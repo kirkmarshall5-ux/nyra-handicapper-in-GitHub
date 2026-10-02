@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>NYRA Handicapper V2</title>
+<style>
+:root{--bg:#08101d;--panel:#111b2c;--panel2:#17243a;--text:#f1f5fb;--muted:#9fb0c7;--line:#293a55;--gold:#efbd4e;--good:#58c792;--bad:#ff7474;--blue:#63a8ff}
+*{box-sizing:border-box} body{margin:0;background:linear-gradient(180deg,#070d17,#0b1423 55%,#08101d);color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input,select,textarea{font:inherit} a{color:inherit;text-decoration:none}
+header{position:sticky;top:0;z-index:20;background:rgba(7,13,23,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.wrap,main{max-width:1260px;margin:auto;padding:14px 18px}.brand{display:flex;gap:12px;align-items:center}.logo{width:44px;height:44px;background:var(--gold);color:#111;border-radius:13px;display:grid;place-items:center;font-weight:950}
+h1{font-size:22px;margin:0}.sub,.muted{color:var(--muted)}.sub{font-size:12px;margin-top:3px}
+nav{display:flex;gap:8px;overflow:auto;padding-top:13px}.tab{border:1px solid var(--line);background:var(--panel);color:var(--text);padding:9px 12px;border-radius:10px;white-space:nowrap}.tab.active{background:var(--gold);border-color:var(--gold);color:#121212;font-weight:800}
+main{padding-top:18px;padding-bottom:60px}.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}.card{background:rgba(17,27,44,.96);border:1px solid var(--line);border-radius:16px;padding:16px}.span12{grid-column:span 12}.span8{grid-column:span 8}.span7{grid-column:span 7}.span6{grid-column:span 6}.span5{grid-column:span 5}.span4{grid-column:span 4}.span3{grid-column:span 3}
+.kicker{font-size:11px;color:var(--gold);font-weight:900;text-transform:uppercase;letter-spacing:.08em}.sectiontitle{font-size:18px;margin:4px 0 12px}.hero{display:flex;justify-content:space-between;gap:20px}.hero h2{font-size:28px;margin:5px 0}
+.badges{display:flex;gap:7px;flex-wrap:wrap}.badge{background:#202e46;border:1px solid #32445f;border-radius:999px;padding:6px 9px;font-size:12px}.badge.gold{background:#3a3119;border-color:#6a5722;color:#ffe294}.badge.green{background:#173626;border-color:#28583c;color:#9ef0be}
+.metric{font-size:28px;font-weight:900;margin-top:5px}.small{font-size:12px}.tiny{font-size:11px}
+.racebar{display:flex;gap:7px;overflow:auto}.racebtn{min-width:44px;height:40px;border-radius:10px;border:1px solid var(--line);background:var(--panel2);color:var(--text);font-weight:800}.racebtn.active{background:var(--gold);color:#111;border-color:var(--gold)}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:10px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{font-size:11px;color:#aebcd0;text-transform:uppercase;letter-spacing:.045em;position:sticky;top:0;background:var(--panel)}
+.num{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:7px;background:#eef2f7;color:#111;font-weight:900;margin-right:7px}.horse{font-weight:850}.odds{font-size:16px;font-weight:900}
+.pacechip{font-size:11px;font-weight:900;padding:4px 6px;border-radius:6px;background:#2b3b56}.E{background:#6a3232}.EP{background:#6d5124}.P{background:#285269}.S{background:#365c3d}
+input,select,textarea{width:100%;background:#0d1728;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px}textarea{resize:vertical}
+button.primary{border:0;background:var(--gold);color:#111;font-weight:850;padding:10px 14px;border-radius:10px}button.secondary{border:1px solid var(--line);background:var(--panel2);color:var(--text);padding:10px 14px;border-radius:10px}.danger{border-color:#603a3a!important}
+.flex{display:flex;gap:10px;align-items:center}.spread{display:flex;justify-content:space-between;gap:12px;align-items:center}.stack{display:grid;gap:10px}.note{background:#0c1626;border:1px dashed #31435e;border-radius:12px;padding:12px}.hidden{display:none!important}
+.progress{height:8px;background:#07101c;border-radius:999px;overflow:hidden}.progress i{display:block;width:0;height:100%;background:var(--gold)}
+.score{font-size:18px;font-weight:950}.good{color:var(--good)}.bad{color:var(--bad)}.blue{color:var(--blue)}
+.pace-lane{display:grid;grid-template-columns:60px 1fr;gap:10px;align-items:center}.lane{min-height:54px;background:#0d1728;border:1px solid var(--line);border-radius:12px;display:flex;gap:8px;align-items:center;padding:8px;overflow:auto}.runner{background:#1f304a;border:1px solid #344a6a;border-radius:10px;padding:8px 10px;white-space:nowrap}.runner b{color:var(--gold)}
+.controls{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}.controls label,.field label{display:block;font-size:11px;color:var(--muted);margin-bottom:4px}
+.ticketgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}.pill{display:inline-block;border:1px solid var(--line);padding:4px 7px;border-radius:999px;font-size:11px;margin:2px}
+.weight-row{display:grid;grid-template-columns:140px 1fr 56px;gap:9px;align-items:center;margin:8px 0}.weight-row input[type=range]{padding:0}
+.check{width:auto}.source{border-left:3px solid var(--gold)}
+@media(max-width:900px){.span8,.span7,.span6,.span5,.span4,.span3{grid-column:span 12}.hero{display:block}.controls,.ticketgrid{grid-template-columns:repeat(2,1fr)}.wrap,main{padding-left:12px;padding-right:12px}.metric{font-size:23px}.hide-sm{display:none}.weight-row{grid-template-columns:120px 1fr 48px}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<div class="brand"><div class="logo">NH</div><div><h1>NYRA Handicapper <span style="color:var(--gold)">V3</span></h1><div class="sub">NYRA card + DRF PP analysis + pace, form & overlooked betting angles</div></div></div>
+<nav>
+<button class="tab active" data-tab="raceday">Race Day</button>
+<button class="tab" data-tab="pace">Pace & Ratings</button>
+<button class="tab" data-tab="connections">Jockey / Trainer</button>
+<button class="tab" data-tab="pp">PP Lab</button>
+<button class="tab" data-tab="public">Load NYRA</button>
+<button class="tab" data-tab="bets">Bet Builder</button>
+</nav></div></header>
+
+<main>
+<section id="raceday">
+<div class="grid">
+<div class="card span12">
+<div class="hero">
+<div><div class="kicker">Current public NYRA example · October 2, 2026</div><h2 id="raceTitle">Belmont Park · Race 5</h2>
+<div class="badges" id="raceBadges"><span class="badge gold">7F Turf</span><span class="badge">$53,000 Claiming</span><span class="badge">3:36 PM</span><span class="badge green">Public NYRA card</span></div></div>
+<div><div class="muted small" style="margin-bottom:5px">Race</div><div class="racebar" id="racebar"></div></div>
+</div></div>
+
+<div class="card span3"><div class="kicker">Active runners</div><div class="metric" id="fieldCount">12</div><div class="muted small">After public scratches</div></div>
+<div class="card span3"><div class="kicker">Live favorite</div><div class="metric" id="favHorse">#2 Azizam</div><div class="muted small" id="favOdds">9/5</div></div>
+<div class="card span3"><div class="kicker">Best meet jockey</div><div class="metric">29.3%</div><div class="muted small">Flavien Prat · 41 starts</div></div>
+<div class="card span3"><div class="kicker">Best meet trainer</div><div class="metric">25.0%</div><div class="muted small">Chad C. Brown · 32 starts</div></div>
+
+<div class="card span12">
+<div class="spread"><h3 class="sectiontitle">Race handicapping grid</h3><div class="small muted">Click style or PP values to edit in Pace & Ratings</div></div>
+<div style="overflow:auto;max-height:540px"><table id="horseTable"><thead><tr><th>Horse</th><th>ML</th><th>Current</th><th>Style</th><th>Jockey</th><th>Trainer</th><th>J Win%</th><th>T Win%</th><th>PP Fig</th><th>Rating</th></tr></thead><tbody></tbody></table></div>
+</div>
+
+<div class="card span12"><div class="spread"><div><div class="kicker">Potentially overlooked angles</div><h3 class="sectiontitle">Things to Consider</h3></div><span class="badge gold">PP-driven</span></div>
+<div class="small muted" style="margin-bottom:10px">Selective flags only — not automatic bets. Stronger when multiple independent clues agree and the price still offers value.</div>
+<div id="thingsToConsider" class="stack"><div class="muted">Upload a DRF PP to scan this race for class, trainer, layoff, surface, pace and trip angles.</div></div></div>
+<div class="card span8"><h3 class="sectiontitle">Race notes</h3><textarea id="raceNotes" rows="6" placeholder="Bias, trip notes, vulnerable favorite, value, scratches, pace changes…"></textarea></div>
+<div class="card span4 source"><h3 class="sectiontitle">Source check</h3><div class="small muted">Public card data in this sample comes from NYRA’s Belmont entries page. Meet statistics come from NYRA’s Belmont Park leaders page. Current odds can move rapidly.</div>
+<div class="stack" style="margin-top:12px">
+<a id="nyraRaceLink" target="_blank" href="https://www.nyra.com/belmont/racing/entries/?day=2026-10-02&limit=entries&race=5"><button class="secondary" style="width:100%">Open this race on NYRA</button></a>
+<a target="_blank" href="https://www.nyra.com/belmont/racing/leaders/"><button class="secondary" style="width:100%">Open meet statistics</button></a>
+</div></div>
+</div></section>
+
+<section id="pace" class="hidden"><div class="grid">
+<div class="card span8"><div class="kicker">Editable race shape</div><h3 class="sectiontitle">Pace map</h3><div id="paceMap" class="stack"></div></div>
+<div class="card span4"><div class="kicker">Transparent comparison</div><h3 class="sectiontitle">Rating weights</h3>
+<div class="small muted">This is not a prediction. It compares the entered PP information and public context. “Things to Consider” stays separate so an angle does not secretly inflate the rating.</div>
+<div id="weights" style="margin-top:12px"></div><button id="resetWeights" class="secondary" style="width:100%;margin-top:8px">Reset weights</button></div>
+
+<div class="card span12"><h3 class="sectiontitle">Edit runners</h3><div style="overflow:auto"><table id="editTable"><thead><tr><th>#</th><th>Horse</th><th>Style</th><th>Last Fig</th><th>Best 3</th><th>Form</th><th>Class</th><th>Trip</th><th>Note</th></tr></thead><tbody></tbody></table></div></div>
+<div class="card span12"><div class="note small"><b>Tip:</b> when your PP file is parsed, the dashboard will try to fill Last Fig / Best 3 and snippets. You can correct anything manually. Manual edits are saved locally on this device.</div></div>
+</div></section>
+
+<section id="connections" class="hidden"><div class="grid">
+<div class="card span6"><div class="kicker">2026 Belmont Park fall meet</div><h3 class="sectiontitle">Jockey leaders</h3><div style="overflow:auto"><table id="jockeyTable"><thead><tr><th>Rank</th><th>Jockey</th><th>Starts</th><th>Wins</th><th>Win %</th><th>Top 3 %</th></tr></thead><tbody></tbody></table></div></div>
+<div class="card span6"><div class="kicker">2026 Belmont Park fall meet</div><h3 class="sectiontitle">Trainer leaders</h3><div style="overflow:auto"><table id="trainerTable"><thead><tr><th>Rank</th><th>Trainer</th><th>Starts</th><th>Wins</th><th>Win %</th><th>Top 3 %</th></tr></thead><tbody></tbody></table></div></div>
+<div class="card span12"><h3 class="sectiontitle">Current-race connections</h3><div id="connectionCards" class="grid"></div></div>
+</div></section>
+
+<section id="pp" class="hidden"><div class="grid">
+<div class="card span7"><div class="kicker">Private PP enrichment</div><h3 class="sectiontitle">Upload past performances</h3>
+<div class="stack"><input id="ppFile" type="file" accept=".pdf,.txt,.csv,.json"><div class="progress"><i id="ppProg"></i></div>
+<div class="flex"><button class="primary" id="analyzeBtn">Analyze PP file</button><button class="secondary" id="clearPP">Clear PP data</button></div>
+<div id="ppStatus" class="muted small">PDF, TXT, CSV or JSON. Processing occurs in your browser; no PP file is sent anywhere by this page.</div></div></div>
+<div class="card span5"><h3 class="sectiontitle">V3 DRF extraction</h3><div class="note small">V3 recognizes DRF fields such as TimeformUS Early/Late, Beyer figures, race Beyer par, trainer situation stats, surface/distance records, workouts and running-line comments. It also scans for a small set of potentially useful trainer/class/form angles and explains why each one was flagged.</div></div>
+<div class="card span12"><h3 class="sectiontitle">PP matches</h3><div id="ppResults" class="stack"><div class="muted">No PP file analyzed yet.</div></div></div>
+</div></section>
+
+<section id="public" class="hidden"><div class="grid">
+<div class="card span7"><div class="kicker">Public NYRA loader</div><h3 class="sectiontitle">Load a race page</h3>
+<div class="controls">
+<div><label>Track</label><select id="track"><option value="belmont">Belmont Park</option><option value="saratoga">Saratoga</option></select></div>
+<div><label>Date</label><input id="raceDate" type="date" value="2026-10-02"></div>
+<div><label>Race</label><input id="raceNo" type="number" min="1" max="14" value="5"></div>
+<div style="grid-column:span 3"><label>NYRA URL</label><input id="raceUrl" readonly></div>
+</div>
+<div class="flex" style="margin-top:12px"><button class="primary" id="tryLoad">Try direct load</button><a id="openRace" target="_blank"><button class="secondary">Open NYRA page</button></a></div>
+<div id="loadStatus" class="muted small" style="margin-top:10px">Direct loading depends on NYRA browser permissions. If blocked, use the paste method below.</div>
+</div>
+<div class="card span5"><h3 class="sectiontitle">Why a fallback?</h3><div class="note small">Browsers can block one website from reading another website directly (CORS). This is a browser security rule, not a data problem. V2 therefore includes a no-server fallback: open the NYRA race page, select/copy the race text, paste it here, and parse it locally.</div></div>
+<div class="card span12"><h3 class="sectiontitle">Paste NYRA race text</h3><textarea id="nyraPaste" rows="9" placeholder="Paste the visible race section from NYRA here…"></textarea>
+<div class="flex" style="margin-top:10px"><button class="primary" id="parsePaste">Parse pasted NYRA data</button><button class="secondary" id="loadSample">Restore Oct. 2 Race 5 sample</button></div>
+<div id="parseStatus" class="small muted" style="margin-top:8px"></div></div>
+</div></section>
+
+<section id="bets" class="hidden"><div class="grid">
+<div class="card span12"><div class="kicker">Ticket calculator</div><h3 class="sectiontitle">Bet Builder</h3>
+<div class="ticketgrid">
+<div><label>Bet</label><select id="betType"><option>Exacta</option><option>Trifecta</option><option>Pick 3</option><option>Pick 4</option><option>Pick 5</option></select></div>
+<div><label>Leg 1</label><input id="leg1" value="2,11"></div><div><label>Leg 2</label><input id="leg2" value="5,6"></div><div><label>Leg 3</label><input id="leg3" value="1,4"></div><div><label>Leg 4</label><input id="leg4" value="2"></div><div><label>Leg 5</label><input id="leg5" value="1,3"></div>
+<div><label>Base wager</label><input id="base" type="number" step=".1" value=".5"></div>
+</div>
+<div class="flex" style="margin-top:14px"><button class="primary" id="calcBtn">Calculate</button><div id="ticketOut" class="metric" style="font-size:22px"></div></div>
+<div class="note small" style="margin-top:12px">The builder calculates combinations and cost only; it does not place wagers.</div>
+</div></div></section>
+
+<footer class="muted small" style="margin-top:20px">Personal handicapping tool. Verify scratches, surface, post time and odds on NYRA immediately before wagering. Bet responsibly.</footer>
+</main>
+
+<script type="module">
+const JOCKEYS=[
+{r:1,n:"Flavien Prat",s:41,w:12,win:29.3,top:46.3},{r:2,n:"Manuel Franco",s:45,w:10,win:22.2,top:42.2},{r:3,n:"Ricardo Santana, Jr.",s:52,w:8,win:15.4,top:40.4},{r:4,n:"Jose Lezcano",s:37,w:5,win:13.5,top:45.9},{r:5,n:"Kendrick Carmouche",s:34,w:4,win:11.8,top:35.3},{r:5,n:"Samuel Marin",s:30,w:4,win:13.3,top:26.7},{r:7,n:"Dylan Davis",s:39,w:3,win:7.7,top:35.9},{r:8,n:"Antonio Fresu",s:33,w:2,win:6.1,top:33.3},{r:8,n:"Jose L. Ortiz",s:8,w:2,win:25.0,top:50.0},{r:8,n:"Joel Rosario",s:19,w:2,win:10.5,top:42.1},{r:8,n:"Javier Castellano",s:27,w:2,win:7.4,top:29.6},{r:12,n:"Junior Alvarado",s:23,w:1,win:4.3,top:47.8},{r:12,n:"John R. Velazquez",s:17,w:1,win:5.9,top:35.3},{r:12,n:"Edgard J. Zayas",s:24,w:1,win:4.2,top:20.8}];
+const TRAINERS=[
+{r:1,n:"Chad C. Brown",s:32,w:8,win:25.0,top:56.2},{r:2,n:"Linda Rice",s:21,w:5,win:23.8,top:47.6},{r:3,n:"Miguel Clement",s:19,w:4,win:21.1,top:47.4},{r:4,n:"Claude R. McGaughey III",s:4,w:3,win:75.0,top:75.0},{r:5,n:"William I. Mott",s:22,w:2,win:9.1,top:63.6},{r:5,n:"Thomas Morley",s:10,w:2,win:20.0,top:70.0},{r:5,n:"Todd A. Pletcher",s:18,w:2,win:11.1,top:38.9},{r:5,n:"Jorge R. Abreu",s:9,w:2,win:22.2,top:44.4},{r:5,n:"Richard E. Dutrow, Jr.",s:11,w:2,win:18.2,top:54.5},{r:5,n:"Raymond Handal",s:5,w:2,win:40.0,top:60.0}];
+
+const SAMPLE={
+track:"Belmont Park",date:"2026-10-02",race:5,cls:"$53,000 Claiming",dist:"7F",surface:"Turf",post:"3:36 PM",
+horses:[
+{n:1,name:"Peyton",j:"Omar Hernandez Moreno",t:"Domenick L. Schettino",odds:"45/1",ml:"30/1",style:"P"},
+{n:2,name:"Azizam (GB)",j:"Javier Castellano",t:"George Weaver",odds:"9/5",ml:"3/1",style:"EP"},
+{n:3,name:"Out of the Fog",j:"Jose E. Morelos",t:"Jena M. Antonucci",odds:"73/1",ml:"20/1",style:"S"},
+{n:4,name:"Two Ducks",j:"Kendrick Carmouche",t:"Carlos F. Martin",odds:"13/1",ml:"12/1",style:"EP"},
+{n:5,name:"Rossbeigh",j:"Antonio Fresu",t:"James Bentley Begg",odds:"8/1",ml:"8/1",style:"P"},
+{n:6,name:"King Puck",j:"Reylu Gutierrez",t:"Keri Brion",odds:"16/1",ml:"8/1",style:"P"},
+{n:7,name:"Chips and Fish",j:"Manuel Franco",t:"Antonio Arriaga",odds:"5/1",ml:"5/1",style:"EP"},
+{n:8,name:"Hong Kong Phooey",j:"Jose Lezcano",t:"Rudy R. Rodriguez",odds:"36/1",ml:"15/1",style:"E"},
+{n:9,name:"The Markinater",j:"Samuel Marin",t:"Dimitrios K. Synnefias",odds:"40/1",ml:"15/1",style:"S"},
+{n:10,name:"Diliello",j:"Junior Alvarado",t:"Thomas Morley",odds:"12/1",ml:"8/1",style:"P"},
+{n:11,name:"Leo's Reward",j:"Paco Lopez",t:"Joe Sharp",odds:"4/1",ml:"6/1",style:"EP"},
+{n:12,name:"Epico",j:"Dylan Davis",t:"Richard E. Dutrow, Jr.",odds:"SCR",ml:"8/1",style:"P"},
+{n:13,name:"I Can See That",j:"Ricardo Santana, Jr.",t:"Bruce N. Levine",odds:"7/1",ml:"8/1",style:"S"},
+{n:14,name:"Sicilian Defense",j:"Manuel Franco",t:"Horacio De Paz",odds:"SCR",ml:"8/1",style:"EP"},
+{n:15,name:"Printer's Alley",j:"Samuel Marin",t:"Ilkay Kantarmaci",odds:"SCR",ml:"6/1",style:"E"},
+{n:16,name:"Noble One",j:"Rajiv Maragh",t:"John S. Pregman, Jr.",odds:"SCR",ml:"50/1",style:"S"}]};
+
+let race=structuredClone(SAMPLE);
+let state=JSON.parse(localStorage.getItem("nyraV3State")||"{}");
+const defaultWeights={fig:45,best:20,form:10,class:10,jockey:7,trainer:8};
+let weights=Object.assign({},defaultWeights,state.weights||{});
+function normalizeName(s){return (s||"").toLowerCase().replace(/\([^)]*\)/g,"").replace(/[^a-z0-9]+/g," ").trim()}
+function jockeyStat(n){return JOCKEYS.find(x=>normalizeName(x.n)===normalizeName(n))}
+function trainerStat(n){return TRAINERS.find(x=>normalizeName(x.n)===normalizeName(n))}
+function fracToProb(o){if(!o||o==="SCR"||!o.includes("/"))return 0;let [a,b]=o.split("/").map(Number);return b/(a+b)}
+function save(){state.weights=weights;state.runners=Object.fromEntries(race.horses.map(h=>[h.n,{style:h.style,last:h.last||"",best:h.best||"",form:h.form||50,cls:h.cls||50,trip:h.trip||50,note:h.note||"",pp:h.pp||"",angles:h.angles||[],tfEarly:h.tfEarly||"",tfLate:h.tfLate||"",trainerAngles:h.trainerAngles||""}]));localStorage.setItem("nyraV3State",JSON.stringify(state))}
+function restoreRunnerEdits(){for(const h of race.horses){const e=state.runners?.[h.n];if(e)Object.assign(h,e)}}
+restoreRunnerEdits();
+
+function score(h){
+ const vals=race.horses.filter(x=>x.odds!=="SCR");
+ const nums=(key)=>vals.map(x=>+x[key]||0).filter(Boolean); const scale=(v,arr)=>{if(!v||!arr.length)return 50;let lo=Math.min(...arr),hi=Math.max(...arr);return hi===lo?50:100*(v-lo)/(hi-lo)};
+ const js=jockeyStat(h.j)?.win||8, ts=trainerStat(h.t)?.win||8;
+ let s=scale(+h.last,nums("last"))*weights.fig/100 + scale(+h.best,nums("best"))*weights.best/100 +
+ (+h.form||50)*weights.form/100+(+h.cls||50)*weights.class/100+Math.min(js*3,100)*weights.jockey/100+Math.min(ts*3,100)*weights.trainer/100;
+ return Math.round(s);
+}
+function renderAll(){renderHeader();renderHorses();renderPace();renderEdit();renderConnections();renderLeaderboards();renderWeights();renderThings();updateUrl()}
+function renderThings(){
+ const el=document.getElementById("thingsToConsider"); if(!el)return;
+ let rows=[];
+ for(const h of race.horses.filter(x=>x.odds!=="SCR")){
+   for(const a of (h.angles||[])) rows.push({h,a});
+ }
+ rows.sort((a,b)=>(b.a.strength||0)-(a.a.strength||0));
+ if(!rows.length){el.innerHTML='<div class="muted">No special PP angles have been identified yet. Upload a DRF PP or review the race manually.</div>';return}
+ el.innerHTML=rows.slice(0,8).map(x=>`<div class="note"><div class="spread"><b>#${x.h.n} ${x.h.name}</b><span class="pill">${x.a.label}</span></div><div class="small" style="margin-top:5px">${x.a.why}</div>${x.a.caution?`<div class="tiny muted" style="margin-top:4px">Watch-out: ${x.a.caution}</div>`:""}</div>`).join("");
+}
+function renderHeader(){
+ raceTitle.textContent=`${race.track} · Race ${race.race}`;
+ raceBadges.innerHTML=`<span class="badge gold">${race.dist||"—"} ${race.surface||""}</span><span class="badge">${race.cls||"Race"}</span><span class="badge">${race.post||"—"}</span><span class="badge green">Public NYRA card</span>`;
+ fieldCount.textContent=race.horses.filter(h=>h.odds!=="SCR").length;
+ let active=race.horses.filter(h=>h.odds!=="SCR").sort((a,b)=>fracToProb(b.odds)-fracToProb(a.odds));
+ favHorse.textContent=active[0]?`#${active[0].n} ${active[0].name}`:"—";favOdds.textContent=active[0]?.odds||"";
+ racebar.innerHTML=Array.from({length:9},(_,i)=>`<button class="racebtn ${i+1===race.race?"active":""}" data-race="${i+1}">${i+1}</button>`).join("");
+}
+function renderHorses(){
+ horseTable.querySelector("tbody").innerHTML=race.horses.map(h=>{let js=jockeyStat(h.j),ts=trainerStat(h.t);return `<tr style="${h.odds==="SCR"?"opacity:.48":""}">
+<td><span class="num">${h.n}</span><span class="horse">${h.name}</span></td><td>${h.ml||"—"}</td><td><span class="odds">${h.odds||"—"}</span></td>
+<td><span class="pacechip ${h.style}">${h.style||"?"}</span></td><td>${h.j||"—"}</td><td>${h.t||"—"}</td>
+<td>${js?js.win.toFixed(1)+"%":"—"}</td><td>${ts?ts.win.toFixed(1)+"%":"—"}</td><td>${h.last||"—"}</td><td><span class="score">${score(h)}</span></td></tr>`}).join("");
+}
+function renderPace(){paceMap.innerHTML=["E","EP","P","S"].map(s=>`<div class="pace-lane"><b>${s}</b><div class="lane">${race.horses.filter(h=>h.style===s&&h.odds!=="SCR").map(h=>`<div class="runner"><b>#${h.n}</b> ${h.name}<div class="tiny muted">Rating ${score(h)}</div></div>`).join("")||'<span class="muted">None</span>'}</div></div>`).join("")}
+function renderEdit(){editTable.querySelector("tbody").innerHTML=race.horses.map(h=>`<tr><td>${h.n}</td><td><b>${h.name}</b></td>
+<td><select data-n="${h.n}" data-k="style"><option ${h.style==="E"?"selected":""}>E</option><option ${h.style==="EP"?"selected":""}>EP</option><option ${h.style==="P"?"selected":""}>P</option><option ${h.style==="S"?"selected":""}>S</option></select></td>
+<td><input data-n="${h.n}" data-k="last" type="number" value="${h.last||""}" style="width:72px"></td>
+<td><input data-n="${h.n}" data-k="best" type="number" value="${h.best||""}" style="width:72px"></td>
+<td><input data-n="${h.n}" data-k="form" type="number" min="0" max="100" value="${h.form||50}" style="width:72px"></td>
+<td><input data-n="${h.n}" data-k="cls" type="number" min="0" max="100" value="${h.cls||50}" style="width:72px"></td>
+<td><input data-n="${h.n}" data-k="trip" type="number" min="0" max="100" value="${h.trip||50}" style="width:72px"></td>
+<td><input data-n="${h.n}" data-k="note" value="${(h.note||"").replace(/"/g,"&quot;")}" style="min-width:180px"></td></tr>`).join("");
+ editTable.querySelectorAll("input,select").forEach(el=>el.onchange=()=>{let h=race.horses.find(x=>x.n==el.dataset.n);h[el.dataset.k]=el.value;save();renderHorses();renderPace()});
+}
+function renderLeaderboards(){
+ jockeyTable.querySelector("tbody").innerHTML=JOCKEYS.map(x=>`<tr><td>${x.r}</td><td><b>${x.n}</b></td><td>${x.s}</td><td>${x.w}</td><td>${x.win.toFixed(1)}%</td><td>${x.top.toFixed(1)}%</td></tr>`).join("");
+ trainerTable.querySelector("tbody").innerHTML=TRAINERS.map(x=>`<tr><td>${x.r}</td><td><b>${x.n}</b></td><td>${x.s}</td><td>${x.w}</td><td>${x.win.toFixed(1)}%</td><td>${x.top.toFixed(1)}%</td></tr>`).join("");
+}
+function renderConnections(){
+ connectionCards.innerHTML=race.horses.filter(h=>h.odds!=="SCR").map(h=>{let j=jockeyStat(h.j),t=trainerStat(h.t);return `<div class="card span4" style="padding:12px"><div><b>#${h.n} ${h.name}</b></div><div class="small" style="margin-top:6px">${h.j} ${j?`<span class="pill">${j.win}% win</span>`:""}<br>${h.t} ${t?`<span class="pill">${t.win}% win</span>`:""}</div></div>`}).join("")
+}
+function renderWeights(){weightsDiv()}
+function weightsDiv(){const names={fig:"Last PP figure",best:"Best-3 figure",form:"Recent form",class:"Class fit",jockey:"Meet jockey",trainer:"Meet trainer"};weightsEl=document.getElementById("weights");weightsEl.innerHTML=Object.entries(names).map(([k,v])=>`<div class="weight-row"><span class="small">${v}</span><input data-w="${k}" type="range" min="0" max="60" value="${weights[k]}"><b>${weights[k]}</b></div>`).join("");weightsEl.querySelectorAll("input").forEach(el=>el.oninput=()=>{weights[el.dataset.w]=+el.value;el.nextElementSibling.textContent=el.value;save();renderHorses();renderPace()})}
+resetWeights.onclick=()=>{weights={...defaultWeights};save();renderWeights();renderHorses();renderPace()};
+
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));b.classList.add("active");["raceday","pace","connections","pp","public","bets"].forEach(id=>document.getElementById(id).classList.toggle("hidden",id!==b.dataset.tab))});
+raceNotes.value=localStorage.getItem("nyraV3Notes")||"";raceNotes.oninput=e=>localStorage.setItem("nyraV3Notes",e.target.value);
+
+function updateUrl(){const url=`https://www.nyra.com/${track.value||"belmont"}/racing/entries/?day=${raceDate.value||race.date}&limit=entries&race=${raceNo.value||race.race}`;raceUrl.value=url;openRace.href=url}
+[track,raceDate,raceNo].forEach(el=>el.onchange=updateUrl);updateUrl();
+
+function parseNyraText(text){
+ let lines=text.split(/\n+/).map(x=>x.trim()).filter(Boolean); let out={track:track.value==="saratoga"?"Saratoga":"Belmont Park",date:raceDate.value,race:+raceNo.value,horses:[]};
+ let joined=" "+lines.join(" ")+" ";
+ let raceMatch=joined.match(/Race\s+(\d+).*?\$(\d[\d,]*)\s+([A-Za-z ]+?)(?=\s+\d| \d\/|\s+\dF|\s+\dM)/i); if(raceMatch){out.race=+raceMatch[1];out.cls="$"+raceMatch[2]+" "+raceMatch[3].trim()}
+ let dist=joined.match(/\b(\d+(?:\s+\d\/\d)?F|\d+(?:\s+\d\/\d)?M)\b/i); if(dist)out.dist=dist[1];
+ let surf=joined.match(/\b(Dirt|Turf|Tapeta)\b/i); if(surf)out.surface=surf[1];
+ let post=joined.match(/(\d{1,2}:\d{2}\s*[ap](?:m)?)/i); if(post)out.post=post[1].toUpperCase();
+ // Heuristic blocks: horse name line, then "Jockey • Trainer", then program number and odds in following lines.
+ for(let i=0;i<lines.length;i++){
+   if(lines[i].includes("•") && i>0){
+      const [j,t]=lines[i].split("•").map(x=>x.trim()); const name=lines[i-1].replace(/^[\d\s-]+/,"").trim();
+      let n=null, odds="", ml="";
+      for(let k=i+1;k<Math.min(lines.length,i+8);k++){if(n===null && /^\d{1,2}$/.test(lines[k]))n=+lines[k]; if(/^(SCR|\d+\/\d+)$/.test(lines[k])){if(lines[k].startsWith("ML"))ml=lines[k].replace("ML","").trim();else if(!odds)odds=lines[k]} if(/^ML\s+\d+\/\d+/.test(lines[k]))ml=lines[k].replace(/^ML\s+/,"")}
+      if(name && n)out.horses.push({n,name,j,t,odds:odds||"—",ml:ml||"—",style:"P"});
+   }
+ }
+ return out.horses.length?out:null;
+}
+parsePaste.onclick=()=>{let p=parseNyraText(nyraPaste.value);if(!p){parseStatus.textContent="I couldn't reliably identify the runners. Try copying just the race section with horse, jockey/trainer, program number and odds.";return}race=p;restoreRunnerEdits();parseStatus.textContent=`Parsed ${race.horses.length} runners. Race Day has been updated.`;renderAll()};
+loadSample.onclick=()=>{race=structuredClone(SAMPLE);restoreRunnerEdits();renderAll();parseStatus.textContent="Sample restored."};
+tryLoad.onclick=async()=>{loadStatus.textContent="Trying NYRA directly…";try{let r=await fetch(raceUrl.value);if(!r.ok)throw new Error("HTTP "+r.status);let txt=await r.text();let doc=new DOMParser().parseFromString(txt,"text/html");let p=parseNyraText(doc.body.innerText);if(!p)throw new Error("Could not parse");race=p;restoreRunnerEdits();renderAll();loadStatus.textContent=`Loaded ${race.horses.length} runners directly from NYRA.`}catch(e){loadStatus.textContent="Direct browser load was blocked or could not be parsed. Open the NYRA page and use the paste fallback below."}};
+
+async function extractPdf(file){
+ const pdfjs=await import("https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs");
+ pdfjs.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.worker.min.mjs";
+ const pdf=await pdfjs.getDocument({data:await file.arrayBuffer()}).promise;let all="";
+ for(let p=1;p<=pdf.numPages;p++){ppProg.style.width=(p/pdf.numPages*90)+"%";let pg=await pdf.getPage(p);let c=await pg.getTextContent();all+="\n"+c.items.map(i=>i.str).join(" ")}
+ return all;
+}
+function ppAnalyze(text){
+ const low=text.toLowerCase();let matches=[];
+ const pct=(str,re)=>{let m=str.match(re);return m?+m[1]:null};
+ for(const h of race.horses){
+  const variants=[h.name,h.name.replace(/\s*\([^)]*\)/g,"")].map(x=>x.toLowerCase());let idx=-1;
+  for(const v of variants){idx=low.indexOf(v);if(idx>=0)break} if(idx<0)continue;
+  let a=Math.max(0,idx-180),b=Math.min(text.length,idx+4200),snip=text.slice(a,b).replace(/\s+/g," ").trim();
+  let head=snip.slice(0,1700), lines=snip;
+  let tf=head.match(/TimeformUS\s+Pace:\s*Early\s+(\d+)\s+Late\s+(\d+)/i);
+  if(tf){h.tfEarly=+tf[1];h.tfLate=+tf[2]; if(h.tfEarly>=105)h.style="E"; else if(h.tfEarly>=90)h.style="EP"; else if(h.tfLate>=85)h.style="S"; else h.style="P";}
+  let life=head.match(/Life\s+\d+\s+\S+\s+\d+\s+\d+\s+\$[\d,]+\s+(\d+)/i);
+  if(life)h.best=+life[1];
+  let runBeyers=[...lines.matchAll(/\b(?:fst|fm|gd|sly|my|yl|sf)\b.{0,180}?\b(\d{2,3})\s+\d+\s*\/\d+/gi)].map(m=>+m[1]).filter(x=>x>=20&&x<=120);
+  if(runBeyers.length){h.last=runBeyers[0];h.best=Math.max(+h.best||0,...runBeyers.slice(0,5))}
+  let trainerBlock=(lines.match(/TRAINER:\s*([^]*?)(?=Daily Racing Form|$)/i)||[])[1]||"";
+  h.trainerAngles=trainerBlock.slice(0,650);
+  h.angles=[];
+  const add=(label,why,strength=1,caution="")=>h.angles.push({label,why,strength,caution});
+  // First-time starter: demand a trainer stat if DRF supplies it.
+  if(/\bLife\s+0\b/i.test(head)||/\bFirst Time Starters?\b/i.test(trainerBlock)){
+    let ft=pct(trainerBlock,/1st(?:Time)?(?:Starter|Start|TS)[^(]*\([^)]*?\.?(\d{2})\s+\$/i);
+    add("First-time starter",ft?`Debut runner; DRF trainer line shows about ${ft}% wins in this situation. Work pattern and pedigree deserve extra weight.`:"Debut runner. Check the trainer's first-time-starter percentage, works and pedigree rather than relying on speed figures.",ft>=18?3:2,"Debut horses carry more uncertainty than experienced runners.");
+  }
+  // Layoffs and trainer-specific comeback record.
+  let lay=trainerBlock.match(/(\+180Days|61-180Days|31-60Days|1stAfterLayoff|1stOff\d+)[^(]*\((\d+)\s+\.?(\d+)\s+\$([\d.]+)/i);
+  if(lay){let wins=+("0."+lay[3]);add("Layoff / freshening",`Trainer's DRF situation line: ${lay[1]} — ${lay[2]} starters, ${(wins*100).toFixed(0)}% wins, $${lay[4]} ROI shown in the PP.`,wins>=.18?3:2,lay[2]<15?"Small sample — treat the percentage cautiously.":"Long layoffs are not automatically positive; trainer context matters.");}
+  // Surface specialization / switch
+  for(const surf of ["Turf","Dirt"]){let re=new RegExp(surf+"\\\\((\\\\d+) \\\\.?(\\\\d+) \\\\$([\\\\d.]+)","i"),m=trainerBlock.match(re);if(m&&+m[1]>=20&&+m[2]>=15)add(`${surf} trainer strength`,`Trainer shows ${m[1]} ${surf.toLowerCase()} starters with roughly ${m[2]}% wins and $${m[3]} ROI in the DRF stat line.`,2);}
+  if(/\bTurf\s*\([^)]*\)/i.test(trainerBlock)&&/Turf\(/i.test(head)) add("Surface fit","Both the horse's surface record and trainer's turf statistics are available; compare today's surface with the horse's best figures rather than overall record alone.",1);
+  // Class moves visible in recent lines.
+  if(/Md Sp Wt/i.test(lines)&&/MdnClm|Md \d{4,5}/i.test(lines)) add("Class move",`Recent lines show maiden-special-weight and maiden-claiming company. A MSW → maiden-claiming drop is meaningful, but price and trainer intent still matter.`,3,"This is a well-known angle, so it can be overbet.");
+  if(/Clm\s+\d+/i.test(lines)&&/(Alw|OC\d)/i.test(lines)) add("Class placement","The PP shows movement between claiming and allowance/optional-claiming company. Check whether today's condition is genuinely easier than the races producing the horse's best figures.",2);
+  // Route/sprint changes with trainer stat
+  let rs=trainerBlock.match(/(Route\/Sprint|Sprint\/Route)[^(]*\((\d+)\s+\.?(\d+)\s+\$([\d.]+)/i);
+  if(rs)add(rs[1]==="Route/Sprint"?"Cutback: route → sprint":"Stretch-out: sprint → route",`Trainer's DRF line shows ${rs[2]} starters, about ${rs[3]}% wins and $${rs[4]} ROI with this distance change.`,+rs[3]>=18?3:2, +rs[2]<15?"Small sample.":"");
+  // Pace mismatch / lone speed candidate
+  if(h.tfEarly>=110)add("Serious early speed",`TimeformUS Early ${h.tfEarly} / Late ${h.tfLate}. This horse may control or force the pace; compare its Early number with every other runner before calling it lone speed.`,3,h.tfLate<65?"The Late figure suggests vulnerability if pressured.":"");
+  if(h.tfLate>=90&&h.tfEarly<85)add("Late-running profile",`TimeformUS Early ${h.tfEarly} / Late ${h.tfLate}. A contested pace could improve this closer's setup.`,2,"Needs enough pace ahead and a clean trip.");
+  // Trip trouble keywords
+  let trip=(lines.match(/(stumbled|checked|steadied|blocked|bumped|pinched|wide|needed rm|off slow)[^.]{0,90}/i)||[])[0];
+  if(trip)add("Trip note",`A recent DRF comment includes: “${trip.trim()}”. Review whether the trouble plausibly masked the horse's true effort.`,2,"Do not upgrade automatically; some troubled horses were beaten for other reasons too.");
+  h.pp=snip;matches.push({h,snip:snip.slice(0,1300),nums:runBeyers.slice(0,5)});
+ }
+ // Race-level lone-speed enhancement: relative, not absolute.
+ let active=race.horses.filter(x=>x.odds!=="SCR"&&x.tfEarly);
+ if(active.length>=3){let sorted=[...active].sort((a,b)=>b.tfEarly-a.tfEarly);if(sorted[0].tfEarly-sorted[1].tfEarly>=12){sorted[0].angles=sorted[0].angles||[];sorted[0].angles.push({label:"Possible lone-speed edge",why:`TimeformUS Early ${sorted[0].tfEarly} is ${sorted[0].tfEarly-sorted[1].tfEarly} points above the next-fastest runner in the uploaded PP. That separation is worth examining in the pace map.`,strength:4,caution:"Recheck after scratches and surface changes."});}}
+ return matches;
+}
+analyzeBtn.onclick=async()=>{let f=ppFile.files[0];if(!f){ppStatus.textContent="Choose a PP file first.";return}ppProg.style.width="8%";ppStatus.textContent="Reading "+f.name+"…";try{let text=f.name.toLowerCase().endsWith(".pdf")?await extractPdf(f):await f.text();let m=ppAnalyze(text);ppProg.style.width="100%";save();renderAll();ppStatus.textContent=`Read ${f.name}. Matched ${m.length} runner${m.length===1?"":"s"}. DRF fields and Things to Consider were scanned. Review the flags and current odds before wagering.`;ppResults.innerHTML=m.length?m.map(x=>`<div class="note"><div class="spread"><b>#${x.h.n} ${x.h.name}</b><span class="pill">Recent Beyer candidates: ${x.nums.join(", ")||"none"}</span></div><div class="small muted" style="margin-top:6px">${x.snip}</div></div>`).join(""):`<div class="muted">No current-race horse names were found.</div>`}catch(e){ppStatus.textContent="Could not parse that file. A text-based PDF, TXT or CSV works best.";ppProg.style.width="0"}};
+clearPP.onclick=()=>{for(const h of race.horses){h.last="";h.best="";h.pp="";h.note="";h.form=50;h.cls=50;h.trip=50}save();renderAll();ppResults.innerHTML='<div class="muted">PP data cleared.</div>';ppStatus.textContent="PP enrichment cleared."};
+
+calcBtn.onclick=()=>{const cnt=id=>document.getElementById(id).value.split(",").map(x=>x.trim()).filter(Boolean).length;let t=betType.value,legs=t==="Exacta"?2:t==="Trifecta"?3:+t.split(" ")[1],counts=[cnt("leg1"),cnt("leg2"),cnt("leg3"),cnt("leg4"),cnt("leg5")].slice(0,legs),combos=counts.reduce((a,b)=>a*b,1),cost=combos*(+base.value||0);ticketOut.textContent=`${combos} combinations · $${cost.toFixed(2)}`};
+
+renderAll();
+</script>
+</body></html>
