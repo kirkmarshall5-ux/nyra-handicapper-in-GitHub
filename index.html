@@ -160,7 +160,7 @@ restoreRunnerEdits();
 function evidenceProfile(h){
  const hasLast=h.last!==""&&h.last!=null&&Number.isFinite(+h.last),hasBest=h.best!==""&&h.best!=null&&Number.isFinite(+h.best);
  const hasRace=hasLast||hasBest||((h.figs||[]).length>0);
- const starts=Number.isFinite(+h.lifeStarts)?+h.lifeStarts:(hasRace?1:0);
+ const starts=h.lifeStarts!==null&&h.lifeStarts!==""&&Number.isFinite(+h.lifeStarts)?+h.lifeStarts:(hasRace?1:0);
  const works=(h.works||[]).length>0||!!h.workText,pedigree=!!(h.sire||h.dam||h.damsire||h.pedigree),trainer=!!h.trainerAngles;
  const points=(hasLast?2:0)+(hasBest?1:0)+(starts>=3?3:starts>0?1:0)+(works?1:0)+(pedigree?1:0)+(trainer?1:0);
  return {starts,hasRace,works,pedigree,trainer,confidence:points>=7?"High":points>=4?"Medium":"Low"};
@@ -382,8 +382,8 @@ function ppAnalyze(text,targetRace=race){
   h.trainerAngles=trainerBlock.slice(0,650);
   h.angles=[];
   const add=(label,why,strength=1,caution="")=>h.angles.push({label,why,strength,caution});
-  // First-time starter: demand a trainer stat if DRF supplies it.
-  if(/\bLife\s+0\b/i.test(head)||/\bFirst Time Starters?\b/i.test(trainerBlock)){h.lifeStarts=0;
+  // First-time starter: require the horse's successfully parsed Life record; trainer stats are context only.
+  if(life&&+life[1]===0){
     let ft=pct(trainerBlock,/1st(?:Time)?(?:Starter|Start|TS)[^(]*\([^)]*?\.?(\d{2})\s+\$/i);
     add("First-time starter",ft?`Debut runner; DRF trainer line shows about ${ft}% wins in this situation. Work pattern and pedigree deserve extra weight.`:"Debut runner. Check the trainer's first-time-starter percentage, works and pedigree rather than relying on speed figures.",ft>=18?3:2,"Debut horses carry more uncertainty than experienced runners.");
   }
@@ -419,7 +419,7 @@ analyzeBtn.onclick=async()=>{let f=ppFile.files[0];if(!f){ppStatus.textContent="
  for(const key of Object.keys(RACES)){try{const tr=structuredClone(RACES[key]),rr=state.runners?.[tr.race]||{};for(const h of tr.horses){const x=rr[h.n];if(x)Object.assign(h,x)}const m=ppAnalyze(text,tr);allMatches.push(...m);raceCounts.push(`R${tr.race}: ${m.length}`);state.runners=state.runners||{};state.runners[tr.race]=Object.fromEntries(tr.horses.map(h=>[h.n,{style:h.style,last:h.last??"",best:h.best??"",form:h.form??"",cls:h.cls??"",trip:h.trip??"",note:h.note||"",angles:h.angles||[],tfEarly:h.tfEarly||"",tfLate:h.tfLate||"",trainerAngles:h.trainerAngles||"",workText:h.workText||"",works:h.works||[],pedigree:h.pedigree||"",sire:h.sire||"",dam:h.dam||"",damsire:h.damsire||"",tripNotes:h.tripNotes||[],lifeStarts:h.lifeStarts??null}]))}catch(re){raceErrors.push(`R${key}: ${re?.name||"Error"}: ${re?.message||String(re)}`)}}
  localStorage.setItem("nyraV3State",JSON.stringify(state));race=structuredClone(RACES[race.race]);restoreRunnerEdits();ppProg.style.width="100%";renderAll();ppStatus.textContent=`Read ${f.name}. Scanned ${Object.keys(RACES).length} races and matched ${allMatches.length} runners.${raceErrors.length?" Analysis warnings: "+raceErrors.length:""}`;ppResults.innerHTML=raceErrors.length?`<div class="note" style="border-color:#ff6b6b"><b style="color:#ff9b9b">PP diagnostic — ${raceErrors.length} race error${raceErrors.length===1?"":"s"}</b><div class="small" style="margin-top:10px;white-space:normal;overflow-wrap:anywhere;line-height:1.6">${raceErrors.map(x=>`<div style="margin-bottom:8px">${x}</div>`).join("")}</div><div class="tiny muted" style="margin-top:8px">Matched before errors: ${allMatches.length} runners · ${raceCounts.join(" · ")||"No race completed"}</div></div>`:allMatches.length?`<div class="note"><b>Full-card scan complete.</b><div class="small muted" style="margin-top:6px">${raceCounts.join(" · ")}</div></div>`:`<div class="muted">The file was read, but no horse names from the loaded card were matched.</div>`;
 }catch(e){console.error(e);ppStatus.textContent="PP analysis error: "+(e?.message||String(e));ppProg.style.width="0"}};
-clearPP.onclick=()=>{for(const h of race.horses){h.last="";h.best="";h.pp="";h.note="";h.form="";h.cls="";h.trip="";h.workText="";h.works=[];h.pedigree="";h.sire="";h.dam="";h.damsire=""}save();renderAll();ppResults.innerHTML='<div class="muted">PP data cleared.</div>';ppStatus.textContent="PP enrichment cleared."};
+clearPP.onclick=()=>{for(const h of race.horses){h.last="";h.best="";h.pp="";h.note="";h.form="";h.cls="";h.trip="";h.workText="";h.works=[];h.pedigree="";h.sire="";h.dam="";h.damsire="";h.lifeStarts=null}save();renderAll();ppResults.innerHTML='<div class="muted">PP data cleared.</div>';ppStatus.textContent="PP enrichment cleared."};
 
 calcBtn.onclick=()=>{const cnt=id=>document.getElementById(id).value.split(",").map(x=>x.trim()).filter(Boolean).length;let t=betType.value,legs=t==="Exacta"?2:t==="Trifecta"?3:+t.split(" ")[1],counts=[cnt("leg1"),cnt("leg2"),cnt("leg3"),cnt("leg4"),cnt("leg5")].slice(0,legs),combos=counts.reduce((a,b)=>a*b,1),cost=combos*(+base.value||0);ticketOut.textContent=`${combos} combinations · $${cost.toFixed(2)}`};
 
