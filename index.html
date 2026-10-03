@@ -367,12 +367,13 @@ function ppAnalyze(text,targetRace=race){
  for(const h of targetRace.horses){
   const idx=ppHorseAnchor(text,h.name);if(idx<0)continue;
   let a=Math.max(0,idx-180),b=Math.min(text.length,idx+4200),snip=text.slice(a,b).replace(/\s+/g," ").trim();
-  let head=snip.slice(0,1700), lines=snip;
+  let head=snip.slice(0,1700), lifeHead=snip.slice(0,2200), lines=snip;
   let tf=head.match(/TimeformUS\s+Pace:\s*Early\s+(\d+)\s+Late\s+(\d+)/i);
   if(tf){h.tfEarly=+tf[1];h.tfLate=+tf[2]; if(h.tfEarly>=105)h.style="E"; else if(h.tfEarly>=90)h.style="EP"; else if(h.tfLate>=85)h.style="S"; else h.style="P";}
-  let life=head.match(/\bLife\s+(\d+)\b/i);
+  h.lifeStarts=null;
+  let life=lifeHead.match(/\bLife\s+(\d+)\b/i);
   if(life)h.lifeStarts=+life[1];
-  let lifeBest=head.match(/\bLife\s+\d+\s+\S+\s+\d+\s+\d+\s+\$[\d,]+\s+(\d{1,3})(?!\d)/i);
+  let lifeBest=lifeHead.match(/\bLife\s+\d+\s+\S+\s+\d+\s+\d+\s+\$[\d,]+\s+(\d{1,3})(?!\d)/i);
   if(lifeBest)h.best=+lifeBest[1];
   let runBeyers=[...lines.matchAll(/\b(?:fst|fm|gd|sly|my|yl|sf)\b.{0,180}?\b(\d{2,3})\s+\d+\s*\/\d+/gi)].map(m=>+m[1]).filter(x=>x>=20&&x<=120);
   if(runBeyers.length){h.last=runBeyers[0];h.best=Math.max(+h.best||0,...runBeyers.slice(0,5))}
