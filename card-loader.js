@@ -255,7 +255,8 @@ export function parseCard(pages, { sourceName = "document" } = {}) {
   const warnings = [];
   if (!track || !date) warnings.push("Track/date metadata is incomplete; a document fingerprint was added to keep state collision-safe.");
   if (Object.keys(races).length === 1) warnings.push("Only one race was discovered; this may be a single-race DRF.");
-  if (totalRunners < Object.keys(races).length * 3) warnings.push("The discovered fields are suspiciously small; verify the runner list.");\n  for(const race of Object.values(races)){if(race.integrity&&!race.integrity.ready)warnings.push(`Race ${race.race} roster mismatch: missing ${race.integrity.missing.join(", ")||"none"}; unexpected ${race.integrity.unexpected.join(", ")||"none"}.`)}
+  if (totalRunners < Object.keys(races).length * 3) warnings.push("The discovered fields are suspiciously small; verify the runner list.");
+  for(const race of Object.values(races)){if(race.integrity&&!race.integrity.ready)warnings.push(`Race ${race.race} roster mismatch: missing ${race.integrity.missing.join(", ")||"none"}; unexpected ${race.integrity.unexpected.join(", ")||"none"}.`)}
   return { id, schemaVersion: SCHEMA_VERSION, track: track || "Unknown track", date, races, sourceName, fingerprint, warnings };
 }
 
