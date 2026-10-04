@@ -1,0 +1,14 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {reconstructPage, parseCard, replaceCardAtomically, runnerStateKey} from './card-loader.js';
+const items=(rows)=>rows.flatMap(([y,parts])=>parts.map(([x,str])=>({str,transform:[1,0,0,1,x,y]})));
+const page=(n,rows)=>reconstructPage(items(rows),n);
+const header=(race,y=700)=>[[y,[[10,`Race ${race}`],[90,'Maiden $50,000'],[240,'6F Dirt'],[330,'Post Time']]]];
+const runner=(n,name,y)=>[[y,[[10,String(n)],[35,name],[180,'Own: Stable']]]];
+test('coordinate reconstruction preserves items, coordinates, and reading order',()=>{const p=page(1,[[100,[[80,'World'],[10,'Hello']]],[120,[[10,'Top']]]]);assert.deepEqual(p.lines.map(x=>x.text),['Top','Hello World']);assert.equal(p.items[0].transform[4],80)});
+test('race spans pages, continuation runners survive, same-page next race splits, historical Race 4 ignored, and 1A works',()=>{const pages=[page(1,[...header(1),...runner('1','Alpha',650)]),page(2,[...runner('1A','Beta',700),[600,[[10,'Race 4 at Saratoga last year']]],...header(2,500),...runner('2','Gamma',450)])];const c=parseCard(pages);assert.deepEqual(Object.keys(c.races),['1','2']);assert.deepEqual(c.races[1].horses.map(h=>h.n),['1','1A']);assert.equal(c.races[2].horses[0].name,'Gamma')});
+test('Own supplied as independent PDF items bounds a runner header',()=>{const c=parseCard([page(1,[...header(1),[650,[[10,'3'],[30,'Separate Pieces'],[170,'Own:'],[210,'Example']]]])]);assert.equal(c.races[1].horses[0].name,'Separate Pieces')});
+test('incomplete identity is deterministic and collision-safe',()=>{const a=parseCard([page(1,[...header(1),...runner(1,'Alpha',650)])],{sourceName:'a.pdf'}),b=parseCard([page(1,[...header(1),...runner(2,'Beta',650)])],{sourceName:'a.pdf'});assert.match(a.id,/unknown/);assert.notEqual(a.id,b.id);assert.equal(a.id,parseCard([page(1,[...header(1),...runner(1,'Alpha',650)])],{sourceName:'a.pdf'}).id)});
+test('runner state includes card, race, number, normalized name',()=>{assert.notEqual(runnerStateKey('a',1,{n:'1',name:'Horse'}),runnerStateKey('b',1,{n:'1',name:'Horse'}));assert.match(runnerStateKey('a',2,{n:'1A',name:'Horse Name'}),/a\|r2\|1A\|horse-name/)});
+test('malformed input fails atomically',()=>{const old={id:'old'};const r=replaceCardAtomically(old,[page(1,[[100,[[10,'not a card']]]])]);assert.equal(r.replaced,false);assert.equal(r.card,old)});
+test('bundled sample remains exactly 11 races and 107 runners',async()=>{const html=await (await import('node:fs/promises')).readFile('index.html','utf8');const json=html.match(/const SAMPLE_RACES=(.*?);\n/s)[1];const races=JSON.parse(json);assert.equal(Object.keys(races).length,11);assert.equal(Object.values(races).reduce((n,r)=>n+r.horses.length,0),107)});
