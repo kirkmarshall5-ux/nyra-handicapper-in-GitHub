@@ -2,7 +2,7 @@ export const SCHEMA_VERSION = 2;
 
 const clean = value => String(value ?? "").replace(/\s+/g, " ").trim();
 const slug = value => clean(value).normalize("NFKD").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
-const STAT_NAME_NOISE = /^(?:WonLastStart|TurfSprints?|DirtSprints?|Sprint|Routes?|Turf|Dirt|Claim|Allowance|Mdn\w*|FirstStart|1stStart|1stBlink|BlinkOn|31-60Days|61-180Days|OffOver180|TimeformUS|Early|Late|Life|Works?|Trainer|Jockey|Sire|Dam|YO|ft)(?:\b|\()/i;
+const STAT_NAME_NOISE = /^(?:(?:WonLastStart|TurfSprints?|DirtSprints?|Sprint|Routes?|Turf|Dirt|Claim|Allowance|Mdn\w*|FirstStart|1stStart|1stBlink|BlinkOn|31-60Days|61-180Days|OffOver180|Off45-180|MSWtoMCL|TimeformUS|Early|Late|Works?|Trainer|Jockey|Sire|Dam)(?:\b|\())|^(?:Life|YO|ft)$/i;
 const plausibleHorseName = value => {
   const name=clean(value).replace(/\s+\([^)]*\)$/, "");
   return /^[A-Za-z][A-Za-z0-9'’ .&-]{1,60}$/.test(name) && !STAT_NAME_NOISE.test(name) && !/\$|\d{2,}%/.test(name);
