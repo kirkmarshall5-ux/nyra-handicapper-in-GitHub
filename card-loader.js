@@ -172,6 +172,30 @@ export function parseCard(pages, { sourceName = "document" } = {}) {
       const name = clean(match[3].replace(/\s+\([^)]*\)$/, ""));
       if (!horses.some(horse => horse.n === n)) horses.push({ n, name, j: "", t: "", odds: "—", ml, style: "P", lifeStarts: null });
     }
+    // DRF can place the morning line below Own: and on the same reconstructed
+    // row as pedigree text from the right column (Oct. 4 Race 1 #10). Inspect
+    // individual PDF items rather than requiring the whole row to equal odds.
+    for (let i = 1; i < section.length - 1; i++) {
+      if (!/^Own\s*:/i.test(clean(section[i].text))) continue;
+      let odds = null;
+      for (let j = i + 1; j <= Math.min(section.length - 1, i + 3) && !odds; j++) {
+        const oddsItem = (section[j].items || []).find(item => item.x < 90 && oddsPattern.test(clean(item.str)));
+        if (oddsItem) odds = clean(oddsItem.str);
+      }
+      if (!odds) continue;
+      let name = null, program = null;
+      for (let p = i - 1; p >= Math.max(0, i - 5) && !name; p--) {
+        const candidates = (section[p].items || []).map(item => ({ x: item.x, text: clean(item.str) }))
+          .filter(item => item.x >= 40 && item.x < 175 && /^[A-Za-z][A-Za-z0-9'’ .&-]{1,60}(?:\s+\([^)]*\))?$/.test(item.text) && !/^(?:Own|Sire|Dam|Timeform|Trainer|Jockey|Life|Works?)\b/i.test(item.text));
+        if (candidates.length) name = clean(candidates[0].text.replace(/\s+\([^)]*\)$/, ""));
+      }
+      if (!name) continue;
+      for (let p = i - 1; p >= Math.max(0, i - 6) && !program; p--) {
+        const programItem = (section[p].items || []).find(item => item.x < 90 && programPattern.test(clean(item.str)));
+        if (programItem) program = clean(programItem.str).toUpperCase();
+      }
+      if (program && !horses.some(horse => horse.n === program)) horses.push({ n: program, name, j: "", t: "", odds: "—", ml: odds, style: "P", lifeStarts: null });
+    }
     const headerText = clean(section[0]?.text || "");
     const bodyText = section.slice(0, 8).map(line => clean(line.text)).join(" ");
     const postMatch = bodyText.match(/\bPost\s*time:\s*([^ ]+\s*(?:ET|PM|AM)?)/i);
