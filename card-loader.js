@@ -89,7 +89,7 @@ function runnerAt(lines, index) {
   const pair = pairs[0];
   const competingPrograms = programs.filter(item => item !== programItem && Math.abs(item.x - programItem.x) <= 24 && Math.abs(item.y - pair.name.item.y) < Math.abs(programItem.y - pair.name.item.y));
   if (competingPrograms.length) return null;
-  return { n: programNumber, name: clean(pair.name.text.replace(/\s+\([^)]*\)$/, "")), index };
+  return { n: programNumber, name: clean(pair.name.text.replace(/\s+\([^)]*\)$/, "")), index, ownerKey: `${pageNumber}:${pair.owner.x}:${pair.owner.y}` };
 }
 
 export function parseCard(pages, { sourceName = "document" } = {}) {
@@ -98,10 +98,12 @@ export function parseCard(pages, { sourceName = "document" } = {}) {
   const races = {};
   const addSection = (raceNumber, section) => {
     const horses = races[raceNumber]?.horses || [];
+    const claimedOwners = new Set(horses.map(horse => horse.ownerKey).filter(Boolean));
     for (let i = 0; i < section.length; i++) {
       const runner = runnerAt(section, i);
-      if (runner && !horses.some(horse => horse.n === runner.n)) {
-        horses.push({ n: runner.n, name: runner.name, j: "", t: "", odds: "—", ml: "—", style: "P", lifeStarts: null });
+      if (runner && !claimedOwners.has(runner.ownerKey) && !horses.some(horse => horse.n === runner.n)) {
+        horses.push({ n: runner.n, name: runner.name, j: "", t: "", odds: "—", ml: "—", style: "P", lifeStarts: null, ownerKey: runner.ownerKey });
+        claimedOwners.add(runner.ownerKey);
       }
     }
     if (!races[raceNumber]) races[raceNumber] = { race: raceNumber, horses, track: "", date: "", cls: clean(section.slice(0, 4).map(line => line.text).join(" · ")), dist: "", surface: "", post: "", oddsMode: "Unknown" };
