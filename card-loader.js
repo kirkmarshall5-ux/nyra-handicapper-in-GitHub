@@ -2,6 +2,11 @@ export const SCHEMA_VERSION = 2;
 
 const clean = value => String(value ?? "").replace(/\s+/g, " ").trim();
 const slug = value => clean(value).normalize("NFKD").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+const STAT_NAME_NOISE = /^(?:WonLastStart|TurfSprints?|DirtSprints?|Sprint|Routes?|Turf|Dirt|Claim|Allowance|Mdn\w*|FirstStart|1stStart|1stBlink|BlinkOn|31-60Days|61-180Days|TimeformUS|Early|Late|Life|Works?|Trainer|Jockey|Sire|Dam)(?:\b|\()/i;
+const plausibleHorseName = value => {
+  const name=clean(value).replace(/\s+\([^)]*\)$/, "");
+  return /^[A-Za-z][A-Za-z0-9'’ .&-]{1,60}$/.test(name) && !STAT_NAME_NOISE.test(name) && !/\$|\d{2,}%/.test(name);
+};
 
 export function reconstructPage(items, pageNumber = 1, tolerance = 2.5) {
   const positioned = items.filter(item => clean(item.str)).map((item, index) => ({
@@ -153,9 +158,9 @@ export function parseCard(pages, { sourceName = "document" } = {}) {
       const program = clean(section[i-3].text).match(programPattern);
       const odds = clean(section[i-2].text);
       const name = clean(section[i-1].text).replace(/\s+\([^)]*\)$/, "");
-      if (!program || !oddsPattern.test(odds) || !/^[A-Za-z]/.test(name) || /^Own\s*:/i.test(name)) continue;
+      if (!program || !oddsPattern.test(odds) || !plausibleHorseName(name)) continue;
       const n = program[1].toUpperCase();
-      if (!horses.some(horse => horse.n === n)) horses.push({ n, name, j: "", t: "", odds: "—", ml: odds, style: "P", lifeStarts: null });
+      if (plausibleHorseName(name) && !horses.some(horse => horse.n === n)) horses.push({ n, name, j: "", t: "", odds: "—", ml: odds, style: "P", lifeStarts: null, identitySource: "strict" });
     }
     // PDF.js can occasionally merge the program, morning line, and horse name
     // onto fewer reconstructed rows. Recover only from the text immediately
@@ -170,32 +175,14 @@ export function parseCard(pages, { sourceName = "document" } = {}) {
       const n = match[1].toUpperCase();
       const ml = match[2];
       const name = clean(match[3].replace(/\s+\([^)]*\)$/, ""));
-      if (!horses.some(horse => horse.n === n)) horses.push({ n, name, j: "", t: "", odds: "—", ml, style: "P", lifeStarts: null });
+      if (!plausibleHorseName(name)) continue;
+      if (!horses.some(horse => horse.n === n)) horses.push({ n, name, j: "", t: "", odds: "—", ml, style: "P", lifeStarts: null, identitySource: "strict" });
     }
-    // DRF can place the morning line below Own: and on the same reconstructed
-    // row as pedigree text from the right column (Oct. 4 Race 1 #10). Inspect
-    // individual PDF items rather than requiring the whole row to equal odds.
-    for (let i = 1; i < section.length - 1; i++) {
-      if (!/^Own\s*:/i.test(clean(section[i].text))) continue;
-      let odds = null;
-      for (let j = i + 1; j <= Math.min(section.length - 1, i + 3) && !odds; j++) {
-        const oddsItem = (section[j].items || []).find(item => item.x < 90 && oddsPattern.test(clean(item.str)));
-        if (oddsItem) odds = clean(oddsItem.str);
-      }
-      if (!odds) continue;
-      let name = null, program = null;
-      for (let p = i - 1; p >= Math.max(0, i - 5) && !name; p--) {
-        const candidates = (section[p].items || []).map(item => ({ x: item.x, text: clean(item.str) }))
-          .filter(item => item.x >= 40 && item.x < 175 && /^[A-Za-z][A-Za-z0-9'’ .&-]{1,60}(?:\s+\([^)]*\))?$/.test(item.text) && !/^(?:Own|Sire|Dam|Timeform|Trainer|Jockey|Life|Works?)\b/i.test(item.text));
-        if (candidates.length) name = clean(candidates[0].text.replace(/\s+\([^)]*\)$/, ""));
-      }
-      if (!name) continue;
-      for (let p = i - 1; p >= Math.max(0, i - 6) && !program; p--) {
-        const programItem = (section[p].items || []).find(item => item.x < 90 && programPattern.test(clean(item.str)));
-        if (programItem) program = clean(programItem.str).toUpperCase();
-      }
-      if (program && !horses.some(horse => horse.n === program)) horses.push({ n: program, name, j: "", t: "", odds: "—", ml: odds, style: "P", lifeStarts: null });
-    }
+    // V4.3 credibility rule: do not guess a runner from loose nearby PDF items.
+    // A previous fallback paired trainer-stat text such as "WonLastStart" with
+    // unrelated numbers and created phantom horses. If the strict header
+    // signature cannot prove identity, leave the runner missing and surface a
+    // validation problem rather than manufacturing a horse.
     const headerText = clean(section[0]?.text || "");
     const bodyText = section.slice(0, 8).map(line => clean(line.text)).join(" ");
     const postMatch = bodyText.match(/\bPost\s*time:\s*([^ ]+\s*(?:ET|PM|AM)?)/i);
