@@ -51,8 +51,19 @@ function runnerAt(lines, index) {
   if (!programItem) return null;
   const namePattern = /^[A-Za-z][A-Za-z0-9'’ .&-]{1,60}(?:\s+\([^)]*\))?$/;
   const noisePattern = /^(?:Early|Late|Own|Sire|Dam|Trainer|Jockey|Blinkers|Weight|Bred|Breeder|Mdn\w*|Turf\w*|Dirt\w*|Sprint\w*|Route\w*|Life|Timeform\w*|Beyer|Workout|Works?|Foaled|Pedigree|Stats?|Record)\b/i;
-  const names = items.map(item => ({ item, text: clean(item.str) }))
+  const itemNames = items.map(item => ({ item, text: clean(item.str) }))
     .filter(candidate => namePattern.test(candidate.text) && !noisePattern.test(candidate.text));
+  // DRF sometimes emits a multi-word horse name as separate PDF text items
+  // (for example, "Early" + "Returns"). Rebuild a candidate from adjacent
+  // items on the same reconstructed row, while keeping it inside the runner
+  // name column so pedigree/statistical text cannot become a horse name.
+  const rowNames = pageLines.map(line => {
+    const parts = (line.items || []).filter(item => item.x > programItem.x + 4 && item.x < 170);
+    if (!parts.length) return null;
+    const text = clean(parts.map(item => item.str).join(" "));
+    return { item: { x: parts[0].x, y: line.y }, text };
+  }).filter(candidate => candidate && namePattern.test(candidate.text) && !noisePattern.test(candidate.text));
+  const names = [...itemNames, ...rowNames];
   const owners = items.filter(item => /^Own\s*:/i.test(clean(item.str)));
   const pairs = [];
   for (const name of names) for (const owner of owners) {
