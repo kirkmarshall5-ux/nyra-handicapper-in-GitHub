@@ -175,7 +175,22 @@ function trainerContextScore(h){
 }
 function workScore(h){return h.workRating!==""&&h.workRating!=null&&Number.isFinite(+h.workRating)?+h.workRating:null}
 function pedigreeScore(h){return h.pedigreeRating!==""&&h.pedigreeRating!=null&&Number.isFinite(+h.pedigreeRating)?+h.pedigreeRating:null}
+function raceAudit(r){
+ const blockers=[],warnings=[],horses=r.horses||[],seen=new Set(),nums=[];
+ const suspicious=/(?:WonLastStart|TurfSprints?|31-60Days|TimeformUS|^Late\s+\d+|^Early\s+\d+|^\d+\s*YO$)/i;
+ for(const h of horses){
+  const key=String(h.n);if(seen.has(key))blockers.push(`duplicate program #${key}`);seen.add(key);
+  if(suspicious.test(h.name||""))blockers.push(`phantom-looking runner #${key} ${h.name}`);
+  const n=parseInt(key,10);if(Number.isFinite(n)&&n<=20)nums.push(n);
+ }
+ if(nums.length){const max=Math.max(...nums),set=new Set(nums);for(let n=1;n<=max;n++)if(!set.has(n))blockers.push(`missing program #${n}`)}
+ const analyzed=horses.some(h=>h.ppParseStatus);
+ if(analyzed){for(const h of horses){if(h.ppParseStatus==="unmatched")blockers.push(`PP block not matched for #${h.n} ${h.name}`);if(h.lifeStarts==null)blockers.push(`career starts unknown for #${h.n} ${h.name}`)}}
+ if(horses.some(h=>!h.j||!h.t))warnings.push("one or more jockey/trainer identities are missing");
+ return {ready:blockers.length===0,blockers:[...new Set(blockers)],warnings:[...new Set(warnings)]};
+}
 function score(h){
+ if(!raceAudit(race).ready)return "N/A";
  const vals=race.horses.filter(x=>x.odds!=="SCR");
  const nums=k=>vals.map(x=>+x[k]).filter(x=>Number.isFinite(x)&&x>0);
  const scale=(v,a)=>{v=+v;if(!Number.isFinite(v)||v<=0||!a.length)return null;let lo=Math.min(...a),hi=Math.max(...a);return hi===lo?70:45+50*(v-lo)/(hi-lo)};
@@ -276,7 +291,8 @@ function renderHorses(){
 function renderPace(){paceMap.innerHTML=["E","EP","P","S"].map(s=>`<div class="pace-lane"><b>${s}</b><div class="lane">${race.horses.filter(h=>h.style===s&&h.odds!=="SCR").map(h=>`<div class="runner"><b>#${h.n}</b> ${h.name}<div class="tiny muted">Rating ${score(h)}</div></div>`).join("")||'<span class="muted">None</span>'}</div></div>`).join("")}
 function renderEvidence(){
  const el=document.getElementById("evidenceSummary");if(!el)return;
- el.innerHTML=race.horses.filter(h=>h.odds!=="SCR").map(h=>{let e=evidenceProfile(h);
+ const audit=raceAudit(race),auditHtml=audit.ready?"":`<div class="note" style="grid-column:1/-1"><b>DATA CHECK FAILED — ratings withheld</b><div class="small">${audit.blockers.join(" · ")}</div></div>`;
+ el.innerHTML=auditHtml+race.horses.filter(h=>h.odds!=="SCR").map(h=>{let e=evidenceProfile(h);
  return `<div class="note"><div class="spread"><b>#${h.n} ${h.name}</b>${confidenceBadge(h)}</div>
  <div class="tiny muted" style="margin-top:6px">${e.experience} · Rating ${score(h)}</div>
  <div class="small" style="margin-top:7px">Race figures: ${e.hasRace?"✓":"N/A"} · Works: ${e.works?"✓":"N/A"} · Pedigree: ${e.pedigree?"✓":"N/A"} · Trainer context: ${e.trainer?"✓":"N/A"}</div>
