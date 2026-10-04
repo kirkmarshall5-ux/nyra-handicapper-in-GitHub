@@ -99,6 +99,21 @@ function runnerAt(lines, index) {
   return { n: programNumber, name: clean(pair.name.text.replace(/\s+\([^)]*\)$/, "")), index, ownerKey: `${pageNumber}:${pair.owner.x}:${pair.owner.y}` };
 }
 
+function entryIndexFromPages(pages){
+ const text=pages.slice(0,2).flatMap(page=>page.lines.map(line=>line.text)).join("\n");
+ const start=text.search(/INDEX TO ENTRIES/i);if(start<0)return null;
+ const after=text.slice(start),trainerAt=after.search(/INDEX TO TRAINERS/i),section=trainerAt>=0?after.slice(0,trainerAt):after.slice(0,7000);
+ const byRace={};
+ const re=/([A-Za-z][A-Za-z0-9'’* .&-]{1,60}?)\s*,\s*(10|[1-9])(?=\s|$)/g;
+ for(const m of section.matchAll(re)){
+  const name=clean(m[1]).replace(/^>\s*[A-Z]\s*>\s*/,"");
+  if(!plausibleHorseName(name))continue;
+  const race=+m[2];(byRace[race]||(byRace[race]=[])).push(name);
+ }
+ for(const race of Object.keys(byRace))byRace[race]=[...new Set(byRace[race])];
+ return Object.keys(byRace).length?byRace:null;
+}
+
 export function parseCard(pages, { sourceName = "document" } = {}) {
   if (!Array.isArray(pages) || !pages.length) throw new Error("No readable PDF pages were found.");
   const lines = pages.flatMap(page => page.lines.map(line => ({ ...line, pageNumber: page.pageNumber })));
@@ -223,6 +238,16 @@ export function parseCard(pages, { sourceName = "document" } = {}) {
   const drfTrack = headers.find(header => header.trackAbbreviation)?.trackAbbreviation;
   const track = trackMatch ? trackMatch[1] : TRACK_ABBREVIATIONS[drfTrack] || (drfTrack ? drfTrack.toUpperCase() : "");
   Object.values(races).forEach(race => { race.track = track || "Unknown track"; race.date = date; });
+  const entryIndex=entryIndexFromPages(pages);
+  if(entryIndex){
+   for(const [raceNo,race] of Object.entries(races)){
+    const expected=entryIndex[raceNo]||[],parsed=race.horses.map(h=>h.name);
+    const canon=v=>slug(v).replace(/-/g,"");
+    const parsedSet=new Set(parsed.map(canon)),expectedSet=new Set(expected.map(canon));
+    const missing=expected.filter(n=>!parsedSet.has(canon(n))),unexpected=parsed.filter(n=>!expectedSet.has(canon(n)));
+    race.integrity={source:"DRF index to entries",expectedCount:expected.length,parsedCount:parsed.length,missing,unexpected,ready:expected.length>0&&missing.length===0&&unexpected.length===0};
+   }
+  }
   const totalRunners = Object.values(races).reduce((sum, race) => sum + race.horses.length, 0);
   if (!totalRunners) throw new Error("Race headers were found, but no bounded runner headers with program number, name, and Own: were found.");
   const fingerprint = fingerprintPages(pages);
@@ -230,7 +255,7 @@ export function parseCard(pages, { sourceName = "document" } = {}) {
   const warnings = [];
   if (!track || !date) warnings.push("Track/date metadata is incomplete; a document fingerprint was added to keep state collision-safe.");
   if (Object.keys(races).length === 1) warnings.push("Only one race was discovered; this may be a single-race DRF.");
-  if (totalRunners < Object.keys(races).length * 3) warnings.push("The discovered fields are suspiciously small; verify the runner list.");
+  if (totalRunners < Object.keys(races).length * 3) warnings.push("The discovered fields are suspiciously small; verify the runner list.");\n  for(const race of Object.values(races)){if(race.integrity&&!race.integrity.ready)warnings.push(`Race ${race.race} roster mismatch: missing ${race.integrity.missing.join(", ")||"none"}; unexpected ${race.integrity.unexpected.join(", ")||"none"}.`)}
   return { id, schemaVersion: SCHEMA_VERSION, track: track || "Unknown track", date, races, sourceName, fingerprint, warnings };
 }
 
