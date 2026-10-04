@@ -268,10 +268,10 @@ function renderHeader(){
 }
 function selectRace(n){if(!activeCard.races[n])return;race=structuredClone(activeCard.races[n]);restoreRunnerEdits();raceNotes.value=state.cards?.[activeCard.id]?.notes?.[n]||"";renderAll();window.scrollTo({top:0,behavior:"smooth"})}
 function renderHorses(){
- horseTable.querySelector("tbody").innerHTML=sortedGridHorses().map(h=>{let js=jockeyStat(h.j),ts=trainerStat(h.t);return `<tr style="${h.odds==="SCR"?"opacity:.48":""}">
+ horseTable.querySelector("tbody").innerHTML=sortedGridHorses().map(h=>{let js=horseJockeyWin(h),ts=horseTrainerWin(h);return `<tr style="${h.odds==="SCR"?"opacity:.48":""}">
 <td><span class="num">${h.n}</span><span class="horse">${h.name}</span></td><td>${h.ml||"—"}</td><td><span class="odds">${h.odds||"—"}</span></td>
 <td><span class="pacechip ${h.style}">${h.style||"?"}</span></td><td>${h.j||"—"}</td><td>${h.t||"—"}</td>
-<td>${js?js.win.toFixed(1)+"%":"—"}</td><td>${ts?ts.win.toFixed(1)+"%":"—"}</td><td>${displayVal(h.last)}</td><td><span class="score">${score(h)}</span><div style="margin-top:4px">${confidenceBadge(h)}</div></td><td><b>${fairOddsMap()[h.n]||"—"}</b></td></tr>`}).join("");
+<td>${Number.isFinite(js)?js.toFixed(1)+"%":"—"}</td><td>${Number.isFinite(ts)?ts.toFixed(1)+"%":"—"}</td><td>${displayVal(h.last)}</td><td><span class="score">${score(h)}</span><div style="margin-top:4px">${confidenceBadge(h)}</div></td><td><b>${fairOddsMap()[h.n]||"—"}</b></td></tr>`}).join("");
 }
 function renderPace(){paceMap.innerHTML=["E","EP","P","S"].map(s=>`<div class="pace-lane"><b>${s}</b><div class="lane">${race.horses.filter(h=>h.style===s&&h.odds!=="SCR").map(h=>`<div class="runner"><b>#${h.n}</b> ${h.name}<div class="tiny muted">Rating ${score(h)}</div></div>`).join("")||'<span class="muted">None</span>'}</div></div>`).join("")}
 function renderEvidence(){
