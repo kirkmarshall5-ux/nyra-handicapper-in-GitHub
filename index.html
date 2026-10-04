@@ -157,7 +157,9 @@ const defaultWeights={fig:45,best:20,form:10,class:10,jockey:7,trainer:8};
 let weights=Object.assign({},defaultWeights,state.weights||{});
 function normalizeName(s){return (s||"").toLowerCase().replace(/\([^)]*\)/g,"").replace(/[^a-z0-9]+/g," ").trim().split(/\s+/).filter(Boolean).sort().join(" ")}
 function jockeyStat(n){return JOCKEYS.find(x=>normalizeName(x.n)===normalizeName(n))}
-function trainerStat(n){return TRAINERS.find(x=>normalizeName(x.n)===normalizeName(n))}\nfunction horseJockeyWin(h){const direct=Number(h.jWin);return Number.isFinite(direct)?direct:horseJockeyWin(h)}\nfunction horseTrainerWin(h){const direct=Number(h.tWin);return Number.isFinite(direct)?direct:horseTrainerWin(h)}
+function trainerStat(n){return TRAINERS.find(x=>normalizeName(x.n)===normalizeName(n))}
+function horseJockeyWin(h){const direct=Number(h.jWin);return Number.isFinite(direct)?direct:jockeyStat(h.j)?.win}
+function horseTrainerWin(h){const direct=Number(h.tWin);return Number.isFinite(direct)?direct:trainerStat(h.t)?.win}
 function fracToProb(o){if(!o||o==="SCR"||!o.includes("/"))return 0;let [a,b]=o.split("/").map(Number);return b/(a+b)}
 function save(){
  state.weights=weights;state.cards=state.cards||{};const cardState=state.cards[activeCard.id]||(state.cards[activeCard.id]={runners:{},notes:{}});
