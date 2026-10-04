@@ -138,7 +138,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 
 <script type="module">
 import {reconstructPage, replaceCardAtomically, runnerStateKey} from "./card-loader.js?v=20261004-9";
-import {evidenceProfile, evidenceWeightedRating, probabilityWeights, extractRunningLineFigures, ratingEvidenceProfile} from "./scoring-engine.js";
+import {evidenceProfile, evidenceWeightedRating, probabilityWeights, extractRunningLineFigures, ratingEvidenceProfile, evidenceSignalAdjustment} from "./scoring-engine.js";
 import {priceEdge, winDecision, exoticDecision, multiRaceDecision} from "./wager-engine.js";
 const JOCKEYS=[
 {r:1,n:"Flavien Prat",s:41,w:12,win:29.3,top:46.3},{r:2,n:"Manuel Franco",s:45,w:10,win:22.2,top:42.2},{r:3,n:"Ricardo Santana, Jr.",s:52,w:8,win:15.4,top:40.4},{r:4,n:"Jose Lezcano",s:37,w:5,win:13.5,top:45.9},{r:5,n:"Kendrick Carmouche",s:34,w:4,win:11.8,top:35.3},{r:5,n:"Samuel Marin",s:30,w:4,win:13.3,top:26.7},{r:7,n:"Dylan Davis",s:39,w:3,win:7.7,top:35.9},{r:8,n:"Antonio Fresu",s:33,w:2,win:6.1,top:33.3},{r:8,n:"Jose L. Ortiz",s:8,w:2,win:25.0,top:50.0},{r:8,n:"Joel Rosario",s:19,w:2,win:10.5,top:42.1},{r:8,n:"Javier Castellano",s:27,w:2,win:7.4,top:29.6},{r:12,n:"Junior Alvarado",s:23,w:1,win:4.3,top:47.8},{r:12,n:"John R. Velazquez",s:17,w:1,win:5.9,top:35.3},{r:12,n:"Edgard J. Zayas",s:24,w:1,win:4.2,top:20.8}];
@@ -219,7 +219,12 @@ function score(h){
   parts.push({value:workScore(h),weight:12},{value:pedigreeScore(h),weight:8},{value:trainerContextScore(h),weight:12});
  }
  const rating=evidenceWeightedRating(parts);
- return rating===null?"N/A":rating;
+ if(rating===null)return "N/A";
+ const fieldCurrent=(race.horses||[]).filter(x=>x.odds!=="SCR").map(x=>Array.isArray(x.figs)?x.figs[0]:x.last).map(Number).filter(Number.isFinite);
+ const signal=evidenceSignalAdjustment(h,fieldCurrent);
+ h.signalAdjustment=signal.adjustment;
+ h.signalEvidence=signal.contributions;
+ return Math.max(0,Math.min(100,Math.round(rating+signal.adjustment)));
 }
 function confidenceBadge(h){let x=evidenceProfile({...h,jockeyRating:horseJockeyWin(h),trainerRating:horseTrainerWin(h)}).confidence;return `<span class="conf ${x.toLowerCase()}">${x}</span>`}
 function displayVal(v){return (v===""||v==null)?'<span class="na">N/A</span>':v}
