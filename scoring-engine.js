@@ -161,7 +161,7 @@ export function relativeBeyerPosition(horseFigures,fieldCurrentFigures){
  const own=(horseFigures||[]).map(numeric).filter(v=>v!==null);
  const field=(fieldCurrentFigures||[]).map(numeric).filter(v=>v!==null).sort((a,b)=>a-b);
  if(!own.length||!field.length)return {available:false};
- const current=own[0],median=field[Math.floor(field.length/2)];
+ const current=own[0],mid=Math.floor(field.length/2),median=field.length%2?field[mid]:(field[mid-1]+field[mid])/2;
  const rank=1+field.filter(v=>v>current).length;
  return {available:true,current,fieldMedian:median,vsMedian:current-median,rank,fieldSize:field.length};
 }
