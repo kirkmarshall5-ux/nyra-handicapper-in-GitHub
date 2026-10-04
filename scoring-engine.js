@@ -141,3 +141,27 @@ export function contextualFigureWeight(run,today={}){
  if(days!==null&&days>365){weight*=0.7;reasons.push("older race")}
  return {weight:+weight.toFixed(3),reasons};
 }
+
+
+export function beyerTrajectory(figures,weights=[]){
+ const figs=(figures||[]).map(numeric).filter(v=>v!==null);
+ if(figs.length<3)return {trend:"insufficient",slope:0,change:0};
+ const chronological=[...figs].reverse();
+ const ws=weights.length===figs.length?[...weights].reverse():chronological.map(()=>1);
+ let sw=0,sx=0,sy=0,sxx=0,sxy=0;
+ chronological.forEach((y,x)=>{const w=Math.max(0,numeric(ws[x])??1);sw+=w;sx+=w*x;sy+=w*y;sxx+=w*x*x;sxy+=w*x*y});
+ const den=sw*sxx-sx*sx;
+ const slope=den?(sw*sxy-sx*sy)/den:0;
+ const change=figs[0]-figs[figs.length-1];
+ const trend=slope>=3?"improving":slope<=-3?"declining":Math.abs(slope)<1.5?"stable":"mixed";
+ return {trend,slope:+slope.toFixed(2),change};
+}
+
+export function relativeBeyerPosition(horseFigures,fieldCurrentFigures){
+ const own=(horseFigures||[]).map(numeric).filter(v=>v!==null);
+ const field=(fieldCurrentFigures||[]).map(numeric).filter(v=>v!==null).sort((a,b)=>a-b);
+ if(!own.length||!field.length)return {available:false};
+ const current=own[0],median=field[Math.floor(field.length/2)];
+ const rank=1+field.filter(v=>v>current).length;
+ return {available:true,current,fieldMedian:median,vsMedian:current-median,rank,fieldSize:field.length};
+}
