@@ -57,7 +57,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <div class="grid">
 <div class="card span12">
 <div class="hero">
-<div><div class="kicker">Belmont Park · Saturday, October 3, 2026 · DRF + NYRA debug card</div><h2 id="raceTitle">Belmont Park · Race 1</h2>
+<div><div class="kicker" id="cardKicker">Active race card</div><h2 id="raceTitle">Belmont Park · Race 1</h2>
 <div class="badges" id="raceBadges"><span class="badge gold">1 1/16M Dirt</span><span class="badge">Maiden Special Weight · $100,000</span><span class="badge">12:05 PM</span><span class="badge green">Public NYRA card</span></div></div>
 <div><div class="muted small" style="margin-bottom:5px">Race</div><div class="racebar" id="racebar"></div></div>
 </div></div>
@@ -137,7 +137,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 </main>
 
 <script type="module">
-import {reconstructPage, replaceCardAtomically, runnerStateKey} from "./card-loader.js?v=20261004-5";
+import {reconstructPage, replaceCardAtomically, runnerStateKey} from "./card-loader.js?v=20261004-6";
 import {evidenceProfile, evidenceWeightedRating, probabilityWeights} from "./scoring-engine.js";
 import {priceEdge, winDecision, exoticDecision, multiRaceDecision} from "./wager-engine.js";
 const JOCKEYS=[
@@ -248,8 +248,9 @@ function renderThings(){
  el.innerHTML=rows.slice(0,8).map(x=>`<div class="note"><div class="spread"><b>#${x.h.n} ${x.h.name}</b><span class="pill">${x.a.label}</span></div><div class="small" style="margin-top:5px">${x.a.why}</div>${x.a.caution?`<div class="tiny muted" style="margin-top:4px">Watch-out: ${x.a.caution}</div>`:""}</div>`).join("");
 }
 function renderHeader(){
+ cardKicker.textContent=`${activeCard.track||race.track||"Race card"} · ${activeCard.date||race.date||"date unknown"} · active DRF card`;
  raceTitle.textContent=`${race.track} · Race ${race.race}`;
- raceBadges.innerHTML=`<span class="badge gold">${race.dist||"—"} ${race.surface||""}</span><span class="badge">${race.cls||"Race"}</span><span class="badge">${race.post||"—"}</span><span class="badge green">Public NYRA card</span>`;
+ raceBadges.innerHTML=`<span class="badge gold">${race.dist||"—"} ${race.surface||""}</span><span class="badge">${race.cls||"Race"}</span><span class="badge">${race.post||"—"}</span><span class="badge green">Active card</span>`;
  let active=race.horses.filter(h=>h.odds!=="SCR");
  const ml=[...active].sort((a,b)=>oddsNumber(a.ml)-oddsNumber(b.ml)).slice(0,3);
  topMl.innerHTML=ml.length?ml.map((h,i)=>`<div><b>${i+1}. #${h.n} ${h.name}</b> <span class="pill">${h.ml||"—"}</span></div>`).join(""):"<span class=\"muted\">No active runners</span>";
