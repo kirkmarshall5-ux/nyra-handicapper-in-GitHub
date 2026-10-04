@@ -88,3 +88,20 @@ export function extractRunningLineFigures(text){
  }
  return out;
 }
+
+
+const COMPROMISED_TRIP_RE=/\b(stumbl\w*|bump\w*\s+(?:st|start|brk|break)|bad\s+(?:start|break)|broke\s+(?:slow|poor)|off\s+slow|slow\s+start|checked|steadied|clipped\s+heels|lost\s+rider|eased|pulled\s+up|stopped|dwelt|pinched\s+back|blocked|shuffled\s+back)\b/i;
+
+export function beyerAnomalies(figures,tripComments=[]){
+ const figs=(figures||[]).map(numeric).filter(v=>v!==null);
+ if(figs.length<3)return [];
+ return figs.map((fig,i)=>{
+  const peers=figs.filter((_,j)=>j!==i).sort((a,b)=>a-b);
+  const median=peers[Math.floor(peers.length/2)];
+  const drop=median-fig;
+  const comment=String(tripComments[i]||"");
+  const compromised=COMPROMISED_TRIP_RE.test(comment);
+  return {index:i,figure:fig,peerMedian:median,drop,comment,compromised,
+   classification:drop>=25?(compromised?"extreme-low-compromised":"extreme-low-unexplained"):drop>=15?"low-outlier":"normal"};
+ }).filter(x=>x.classification!=="normal");
+}
