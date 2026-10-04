@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';
-import {evidenceProfile,evidenceWeightedRating,confidenceAdjustedTemperature,probabilityWeights,extractRunningLineFigures,beyerAnomalies,claimLayoffSignal,contextualFigureWeight} from './scoring-engine.js';
+import {evidenceProfile,evidenceWeightedRating,confidenceAdjustedTemperature,probabilityWeights,extractRunningLineFigures,beyerAnomalies,claimLayoffSignal,contextualFigureWeight,beyerTrajectory,relativeBeyerPosition} from './scoring-engine.js';
 test('missing descriptive workout/pedigree text does not invent a numeric rating',()=>{assert.equal(evidenceWeightedRating([{value:null,weight:24},{value:null,weight:18}]),null)});
 test('unknown career starts are labeled unknown and forced to low confidence',()=>{const e=evidenceProfile({lifeStarts:null,last:88,best:92,figs:[88,86,84],trainerAngles:'Dirt stats'});assert.equal(e.experience,'Starts unknown');assert.equal(e.confidence,'Low')});
 test('first-time starter can reach medium but never high without race evidence',()=>{const e=evidenceProfile({lifeStarts:0,workText:'5f work',pedigree:'Sire / Dam',trainerAngles:'1st starter'});assert.equal(e.experience,'First-time starter');assert.equal(e.confidence,'Medium')});
@@ -24,3 +24,7 @@ test('claim layoff ignores trainer percentage when sample is too small',()=>{con
 test('off-surface Beyer is preserved but heavily discounted for today',()=>{const x=contextualFigureWeight({surface:'turf',distanceFurlongs:6},{surface:'dirt',distanceFurlongs:6});assert.equal(x.weight,.35);assert.ok(x.reasons.includes('different surface'))});
 test('compromised trip reduces relevance without deleting the Beyer',()=>{const x=contextualFigureWeight({surface:'turf',distanceFurlongs:8,compromisedTrip:true},{surface:'turf',distanceFurlongs:8});assert.equal(x.weight,.45);assert.ok(x.reasons.includes('compromised trip'))});
 test('comparable clean recent race retains full Beyer weight',()=>{assert.equal(contextualFigureWeight({surface:'dirt',distanceFurlongs:7,daysAgo:30},{surface:'dirt',distanceFurlongs:7}).weight,1)});
+
+test('Beyer trajectory distinguishes steady improvement from decline',()=>{assert.equal(beyerTrajectory([88,82,75,68,62]).trend,'improving');assert.equal(beyerTrajectory([73,79,86,92,96]).trend,'declining')});
+test('stable Beyer sequence is not forced into a trend',()=>{assert.equal(beyerTrajectory([82,81,83,82,80]).trend,'stable')});
+test('current Beyer is evaluated relative to todays field',()=>{const x=relativeBeyerPosition([83,78,73,68],[94,83,80,78,74,70]);assert.equal(x.vsMedian,5);assert.equal(x.rank,2)});
