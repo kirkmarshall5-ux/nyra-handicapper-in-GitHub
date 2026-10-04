@@ -105,3 +105,26 @@ export function beyerAnomalies(figures,tripComments=[]){
    classification:drop>=25?(compromised?"extreme-low-compromised":"extreme-low-unexplained"):drop>=15?"low-outlier":"normal"};
  }).filter(x=>x.classification!=="normal");
 }
+
+
+export function claimLayoffSignal(h){
+ const days=numeric(h.daysSinceLast),claimPrice=numeric(h.lastClaimPrice),todayPrice=numeric(h.todayClaimPrice);
+ const claimed=!!h.claimedLastStart||claimPrice!==null;
+ if(!claimed)return {applicable:false,label:"No recent claim",score:0};
+ let score=0,reasons=[];
+ if(days!==null&&days>=45){score+=1;reasons.push(String(days)+"-day reset after claim")}
+ const works=Array.isArray(h.works)?h.works.length:0;
+ if(days!==null&&days>=45&&works>=3){score+=1;reasons.push(String(works)+" recorded works during reset")}
+ if(claimPrice!==null&&todayPrice!==null){
+  const ratio=todayPrice/claimPrice;
+  if(ratio>=1.2){score+=2;reasons.push("protected/raised above claim price")}
+  else if(ratio<=0.75){score-=2;reasons.push("returned well below claim price")}
+ }
+ const stat=numeric(h.claimLayoffWinPct),sample=numeric(h.claimLayoffStarts);
+ if(stat!==null&&sample!==null&&sample>=10){
+  if(stat>=20){score+=1;reasons.push("trainer "+stat+"% with claim/layoff pattern ("+sample+" starts)")}
+  else if(stat<=7){score-=1;reasons.push("trainer only "+stat+"% with claim/layoff pattern ("+sample+" starts)")}
+ }
+ const label=score>=3?"Positive claim intent":score<=-2?"Negative claim intent":"Mixed/neutral claim intent";
+ return {applicable:true,label,score,reasons};
+}
