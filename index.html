@@ -461,11 +461,11 @@ function ppAnalyze(text,targetRace=race){
  if(active.length>=3){let sorted=[...active].sort((a,b)=>b.tfEarly-a.tfEarly);if(sorted[0].tfEarly-sorted[1].tfEarly>=12){sorted[0].angles=sorted[0].angles||[];sorted[0].angles.push({label:"Possible lone-speed edge",why:`TimeformUS Early ${sorted[0].tfEarly} is ${sorted[0].tfEarly-sorted[1].tfEarly} points above the next-fastest runner in the uploaded PP. That separation is worth examining in the pace map.`,strength:4,caution:"Recheck after scratches and surface changes."});}}
  return matches;
 }
-let pendingCard=null;
+let pendingCard=null,activePPText="";
 async function loadCandidate(replaceImmediately=false){let f=ppFile.files[0];if(!f){ppStatus.textContent="Choose a DRF PDF first.";return}ppProg.style.width="8%";ppStatus.textContent="Reading and validating "+f.name+"…";try{
  if(!f.name.toLowerCase().endsWith(".pdf"))throw new Error("Card discovery requires a PDF with positioned text items.");
  const pages=await extractPdf(f),result=replaceCardAtomically(activeCard,pages,{sourceName:f.name});if(!result.replaced)throw result.error;
- const candidate=result.card,allMatches=[],raceCounts=[],text=pages.flatMap(p=>p.lines.map(l=>l.text)).join("\n");for(const tr of Object.values(candidate.races)){const matches=ppAnalyze(text,tr);allMatches.push(...matches);raceCounts.push(`R${tr.race}: ${matches.length}`)}
+ const candidate=result.card,allMatches=[],raceCounts=[],text=pages.flatMap(p=>p.lines.map(l=>l.text)).join("\n");activePPText=text;for(const tr of Object.values(candidate.races)){const matches=ppAnalyze(text,tr);allMatches.push(...matches);raceCounts.push(`R${tr.race}: ${matches.length}`)}
  pendingCard=candidate;if(!replaceImmediately){ppStatus.textContent=`Validated ${candidate.track} · ${candidate.date||"date unknown"} · ${Object.keys(candidate.races).length} races · ${Object.values(candidate.races).reduce((n,r)=>n+r.horses.length,0)} runners. Click Replace Active Card to confirm. ${candidate.warnings.join(" ")}`;ppProg.style.width="90%";return}
  activateCandidate(candidate,allMatches,raceCounts);
  }catch(e){console.error(e);pendingCard=null;ppStatus.textContent="Card load failed; active card was not changed: "+(e?.message||String(e));ppProg.style.width="0"}}
