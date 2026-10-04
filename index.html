@@ -157,7 +157,7 @@ const defaultWeights={fig:45,best:20,form:10,class:10,jockey:7,trainer:8};
 let weights=Object.assign({},defaultWeights,state.weights||{});
 function normalizeName(s){return (s||"").toLowerCase().replace(/\([^)]*\)/g,"").replace(/[^a-z0-9]+/g," ").trim().split(/\s+/).filter(Boolean).sort().join(" ")}
 function jockeyStat(n){return JOCKEYS.find(x=>normalizeName(x.n)===normalizeName(n))}
-function trainerStat(n){return TRAINERS.find(x=>normalizeName(x.n)===normalizeName(n))}
+function trainerStat(n){return TRAINERS.find(x=>normalizeName(x.n)===normalizeName(n))}\nfunction horseJockeyWin(h){const direct=Number(h.jWin);return Number.isFinite(direct)?direct:horseJockeyWin(h)}\nfunction horseTrainerWin(h){const direct=Number(h.tWin);return Number.isFinite(direct)?direct:horseTrainerWin(h)}
 function fracToProb(o){if(!o||o==="SCR"||!o.includes("/"))return 0;let [a,b]=o.split("/").map(Number);return b/(a+b)}
 function save(){
  state.weights=weights;state.cards=state.cards||{};const cardState=state.cards[activeCard.id]||(state.cards[activeCard.id]={runners:{},notes:{}});
@@ -179,7 +179,7 @@ function score(h){
  const vals=race.horses.filter(x=>x.odds!=="SCR");
  const nums=k=>vals.map(x=>+x[k]).filter(x=>Number.isFinite(x)&&x>0);
  const scale=(v,a)=>{v=+v;if(!Number.isFinite(v)||v<=0||!a.length)return null;let lo=Math.min(...a),hi=Math.max(...a);return hi===lo?70:45+50*(v-lo)/(hi-lo)};
- const js=jockeyStat(h.j)?.win,ts=trainerStat(h.t)?.win,ep=evidenceProfile({...h,jockeyRating:Number.isFinite(js)?js:null,trainerRating:Number.isFinite(ts)?ts:null});
+ const js=horseJockeyWin(h),ts=horseTrainerWin(h),ep=evidenceProfile({...h,jockeyRating:Number.isFinite(js)?js:null,trainerRating:Number.isFinite(ts)?ts:null});
  const parts=[
   {value:scale(h.last,nums("last")),weight:45},
   {value:scale(h.best,nums("best")),weight:20},
@@ -194,7 +194,7 @@ function score(h){
  const rating=evidenceWeightedRating(parts);
  return rating===null?"N/A":rating;
 }
-function confidenceBadge(h){let x=evidenceProfile({...h,jockeyRating:jockeyStat(h.j)?.win,trainerRating:trainerStat(h.t)?.win}).confidence;return `<span class="conf ${x.toLowerCase()}">${x}</span>`}
+function confidenceBadge(h){let x=evidenceProfile({...h,jockeyRating:horseJockeyWin(h),trainerRating:horseTrainerWin(h)}).confidence;return `<span class="conf ${x.toLowerCase()}">${x}</span>`}
 function displayVal(v){return (v===""||v==null)?'<span class="na">N/A</span>':v}
 function fairOddsMap(){
  const active=race.horses.filter(h=>h.odds!=="SCR").map(h=>({h,rating:+score(h)})).filter(x=>Number.isFinite(x.rating));
@@ -205,8 +205,8 @@ function fairOddsMap(){
  return out;
 }
 
-function confidenceRank(h){const ep=evidenceProfile({...h,jockeyRating:jockeyStat(h.j)?.win,trainerRating:trainerStat(h.t)?.win});return ({High:3,Medium:2,Low:1})[ep.confidence]||1}
-function valueRows(){const fm=fairOddsMap();return race.horses.filter(h=>h.odds!=="SCR").map(h=>{const rating=+score(h),conf=evidenceProfile({...h,jockeyRating:jockeyStat(h.j)?.win,trainerRating:trainerStat(h.t)?.win}).confidence,fairOdds=fm[h.n],edge=priceEdge(h.odds,fairOdds);return {h,id:h.n,rating,edge,conf,confidence:conf,odds:h.odds,fairOdds}}).filter(x=>Number.isFinite(x.rating)).sort((a,b)=>(b.edge??-99)-(a.edge??-99))}
+function confidenceRank(h){const ep=evidenceProfile({...h,jockeyRating:horseJockeyWin(h),trainerRating:horseTrainerWin(h)});return ({High:3,Medium:2,Low:1})[ep.confidence]||1}
+function valueRows(){const fm=fairOddsMap();return race.horses.filter(h=>h.odds!=="SCR").map(h=>{const rating=+score(h),conf=evidenceProfile({...h,jockeyRating:horseJockeyWin(h),trainerRating:horseTrainerWin(h)}).confidence,fairOdds=fm[h.n],edge=priceEdge(h.odds,fairOdds);return {h,id:h.n,rating,edge,conf,confidence:conf,odds:h.odds,fairOdds}}).filter(x=>Number.isFinite(x.rating)).sort((a,b)=>(b.edge??-99)-(a.edge??-99))}
 function renderRaceInsights(){const fm=fairOddsMap(),top=race.horses.filter(h=>h.odds!=="SCR").map(h=>({h,r:+score(h)})).filter(x=>Number.isFinite(x.r)).sort((a,b)=>b.r-a.r).slice(0,4);topContenders.innerHTML=top.map((x,i)=>`<div><b>${i+1}. #${x.h.n} ${x.h.name}</b> <span class="pill">Rating ${x.r}</span> <span class="pill">Fair ${fm[x.h.n]||"—"}</span></div>`).join("")||'<span class="muted">No rated active runners</span>';const vals=valueRows().filter(x=>winDecision(x).play).slice(0,4);bestValue.innerHTML=vals.length?vals.map(x=>`<div class="note"><b>#${x.h.n} ${x.h.name}</b> · available ${x.h.odds||"—"} vs Fair ${x.fairOdds||"—"} <span class="pill">${Math.round(x.edge*100)}% price edge</span><div class="tiny muted">${x.conf} confidence · Handicap Rating ${x.rating}</div></div>`).join(""):'<div class="muted">No runner clears the confidence-adjusted value threshold. PASS is the recommendation.</div>'}
 function renderBetSuggestions(){const el=document.getElementById("betSuggestions");if(!el)return;const rows=valueRows(),plays=rows.filter(x=>winDecision(x).play),ex=exoticDecision(rows),multi=multiRaceDecision(rows),out=[];if(plays.length){const w=plays[0],d=winDecision(w);out.push(`<div class="note"><b>WIN consideration — #${w.h.n} ${w.h.name}</b><div class="small">Available ${w.h.odds} · Fair ${w.fairOdds} · Rating ${w.rating} · ${w.conf} confidence · about ${Math.round(w.edge*100)}% price edge.</div><div class="tiny muted">Required cushion for this confidence level: ${Math.round(d.required*100)}%. Recheck the tote before betting.</div></div>`)}else out.push('<div class="note"><b>WIN: PASS</b><div class="small muted">No runner clears its confidence-adjusted price threshold. High confidence requires 20%; Medium requires 30%; Low confidence is not a win recommendation.</div></div>');if(ex.play)out.push(`<div class="note"><b>EXOTIC structure to consider</b><div class="small">Key #${ex.key.h.n} ${ex.key.h.name} with #${ex.backup.h.n} ${ex.backup.h.name}${ex.value&&ex.value.h.n!==ex.backup.h.n?` and value runner #${ex.value.h.n} ${ex.value.h.name}`:""}. Rating gap: ${ex.gap}.</div></div>`);else out.push(`<div class="note"><b>EXOTICS: PASS / keep it small</b><div class="small muted">${ex.reason}.</div></div>`);out.push(multi.single?`<div class="note"><b>MULTI-RACE SINGLE — #${multi.key.h.n} ${multi.key.h.name}</b><div class="small">High confidence with a ${multi.gap}-point rating advantage. Still verify scratches and price/race conditions.</div></div>`:`<div class="note"><b>MULTI-RACE: SPREAD / PASS</b><div class="small muted">${multi.reason}.</div></div>`);el.innerHTML=out.join("")}
 let gridSort={key:"number",dir:1};
