@@ -357,6 +357,7 @@ function mergeNyraRace(base,live){
  }
  out.race=base.race;out.track=base.track||live.track;out.date=base.date||live.date;
  if(activePPText)ppAnalyze(activePPText,out);
+ if(out.integrity?.expected){const canon=v=>normalizeName(v).replace(/[^a-z0-9]/g,""),actual=out.horses.map(h=>h.name),set=new Set(actual.map(canon)),expSet=new Set(out.integrity.expected.map(canon));out.integrity.missing=out.integrity.expected.filter(n=>!set.has(canon(n)));out.integrity.unexpected=actual.filter(n=>!expSet.has(canon(n)));out.integrity.parsedCount=actual.length;out.integrity.ready=!out.integrity.missing.length&&!out.integrity.unexpected.length}
  return out;
 }
 parsePaste.onclick=()=>{let p=parseNyraText(nyraPaste.value);if(!p){parseStatus.textContent="Could not reliably identify the NYRA runners. Copy just the race section with horse, jockey/trainer, program number and odds.";return}const requested=+raceNo.value,base=activeCard.races[requested]?structuredClone(activeCard.races[requested]):structuredClone(race);race=mergeNyraRace(base,p);restoreRunnerEdits();parseStatus.textContent=`Merged ${p.horses.length} NYRA runners into Race ${requested}; PP evidence was preserved.`;renderAll()};
