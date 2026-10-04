@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';
-import {evidenceProfile,evidenceWeightedRating,confidenceAdjustedTemperature,probabilityWeights,extractRunningLineFigures,beyerAnomalies} from './scoring-engine.js';
+import {evidenceProfile,evidenceWeightedRating,confidenceAdjustedTemperature,probabilityWeights,extractRunningLineFigures,beyerAnomalies,claimLayoffSignal} from './scoring-engine.js';
 test('missing descriptive workout/pedigree text does not invent a numeric rating',()=>{assert.equal(evidenceWeightedRating([{value:null,weight:24},{value:null,weight:18}]),null)});
 test('unknown career starts are labeled unknown and forced to low confidence',()=>{const e=evidenceProfile({lifeStarts:null,last:88,best:92,figs:[88,86,84],trainerAngles:'Dirt stats'});assert.equal(e.experience,'Starts unknown');assert.equal(e.confidence,'Low')});
 test('first-time starter can reach medium but never high without race evidence',()=>{const e=evidenceProfile({lifeStarts:0,workText:'5f work',pedigree:'Sire / Dam',trainerAngles:'1st starter'});assert.equal(e.experience,'First-time starter');assert.equal(e.confidence,'Medium')});
@@ -16,3 +16,7 @@ test('Beyer extraction preserves low figures and DRF joined post layout',()=>{
 test('extreme low Beyer with troubled trip is flagged but preserved',()=>{const a=beyerAnomalies([14,62,66,64],['stumbled badly start','','','']);assert.equal(a[0].figure,14);assert.equal(a[0].classification,'extreme-low-compromised')});
 test('extreme low Beyer without excuse remains an unexplained negative',()=>{const a=beyerAnomalies([18,70,72,68],['no response','','','']);assert.equal(a[0].classification,'extreme-low-unexplained')});
 test('ordinary variation is not mislabeled as an extreme trip anomaly',()=>{assert.deepEqual(beyerAnomalies([72,78,69,75],['4w','','','']),[])});
+
+test('claim layoff can identify protected positive intent without guessing',()=>{const x=claimLayoffSignal({claimedLastStart:true,daysSinceLast:70,lastClaimPrice:25000,todayClaimPrice:35000,works:[1,2,3,4],claimLayoffWinPct:24,claimLayoffStarts:25});assert.equal(x.label,'Positive claim intent');assert.ok(x.reasons.some(r=>r.includes('protected/raised')))});
+test('claim layoff flags steep class drop as negative intent evidence',()=>{const x=claimLayoffSignal({claimedLastStart:true,daysSinceLast:90,lastClaimPrice:40000,todayClaimPrice:20000,works:[1]});assert.equal(x.label,'Mixed/neutral claim intent');assert.ok(x.score<0)});
+test('claim layoff ignores trainer percentage when sample is too small',()=>{const x=claimLayoffSignal({claimedLastStart:true,daysSinceLast:60,lastClaimPrice:25000,todayClaimPrice:25000,works:[1,2,3],claimLayoffWinPct:50,claimLayoffStarts:2});assert.ok(!x.reasons.some(r=>r.includes('trainer 50%')))});
