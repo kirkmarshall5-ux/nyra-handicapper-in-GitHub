@@ -301,7 +301,7 @@ function renderLeaderboards(){
  trainerTable.querySelector("tbody").innerHTML=TRAINERS.map(x=>`<tr><td>${x.r}</td><td><b>${x.n}</b></td><td>${x.s}</td><td>${x.w}</td><td>${x.win.toFixed(1)}%</td><td>${x.top.toFixed(1)}%</td></tr>`).join("");
 }
 function renderConnections(){
- connectionCards.innerHTML=race.horses.filter(h=>h.odds!=="SCR").map(h=>{let j=jockeyStat(h.j),t=trainerStat(h.t);return `<div class="card span4" style="padding:12px"><div><b>#${h.n} ${h.name}</b></div><div class="small" style="margin-top:6px">${h.j} ${j?`<span class="pill">${j.win}% win</span>`:""}<br>${h.t} ${t?`<span class="pill">${t.win}% win</span>`:""}</div></div>`}).join("")
+ connectionCards.innerHTML=race.horses.filter(h=>h.odds!=="SCR").map(h=>{let j=horseJockeyWin(h),t=horseTrainerWin(h);return `<div class="card span4" style="padding:12px"><div><b>#${h.n} ${h.name}</b></div><div class="small" style="margin-top:6px">${h.j||"—"} ${Number.isFinite(j)?`<span class="pill">${j.toFixed(1)}% win</span>`:""}<br>${h.t||"—"} ${Number.isFinite(t)?`<span class="pill">${t.toFixed(1)}% win</span>`:""}</div></div>`}).join("")
 }
 function renderWeights(){weightsDiv()}
 function weightsDiv(){const names={fig:"Last PP figure",best:"Best-3 figure",form:"Recent form",class:"Class fit",jockey:"Meet jockey",trainer:"Meet trainer"};const weightsEl=document.getElementById("weights");weightsEl.innerHTML=Object.entries(names).map(([k,v])=>`<div class="weight-row"><span class="small">${v}</span><input data-w="${k}" type="range" min="0" max="60" value="${weights[k]}"><b>${weights[k]}</b></div>`).join("");weightsEl.querySelectorAll("input").forEach(el=>el.oninput=()=>{weights[el.dataset.w]=+el.value;el.nextElementSibling.textContent=el.value;save();renderHorses();renderPace()})}
