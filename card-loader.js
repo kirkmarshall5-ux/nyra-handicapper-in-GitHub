@@ -35,7 +35,7 @@ function raceHeaderAt(lines, index) {
   if (drfPageHeader) {
     return { race: +drfPageHeader[2], trackAbbreviation: drfPageHeader[1].toLowerCase(), documentPage: +drfPageHeader[3], kind: "drf-page" };
   }
-  const drfRace = text.match(/^\s*(\d+)\s+(Belmont Park|Aqueduct|Saratoga|Churchill Downs|Gulfstream Park|Keeneland|Santa Anita(?: Park)?)\b/i);
+  const drfRace = text.match(/^\s*(\d+)\s+(Belmont Park|Aqueduct|Saratoga|Churchill Downs|Gulfstream Park|Keeneland|Santa Anita(?: Park)?)\s+\S+/i);
   if (drfRace) return { race: +drfRace[1], track: drfRace[2], kind: "drf-race-heading" };
   const race = text.match(/^\s*Race\s+(\d+)\b/i);
   if (!race) return null;
