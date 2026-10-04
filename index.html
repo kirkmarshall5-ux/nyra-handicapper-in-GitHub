@@ -138,6 +138,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 
 <script type="module">
 import {reconstructPage, replaceCardAtomically, runnerStateKey} from "./card-loader.js";
+import {evidenceProfile, evidenceWeightedRating, probabilityWeights} from "./scoring-engine.js";
 const JOCKEYS=[
 {r:1,n:"Flavien Prat",s:41,w:12,win:29.3,top:46.3},{r:2,n:"Manuel Franco",s:45,w:10,win:22.2,top:42.2},{r:3,n:"Ricardo Santana, Jr.",s:52,w:8,win:15.4,top:40.4},{r:4,n:"Jose Lezcano",s:37,w:5,win:13.5,top:45.9},{r:5,n:"Kendrick Carmouche",s:34,w:4,win:11.8,top:35.3},{r:5,n:"Samuel Marin",s:30,w:4,win:13.3,top:26.7},{r:7,n:"Dylan Davis",s:39,w:3,win:7.7,top:35.9},{r:8,n:"Antonio Fresu",s:33,w:2,win:6.1,top:33.3},{r:8,n:"Jose L. Ortiz",s:8,w:2,win:25.0,top:50.0},{r:8,n:"Joel Rosario",s:19,w:2,win:10.5,top:42.1},{r:8,n:"Javier Castellano",s:27,w:2,win:7.4,top:29.6},{r:12,n:"Junior Alvarado",s:23,w:1,win:4.3,top:47.8},{r:12,n:"John R. Velazquez",s:17,w:1,win:5.9,top:35.3},{r:12,n:"Edgard J. Zayas",s:24,w:1,win:4.2,top:20.8}];
 const TRAINERS=[
@@ -165,44 +166,46 @@ function save(){
 function restoreRunnerEdits(){const rr=state.cards?.[activeCard.id]?.runners||{};for(const h of race.horses){const e=rr[runnerStateKey(activeCard.id,race.race,h)];if(e)Object.assign(h,e)}}
 restoreRunnerEdits();
 
-function evidenceProfile(h){
- const hasLast=h.last!==""&&h.last!=null&&Number.isFinite(+h.last),hasBest=h.best!==""&&h.best!=null&&Number.isFinite(+h.best);
- const hasRace=hasLast||hasBest||((h.figs||[]).length>0);
- const starts=h.lifeStarts!==null&&h.lifeStarts!==""&&Number.isFinite(+h.lifeStarts)?+h.lifeStarts:null;
- const works=(h.works||[]).length>0||!!h.workText,pedigree=!!(h.sire||h.dam||h.damsire||h.pedigree),trainer=!!h.trainerAngles;
- const points=(hasLast?2:0)+(hasBest?1:0)+(starts!==null&&starts>=3?3:starts!==null&&starts>0?1:0)+(works?1:0)+(pedigree?1:0)+(trainer?1:0);
- return {starts,hasRace,works,pedigree,trainer,confidence:points>=7?"High":points>=4?"Medium":"Low"};
-}
 function trainerContextScore(h){
+ const explicit=h.trainerContextRating!==""&&h.trainerContextRating!=null&&Number.isFinite(+h.trainerContextRating)?+h.trainerContextRating:null;
+ if(explicit!==null)return explicit;
  const rates=[...(h.trainerAngles||"").matchAll(/\(\d+\s+\.?(\d{2})\s+\$[\d.]+\)/g)].map(x=>+x[1]).filter(x=>x<=60);
  return rates.length?Math.min(100,Math.max(25,Math.round(rates.reduce((a,b)=>a+b,0)/rates.length*3))):null;
 }
-function workScore(h){if(Number.isFinite(+h.workRating)&&h.workRating!=="")return +h.workRating;return (h.works||[]).length||h.workText?68:null}
-function pedigreeScore(h){if(Number.isFinite(+h.pedigreeRating)&&h.pedigreeRating!=="")return +h.pedigreeRating;return (h.sire||h.dam||h.damsire||h.pedigree)?65:null}
+function workScore(h){return h.workRating!==""&&h.workRating!=null&&Number.isFinite(+h.workRating)?+h.workRating:null}
+function pedigreeScore(h){return h.pedigreeRating!==""&&h.pedigreeRating!=null&&Number.isFinite(+h.pedigreeRating)?+h.pedigreeRating:null}
 function score(h){
  const vals=race.horses.filter(x=>x.odds!=="SCR");
  const nums=k=>vals.map(x=>+x[k]).filter(x=>Number.isFinite(x)&&x>0);
  const scale=(v,a)=>{v=+v;if(!Number.isFinite(v)||v<=0||!a.length)return null;let lo=Math.min(...a),hi=Math.max(...a);return hi===lo?70:45+50*(v-lo)/(hi-lo)};
- const js=jockeyStat(h.j)?.win,ts=trainerStat(h.t)?.win,ep=evidenceProfile(h);
- let parts=[[scale(h.last,nums("last")),45],[scale(h.best,nums("best")),20],
- [h.form!==""&&h.form!=null?+h.form:null,10],[h.cls!==""&&h.cls!=null?+h.cls:null,10],
- [Number.isFinite(js)?Math.min(js*3,100):null,7],[Number.isFinite(ts)?Math.min(ts*3,100):null,8]];
- if(ep.starts!==null&&ep.starts<=2)parts.push([workScore(h),ep.starts===0?24:12],[pedigreeScore(h),ep.starts===0?18:8],[trainerContextScore(h),ep.starts===0?24:12]);
- parts=parts.filter(([v,w])=>Number.isFinite(v)&&w>0); if(!parts.length)return "N/A";
- const wt=parts.reduce((a,[v,w])=>a+w,0);return Math.round(parts.reduce((a,[v,w])=>a+v*w,0)/wt);
+ const js=jockeyStat(h.j)?.win,ts=trainerStat(h.t)?.win,ep=evidenceProfile({...h,jockeyRating:Number.isFinite(js)?js:null,trainerRating:Number.isFinite(ts)?ts:null});
+ const parts=[
+  {value:scale(h.last,nums("last")),weight:45},
+  {value:scale(h.best,nums("best")),weight:20},
+  {value:h.form!==""&&h.form!=null?+h.form:null,weight:10},
+  {value:h.cls!==""&&h.cls!=null?+h.cls:null,weight:10},
+  {value:Number.isFinite(js)?Math.min(js*3,100):null,weight:7},
+  {value:Number.isFinite(ts)?Math.min(ts*3,100):null,weight:8}
+ ];
+ if(ep.starts!==null&&ep.starts<=2){
+  parts.push({value:workScore(h),weight:ep.starts===0?24:12},{value:pedigreeScore(h),weight:ep.starts===0?18:8},{value:trainerContextScore(h),weight:ep.starts===0?24:12});
+ }
+ const rating=evidenceWeightedRating(parts);
+ return rating===null?"N/A":rating;
 }
-function confidenceBadge(h){let x=evidenceProfile(h).confidence;return `<span class="conf ${x.toLowerCase()}">${x}</span>`}
+function confidenceBadge(h){let x=evidenceProfile({...h,jockeyRating:jockeyStat(h.j)?.win,trainerRating:trainerStat(h.t)?.win}).confidence;return `<span class="conf ${x.toLowerCase()}">${x}</span>`}
 function displayVal(v){return (v===""||v==null)?'<span class="na">N/A</span>':v}
 function fairOddsMap(){
- const active=race.horses.filter(h=>h.odds!=="SCR"&&Number.isFinite(+score(h)));
+ const active=race.horses.filter(h=>h.odds!=="SCR").map(h=>({h,rating:+score(h)})).filter(x=>Number.isFinite(x.rating));
  if(!active.length)return {};
- const exps=active.map(h=>({n:h.n,v:Math.exp((+score(h)-75)/14)})),sum=exps.reduce((a,x)=>a+x.v,0)||1,out={};
- for(const x of exps){const p=x.v/sum,dec=(1-p)/p;out[x.n]=dec<1?`${Math.max(1,Math.round(dec*2))}/2`:dec<3?`${Math.round(dec*2)}/2`:`${Math.round(dec)}/1`;}
+ const rows=active.map(x=>({id:x.h.n,rating:x.rating,confidence:evidenceProfile({...x.h,jockeyRating:jockeyStat(x.h.j)?.win,trainerRating:trainerStat(x.h.t)?.win}).confidence}));
+ const probs=probabilityWeights(rows),out={};
+ for(const x of probs){const p=x.p,dec=(1-p)/p;out[x.id]=dec<1?`${Math.max(1,Math.round(dec*2))}/2`:dec<3?`${Math.round(dec*2)}/2`:`${Math.round(dec)}/1`;}
  return out;
 }
 
-function confidenceRank(h){return ({High:3,Medium:2,Low:1})[evidenceProfile(h).confidence]||1}
-function valueRows(){return race.horses.filter(h=>h.odds!=="SCR").map(h=>{const a=oddsNumber(h.odds),f=oddsNumber(fairOddsMap()[h.n]),rating=+score(h);return {h,rating,edge:Number.isFinite(a)&&Number.isFinite(f)?(a+1)/(f+1)-1:null,conf:evidenceProfile(h).confidence}}).filter(x=>Number.isFinite(x.rating)).sort((a,b)=>(b.edge??-99)-(a.edge??-99))}
+function confidenceRank(h){const ep=evidenceProfile({...h,jockeyRating:jockeyStat(h.j)?.win,trainerRating:trainerStat(h.t)?.win});return ({High:3,Medium:2,Low:1})[ep.confidence]||1}
+function valueRows(){return race.horses.filter(h=>h.odds!=="SCR").map(h=>{const a=oddsNumber(h.odds),f=oddsNumber(fairOddsMap()[h.n]),rating=+score(h);return {h,rating,edge:Number.isFinite(a)&&Number.isFinite(f)?(a+1)/(f+1)-1:null,conf:evidenceProfile({...h,jockeyRating:jockeyStat(h.j)?.win,trainerRating:trainerStat(h.t)?.win}).confidence}}).filter(x=>Number.isFinite(x.rating)).sort((a,b)=>(b.edge??-99)-(a.edge??-99))}
 function renderRaceInsights(){const fm=fairOddsMap(),top=race.horses.filter(h=>h.odds!=="SCR").map(h=>({h,r:+score(h)})).filter(x=>Number.isFinite(x.r)).sort((a,b)=>b.r-a.r).slice(0,4);topContenders.innerHTML=top.map((x,i)=>`<div><b>${i+1}. #${x.h.n} ${x.h.name}</b> <span class="pill">Rating ${x.r}</span> <span class="pill">Fair ${fm[x.h.n]||"—"}</span></div>`).join("")||'<span class="muted">No rated active runners</span>';const vals=valueRows().filter(x=>x.edge!=null&&x.edge>=.25&&confidenceRank(x.h)>=2).slice(0,4);bestValue.innerHTML=vals.length?vals.map(x=>`<div class="note"><b>#${x.h.n} ${x.h.name}</b> · available ${x.h.odds||"—"} vs Fair ${fm[x.h.n]||"—"} <span class="pill">${Math.round(x.edge*100)}% price edge</span><div class="tiny muted">${x.conf} confidence · Handicap Rating ${x.rating}</div></div>`).join(""):'<div class="muted">No clear value edge at the currently entered prices. PASS is a valid result.</div>'}
 function renderBetSuggestions(){const el=document.getElementById("betSuggestions");if(!el)return;const rows=valueRows(),play=rows.filter(x=>x.edge!=null&&x.edge>=.25&&confidenceRank(x.h)>=2),rank=[...rows].sort((a,b)=>b.rating-a.rating),out=[];if(play.length){const w=play[0];out.push(`<div class="note"><b>WIN consideration — #${w.h.n} ${w.h.name}</b><div class="small">Available ${w.h.odds} · Fair ${fairOddsMap()[w.h.n]} · Rating ${w.rating} · ${w.conf} confidence · about ${Math.round(w.edge*100)}% price edge.</div><div class="tiny muted">Only value while the available odds remain meaningfully above Fair Odds.</div></div>`)}else out.push('<div class="note"><b>WIN: PASS</b><div class="small muted">No runner currently combines Medium/High confidence with at least a 25% price cushion over Fair Odds.</div></div>');if(rank.length>=3){const a=rank[0],b=rank[1],v=play.find(x=>x.h.n!==a.h.n);out.push(`<div class="note"><b>${a.rating-b.rating>=5||v?"EXOTIC structure to consider":"EXOTICS: PASS / keep it small"}</b><div class="small">${a.rating-b.rating>=5||v?`Key #${a.h.n} ${a.h.name} with #${b.h.n} ${b.h.name}${v&&v.h.n!==b.h.n?` and value runner #${v.h.n} ${v.h.name}`:""}. Avoid automatically boxing every contender.`:"The top ratings are too tightly grouped to justify an aggressive key."}</div></div>`)}out.push('<div class="note"><b>MULTI-RACE</b><div class="small muted">Use the Handicap Ratings and confidence levels to look for a legitimate single; otherwise spread selectively rather than forcing a Pick 3/4/5. The ticket calculator below remains available for cost.</div></div>');el.innerHTML=out.join("")}
 let gridSort={key:"number",dir:1};
