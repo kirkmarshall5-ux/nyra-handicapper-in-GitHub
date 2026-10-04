@@ -165,3 +165,14 @@ export function relativeBeyerPosition(horseFigures,fieldCurrentFigures){
  const rank=1+field.filter(v=>v>current).length;
  return {available:true,current,fieldMedian:median,vsMedian:current-median,rank,fieldSize:field.length};
 }
+
+
+export function ratingEvidenceProfile(h){
+ const beyers=(h.beyers||h.figs||[]).map(numeric).filter(v=>v!==null);
+ const timeform=(h.timeformRatings||[]).map(numeric).filter(v=>v!==null);
+ const foreign=!!h.foreignForm||timeform.length>0;
+ if(beyers.length&&timeform.length)return {status:"mixed-rating-systems",beyers,timeform,foreign,comparable:false};
+ if(beyers.length)return {status:"beyer",beyers,timeform:[],foreign,comparable:true};
+ if(timeform.length)return {status:"timeform-only",beyers:[],timeform,foreign:true,comparable:false};
+ return {status:"no-speed-rating",beyers:[],timeform:[],foreign,comparable:false};
+}
