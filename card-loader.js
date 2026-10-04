@@ -45,9 +45,9 @@ function runnerAt(lines, index) {
   const pageNumber = lines[index]?.pageNumber;
   const pageLines = lines.filter(line => line.pageNumber === pageNumber);
   const items = pageLines.flatMap(line => line.items?.length ? line.items : [{ str: line.text, x: 0, y: line.y }]);
-  const programs = items.filter(item => /^(\d{1,2}[A-Z]?)$/i.test(clean(item.str)));
+  const programs = items.filter(item => /^([1-9]\d?[A-Z]?)$/i.test(clean(item.str)));
   const lineItems = lines[index]?.items || [];
-  const programItem = lineItems.find(item => /^(\d{1,2}[A-Z]?)$/i.test(clean(item.str)));
+  const programItem = lineItems.find(item => /^([1-9]\d?[A-Z]?)$/i.test(clean(item.str)));
   if (!programItem) return null;
   const namePattern = /^[A-Za-z][A-Za-z0-9'’ .&-]{1,60}(?:\s+\([^)]*\))?$/;
   const noisePattern = /^(?:(?:Early|Late)$|(?:Own|Sire|Dam|Trainer|Jockey|Blinkers|Weight|Bred|Breeder|Mdn\w*|Turf\w*|Dirt\w*|Sprint\w*|Route\w*|Life|Timeform\w*|Beyer|Workout|Works?|Foaled|Pedigree|Stats?|Record)\b)/i;
