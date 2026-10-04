@@ -71,7 +71,7 @@ function runnerAt(lines, index) {
     const programToNameY = programItem.y - name.item.y;
     const nameToOwnerX = owner.x - name.item.x;
     const nameToOwnerY = name.item.y - owner.y;
-    const stacked = programToNameX >= 4 && programToNameX <= 140 && programToNameY >= 0 && programToNameY <= 60 && Math.abs(nameToOwnerX) <= 70 && nameToOwnerY >= 0 && nameToOwnerY <= 60;
+    const stacked = programToNameX >= 4 && programToNameX <= 140 && programToNameY >= -12 && programToNameY <= 60 && Math.abs(nameToOwnerX) <= 70 && nameToOwnerY >= 0 && nameToOwnerY <= 60;
     const inline = programToNameX >= 4 && programToNameX <= 140 && Math.abs(programToNameY) <= 4 && nameToOwnerX >= 0 && nameToOwnerX <= 240 && Math.abs(nameToOwnerY) <= 4;
     // Some DRF builds flatten the runner header into separate text rows with
     // wider vertical/column spacing. Keep the identity bounded by program ->
@@ -118,9 +118,13 @@ export function parseCard(pages, { sourceName = "document" } = {}) {
     boundaries.forEach((boundary, boundaryIndex) => addSection(boundary.race, lines.slice(boundary.index, boundaries[boundaryIndex + 1]?.index ?? lines.length)));
   }
   const allText = lines.slice(0, 80).map(line => line.text).join(" ");
-  const dateMatch = allText.match(/\b(20\d{2})[-\/]([01]?\d)[-\/]([0-3]?\d)\b/) || allText.match(/\b(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2}),\s*(20\d{2})/i);
+  const ymdMatch = allText.match(/\b(20\d{2})[-\/]([01]?\d)[-\/]([0-3]?\d)\b/);
+  const mdyMatch = allText.match(/\b([01]?\d)[-\/]([0-3]?\d)[-\/](20\d{2})\b/);
+  const monthMatch = allText.match(/\b(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2}),\s*(20\d{2})/i);
   let date = "";
-  if (dateMatch) date = dateMatch[1].length === 4 ? `${dateMatch[1]}-${dateMatch[2].padStart(2,"0")}-${dateMatch[3].padStart(2,"0")}` : `${dateMatch[3]}-${String(new Date(`${dateMatch[1]} 1, 2000`).getMonth()+1).padStart(2,"0")}-${dateMatch[2].padStart(2,"0")}`;
+  if (ymdMatch) date = `${ymdMatch[1]}-${ymdMatch[2].padStart(2,"0")}-${ymdMatch[3].padStart(2,"0")}`;
+  else if (mdyMatch) date = `${mdyMatch[3]}-${mdyMatch[1].padStart(2,"0")}-${mdyMatch[2].padStart(2,"0")}`;
+  else if (monthMatch) date = `${monthMatch[3]}-${String(new Date(`${monthMatch[1]} 1, 2000`).getMonth()+1).padStart(2,"0")}-${monthMatch[2].padStart(2,"0")}`;
   const trackMatch = allText.match(/\b(Belmont Park|Aqueduct|Saratoga|Churchill Downs|Gulfstream Park|Keeneland|Santa Anita(?: Park)?)\b/i);
   const drfTrack = headers.find(header => header.trackAbbreviation)?.trackAbbreviation;
   const track = trackMatch ? trackMatch[1] : TRACK_ABBREVIATIONS[drfTrack] || (drfTrack ? drfTrack.toUpperCase() : "");
