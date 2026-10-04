@@ -71,8 +71,12 @@ function runnerAt(lines, index) {
     const programToNameY = programItem.y - name.item.y;
     const nameToOwnerX = owner.x - name.item.x;
     const nameToOwnerY = name.item.y - owner.y;
-    const stacked = programToNameX >= 4 && programToNameX <= 100 && programToNameY >= 2 && programToNameY <= 36 && Math.abs(nameToOwnerX) <= 36 && nameToOwnerY >= 2 && nameToOwnerY <= 42;
-    const inline = programToNameX >= 4 && programToNameX <= 100 && Math.abs(programToNameY) <= 3 && nameToOwnerX >= 4 && nameToOwnerX <= 200 && Math.abs(nameToOwnerY) <= 3;
+    const stacked = programToNameX >= 4 && programToNameX <= 140 && programToNameY >= 0 && programToNameY <= 60 && Math.abs(nameToOwnerX) <= 70 && nameToOwnerY >= 0 && nameToOwnerY <= 60;
+    const inline = programToNameX >= 4 && programToNameX <= 140 && Math.abs(programToNameY) <= 4 && nameToOwnerX >= 0 && nameToOwnerX <= 240 && Math.abs(nameToOwnerY) <= 4;
+    // Some DRF builds flatten the runner header into separate text rows with
+    // wider vertical/column spacing. Keep the identity bounded by program ->
+    // horse name -> Own:, but tolerate that layout instead of requiring the
+    // older, unusually tight geometry.
     if (stacked || inline) pairs.push({ name, owner, score: Math.abs(programToNameX) + Math.abs(programToNameY) + Math.abs(nameToOwnerX) + Math.abs(nameToOwnerY) });
   }
   if (!pairs.length) return null;
