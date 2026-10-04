@@ -157,25 +157,20 @@ export function parseCard(pages, { sourceName = "document" } = {}) {
       const n = program[1].toUpperCase();
       if (!horses.some(horse => horse.n === n)) horses.push({ n, name, j: "", t: "", odds: "—", ml: odds, style: "P", lifeStarts: null });
     }
-    // Rare DRF header variant (seen on Oct. 4 Race 1 #10 First to Engage):
-    // program/name is printed before Own:, while morning-line odds follow Own:.
-    // Keep this fallback owner-anchored and require the post-owner odds row so
-    // pace/stat/index text still cannot qualify as a runner.
-    for (let i = 1; i < section.length - 1; i++) {
+    // PDF.js can occasionally merge the program, morning line, and horse name
+    // onto fewer reconstructed rows. Recover only from the text immediately
+    // preceding an Own: anchor and still require the full program -> odds ->
+    // horse-name signature. This preserves the structural guard against pace,
+    // age, index, and running-line decoys while tolerating row merging.
+    for (let i = 1; i < section.length; i++) {
       if (!/^Own\s*:/i.test(clean(section[i].text))) continue;
-      const afterOwnerOdds = clean(section[i + 1].text);
-      if (!oddsPattern.test(afterOwnerOdds)) continue;
-      let recovered = null;
-      for (let p = i - 1; p >= Math.max(0, i - 6) && !recovered; p--) {
-        const text = clean(section[p].text);
-        const combined = text.match(/^([1-9]\d?(?:A|B|X)?)\s+([A-Za-z][A-Za-z0-9'’ .&-]{1,60})(?:\s+\([^)]*\))?$/i);
-        if (combined) recovered = { n: combined[1].toUpperCase(), name: clean(combined[2]) };
-        else if (/^[A-Za-z][A-Za-z0-9'’ .&-]{1,60}(?:\s+\([^)]*\))?$/.test(text) && !/^(?:Sire|Dam|Own|Timeform|Trainer|Jockey)\b/i.test(text)) {
-          const priorProgram = p > 0 ? clean(section[p - 1].text).match(programPattern) : null;
-          if (priorProgram) recovered = { n: priorProgram[1].toUpperCase(), name: clean(text.replace(/\s+\([^)]*\)$/, "")) };
-        }
-      }
-      if (recovered && !horses.some(horse => horse.n === recovered.n)) horses.push({ n: recovered.n, name: recovered.name, j: "", t: "", odds: "—", ml: afterOwnerOdds, style: "P", lifeStarts: null });
+      const tail = section.slice(Math.max(0, i - 4), i).map(line => clean(line.text)).join(" ");
+      const match = tail.match(/(?:^|\s)([1-9]\d?(?:A|B|X)?)\s+(\d+(?:\.\d+)?-\d+|\d+\/\d+)\s+([A-Za-z][A-Za-z0-9'’ .&-]{1,60}(?:\s+\([^)]*\))?)$/i);
+      if (!match) continue;
+      const n = match[1].toUpperCase();
+      const ml = match[2];
+      const name = clean(match[3].replace(/\s+\([^)]*\)$/, ""));
+      if (!horses.some(horse => horse.n === n)) horses.push({ n, name, j: "", t: "", odds: "—", ml, style: "P", lifeStarts: null });
     }
     const headerText = clean(section[0]?.text || "");
     const bodyText = section.slice(0, 8).map(line => clean(line.text)).join(" ");
