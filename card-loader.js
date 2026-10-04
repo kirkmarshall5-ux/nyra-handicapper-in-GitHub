@@ -245,7 +245,7 @@ export function parseCard(pages, { sourceName = "document" } = {}) {
     const canon=v=>slug(v).replace(/-/g,"");
     const parsedSet=new Set(parsed.map(canon)),expectedSet=new Set(expected.map(canon));
     const missing=expected.filter(n=>!parsedSet.has(canon(n))),unexpected=parsed.filter(n=>!expectedSet.has(canon(n)));
-    race.integrity={source:"DRF index to entries",expectedCount:expected.length,parsedCount:parsed.length,missing,unexpected,ready:expected.length>0&&missing.length===0&&unexpected.length===0};
+    race.integrity={source:"DRF index to entries",expected:[...expected],expectedCount:expected.length,parsedCount:parsed.length,missing,unexpected,ready:expected.length>0&&missing.length===0&&unexpected.length===0};
    }
   }
   const totalRunners = Object.values(races).reduce((sum, race) => sum + race.horses.length, 0);
