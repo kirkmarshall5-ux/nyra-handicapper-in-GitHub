@@ -360,24 +360,33 @@ function ppHorseAnchor(text,name){
  const ix=ppCanonicalIndex(text),needle=ppNameKey(name);
  if(!needle)return -1;
  let from=0,best=-1,bestScore=-1,seen=0;
- while(seen<30){
+ while(seen<40){
   const hit=ix.canon.indexOf(needle,from);if(hit<0)break;
   const pos=ix.map[hit]??-1;if(pos<0)break;
-  const tail=text.slice(pos,Math.min(text.length,pos+2200));
-  const before=text.slice(Math.max(0,pos-120),pos);
-  let score=0;
-  if(/\bOwn\s*:/i.test(tail))score+=6;
-  if(/TimeformUS\s+Pace/i.test(tail))score+=5;
-  if(/\bSire\s*:/i.test(tail))score+=4;
-  if(/\bDam\s*:/i.test(tail))score+=3;
-  if(/\bLife\s+\d+/i.test(tail))score+=4;
-  if(/\bTr\s*:/i.test(tail))score+=2;
-  if(/TRAINER\s*:/i.test(tail))score+=2;
-  if(/INDEX TO ENTRIES/i.test(before+tail.slice(0,120)))score-=8;
-  if(score>bestScore){bestScore=score;best=pos}
+  const tail=text.slice(pos,Math.min(text.length,pos+1800));
+  const ownAt=tail.search(/\bOwn\s*:/i);
+  // A true DRF horse header is followed almost immediately by Own:. Historical
+  // running lines and the index can repeat a horse name, but they are not.
+  if(ownAt>=0&&ownAt<=320){
+   let score=20-Math.min(15,Math.floor(ownAt/25));
+   if(/TimeformUS\s+Pace/i.test(tail.slice(0,900)))score+=5;
+   if(/\bSire\s*:/i.test(tail.slice(0,1000)))score+=4;
+   if(/\bDam\s*:/i.test(tail.slice(0,1100)))score+=3;
+   if(/\bLife\s+\d+/i.test(tail.slice(0,1400)))score+=6;
+   if(/INDEX TO ENTRIES/i.test(text.slice(Math.max(0,pos-120),pos+120)))score-=20;
+   if(score>bestScore){bestScore=score;best=pos}
+  }
   from=hit+needle.length;seen++;
  }
- return bestScore>=4?best:-1;
+ return bestScore>=15?best:-1;
+}
+function ppHorseBlock(text,idx){
+ const tail=text.slice(idx,Math.min(text.length,idx+7000));
+ const ownAt=tail.search(/\bOwn\s*:/i);
+ if(ownAt<0||ownAt>320)return "";
+ const afterOwn=tail.slice(ownAt+4),nextOwnRel=afterOwn.search(/\bOwn\s*:/i);
+ const end=nextOwnRel>=0?ownAt+4+nextOwnRel:Math.min(tail.length,6000);
+ return tail.slice(0,end);
 }
 function ppAnalyze(text,targetRace=race){
  let matches=[];
