@@ -1,0 +1,3 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {readFile} from 'node:fs/promises';
+test('browser module script remains syntactically valid',async()=>{const html=await readFile('index.html','utf8');const m=html.match(/<script type="module">([\s\S]*?)<\/script>/);assert.ok(m);const body=m[1].replace(/^import .*;$/gm,'');assert.doesNotThrow(()=>new Function(body));});
+test('credibility gates and NYRA merge are wired into the UI',async()=>{const html=await readFile('index.html','utf8');assert.match(html,/DATA CHECK FAILED — ratings withheld/);assert.match(html,/function mergeNyraRace/);assert.match(html,/requested race number remains authoritative/);assert.match(html,/ppHorseBlock/);});
