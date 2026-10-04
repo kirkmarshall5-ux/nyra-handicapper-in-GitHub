@@ -2,7 +2,7 @@ export const SCHEMA_VERSION = 2;
 
 const clean = value => String(value ?? "").replace(/\s+/g, " ").trim();
 const slug = value => clean(value).normalize("NFKD").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
-const STAT_NAME_NOISE = /^(?:WonLastStart|TurfSprints?|DirtSprints?|Sprint|Routes?|Turf|Dirt|Claim|Allowance|Mdn\w*|FirstStart|1stStart|1stBlink|BlinkOn|31-60Days|61-180Days|TimeformUS|Early|Late|Life|Works?|Trainer|Jockey|Sire|Dam)(?:\b|\()/i;
+const STAT_NAME_NOISE = /^(?:WonLastStart|TurfSprints?|DirtSprints?|Sprint|Routes?|Turf|Dirt|Claim|Allowance|Mdn\w*|FirstStart|1stStart|1stBlink|BlinkOn|31-60Days|61-180Days|OffOver180|TimeformUS|Early|Late|Life|Works?|Trainer|Jockey|Sire|Dam|YO|ft)(?:\b|\()/i;
 const plausibleHorseName = value => {
   const name=clean(value).replace(/\s+\([^)]*\)$/, "");
   return /^[A-Za-z][A-Za-z0-9'’ .&-]{1,60}$/.test(name) && !STAT_NAME_NOISE.test(name) && !/\$|\d{2,}%/.test(name);
@@ -63,7 +63,7 @@ function runnerAt(lines, index) {
   const namePattern = /^[A-Za-z][A-Za-z0-9'’ .&-]{1,60}(?:\s+\([^)]*\))?$/;
   const noisePattern = /^(?:(?:Early|Late)$|(?:Own|Sire|Dam|Trainer|Jockey|Blinkers|Weight|Bred|Breeder|Mdn\w*|Turf\w*|Dirt\w*|Sprint\w*|Route\w*|Life|Timeform\w*|Beyer|Workout|Works?|Foaled|Pedigree|Stats?|Record)\b)/i;
   const itemNames = items.map(item => ({ item, text: clean(item.str) }))
-    .filter(candidate => namePattern.test(candidate.text) && !noisePattern.test(candidate.text));
+    .filter(candidate => namePattern.test(candidate.text) && !noisePattern.test(candidate.text) && plausibleHorseName(candidate.text));
   // DRF sometimes emits a multi-word horse name as separate PDF text items
   // (for example, "Early" + "Returns"). Rebuild a candidate from adjacent
   // items on the same reconstructed row, while keeping it inside the runner
@@ -73,7 +73,7 @@ function runnerAt(lines, index) {
     if (!parts.length) return null;
     const text = clean(parts.map(item => item.str).join(" "));
     return { item: { x: parts[0].x, y: line.y }, text };
-  }).filter(candidate => candidate && namePattern.test(candidate.text) && !noisePattern.test(candidate.text));
+  }).filter(candidate => candidate && namePattern.test(candidate.text) && !noisePattern.test(candidate.text) && plausibleHorseName(candidate.text));
   const embeddedNames = embedded ? [{ item: { x: programItem.x + 12, y: programItem.y }, text: clean(embedded[2]) }] : [];
   const names = [...embeddedNames, ...itemNames, ...rowNames];
   const owners = items.filter(item => /^Own\s*:/i.test(clean(item.str)));
@@ -144,8 +144,8 @@ export function parseCard(pages, { sourceName = "document" } = {}) {
         const line = prior[p];
         const lineText = clean(line.text);
         const combined = lineText.match(/^([1-9]\d?(?:A|B|X)?)[ .:-]*([A-Za-z][A-Za-z0-9'’ .&-]{1,60})(?:\s+\([^)]*\))?$/i);
-        if (combined) recovered = { n: combined[1].toUpperCase(), name: clean(combined[2]) };
-        else if (/^[A-Za-z][A-Za-z0-9'’ .&-]{1,60}(?:\s+\([^)]*\))?$/.test(lineText) && !/^(?:Own|Sire|Dam|Trainer|Jockey|Timeform|Beyer|Post time|Belmont Park)\b/i.test(lineText)) {
+        if (combined && plausibleHorseName(combined[2])) recovered = { n: combined[1].toUpperCase(), name: clean(combined[2]) };
+        else if (/^[A-Za-z][A-Za-z0-9'’ .&-]{1,60}(?:\s+\([^)]*\))?$/.test(lineText) && plausibleHorseName(lineText) && !/^(?:Own|Sire|Dam|Trainer|Jockey|Timeform|Beyer|Post time|Belmont Park)\b/i.test(lineText)) {
           for (let q = p - 1; q >= 0; q--) {
             const program = clean(prior[q].text).match(/^([1-9]\d?(?:A|B|X)?)$/i);
             if (program) { recovered = { n: program[1].toUpperCase(), name: clean(lineText.replace(/\s+\([^)]*\)$/, "")) }; break; }
