@@ -193,20 +193,25 @@ function raceAudit(r){
 }
 function score(h){
  if(!raceAudit(race).ready)return "N/A";
- const vals=race.horses.filter(x=>x.odds!=="SCR");
- const nums=k=>vals.map(x=>+x[k]).filter(x=>Number.isFinite(x)&&x>0);
- const scale=(v,a)=>{v=+v;if(!Number.isFinite(v)||v<=0||!a.length)return null;let lo=Math.min(...a),hi=Math.max(...a);return hi===lo?70:45+50*(v-lo)/(hi-lo)};
  const js=horseJockeyWin(h),ts=horseTrainerWin(h),ep=evidenceProfile({...h,jockeyRating:Number.isFinite(js)?js:null,trainerRating:Number.isFinite(ts)?ts:null});
- const parts=[
-  {value:scale(h.last,nums("last")),weight:45},
-  {value:scale(h.best,nums("best")),weight:20},
-  {value:h.form!==""&&h.form!=null?+h.form:null,weight:10},
-  {value:h.cls!==""&&h.cls!=null?+h.cls:null,weight:10},
-  {value:Number.isFinite(js)?Math.min(js*3,100):null,weight:7},
-  {value:Number.isFinite(ts)?Math.min(ts*3,100):null,weight:8}
+ const fig=v=>{v=+v;return Number.isFinite(v)&&v>0?Math.max(0,Math.min(110,v)):null};
+ let parts=[
+  {value:fig(h.last),weight:weights.fig},
+  {value:fig(h.best),weight:weights.best},
+  {value:h.form!==""&&h.form!=null?+h.form:null,weight:weights.form},
+  {value:h.cls!==""&&h.cls!=null?+h.cls:null,weight:weights.class},
+  {value:Number.isFinite(js)?Math.min(js*3,100):null,weight:weights.jockey},
+  {value:Number.isFinite(ts)?Math.min(ts*3,100):null,weight:weights.trainer}
  ];
- if(ep.starts!==null&&ep.starts<=2){
-  parts.push({value:workScore(h),weight:ep.starts===0?24:12},{value:pedigreeScore(h),weight:ep.starts===0?18:8},{value:trainerContextScore(h),weight:ep.starts===0?24:12});
+ if(ep.starts===0){
+  // Do not manufacture a debut rating from trainer stats alone. Until workouts
+  // and pedigree have measured numeric scores, a first-time starter can be
+  // discussed in Things to Consider but should not receive fake precision.
+  const starter=[{value:workScore(h),weight:35},{value:pedigreeScore(h),weight:30},{value:trainerContextScore(h),weight:35}];
+  if(starter.filter(p=>Number.isFinite(p.value)).length<2)return "N/A";
+  parts=starter;
+ }else if(ep.starts!==null&&ep.starts<=2){
+  parts.push({value:workScore(h),weight:12},{value:pedigreeScore(h),weight:8},{value:trainerContextScore(h),weight:12});
  }
  const rating=evidenceWeightedRating(parts);
  return rating===null?"N/A":rating;
