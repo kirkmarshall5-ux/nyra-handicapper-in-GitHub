@@ -31,7 +31,7 @@ const TRACK_ABBREVIATIONS = { bel: "Belmont Park", aqu: "Aqueduct", sar: "Sarato
 
 function raceHeaderAt(lines, index) {
   const text = lines[index].text;
-  const drfPageHeader = text.match(/^\s*([A-Za-z]{2,5})\s*,?\s*race\s+(\d+)\s*,?\s*page\s*:\s*(\d+)\b/i);
+  const drfPageHeader = text.match(/(?:^|\s)([A-Za-z]{2,5})\s*,?\s*race\s+(\d+)\s*,?\s*page\s*:\s*(\d+)\b/i);
   if (drfPageHeader) {
     return { race: +drfPageHeader[2], trackAbbreviation: drfPageHeader[1].toLowerCase(), documentPage: +drfPageHeader[3], kind: "drf-page" };
   }
