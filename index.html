@@ -183,7 +183,7 @@ function raceAudit(r){
   if(suspicious.test(h.name||""))blockers.push(`phantom-looking runner #${key} ${h.name}`);
   const n=parseInt(key,10);if(Number.isFinite(n)&&n<=20)nums.push(n);
  }
- if(nums.length){const max=Math.max(...nums),set=new Set(nums);for(let n=1;n<=max;n++)if(!set.has(n))blockers.push(`missing program #${n}`)}
+ if(r.integrity){if(!r.integrity.ready){for(const n of r.integrity.missing||[])blockers.push(`DRF roster missing ${n}`);for(const n of r.integrity.unexpected||[])blockers.push(`unexpected parsed runner ${n}`)}}else if(nums.length){const max=Math.max(...nums),set=new Set(nums);for(let n=1;n<=max;n++)if(!set.has(n))blockers.push(`missing program #${n}`)}
  const analyzed=horses.some(h=>h.ppParseStatus);
  if(analyzed){for(const h of horses){if(h.ppParseStatus==="unmatched")blockers.push(`PP block not matched for #${h.n} ${h.name}`);if(h.lifeStarts==null)blockers.push(`career starts unknown for #${h.n} ${h.name}`)}}
  if(horses.some(h=>!h.j||!h.t))warnings.push("one or more jockey/trainer identities are missing");
