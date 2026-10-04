@@ -31,3 +31,5 @@ test('DRF numeric month/day/year date is normalized',()=>{const rows=[[770,[[10,
 
 test('Oct 4 DRF combined program and horse-name PDF item is parsed',()=>{const rows=[...copyrightedDrfHeader(1,1),[700,[[36,'1 Bahia Blue']]],[688,[[35,'15-1']]],[676,[[49,'Own: Drazin Dennis A']]]];const card=parseCard([page(1,rows)]);assert.deepEqual(card.races[1].horses.map(h=>[h.n,h.name]),[['1','Bahia Blue']])});
 test('Oct 4 DRF program can touch horse name in a combined PDF item',()=>{const rows=[...copyrightedDrfHeader(3,5),[700,[[36,'6I Need a Miracle']]],[688,[[35,'8-1']]],[676,[[49,'Own: Example Stable']]]];const card=parseCard([page(5,rows)]);assert.deepEqual(card.races[3].horses.map(h=>[h.n,h.name]),[['6','I Need a Miracle']])});
+
+test('one DRF Own header cannot create two runners',()=>{const rows=[...copyrightedDrfHeader(1,1),[700,[[36,'1 Bahia Blue']]],[694,[[38,'11 Belmont Park']]],[688,[[35,'15-1']]],[676,[[49,'Own: Sure Thing Stables LLC']]]];const card=parseCard([page(1,rows)]);assert.equal(card.races[1].horses.length,1);assert.equal(card.races[1].horses[0].name,'Bahia Blue')});
