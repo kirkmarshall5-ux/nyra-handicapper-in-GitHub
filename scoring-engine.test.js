@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';
-import {evidenceProfile,evidenceWeightedRating,confidenceAdjustedTemperature,probabilityWeights,extractRunningLineFigures,beyerAnomalies,claimLayoffSignal,contextualFigureWeight,beyerTrajectory,relativeBeyerPosition} from './scoring-engine.js';
+import {evidenceProfile,evidenceWeightedRating,confidenceAdjustedTemperature,probabilityWeights,extractRunningLineFigures,beyerAnomalies,claimLayoffSignal,contextualFigureWeight,beyerTrajectory,relativeBeyerPosition,ratingEvidenceProfile} from './scoring-engine.js';
 test('missing descriptive workout/pedigree text does not invent a numeric rating',()=>{assert.equal(evidenceWeightedRating([{value:null,weight:24},{value:null,weight:18}]),null)});
 test('unknown career starts are labeled unknown and forced to low confidence',()=>{const e=evidenceProfile({lifeStarts:null,last:88,best:92,figs:[88,86,84],trainerAngles:'Dirt stats'});assert.equal(e.experience,'Starts unknown');assert.equal(e.confidence,'Low')});
 test('first-time starter can reach medium but never high without race evidence',()=>{const e=evidenceProfile({lifeStarts:0,workText:'5f work',pedigree:'Sire / Dam',trainerAngles:'1st starter'});assert.equal(e.experience,'First-time starter');assert.equal(e.confidence,'Medium')});
@@ -28,3 +28,7 @@ test('comparable clean recent race retains full Beyer weight',()=>{assert.equal(
 test('Beyer trajectory distinguishes steady improvement from decline',()=>{assert.equal(beyerTrajectory([88,82,75,68,62]).trend,'improving');assert.equal(beyerTrajectory([73,79,86,92,96]).trend,'declining')});
 test('stable Beyer sequence is not forced into a trend',()=>{assert.equal(beyerTrajectory([82,81,83,82,80]).trend,'stable')});
 test('current Beyer is evaluated relative to todays field',()=>{const x=relativeBeyerPosition([83,78,73,68],[94,83,80,78,74,70]);assert.equal(x.vsMedian,4);assert.equal(x.rank,2)});
+
+test('foreign Timeform-only runner is evidence-bearing, not missing-data',()=>{const x=ratingEvidenceProfile({foreignForm:true,timeformRatings:[72,72]});assert.equal(x.status,'timeform-only');assert.equal(x.foreign,true);assert.equal(x.comparable,false)});
+test('mixed import history preserves Beyer and Timeform as separate systems',()=>{const x=ratingEvidenceProfile({beyers:[76,75],timeformRatings:[72,72]});assert.equal(x.status,'mixed-rating-systems');assert.deepEqual(x.beyers,[76,75]);assert.deepEqual(x.timeform,[72,72]);assert.equal(x.comparable,false)});
+test('ordinary Beyer horse remains directly comparable in Beyer field context',()=>{assert.equal(ratingEvidenceProfile({beyers:[91,85,82]}).status,'beyer')});
