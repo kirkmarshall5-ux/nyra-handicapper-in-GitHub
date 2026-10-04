@@ -28,3 +28,6 @@ test('Oct 4 DRF wider stacked runner header is accepted while remaining Own-boun
 
 test('Oct 4 DRF may place horse name slightly above program number',()=>{const rows=[...copyrightedDrfHeader(1,1),[700,[[49,'Bahia Blue']]],[694,[[36,'1']]],[686,[[34,'15-1']]],[654,[[49,'Own: Drazin Dennis A']]]];const card=parseCard([page(1,rows)]);assert.deepEqual(card.races[1].horses.map(h=>[h.n,h.name]),[['1','Bahia Blue']])});
 test('DRF numeric month/day/year date is normalized',()=>{const rows=[[770,[[10,'Daily Racing Form Belmont Park (10/4/2026)']]],...copyrightedDrfHeader(1,1),...runner('1','Bahia Blue',700)];const card=parseCard([page(1,rows)]);assert.equal(card.date,'2026-10-04');assert.match(card.id,/2026-10-04/)});
+
+test('Oct 4 DRF combined program and horse-name PDF item is parsed',()=>{const rows=[...copyrightedDrfHeader(1,1),[700,[[36,'1 Bahia Blue']]],[688,[[35,'15-1']]],[676,[[49,'Own: Drazin Dennis A']]]];const card=parseCard([page(1,rows)]);assert.deepEqual(card.races[1].horses.map(h=>[h.n,h.name]),[['1','Bahia Blue']])});
+test('Oct 4 DRF program can touch horse name in a combined PDF item',()=>{const rows=[...copyrightedDrfHeader(3,5),[700,[[36,'6I Need a Miracle']]],[688,[[35,'8-1']]],[676,[[49,'Own: Example Stable']]]];const card=parseCard([page(5,rows)]);assert.deepEqual(card.races[3].horses.map(h=>[h.n,h.name]),[['6','I Need a Miracle']])});
