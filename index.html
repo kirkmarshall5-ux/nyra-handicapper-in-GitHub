@@ -445,14 +445,20 @@ function ppAnalyze(text,targetRace=race){
   let runBeyers=extractRunningLineFigures(lines);
   h.figs=runBeyers.slice(0,5);
   if(runBeyers.length){h.last=runBeyers[0];h.best=Math.max(+h.best||0,...h.figs)}
+  h.timeformRatings=[...lines.matchAll(/Timeform\s+Rating:\s*(\d{1,3})/gi)].map(m=>+m[1]).filter(v=>v>=0&&v<=150);
+  h.foreignForm=h.timeformRatings.length>0;
   let ped=head.match(/(?:Sire|SIRE)[:\s]+([^·|]{2,60}).{0,220}?(?:Dam|DAM)[:\s]+([^·|]{2,60})/i);
   if(ped){h.sire=ped[1].trim();h.dam=ped[2].trim();h.pedigree=h.sire+" / "+h.dam;}
   const worksMatch=lines.match(/WORKS:\s*([^]*?)(?=TRAINER:|$)/i),workText=(worksMatch?.[1]||"").trim();
   h.works=workText?[workText]:[];h.workText=workText.slice(0,650);
-  const jockey=head.match(/\b([A-Z][A-Z .'-]{1,28})\s*\((\d+)\s+(\d+)\s+\d+\s+\d+\s+\.\d+\)\s*2026:/);
-  if(jockey){h.j=jockey[1].trim();h.jWin=+jockey[2]?100*(+jockey[3])/(+jockey[2]):0}
-  const trainer=head.match(/\bTr:\s*([A-Za-z .'-]{2,45}?)\s*\((\d+)\s+(\d+)\s+\d+\s+\d+\s+\.\d+\)\s*2026:/i);
-  if(trainer){h.t=trainer[1].trim();h.tWin=+trainer[2]?100*(+trainer[3])/(+trainer[2]):0}
+  const jockey=head.match(/\b([A-Z][A-Z .'-]{1,28})\s*\((\d+)\s+(\d+)\s+\d+\s+\d+\s+\.\d+\)\s*2026:/)
+    || head.match(/\b([A-Z][A-Z .'-]{1,28})\s*\(>\)\s*2026:/)
+    || head.match(/\b([A-Z][A-Z .'-]{1,28})\s*\(>\)/);
+  if(jockey){h.j=jockey[1].trim();if(jockey[2]!==undefined)h.jWin=+jockey[2]?100*(+jockey[3])/(+jockey[2]):0}
+  const trainer=head.match(/\bTr:\s*([A-Za-z .'-]{2,45}?)\s*\((\d+)\s+(\d+)\s+\d+\s+\d+\s+\.\d+\)\s*2026:/i)
+    || head.match(/\bTr:\s*([A-Za-z .'-]{2,45}?)\s*\(>\)\s*2026:/i)
+    || head.match(/\bTr:\s*([A-Za-z .'-]{2,45}?)\s*\(>\)/i);
+  if(trainer){h.t=trainer[1].trim();if(trainer[2]!==undefined)h.tWin=+trainer[2]?100*(+trainer[3])/(+trainer[2]):0}
   let trainerBlock=(lines.match(/TRAINER:\s*([^]*?)$/i)||[])[1]||"";
   h.trainerAngles=trainerBlock.slice(0,650);
   h.angles=[];
