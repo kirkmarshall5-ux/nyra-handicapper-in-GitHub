@@ -35,6 +35,8 @@ function raceHeaderAt(lines, index) {
   if (drfPageHeader) {
     return { race: +drfPageHeader[2], trackAbbreviation: drfPageHeader[1].toLowerCase(), documentPage: +drfPageHeader[3], kind: "drf-page" };
   }
+  const drfRace = text.match(/^\s*(\d+)\s+(Belmont Park|Aqueduct|Saratoga|Churchill Downs|Gulfstream Park|Keeneland|Santa Anita(?: Park)?)\s+\S+/i);
+  if (drfRace) return { race: +drfRace[1], track: drfRace[2], kind: "drf-race-heading" };
   const race = text.match(/^\s*Race\s+(\d+)\b/i);
   if (!race) return null;
   const signals = [/\$[\d,]+/, /\b(?:Dirt|Turf|Synthetic|Tapeta)\b/i, /\b\d+(?:\s+\d\/\d)?\s*(?:F|M|furlongs?|miles?)\b/i, /\bPost\s*(?:Time)?\b/i, /\b(?:Maiden|Claiming|Allowance|Stakes|Handicap)\b/i];
@@ -137,13 +139,43 @@ export function parseCard(pages, { sourceName = "document" } = {}) {
     }
     if (!races[raceNumber]) races[raceNumber] = { race: raceNumber, horses, track: "", date: "", cls: clean(section.slice(0, 4).map(line => line.text).join(" · ")), dist: "", surface: "", post: "", oddsMode: "Unknown" };
   };
+  const addStrictSection = (raceNumber, section) => {
+    const horses = [];
+    const programPattern = /^([1-9]\d?(?:A|B|X)?)$/i;
+    const oddsPattern = /^(?:\d+(?:\.\d+)?-\d+|\d+\/\d+)$/;
+    // DRF runner identity has a stable textual signature even when PDF x/y
+    // geometry varies: program number -> morning line -> horse name -> Own:.
+    // Anchor on Own: and require all three immediately preceding rows. This
+    // prevents Timeform 'Late 47', age labels such as '2 YO', index entries,
+    // and running-line numbers from ever becoming runners.
+    for (let i = 3; i < section.length; i++) {
+      if (!/^Own\s*:/i.test(clean(section[i].text))) continue;
+      const program = clean(section[i-3].text).match(programPattern);
+      const odds = clean(section[i-2].text);
+      const name = clean(section[i-1].text).replace(/\s+\([^)]*\)$/, "");
+      if (!program || !oddsPattern.test(odds) || !/^[A-Za-z]/.test(name) || /^Own\s*:/i.test(name)) continue;
+      const n = program[1].toUpperCase();
+      if (!horses.some(horse => horse.n === n)) horses.push({ n, name, j: "", t: "", odds: "—", ml: odds, style: "P", lifeStarts: null });
+    }
+    const headerText = clean(section[0]?.text || "");
+    const bodyText = section.slice(0, 8).map(line => clean(line.text)).join(" ");
+    const postMatch = bodyText.match(/\bPost\s*time:\s*([^ ]+\s*(?:ET|PM|AM)?)/i);
+    const surface = /\bInner Turf\b/i.test(bodyText) ? "Inner Turf" : /\bTurf\b/i.test(bodyText) ? "Turf" : /\bTapeta\b|\bSynthetic\b/i.test(bodyText) ? "Synthetic" : "Dirt";
+    const headingClass = headerText.replace(/^\s*\d+\s+(?:Belmont Park|Aqueduct|Saratoga|Churchill Downs|Gulfstream Park|Keeneland|Santa Anita(?: Park)?)\s*/i, "");
+    races[raceNumber] = { race: raceNumber, horses, track: "", date: "", cls: headingClass || "Race", dist: "", surface, post: postMatch?.[1] || "", oddsMode: "Morning line (pre-race)" };
+  };
   const pageAssignments = pages.map(page => {
     const pageLines = page.lines.map(line => ({ ...line, pageNumber: page.pageNumber }));
     const footer = pageLines.map((line, index) => raceHeaderAt(pageLines, index)).find(header => header?.kind === "drf-page");
     return footer ? { page, footer } : null;
   }).filter(Boolean);
   let headers;
-  if (pageAssignments.length) {
+  const raceBoundaries = [];
+  lines.forEach((line, index) => { const header = raceHeaderAt(lines, index); if (header?.kind === "drf-race-heading") raceBoundaries.push({ index, ...header }); });
+  if (raceBoundaries.length) {
+    headers = raceBoundaries;
+    raceBoundaries.forEach((boundary, boundaryIndex) => addStrictSection(boundary.race, lines.slice(boundary.index, raceBoundaries[boundaryIndex + 1]?.index ?? lines.length)));
+  } else if (pageAssignments.length) {
     headers = pageAssignments.map(({ footer }) => footer);
     pageAssignments.forEach(({ page, footer }) => addSection(footer.race, page.lines.map(line => ({ ...line, pageNumber: page.pageNumber }))));
   } else {
