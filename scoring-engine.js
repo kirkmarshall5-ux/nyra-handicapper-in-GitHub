@@ -128,3 +128,16 @@ export function claimLayoffSignal(h){
  const label=score>=3?"Positive claim intent":score<=-2?"Negative claim intent":"Mixed/neutral claim intent";
  return {applicable:true,label,score,reasons};
 }
+
+
+export function contextualFigureWeight(run,today={}){
+ let weight=1,reasons=[];
+ const rs=String(run.surface||"").toLowerCase(),ts=String(today.surface||"").toLowerCase();
+ if(rs&&ts&&rs!==ts){weight*=0.35;reasons.push("different surface")}
+ const rd=numeric(run.distanceFurlongs),td=numeric(today.distanceFurlongs);
+ if(rd!==null&&td!==null&&Math.abs(rd-td)>=2){weight*=0.7;reasons.push("materially different distance")}
+ if(run.compromisedTrip){weight*=0.45;reasons.push("compromised trip")}
+ const days=numeric(run.daysAgo);
+ if(days!==null&&days>365){weight*=0.7;reasons.push("older race")}
+ return {weight:+weight.toFixed(3),reasons};
+}
