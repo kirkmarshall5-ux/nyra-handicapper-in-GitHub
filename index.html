@@ -138,7 +138,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 
 <script type="module">
 import {reconstructPage, replaceCardAtomically, runnerStateKey} from "./card-loader.js?v=20261004-9";
-import {evidenceProfile, evidenceWeightedRating, probabilityWeights} from "./scoring-engine.js";
+import {evidenceProfile, evidenceWeightedRating, probabilityWeights, extractRunningLineFigures} from "./scoring-engine.js";
 import {priceEdge, winDecision, exoticDecision, multiRaceDecision} from "./wager-engine.js";
 const JOCKEYS=[
 {r:1,n:"Flavien Prat",s:41,w:12,win:29.3,top:46.3},{r:2,n:"Manuel Franco",s:45,w:10,win:22.2,top:42.2},{r:3,n:"Ricardo Santana, Jr.",s:52,w:8,win:15.4,top:40.4},{r:4,n:"Jose Lezcano",s:37,w:5,win:13.5,top:45.9},{r:5,n:"Kendrick Carmouche",s:34,w:4,win:11.8,top:35.3},{r:5,n:"Samuel Marin",s:30,w:4,win:13.3,top:26.7},{r:7,n:"Dylan Davis",s:39,w:3,win:7.7,top:35.9},{r:8,n:"Antonio Fresu",s:33,w:2,win:6.1,top:33.3},{r:8,n:"Jose L. Ortiz",s:8,w:2,win:25.0,top:50.0},{r:8,n:"Joel Rosario",s:19,w:2,win:10.5,top:42.1},{r:8,n:"Javier Castellano",s:27,w:2,win:7.4,top:29.6},{r:12,n:"Junior Alvarado",s:23,w:1,win:4.3,top:47.8},{r:12,n:"John R. Velazquez",s:17,w:1,win:5.9,top:35.3},{r:12,n:"Edgard J. Zayas",s:24,w:1,win:4.2,top:20.8}];
@@ -442,57 +442,7 @@ function ppAnalyze(text,targetRace=race){
   if(life)h.lifeStarts=+life[1];
   let lifeBest=lifeHead.match(/\bLife\s+\d+\s+\S+\s+\d+\s+\d+\s+\$[\d,]+\s+(\d{1,3})(?!\d)/i);
   if(lifeBest)h.best=+lifeBest[1];
-  let runBeyers=[...lines.matchAll(/\b(?:fst|fm|gd|sly|my|yl|sf)\b.{0,180}?\b(\d{2,3})\s+\d+\s*\/\d+/gi)].map(m=>+m[1]).filter(x=>x>=20&&x<=120);
-  h.figs=runBeyers.slice(0,5);
-  if(runBeyers.length){h.last=runBeyers[0];h.best=Math.max(+h.best||0,...h.figs)}
-  let ped=head.match(/(?:Sire|SIRE)[:\s]+([^·|]{2,60}).{0,220}?(?:Dam|DAM)[:\s]+([^·|]{2,60})/i);
-  if(ped){h.sire=ped[1].trim();h.dam=ped[2].trim();h.pedigree=h.sire+" / "+h.dam;}
-  const worksMatch=lines.match(/WORKS:\s*([^]*?)(?=TRAINER:|$)/i),workText=(worksMatch?.[1]||"").trim();
-  h.works=workText?[workText]:[];h.workText=workText.slice(0,650);
-  const jockey=head.match(/\b([A-Z][A-Z .'-]{1,28})\s*\((\d+)\s+(\d+)\s+\d+\s+\d+\s+\.\d+\)\s*2026:/);
-  if(jockey){h.j=jockey[1].trim();h.jWin=+jockey[2]?100*(+jockey[3])/(+jockey[2]):0}
-  const trainer=head.match(/\bTr:\s*([A-Za-z .'-]{2,45}?)\s*\((\d+)\s+(\d+)\s+\d+\s+\d+\s+\.\d+\)\s*2026:/i);
-  if(trainer){h.t=trainer[1].trim();h.tWin=+trainer[2]?100*(+trainer[3])/(+trainer[2]):0}
-  let trainerBlock=(lines.match(/TRAINER:\s*([^]*?)$/i)||[])[1]||"";
-  h.trainerAngles=trainerBlock.slice(0,650);
-  h.angles=[];
-  const add=(label,why,strength=1,caution="")=>h.angles.push({label,why,strength,caution});
-  // First-time starter: require the horse's successfully parsed Life record; trainer stats are context only.
-  if(life&&+life[1]===0){
-    let ft=pct(trainerBlock,/1st(?:Time)?(?:Starter|Start|TS)[^(]*\([^)]*?\.?(\d{2})\s+\$/i);
-    add("First-time starter",ft?`Debut runner; DRF trainer line shows about ${ft}% wins in this situation. Work pattern and pedigree deserve extra weight.`:"Debut runner. Check the trainer's first-time-starter percentage, works and pedigree rather than relying on speed figures.",ft>=18?3:2,"Debut horses carry more uncertainty than experienced runners.");
-  }
-  // Layoffs and trainer-specific comeback record.
-  let lay=trainerBlock.match(/(\+180Days|61-180Days|31-60Days|1stAfterLayoff|1stOff\d+)[^(]*\((\d+)\s+\.?(\d+)\s+\$([\d.]+)/i);
-  if(lay){let wins=+("0."+lay[3]);add("Layoff / freshening",`Trainer's DRF situation line: ${lay[1]} — ${lay[2]} starters, ${(wins*100).toFixed(0)}% wins, $${lay[4]} ROI shown in the PP.`,wins>=.18?3:2,lay[2]<15?"Small sample — treat the percentage cautiously.":"Long layoffs are not automatically positive; trainer context matters.");}
-  // Surface specialization / switch
-  for(const surf of ["Turf","Dirt"]){let re=new RegExp(surf+"\\((\\d+) \\.?(\\d+) \\$([\\d.]+)","i"),m=trainerBlock.match(re);if(m&&+m[1]>=20&&+m[2]>=15)add(`${surf} trainer strength`,`Trainer shows ${m[1]} ${surf.toLowerCase()} starters with roughly ${m[2]}% wins and $${m[3]} ROI in the DRF stat line.`,2);}
-  if(/\bTurf\s*\([^)]*\)/i.test(trainerBlock)&&/Turf\(/i.test(head)) add("Surface fit","Both the horse's surface record and trainer's turf statistics are available; compare today's surface with the horse's best figures rather than overall record alone.",1);
-  // Class moves visible in recent lines.
-  if(/Md Sp Wt/i.test(lines)&&/MdnClm|Md \d{4,5}/i.test(lines)) add("Class move",`Recent lines show maiden-special-weight and maiden-claiming company. A MSW → maiden-claiming drop is meaningful, but price and trainer intent still matter.`,3,"This is a well-known angle, so it can be overbet.");
-  if(/Clm\s+\d+/i.test(lines)&&/(Alw|OC\d)/i.test(lines)) add("Class placement","The PP shows movement between claiming and allowance/optional-claiming company. Check whether today's condition is genuinely easier than the races producing the horse's best figures.",2);
-  // Route/sprint changes with trainer stat
-  let rs=trainerBlock.match(/(Route\/Sprint|Sprint\/Route)[^(]*\((\d+)\s+\.?(\d+)\s+\$([\d.]+)/i);
-  if(rs)add(rs[1]==="Route/Sprint"?"Cutback: route → sprint":"Stretch-out: sprint → route",`Trainer's DRF line shows ${rs[2]} starters, about ${rs[3]}% wins and $${rs[4]} ROI with this distance change.`,+rs[3]>=18?3:2, +rs[2]<15?"Small sample.":"");
-  // Pace mismatch / lone speed candidate
-  if(h.tfEarly>=110)add("Serious early speed",`TimeformUS Early ${h.tfEarly} / Late ${h.tfLate}. This horse may control or force the pace; compare its Early number with every other runner before calling it lone speed.`,3,h.tfLate<65?"The Late figure suggests vulnerability if pressured.":"");
-  if(h.tfLate>=90&&h.tfEarly<85)add("Late-running profile",`TimeformUS Early ${h.tfEarly} / Late ${h.tfLate}. A contested pace could improve this closer's setup.`,2,"Needs enough pace ahead and a clean trip.");
-  // Running-line comments: surface meaningful trip/pace/finish clues without automatically changing the rating.
-  const tripRe=/(stumbled|bobbl(?:e|ed)|off slow|slow start|broke slow|checked|steadied|blocked|boxed|bumped|pinched|needed rm|altered course|(?:3|4|5|6)w(?:ide)?|wide|dueled|pressed|chased|rated|weakened|tired|rallied|closed|gaining|held)[^.]{0,95}/gi;
-  let tripHits=[...lines.matchAll(tripRe)].map(m=>m[0].trim()).filter((x,i,a)=>a.findIndex(y=>y.toLowerCase()===x.toLowerCase())===i).slice(0,3);
-  if(tripHits.length){h.tripNotes=tripHits;add("Running-line trip clues",`Recent DRF comments include: “${tripHits.join("” · “")}”. Compare each comment with that race's figure, pace and finish before deciding whether the performance was better or worse than it looks.`,tripHits.length>1?3:2,"Trip comments are context only; trouble does not automatically earn a rating upgrade.");}
-  h.pp=snip;matches.push({h,snip:snip.slice(0,1300),nums:runBeyers.slice(0,5)});
- }
- // Race-level lone-speed enhancement: relative, not absolute.
- let active=targetRace.horses.filter(x=>x.odds!=="SCR"&&x.tfEarly);
- if(active.length>=3){let sorted=[...active].sort((a,b)=>b.tfEarly-a.tfEarly);if(sorted[0].tfEarly-sorted[1].tfEarly>=12){sorted[0].angles=sorted[0].angles||[];sorted[0].angles.push({label:"Possible lone-speed edge",why:`TimeformUS Early ${sorted[0].tfEarly} is ${sorted[0].tfEarly-sorted[1].tfEarly} points above the next-fastest runner in the uploaded PP. That separation is worth examining in the pace map.`,strength:4,caution:"Recheck after scratches and surface changes."});}}
- return matches;
-}
-let pendingCard=null,activePPText="";
-async function loadCandidate(replaceImmediately=false){let f=ppFile.files[0];if(!f){ppStatus.textContent="Choose a DRF PDF first.";return}ppProg.style.width="8%";ppStatus.textContent="Reading and validating "+f.name+"…";try{
- if(!f.name.toLowerCase().endsWith(".pdf"))throw new Error("Card discovery requires a PDF with positioned text items.");
- const pages=await extractPdf(f),result=replaceCardAtomically(activeCard,pages,{sourceName:f.name});if(!result.replaced)throw result.error;
- const candidate=result.card,allMatches=[],raceCounts=[],text=pages.flatMap(p=>p.lines.map(l=>l.text)).join("\n");activePPText=text;for(const tr of Object.values(candidate.races)){const matches=ppAnalyze(text,tr);allMatches.push(...matches);raceCounts.push(`R${tr.race}: ${matches.length}`)}
+  let runBeyers=extractRunningLineFigures(lines);\n");activePPText=text;for(const tr of Object.values(candidate.races)){const matches=ppAnalyze(text,tr);allMatches.push(...matches);raceCounts.push(`R${tr.race}: ${matches.length}`)}
  pendingCard=candidate;if(!replaceImmediately){ppStatus.textContent=`Validated ${candidate.track} · ${candidate.date||"date unknown"} · ${Object.keys(candidate.races).length} races · ${Object.values(candidate.races).reduce((n,r)=>n+r.horses.length,0)} runners. Click Replace Active Card to confirm. ${candidate.warnings.join(" ")}`;ppProg.style.width="90%";return}
  activateCandidate(candidate,allMatches,raceCounts);
  }catch(e){console.error(e);pendingCard=null;ppStatus.textContent="Card load failed; active card was not changed: "+(e?.message||String(e));ppProg.style.width="0"}}
