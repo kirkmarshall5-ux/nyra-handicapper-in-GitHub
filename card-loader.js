@@ -106,6 +106,35 @@ export function parseCard(pages, { sourceName = "document" } = {}) {
         claimedOwners.add(runner.ownerKey);
       }
     }
+    // Recovery is owner-anchored, not geometry-loosened: every DRF runner header
+    // has one Own: row. If normal bounded geometry missed that owner, walk only
+    // the few immediately preceding reconstructed rows for program/name.
+    for (let ownerIndex = 0; ownerIndex < section.length; ownerIndex++) {
+      const ownerLine = section[ownerIndex];
+      const ownerItem = (ownerLine.items || []).find(item => /^Own\s*:/i.test(clean(item.str)));
+      if (!ownerItem) continue;
+      const ownerKey = `${ownerLine.pageNumber}:${ownerItem.x}:${ownerItem.y}`;
+      if (claimedOwners.has(ownerKey)) continue;
+      const windowStart = Math.max(0, ownerIndex - 6);
+      const prior = section.slice(windowStart, ownerIndex);
+      let recovered = null;
+      for (let p = prior.length - 1; p >= 0 && !recovered; p--) {
+        const line = prior[p];
+        const lineText = clean(line.text);
+        const combined = lineText.match(/^([1-9]\d?(?:A|B|X)?)[ .:-]*([A-Za-z][A-Za-z0-9'’ .&-]{1,60})(?:\s+\([^)]*\))?$/i);
+        if (combined) recovered = { n: combined[1].toUpperCase(), name: clean(combined[2]) };
+        else if (/^[A-Za-z][A-Za-z0-9'’ .&-]{1,60}(?:\s+\([^)]*\))?$/.test(lineText) && !/^(?:Own|Sire|Dam|Trainer|Jockey|Timeform|Beyer|Post time|Belmont Park)\b/i.test(lineText)) {
+          for (let q = p - 1; q >= 0; q--) {
+            const program = clean(prior[q].text).match(/^([1-9]\d?(?:A|B|X)?)$/i);
+            if (program) { recovered = { n: program[1].toUpperCase(), name: clean(lineText.replace(/\s+\([^)]*\)$/, "")) }; break; }
+          }
+        }
+      }
+      if (recovered && !horses.some(horse => horse.n === recovered.n)) {
+        horses.push({ n: recovered.n, name: recovered.name, j: "", t: "", odds: "—", ml: "—", style: "P", lifeStarts: null, ownerKey });
+        claimedOwners.add(ownerKey);
+      }
+    }
     if (!races[raceNumber]) races[raceNumber] = { race: raceNumber, horses, track: "", date: "", cls: clean(section.slice(0, 4).map(line => line.text).join(" · ")), dist: "", surface: "", post: "", oddsMode: "Unknown" };
   };
   const pageAssignments = pages.map(page => {

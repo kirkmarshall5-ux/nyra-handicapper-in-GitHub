@@ -33,3 +33,5 @@ test('Oct 4 DRF combined program and horse-name PDF item is parsed',()=>{const r
 test('Oct 4 DRF program can touch horse name in a combined PDF item',()=>{const rows=[...copyrightedDrfHeader(3,5),[700,[[36,'6I Need a Miracle']]],[688,[[35,'8-1']]],[676,[[49,'Own: Example Stable']]]];const card=parseCard([page(5,rows)]);assert.deepEqual(card.races[3].horses.map(h=>[h.n,h.name]),[['6','I Need a Miracle']])});
 
 test('one DRF Own header cannot create two runners',()=>{const rows=[...copyrightedDrfHeader(1,1),[700,[[36,'1 Bahia Blue']]],[694,[[38,'11 Belmont Park']]],[688,[[35,'15-1']]],[676,[[49,'Own: Sure Thing Stables LLC']]]];const card=parseCard([page(1,rows)]);assert.equal(card.races[1].horses.length,1);assert.equal(card.races[1].horses[0].name,'Bahia Blue')});
+
+test('unmatched Own header recovers one runner without loosening geometry',()=>{const rows=[...copyrightedDrfHeader(1,1),[700,[[36,'7']]],[690,[[35,'3-1']]],[620,[[52,'Jackpot Jackie']]],[540,[[49,'Own: Jackpot Farm']]]];const card=parseCard([page(1,rows)]);assert.deepEqual(card.races[1].horses.map(h=>[h.n,h.name]),[['7','Jackpot Jackie']])});
