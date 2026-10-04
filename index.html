@@ -115,7 +115,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <section id="public" class="hidden"><div class="grid">
 <div class="card span7"><div class="kicker">Public NYRA loader</div><h3 class="sectiontitle">Load a race page</h3>
 <div class="controls">
-<div><label>Track</label><select id="track"><option value="belmont">Belmont Park</option><option value="saratoga">Saratoga</option></select></div>
+<div><label>Track</label><select id="track"><option value="belmont">Belmont Park</option><option value="aqueduct">Aqueduct</option><option value="saratoga">Saratoga</option></select></div>
 <div><label>Date</label><input id="raceDate" type="date" value="2026-10-03"></div>
 <div><label>Race</label><input id="raceNo" type="number" min="1" max="11" value="1"></div>
 <div style="grid-column:span 3"><label>NYRA URL</label><input id="raceUrl" readonly></div>
@@ -305,7 +305,7 @@ resetWeights.onclick=()=>{weights={...defaultWeights};save();renderWeights();ren
 document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));b.classList.add("active");["raceday","pace","connections","pp","public","bets"].forEach(id=>document.getElementById(id).classList.toggle("hidden",id!==b.dataset.tab))});
 raceNotes.value=state.cards?.[activeCard.id]?.notes?.[1]||"";raceNotes.oninput=e=>{const cs=state.cards[activeCard.id]||(state.cards[activeCard.id]={runners:{},notes:{}});cs.notes=cs.notes||{};cs.notes[race.race]=e.target.value;save()};
 
-function updateUrl(){const url=`https://www.nyra.com/belmont/racing/entries/?day=${race.date}&limit=entries&race=${race.race}`;raceUrl.value=url;openRace.href=url;nyraRaceLink.href=url}
+function updateUrl(){const venue=["belmont","aqueduct","saratoga"].includes(track.value)?track.value:"belmont";const url=`https://www.nyra.com/${venue}/racing/entries/?day=${race.date}&limit=entries&race=${race.race}`;raceUrl.value=url;openRace.href=url;nyraRaceLink.href=url}
 [track,raceDate,raceNo].forEach(el=>el.onchange=updateUrl);updateUrl();
 
 function parseNyraText(text){
