@@ -176,3 +176,42 @@ export function ratingEvidenceProfile(h){
  if(timeform.length)return {status:"timeform-only",beyers:[],timeform,foreign:true,comparable:false};
  return {status:"no-speed-rating",beyers:[],timeform:[],foreign,comparable:false};
 }
+
+
+export function evidenceSignalAdjustment(h,fieldCurrentFigures=[]){
+ const contributions=[];
+ const figs=(h.figs||[]).map(numeric).filter(v=>v!==null);
+
+ // Form direction: deliberately small. Ability is already represented by last/best.
+ const traj=beyerTrajectory(figs);
+ if(traj.trend!=="insufficient"){
+  const adj=Math.max(-3,Math.min(3,traj.slope/2));
+  if(Math.abs(adj)>=0.5)contributions.push({signal:"trajectory",adjustment:+adj.toFixed(2),detail:traj});
+ }
+
+ // Field context: current figure relative to today's median. This is capped tightly
+ // because the current Beyer is already part of the base rating.
+ const rel=relativeBeyerPosition(figs,fieldCurrentFigures);
+ if(rel.available){
+  const adj=Math.max(-2,Math.min(2,rel.vsMedian/10));
+  if(Math.abs(adj)>=0.5)contributions.push({signal:"field-relative",adjustment:+adj.toFixed(2),detail:rel});
+ }
+
+ // Trip anomaly: only a verified compromised latest outlier earns a partial excuse.
+ // An unexplained extreme collapse is a small negative, never deleted from history.
+ const anomalies=beyerAnomalies(figs,h.tripComments||[]);
+ const latest=anomalies.find(x=>x.index===0);
+ if(latest?.classification==="extreme-low-compromised")contributions.push({signal:"latest-trip-excuse",adjustment:2,detail:latest});
+ else if(latest?.classification==="extreme-low-unexplained")contributions.push({signal:"latest-unexplained-collapse",adjustment:-1,detail:latest});
+
+ // Claim/layoff evidence is used only when structured claim fields actually exist.
+ const claim=claimLayoffSignal(h);
+ if(claim.applicable&&claim.score){
+  const adj=Math.max(-2,Math.min(2,claim.score/2));
+  contributions.push({signal:"claim-layoff",adjustment:+adj.toFixed(2),detail:claim});
+ }
+
+ const raw=contributions.reduce((s,x)=>s+x.adjustment,0);
+ const adjustment=Math.max(-6,Math.min(6,raw));
+ return {adjustment:+adjustment.toFixed(2),contributions,trajectory:traj,relative:rel};
+}
