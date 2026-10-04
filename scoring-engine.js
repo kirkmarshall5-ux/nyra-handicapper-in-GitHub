@@ -1,20 +1,50 @@
 export function numeric(v){return v!==""&&v!=null&&Number.isFinite(+v)?+v:null}
+
+function numericFigures(h){
+ const values=[...(Array.isArray(h.figs)?h.figs:[]),h.last,h.best].map(numeric).filter(v=>v!==null);
+ return [...new Set(values)];
+}
+
 export function evidenceProfile(h){
- const starts=numeric(h.lifeStarts),hasLast=numeric(h.last)!==null,hasBest=numeric(h.best)!==null;
- const hasRace=hasLast||hasBest||((h.figs||[]).length>0);
+ const starts=numeric(h.lifeStarts),figs=numericFigures(h),hasLast=numeric(h.last)!==null,hasBest=numeric(h.best)!==null;
+ const hasRace=figs.length>0;
  const workMeasured=numeric(h.workRating)!==null,pedigreeMeasured=numeric(h.pedigreeRating)!==null;
  const trainerMeasured=numeric(h.trainerContextRating)!==null;
  const works=workMeasured||((h.works||[]).length>0)||!!h.workText;
  const pedigree=pedigreeMeasured||!!(h.sire||h.dam||h.damsire||h.pedigree);
  const trainer=trainerMeasured||!!h.trainerAngles;
- let available=0,possible=0;
- const add=(present,weight)=>{possible+=weight;if(present)available+=weight};
- if(starts===0){add(works,4);add(pedigree,3);add(trainer,4);add(numeric(h.form)!==null,1);add(numeric(h.cls)!==null,1)}
- else if(starts!==null&&starts<=2){add(hasRace,5);add(works,2);add(pedigree,1);add(trainer,2);add(numeric(h.form)!==null,1);add(numeric(h.cls)!==null,1)}
- else {add(hasLast,5);add(hasBest,2);add(numeric(h.form)!==null,1);add(numeric(h.cls)!==null,1);add(numeric(h.jockeyRating)!==null,0.5);add(numeric(h.trainerRating)!==null,0.5)}
- const coverage=possible?available/possible:0;
- return {starts,hasRace,works,pedigree,trainer,coverage,confidence:coverage>=.72?"High":coverage>=.42?"Medium":"Low"};
+ const jockeyKnown=numeric(h.jockeyRating)!==null||numeric(h.jWin)!==null;
+ const trainerKnown=numeric(h.trainerRating)!==null||numeric(h.tWin)!==null;
+ let experience="Starts unknown",confidence="Low",coverage=0;
+
+ if(starts===null){
+  const available=[hasRace,works,pedigree,trainer,jockeyKnown,trainerKnown].filter(Boolean).length;
+  coverage=available/6;
+  confidence="Low"; // unknown career history is a data-quality limitation, never silently "Experienced"
+ }else if(starts===0){
+  experience="First-time starter";
+  const support=[works,pedigree,trainer].filter(Boolean).length;
+  coverage=support/3;
+  // Debut runners never receive High confidence: there is no direct race evidence.
+  confidence=support===3?"Medium":"Low";
+ }else if(starts<=2){
+  experience="Lightly raced";
+  const support=[hasRace,works,pedigree,trainer].filter(Boolean).length;
+  coverage=support/4;
+  // Sparse race history caps confidence at Medium.
+  confidence=hasRace&&support>=3?"Medium":"Low";
+ }else{
+  experience="Experienced";
+  const direct=Math.min(figs.length,3);
+  const support=[hasLast,hasBest,jockeyKnown,trainerKnown].filter(Boolean).length;
+  coverage=(direct*2+support)/10;
+  // Established runners earn High only from multiple direct race figures,
+  // not merely because "last" and "best" happen to be populated.
+  confidence=hasLast&&hasBest&&figs.length>=3?"High":hasLast&&hasRace?"Medium":"Low";
+ }
+ return {starts,experience,figCount:figs.length,hasRace,works,pedigree,trainer,coverage,confidence};
 }
+
 export function evidenceWeightedRating(parts){
  const usable=parts.filter(p=>Number.isFinite(p.value)&&p.weight>0);
  if(!usable.length)return null;
