@@ -74,7 +74,7 @@ function runnerAt(lines, index) {
     const text = clean(parts.map(item => item.str).join(" "));
     return { item: { x: parts[0].x, y: line.y }, text };
   }).filter(candidate => candidate && namePattern.test(candidate.text) && !noisePattern.test(candidate.text) && plausibleHorseName(candidate.text));
-  const embeddedNames = embedded ? [{ item: { x: programItem.x + 12, y: programItem.y }, text: clean(embedded[2]) }] : [];
+  const embeddedNames = embedded && plausibleHorseName(embedded[2]) ? [{ item: { x: programItem.x + 12, y: programItem.y }, text: clean(embedded[2]) }] : [];
   const names = [...embeddedNames, ...itemNames, ...rowNames];
   const owners = items.filter(item => /^Own\s*:/i.test(clean(item.str)));
   const pairs = [];
@@ -106,7 +106,7 @@ function entryIndexFromPages(pages){
  const byRace={};
  const re=/([A-Za-z][A-Za-z0-9'’* .&-]{1,60}?)\s*,\s*(10|[1-9])(?=\s|$)/g;
  for(const m of section.matchAll(re)){
-  const name=clean(m[1]).replace(/^>\s*[A-Z]\s*>\s*/,"");
+  const name=clean(m[1]).replace(/^>\s*[A-Z]\s*>\s*/,"").replace(/\*+$/,"");
   if(!plausibleHorseName(name))continue;
   const race=+m[2];(byRace[race]||(byRace[race]=[])).push(name);
  }
@@ -118,7 +118,7 @@ export function parseCard(pages, { sourceName = "document" } = {}) {
   if (!Array.isArray(pages) || !pages.length) throw new Error("No readable PDF pages were found.");
   const lines = pages.flatMap(page => page.lines.map(line => ({ ...line, pageNumber: page.pageNumber })));
   const races = {};
-  const addSection = (raceNumber, section) => {
+  const addSection = (raceNumber, section, expectedNames=[]) => {
     const horses = races[raceNumber]?.horses || [];
     const claimedOwners = new Set(horses.map(horse => horse.ownerKey).filter(Boolean));
     for (let i = 0; i < section.length; i++) {
@@ -155,6 +155,22 @@ export function parseCard(pages, { sourceName = "document" } = {}) {
       if (recovered && !horses.some(horse => horse.n === recovered.n)) {
         horses.push({ n: recovered.n, name: recovered.name, j: "", t: "", odds: "—", ml: "—", style: "P", lifeStarts: null, ownerKey });
         claimedOwners.add(ownerKey);
+      }
+    }
+    // Final identity recovery uses two independent DRF anchors: the official
+    // Index-to-Entries name and the runner's Life header, plus a nearby program
+    // number and Own: row. This repairs PDF row-merging without guessing names.
+    const canon=v=>slug(v).replace(/-/g,"");
+    for(const expectedName of expectedNames){
+      if(horses.some(h=>canon(h.name)===canon(expectedName)))continue;
+      for(let i=0;i<section.length;i++){
+        const lineText=clean(section[i].text), expectedKey=canon(expectedName);
+        if(!lineText || !canon(lineText).startsWith(expectedKey) || !/\bLife\s+\d+\b/i.test(lineText))continue;
+        const hasOwner=section.slice(i+1,Math.min(section.length,i+5)).some(line=>/^Own\s*:/i.test(clean(line.text)));
+        if(!hasOwner)continue;
+        let program=null;
+        for(let p=i-1;p>=Math.max(0,i-3);p--){const m=clean(section[p].text).match(/^([1-9]\d?(?:A|B|X)?)$/i);if(m){program=m[1].toUpperCase();break}}
+        if(program && !horses.some(h=>h.n===program)){horses.push({n:program,name:expectedName,j:"",t:"",odds:"—",ml:"—",style:"P",lifeStarts:null,identitySource:"index-life-owner"});break}
       }
     }
     if (!races[raceNumber]) races[raceNumber] = { race: raceNumber, horses, track: "", date: "", cls: clean(section.slice(0, 4).map(line => line.text).join(" · ")), dist: "", surface: "", post: "", oddsMode: "Unknown" };
@@ -205,6 +221,7 @@ export function parseCard(pages, { sourceName = "document" } = {}) {
     const headingClass = headerText.replace(/^\s*\d+\s+(?:Belmont Park|Aqueduct|Saratoga|Churchill Downs|Gulfstream Park|Keeneland|Santa Anita(?: Park)?)\s*/i, "");
     races[raceNumber] = { race: raceNumber, horses, track: "", date: "", cls: headingClass || "Race", dist: "", surface, post: postMatch?.[1] || "", oddsMode: "Morning line (pre-race)" };
   };
+  const entryIndex=entryIndexFromPages(pages);
   const pageAssignments = pages.map(page => {
     const pageLines = page.lines.map(line => ({ ...line, pageNumber: page.pageNumber }));
     const footer = pageLines.map((line, index) => raceHeaderAt(pageLines, index)).find(header => header?.kind === "drf-page");
@@ -218,7 +235,7 @@ export function parseCard(pages, { sourceName = "document" } = {}) {
     raceBoundaries.forEach((boundary, boundaryIndex) => addStrictSection(boundary.race, lines.slice(boundary.index, raceBoundaries[boundaryIndex + 1]?.index ?? lines.length)));
   } else if (pageAssignments.length) {
     headers = pageAssignments.map(({ footer }) => footer);
-    pageAssignments.forEach(({ page, footer }) => addSection(footer.race, page.lines.map(line => ({ ...line, pageNumber: page.pageNumber }))));
+    pageAssignments.forEach(({ page, footer }) => addSection(footer.race, page.lines.map(line => ({ ...line, pageNumber: page.pageNumber })), entryIndex?.[footer.race]||[]));
   } else {
     const boundaries = [];
     lines.forEach((line, index) => { const header = raceHeaderAt(lines, index); if (header) boundaries.push({ index, ...header }); });
@@ -238,7 +255,6 @@ export function parseCard(pages, { sourceName = "document" } = {}) {
   const drfTrack = headers.find(header => header.trackAbbreviation)?.trackAbbreviation;
   const track = trackMatch ? trackMatch[1] : TRACK_ABBREVIATIONS[drfTrack] || (drfTrack ? drfTrack.toUpperCase() : "");
   Object.values(races).forEach(race => { race.track = track || "Unknown track"; race.date = date; });
-  const entryIndex=entryIndexFromPages(pages);
   if(entryIndex){
    for(const [raceNo,race] of Object.entries(races)){
     const expected=entryIndex[raceNo]||[],parsed=race.horses.map(h=>h.name);
