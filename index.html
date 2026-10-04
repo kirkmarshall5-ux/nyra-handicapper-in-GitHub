@@ -278,7 +278,7 @@ function renderEvidence(){
  const el=document.getElementById("evidenceSummary");if(!el)return;
  el.innerHTML=race.horses.filter(h=>h.odds!=="SCR").map(h=>{let e=evidenceProfile(h);
  return `<div class="note"><div class="spread"><b>#${h.n} ${h.name}</b>${confidenceBadge(h)}</div>
- <div class="tiny muted" style="margin-top:6px">${e.starts===null?"Starts unknown":e.starts===0?"First-time starter":e.starts<=2?"Lightly raced":"Experienced"} · Rating ${score(h)}</div>
+ <div class="tiny muted" style="margin-top:6px">${e.experience} · Rating ${score(h)}</div>
  <div class="small" style="margin-top:7px">Race figures: ${e.hasRace?"✓":"N/A"} · Works: ${e.works?"✓":"N/A"} · Pedigree: ${e.pedigree?"✓":"N/A"} · Trainer context: ${e.trainer?"✓":"N/A"}</div>
  ${h.workText?`<div class="tiny muted" style="margin-top:6px"><b>Works:</b> ${h.workText}</div>`:""}
  ${(h.sire||h.dam||h.damsire||h.pedigree)?`<div class="tiny muted" style="margin-top:4px"><b>Pedigree:</b> ${h.pedigree||[h.sire,h.dam,h.damsire].filter(Boolean).join(" / ")}</div>`:""}</div>`}).join("");
