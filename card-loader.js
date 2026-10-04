@@ -50,7 +50,7 @@ function runnerAt(lines, index) {
   const programItem = lineItems.find(item => /^(\d{1,2}[A-Z]?)$/i.test(clean(item.str)));
   if (!programItem) return null;
   const namePattern = /^[A-Za-z][A-Za-z0-9'’ .&-]{1,60}(?:\s+\([^)]*\))?$/;
-  const noisePattern = /^(?:(?:Early|Late)$|(?:Own|Sire|Dam|Trainer|Jockey|Blinkers|Weight|Bred|Breeder|Mdn\\w*|Turf\\w*|Dirt\\w*|Sprint\\w*|Route\\w*|Life|Timeform\\w*|Beyer|Workout|Works?|Foaled|Pedigree|Stats?|Record)\\b)/i;
+  const noisePattern = /^(?:(?:Early|Late)$|(?:Own|Sire|Dam|Trainer|Jockey|Blinkers|Weight|Bred|Breeder|Mdn\w*|Turf\w*|Dirt\w*|Sprint\w*|Route\w*|Life|Timeform\w*|Beyer|Workout|Works?|Foaled|Pedigree|Stats?|Record)\b)/i;
   const itemNames = items.map(item => ({ item, text: clean(item.str) }))
     .filter(candidate => namePattern.test(candidate.text) && !noisePattern.test(candidate.text));
   // DRF sometimes emits a multi-word horse name as separate PDF text items
