@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';
-import {evidenceProfile,evidenceWeightedRating,confidenceAdjustedTemperature,probabilityWeights,extractRunningLineFigures} from './scoring-engine.js';
+import {evidenceProfile,evidenceWeightedRating,confidenceAdjustedTemperature,probabilityWeights,extractRunningLineFigures,beyerAnomalies} from './scoring-engine.js';
 test('missing descriptive workout/pedigree text does not invent a numeric rating',()=>{assert.equal(evidenceWeightedRating([{value:null,weight:24},{value:null,weight:18}]),null)});
 test('unknown career starts are labeled unknown and forced to low confidence',()=>{const e=evidenceProfile({lifeStarts:null,last:88,best:92,figs:[88,86,84],trainerAngles:'Dirt stats'});assert.equal(e.experience,'Starts unknown');assert.equal(e.confidence,'Low')});
 test('first-time starter can reach medium but never high without race evidence',()=>{const e=evidenceProfile({lifeStarts:0,workText:'5f work',pedigree:'Sire / Dam',trainerAngles:'1st starter'});assert.equal(e.experience,'First-time starter');assert.equal(e.confidence,'Medium')});
@@ -12,3 +12,7 @@ test('Beyer extraction preserves low figures and DRF joined post layout',()=>{
  const s='3æ26=7Del myø 1 S 24 :47 1:37 3ÎçOC 50k/N3L 34 5 /5 finish 18æ26=8Bel fst 6ôf 22 :45 1:16 3ÎAlw 55000sN1X 7810/12 finish 30Û26=9Sar slyø 5ôf ï 22 :45 1:03 3ÎClm 40000N2L 87 2 /7 finish';
  assert.deepEqual(extractRunningLineFigures(s),[34,78,87]);
 });
+
+test('extreme low Beyer with troubled trip is flagged but preserved',()=>{const a=beyerAnomalies([14,62,66,64],['stumbled badly start','','','']);assert.equal(a[0].figure,14);assert.equal(a[0].classification,'extreme-low-compromised')});
+test('extreme low Beyer without excuse remains an unexplained negative',()=>{const a=beyerAnomalies([18,70,72,68],['no response','','','']);assert.equal(a[0].classification,'extreme-low-unexplained')});
+test('ordinary variation is not mislabeled as an extreme trip anomaly',()=>{assert.deepEqual(beyerAnomalies([72,78,69,75],['4w','','','']),[])});
