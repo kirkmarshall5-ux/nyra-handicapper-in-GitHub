@@ -45,10 +45,14 @@ function runnerAt(lines, index) {
   const pageNumber = lines[index]?.pageNumber;
   const pageLines = lines.filter(line => line.pageNumber === pageNumber);
   const items = pageLines.flatMap(line => line.items?.length ? line.items : [{ str: line.text, x: 0, y: line.y }]);
-  const programs = items.filter(item => /^([1-9]\d?(?:A|B|X)?)$/i.test(clean(item.str)));
+  const exactProgram = item => /^([1-9]\d?(?:A|B|X)?)$/i.test(clean(item.str));
+  const embeddedProgram = item => clean(item.str).match(/^([1-9]\d?(?:A|B|X)?)[ .:-]*([A-Za-z][A-Za-z0-9'’ .&-]{1,60})(?:\s+\([^)]*\))?$/i);
+  const programs = items.filter(item => exactProgram(item) || (item.x < 90 && embeddedProgram(item)));
   const lineItems = lines[index]?.items || [];
-  const programItem = lineItems.find(item => /^([1-9]\d?(?:A|B|X)?)$/i.test(clean(item.str)));
+  const programItem = lineItems.find(exactProgram) || lineItems.find(item => item.x < 90 && embeddedProgram(item));
   if (!programItem) return null;
+  const embedded = exactProgram(programItem) ? null : embeddedProgram(programItem);
+  const programNumber = embedded ? embedded[1].toUpperCase() : clean(programItem.str).toUpperCase();
   const namePattern = /^[A-Za-z][A-Za-z0-9'’ .&-]{1,60}(?:\s+\([^)]*\))?$/;
   const noisePattern = /^(?:(?:Early|Late)$|(?:Own|Sire|Dam|Trainer|Jockey|Blinkers|Weight|Bred|Breeder|Mdn\w*|Turf\w*|Dirt\w*|Sprint\w*|Route\w*|Life|Timeform\w*|Beyer|Workout|Works?|Foaled|Pedigree|Stats?|Record)\b)/i;
   const itemNames = items.map(item => ({ item, text: clean(item.str) }))
@@ -63,7 +67,8 @@ function runnerAt(lines, index) {
     const text = clean(parts.map(item => item.str).join(" "));
     return { item: { x: parts[0].x, y: line.y }, text };
   }).filter(candidate => candidate && namePattern.test(candidate.text) && !noisePattern.test(candidate.text));
-  const names = [...itemNames, ...rowNames];
+  const embeddedNames = embedded ? [{ item: { x: programItem.x + 12, y: programItem.y }, text: clean(embedded[2]) }] : [];
+  const names = [...embeddedNames, ...itemNames, ...rowNames];
   const owners = items.filter(item => /^Own\s*:/i.test(clean(item.str)));
   const pairs = [];
   for (const name of names) for (const owner of owners) {
@@ -84,7 +89,7 @@ function runnerAt(lines, index) {
   const pair = pairs[0];
   const competingPrograms = programs.filter(item => item !== programItem && Math.abs(item.x - programItem.x) <= 24 && Math.abs(item.y - pair.name.item.y) < Math.abs(programItem.y - pair.name.item.y));
   if (competingPrograms.length) return null;
-  return { n: clean(programItem.str).toUpperCase(), name: clean(pair.name.text.replace(/\s+\([^)]*\)$/, "")), index };
+  return { n: programNumber, name: clean(pair.name.text.replace(/\s+\([^)]*\)$/, "")), index };
 }
 
 export function parseCard(pages, { sourceName = "document" } = {}) {
@@ -117,7 +122,7 @@ export function parseCard(pages, { sourceName = "document" } = {}) {
     headers = boundaries;
     boundaries.forEach((boundary, boundaryIndex) => addSection(boundary.race, lines.slice(boundary.index, boundaries[boundaryIndex + 1]?.index ?? lines.length)));
   }
-  const allText = lines.slice(0, 80).map(line => line.text).join(" ");
+  const allText = pages.slice(0, 2).flatMap(page => page.lines.map(line => line.text)).join(" ");
   const ymdMatch = allText.match(/\b(20\d{2})[-\/]([01]?\d)[-\/]([0-3]?\d)\b/);
   const mdyMatch = allText.match(/\b([01]?\d)[-\/]([0-3]?\d)[-\/](20\d{2})\b/);
   const monthMatch = allText.match(/\b(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2}),\s*(20\d{2})/i);
