@@ -58,3 +58,33 @@ export function probabilityWeights(rows){
  const sum=raw.reduce((a,x)=>a+x.v,0)||1;
  return raw.map(x=>({id:x.id,p:x.v/sum}));
 }
+
+
+// Extract Beyer figures from DRF running lines without depending on surface
+// abbreviations. PDF.js sometimes joins the Beyer and post position (e.g.
+// "7810/12" = Beyer 78, post 10 of 12), so handle both layouts explicitly.
+export function extractRunningLineFigures(text){
+ const src=String(text||"").replace(/\\s+/g," ").trim();
+ const starts=[...src.matchAll(/\\b\\d{1,2}\\S{0,4}\\d{2}=\\d+[A-Za-z]+/g)].map(m=>m.index);
+ const out=[];
+ for(let i=0;i<starts.length;i++){
+  const seg=src.slice(starts[i],starts[i+1]??src.length).split(/\\bWORKS:/i)[0];
+  let m=seg.match(/(?:^|\\s)(\\d{1,3})\\s+(\\d{1,2})\\s*\\/\\s*(\\d{1,2})(?=\\s|$)/);
+  let fig=null;
+  if(m){fig=+m[1]}
+  else{
+   const joined=seg.match(/(?:^|\\s)(\\d{3,5})\\s*\\/\\s*(\\d{1,2})(?=\\s|$)/);
+   if(joined){
+    const digits=joined[1],field=+joined[2],candidates=[];
+    for(const postDigits of [2,1]){
+     if(digits.length<=postDigits)continue;
+     const f=+digits.slice(0,-postDigits),post=+digits.slice(-postDigits);
+     if(f>=0&&f<=120&&post>=1&&post<=field)candidates.push({f,postDigits});
+    }
+    if(candidates.length)fig=candidates[0].f;
+   }
+  }
+  if(fig!==null&&fig>=0&&fig<=120)out.push(fig);
+ }
+ return out;
+}
