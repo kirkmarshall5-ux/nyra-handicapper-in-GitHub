@@ -76,7 +76,7 @@ function runnerAt(lines, index) {
     if (stacked || inline) pairs.push({ name, owner, score: Math.abs(programToNameX) + Math.abs(programToNameY) + Math.abs(nameToOwnerX) + Math.abs(nameToOwnerY) });
   }
   if (!pairs.length) return null;
-  pairs.sort((a, b) => a.score - b.score);
+  pairs.sort((a, b) => a.score - b.score || b.name.text.length - a.name.text.length);
   const pair = pairs[0];
   const competingPrograms = programs.filter(item => item !== programItem && Math.abs(item.x - programItem.x) <= 24 && Math.abs(item.y - pair.name.item.y) < Math.abs(programItem.y - pair.name.item.y));
   if (competingPrograms.length) return null;
