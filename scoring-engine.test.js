@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';
-import {evidenceProfile,evidenceWeightedRating,confidenceAdjustedTemperature,probabilityWeights} from './scoring-engine.js';
+import {evidenceProfile,evidenceWeightedRating,confidenceAdjustedTemperature,probabilityWeights,extractRunningLineFigures} from './scoring-engine.js';
 test('missing descriptive workout/pedigree text does not invent a numeric rating',()=>{assert.equal(evidenceWeightedRating([{value:null,weight:24},{value:null,weight:18}]),null)});
 test('unknown career starts are labeled unknown and forced to low confidence',()=>{const e=evidenceProfile({lifeStarts:null,last:88,best:92,figs:[88,86,84],trainerAngles:'Dirt stats'});assert.equal(e.experience,'Starts unknown');assert.equal(e.confidence,'Low')});
 test('first-time starter can reach medium but never high without race evidence',()=>{const e=evidenceProfile({lifeStarts:0,workText:'5f work',pedigree:'Sire / Dam',trainerAngles:'1st starter'});assert.equal(e.experience,'First-time starter');assert.equal(e.confidence,'Medium')});
@@ -7,3 +7,8 @@ test('first-time starter with only one support category stays low',()=>{assert.e
 test('lightly raced runner is capped at medium',()=>{const e=evidenceProfile({lifeStarts:2,last:78,figs:[78,72],workText:'work',pedigree:'Sire / Dam',trainerAngles:'context'});assert.equal(e.experience,'Lightly raced');assert.equal(e.confidence,'Medium')});
 test('established horse needs multiple direct figures for high confidence',()=>{assert.equal(evidenceProfile({lifeStarts:8,last:88,best:92,figs:[88,86,84]}).confidence,'High');assert.equal(evidenceProfile({lifeStarts:8,last:88,best:92,figs:[88]}).confidence,'Medium')});
 test('lower confidence flattens fair-odds probability differences',()=>{const hi=probabilityWeights([{id:'a',rating:90,confidence:'High'},{id:'b',rating:70,confidence:'High'}]);const lo=probabilityWeights([{id:'a',rating:90,confidence:'Low'},{id:'b',rating:70,confidence:'Low'}]);assert.ok((hi[0].p-hi[1].p)>(lo[0].p-lo[1].p))});
+
+test('Beyer extraction preserves low figures and DRF joined post layout',()=>{
+ const s='3æ26=7Del myø 1 S 24 :47 1:37 3ÎçOC 50k/N3L 34 5 /5 finish 18æ26=8Bel fst 6ôf 22 :45 1:16 3ÎAlw 55000sN1X 7810/12 finish 30Û26=9Sar slyø 5ôf ï 22 :45 1:03 3ÎClm 40000N2L 87 2 /7 finish';
+ assert.deepEqual(extractRunningLineFigures(s),[34,78,87]);
+});
