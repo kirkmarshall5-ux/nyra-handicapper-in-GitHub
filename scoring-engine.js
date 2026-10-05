@@ -286,7 +286,15 @@ export function experimentalV44Adjustment(h,field=[]){
  const pace=paceFitAdjustment(h,field);
  const rebound=reboundProtectionAdjustment(h);
  const upside=lightlyRacedUpsideAdjustment(h,fieldCurrent);
- const contributions=[...base.contributions];
+ // V4.4b rebound guard: when a single anomalous latest figure is protected by
+ // stable prior form, do not let that same race also create full recency-based
+ // trajectory/field-relative punishment. Positive evidence is preserved.
+ // This changes only the double-counting interaction; all other V4.4 signals
+ // and the overall +/-6 cap remain unchanged.
+ const guardedBaseContributions=rebound.adjustment>0
+  ?base.contributions.filter(x=>!(x.signal==="trajectory"&&numeric(x.adjustment)<0)&&!(x.signal==="field-relative"&&numeric(x.adjustment)<0)&&x.signal!=="latest-unexplained-collapse")
+  :base.contributions;
+ const contributions=[...guardedBaseContributions];
  if(pace.adjustment)contributions.push({signal:"pace-fit",adjustment:pace.adjustment,detail:pace});
  if(rebound.adjustment)contributions.push({signal:"rebound-protection",adjustment:rebound.adjustment,detail:rebound});
  if(upside.adjustment)contributions.push({signal:"lightly-raced-upside",adjustment:upside.adjustment,detail:upside});
