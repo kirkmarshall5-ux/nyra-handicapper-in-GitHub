@@ -233,3 +233,61 @@ export function evidenceSignalAdjustment(h,fieldCurrentFigures=[]){
  const adjustment=Math.max(-6,Math.min(6,raw));
  return {adjustment:+adjustment.toFixed(2),contributions,trajectory:traj,relative:rel};
 }
+
+
+export function paceFitAdjustment(h,field=[]){
+ const own=numeric(h?.tfEarly);
+ if(own===null)return {available:false,adjustment:0,reason:"no-timeform-early"};
+ const rivals=(Array.isArray(field)?field:[]).filter(x=>x&&x!==h&&x.odds!=="SCR").map(x=>numeric(x.tfEarly)).filter(v=>v!==null);
+ if(!rivals.length)return {available:false,adjustment:0,reason:"no-comparable-rivals"};
+ const fastest=Math.max(...rivals),advantage=own-fastest;
+ const nearPressers=rivals.filter(v=>v>=own-5).length;
+ let adjustment=0,label="neutral";
+ if(advantage>=20){adjustment=3;label="clear-lone-speed"}
+ else if(advantage>=10){adjustment=2;label="meaningful-speed-edge"}
+ else if(advantage>=5){adjustment=1;label="small-speed-edge"}
+ else if(own>=95&&nearPressers>=2){adjustment=-1;label="pace-pressure-risk"}
+ return {available:true,adjustment,label,own,fastestRival:fastest,advantage,nearPressers};
+}
+
+export function reboundProtectionAdjustment(h){
+ const figs=(h?.figs||[]).map(numeric).filter(v=>v!==null);
+ if(figs.length<3)return {available:false,adjustment:0,reason:"insufficient-history"};
+ const latest=figs[0],prior=figs.slice(1,5).sort((a,b)=>a-b),mid=Math.floor(prior.length/2);
+ const priorMedian=prior.length%2?prior[mid]:(prior[mid-1]+prior[mid])/2;
+ const gap=priorMedian-latest;
+ const trajectory=beyerTrajectory(figs);
+ // One poor latest race is not automatically a new ability level. Give only
+ // modest protection when multiple prior races establish a substantially
+ // higher baseline and the longer trend is not clearly declining.
+ const adjustment=gap>=20&&trajectory.trend!=="declining"?2:gap>=15&&trajectory.trend!=="declining"?1:0;
+ return {available:true,adjustment,latest,priorMedian,gap,trajectory};
+}
+
+export function lightlyRacedUpsideAdjustment(h,fieldCurrentFigures=[]){
+ const starts=numeric(h?.lifeStarts),figs=(h?.figs||[]).map(numeric).filter(v=>v!==null);
+ if(starts===null||starts===0||starts>5||figs.length<2)return {available:false,adjustment:0,reason:"not-lightly-raced-with-history"};
+ const field=(fieldCurrentFigures||[]).map(numeric).filter(v=>v!==null).sort((a,b)=>a-b);
+ const mid=Math.floor(field.length/2),median=field.length?(field.length%2?field[mid]:(field[mid-1]+field[mid])/2):null;
+ const best=Math.max(...figs),traj=beyerTrajectory(figs);
+ let adjustment=0;
+ if(traj.trend==="improving")adjustment+=1;
+ if(median!==null&&best>=median+5)adjustment+=1;
+ adjustment=Math.min(2,adjustment);
+ return {available:true,adjustment,starts,best,fieldMedian:median,trajectory:traj};
+}
+
+export function experimentalV44Adjustment(h,field=[]){
+ const fieldCurrent=(Array.isArray(field)?field:[]).filter(x=>x?.odds!=="SCR").map(x=>Array.isArray(x.figs)?x.figs[0]:x.last).map(numeric).filter(v=>v!==null);
+ const base=evidenceSignalAdjustment(h,fieldCurrent);
+ const pace=paceFitAdjustment(h,field);
+ const rebound=reboundProtectionAdjustment(h);
+ const upside=lightlyRacedUpsideAdjustment(h,fieldCurrent);
+ const contributions=[...base.contributions];
+ if(pace.adjustment)contributions.push({signal:"pace-fit",adjustment:pace.adjustment,detail:pace});
+ if(rebound.adjustment)contributions.push({signal:"rebound-protection",adjustment:rebound.adjustment,detail:rebound});
+ if(upside.adjustment)contributions.push({signal:"lightly-raced-upside",adjustment:upside.adjustment,detail:upside});
+ const raw=contributions.reduce((s,x)=>s+(numeric(x.adjustment)||0),0);
+ const adjustment=Math.max(-6,Math.min(6,raw));
+ return {adjustment:+adjustment.toFixed(2),contributions,pace,rebound,upside,base};
+}
