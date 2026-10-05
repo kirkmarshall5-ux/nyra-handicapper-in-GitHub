@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';
-import {evidenceProfile,evidenceWeightedRating,confidenceAdjustedTemperature,probabilityWeights,extractRunningLineFigures,beyerAnomalies,claimLayoffSignal,contextualFigureWeight,beyerTrajectory,relativeBeyerPosition,ratingEvidenceProfile,evidenceSignalAdjustment,contextualFigureSignal} from './scoring-engine.js';
+import {evidenceProfile,evidenceWeightedRating,confidenceAdjustedTemperature,probabilityWeights,extractRunningLineFigures,beyerAnomalies,claimLayoffSignal,contextualFigureWeight,beyerTrajectory,relativeBeyerPosition,ratingEvidenceProfile,evidenceSignalAdjustment,contextualFigureSignal,paceFitAdjustment,reboundProtectionAdjustment,lightlyRacedUpsideAdjustment,experimentalV44Adjustment} from './scoring-engine.js';
 test('missing descriptive workout/pedigree text does not invent a numeric rating',()=>{assert.equal(evidenceWeightedRating([{value:null,weight:24},{value:null,weight:18}]),null)});
 test('unknown career starts are labeled unknown and forced to low confidence',()=>{const e=evidenceProfile({lifeStarts:null,last:88,best:92,figs:[88,86,84],trainerAngles:'Dirt stats'});assert.equal(e.experience,'Starts unknown');assert.equal(e.confidence,'Low')});
 test('first-time starter can reach medium but never high without race evidence',()=>{const e=evidenceProfile({lifeStarts:0,workText:'5f work',pedigree:'Sire / Dam',trainerAngles:'1st starter'});assert.equal(e.experience,'First-time starter');assert.equal(e.confidence,'Medium')});
@@ -54,4 +54,34 @@ test('contextual figure signal is neutral when running lines are comparable',()=
 });
 test('contextual figure signal fails closed without structured running lines',()=>{
  const x=contextualFigureSignal([{figure:90}],{surface:'dirt',distanceFurlongs:7});assert.equal(x.available,false);assert.equal(x.adjustment,0);
+});
+
+
+test('V4.4 pace fit rewards a clear lone-speed advantage but not a pace scrum',()=>{
+ const lone={tfEarly:118,odds:'5/2'},field=[lone,{tfEarly:96,odds:'3/1'},{tfEarly:88,odds:'6/1'}];
+ assert.equal(paceFitAdjustment(lone,field).adjustment,3);
+ const pressed={tfEarly:101,odds:'5/2'},scrum=[pressed,{tfEarly:100,odds:'3/1'},{tfEarly:98,odds:'4/1'},{tfEarly:70,odds:'8/1'}];
+ assert.equal(paceFitAdjustment(pressed,scrum).adjustment,-1);
+});
+
+test('V4.4 rebound protection limits damage from one anomalous latest figure',()=>{
+ const x=reboundProtectionAdjustment({figs:[50,82,80,84]});
+ assert.ok(x.adjustment>0);assert.equal(x.latest,50);assert.ok(x.priorMedian>=80);
+});
+
+test('V4.4 rebound protection does not rescue a true declining pattern',()=>{
+ const x=reboundProtectionAdjustment({figs:[60,70,80,90]});
+ assert.equal(x.adjustment,0);
+});
+
+test('V4.4 lightly raced upside is small and evidence based',()=>{
+ const x=lightlyRacedUpsideAdjustment({lifeStarts:4,figs:[82,76,70]},[90,84,78,74,70]);
+ assert.ok(x.adjustment>=1&&x.adjustment<=2);
+});
+
+test('V4.4 combined experimental adjustment remains capped at plus/minus six',()=>{
+ const h={lifeStarts:4,figs:[50,90,86,82],tfEarly:120,odds:'5/2',tripComments:['No response','','','']};
+ const field=[h,{figs:[70],tfEarly:90,odds:'4/1'},{figs:[72],tfEarly:80,odds:'6/1'}];
+ const x=experimentalV44Adjustment(h,field);
+ assert.ok(x.adjustment<=6&&x.adjustment>=-6);
 });
