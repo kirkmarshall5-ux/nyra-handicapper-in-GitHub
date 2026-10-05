@@ -279,12 +279,34 @@ export function lightlyRacedUpsideAdjustment(h,fieldCurrentFigures=[]){
  return {available:true,adjustment,starts,best,fieldMedian:median,trajectory:traj};
 }
 
+export function provenAbilityAdjustment(h,field=[]){
+ const figs=(h?.figs||[]).map(numeric).filter(v=>v!==null);
+ if(figs.length<2)return {available:false,adjustment:0,reason:"insufficient-history"};
+ const active=(Array.isArray(field)?field:[]).filter(x=>x&&x.odds!=="SCR");
+ const profiles=active.map(x=>{
+  const f=(x?.figs||[]).map(numeric).filter(v=>v!==null);
+  if(!f.length)return null;
+  const sorted=[...f].sort((a,b)=>b-a);
+  return {peak:sorted[0],second:sorted[1]??null,depth80:f.slice(0,8).filter(v=>v>=80).length,depth90:f.slice(0,8).filter(v=>v>=90).length};
+ }).filter(Boolean);
+ const median=v=>{const a=v.filter(x=>x!==null).sort((x,y)=>x-y);if(!a.length)return null;const m=Math.floor(a.length/2);return a.length%2?a[m]:(a[m-1]+a[m])/2};
+ const peakMedian=median(profiles.map(x=>x.peak)),secondMedian=median(profiles.map(x=>x.second)),d80Median=median(profiles.map(x=>x.depth80)),d90Median=median(profiles.map(x=>x.depth90));
+ const sorted=[...figs].sort((a,b)=>b-a),peak=sorted[0],second=sorted[1]??null,depth80=figs.slice(0,8).filter(v=>v>=80).length,depth90=figs.slice(0,8).filter(v=>v>=90).length;
+ if(peakMedian===null||peak<peakMedian+5)return {available:true,adjustment:0,peak,peakMedian,reason:"no-peak-edge"};
+ const secondEdge=second!==null&&secondMedian!==null?second-secondMedian:null,d80Edge=d80Median!==null?depth80-d80Median:0,d90Edge=d90Median!==null?depth90-d90Median:0;
+ const corroborated=(secondEdge!==null&&secondEdge>=3)||d80Edge>=1||d90Edge>=1;
+ if(!corroborated)return {available:true,adjustment:0,peak,peakMedian,second,secondMedian,depth80,depth90,reason:"uncorroborated-peak"};
+ const strong=(secondEdge!==null&&secondEdge>=5)||d80Edge>=1||d90Edge>=1;
+ const adjustment=strong?2:1;
+ return {available:true,adjustment,peak,peakMedian,second,secondMedian,secondEdge,depth80,depth80Median:d80Median,d80Edge,depth90,depth90Median:d90Median,d90Edge};
+}
+
 export function experimentalV44Adjustment(h,field=[]){
  const fieldCurrent=(Array.isArray(field)?field:[]).filter(x=>x?.odds!=="SCR").map(x=>Array.isArray(x.figs)?x.figs[0]:x.last).map(numeric).filter(v=>v!==null);
  const base=evidenceSignalAdjustment(h,fieldCurrent);
  const pace=paceFitAdjustment(h,field);
  const rebound=reboundProtectionAdjustment(h);
- const upside=lightlyRacedUpsideAdjustment(h,fieldCurrent);
+ const upside=lightlyRacedUpsideAdjustment(h,fieldCurrent);\n const proven=provenAbilityAdjustment(h,field);
  // V4.4b rebound guard: when a single anomalous latest figure is protected by
  // stable prior form, do not let that same race also create full recency-based
  // trajectory/field-relative punishment. Positive evidence is preserved.
@@ -296,8 +318,8 @@ export function experimentalV44Adjustment(h,field=[]){
  const contributions=[...guardedBaseContributions];
  if(pace.adjustment)contributions.push({signal:"pace-fit",adjustment:pace.adjustment,detail:pace});
  if(rebound.adjustment)contributions.push({signal:"rebound-protection",adjustment:rebound.adjustment,detail:rebound});
- if(upside.adjustment)contributions.push({signal:"lightly-raced-upside",adjustment:upside.adjustment,detail:upside});
+ if(upside.adjustment)contributions.push({signal:"lightly-raced-upside",adjustment:upside.adjustment,detail:upside});\n if(proven.adjustment)contributions.push({signal:"proven-ability",adjustment:proven.adjustment,detail:proven});
  const raw=contributions.reduce((s,x)=>s+(numeric(x.adjustment)||0),0);
  const adjustment=Math.max(-6,Math.min(6,raw));
- return {adjustment:+adjustment.toFixed(2),contributions,pace,rebound,upside,base};
+ return {adjustment:+adjustment.toFixed(2),contributions,pace,rebound,upside,proven,base};
 }
