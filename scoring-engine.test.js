@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';
-import {evidenceProfile,evidenceWeightedRating,confidenceAdjustedTemperature,probabilityWeights,extractRunningLineFigures,beyerAnomalies,claimLayoffSignal,contextualFigureWeight,beyerTrajectory,relativeBeyerPosition,ratingEvidenceProfile,evidenceSignalAdjustment,contextualFigureSignal,paceFitAdjustment,reboundProtectionAdjustment,lightlyRacedUpsideAdjustment,experimentalV44Adjustment} from './scoring-engine.js';
+import {evidenceProfile,evidenceWeightedRating,confidenceAdjustedTemperature,probabilityWeights,extractRunningLineFigures,beyerAnomalies,claimLayoffSignal,contextualFigureWeight,beyerTrajectory,relativeBeyerPosition,ratingEvidenceProfile,evidenceSignalAdjustment,contextualFigureSignal,paceFitAdjustment,reboundProtectionAdjustment,lightlyRacedUpsideAdjustment,experimentalV44Adjustment,provenAbilityAdjustment} from './scoring-engine.js';
 test('missing descriptive workout/pedigree text does not invent a numeric rating',()=>{assert.equal(evidenceWeightedRating([{value:null,weight:24},{value:null,weight:18}]),null)});
 test('unknown career starts are labeled unknown and forced to low confidence',()=>{const e=evidenceProfile({lifeStarts:null,last:88,best:92,figs:[88,86,84],trainerAngles:'Dirt stats'});assert.equal(e.experience,'Starts unknown');assert.equal(e.confidence,'Low')});
 test('first-time starter can reach medium but never high without race evidence',()=>{const e=evidenceProfile({lifeStarts:0,workText:'5f work',pedigree:'Sire / Dam',trainerAngles:'1st starter'});assert.equal(e.experience,'First-time starter');assert.equal(e.confidence,'Medium')});
@@ -84,4 +84,26 @@ test('V4.4 combined experimental adjustment remains capped at plus/minus six',()
  const field=[h,{figs:[70],tfEarly:90,odds:'4/1'},{figs:[72],tfEarly:80,odds:'6/1'}];
  const x=experimentalV44Adjustment(h,field);
  assert.ok(x.adjustment<=6&&x.adjustment>=-6);
+});
+
+
+test('V4.4d proven ability requires peak edge plus corroboration',()=>{
+ const h={figs:[95,90,84],odds:'4/1'},field=[h,{figs:[88,86,82],odds:'3/1'},{figs:[84,82,80],odds:'5/1'},{figs:[82,80,78],odds:'8/1'}];
+ const x=provenAbilityAdjustment(h,field);assert.equal(x.adjustment,2);assert.ok(x.peak>=x.peakMedian+5);
+});
+test('V4.4d isolated peak receives no proven-ability bonus',()=>{
+ const h={figs:[95,80,78],odds:'4/1'},field=[h,{figs:[88,86,82],odds:'3/1'},{figs:[86,84,81],odds:'5/1'},{figs:[84,83,80],odds:'8/1'}];
+ assert.equal(provenAbilityAdjustment(h,field).adjustment,0);
+});
+test('V4.4d modest corroboration earns only plus one',()=>{
+ const h={figs:[95,88,79],odds:'4/1'},field=[h,{figs:[88,84,82],odds:'3/1'},{figs:[86,84,81],odds:'5/1'},{figs:[84,83,80],odds:'8/1'}];
+ assert.equal(provenAbilityAdjustment(h,field).adjustment,1);
+});
+test('V4.4d proven ability still respects combined plus six cap',()=>{
+ const h={lifeStarts:4,figs:[100,95,90],tfEarly:125,odds:'2/1'};const field=[h,{figs:[80,78,76],tfEarly:90,odds:'4/1'},{figs:[78,76,74],tfEarly:85,odds:'6/1'}];
+ const x=experimentalV44Adjustment(h,field);assert.ok(x.contributions.some(y=>y.signal==='proven-ability'));assert.equal(x.adjustment,6);
+});
+test('V4.4d scratched rivals do not set proven-ability field medians',()=>{
+ const h={figs:[90,87,84],odds:'4/1'},field=[h,{figs:[84,82,80],odds:'3/1'},{figs:[120,118,115],odds:'SCR'}];
+ assert.ok(provenAbilityAdjustment(h,field).adjustment>0);
 });
