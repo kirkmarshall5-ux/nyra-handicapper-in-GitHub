@@ -319,7 +319,8 @@ export function experimentalV44Adjustment(h,field=[]){
  const contributions=[...guardedBaseContributions];
  if(pace.adjustment)contributions.push({signal:"pace-fit",adjustment:pace.adjustment,detail:pace});
  if(rebound.adjustment)contributions.push({signal:"rebound-protection",adjustment:rebound.adjustment,detail:rebound});
- if(upside.adjustment)contributions.push({signal:"lightly-raced-upside",adjustment:upside.adjustment,detail:upside});\n if(proven.adjustment)contributions.push({signal:"proven-ability",adjustment:proven.adjustment,detail:proven});
+ if(upside.adjustment)contributions.push({signal:"lightly-raced-upside",adjustment:upside.adjustment,detail:upside});
+ if(proven.adjustment)contributions.push({signal:"proven-ability",adjustment:proven.adjustment,detail:proven});
  const raw=contributions.reduce((s,x)=>s+(numeric(x.adjustment)||0),0);
  const adjustment=Math.max(-6,Math.min(6,raw));
  return {adjustment:+adjustment.toFixed(2),contributions,pace,rebound,upside,proven,base};
