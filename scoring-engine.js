@@ -143,6 +143,24 @@ export function contextualFigureWeight(run,today={}){
 }
 
 
+export function contextualFigureSignal(runs,today={}){
+ const usable=(Array.isArray(runs)?runs:[]).map(run=>{
+  const figure=numeric(run?.figure);
+  if(figure===null)return null;
+  const context=contextualFigureWeight(run,today);
+  return {figure,weight:context.weight,reasons:context.reasons};
+ }).filter(Boolean);
+ if(usable.length<2)return {available:false,adjustment:0,reason:"insufficient-structured-running-lines",runs:usable};
+ const recent=usable.slice(0,5),rawMean=recent.reduce((s,x)=>s+x.figure,0)/recent.length;
+ const weightSum=recent.reduce((s,x)=>s+x.weight,0);
+ if(weightSum<=0)return {available:false,adjustment:0,reason:"no-comparable-running-lines",runs:recent};
+ const contextualMean=recent.reduce((s,x)=>s+x.figure*x.weight,0)/weightSum;
+ // Context may refine the rating, never dominate it. A 10-point contextual
+ // difference moves the handicap rating only 2 points; total effect is capped ±4.
+ const adjustment=Math.max(-4,Math.min(4,(contextualMean-rawMean)/5));
+ return {available:true,adjustment:+adjustment.toFixed(2),rawMean:+rawMean.toFixed(2),contextualMean:+contextualMean.toFixed(2),runs:recent};
+}
+
 export function beyerTrajectory(figures,weights=[]){
  const figs=(figures||[]).map(numeric).filter(v=>v!==null);
  if(figs.length<3)return {trend:"insufficient",slope:0,change:0};
