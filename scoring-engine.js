@@ -306,7 +306,8 @@ export function experimentalV44Adjustment(h,field=[]){
  const base=evidenceSignalAdjustment(h,fieldCurrent);
  const pace=paceFitAdjustment(h,field);
  const rebound=reboundProtectionAdjustment(h);
- const upside=lightlyRacedUpsideAdjustment(h,fieldCurrent);\n const proven=provenAbilityAdjustment(h,field);
+ const upside=lightlyRacedUpsideAdjustment(h,fieldCurrent);
+ const proven=provenAbilityAdjustment(h,field);
  // V4.4b rebound guard: when a single anomalous latest figure is protected by
  // stable prior form, do not let that same race also create full recency-based
  // trajectory/field-relative punishment. Positive evidence is preserved.
