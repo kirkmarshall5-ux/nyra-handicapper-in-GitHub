@@ -256,12 +256,15 @@ export function reboundProtectionAdjustment(h){
  const latest=figs[0],prior=figs.slice(1,5).sort((a,b)=>a-b),mid=Math.floor(prior.length/2);
  const priorMedian=prior.length%2?prior[mid]:(prior[mid-1]+prior[mid])/2;
  const gap=priorMedian-latest;
+ const priorSpread=prior.length?Math.max(...prior)-Math.min(...prior):null;
  const trajectory=beyerTrajectory(figs);
- // One poor latest race is not automatically a new ability level. Give only
- // modest protection when multiple prior races establish a substantially
- // higher baseline and the longer trend is not clearly declining.
- const adjustment=gap>=20&&trajectory.trend!=="declining"?2:gap>=15&&trajectory.trend!=="declining"?1:0;
- return {available:true,adjustment,latest,priorMedian,gap,trajectory};
+ // One poor latest race is not automatically a new ability level. Protect it
+ // only when the preceding form was reasonably stable; repeated deterioration
+ // receives no rescue. This avoids the circular error where the anomalous
+ // latest figure itself makes the overall trajectory look "declining."
+ const stablePrior=prior.length>=2&&priorSpread<=15;
+ const adjustment=stablePrior&&gap>=20?2:stablePrior&&gap>=15?1:0;
+ return {available:true,adjustment,latest,priorMedian,priorSpread,gap,stablePrior,trajectory};
 }
 
 export function lightlyRacedUpsideAdjustment(h,fieldCurrentFigures=[]){
