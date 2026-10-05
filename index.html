@@ -461,12 +461,12 @@ function ppAnalyze(text,targetRace=race){
   if(ped){h.sire=ped[1].trim();h.dam=ped[2].trim();h.pedigree=h.sire+" / "+h.dam;}
   const worksMatch=lines.match(/WORKS:\s*([^]*?)(?=TRAINER:|$)/i),workText=(worksMatch?.[1]||"").trim();
   h.works=workText?[workText]:[];h.workText=workText.slice(0,650);
-  const jockey=head.match(/\b([A-Z][A-Z .'-]{1,28})\s*\((\d+)\s+(\d+)\s+\d+\s+\d+\s+\.\d+\)\s*2026:/)
-    || head.match(/\b([A-Z][A-Z .'-]{1,28})\s*\(>\)\s*2026:/)
+  const jockey=head.match(/\b([A-Z][A-Z .'-]{1,28})\s*\((\d+)\s+(\d+)\s+\d+\s+\d+\s+\.\d+\)\s*20\d{2}:/)
+    || head.match(/\b([A-Z][A-Z .'-]{1,28})\s*\(>\)\s*20\d{2}:/)
     || head.match(/\b([A-Z][A-Z .'-]{1,28})\s*\(>\)/);
   if(jockey){h.j=jockey[1].trim();if(jockey[2]!==undefined)h.jWin=+jockey[2]?100*(+jockey[3])/(+jockey[2]):0}
-  const trainer=head.match(/\bTr:\s*([A-Za-z .'-]{2,45}?)\s*\((\d+)\s+(\d+)\s+\d+\s+\d+\s+\.\d+\)\s*2026:/i)
-    || head.match(/\bTr:\s*([A-Za-z .'-]{2,45}?)\s*\(>\)\s*2026:/i)
+  const trainer=head.match(/\bTr:\s*([A-Za-z .'-]{2,45}?)\s*\((\d+)\s+(\d+)\s+\d+\s+\d+\s+\.\d+\)\s*20\d{2}:/i)
+    || head.match(/\bTr:\s*([A-Za-z .'-]{2,45}?)\s*\(>\)\s*20\d{2}:/i)
     || head.match(/\bTr:\s*([A-Za-z .'-]{2,45}?)\s*\(>\)/i);
   if(trainer){h.t=trainer[1].trim();if(trainer[2]!==undefined)h.tWin=+trainer[2]?100*(+trainer[3])/(+trainer[2]):0}
   let trainerBlock=(lines.match(/TRAINER:\s*([^]*?)$/i)||[])[1]||"";
