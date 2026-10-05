@@ -92,11 +92,11 @@ test('V4.4d proven ability requires peak edge plus corroboration',()=>{
  const x=provenAbilityAdjustment(h,field);assert.equal(x.adjustment,2);assert.ok(x.peak>=x.peakMedian+5);
 });
 test('V4.4d isolated peak receives no proven-ability bonus',()=>{
- const h={figs:[95,80,70],odds:'4/1'},field=[h,{figs:[88,86,70],odds:'3/1'},{figs:[86,84,70],odds:'5/1'},{figs:[84,83,70],odds:'8/1'}];
+ const h={figs:[79,67,60],odds:'4/1'},field=[h,{figs:[70,68,60],odds:'3/1'},{figs:[68,68,60],odds:'5/1'},{figs:[66,67,60],odds:'8/1'}];
  assert.equal(provenAbilityAdjustment(h,field).adjustment,0);
 });
 test('V4.4d modest corroboration earns only plus one',()=>{
- const h={figs:[95,87,70],odds:'4/1'},field=[h,{figs:[88,84,70],odds:'3/1'},{figs:[86,84,70],odds:'5/1'},{figs:[84,83,70],odds:'8/1'}];
+ const h={figs:[79,71,60],odds:'4/1'},field=[h,{figs:[70,68,60],odds:'3/1'},{figs:[68,68,60],odds:'5/1'},{figs:[66,67,60],odds:'8/1'}];
  assert.equal(provenAbilityAdjustment(h,field).adjustment,1);
 });
 test('V4.4d proven ability still respects combined plus six cap',()=>{
