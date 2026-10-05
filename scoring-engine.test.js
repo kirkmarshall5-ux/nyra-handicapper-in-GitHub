@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';
-import {evidenceProfile,evidenceWeightedRating,confidenceAdjustedTemperature,probabilityWeights,extractRunningLineFigures,beyerAnomalies,claimLayoffSignal,contextualFigureWeight,beyerTrajectory,relativeBeyerPosition,ratingEvidenceProfile,evidenceSignalAdjustment} from './scoring-engine.js';
+import {evidenceProfile,evidenceWeightedRating,confidenceAdjustedTemperature,probabilityWeights,extractRunningLineFigures,beyerAnomalies,claimLayoffSignal,contextualFigureWeight,beyerTrajectory,relativeBeyerPosition,ratingEvidenceProfile,evidenceSignalAdjustment,contextualFigureSignal} from './scoring-engine.js';
 test('missing descriptive workout/pedigree text does not invent a numeric rating',()=>{assert.equal(evidenceWeightedRating([{value:null,weight:24},{value:null,weight:18}]),null)});
 test('unknown career starts are labeled unknown and forced to low confidence',()=>{const e=evidenceProfile({lifeStarts:null,last:88,best:92,figs:[88,86,84],trainerAngles:'Dirt stats'});assert.equal(e.experience,'Starts unknown');assert.equal(e.confidence,'Low')});
 test('first-time starter can reach medium but never high without race evidence',()=>{const e=evidenceProfile({lifeStarts:0,workText:'5f work',pedigree:'Sire / Dam',trainerAngles:'1st starter'});assert.equal(e.experience,'First-time starter');assert.equal(e.confidence,'Medium')});
@@ -38,3 +38,20 @@ test('signal adjustment penalizes declining trajectory',()=>{const x=evidenceSig
 test('verified compromised latest outlier gets only a partial excuse',()=>{const x=evidenceSignalAdjustment({figs:[50,80,82,81],tripComments:['Bumped start badly','','','']},[50,70,80,82]);assert.ok(x.contributions.some(y=>y.signal==='latest-trip-excuse'));assert.ok(x.adjustment<=6)});
 test('unexplained latest collapse is not forgiven',()=>{const x=evidenceSignalAdjustment({figs:[50,80,82,81],tripComments:['No response','','','']},[50,70,80,82]);assert.ok(x.contributions.some(y=>y.signal==='latest-unexplained-collapse'))});
 test('field-relative contribution is tightly capped to avoid double-counting Beyer',()=>{const x=evidenceSignalAdjustment({figs:[100,98,96]},[60,65,70,75,80,100]);const r=x.contributions.find(y=>y.signal==='field-relative');assert.ok(r.adjustment<=2)});
+
+
+test('contextual figure signal discounts non-comparable high figures without deleting them',()=>{
+ const x=contextualFigureSignal([
+  {figure:95,surface:'turf',distanceFurlongs:8},
+  {figure:78,surface:'dirt',distanceFurlongs:8},
+  {figure:80,surface:'dirt',distanceFurlongs:8}
+ ],{surface:'dirt',distanceFurlongs:8});
+ assert.equal(x.available,true);assert.ok(x.adjustment<0);assert.ok(x.adjustment>=-4);
+});
+test('contextual figure signal is neutral when running lines are comparable',()=>{
+ const x=contextualFigureSignal([{figure:84,surface:'dirt',distanceFurlongs:7},{figure:80,surface:'dirt',distanceFurlongs:7},{figure:82,surface:'dirt',distanceFurlongs:7}],{surface:'dirt',distanceFurlongs:7});
+ assert.equal(x.adjustment,0);
+});
+test('contextual figure signal fails closed without structured running lines',()=>{
+ const x=contextualFigureSignal([{figure:90}],{surface:'dirt',distanceFurlongs:7});assert.equal(x.available,false);assert.equal(x.adjustment,0);
+});
