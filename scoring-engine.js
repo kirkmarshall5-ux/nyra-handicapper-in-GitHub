@@ -200,12 +200,11 @@ export function evidenceSignalAdjustment(h,fieldCurrentFigures=[]){
  const contributions=[];
  const figs=(h.figs||[]).map(numeric).filter(v=>v!==null);
 
- // Form direction: deliberately small. Ability is already represented by last/best.
+ // V4.4c: retain trajectory as diagnostic evidence only. Blind validation
+ // showed that turning recent-figure slope into a rating adjustment duplicated
+ // information already represented by last/best and caused avoidable Top-3
+ // regressions. Do not add or subtract rating points for trajectory.
  const traj=beyerTrajectory(figs);
- if(traj.trend!=="insufficient"){
-  const adj=Math.max(-3,Math.min(3,traj.slope/2));
-  if(Math.abs(adj)>=0.5)contributions.push({signal:"trajectory",adjustment:+adj.toFixed(2),detail:traj});
- }
 
  // Field context: current figure relative to today's median. This is capped tightly
  // because the current Beyer is already part of the base rating.
