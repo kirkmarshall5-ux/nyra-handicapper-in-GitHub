@@ -117,16 +117,20 @@ function entryIndexFromPages(pages){
 export function parseCard(pages, { sourceName = "document" } = {}) {
   const markEntryStatuses=(section,horses)=>{
     const norm=v=>clean(v).toLowerCase();
+    const markers=[];
+    for(let i=0;i<section.length;i++){
+      const text=clean(section[i].text);
+      if(/Entered For Main Track Only/i.test(text))markers.push({index:i,status:"MTO"});
+      else if(/Also Eligible|Also-Eligible/i.test(text))markers.push({index:i,status:"AE"});
+    }
     for(const h of horses){
-      let status="REGULAR";
+      let horseIndex=-1;
       for(let i=0;i<section.length;i++){
-        if(!norm(section[i].text).includes(norm(h.name)))continue;
-        const before=section.slice(Math.max(0,i-12),i+1).map(x=>clean(x.text)).join(" ");
-        if(/Entered For Main Track Only/i.test(before)){status="MTO";break}
-        if(/Also Eligible|Also-Eligible/i.test(before)){status="AE";break}
+        if(norm(section[i].text).includes(norm(h.name))){horseIndex=i;break}
       }
-      h.entryStatus=status;
-      if(status==="AE"&&h.aeDrawnIn==null)h.aeDrawnIn=false;
+      const prior=markers.filter(m=>m.index<horseIndex).at(-1);
+      h.entryStatus=prior?.status||"REGULAR";
+      if(h.entryStatus==="AE"&&h.aeDrawnIn==null)h.aeDrawnIn=false;
     }
   };
   if (!Array.isArray(pages) || !pages.length) throw new Error("No readable PDF pages were found.");
