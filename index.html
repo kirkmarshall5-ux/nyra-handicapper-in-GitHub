@@ -64,6 +64,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 
 <div class="card span3"><div class="kicker">Top 4 win contenders</div><div id="topContenders" class="stack small"></div></div>
 <div class="card span3"><div class="kicker">Top 3 morning-line favorites</div><div id="topMl" class="stack small"></div></div>
+<div class="card span12"><h3 class="sectiontitle">J1 research comparison</h3><div class="small muted">Compare source-card annual jockey rates with the baseline. Historical improvement is unvalidated; these rankings do not authorize bets.</div><div id="j1Comparison" class="small" style="margin-top:10px"></div></div>
 <div class="card span3"><div class="kicker">Top jockeys · this race</div><div id="topJockeys" class="stack small"></div></div>
 <div class="card span3"><div class="kicker">Top trainers · this race</div><div id="topTrainers" class="stack small"></div></div><div class="card span12"><div class="spread"><div><div class="kicker">Price vs. our line</div><h3 class="sectiontitle">Best Value</h3></div><span class="badge gold">Validation pending</span></div><div id="bestValue" class="stack small"></div><div class="tiny muted" style="margin-top:8px">A win-bet value rule must be frozen and validated before automated wager recommendations are enabled.</div></div>
 
@@ -137,9 +138,10 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 </main>
 
 <script type="module">
-import {runnerStateKey} from "./card-loader.js?v=20261006-v44c3";
-import {evidenceProfile, websiteRace} from "./scoring-engine.js?v=20261006-v44c3";
-import {restoredPage, parseRestoredCard} from "./restored-card-parser.js?v=20261006-v44c3";
+import {runnerStateKey} from "./card-loader.js?v=20261006-j1preview1";
+import {researchRace} from "./jockey-research.js?v=20261006-j1preview1";
+import {evidenceProfile, websiteRace} from "./scoring-engine.js?v=20261006-j1preview1";
+import {restoredPage, parseRestoredCard} from "./restored-card-parser.js?v=20261006-j1preview1";
 
 const JOCKEYS=[
 {r:1,n:"Flavien Prat",s:41,w:12,win:29.3,top:46.3},{r:2,n:"Manuel Franco",s:45,w:10,win:22.2,top:42.2},{r:3,n:"Ricardo Santana, Jr.",s:52,w:8,win:15.4,top:40.4},{r:4,n:"Jose Lezcano",s:37,w:5,win:13.5,top:45.9},{r:5,n:"Kendrick Carmouche",s:34,w:4,win:11.8,top:35.3},{r:5,n:"Samuel Marin",s:30,w:4,win:13.3,top:26.7},{r:7,n:"Dylan Davis",s:39,w:3,win:7.7,top:35.9},{r:8,n:"Antonio Fresu",s:33,w:2,win:6.1,top:33.3},{r:8,n:"Jose L. Ortiz",s:8,w:2,win:25.0,top:50.0},{r:8,n:"Joel Rosario",s:19,w:2,win:10.5,top:42.1},{r:8,n:"Javier Castellano",s:27,w:2,win:7.4,top:29.6},{r:12,n:"Junior Alvarado",s:23,w:1,win:4.3,top:47.8},{r:12,n:"John R. Velazquez",s:17,w:1,win:5.9,top:35.3},{r:12,n:"Edgard J. Zayas",s:24,w:1,win:4.2,top:20.8}];
@@ -187,6 +189,11 @@ function confidenceRank(h){const ep=evidenceProfile({...h,jockeyRating:jockeySta
 function valueRows(){return []}
 const escapeText=s=>String(s??"").replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function renderRaceInsights(){const r=currentRating();topContenders.innerHTML=r.decision==="PASS"?'<b>V4.4c: PASS</b><div class="tiny muted">'+r.pass_reasons.map(x=>escapeText((x.horse?x.horse+": ":"")+x.reason)).join('<br>')+'</div>':r.rankings.slice(0,4).map((h,i)=>`<div><b>${i+1}. #${h.n||"—"} ${escapeText(h.name)}</b> <span class="pill">Rating ${h.v44c_display_score}</span><div class="tiny muted">${h.v44c_signals.map(([k,v])=>escapeText(k)+" "+(v>0?"+":"")+v).join(" · ")||"No adjustment"}</div></div>`).join("");bestValue.innerHTML='<div class="muted">Value betting is awaiting validation. Fair odds and automated betting recommendations are unavailable.</div>'}
+function renderJ1Comparison(){
+ const base=currentRating(),j1=researchRace(race),panel=document.getElementById("j1Comparison");
+ const list=r=>r.decision==="PASS"?"PASS — "+r.pass_reasons.map(x=>escapeText(x.reason)).join("; "):r.rankings.slice(0,4).map((h,i)=>`${i+1}. ${escapeText(h.name)} (${h.v44c_display_score})`).join("<br>");
+ panel.innerHTML=`<div class="grid"><div class="span6"><b>V4.4c · default</b><div>${list(base)}</div></div><div class="span6"><b>J1 · research only</b><div>${list(j1)}</div></div></div><div class="muted" style="margin-top:8px">Verified annual jockey inputs: ${j1.annual_coverage}/${j1.eligible_count}. ${j1.fallbacks.length?"Baseline input retained for: "+j1.fallbacks.map(escapeText).join(", ")+". Upload the source PP again to extract annual counts from older saved cards.":"All eligible runners have source-card annual counts."} Baseline race grid and betting PASS remain in force.</div>`;
+}
 function renderBetSuggestions(){document.getElementById("betSuggestions").innerHTML='<div class="note"><b>BETTING: PASS — validation pending</b><div class="small muted">V4.4c ranks eligible races. A validated win-bet value rule, exacta strategy and multi-race structure have not yet been deployed.</div></div>'}
 let gridSort={key:"number",dir:1};
 function oddsNumber(o){if(!o||o==="SCR")return Infinity;if(/^\d+(\.\d+)?$/.test(String(o)))return +o;if(String(o).includes("/")){let [a,b]=String(o).split("/").map(Number);return b?a/b:Infinity}return Infinity}
@@ -215,7 +222,7 @@ document.querySelectorAll(".sortbtn").forEach(b=>b.onclick=()=>{
  else {gridSort.key=key;gridSort.dir=key==="number"?1:-1}
  renderHorses();updateSortButtons();
 });
-function renderAll(){renderHeader();renderHorses();updateSortButtons();renderPace();renderEdit();renderEvidence();renderConnections();renderLeaderboards();renderWeights();renderThings();renderRaceInsights();renderBetSuggestions();updateUrl()}
+function renderAll(){renderJ1Comparison();renderHeader();renderHorses();updateSortButtons();renderPace();renderEdit();renderEvidence();renderConnections();renderLeaderboards();renderWeights();renderThings();renderRaceInsights();renderBetSuggestions();updateUrl()}
 function renderThings(){
  const el=document.getElementById("thingsToConsider"); if(!el)return;
  let rows=[];
