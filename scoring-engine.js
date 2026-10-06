@@ -1,5 +1,18 @@
 export function numeric(v){return v!==""&&v!=null&&Number.isFinite(+v)?+v:null}
 
+export function runnerEligibleForScoring(h,race={}){
+ const status=String(h?.entryStatus||"REGULAR").toUpperCase();
+ if(String(h?.odds||"").toUpperCase()==="SCR")return false;
+ const surface=String(race?.effectiveSurface||race?.surface||"").toLowerCase();
+ const turf=/turf|grass/.test(surface);
+ if(status==="MTO")return !turf;
+ if(status==="AE")return h?.aeDrawnIn===true;
+ return true;
+}
+export function eligibleField(field=[],race={}){
+ return (Array.isArray(field)?field:[]).filter(h=>runnerEligibleForScoring(h,race));
+}
+
 function numericFigures(h){
  const values=[...(Array.isArray(h.figs)?h.figs:[]),h.last,h.best].map(numeric).filter(v=>v!==null);
  return [...new Set(values)];
@@ -234,10 +247,10 @@ export function evidenceSignalAdjustment(h,fieldCurrentFigures=[]){
 }
 
 
-export function paceFitAdjustment(h,field=[]){
+export function paceFitAdjustment(h,field=[],race={}){
  const own=numeric(h?.tfEarly);
  if(own===null)return {available:false,adjustment:0,reason:"no-timeform-early"};
- const rivals=(Array.isArray(field)?field:[]).filter(x=>x&&x!==h&&x.odds!=="SCR").map(x=>numeric(x.tfEarly)).filter(v=>v!==null);
+ const rivals=eligibleField(field,race).filter(x=>x&&x!==h).map(x=>numeric(x.tfEarly)).filter(v=>v!==null);
  if(!rivals.length)return {available:false,adjustment:0,reason:"no-comparable-rivals"};
  const fastest=Math.max(...rivals),advantage=own-fastest;
  const nearPressers=rivals.filter(v=>v>=own-5).length;
@@ -279,10 +292,11 @@ export function lightlyRacedUpsideAdjustment(h,fieldCurrentFigures=[]){
  return {available:true,adjustment,starts,best,fieldMedian:median,trajectory:traj};
 }
 
-export function experimentalV44Adjustment(h,field=[]){
- const fieldCurrent=(Array.isArray(field)?field:[]).filter(x=>x?.odds!=="SCR").map(x=>Array.isArray(x.figs)?x.figs[0]:x.last).map(numeric).filter(v=>v!==null);
+export function experimentalV44Adjustment(h,field=[],race={}){
+ const active=eligibleField(field,race);
+ const fieldCurrent=active.map(x=>Array.isArray(x.figs)?x.figs[0]:x.last).map(numeric).filter(v=>v!==null);
  const base=evidenceSignalAdjustment(h,fieldCurrent);
- const pace=paceFitAdjustment(h,field);
+ const pace=paceFitAdjustment(h,active,race);
  const rebound=reboundProtectionAdjustment(h);
  const upside=lightlyRacedUpsideAdjustment(h,fieldCurrent);
  // V4.4b rebound guard: when a single anomalous latest figure is protected by
