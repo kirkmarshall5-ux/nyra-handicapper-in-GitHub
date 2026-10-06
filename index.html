@@ -137,9 +137,9 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 </main>
 
 <script type="module">
-import {runnerStateKey} from "./card-loader.js?v=20261006-v44c2";
-import {evidenceProfile, websiteRace} from "./scoring-engine.js?v=20261006-v44c2";
-import {restoredPage, parseRestoredCard} from "./restored-card-parser.js?v=20261006-v44c2";
+import {runnerStateKey} from "./card-loader.js?v=20261006-v44c3";
+import {evidenceProfile, websiteRace} from "./scoring-engine.js?v=20261006-v44c3";
+import {restoredPage, parseRestoredCard} from "./restored-card-parser.js?v=20261006-v44c3";
 
 const JOCKEYS=[
 {r:1,n:"Flavien Prat",s:41,w:12,win:29.3,top:46.3},{r:2,n:"Manuel Franco",s:45,w:10,win:22.2,top:42.2},{r:3,n:"Ricardo Santana, Jr.",s:52,w:8,win:15.4,top:40.4},{r:4,n:"Jose Lezcano",s:37,w:5,win:13.5,top:45.9},{r:5,n:"Kendrick Carmouche",s:34,w:4,win:11.8,top:35.3},{r:5,n:"Samuel Marin",s:30,w:4,win:13.3,top:26.7},{r:7,n:"Dylan Davis",s:39,w:3,win:7.7,top:35.9},{r:8,n:"Antonio Fresu",s:33,w:2,win:6.1,top:33.3},{r:8,n:"Jose L. Ortiz",s:8,w:2,win:25.0,top:50.0},{r:8,n:"Joel Rosario",s:19,w:2,win:10.5,top:42.1},{r:8,n:"Javier Castellano",s:27,w:2,win:7.4,top:29.6},{r:12,n:"Junior Alvarado",s:23,w:1,win:4.3,top:47.8},{r:12,n:"John R. Velazquez",s:17,w:1,win:5.9,top:35.3},{r:12,n:"Edgard J. Zayas",s:24,w:1,win:4.2,top:20.8}];
@@ -153,7 +153,7 @@ const deepFreeze=o=>{Object.freeze(o);Object.values(o).forEach(v=>v&&typeof v===
 deepFreeze(SAMPLE_RACES);
 const sampleCard={id:"v4.4c:sample:belmont-park:2026-10-03",schemaVersion:2,track:"Belmont Park",date:"2026-10-03",races:SAMPLE_RACES,warnings:[]};
 let activeCard=JSON.parse(localStorage.getItem("nyraV44cActiveCard")||"null")||structuredClone(sampleCard);
-if(activeCard.parser_version!=="V4.4c-font-verified-v2")activeCard=structuredClone(sampleCard);
+if(activeCard.parser_version!=="V4.4c-font-verified-v3")activeCard=structuredClone(sampleCard);
 let race=structuredClone(activeCard.races[Object.keys(activeCard.races).sort((a,b)=>+a-+b)[0]]);
 const defaultWeights={fig:45,best:20,form:10,class:10,jockey:7,trainer:8};
 let weights=Object.assign({},defaultWeights,state.weights||{});
@@ -186,157 +186,4 @@ function fairOddsMap(){return {}}
 function confidenceRank(h){const ep=evidenceProfile({...h,jockeyRating:jockeyStat(h.j)?.win,trainerRating:trainerStat(h.t)?.win});return ({High:3,Medium:2,Low:1})[ep.confidence]||1}
 function valueRows(){return []}
 const escapeText=s=>String(s??"").replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function renderRaceInsights(){const r=currentRating();topContenders.innerHTML=r.decision==="PASS"?'<b>V4.4c: PASS</b><div class="tiny muted">'+r.pass_reasons.map(x=>escapeText((x.horse?x.horse+": ":"")+x.reason)).join('<br>')+'</div>':r.rankings.slice(0,4).map((h,i)=>`<div><b>${i+1}. #${h.n||"—"} ${escapeText(h.name)}</b> <span class="pill">Rating ${h.v44c_display_score}</span><div class="tiny muted">${h.v44c_signals.map(([k,v])=>escapeText(k)+" "+(v>0?"+":"")+v).join(" · ")||"No adjustment"}</div></div>`).join("");bestValue.innerHTML='<div class="muted">Value betting is awaiting validation. Fair odds and automated betting recommendations are unavailable.</div>'}
-function renderBetSuggestions(){document.getElementById("betSuggestions").innerHTML='<div class="note"><b>BETTING: PASS — validation pending</b><div class="small muted">V4.4c ranks eligible races. A validated win-bet value rule, exacta strategy and multi-race structure have not yet been deployed.</div></div>'}
-let gridSort={key:"number",dir:1};
-function oddsNumber(o){if(!o||o==="SCR")return Infinity;if(/^\d+(\.\d+)?$/.test(String(o)))return +o;if(String(o).includes("/")){let [a,b]=String(o).split("/").map(Number);return b?a/b:Infinity}return Infinity}
-function sortedGridHorses(){
- const hs=[...race.horses];
- hs.sort((a,b)=>{
-   let av,bv;
-   if(gridSort.key==="ml"){av=oddsNumber(a.ml);bv=oddsNumber(b.ml)}
-   else if(gridSort.key==="prerace"){av=oddsNumber(a.odds);bv=oddsNumber(b.odds)}
-   else {av=+a.n;bv=+b.n}
-   if(av===bv)return (+a.n)-(+b.n);
-   return (av-bv)*gridSort.dir;
- });
- return hs;
-}
-function updateSortButtons(){
- document.querySelectorAll(".sortbtn").forEach(b=>{
-   const active=b.dataset.sort===gridSort.key;
-   const labels={number:"Horse #",ml:"ML",prerace:"Pre-Race"};
-   b.textContent=labels[b.dataset.sort]+(active?(gridSort.dir===1?" ↑":" ↓"):" ↕");
- });
-}
-document.querySelectorAll(".sortbtn").forEach(b=>b.onclick=()=>{
- const key=b.dataset.sort;
- if(gridSort.key===key)gridSort.dir*=-1;
- else {gridSort.key=key;gridSort.dir=key==="number"?1:-1}
- renderHorses();updateSortButtons();
-});
-function renderAll(){renderHeader();renderHorses();updateSortButtons();renderPace();renderEdit();renderEvidence();renderConnections();renderLeaderboards();renderWeights();renderThings();renderRaceInsights();renderBetSuggestions();updateUrl()}
-function renderThings(){
- const el=document.getElementById("thingsToConsider"); if(!el)return;
- let rows=[];
- for(const h of race.horses.filter(x=>x.odds!=="SCR")){
-   for(const a of (h.angles||[])) rows.push({h,a});
- }
- rows.sort((a,b)=>(b.a.strength||0)-(a.a.strength||0));
- if(!rows.length){el.innerHTML='<div class="muted">No significant angles identified for this race from the currently analyzed PP evidence.</div>';return}
- el.innerHTML=rows.slice(0,8).map(x=>`<div class="note"><div class="spread"><b>#${x.h.n} ${x.h.name}</b><span class="pill">${x.a.label}</span></div><div class="small" style="margin-top:5px">${x.a.why}</div>${x.a.caution?`<div class="tiny muted" style="margin-top:4px">Watch-out: ${x.a.caution}</div>`:""}</div>`).join("");
-}
-function renderHeader(){
- cardKicker.textContent=`${activeCard.track||race.track||"Race card"} · ${activeCard.date||race.date||"date unknown"} · active DRF card`;
- raceTitle.textContent=`${race.track} · Race ${race.race}`;
- raceBadges.innerHTML=`<span class="badge gold">${race.dist||"—"} ${race.surface||""}</span><span class="badge">${race.cls||"Race"}</span><span class="badge">${race.post||"—"}</span><span class="badge green">Active card</span>`;
- let active=race.horses.filter(h=>h.odds!=="SCR");
- const ml=[...active].sort((a,b)=>oddsNumber(a.ml)-oddsNumber(b.ml)).slice(0,3);
- topMl.innerHTML=ml.length?ml.map((h,i)=>`<div><b>${i+1}. #${h.n} ${h.name}</b> <span class="pill">${h.ml||"—"}</span></div>`).join(""):"<span class=\"muted\">No active runners</span>";
- const uniqTop=(kind,lookup)=>{let seen=new Set(),rows=[];for(const h of active){let name=h[kind];if(!name||seen.has(name))continue;seen.add(name);let st=lookup(name);if(st)rows.push({name,st})}return rows.sort((a,b)=>b.st.win-a.st.win||b.st.s-a.st.s).slice(0,3)};
- const tj=uniqTop("j",jockeyStat),tt=uniqTop("t",trainerStat);
- topJockeys.innerHTML=tj.length?tj.map((x,i)=>`<div><b>${i+1}. ${x.name}</b> <span class="pill">${x.st.win.toFixed(1)}%</span><div class="tiny muted">${x.st.s} meet starts</div></div>`).join(""):"<span class=\"muted\">No meet stats for this field</span>";
- topTrainers.innerHTML=tt.length?tt.map((x,i)=>`<div><b>${i+1}. ${x.name}</b> <span class="pill">${x.st.win.toFixed(1)}%</span><div class="tiny muted">${x.st.s} meet starts</div></div>`).join(""):"<span class=\"muted\">No meet stats for this field</span>";
- racebar.innerHTML=Object.keys(activeCard.races).sort((a,b)=>+a-+b).map(n=>`<button class="racebtn ${+n===race.race?"active":""}" data-race="${n}">${n}</button>`).join("");
- racebar.querySelectorAll(".racebtn").forEach(b=>b.onclick=()=>selectRace(+b.dataset.race));
- raceDate.value=race.date;raceNo.value=race.race;
- const trackName=(race.track||activeCard.track||"").toLowerCase();
- if(trackName.includes("saratoga"))track.value="saratoga";
- else if(trackName.includes("aqueduct"))track.value="aqueduct";
- else if(trackName.includes("belmont"))track.value="belmont";
-}
-function selectRace(n){if(!activeCard.races[n])return;race=structuredClone(activeCard.races[n]);restoreRunnerEdits();raceNotes.value=state.cards?.[activeCard.id]?.notes?.[n]||"";renderAll();window.scrollTo({top:0,behavior:"smooth"})}
-function renderHorses(){
- horseTable.querySelector("tbody").innerHTML=sortedGridHorses().map(h=>{let js=h.jockey_win!=null?{win:h.jockey_win}:null,ts=h.trainer_win!=null?{win:h.trainer_win}:null;return `<tr style="${h.odds==="SCR"?"opacity:.48":""}">
-<td><span class="num">${h.n}</span><span class="horse">${escapeText(h.name)}${h.entry_status&&h.entry_status!=="REGULAR"?` <span class="pill">${h.entry_status} excluded</span>`:""}</span></td><td>${h.ml||"—"}</td><td><span class="odds">${h.odds||"—"}</span></td>
-<td><span class="pacechip ${h.style}">${h.style||"?"}</span></td><td>${h.j||"—"}</td><td>${h.t||"—"}</td>
-<td>${js?js.win.toFixed(1)+"%":"—"}</td><td>${ts?ts.win.toFixed(1)+"%":"—"}</td><td>${displayVal(h.last)}</td><td><span class="score">${score(h)}</span><div style="margin-top:4px">${confidenceBadge(h)}</div></td><td><b>${fairOddsMap()[h.n]||"—"}</b></td></tr>`}).join("");
-}
-function renderPace(){paceMap.innerHTML=["E","EP","P","S"].map(s=>`<div class="pace-lane"><b>${s}</b><div class="lane">${race.horses.filter(h=>h.style===s&&h.odds!=="SCR").map(h=>`<div class="runner"><b>#${h.n}</b> ${h.name}<div class="tiny muted">Rating ${score(h)}</div></div>`).join("")||'<span class="muted">None</span>'}</div></div>`).join("")}
-function renderEvidence(){
- const el=document.getElementById("evidenceSummary");if(!el)return;
- el.innerHTML=race.horses.filter(h=>h.odds!=="SCR").map(h=>{let e=evidenceProfile(h);
- return `<div class="note"><div class="spread"><b>#${h.n} ${h.name}</b>${confidenceBadge(h)}</div>
- <div class="tiny muted" style="margin-top:6px">${e.starts===null?"Starts unknown":e.starts===0?"First-time starter":e.starts<=2?"Lightly raced":"Experienced"} · Rating ${score(h)}</div>
- <div class="small" style="margin-top:7px">Race figures: ${e.hasRace?"✓":"N/A"} · Works: ${e.works?"✓":"N/A"} · Pedigree: ${e.pedigree?"✓":"N/A"} · Trainer context: ${e.trainer?"✓":"N/A"}</div>
- ${h.workText?`<div class="tiny muted" style="margin-top:6px"><b>Works:</b> ${h.workText}</div>`:""}
- ${(h.sire||h.dam||h.damsire||h.pedigree)?`<div class="tiny muted" style="margin-top:4px"><b>Pedigree:</b> ${h.pedigree||[h.sire,h.dam,h.damsire].filter(Boolean).join(" / ")}</div>`:""}</div>`}).join("");
-}
-function renderEdit(){editTable.querySelector("tbody").innerHTML=race.horses.map(h=>`<tr><td>${h.n}</td><td><b>${h.name}</b></td>
-<td><select data-n="${escapeText(h.n||h.name)}" data-k="style"><option ${h.style==="E"?"selected":""}>E</option><option ${h.style==="EP"?"selected":""}>EP</option><option ${h.style==="P"?"selected":""}>P</option><option ${h.style==="S"?"selected":""}>S</option></select></td>
-<td><input data-n="${escapeText(h.n||h.name)}" data-k="last" type="number" value="${h.last||""}" placeholder="N/A" style="width:72px"></td>
-<td><input data-n="${escapeText(h.n||h.name)}" data-k="best" type="number" value="${h.best||""}" placeholder="N/A" style="width:72px"></td>
-<td><input data-n="${escapeText(h.n||h.name)}" data-k="form" type="number" min="0" max="100" value="${h.form??""}" placeholder="N/A" style="width:72px"></td>
-<td><input data-n="${escapeText(h.n||h.name)}" data-k="cls" type="number" min="0" max="100" value="${h.cls??""}" placeholder="N/A" style="width:72px"></td>
-<td><input data-n="${escapeText(h.n||h.name)}" data-k="trip" type="number" min="0" max="100" value="${h.trip??""}" placeholder="N/A" style="width:72px"></td>
-<td><input data-n="${escapeText(h.n||h.name)}" data-k="workText" value="${(h.workText||"").replace(/"/g,"&quot;")}" placeholder="Workout notes" style="min-width:160px"></td>
-<td><input data-n="${escapeText(h.n||h.name)}" data-k="pedigree" value="${(h.pedigree||"").replace(/"/g,"&quot;")}" placeholder="Sire / dam / damsire" style="min-width:170px"></td>
-<td>${confidenceBadge(h)}</td>
-<td><input data-n="${escapeText(h.n||h.name)}" data-k="note" value="${(h.note||"").replace(/"/g,"&quot;")}" style="min-width:180px"></td></tr>`).join("");
- editTable.querySelectorAll("input").forEach(el=>{if(["last","best","form","cls","trip"].includes(el.dataset.k))el.readOnly=true});
- editTable.querySelectorAll("input,select").forEach(el=>el.onchange=()=>{let h=race.horses.find(x=>(x.n||x.name)==el.dataset.n);h[el.dataset.k]=el.value;save();renderHorses();renderPace();renderEvidence()});
-}
-function renderLeaderboards(){
- jockeyTable.querySelector("tbody").innerHTML=JOCKEYS.map(x=>`<tr><td>${x.r}</td><td><b>${x.n}</b></td><td>${x.s}</td><td>${x.w}</td><td>${x.win.toFixed(1)}%</td><td>${x.top.toFixed(1)}%</td></tr>`).join("");
- trainerTable.querySelector("tbody").innerHTML=TRAINERS.map(x=>`<tr><td>${x.r}</td><td><b>${x.n}</b></td><td>${x.s}</td><td>${x.w}</td><td>${x.win.toFixed(1)}%</td><td>${x.top.toFixed(1)}%</td></tr>`).join("");
-}
-function renderConnections(){
- connectionCards.innerHTML=race.horses.filter(h=>h.odds!=="SCR").map(h=>{let j=jockeyStat(h.j),t=trainerStat(h.t);return `<div class="card span4" style="padding:12px"><div><b>#${h.n} ${h.name}</b></div><div class="small" style="margin-top:6px">${h.j} ${j?`<span class="pill">${j.win}% win</span>`:""}<br>${h.t} ${t?`<span class="pill">${t.win}% win</span>`:""}</div></div>`}).join("")
-}
-function renderWeights(){weightsDiv()}
-function weightsDiv(){document.getElementById("weights").innerHTML='<div class="small">Last verified Beyer: 40 · best of latest 3: 22 · PP jockey: 7 · PP trainer: 8 · trainer context for ≤2 starts: 12. Missing components are omitted. V4.4c adjustments are capped at ±6. Rank unrounded totals, then horse name.</div>';resetWeights.disabled=true;resetWeights.textContent="V4.4c weights locked"}
-
-document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));b.classList.add("active");["raceday","pace","connections","pp","public","bets"].forEach(id=>document.getElementById(id).classList.toggle("hidden",id!==b.dataset.tab))});
-raceNotes.value=state.cards?.[activeCard.id]?.notes?.[1]||"";raceNotes.oninput=e=>{const cs=state.cards[activeCard.id]||(state.cards[activeCard.id]={runners:{},notes:{}});cs.notes=cs.notes||{};cs.notes[race.race]=e.target.value;save()};
-
-function updateUrl(){const venue=["belmont","aqueduct","saratoga"].includes(track.value)?track.value:"belmont";const url=`https://www.nyra.com/${venue}/racing/entries/?day=${race.date}&limit=entries&race=${race.race}`;raceUrl.value=url;openRace.href=url;nyraRaceLink.href=url}
-[track,raceDate,raceNo].forEach(el=>el.onchange=updateUrl);updateUrl();
-
-function parseNyraText(text){
- let lines=text.split(/\n+/).map(x=>x.trim()).filter(Boolean); let out={track:track.value==="saratoga"?"Saratoga":"Belmont Park",date:raceDate.value,race:+raceNo.value,horses:[]};
- let joined=" "+lines.join(" ")+" ";
- let raceMatch=joined.match(/Race\s+(\d+).*?\$(\d[\d,]*)\s+([A-Za-z ]+?)(?=\s+\d| \d\/|\s+\dF|\s+\dM)/i); if(raceMatch){out.race=+raceMatch[1];out.cls="$"+raceMatch[2]+" "+raceMatch[3].trim()}
- let dist=joined.match(/\b(\d+(?:\s+\d\/\d)?F|\d+(?:\s+\d\/\d)?M)\b/i); if(dist)out.dist=dist[1];
- let surf=joined.match(/\b(Dirt|Turf|Tapeta)\b/i); if(surf)out.surface=surf[1];
- let post=joined.match(/(\d{1,2}:\d{2}\s*[ap](?:m)?)/i); if(post)out.post=post[1].toUpperCase();
- // Heuristic blocks: horse name line, then "Jockey • Trainer", then program number and odds in following lines.
- for(let i=0;i<lines.length;i++){
-   if(lines[i].includes("•") && i>0){
-      const [j,t]=lines[i].split("•").map(x=>x.trim()); const name=lines[i-1].replace(/^[\d\s-]+/,"").trim();
-      let n=null, odds="", ml="";
-      for(let k=i+1;k<Math.min(lines.length,i+8);k++){if(n===null && /^\d{1,2}$/.test(lines[k]))n=+lines[k]; if(/^(SCR|\d+\/\d+)$/.test(lines[k])){if(lines[k].startsWith("ML"))ml=lines[k].replace("ML","").trim();else if(!odds)odds=lines[k]} if(/^ML\s+\d+\/\d+/.test(lines[k]))ml=lines[k].replace(/^ML\s+/,"")}
-      if(name && n)out.horses.push({n,name,j,t,odds:odds||"—",ml:ml||"—",style:"P"});
-   }
- }
- return out.horses.length?out:null;
-}
-parsePaste.onclick=()=>{let p=parseNyraText(nyraPaste.value);if(!p){parseStatus.textContent="I couldn't reliably identify the runners. Try copying just the race section with horse, jockey/trainer, program number and odds.";return}race=p;restoreRunnerEdits();parseStatus.textContent=`Parsed ${race.horses.length} runners. Race Day has been updated.`;renderAll()};
-loadSample.onclick=()=>{resetSample.click();parseStatus.textContent="October 3 full card restored. All 11 races / 107 runners are bundled."};
-tryLoad.onclick=async()=>{loadStatus.textContent="Trying NYRA directly…";try{let r=await fetch(raceUrl.value);if(!r.ok)throw new Error("HTTP "+r.status);let txt=await r.text();let doc=new DOMParser().parseFromString(txt,"text/html");let p=parseNyraText(doc.body.innerText);if(!p)throw new Error("Could not parse");race=p;restoreRunnerEdits();renderAll();loadStatus.textContent=`Loaded ${race.horses.length} runners directly from NYRA.`}catch(e){loadStatus.textContent="Direct browser load was blocked or could not be parsed. Open the NYRA page and use the paste fallback below."}};
-
-async function extractPdf(file){
- const pdfjs=await import("https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.min.mjs");
- pdfjs.GlobalWorkerOptions.workerSrc="https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.worker.min.mjs";
- const pdf=await pdfjs.getDocument({data:await file.arrayBuffer()}).promise,pages=[];
- for(let p=1;p<=pdf.numPages;p++){ppProg.style.width=(p/pdf.numPages*75)+"%";const pg=await pdf.getPage(p),content=await pg.getTextContent({disableNormalization:true});await pg.getOperatorList();const fonts=Object.fromEntries(Object.keys(content.styles).map(k=>[k,pg.commonObjs.get(k)?.name||""]));pages.push(restoredPage(content.items,p,fonts))}
- return pages;
-}
-
-let pendingCard=null;
-async function loadCandidate(replaceImmediately=false){let f=ppFile.files[0];if(!f){ppStatus.textContent="Choose a DRF PDF first.";return}ppProg.style.width="8%";ppStatus.textContent="Reading and validating "+f.name+"…";try{
- if(!f.name.toLowerCase().endsWith(".pdf"))throw new Error("Card discovery requires a PDF with positioned text items.");
- const pages=await extractPdf(f),candidate=parseRestoredCard(pages,{sourceName:f.name});
- pendingCard=candidate;if(!replaceImmediately){ppStatus.textContent=`Validated ${candidate.track} · ${candidate.date||"date unknown"} · ${Object.keys(candidate.races).length} races · ${Object.values(candidate.races).reduce((n,r)=>n+r.horses.length,0)} runners. Click Replace Active Card to confirm. ${candidate.warnings.join(" ")}`;ppProg.style.width="90%";return}
- activateCandidate(candidate);
- }catch(e){console.error(e);pendingCard=null;ppStatus.textContent="Card load failed; active card was not changed: "+(e?.message||String(e));ppProg.style.width="0"}}
-function activateCandidate(candidate){activeCard=candidate;localStorage.setItem("nyraV44cActiveCard",JSON.stringify(activeCard));const first=+Object.keys(activeCard.races).sort((a,b)=>+a-+b)[0];race=structuredClone(activeCard.races[first]);restoreRunnerEdits();save();renderAll();ppProg.style.width="100%";const runners=Object.values(activeCard.races).reduce((n,r)=>n+r.horses.length,0);ppStatus.textContent=`${activeCard.track} · ${activeCard.date||"date unknown"} · ${Object.keys(activeCard.races).length} races · ${runners} runners loaded. ${activeCard.warnings.join(" ")}`;ppResults.innerHTML=`<div class="note"><b>Active card replaced.</b><div class="small muted">${activeCard.warnings.join(" ")||"No parser warnings."}</div></div>`;pendingCard=null}
-analyzeBtn.onclick=()=>loadCandidate(false);
-replaceCard.onclick=async()=>{if(pendingCard)activateCandidate(pendingCard);else await loadCandidate(true)};
-resetSample.onclick=()=>{activeCard=structuredClone(sampleCard);race=structuredClone(activeCard.races[1]);restoreRunnerEdits();save();renderAll();ppStatus.textContent="Bundled October 3 sample card restored."};
-clearPP.onclick=()=>{for(const r of Object.values(activeCard.races))for(const h of r.horses){h.last="";h.best="";h.pp="";h.note="";h.form="";h.cls="";h.trip="";h.workText="";h.works=[];h.pedigree="";h.sire="";h.dam="";h.damsire="";h.lifeStarts=null;h.life_starts=null;h.beyer_figures=[];h.figs=[];h.parser_blockers=["PP-evidence-cleared"];h.angles=[]}if(state.cards?.[activeCard.id])state.cards[activeCard.id].runners={};race=structuredClone(activeCard.races[race.race]);save();renderAll();ppResults.innerHTML='<div class="muted">PP enrichment cleared; races and runners preserved.</div>';ppStatus.textContent="PP enrichment cleared."};
-
-calcBtn.onclick=()=>{const cnt=id=>document.getElementById(id).value.split(",").map(x=>x.trim()).filter(Boolean).length;let t=betType.value,legs=t==="Exacta"?2:t==="Trifecta"?3:+t.split(" ")[1],counts=[cnt("leg1"),cnt("leg2"),cnt("leg3"),cnt("leg4"),cnt("leg5")].slice(0,legs),combos=counts.reduce((a,b)=>a*b,1),cost=combos*(+base.value||0);ticketOut.textContent=`${combos} combinations · $${cost.toFixed(2)}`};
-
-renderAll();
-</script>
-</body></html>
+function renderRaceInsights(){const r=currentRating();topContenders.innerHTML=r.decision==="PASS"?'<b>V4.4c: PASS</b><div class="tiny muted">'+r.pass_reasons.map(x=>escapeText((x.horse?x.horse+": ":"")+x.reason)).join('<br>')+'</div>':r.rankings.slice(0,4).map((h,i)=>`<div><b>${i+1}. #${h.n||"—"} ${esc

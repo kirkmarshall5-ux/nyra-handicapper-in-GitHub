@@ -1,4 +1,4 @@
-import {pythonRound,MODEL_ID} from './scoring-engine.js?v=20261006-v44c2';
+import {pythonRound,MODEL_ID} from './scoring-engine.js?v=20261006-v44c3';
 // Preserve the PDF text stream and explicit font boundaries. Sorting a multi-column
 // PP into whole-page visual rows would mix unrelated runners' evidence.
 export function restoredPage(items,pageNumber,fontNames={}){
@@ -24,7 +24,7 @@ export function parseRestoredCard(pages,{sourceName='document'}={}){
  for(const p of pages){const footer=p.lines.map(l=>l.text).join('\n').match(/(Sar|Aqu|Bel|BAQ), race (\d+), page:/i);if(!footer)throw new Error('Race footer unverified on page '+p.pageNumber);(raceLines[+footer[2]]??=[]).push(...p.lines)}
  for(const [rn,ls] of Object.entries(raceLines)){
   const anchors=[];let status='REGULAR';
-  for(let i=0;i<ls.length;i++){const s=ls[i].text;if(/^\s*Entered For Main Track Only\s*$/i.test(s))status='MTO';else if(/^\s*Also[- ]Eligible:?\s*$/i.test(s))status='AE';if(/^Own:/.test(s)){const name=ls[i-1]?.text.trim().replace(/\s*\([^)]*\)$/,'');if(!name)throw new Error('Owner identity missing');let start=i-1,n='',ml='';const prior=ls.slice(Math.max(0,i-4),i-1).map(l=>l.text.trim());const program=prior.findIndex(s=>/^\d{1,2}[ABX]?$/.test(s));if(program>=0){n=prior[program];start=Math.max(0,i-4)+program;const odds=prior.slice(program+1).find(s=>/^\d+(?:-\d+|\/\d+)$/.test(s));if(odds)ml=odds.replace('-','/')}anchors.push({start,own:i,name,status,n,ml})}}
+  for(let i=0;i<ls.length;i++){const s=ls[i].text;if(/^\s*Entered For Main Track Only\s*$/i.test(s))status='MTO';else if(/^\s*Also[- ]Eligible:?\s*$/i.test(s))status='AE';if(/^Own:/.test(s)){const name=ls[i-1]?.text.trim().replace(/\s*\([^)]*\)$/,'');if(!name)throw new Error('Owner identity missing');let start=i-1,n='',ml='';const prior=ls.slice(Math.max(0,i-4),i-1).map(l=>l.text.trim());const program=prior.findIndex(s=>/^\d{1,2}[ABX]?$/.test(s));if(program>=0){n=prior[program];start=Math.max(0,i-4)+program;const odds=prior.slice(program+1).find(s=>/^\d+\s*(?:-\s*\d+|\/\s*\d+)$/.test(s));if(odds)ml=odds.replace(/\s+/g,'').replace('-','/')}anchors.push({start,own:i,name,status,n,ml})}}
   if(!anchors.length)throw new Error('No owner-anchored runners in race '+rn);
   const before=ls.slice(0,anchors[0].start).map(l=>l.text).join('\n'),headers=[...before.matchAll(new RegExp('(?:^|\\n)'+rn+'\\s*\\n(?:Saratoga|Aqueduct|Belmont Park|Belmont at the Big A)\\b[^\\n]*\\n','g'))],header=headers.length?before.slice(headers.at(-1).index):before,blockers=[];
   if(!headers.length)blockers.push({reason:'race-heading-unverified'});if(/\bHurdles\b|\bSteeplechase\b/i.test(header))blockers.push({reason:'unsupported-hurdle-race-type'});
@@ -37,5 +37,5 @@ export function parseRestoredCard(pages,{sourceName='document'}={}){
  const identities=new Set(footers.map(m=>`${m[1]}|${m[4]}-${m[2].padStart(2,'0')}-${m[3].padStart(2,'0')}`));if(identities.size!==1)throw new Error('Conflicting card dates/tracks across PDF pages');const [track,date]=[...identities][0].split('|');
  const [year,month,day]=date.split('-').map(Number),verifiedDate=new Date(Date.UTC(year,month-1,day));if(verifiedDate.getUTCFullYear()!==year||verifiedDate.getUTCMonth()+1!==month||verifiedDate.getUTCDate()!==day)throw new Error('Invalid card date');
  for(const r of Object.values(races)){r.date=date;r.track=track}
- return {id:`v4.4c:${track}:${date}`,schemaVersion:3,model_id:MODEL_ID,track,date,races,sourceName,warnings:[],parser_version:'V4.4c-font-verified-v2'};
+ return {id:`v4.4c:${track}:${date}`,schemaVersion:3,model_id:MODEL_ID,track,date,races,sourceName,warnings:[],parser_version:'V4.4c-font-verified-v3'};
 }
