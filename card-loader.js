@@ -115,6 +115,20 @@ function entryIndexFromPages(pages){
 }
 
 export function parseCard(pages, { sourceName = "document" } = {}) {
+  const markEntryStatuses=(section,horses)=>{
+    const norm=v=>clean(v).toLowerCase();
+    for(const h of horses){
+      let status="REGULAR";
+      for(let i=0;i<section.length;i++){
+        if(!norm(section[i].text).includes(norm(h.name)))continue;
+        const before=section.slice(Math.max(0,i-12),i+1).map(x=>clean(x.text)).join(" ");
+        if(/Entered For Main Track Only/i.test(before)){status="MTO";break}
+        if(/Also Eligible|Also-Eligible/i.test(before)){status="AE";break}
+      }
+      h.entryStatus=status;
+      if(status==="AE"&&h.aeDrawnIn==null)h.aeDrawnIn=false;
+    }
+  };
   if (!Array.isArray(pages) || !pages.length) throw new Error("No readable PDF pages were found.");
   const lines = pages.flatMap(page => page.lines.map(line => ({ ...line, pageNumber: page.pageNumber })));
   const races = {};
@@ -173,6 +187,7 @@ export function parseCard(pages, { sourceName = "document" } = {}) {
         if(program && !horses.some(h=>h.n===program)){horses.push({n:program,name:expectedName,j:"",t:"",odds:"—",ml:"—",style:"P",lifeStarts:null,identitySource:"index-life-owner"});break}
       }
     }
+    markEntryStatuses(section,horses);
     if (!races[raceNumber]) races[raceNumber] = { race: raceNumber, horses, track: "", date: "", cls: clean(section.slice(0, 4).map(line => line.text).join(" · ")), dist: "", surface: "", post: "", oddsMode: "Unknown" };
   };
   const addStrictSection = (raceNumber, section) => {
@@ -219,6 +234,7 @@ export function parseCard(pages, { sourceName = "document" } = {}) {
     const postMatch = bodyText.match(/\bPost\s*time:\s*([^ ]+\s*(?:ET|PM|AM)?)/i);
     const surface = /\bInner Turf\b/i.test(bodyText) ? "Inner Turf" : /\bTurf\b/i.test(bodyText) ? "Turf" : /\bTapeta\b|\bSynthetic\b/i.test(bodyText) ? "Synthetic" : "Dirt";
     const headingClass = headerText.replace(/^\s*\d+\s+(?:Belmont Park|Aqueduct|Saratoga|Churchill Downs|Gulfstream Park|Keeneland|Santa Anita(?: Park)?)\s*/i, "");
+    markEntryStatuses(section,horses);
     races[raceNumber] = { race: raceNumber, horses, track: "", date: "", cls: headingClass || "Race", dist: "", surface, post: postMatch?.[1] || "", oddsMode: "Morning line (pre-race)" };
   };
   const entryIndex=entryIndexFromPages(pages);
