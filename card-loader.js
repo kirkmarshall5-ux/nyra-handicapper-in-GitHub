@@ -126,7 +126,9 @@ export function parseCard(pages, { sourceName = "document" } = {}) {
     for(const h of horses){
       let horseIndex=-1;
       for(let i=0;i<section.length;i++){
-        if(norm(section[i].text).includes(norm(h.name))){horseIndex=i;break}
+        if(!norm(section[i].text).includes(norm(h.name)))continue;
+        const ownerNearby=section.slice(i+1,Math.min(section.length,i+5)).some(x=>/^Own\s*:/i.test(clean(x.text)));
+        if(ownerNearby){horseIndex=i;break}
       }
       const prior=markers.filter(m=>m.index<horseIndex).at(-1);
       h.entryStatus=prior?.status||"REGULAR";
