@@ -137,9 +137,9 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 </main>
 
 <script type="module">
-import {runnerStateKey} from "./card-loader.js?v=20261006-v44c2";
-import {evidenceProfile, websiteRace} from "./scoring-engine.js?v=20261006-v44c2";
-import {restoredPage, parseRestoredCard} from "./restored-card-parser.js?v=20261006-v44c2";
+import {runnerStateKey} from "./card-loader.js?v=20261006-v44c3";
+import {evidenceProfile, websiteRace} from "./scoring-engine.js?v=20261006-v44c3";
+import {restoredPage, parseRestoredCard} from "./restored-card-parser.js?v=20261006-v44c3";
 
 const JOCKEYS=[
 {r:1,n:"Flavien Prat",s:41,w:12,win:29.3,top:46.3},{r:2,n:"Manuel Franco",s:45,w:10,win:22.2,top:42.2},{r:3,n:"Ricardo Santana, Jr.",s:52,w:8,win:15.4,top:40.4},{r:4,n:"Jose Lezcano",s:37,w:5,win:13.5,top:45.9},{r:5,n:"Kendrick Carmouche",s:34,w:4,win:11.8,top:35.3},{r:5,n:"Samuel Marin",s:30,w:4,win:13.3,top:26.7},{r:7,n:"Dylan Davis",s:39,w:3,win:7.7,top:35.9},{r:8,n:"Antonio Fresu",s:33,w:2,win:6.1,top:33.3},{r:8,n:"Jose L. Ortiz",s:8,w:2,win:25.0,top:50.0},{r:8,n:"Joel Rosario",s:19,w:2,win:10.5,top:42.1},{r:8,n:"Javier Castellano",s:27,w:2,win:7.4,top:29.6},{r:12,n:"Junior Alvarado",s:23,w:1,win:4.3,top:47.8},{r:12,n:"John R. Velazquez",s:17,w:1,win:5.9,top:35.3},{r:12,n:"Edgard J. Zayas",s:24,w:1,win:4.2,top:20.8}];
@@ -153,7 +153,7 @@ const deepFreeze=o=>{Object.freeze(o);Object.values(o).forEach(v=>v&&typeof v===
 deepFreeze(SAMPLE_RACES);
 const sampleCard={id:"v4.4c:sample:belmont-park:2026-10-03",schemaVersion:2,track:"Belmont Park",date:"2026-10-03",races:SAMPLE_RACES,warnings:[]};
 let activeCard=JSON.parse(localStorage.getItem("nyraV44cActiveCard")||"null")||structuredClone(sampleCard);
-if(activeCard.parser_version!=="V4.4c-font-verified-v2")activeCard=structuredClone(sampleCard);
+if(activeCard.parser_version!=="V4.4c-font-verified-v3")activeCard=structuredClone(sampleCard);
 let race=structuredClone(activeCard.races[Object.keys(activeCard.races).sort((a,b)=>+a-+b)[0]]);
 const defaultWeights={fig:45,best:20,form:10,class:10,jockey:7,trainer:8};
 let weights=Object.assign({},defaultWeights,state.weights||{});
@@ -231,8 +231,8 @@ function renderHeader(){
  raceTitle.textContent=`${race.track} · Race ${race.race}`;
  raceBadges.innerHTML=`<span class="badge gold">${race.dist||"—"} ${race.surface||""}</span><span class="badge">${race.cls||"Race"}</span><span class="badge">${race.post||"—"}</span><span class="badge green">Active card</span>`;
  let active=race.horses.filter(h=>h.odds!=="SCR");
- const ml=[...active].sort((a,b)=>oddsNumber(a.ml)-oddsNumber(b.ml)).slice(0,3);
- topMl.innerHTML=ml.length?ml.map((h,i)=>`<div><b>${i+1}. #${h.n} ${h.name}</b> <span class="pill">${h.ml||"—"}</span></div>`).join(""):"<span class=\"muted\">No active runners</span>";
+ const ml=active.filter(h=>h.included_in_frozen_field!==false&&Number.isFinite(oddsNumber(h.ml))).sort((a,b)=>oddsNumber(a.ml)-oddsNumber(b.ml)).slice(0,3);
+ topMl.innerHTML=ml.length?ml.map((h,i)=>`<div><b>${i+1}. #${h.n} ${h.name}</b> <span class="pill">${h.ml||"—"}</span></div>`).join(""):"<span class=\"muted\">Verified morning line unavailable</span>";
  const uniqTop=(kind,lookup)=>{let seen=new Set(),rows=[];for(const h of active){let name=h[kind];if(!name||seen.has(name))continue;seen.add(name);let st=lookup(name);if(st)rows.push({name,st})}return rows.sort((a,b)=>b.st.win-a.st.win||b.st.s-a.st.s).slice(0,3)};
  const tj=uniqTop("j",jockeyStat),tt=uniqTop("t",trainerStat);
  topJockeys.innerHTML=tj.length?tj.map((x,i)=>`<div><b>${i+1}. ${x.name}</b> <span class="pill">${x.st.win.toFixed(1)}%</span><div class="tiny muted">${x.st.s} meet starts</div></div>`).join(""):"<span class=\"muted\">No meet stats for this field</span>";
