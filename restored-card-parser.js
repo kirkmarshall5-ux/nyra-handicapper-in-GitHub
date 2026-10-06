@@ -1,4 +1,4 @@
-import {pythonRound,MODEL_ID} from './scoring-engine.js?v=20261006-v44c';
+import {pythonRound,MODEL_ID} from './scoring-engine.js?v=20261006-v44c2';
 // Preserve the PDF text stream and explicit font boundaries. Sorting a multi-column
 // PP into whole-page visual rows would mix unrelated runners' evidence.
 export function restoredPage(items,pageNumber,fontNames={}){
@@ -32,7 +32,10 @@ export function parseRestoredCard(pages,{sourceName='document'}={}){
   if(new Set(horses.map(h=>h.name)).size!==horses.length)throw new Error('Duplicate horse identity in race '+rn);
   races[rn]={race:+rn,horses,parser_blockers:blockers,surface:/\([^)]*turf[^)]*\)/i.test(header)?'Turf':'Dirt',header,cls:clean(header.split('\n').slice(0,5).join(' ')),oddsMode:'Unknown',dist:header.match(/\n([^\n]*?(?:Furlongs?|MILES?|Miles?))/)?.[1]?.trim()||'',post:header.match(/Post time:\s*([^\n]*?)(?= Wagers:|$|\n)/)?.[1]?.trim()||''};
  }
- const text=all.map(l=>l.text).join('\n'),m=text.match(/(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2}),\s*(20\d{2})/i),date=m?`${m[3]}-${String(new Date(m[1]+' 1, 2000').getMonth()+1).padStart(2,'0')}-${m[2].padStart(2,'0')}`:'',track=text.match(/\b(Saratoga|Aqueduct|Belmont Park|Belmont at the Big A)\b/)?.[1]||'';
- if(!date||!track)throw new Error('Current card date/track unverified');for(const r of Object.values(races)){r.date=date;r.track=track}
- return {id:`v4.4c:${track}:${date}`,schemaVersion:3,model_id:MODEL_ID,track,date,races,sourceName,warnings:[],parser_version:'V4.4c-font-verified-v1'};
+ const text=all.map(l=>l.text).join('\n'),footers=[...text.matchAll(/Daily Racing Form\s+(Saratoga|Aqueduct|Belmont Park|Belmont at the Big A)\s*\(\s*(\d{1,2})\/\s*(\d{1,2})\/\s*(20\d{2})\s*\)/g)];
+ if(!footers.length)throw new Error('Current card date/track footer unverified');
+ const identities=new Set(footers.map(m=>`${m[1]}|${m[4]}-${m[2].padStart(2,'0')}-${m[3].padStart(2,'0')}`));if(identities.size!==1)throw new Error('Conflicting card dates/tracks across PDF pages');const [track,date]=[...identities][0].split('|');
+ const [year,month,day]=date.split('-').map(Number),verifiedDate=new Date(Date.UTC(year,month-1,day));if(verifiedDate.getUTCFullYear()!==year||verifiedDate.getUTCMonth()+1!==month||verifiedDate.getUTCDate()!==day)throw new Error('Invalid card date');
+ for(const r of Object.values(races)){r.date=date;r.track=track}
+ return {id:`v4.4c:${track}:${date}`,schemaVersion:3,model_id:MODEL_ID,track,date,races,sourceName,warnings:[],parser_version:'V4.4c-font-verified-v2'};
 }
