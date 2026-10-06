@@ -2,6 +2,11 @@ export const SCHEMA_VERSION = 2;
 
 const clean = value => String(value ?? "").replace(/\s+/g, " ").trim();
 const slug = value => clean(value).normalize("NFKD").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+const STAT_NAME_NOISE = /^(?:(?:WonLastStart|TurfSprints?|DirtSprints?|Sprint|Routes?|Turf|Dirt|Claim|Allowance|Mdn\w*|FirstStart|1stStart|1stBlink|BlinkOn|31-60Days|61-180Days|OffOver180|Off45-180|MSWtoMCL|TimeformUS|Works?|Trainer|Jockey|Sire|Dam)(?:\b|\())|^(?:Early|Late)(?:\s+\d+)?$|^(?:Life|YO|ft)$/i;
+const plausibleHorseName = value => {
+  const name=clean(value).replace(/\s+\([^)]*\)$/, "");
+  return /^[A-Za-z][A-Za-z0-9'’ .&-]{1,60}$/.test(name) && !STAT_NAME_NOISE.test(name) && !/\$|\d{2,}%/.test(name);
+};
 
 export function reconstructPage(items, pageNumber = 1, tolerance = 2.5) {
   const positioned = items.filter(item => clean(item.str)).map((item, index) => ({
@@ -58,7 +63,7 @@ function runnerAt(lines, index) {
   const namePattern = /^[A-Za-z][A-Za-z0-9'’ .&-]{1,60}(?:\s+\([^)]*\))?$/;
   const noisePattern = /^(?:(?:Early|Late)$|(?:Own|Sire|Dam|Trainer|Jockey|Blinkers|Weight|Bred|Breeder|Mdn\w*|Turf\w*|Dirt\w*|Sprint\w*|Route\w*|Life|Timeform\w*|Beyer|Workout|Works?|Foaled|Pedigree|Stats?|Record)\b)/i;
   const itemNames = items.map(item => ({ item, text: clean(item.str) }))
-    .filter(candidate => namePattern.test(candidate.text) && !noisePattern.test(candidate.text));
+    .filter(candidate => namePattern.test(candidate.text) && !noisePattern.test(candidate.text) && plausibleHorseName(candidate.text));
   // DRF sometimes emits a multi-word horse name as separate PDF text items
   // (for example, "Early" + "Returns"). Rebuild a candidate from adjacent
   // items on the same reconstructed row, while keeping it inside the runner
@@ -68,8 +73,8 @@ function runnerAt(lines, index) {
     if (!parts.length) return null;
     const text = clean(parts.map(item => item.str).join(" "));
     return { item: { x: parts[0].x, y: line.y }, text };
-  }).filter(candidate => candidate && namePattern.test(candidate.text) && !noisePattern.test(candidate.text));
-  const embeddedNames = embedded ? [{ item: { x: programItem.x + 12, y: programItem.y }, text: clean(embedded[2]) }] : [];
+  }).filter(candidate => candidate && namePattern.test(candidate.text) && !noisePattern.test(candidate.text) && plausibleHorseName(candidate.text));
+  const embeddedNames = embedded && plausibleHorseName(embedded[2]) ? [{ item: { x: programItem.x + 12, y: programItem.y }, text: clean(embedded[2]) }] : [];
   const names = [...embeddedNames, ...itemNames, ...rowNames];
   const owners = items.filter(item => /^Own\s*:/i.test(clean(item.str)));
   const pairs = [];
@@ -94,11 +99,46 @@ function runnerAt(lines, index) {
   return { n: programNumber, name: clean(pair.name.text.replace(/\s+\([^)]*\)$/, "")), index, ownerKey: `${pageNumber}:${pair.owner.x}:${pair.owner.y}` };
 }
 
+function entryIndexFromPages(pages){
+ const text=pages.slice(0,2).flatMap(page=>page.lines.map(line=>line.text)).join("\n");
+ const start=text.search(/INDEX TO ENTRIES/i);if(start<0)return null;
+ const after=text.slice(start),trainerAt=after.search(/INDEX TO TRAINERS/i),section=trainerAt>=0?after.slice(0,trainerAt):after.slice(0,7000);
+ const byRace={};
+ const re=/([A-Za-z][A-Za-z0-9'’* .&-]{1,60}?)\s*,\s*(10|[1-9])(?=\s|$)/g;
+ for(const m of section.matchAll(re)){
+  const name=clean(m[1]).replace(/^>\s*[A-Z]\s*>\s*/,"").replace(/\*+$/,"");
+  if(!plausibleHorseName(name))continue;
+  const race=+m[2];(byRace[race]||(byRace[race]=[])).push(name);
+ }
+ for(const race of Object.keys(byRace))byRace[race]=[...new Set(byRace[race])];
+ return Object.keys(byRace).length?byRace:null;
+}
+
 export function parseCard(pages, { sourceName = "document" } = {}) {
+  const markEntryStatuses=(section,horses)=>{
+    const norm=v=>clean(v).toLowerCase();
+    const markers=[];
+    for(let i=0;i<section.length;i++){
+      const text=clean(section[i].text);
+      if(/Entered For Main Track Only/i.test(text))markers.push({index:i,status:"MTO"});
+      else if(/Also Eligible|Also-Eligible/i.test(text))markers.push({index:i,status:"AE"});
+    }
+    for(const h of horses){
+      let horseIndex=-1;
+      for(let i=0;i<section.length;i++){
+        if(!norm(section[i].text).includes(norm(h.name)))continue;
+        const ownerNearby=section.slice(i+1,Math.min(section.length,i+5)).some(x=>/^Own\s*:/i.test(clean(x.text)));
+        if(ownerNearby){horseIndex=i;break}
+      }
+      const prior=markers.filter(m=>m.index<horseIndex).at(-1);
+      h.entryStatus=prior?.status||"REGULAR";
+      if(h.entryStatus==="AE"&&h.aeDrawnIn==null)h.aeDrawnIn=false;
+    }
+  };
   if (!Array.isArray(pages) || !pages.length) throw new Error("No readable PDF pages were found.");
   const lines = pages.flatMap(page => page.lines.map(line => ({ ...line, pageNumber: page.pageNumber })));
   const races = {};
-  const addSection = (raceNumber, section) => {
+  const addSection = (raceNumber, section, expectedNames=[]) => {
     const horses = races[raceNumber]?.horses || [];
     const claimedOwners = new Set(horses.map(horse => horse.ownerKey).filter(Boolean));
     for (let i = 0; i < section.length; i++) {
@@ -124,8 +164,8 @@ export function parseCard(pages, { sourceName = "document" } = {}) {
         const line = prior[p];
         const lineText = clean(line.text);
         const combined = lineText.match(/^([1-9]\d?(?:A|B|X)?)[ .:-]*([A-Za-z][A-Za-z0-9'’ .&-]{1,60})(?:\s+\([^)]*\))?$/i);
-        if (combined) recovered = { n: combined[1].toUpperCase(), name: clean(combined[2]) };
-        else if (/^[A-Za-z][A-Za-z0-9'’ .&-]{1,60}(?:\s+\([^)]*\))?$/.test(lineText) && !/^(?:Own|Sire|Dam|Trainer|Jockey|Timeform|Beyer|Post time|Belmont Park)\b/i.test(lineText)) {
+        if (combined && plausibleHorseName(combined[2])) recovered = { n: combined[1].toUpperCase(), name: clean(combined[2]) };
+        else if (/^[A-Za-z][A-Za-z0-9'’ .&-]{1,60}(?:\s+\([^)]*\))?$/.test(lineText) && plausibleHorseName(lineText) && !/^(?:Own|Sire|Dam|Trainer|Jockey|Timeform|Beyer|Post time|Belmont Park)\b/i.test(lineText)) {
           for (let q = p - 1; q >= 0; q--) {
             const program = clean(prior[q].text).match(/^([1-9]\d?(?:A|B|X)?)$/i);
             if (program) { recovered = { n: program[1].toUpperCase(), name: clean(lineText.replace(/\s+\([^)]*\)$/, "")) }; break; }
@@ -137,6 +177,23 @@ export function parseCard(pages, { sourceName = "document" } = {}) {
         claimedOwners.add(ownerKey);
       }
     }
+    // Final identity recovery uses two independent DRF anchors: the official
+    // Index-to-Entries name and the runner's Life header, plus a nearby program
+    // number and Own: row. This repairs PDF row-merging without guessing names.
+    const canon=v=>slug(v).replace(/-/g,"");
+    for(const expectedName of expectedNames){
+      if(horses.some(h=>canon(h.name)===canon(expectedName)))continue;
+      for(let i=0;i<section.length;i++){
+        const lineText=clean(section[i].text), expectedKey=canon(expectedName);
+        if(!lineText || !canon(lineText).startsWith(expectedKey) || !/\bLife\s+\d+\b/i.test(lineText))continue;
+        const hasOwner=section.slice(i+1,Math.min(section.length,i+5)).some(line=>/^Own\s*:/i.test(clean(line.text)));
+        if(!hasOwner)continue;
+        let program=null;
+        for(let p=i-1;p>=Math.max(0,i-3);p--){const m=clean(section[p].text).match(/^([1-9]\d?(?:A|B|X)?)$/i);if(m){program=m[1].toUpperCase();break}}
+        if(program && !horses.some(h=>h.n===program)){horses.push({n:program,name:expectedName,j:"",t:"",odds:"—",ml:"—",style:"P",lifeStarts:null,identitySource:"index-life-owner"});break}
+      }
+    }
+    markEntryStatuses(section,horses);
     if (!races[raceNumber]) races[raceNumber] = { race: raceNumber, horses, track: "", date: "", cls: clean(section.slice(0, 4).map(line => line.text).join(" · ")), dist: "", surface: "", post: "", oddsMode: "Unknown" };
   };
   const addStrictSection = (raceNumber, section) => {
@@ -153,9 +210,9 @@ export function parseCard(pages, { sourceName = "document" } = {}) {
       const program = clean(section[i-3].text).match(programPattern);
       const odds = clean(section[i-2].text);
       const name = clean(section[i-1].text).replace(/\s+\([^)]*\)$/, "");
-      if (!program || !oddsPattern.test(odds) || !/^[A-Za-z]/.test(name) || /^Own\s*:/i.test(name)) continue;
+      if (!program || !oddsPattern.test(odds) || !plausibleHorseName(name)) continue;
       const n = program[1].toUpperCase();
-      if (!horses.some(horse => horse.n === n)) horses.push({ n, name, j: "", t: "", odds: "—", ml: odds, style: "P", lifeStarts: null });
+      if (plausibleHorseName(name) && !horses.some(horse => horse.n === n)) horses.push({ n, name, j: "", t: "", odds: "—", ml: odds, style: "P", lifeStarts: null, identitySource: "strict" });
     }
     // PDF.js can occasionally merge the program, morning line, and horse name
     // onto fewer reconstructed rows. Recover only from the text immediately
@@ -170,39 +227,23 @@ export function parseCard(pages, { sourceName = "document" } = {}) {
       const n = match[1].toUpperCase();
       const ml = match[2];
       const name = clean(match[3].replace(/\s+\([^)]*\)$/, ""));
-      if (!horses.some(horse => horse.n === n)) horses.push({ n, name, j: "", t: "", odds: "—", ml, style: "P", lifeStarts: null });
+      if (!plausibleHorseName(name)) continue;
+      if (!horses.some(horse => horse.n === n)) horses.push({ n, name, j: "", t: "", odds: "—", ml, style: "P", lifeStarts: null, identitySource: "strict" });
     }
-    // DRF can place the morning line below Own: and on the same reconstructed
-    // row as pedigree text from the right column (Oct. 4 Race 1 #10). Inspect
-    // individual PDF items rather than requiring the whole row to equal odds.
-    for (let i = 1; i < section.length - 1; i++) {
-      if (!/^Own\s*:/i.test(clean(section[i].text))) continue;
-      let odds = null;
-      for (let j = i + 1; j <= Math.min(section.length - 1, i + 3) && !odds; j++) {
-        const oddsItem = (section[j].items || []).find(item => item.x < 90 && oddsPattern.test(clean(item.str)));
-        if (oddsItem) odds = clean(oddsItem.str);
-      }
-      if (!odds) continue;
-      let name = null, program = null;
-      for (let p = i - 1; p >= Math.max(0, i - 5) && !name; p--) {
-        const candidates = (section[p].items || []).map(item => ({ x: item.x, text: clean(item.str) }))
-          .filter(item => item.x >= 40 && item.x < 175 && /^[A-Za-z][A-Za-z0-9'’ .&-]{1,60}(?:\s+\([^)]*\))?$/.test(item.text) && !/^(?:Own|Sire|Dam|Timeform|Trainer|Jockey|Life|Works?)\b/i.test(item.text));
-        if (candidates.length) name = clean(candidates[0].text.replace(/\s+\([^)]*\)$/, ""));
-      }
-      if (!name) continue;
-      for (let p = i - 1; p >= Math.max(0, i - 6) && !program; p--) {
-        const programItem = (section[p].items || []).find(item => item.x < 90 && programPattern.test(clean(item.str)));
-        if (programItem) program = clean(programItem.str).toUpperCase();
-      }
-      if (program && !horses.some(horse => horse.n === program)) horses.push({ n: program, name, j: "", t: "", odds: "—", ml: odds, style: "P", lifeStarts: null });
-    }
+    // V4.3 credibility rule: do not guess a runner from loose nearby PDF items.
+    // A previous fallback paired trainer-stat text such as "WonLastStart" with
+    // unrelated numbers and created phantom horses. If the strict header
+    // signature cannot prove identity, leave the runner missing and surface a
+    // validation problem rather than manufacturing a horse.
     const headerText = clean(section[0]?.text || "");
     const bodyText = section.slice(0, 8).map(line => clean(line.text)).join(" ");
     const postMatch = bodyText.match(/\bPost\s*time:\s*([^ ]+\s*(?:ET|PM|AM)?)/i);
     const surface = /\bInner Turf\b/i.test(bodyText) ? "Inner Turf" : /\bTurf\b/i.test(bodyText) ? "Turf" : /\bTapeta\b|\bSynthetic\b/i.test(bodyText) ? "Synthetic" : "Dirt";
     const headingClass = headerText.replace(/^\s*\d+\s+(?:Belmont Park|Aqueduct|Saratoga|Churchill Downs|Gulfstream Park|Keeneland|Santa Anita(?: Park)?)\s*/i, "");
+    markEntryStatuses(section,horses);
     races[raceNumber] = { race: raceNumber, horses, track: "", date: "", cls: headingClass || "Race", dist: "", surface, post: postMatch?.[1] || "", oddsMode: "Morning line (pre-race)" };
   };
+  const entryIndex=entryIndexFromPages(pages);
   const pageAssignments = pages.map(page => {
     const pageLines = page.lines.map(line => ({ ...line, pageNumber: page.pageNumber }));
     const footer = pageLines.map((line, index) => raceHeaderAt(pageLines, index)).find(header => header?.kind === "drf-page");
@@ -216,7 +257,7 @@ export function parseCard(pages, { sourceName = "document" } = {}) {
     raceBoundaries.forEach((boundary, boundaryIndex) => addStrictSection(boundary.race, lines.slice(boundary.index, raceBoundaries[boundaryIndex + 1]?.index ?? lines.length)));
   } else if (pageAssignments.length) {
     headers = pageAssignments.map(({ footer }) => footer);
-    pageAssignments.forEach(({ page, footer }) => addSection(footer.race, page.lines.map(line => ({ ...line, pageNumber: page.pageNumber }))));
+    pageAssignments.forEach(({ page, footer }) => addSection(footer.race, page.lines.map(line => ({ ...line, pageNumber: page.pageNumber })), entryIndex?.[footer.race]||[]));
   } else {
     const boundaries = [];
     lines.forEach((line, index) => { const header = raceHeaderAt(lines, index); if (header) boundaries.push({ index, ...header }); });
@@ -236,6 +277,15 @@ export function parseCard(pages, { sourceName = "document" } = {}) {
   const drfTrack = headers.find(header => header.trackAbbreviation)?.trackAbbreviation;
   const track = trackMatch ? trackMatch[1] : TRACK_ABBREVIATIONS[drfTrack] || (drfTrack ? drfTrack.toUpperCase() : "");
   Object.values(races).forEach(race => { race.track = track || "Unknown track"; race.date = date; });
+  if(entryIndex){
+   for(const [raceNo,race] of Object.entries(races)){
+    const expected=entryIndex[raceNo]||[],parsed=race.horses.map(h=>h.name);
+    const canon=v=>slug(v).replace(/-/g,"");
+    const parsedSet=new Set(parsed.map(canon)),expectedSet=new Set(expected.map(canon));
+    const missing=expected.filter(n=>!parsedSet.has(canon(n))),unexpected=parsed.filter(n=>!expectedSet.has(canon(n)));
+    race.integrity={source:"DRF index to entries",expected:[...expected],expectedCount:expected.length,parsedCount:parsed.length,missing,unexpected,ready:expected.length>0&&missing.length===0&&unexpected.length===0};
+   }
+  }
   const totalRunners = Object.values(races).reduce((sum, race) => sum + race.horses.length, 0);
   if (!totalRunners) throw new Error("Race headers were found, but no bounded runner headers with program number, name, and Own: were found.");
   const fingerprint = fingerprintPages(pages);
@@ -244,6 +294,7 @@ export function parseCard(pages, { sourceName = "document" } = {}) {
   if (!track || !date) warnings.push("Track/date metadata is incomplete; a document fingerprint was added to keep state collision-safe.");
   if (Object.keys(races).length === 1) warnings.push("Only one race was discovered; this may be a single-race DRF.");
   if (totalRunners < Object.keys(races).length * 3) warnings.push("The discovered fields are suspiciously small; verify the runner list.");
+  for(const race of Object.values(races)){if(race.integrity&&!race.integrity.ready)warnings.push(`Race ${race.race} roster mismatch: missing ${race.integrity.missing.join(", ")||"none"}; unexpected ${race.integrity.unexpected.join(", ")||"none"}.`)}
   return { id, schemaVersion: SCHEMA_VERSION, track: track || "Unknown track", date, races, sourceName, fingerprint, warnings };
 }
 

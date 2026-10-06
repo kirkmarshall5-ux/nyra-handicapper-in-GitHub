@@ -1,1 +1,1 @@
-{"name":"nyra-handicapper","private":true,"type":"module","scripts":{"test":"node --test card-loader.test.js scoring-engine.test.js wager-engine.test.js"}}
+{"name":"nyra-handicapper","private":true,"type":"module","scripts":{"test":"node --test *.test.js"}}
