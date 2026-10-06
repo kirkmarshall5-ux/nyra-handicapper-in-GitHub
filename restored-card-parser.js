@@ -1,4 +1,5 @@
-import {pythonRound,MODEL_ID} from './scoring-engine.js?v=20261006-v44c3';
+import {parseAnnualJockey} from './jockey-research.js?v=20261006-j1preview1';
+import {pythonRound,MODEL_ID} from './scoring-engine.js?v=20261006-j1preview1';
 // Preserve the PDF text stream and explicit font boundaries. Sorting a multi-column
 // PP into whole-page visual rows would mix unrelated runners' evidence.
 export function restoredPage(items,pageNumber,fontNames={}){
@@ -17,7 +18,7 @@ function horseEvidence(lines,roster){
  const life=[...head.matchAll(/\bLife\s+(\d+)\b/g)],starts=life.length===1?+life[0][1]:null;if(starts===null)blockers.push('career-record-not-uniquely-anchored');
  const tf=head.match(/TimeformUS\s+Pace:\s*Early\s+(\d+)\s+Late\s+(\d+)/),j=head.match(/\b([A-Z][A-Z .'-]{1,35})\s*\((\d+)\s+(\d+)\s+\d+\s+\d+\s+\.\d+\)\s*20\d{2}:/),t=head.match(/\bTr:\s*([^()]{2,55}?)\s*\((\d+)\s+(\d+)\s+\d+\s+\d+\s+\.\d+\)\s*20\d{2}:/);
  const trainerAngles=flat.includes('TRAINER:')?flat.split('TRAINER:')[1]:'',rates=[...trainerAngles.matchAll(/\(\d+\s+\.?(\d{2})\s+\$[\d.]+\)/g)].map(x=>+x[1]).filter(x=>x<=60),context=rates.length?Math.min(100,Math.max(25,pythonRound(rates.reduce((a,b)=>a+b,0)/rates.length*3))):null;
- return {...roster,life_starts:starts,lifeStarts:starts,beyer_figures:figs.slice(0,5),figs:figs.slice(0,5),beyer_evidence:evidence.slice(0,5),available_beyer_rows:figs.length,timeform_early:tf?+tf[1]:null,timeform_late:tf?+tf[2]:null,tfEarly:tf?+tf[1]:'',tfLate:tf?+tf[2]:'',j:j?.[1].trim()||'',t:t?.[1].trim()||'',jockey_win:j?(+j[2]?100*+j[3]/+j[2]:0):null,trainer_win:t?(+t[2]?100*+t[3]/+t[2]:0):null,trainer_context_score:context,trainerAngles,parser_blockers:[...new Set(blockers)].sort(),last:figs[0]??'',best:figs.length?Math.max(...figs.slice(0,3)):'',style:tf?(+tf[1]>=105?'E':+tf[1]>=90?'EP':+tf[2]>=85?'S':'P'):'P',odds:'—',ml:roster.ml||'—'};
+ return {...roster,jockey_annual_header:head.split('Tr:',1)[0],life_starts:starts,lifeStarts:starts,beyer_figures:figs.slice(0,5),figs:figs.slice(0,5),beyer_evidence:evidence.slice(0,5),available_beyer_rows:figs.length,timeform_early:tf?+tf[1]:null,timeform_late:tf?+tf[2]:null,tfEarly:tf?+tf[1]:'',tfLate:tf?+tf[2]:'',j:j?.[1].trim()||'',t:t?.[1].trim()||'',jockey_win:j?(+j[2]?100*+j[3]/+j[2]:0):null,trainer_win:t?(+t[2]?100*+t[3]/+t[2]:0):null,trainer_context_score:context,trainerAngles,parser_blockers:[...new Set(blockers)].sort(),last:figs[0]??'',best:figs.length?Math.max(...figs.slice(0,3)):'',style:tf?(+tf[1]>=105?'E':+tf[1]>=90?'EP':+tf[2]>=85?'S':'P'):'P',odds:'—',ml:roster.ml||'—'};
 }
 export function parseRestoredCard(pages,{sourceName='document'}={}){
  const races={},all=pages.flatMap(p=>p.lines),raceLines={};
@@ -36,6 +37,6 @@ export function parseRestoredCard(pages,{sourceName='document'}={}){
  if(!footers.length)throw new Error('Current card date/track footer unverified');
  const identities=new Set(footers.map(m=>`${m[1]}|${m[4]}-${m[2].padStart(2,'0')}-${m[3].padStart(2,'0')}`));if(identities.size!==1)throw new Error('Conflicting card dates/tracks across PDF pages');const [track,date]=[...identities][0].split('|');
  const [year,month,day]=date.split('-').map(Number),verifiedDate=new Date(Date.UTC(year,month-1,day));if(verifiedDate.getUTCFullYear()!==year||verifiedDate.getUTCMonth()+1!==month||verifiedDate.getUTCDate()!==day)throw new Error('Invalid card date');
- for(const r of Object.values(races)){r.date=date;r.track=track}
+ for(const r of Object.values(races)){r.date=date;r.track=track;for(const h of r.horses){h.jockey_annual=parseAnnualJockey(h.jockey_annual_header,year);delete h.jockey_annual_header}}
  return {id:`v4.4c:${track}:${date}`,schemaVersion:3,model_id:MODEL_ID,track,date,races,sourceName,warnings:[],parser_version:'V4.4c-font-verified-v3'};
 }
