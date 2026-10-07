@@ -23,3 +23,8 @@ test('stale, late and PASS-race observations remain auditable, never become wage
  const a=quoteCapture({...input,quoteTime:'2026-10-07T13:00:00-04:00'}).record;assert.equal(a.quoteTimingEligible,false);assert.equal(a.decision,'PASS');
  const r=quoteCapture({...input,rating:{decision:'PASS',rankings:[],pass_reasons:[{reason:'FTS-unrated'}]}}).record;assert.equal(r.selectionFrozen,false);assert.equal(r.rank,null);assert.equal(r.racePassReasons[0].reason,'FTS-unrated');
 });
+
+test('program-less PPs cannot capture quotes; recorded model matches the frozen rating',()=>{
+ const missing=quoteCapture({...input,horseNumber:'',race:{...input.race,horses:[{n:'',name:'Runner'}]}});assert.equal(missing.record,null);
+ const {record}=quoteCapture({...input,rating:{...input.rating,model_id:'release-version-test'}});assert.equal(record.model,'release-version-test');
+});

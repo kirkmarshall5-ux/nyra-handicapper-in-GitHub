@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node --test card-loader.test.js scoring-engine.test.js wager-engine.test.js restored-v44c.test.js jockey-research.test.js pp-context.test.js win-value-gate.test.mjs research-builder.test.js research-builder-ui.test.js",
+    "test": "node --test card-loader.test.js scoring-engine.test.js wager-engine.test.js restored-v44c.test.js jockey-research.test.js pp-context.test.js win-value-gate.test.mjs research-builder.test.js research-builder-ui.test.js data-corrected-research.test.js rankings-release.test.js morning-line-overlay.test.js",
     "test:pdf-parity": "node scripts/check-pdf-parity.mjs"
   },
   "devDependencies": {
