@@ -169,6 +169,7 @@ import {runnerStateKey} from "./card-loader.js?v=20261007-release1";
 import {researchRace} from "./jockey-research.js?v=20261007-release1";
 import {evidenceProfile} from "./scoring-engine.js?v=20261007-release1";
 import {releaseRace as websiteRace,RELEASE_ID} from "./rankings-release.js?v=20261007-release1";
+import {parseNyraText as parseNyraEntries} from "./nyra-entry-parser.js?v=20261007-release2";
 import {applyMorningLines} from "./morning-line-overlay.js?v=20261007-release1";
 import {runnerContext} from "./release-context.js?v=20261007-release1";
 import {restoredPage, parseRestoredCard} from "./release-card-parser.js?v=20261007-release1";
@@ -324,24 +325,8 @@ raceNotes.value=state.cards?.[activeCard.id]?.notes?.[1]||"";raceNotes.oninput=e
 function updateUrl(){const venue=["belmont","aqueduct","saratoga"].includes(track.value)?track.value:"belmont";const url=`https://www.nyra.com/${venue}/racing/entries/?day=${race.date}&limit=entries&race=${race.race}`;raceUrl.value=url;openRace.href=url;nyraRaceLink.href=url}
 [track,raceDate,raceNo].forEach(el=>el.onchange=updateUrl);updateUrl();
 
-function parseNyraText(text){
- let lines=text.split(/\n+/).map(x=>x.trim()).filter(Boolean); let out={track:({saratoga:"Saratoga",aqueduct:"Aqueduct",belmont:"Belmont Park"}[track.value]||"Belmont Park"),date:raceDate.value,race:+raceNo.value,horses:[]};
- let joined=" "+lines.join(" ")+" "; const headings=lines.filter(l=>/^Race\s+\d+(?:\s+\d+\s+MTP)?$/.test(l));if(headings.length===1)out.race=+headings[0].match(/\d+/)[0];
- let raceMatch=joined.match(/Race\s+(\d+).*?\$(\d[\d,]*)\s+([A-Za-z ]+?)(?=\s+\d| \d\/|\s+\dF|\s+\dM)/i); if(raceMatch){if(!headings.length)out.race=+raceMatch[1];out.cls="$"+raceMatch[2]+" "+raceMatch[3].trim()}
- let dist=joined.match(/\b(\d+(?:\s+\d\/\d)?F|\d+(?:\s+\d\/\d)?M)\b/i); if(dist)out.dist=dist[1];
- let surf=joined.match(/\b(Dirt|Turf|Tapeta)\b/i); if(surf)out.surface=surf[1];
- let post=joined.match(/(\d{1,2}:\d{2}\s*[ap](?:m)?)/i); if(post)out.post=post[1].toUpperCase();
- // Heuristic blocks: horse name line, then "Jockey • Trainer", then program number and odds in following lines.
- for(let i=0;i<lines.length;i++){
-   if(lines[i].includes("•") && i>0){
-      const [j,t]=lines[i].split("•").map(x=>x.trim()); const name=lines[i-1].replace(/^[\d\s-]+/,"").trim();
-      let n=null, odds="", ml="";
-      for(let k=i+1;k<Math.min(lines.length,i+8);k++){if(n===null && /^\d{1,2}$/.test(lines[k]))n=+lines[k]; if(/^(SCR|\d+\/\d+)$/.test(lines[k])){if(lines[k].startsWith("ML"))ml=lines[k].replace("ML","").trim();else if(!odds)odds=lines[k]} if(/^ML\s+\d+\/\d+/.test(lines[k]))ml=lines[k].replace(/^ML\s+/,"")}
-      if(name && n)out.horses.push({n,name,j,t,odds:odds||"—",ml:ml||"—",style:"P"});
-   }
- }
- return out.horses.length?out:null;
-}
+function parseNyraText(text){return parseNyraEntries(text,{track:track.value,date:raceDate.value,race:+raceNo.value})}
+
 parsePaste.onclick=()=>{let p=parseNyraText(nyraPaste.value);if(!p){parseStatus.textContent="I couldn't reliably identify the runners. Try copying just the race section with horse, jockey/trainer, program number and odds.";return}try{race=applyMorningLines(race,p,{sourceUrl:raceUrl.value,observedAt:new Date().toISOString()});activeCard.races[race.race]=structuredClone(race);save();renderAll();parseStatus.textContent=`Updated ${p.horses.length} morning-line references; PP ratings preserved. These are not verified live quotes.`}catch(e){parseStatus.textContent="Morning lines were not changed: "+e.message}};
 loadSample.onclick=()=>{resetSample.click();parseStatus.textContent="October 3 full card restored. All 11 races / 107 runners are bundled."};
 tryLoad.onclick=async()=>{loadStatus.textContent="Trying NYRA directly…";try{let r=await fetch(raceUrl.value);if(!r.ok)throw new Error("HTTP "+r.status);let txt=await r.text();let doc=new DOMParser().parseFromString(txt,"text/html");let p=parseNyraText(doc.body.innerText);if(!p)throw new Error("Could not parse");race=applyMorningLines(race,p,{sourceUrl:raceUrl.value,observedAt:new Date().toISOString()});activeCard.races[race.race]=structuredClone(race);save();renderAll();loadStatus.textContent=`Updated ${p.horses.length} morning-line references; PP ratings preserved.`}catch(e){loadStatus.textContent="Direct browser load was blocked or could not be parsed. Open the NYRA page and use the paste fallback below."}};
