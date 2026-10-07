@@ -17,7 +17,7 @@ export function renderResearchBuilder(){
   lastRace=identity;for(const id of ['researchOdds','researchSource','researchEvidence','researchQuoteTime','researchPostTime'])el(id).value='';for(const id of ['researchObserved','researchField','researchSurface','researchDuplicate'])el(id).checked=false;
   el('researchStatus').textContent='';
  }
- const previous=el('researchHorse').value,active=race.horses.filter(h=>h.odds!=='SCR'&&h.included_in_frozen_field!==false);
+ const previous=el('researchHorse').value,active=race.horses.filter(h=>h.n&&h.odds!=='SCR'&&h.included_in_frozen_field!==false);
  el('researchHorse').innerHTML=active.map(h=>`<option value="${escape(h.n)}">#${escape(h.n)} ${escape(h.name)}</option>`).join('');
  if(active.some(h=>String(h.n)===previous)&&identity===el('researchHorse').dataset.race)el('researchHorse').value=previous;
  else if(rating.rankings[0])el('researchHorse').value=String(rating.rankings[0].n);
