@@ -5,3 +5,12 @@ test('wrong race or horse rejects atomically',()=>{assert.throws(()=>applyMornin
 test('duplicate or missing lines fail',()=>{assert.throws(()=>applyMorningLines(race,{...candidate,horses:[candidate.horses[0],candidate.horses[0]]},source));assert.throws(()=>applyMorningLines(race,{...candidate,horses:[{...candidate.horses[0],ml:'—'}]},source))});
 
 test('program-less PP gets program from matched official entry, never gate',()=>{const x=applyMorningLines({...race,horses:[{...race.horses[0],n:''}]},candidate,source);assert.equal(x.horses[0].n,'3');assert.equal(x.horses[0].actual_post,null);assert.deepEqual(x.horses[0].beyer_figures,[88,80])});
+
+import {releaseRace}from './rankings-release.js';
+test('official scratch removes top selection and recomputes final-field rankings without copying tote prices',()=>{
+ const pp={track:'Saratoga',date:'2026-08-22',race:12,surface:'Turf',horses:[{name:'First',n:'1',ml:'2/1',odds:'—',life_starts:6,beyer_figures:[90]},{name:'Second',n:'2',ml:'4/1',odds:'—',life_starts:6,beyer_figures:[80]}]};
+ const entries={...pp,dist:'1 3/16M',post:'7:21P',horses:[{name:'First',n:1,ml:'2/1',odds:'SCR'},{name:'Second',n:2,ml:'4/1',odds:'9/1'}]};
+ assert.equal(releaseRace(pp).rankings[0].name,'First');const updated=applyMorningLines(pp,entries,source);
+ assert.equal(releaseRace(updated).rankings[0].name,'Second');assert.equal(releaseRace(updated).rankings.length,1);assert.equal(updated.horses[1].odds,'—');assert.deepEqual(updated.horses.map(h=>h.beyer_figures),pp.horses.map(h=>h.beyer_figures));assert.equal(updated.dist,'1 3/16M');assert.equal(pp.horses[0].odds,'—');
+ assert.throws(()=>applyMorningLines(pp,{...entries,surface:'Dirt'},source),/surface differs/);
+});
