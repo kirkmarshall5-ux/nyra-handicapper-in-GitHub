@@ -66,7 +66,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <div class="card span3"><div class="kicker">Top 3 morning-line favorites</div><div id="topMl" class="stack small"></div></div>
 <div class="card span12"><h3 class="sectiontitle">J1 research comparison</h3><div class="small muted">Compare source-card annual jockey rates with the baseline. Historical improvement is unvalidated; these rankings do not authorize bets.</div><div id="j1Comparison" class="small" style="margin-top:10px"></div></div>
 <div class="card span3"><div class="kicker">Top jockeys · this race</div><div id="topJockeys" class="stack small"></div></div>
-<div class="card span3"><div class="kicker">Top trainers · this race</div><div id="topTrainers" class="stack small"></div></div><div class="card span12"><div class="spread"><div><div class="kicker">Price vs. our line</div><h3 class="sectiontitle">Best Value</h3></div><span class="badge gold">Probability validation pending</span></div><div id="bestValue" class="stack small"></div><div class="tiny muted" style="margin-top:8px">A win-bet value rule must be frozen and validated before automated wager recommendations are enabled.</div></div>
+<div class="card span3"><div class="kicker">Top trainers · this race</div><div id="topTrainers" class="stack small"></div></div><div class="card span12"><div class="kicker">Top Jockey/Trainer This Race</div><div id="topPairings" class="stack small"></div></div><div class="card span12"><div class="spread"><div><div class="kicker">Price vs. our line</div><h3 class="sectiontitle">Best Value</h3></div><span class="badge gold">Probability validation pending</span></div><div id="bestValue" class="stack small"></div><div class="tiny muted" style="margin-top:8px">A win-bet value rule must be frozen and validated before automated wager recommendations are enabled.</div></div>
 
 <div class="card span12">
 <div class="spread"><h3 class="sectiontitle">Race handicapping grid</h3><div class="small muted">Verified PP evidence · V4.4c scoring is locked</div></div><div class="sortbar" style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 12px"><span class="small muted" style="align-self:center">Sort:</span><button class="secondary sortbtn" data-sort="number">Horse # ↕</button><button class="secondary sortbtn" data-sort="ml">ML ↕</button><button class="secondary sortbtn" data-sort="prerace">Pre-Race ↕</button></div>
@@ -164,6 +164,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 
 <script type="module">
 import {initResearchBuilder,renderResearchBuilder} from "./research-builder-ui.js?v=20261008-qa1";
+import {connectionRows,LEADER_SCOPE,LEADER_SOURCE} from "./connection-research.js?v=20261008-jt1";
 import {fieldConnections} from "./pp-context.js?v=20261008-qa1";
 import {runnerStateKey} from "./card-loader.js?v=20261008-qa1";
 import {researchRace} from "./jockey-research.js?v=20261008-qa1";
@@ -268,6 +269,8 @@ function renderHeader(){
  topMl.innerHTML=ml.length?ml.map((h,i)=>`<div><b>${i+1}. #${h.n} ${h.name}</b> <span class="pill">${h.ml||"—"}</span></div>`).join(""):"<span class=\"muted\">Verified morning line unavailable</span>";
  const panel=kind=>{const rows=fieldConnections(active,kind).slice(0,3);return rows.length?rows.map((x,i)=>`<div><b>${i+1}. ${escapeText(x.name)}</b> <span class="pill">${x.win==null?'No starts':x.win.toFixed(1)+'%'}</span><div class="tiny muted">${x.wins}/${x.starts} · uploaded PP local record</div></div>`).join(""):"<span class=\"muted\">Source record unavailable; upload the PP again.</span>"};
  topJockeys.innerHTML=panel('jockey');topTrainers.innerHTML=panel('trainer');
+ const pairs=connectionRows(race).filter(x=>x.topPair);
+ document.getElementById('topPairings').innerHTML=`<div class="tiny muted">${escapeText(LEADER_SCOPE)} · <a href="${LEADER_SOURCE}" target="_blank" rel="noopener">Source</a></div>`+(pairs.length?pairs.map(x=>`<div class="note"><b>#${escapeText(x.program)} ${escapeText(x.horse)}</b> · ${escapeText(x.jockey)} / ${escapeText(x.trainer)}<div>${x.records.length?x.records.map(r=>`${escapeText(r.period)} ${escapeText(r.scope)}: ${r.starts} starts · ${(r.winRate*100).toFixed(0)}% wins${r.limitedSample?' · Limited sample':''}`).join('<br>'):'Pairing data unavailable'}</div><div class="tiny muted">Joint second/third counts unavailable.${x.flags.length?' '+x.flags.map(escapeText).join(' · '):''} Research only; no rating adjustment.</div></div>`).join(''):'<div>No Top Jockey/Trainer This Race</div>');
  racebar.innerHTML=Object.keys(activeCard.races).sort((a,b)=>+a-+b).map(n=>`<button class="racebtn ${+n===race.race?"active":""}" data-race="${n}">${n}</button>`).join("");
  racebar.querySelectorAll(".racebtn").forEach(b=>b.onclick=()=>selectRace(+b.dataset.race));
  raceDate.value=race.date;raceNo.value=race.race;
