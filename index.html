@@ -70,7 +70,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 
 <div class="card span12">
 <div class="spread"><h3 class="sectiontitle">Race handicapping grid</h3><div class="small muted">Verified PP evidence · V4.4c scoring is locked</div></div><div class="sortbar" style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 12px"><span class="small muted" style="align-self:center">Sort:</span><button class="secondary sortbtn" data-sort="number">Horse # ↕</button><button class="secondary sortbtn" data-sort="ml">ML ↕</button><button class="secondary sortbtn" data-sort="prerace">Pre-Race ↕</button></div>
-<div style="overflow:auto;max-height:540px"><table id="horseTable"><thead><tr><th>Horse</th><th>ML</th><th>Pre-race*</th><th>Style</th><th>Jockey</th><th>Trainer</th><th>PP J Win%</th><th>PP T Win%</th><th>PP Fig</th><th>Handicap Rating</th><th>Fair Odds*</th></tr></thead><tbody></tbody></table></div>
+<div class="flex" style="margin-bottom:10px"><button class="primary" id="updateOddsSnapshot">Update Odds Snapshot</button><span class="small muted" id="oddsSnapshotStatus">Fetch NYRA prices for the selected race. Snapshots may be delayed.</span></div><div style="overflow:auto;max-height:540px"><table id="horseTable"><thead><tr><th>Horse</th><th>ML</th><th>Pre-race*</th><th>Style</th><th>Jockey</th><th>Trainer</th><th>PP J Win%</th><th>PP T Win%</th><th>PP Fig</th><th>Handicap Rating</th><th>Fair Odds*</th></tr></thead><tbody></tbody></table></div>
 </div>
 
 <div class="card span12"><div class="spread"><div><div class="kicker">Potentially overlooked angles</div><h3 class="sectiontitle">Things to Consider — Auto Analysis</h3></div><span class="badge gold">PP-driven</span></div>
@@ -172,6 +172,7 @@ import {evidenceProfile} from "./scoring-engine.js?v=20261008-qa1";
 import {releaseRace as websiteRace,RELEASE_ID} from "./rankings-release.js?v=20261008-qa1";
 import {parseNyraText as parseNyraEntries} from "./nyra-entry-parser.js?v=20261008-qa1";
 import {displayDistance} from "./race-conditions.js?v=20261008-qa1";
+import {applyOddsSnapshot} from "./odds-snapshot.js?v=20261008-snapshot1";
 import {applyMorningLines} from "./morning-line-overlay.js?v=20261008-odds2";
 import {runnerContext} from "./release-context.js?v=20261008-qa1";
 import {PARSER_ID,restoredPage, parseRestoredCard} from "./release-card-parser.js?v=20261008-qa1";
@@ -282,7 +283,7 @@ function renderHeader(){
 function selectRace(n){if(!activeCard.races[n])return;race=structuredClone(activeCard.races[n]);restoreRunnerEdits();raceNotes.value=state.cards?.[activeCard.id]?.notes?.[n]||"";renderAll();window.scrollTo({top:0,behavior:"smooth"})}
 function renderHorses(){
  horseTable.querySelector("tbody").innerHTML=sortedGridHorses().map(h=>{let js=h.jockey_win!=null?{win:h.jockey_win}:null,ts=h.trainer_win!=null?{win:h.trainer_win}:null;return `<tr style="${h.odds==="SCR"?"opacity:.48":""}">
-<td><span class="num">${h.n}</span><span class="horse">${escapeText(h.name)}${h.entry_status&&h.entry_status!=="REGULAR"?` <span class="pill">${h.entry_status} excluded</span>`:""}</span></td><td>${h.ml||"—"}</td><td><span class="odds">${h.odds||"—"}</span>${h.pre_race_evidence?`<div class="tiny muted">Pasted snapshot · imported ${escapeText(new Date(h.pre_race_evidence.importedAt).toLocaleTimeString())}<br>Freshness unverified</div>`:""}</td>
+<td><span class="num">${h.n}</span><span class="horse">${escapeText(h.name)}${h.entry_status&&h.entry_status!=="REGULAR"?` <span class="pill">${h.entry_status} excluded</span>`:""}</span></td><td>${h.ml||"—"}</td><td><span class="odds">${h.odds||"—"}</span>${h.pre_race_evidence?`<div class="tiny muted">${h.pre_race_evidence.status==="PUBLIC_PAGE_SNAPSHOT"?"NYRA snapshot":"Pasted snapshot"} · imported ${escapeText(new Date(h.pre_race_evidence.importedAt).toLocaleTimeString())}${h.pre_race_evidence.upstreamAgeSeconds!=null?` · cache age ${h.pre_race_evidence.upstreamAgeSeconds}s`:""}<br>Freshness unverified</div>`:""}</td>
 <td><span class="pacechip ${h.style}">${h.style||"?"}</span></td><td>${escapeText(h.source_context?.jockey?.name||h.jockey_annual?.jockey||h.j||"—")}</td><td>${escapeText(h.source_context?.trainer?.name||h.t||"—")}</td>
 <td>${js?js.win.toFixed(1)+"%":"—"}</td><td>${ts?ts.win.toFixed(1)+"%":"—"}</td><td>${displayVal(h.last)}</td><td><span class="score">${score(h)}</span><div style="margin-top:4px">${confidenceBadge(h)}</div></td><td><b>${fairOddsMap()[h.n]||"—"}</b></td></tr>`}).join("");
 }
@@ -333,6 +334,25 @@ function updateUrl(){const venue=["belmont","aqueduct","saratoga"].includes(trac
 function parseNyraText(text){return parseNyraEntries(text,{track:track.value,date:raceDate.value,race:+raceNo.value})}
 
 parsePaste.onclick=()=>{let p=parseNyraText(nyraPaste.value);if(!p){parseStatus.textContent="I couldn't reliably identify the runners. Try copying just the race section with horse, jockey/trainer, program number and odds.";return}try{race=applyMorningLines(race,p,{sourceUrl:raceUrl.value,observedAt:new Date().toISOString(),includeToteSnapshot:true});activeCard.races[race.race]=structuredClone(race);save();renderAll();parseStatus.textContent=`Updated ${p.horses.length} entry references, including scratches and current-odds snapshots. Prices are not a live feed; freshness is unverified. PP rating inputs retained.`}catch(e){parseStatus.textContent="Morning lines were not changed: "+e.message}};
+
+document.getElementById('updateOddsSnapshot').onclick=async()=>{
+ const button=document.getElementById('updateOddsSnapshot'),status=document.getElementById('oddsSnapshotStatus'),initial={card:activeCard.id,date:race.date,race:race.race,track:race.track};
+ button.disabled=true;status.textContent='Fetching NYRA snapshot…';
+ try{
+  const venue=initial.track.toLowerCase().includes('saratoga')?'saratoga':initial.track.toLowerCase().includes('aqueduct')?'aqueduct':'belmont';
+  const url=new URL('/odds','https://nyra-odds-snapshot.beigebeech4.chatgpt.site');url.search=new URLSearchParams({track:venue,date:initial.date,race:initial.race});
+  const response=await fetch(url,{cache:'no-store',signal:AbortSignal.timeout(22000)});
+  if(!response.ok)throw Error('Odds service unavailable (HTTP '+response.status+')');
+  if(!(response.headers.get('content-type')||'').includes('application/json'))throw Error('Odds service access is not enabled');
+  const snapshot=await response.json();
+  if(activeCard.id!==initial.card||race.date!==initial.date||race.race!==initial.race||race.track!==initial.track)throw Error('Race changed during update; response discarded');
+  const updated=applyOddsSnapshot(race,snapshot);
+  race=updated;activeCard.races[race.race]=structuredClone(race);save();renderAll();
+  status.textContent='Updated '+snapshot.runners.length+' runners at '+new Date(snapshot.fetchedAt).toLocaleTimeString()+'. '+(snapshot.upstreamAgeSeconds==null?'Source age unknown.':'Source cache age '+snapshot.upstreamAgeSeconds+' seconds. ')+(snapshot.upstreamAgeSeconds>120?'Delayed snapshot. ':'')+'Freshness unverified.';
+ }catch(e){status.textContent='Update failed: '+e.message+'. Previous prices retained; they may be stale.';}
+ finally{button.disabled=false;}
+};
+
 loadSample.onclick=()=>{resetSample.click();parseStatus.textContent="October 3 full card restored. All 11 races / 107 runners are bundled."};
 tryLoad.onclick=async()=>{loadStatus.textContent="Trying NYRA directly…";try{let r=await fetch(raceUrl.value);if(!r.ok)throw new Error("HTTP "+r.status);let txt=await r.text();let doc=new DOMParser().parseFromString(txt,"text/html");let p=parseNyraText(doc.body.innerText);if(!p)throw new Error("Could not parse");race=applyMorningLines(race,p,{sourceUrl:raceUrl.value,observedAt:new Date().toISOString()});activeCard.races[race.race]=structuredClone(race);save();renderAll();loadStatus.textContent=`Updated ${p.horses.length} entry references, including scratches; rankings recalculated from retained PP inputs.`}catch(e){loadStatus.textContent="Direct browser load was blocked or could not be parsed. Open the NYRA page and use the paste fallback below."}};
 
