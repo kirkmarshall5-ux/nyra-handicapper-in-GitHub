@@ -50,6 +50,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <button class="tab" data-tab="pp">PP Lab</button>
 <button class="tab" data-tab="public">Load NYRA</button>
 <button class="tab" data-tab="bets">Bet Builder</button>
+<button class="tab" data-tab="knowledge">Knowledge Base</button>
 </nav></div></header>
 
 <main>
@@ -131,6 +132,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <div id="parseStatus" class="small muted" style="margin-top:8px"></div></div>
 </div></section>
 
+<section id="knowledge" class="hidden"></section>
 <section id="bets" class="hidden"><div class="grid">
 <div class="card span12"><div class="kicker">Research only · no betting recommendations</div><h3 class="sectiontitle">Win Bet Builder &amp; Quote Recorder</h3>
 <div id="researchRace" class="small muted"></div>
@@ -163,6 +165,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 </main>
 
 <script type="module">
+import {initKnowledgeBase} from "./knowledge-base.js?v=20261008-kb1";
 import {initResearchBuilder,renderResearchBuilder} from "./research-builder-ui.js?v=20261008-qa1";
 import {connectionRows,LEADER_SCOPE,LEADER_SOURCE} from "./connection-research.js?v=20261008-jt1";
 import {fieldConnections} from "./pp-context.js?v=20261008-qa1";
@@ -325,7 +328,7 @@ function renderConnections(){
 function renderWeights(){weightsDiv()}
 function weightsDiv(){document.getElementById("weights").innerHTML='<div class="small">Last verified Beyer: 40 · best of latest 3: 22 · PP jockey: 7 · PP trainer: 8 · trainer context for ≤2 starts: 12. Verified zero figures remain included; only missing components are omitted. Figure values require source verification. V4.4c adjustments are capped at ±6. Rank unrounded totals, then horse name.</div>';resetWeights.disabled=true;resetWeights.textContent="V4.4c weights locked"}
 
-document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));b.classList.add("active");["raceday","pace","connections","pp","public","bets"].forEach(id=>document.getElementById(id).classList.toggle("hidden",id!==b.dataset.tab))});
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));b.classList.add("active");["raceday","pace","connections","pp","public","bets","knowledge"].forEach(id=>document.getElementById(id).classList.toggle("hidden",id!==b.dataset.tab))});
 raceNotes.value=state.cards?.[activeCard.id]?.notes?.[1]||"";raceNotes.oninput=e=>{const cs=state.cards[activeCard.id]||(state.cards[activeCard.id]={runners:{},notes:{}});cs.notes=cs.notes||{};cs.notes[race.race]=e.target.value;save()};
 
 function updateUrl(){const venue=["belmont","aqueduct","saratoga"].includes(track.value)?track.value:"belmont";const url=`https://www.nyra.com/${venue}/racing/entries/?day=${race.date}&limit=entries&race=${race.race}`;raceUrl.value=url;openRace.href=url;nyraRaceLink.href=url}
@@ -379,6 +382,7 @@ clearPP.onclick=()=>{for(const r of Object.values(activeCard.races))for(const h 
 
 calcBtn.onclick=()=>{const cnt=id=>document.getElementById(id).value.split(",").map(x=>x.trim()).filter(Boolean).length;let t=betType.value,legs=t==="Exacta"?2:t==="Trifecta"?3:+t.split(" ")[1],counts=[cnt("leg1"),cnt("leg2"),cnt("leg3"),cnt("leg4"),cnt("leg5")].slice(0,legs),combos=counts.reduce((a,b)=>a*b,1),cost=combos*(+base.value||0);ticketOut.textContent=`${combos} combinations · $${cost.toFixed(2)}`};
 
+initKnowledgeBase(()=>({card:activeCard,race,rating:currentRating()}));
 initResearchBuilder(()=>({card:activeCard,race,rating:currentRating()}));
 renderAll();
 </script>
