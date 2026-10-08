@@ -1,3 +1,4 @@
+import {raceConditions,conditionBlockers} from './race-conditions.js';
 import {ppContext,datedWorkoutText} from './pp-context.js?v=20261007-context1';
 import {parseAnnualJockey} from './jockey-research.js?v=20261006-j1preview1';
 import {pythonRound} from './scoring-engine.js';
@@ -30,10 +31,10 @@ export function parseRestoredCard(pages,{sourceName='document'}={}){
   for(let i=0;i<ls.length;i++){const s=ls[i].text;if(/^\s*Entered For Main Track Only\s*$/i.test(s))status='MTO';else if(/^\s*Also[- ]Eligible:?\s*$/i.test(s))status='AE';if(/^Own:/.test(s)){const name=ls[i-1]?.text.trim().replace(/\s*\([^)]*\)$/,'');if(!name)throw new Error('Owner identity missing');let start=i-1,n='',ml='';const prior=ls.slice(Math.max(0,i-4),i-1).map(l=>l.text.trim());const program=prior.findIndex(s=>/^\d{1,2}[ABX]?$/.test(s));if(program>=0){n=prior[program];start=Math.max(0,i-4)+program;const odds=prior.slice(program+1).find(s=>/^\d+\s*(?:-\s*\d+|\/\s*\d+)$/.test(s));if(odds)ml=odds.replace(/\s+/g,'').replace('-','/')}anchors.push({start,own:i,name,status,n,ml})}}
   if(!anchors.length)throw new Error('No owner-anchored runners in race '+rn);
   const before=ls.slice(0,anchors[0].start).map(l=>l.text).join('\n'),headers=[...before.matchAll(new RegExp('(?:^|\\n)'+rn+'\\s*\\n(?:Saratoga|Aqueduct|Belmont Park|Belmont at the Big A|Meadowlands|Churchill Downs|Keeneland|Finger Lakes)\\b[^\\n]*\\n','g'))],header=headers.length?before.slice(headers.at(-1).index):before,blockers=[];
-  if(!headers.length)blockers.push({reason:'race-heading-unverified'});if(/\bHurdles\b|\bSteeplechase\b/i.test(header))blockers.push({reason:'unsupported-hurdle-race-type'});
+  if(!headers.length)blockers.push({reason:'race-heading-unverified'});const conditions=raceConditions(header);blockers.push(...conditionBlockers(conditions));
   const horses=anchors.map((a,i)=>horseEvidence(ls.slice(a.start,anchors[i+1]?.start??ls.length),{name:a.name,n:a.n,ml:a.ml,entry_status:a.status,included_in_frozen_field:a.status==='REGULAR'}));
   if(new Set(horses.map(h=>h.name)).size!==horses.length)throw new Error('Duplicate horse identity in race '+rn);
-  races[rn]={race:+rn,horses,parser_blockers:blockers,surface:/\([^)]*turf[^)]*\)/i.test(header)?'Turf':'Dirt',header,cls:clean(header.split('\n').slice(0,5).join(' ')),oddsMode:'Unknown',dist:header.match(/\n([^\n]*?(?:Furlongs?|MILES?|Miles?))/)?.[1]?.trim()||'',post:header.match(/Post time:\s*([^\n]*?)(?= Wagers:|$|\n)/)?.[1]?.trim()||''};
+  races[rn]={race:+rn,horses,parser_blockers:blockers,surface:conditions.surface,conditions,header,cls:clean(header.split('\n').slice(0,5).join(' ')),oddsMode:'Unknown',dist:header.match(/\n([^\n]*?(?:Furlongs?|MILES?|Miles?))/)?.[1]?.trim()||'',post:header.match(/Post time:\s*([^\n]*?)(?= Wagers:|$|\n)/)?.[1]?.trim()||''};
  }
  const text=all.map(l=>l.text).join('\n'),footers=[...text.matchAll(/Daily Racing Form\s+(Saratoga|Aqueduct|Belmont Park|Belmont at the Big A|Meadowlands|Churchill Downs|Keeneland|Finger Lakes)\s*\(\s*(\d{1,2})\/\s*(\d{1,2})\/\s*(20\d{2})\s*\)/g)];
  if(!footers.length)throw new Error('Current card date/track footer unverified');
