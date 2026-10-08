@@ -2,7 +2,7 @@ const months={'â':1,'á':2,'à':3,'ß':4,'Ü':5,'Þ':6,'Û':7,'Ý':8,'æ':9,'å
 export function figureContext(p,today){
  const m=(p.running_date_track||'').match(/^(\d{1,2})(.)(\d{2})=/);if(!m||!months[m[2]])return null;const d=new Date(Date.UTC(2000+ +m[3],months[m[2]]-1,+m[1]));if(d.getUTCMonth()+1!==months[m[2]]||d.getUTCDate()!==+m[1]||d.toISOString().slice(0,10)>=today)return null;
  const tail=(p.source_line||'').split(p.running_date_track)[1]||'',q=tail.trim().match(/^(fst|fm|gd|sly|my|yl|sf|hy)(?:ø)?\s+Í?(\d[^\s]*)/);if(!q)return null;
- const anchor=tail.search(new RegExp('\\b'+p.figure+'\\s+'+p.post+'\\s*/\\s*'+p.field_size+'\\b')),head=anchor>=0?tail.slice(0,anchor):'';if(!head)return null;const surface=/[úü]/.test(head)?'Synthetic':/[êÑ]/.test(head)||['fm','yl','sf','hy'].includes(q[1])?'Turf':['fst','gd','sly','my'].includes(q[1])?'Dirt':null;
+ const anchor=tail.search(new RegExp('\\b'+p.figure+'\\s+'+p.post+'\\s*/\\s*'+p.field_size+'\\b')),head=anchor>=0?tail.slice(0,anchor):'';if(!head)return null;const surface=/[úü]/.test(head)?'Synth':/[êÑ]/.test(head)||['fm','yl','sf','hy'].includes(q[1])?'Turf':['fst','gd','sly','my'].includes(q[1])?'Dirt':null;
  const category=/f/.test(q[2])?(parseInt(q[2],10)>=8?'route':'sprint'):/^[1234]/.test(q[2])?'route':null;
  const finishers=[...(p.source_line||'').matchAll(/[A-Za-z’'*.\-]+\d{2,3}[¦¨©ª«¬®¥§°±²³´µ¶·¸¹º¼½¾ôõöøÇÉóñ]+/g)];const last=finishers.at(-1),trip=finishers.length>=3?(p.source_line||'').slice(last.index+last[0].length).trim():null;
  return {date:d.toISOString().slice(0,10),surface,category,condition:q[1],distance_token:q[2],figure:p.figure,source_line:p.source_line,trip_text:trip,trip_status:trip?'PARSED_SOURCE_TEXT_IMPACT_UNVERIFIED':'UNKNOWN',figure_correction:null};
