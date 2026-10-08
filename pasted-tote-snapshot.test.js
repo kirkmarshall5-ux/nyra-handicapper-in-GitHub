@@ -1,0 +1,6 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {applyMorningLines} from './morning-line-overlay.js';
+const race={race:1,date:'2026-10-08',track:'Belmont Park',surface:'Dirt',horses:[{n:'1',name:'Hedge Book',ml:'3/1',odds:'—',beyer_figures:[74,75]}]};
+const entries={race:1,date:race.date,track:race.track,horses:[{n:1,name:'Hedge Book',ml:'3/1',odds:'5/2'}]};
+const source={sourceUrl:'https://www.nyra.com/belmont/racing/entries/',observedAt:'2026-10-08T16:05:00Z',includeToteSnapshot:true};
+test('pasted tote snapshot displays independently of ML and remains unverified',()=>{const x=applyMorningLines(race,entries,source);assert.equal(x.horses[0].odds,'5/2');assert.equal(x.horses[0].ml,'3/1');assert.deepEqual(x.horses[0].beyer_figures,[74,75]);assert.equal(x.horses[0].pre_race_evidence.bettingEligible,false);assert.equal(x.horses[0].pre_race_evidence.observedAt,null);assert.equal(race.horses[0].odds,'—');});
+test('default ML overlay does not import tote; invalid price rejects atomically',()=>{assert.equal(applyMorningLines(race,entries,{...source,includeToteSnapshot:false}).horses[0].odds,'—');assert.throws(()=>applyMorningLines(race,{...entries,horses:[{...entries.horses[0],odds:'—'}]},source));assert.equal(race.horses[0].ml,'3/1');});
