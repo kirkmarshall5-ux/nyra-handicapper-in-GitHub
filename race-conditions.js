@@ -1,5 +1,10 @@
 // One source of truth for scheduled conditions; alternate wording is context only.
 export const CONDITIONS_VERSION='primary-conditions-v1';
+// DRF's PDF font uses these characters for fractional distances.
+export function displayDistance(distance=''){
+ const fractions={'ô':'1/2','Â':'1/16','±':'3/16','²':'1/4','´':'3/8','ö':'3/4','ø':'7/8'};
+ return String(distance).replace(/(\d)([ôÂ±²´öø])/g,(_,whole,f)=>whole+' '+fractions[f]);
+}
 export function raceConditions(header=''){
  const distanceLine=String(header).split('\n').find(l=>/\b(?:MILES?|FURLONGS?|YARDS?)\b/i.test(l)&&!/^\s*(?:if|alternate)\b/i.test(l))||'';
  const primary=distanceLine.split(/\b(?:if|alternate)\b/i)[0];
