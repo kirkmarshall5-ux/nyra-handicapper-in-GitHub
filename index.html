@@ -262,7 +262,7 @@ function renderThings(){
 function renderHeader(){
  cardKicker.textContent=`${activeCard.track||race.track||"Race card"} · ${activeCard.date||race.date||"date unknown"} · active DRF card`;
  raceTitle.textContent=`${race.track} · Race ${race.race}`;
- raceBadges.innerHTML=`<span class="badge gold">${escapeText(displayDistance(race.dist)||"—")} ${race.surface||""}</span><span class="badge">${race.cls||"Race"}</span><span class="badge">${race.post||"—"}</span><span class="badge green">Active card</span>`;
+ raceBadges.innerHTML=`<span class="badge gold">${escapeText(displayDistance(race.dist)||"—")} ${race.surface||""}</span><span class="badge">${escapeText(displayDistance(race.cls)||"Race")}</span><span class="badge">${race.post||"—"}</span><span class="badge green">Active card</span>`;
  let active=race.horses.filter(h=>h.odds!=="SCR");
  const ml=active.filter(h=>h.included_in_frozen_field!==false&&Number.isFinite(oddsNumber(h.ml))).sort((a,b)=>oddsNumber(a.ml)-oddsNumber(b.ml)).slice(0,3);
  topMl.innerHTML=ml.length?ml.map((h,i)=>`<div><b>${i+1}. #${h.n} ${h.name}</b> <span class="pill">${h.ml||"—"}</span></div>`).join(""):"<span class=\"muted\">Verified morning line unavailable</span>";
