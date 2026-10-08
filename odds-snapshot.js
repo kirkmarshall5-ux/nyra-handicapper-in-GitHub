@@ -8,7 +8,7 @@ export function applyOddsSnapshot(race,snapshot,now=Date.now()){
  const out=structuredClone(race),seen=new Set();
  for(const row of snapshot.runners){
   const horse=out.horses.find(h=>String(h.n)===String(row.program)&&normalize(h.name)===normalize(row.name));
-  if(!horse||seen.has(String(row.program)))throw Error('Unknown or duplicate runner; previous prices retained');
+  if(!horse||seen.has(String(row.program)))throw Error(`Unknown or duplicate runner #${row.program} (${row.name}); previous prices retained`);
   seen.add(String(row.program));
   if(!/^(SCR|\d+(?:\.\d+)?\/\d+(?:\.\d+)?)$/.test(row.odds)||row.odds!=='SCR'&&Number(row.odds.split('/')[1])<=0)throw Error('Invalid price; previous prices retained');
   if(horse.odds==='SCR'&&row.odds!=='SCR')throw Error('Previously scratched runner requires field verification');
