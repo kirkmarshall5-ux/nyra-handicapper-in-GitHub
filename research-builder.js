@@ -29,6 +29,7 @@ export function quoteCapture({card,race,rating,horseNumber,odds,sourceId,evidenc
  if(observedLive!==true)errors.push('Confirm that the quote was copied from a live tote.');
  if(q===null||post===null)errors.push('Use full quote/post timestamps with Z or an explicit offset, such as -04:00.');
  if(!finite(now)||q!==null&&q>now)errors.push('Quote time cannot be in the future.');
+ if(q!==null&&post!==null&&q>=post)errors.push('Quote must be observed before the recorded post time.');
  if(q!==null&&post!==null){const dateET=new Intl.DateTimeFormat('en-CA',{timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(post));if(dateET!==race.date)errors.push('Post date must match the card date in New York time.');}
  if(errors.length)return {record:null,errors};
  const ranked=rating.rankings.find(h=>h.name===horse.name),timing=now-q<=RULES.maxQuoteAgeSeconds*1000&&post-now>=RULES.minSecondsBeforePost*1000;
