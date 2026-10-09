@@ -1,4 +1,4 @@
-import {quoteCapture,previewBudget,money} from './research-builder.js?v=20261007-builder1';
+import {quoteCapture,previewBudget,money} from './research-builder.js?v=20261009-posttime-guard';
 const key='nyraResearchQuoteLogV1',settingsKey='nyraResearchBudgetV1';
 let context,lastRace='',records=[];
 const el=id=>document.getElementById(id),escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
