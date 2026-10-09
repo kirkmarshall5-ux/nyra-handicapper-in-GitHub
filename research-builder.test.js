@@ -19,6 +19,17 @@ test('bad identity, conditional/scratched horses, malformed odds and future quot
  for(const patch of [{horseNumber:'9'},{odds:'2/1/4'},{observedLive:false},{evidenceRef:''},{quoteTime:'2026-10-07T17:07:01Z'},{postTime:'2026-10-08T13:10:00-04:00'}])assert.equal(quoteCapture({...input,...patch}).record,null);
  for(const patch of [{odds:'SCR'},{included_in_frozen_field:false}])assert.equal(quoteCapture({...input,race:{...input.race,horses:[{...input.race.horses[0],...patch}]}}).record,null);
 });
+test('quotes at or after recorded post time are rejected before saving',()=>{
+ for(const quoteTime of ['2026-10-07T13:10:00-04:00','2026-10-07T13:10:01-04:00','2026-10-07T13:11:00-04:00']){
+  const result=quoteCapture({...input,quoteTime,now:Date.parse('2026-10-07T17:12:00Z')});
+  assert.equal(result.record,null);
+  assert.ok(result.errors.some(e=>e.includes('before the recorded post time')));
+ }
+ const valid=quoteCapture({...input,quoteTime:'2026-10-07T13:09:59-04:00',now:Date.parse('2026-10-07T17:09:59Z')});
+ assert.deepEqual(valid.errors,[]);
+ assert.equal(valid.record.decision,'PASS');
+});
+
 test('stale, late and PASS-race observations remain auditable, never become wagers',()=>{
  const a=quoteCapture({...input,quoteTime:'2026-10-07T13:00:00-04:00'}).record;assert.equal(a.quoteTimingEligible,false);assert.equal(a.decision,'PASS');
  const r=quoteCapture({...input,rating:{decision:'PASS',rankings:[],pass_reasons:[{reason:'FTS-unrated'}]}}).record;assert.equal(r.selectionFrozen,false);assert.equal(r.rank,null);assert.equal(r.racePassReasons[0].reason,'FTS-unrated');
