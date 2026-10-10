@@ -8,15 +8,15 @@ const SOURCES=Object.freeze({
 });
 export function oddsSourceForTrack(track){
  const t=String(track||'').trim().toLowerCase().replace(/[^a-z0-9]/g,'');
- if(t==='bel'||t==='belmont'||t==='belmontpark'||t==='baq'||t==='belmontatthebig a'.replace(/[^a-z0-9]/g,''))return {id:'belmont',...SOURCES.belmont};
+ if(t==='bel'||t==='belmont'||t==='belmontpark'||t==='baq'||t==='belmontatthebiga')return {id:'belmont',...SOURCES.belmont};
  if(t==='aqu'||t==='aqueduct')return {id:'aqueduct',...SOURCES.aqueduct};
  if(t==='sar'||t==='saratoga')return {id:'saratoga',...SOURCES.saratoga};
  if(t==='kee'||t==='keeneland')return {id:'keeneland',...SOURCES.keeneland};
  if(t==='cd'||t==='churchill'||t==='churchilldowns')return {id:'churchill',...SOURCES.churchill};
  return {id:null,label:track||'Unknown track',mode:'unsupported'};
 }
-const cleanName=s=>String(s||'').replace(/\\s*\\((?:GB|IRE|FR|GER|ARG|BRZ|CHI|AUS|NZ|JPN|CAN|USA|ITY|SAF)\\)\\s*$/i,'').toLowerCase().replace(/[^a-z0-9]/g,'');
-const validOdds=s=>/^(?:\\d+(?:\\.\\d+)?\\/\\d+(?:\\.\\d+)?|\\d+(?:\\.\\d+)?)$/.test(s)&&(!s.includes('/')||Number(s.split('/')[1])>0);
+const cleanName=s=>String(s||'').replace(/\s*\((?:GB|IRE|FR|GER|ARG|BRZ|CHI|AUS|NZ|JPN|CAN|USA|ITY|SAF)\)\s*$/i,'').toLowerCase().replace(/[^a-z0-9]/g,'');
+const validOdds=s=>/^(?:\d+(?:\.\d+)?\/\d+(?:\.\d+)?|\d+(?:\.\d+)?)$/.test(s)&&(!s.includes('/')||Number(s.split('/')[1])>0);
 export function applyManualOdds(race,rows,{sourceUrl,observedAt,now=Date.now()}={}){
  const source=oddsSourceForTrack(race.track);
  if(source.mode!=='manual')throw Error('Manual source adapter not configured for this track');
@@ -40,10 +40,10 @@ export function applyManualOdds(race,rows,{sourceUrl,observedAt,now=Date.now()}=
  return out;
 }
 export function parseManualOdds(text){
- const lines=String(text||'').trim().split(/\\r?\\n/).filter(Boolean);
+ const lines=String(text||'').trim().split(/\r?\n/).filter(Boolean);
  if(!lines.length)throw Error('Paste one runner per line');
  return lines.map((line,i)=>{
-  const parts=line.split(/\\s*[,|\\t]\\s*/).map(x=>x.trim());
+  const parts=line.split(/\s*[,|\t]\s*/).map(x=>x.trim());
   if(parts.length!==3||!parts.every(Boolean))throw Error('Line '+(i+1)+' must contain program number, horse name, odds separated by commas, tabs or |');
   return {program:parts[0],name:parts[1],odds:parts[2]};
  });
