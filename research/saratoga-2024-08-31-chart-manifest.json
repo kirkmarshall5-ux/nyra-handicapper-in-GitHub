@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "description": "Saratoga August 31 2024 pilot chart acquisition queue; no actual result data verified",
+  "createdAt": "2026-10-10",
+  "races": [
+    {
+      "raceId": "SAR-2024-08-31-R1",
+      "track": "SAR",
+      "date": "2024-08-31",
+      "raceNumber": 1,
+      "ppSourceId": "SAR--08-31-2024.pdf",
+      "distance": "6.5F",
+      "surface": "dirt",
+      "chartStatus": "AWAITING_OFFICIAL_CHART",
+      "officialChartId": null,
+      "officialChartUrl": null,
+      "fullFieldReconciled": false,
+      "callMappingVerified": false,
+      "notes": "Keeneland pre-race tip sheet confirms race 1 6.5F dirt; not an official chart or final-field record."
+    },
+    {
+      "raceId": "SAR-2024-08-31-R2",
+      "track": "SAR",
+      "date": "2024-08-31",
+      "raceNumber": 2,
+      "ppSourceId": "SAR--08-31-2024.pdf",
+      "distance": "1 1/16M",
+      "surface": "inner turf",
+      "chartStatus": "AWAITING_OFFICIAL_CHART",
+      "officialChartId": null,
+      "officialChartUrl": null,
+      "fullFieldReconciled": false,
+      "callMappingVerified": false,
+      "notes": "DRF page 3 confirms pre-race inner turf 1 1/16M; verify actual surface and scratches in official chart."
+    }
+  ]
+}
