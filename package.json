@@ -3,11 +3,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node --test simulation-chart-reconciliation.test.js simulation-evidence-inventory.test.js simulation-validator.test.js knowledge-base.test.js odds-snapshot.test.js pasted-tote-snapshot.test.js card-loader.test.js scoring-engine.test.js wager-engine.test.js restored-v44c.test.js jockey-research.test.js pp-context.test.js win-value-gate.test.mjs research-builder.test.js research-builder-ui.test.js data-corrected-research.test.js rankings-release.test.js morning-line-overlay.test.js nyra-entry-parser.test.js race-conditions.test.js",
+    "test": "node --test simulation-historical-running-style.test.js simulation-chart-reconciliation.test.js simulation-evidence-inventory.test.js simulation-validator.test.js knowledge-base.test.js odds-snapshot.test.js pasted-tote-snapshot.test.js card-loader.test.js scoring-engine.test.js wager-engine.test.js restored-v44c.test.js jockey-research.test.js pp-context.test.js win-value-gate.test.mjs research-builder.test.js research-builder-ui.test.js data-corrected-research.test.js rankings-release.test.js morning-line-overlay.test.js nyra-entry-parser.test.js race-conditions.test.js",
     "test:pdf-parity": "node scripts/check-pdf-parity.mjs",
     "test:simulation": "node --test simulation-validator.test.js",
     "test:simulation-evidence": "node --test simulation-evidence-inventory.test.js",
-    "test:simulation-chart": "node --test simulation-chart-reconciliation.test.js"
+    "test:simulation-chart": "node --test simulation-chart-reconciliation.test.js",
+    "test:historical-style": "node --test simulation-historical-running-style.test.js"
   },
   "devDependencies": {
     "pdfjs-dist": "4.10.38"
