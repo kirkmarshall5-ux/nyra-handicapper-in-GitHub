@@ -32,6 +32,7 @@ function compareProgram(a,b){
 }
 export function projectRaceSetup(race){
  const markers=raceCallMarkers(race.dist);
+ if(/hurdle|steeplechase/i.test(String(race.cls||'')+' '+String(race.surface||'')))return {available:false,reason:'Hurdle and steeplechase races are excluded from this illustration.',markers:[],rows:[]};
  if(!markers)return {available:false,reason:'Distance unavailable or unsupported for fractional projection.',markers:[],rows:[]};
  const eligible=(race.horses||[]).filter(h=>h.odds!=='SCR'&&h.included_in_frozen_field!==false&&h.entry_status!=='MTO'&&h.entry_status!=='AE');
  if(eligible.length<2)return {available:false,reason:'At least two confirmed runners are required.',markers,rows:[]};
