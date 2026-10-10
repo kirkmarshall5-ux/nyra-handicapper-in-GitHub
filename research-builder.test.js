@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {previewBudget,quoteCapture,money,timestamp,preRaceFreeze,sealedResearchExport} from './research-builder.js';
-import {createHash,webcrypto} from 'node:crypto';
+import {createHash} from 'node:crypto';
 const b={cash:300,dailyStaked:0,outstandingBets:0,alreadyBet:false};
 const now=Date.parse('2026-10-07T17:07:00Z'),input={card:{id:'test',sourceName:'fixture.pdf'},race:{date:'2026-10-07',track:'Belmont Park',race:1,horses:[{n:'3',name:'Runner'}]},rating:{decision:'RATEABLE',rankings:[{n:'3',name:'Runner',v44c_rank:1,v44c_unrounded_score:80}],pass_reasons:[]},horseNumber:'3',odds:'5/2',sourceId:'synthetic-test-only',evidenceRef:'synthetic-test-only',quoteTime:'2026-10-07T13:06:30-04:00',postTime:'2026-10-07T13:10:00-04:00',now,observedLive:true,finalFieldVerified:true,surfaceVerified:true,budget:previewBudget(b)};
 test('fixed $2 preview respects cash, exposure, outstanding and duplicate boundaries',()=>{
@@ -53,8 +53,6 @@ test('freeze captures the full field before post and rejects post-race or unveri
  assert.equal(preRaceFreeze({...p,postTime:'2026-10-08T13:10:00-04:00'}).freeze,null);
 });
 test('export digest covers exact records and frozen rankings, and changes on tampering',async()=>{
- const oldCrypto=globalThis.crypto;globalThis.crypto=webcrypto;
- try{
   const freezes=[preRaceFreeze({card:input.card,race:input.race,rating:input.rating,postTime:input.postTime,now,finalFieldVerified:true,surfaceVerified:true}).freeze];
   const records=[quoteCapture(input).record];
   const sealed=await sealedResearchExport({records,freezes,exportedAt:'2026-10-07T17:08:00Z'});
@@ -63,5 +61,4 @@ test('export digest covers exact records and frozen rankings, and changes on tam
   assert.equal(sealed.anchorStatus,'UNVERIFIED_LOCAL_EXPORT');
   const modified=await sealedResearchExport({records,freezes:[{...freezes[0],raceDecision:'PASS_TAMPERED'}],exportedAt:'2026-10-07T17:08:00Z'});
   assert.notEqual(modified.recordsDigestSha256,sealed.recordsDigestSha256);
- }finally{globalThis.crypto=oldCrypto}
 });
