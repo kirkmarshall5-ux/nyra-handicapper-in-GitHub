@@ -1,6 +1,9 @@
+import {oddsSourceForTrack} from './multitrack-odds.js';
 const normalize=s=>String(s||'').replace(/\s*\((?:GB|IRE|FR|GER|ARG|BRZ|CHI|AUS|NZ|JPN|CAN|USA|ITY|SAF)\)\s*$/i,'').toLowerCase().replace(/[^a-z0-9]/g,'');
 export function applyOddsSnapshot(race,snapshot,now=Date.now()){
- const venue=String(race.track).toLowerCase().includes('saratoga')?'saratoga':String(race.track).toLowerCase().includes('aqueduct')?'aqueduct':'belmont';
+ const source=oddsSourceForTrack(race.track);
+ if(source.mode!=='automatic')throw Error('No NYRA odds adapter for '+race.track);
+ const venue=source.venue;
  if(snapshot.schemaVersion!==1||snapshot.track!==venue||snapshot.date!==race.date||snapshot.race!==race.race)throw Error('Snapshot race does not match the active card');
  const time=Date.parse(snapshot.fetchedAt);
  if(!Number.isFinite(time)||time>now+5000||now-time>60000)throw Error('Retrieval timestamp is invalid or too old');

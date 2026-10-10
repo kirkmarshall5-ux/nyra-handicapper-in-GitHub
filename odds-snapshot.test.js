@@ -6,3 +6,5 @@ test('identity, stale timestamp, partial field and bad prices reject atomically'
 
 test('recognized country suffix matches while genuine different name rejects',()=>{const r={...race,horses:[{n:'1',name:'Majority Interest',odds:'—'}]},s={...snapshot,runners:[{program:'1',name:'Majority Interest (Gb)',odds:'4/1'}]};assert.equal(applyOddsSnapshot(r,s,now).horses[0].odds,'4/1');assert.throws(()=>applyOddsSnapshot(r,{...s,runners:[{program:'1',name:'Majority Interest Other',odds:'4/1'}]},now));});
 test('scratch rows update atomically without erasing PP or allowing reactivation',()=>{const s={...snapshot,runners:[{program:'1',name:'Hedge Book',odds:'SCR'}]},r=applyOddsSnapshot(race,s,now);assert.equal(r.horses[0].odds,'SCR');assert.equal(r.horses[0].ml,'3/1');assert.throws(()=>applyOddsSnapshot(r,snapshot,now));});
+
+test('NYRA snapshot rejects non-NYRA tracks rather than falling back to Belmont',()=>{assert.throws(()=>applyOddsSnapshot({...race,track:'Churchill Downs'},snapshot,now),/No NYRA odds adapter/);assert.throws(()=>applyOddsSnapshot({...race,track:'Keeneland'},snapshot,now),/No NYRA odds adapter/);});
