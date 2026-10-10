@@ -92,6 +92,11 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <div id="weights" style="margin-top:12px"></div><button id="resetWeights" class="secondary" style="width:100%;margin-top:8px">Reset weights</button></div>
 
 <div class="card span12">
+<div class="kicker">Illustrative race flow · information only</div><h3 class="sectiontitle">Projected race set up</h3>
+<div class="small muted" style="margin-bottom:10px">Projected running positions by race call. 1 = first, 2 = second, etc. These are rough pace-based illustrations, NOT verified predicted finish orders, handicap ratings, or wagering advice. The stretch marker is a phase estimate, not a measured track pole. Missing pace evidence can prevent a projection.</div>
+<div id="projectedRaceSetup" style="overflow-x:auto"></div></div>
+
+<div class="card span12">
 <div class="kicker">Adaptive evidence model</div><h3 class="sectiontitle">What the Handicap Rating Knows</h3>
 <div class="small muted" style="margin-bottom:10px">Missing race information is unknown. First-time starters and missing verified career/Beyer evidence force a race PASS. Core coverage describes the ranking inputs, not the chance of winning or completeness of context. Workouts and pedigree below are source notes only; they do not change the locked score. Older saved cards must be uploaded again to extract these notes.</div>
 <div id="evidenceSummary" class="evidence"></div></div>
@@ -178,6 +183,7 @@ import {passRaceDisplay} from "./pass-race-display.js?v=20261010-passview1";
 import {releaseRace as websiteRace,RELEASE_ID} from "./rankings-release.js?v=20261008-qa1";
 import {parseNyraText as parseNyraEntries} from "./nyra-entry-parser.js?v=20261008-qa1";
 import {displayDistance} from "./race-conditions.js?v=20261008-qa1";
+import {projectRaceSetup} from "./projected-race-setup.js?v=20261010-1";
 import {applyOddsSnapshot} from "./odds-snapshot.js?v=20261008-scratchfix3";
 import {applyMorningLines} from "./morning-line-overlay.js?v=20261008-odds2";
 import {runnerContext} from "./release-context.js?v=20261008-qa1";
@@ -267,7 +273,7 @@ document.querySelectorAll(".sortbtn").forEach(b=>b.onclick=()=>{
  else {gridSort.key=key;gridSort.dir=key==="number"?1:-1}
  renderHorses();updateSortButtons();
 });
-function renderAll(){renderReleaseContext();renderJ1Comparison();renderHeader();renderHorses();updateSortButtons();renderPace();renderEdit();renderEvidence();renderConnections();renderLeaderboards();renderWeights();renderThings();renderRaceInsights();renderBetSuggestions();renderResearchBuilder();updateUrl()}
+function renderAll(){renderProjectedRaceSetup();renderReleaseContext();renderJ1Comparison();renderHeader();renderHorses();updateSortButtons();renderPace();renderEdit();renderEvidence();renderConnections();renderLeaderboards();renderWeights();renderThings();renderRaceInsights();renderBetSuggestions();renderResearchBuilder();updateUrl()}
 function renderThings(){
  const el=document.getElementById("thingsToConsider"); if(!el)return;
  let rows=[];
@@ -303,6 +309,14 @@ function renderHorses(){
 <td><span class="num">${h.n}</span><span class="horse">${escapeText(h.name)}${h.entry_status&&h.entry_status!=="REGULAR"?` <span class="pill">${h.entry_status} excluded</span>`:""}</span></td><td>${h.ml||"—"}</td><td><span class="odds">${h.odds||"—"}</span>${h.pre_race_evidence?`<div class="tiny muted">${h.pre_race_evidence.status==="PUBLIC_PAGE_SNAPSHOT"?"NYRA snapshot":"Pasted snapshot"} · imported ${escapeText(new Date(h.pre_race_evidence.importedAt).toLocaleTimeString())}${h.pre_race_evidence.upstreamAgeSeconds!=null?` · cache age ${h.pre_race_evidence.upstreamAgeSeconds}s`:""}<br>Freshness unverified</div>`:""}</td>
 <td><span class="pacechip ${h.style}">${h.style||"?"}</span></td><td>${escapeText(h.source_context?.jockey?.name||h.jockey_annual?.jockey||h.j||"—")}</td><td>${escapeText(h.source_context?.trainer?.name||h.t||"—")}</td>
 <td>${js?js.win.toFixed(1)+"%":"—"}</td><td>${ts?ts.win.toFixed(1)+"%":"—"}</td><td>${displayVal(h.last)}</td><td><span class="score">${score(h)}</span><div style="margin-top:4px">${confidenceBadge(h)}</div></td><td><b>${fairOddsMap()[h.n]||"—"}</b></td></tr>`}).join("");
+}
+function renderProjectedRaceSetup(){
+ const target=document.getElementById('projectedRaceSetup');if(!target)return;
+ const projection=projectRaceSetup(race);
+ if(!projection.available){target.innerHTML='<div class="note small muted">'+escapeText(projection.reason)+'</div>';return}
+ const header=projection.markers.map(m=>'<th scope="col">'+escapeText(m.label)+'</th>').join('');
+ const body=projection.rows.map(h=>'<tr><td><b>#'+escapeText(h.program)+' '+escapeText(h.name)+'</b><div class="tiny muted">'+escapeText(h.source)+'</div></td>'+h.positions.map(n=>'<td style="text-align:center"><b>'+n+'</b></td>').join('')+'</tr>').join('');
+ target.innerHTML='<table><thead><tr><th scope="col">Horse</th>'+header+'</tr></thead><tbody>'+body+'</tbody></table><div class="tiny muted" style="margin-top:10px">'+escapeText(projection.method)+' No changes to V4.4c ranking, PASS, or betting rules.</div>';
 }
 function renderPace(){paceMap.innerHTML=["E","EP","P","S"].map(s=>`<div class="pace-lane"><b>${s}</b><div class="lane">${race.horses.filter(h=>h.style===s&&h.odds!=="SCR").map(h=>`<div class="runner"><b>#${h.n}</b> ${h.name}<div class="tiny muted">Rating ${score(h)}</div></div>`).join("")||'<span class="muted">None</span>'}</div></div>`).join("")}
 function renderReleaseContext(){
