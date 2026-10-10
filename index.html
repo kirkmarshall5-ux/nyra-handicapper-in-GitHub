@@ -154,9 +154,9 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <label><input id="researchOutstanding" type="checkbox" style="width:auto"> I have an unsettled bet.</label>
 <label><input id="researchDuplicate" type="checkbox" style="width:auto"> I already bet this race.</label></div>
 <div id="researchPreview" class="note" style="margin-top:12px"></div>
-<div class="flex" style="margin-top:12px"><button id="researchRecord" class="primary">Record Quote &amp; Ranking Snapshot</button><button id="researchExport" class="secondary">Export Research Log</button></div>
+<div class="flex" style="margin-top:12px"><button id="researchFreeze" class="secondary">Freeze Pre-Race Rankings</button><button id="researchRecord" class="primary">Record Quote &amp; Ranking Snapshot</button><button id="researchExport" class="secondary">Export Research Log</button></div>
 <div id="researchStatus" class="small muted" role="status" style="margin-top:8px"></div><div id="researchCount" class="tiny muted" style="margin-top:8px"></div><div id="researchLog" class="stack" style="margin-top:10px"></div>
-<div class="tiny muted" style="margin-top:10px">Candidate timing: quote ≤60 seconds old and decision ≥60 seconds before recorded post. Manual records require source review; recording does not certify calibration, freshness later, or an untouched race. Source screenshots are referenced, not uploaded here. Research logs are saved on this device; export them for testing.</div></div>
+<div class="tiny muted" style="margin-top:10px">Before the race: verify field and surface, enter scheduled post time, freeze rankings, export and anchor the SHA-256 digest on GitHub before post time. Local clock timestamps and hashes alone are not independent proof. Candidate timing: quote ≤60 seconds old and decision ≥60 seconds before recorded post. Manual records require source review; recording does not certify calibration, freshness later, or an untouched race. Source screenshots are referenced, not uploaded here. Research logs are saved on this device; export them for testing.</div></div>
 
 <div class="card span12"><div class="kicker">Model + price + confidence</div><h3 class="sectiontitle">Suggested Wager Opportunities</h3><div class="small muted" style="margin-bottom:12px">Win-bet value rules are awaiting validation. The calculator below estimates ticket cost only.</div><div id="betSuggestions" class="stack"></div></div>
 <div class="card span12"><div class="kicker">Optional cost calculator</div><h3 class="sectiontitle">Ticket Calculator</h3><div class="ticketgrid"><div><label>Bet</label><select id="betType"><option>Exacta</option><option>Trifecta</option><option>Pick 3</option><option>Pick 4</option><option>Pick 5</option></select></div><div><label>Leg 1</label><input id="leg1" value=""></div><div><label>Leg 2</label><input id="leg2" value=""></div><div><label>Leg 3</label><input id="leg3" value=""></div><div><label>Leg 4</label><input id="leg4" value=""></div><div><label>Leg 5</label><input id="leg5" value=""></div><div><label>Base wager</label><input id="base" type="number" step=".1" value=".5"></div></div><div class="flex" style="margin-top:14px"><button class="primary" id="calcBtn">Calculate Cost</button><div id="ticketOut" class="metric" style="font-size:22px"></div></div></div></div></section>
@@ -166,7 +166,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 
 <script type="module">
 import {initKnowledgeBase} from "./knowledge-base.js?v=20261008-kb1";
-import {initResearchBuilder,renderResearchBuilder} from "./research-builder-ui.js?v=20261009-posttime-guard";
+import {initResearchBuilder,renderResearchBuilder} from "./research-builder-ui.js?v=20261009-integrity1";
 import {connectionRows,LEADER_SCOPE,LEADER_SOURCE} from "./connection-research.js?v=20261008-jt1";
 import {fieldConnections} from "./pp-context.js?v=20261008-qa1";
 import {runnerStateKey} from "./card-loader.js?v=20261008-qa1";
