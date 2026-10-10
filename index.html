@@ -71,7 +71,15 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <div class="card span12" style="display:none" aria-hidden="true"><h3 class="sectiontitle">J1 research comparison</h3><div class="small muted">Compare source-card annual jockey rates with the baseline. Historical improvement is unvalidated; these rankings do not authorize bets.</div><div id="j1Comparison" class="small" style="margin-top:10px"></div></div>
 <div class="card span12">
 <div class="spread"><h3 class="sectiontitle">Race handicapping grid</h3><div class="small muted">Verified PP evidence · V4.4c scoring is locked</div></div><div class="sortbar" style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 12px"><span class="small muted" style="align-self:center">Sort:</span><button class="secondary sortbtn" data-sort="number">Horse # ↕</button><button class="secondary sortbtn" data-sort="ml">ML ↕</button><button class="secondary sortbtn" data-sort="prerace">Pre-Race ↕</button></div>
-<div class="flex" style="margin-bottom:10px"><button class="primary" id="updateOddsSnapshot">Update Odds Snapshot</button><span class="small muted" id="oddsSnapshotStatus">Fetch NYRA prices for the selected race. Snapshots may be delayed.</span></div><div style="overflow:auto;max-height:540px"><table id="horseTable"><thead><tr><th>Horse</th><th>ML</th><th>Pre-race*</th><th>Style</th><th>Jockey</th><th>Trainer</th><th>PP J Win%</th><th>PP T Win%</th><th>PP Fig</th><th>Handicap Rating</th><th>Fair Odds*</th></tr></thead><tbody></tbody></table></div>
+<div class="flex" style="margin-bottom:10px"><button class="primary" id="updateOddsSnapshot">Update Odds Snapshot</button><span class="small muted" id="oddsSnapshotStatus">Fetch NYRA prices for the selected race. Snapshots may be delayed.</span></div>
+<div id="manualOddsPanel" class="card" style="display:none;margin:0 0 14px">
+<h3 class="sectiontitle">Multi-track odds · manual source</h3><div class="small muted" id="manualOddsSource"></div>
+<div class="small" style="margin:10px 0"><a id="manualOddsLink" href="#" target="_blank" rel="noopener noreferrer" style="text-decoration:underline">Open official odds source</a></div>
+<label class="small" for="manualOddsText">Paste full field: program number, horse name, current odds (one per line; comma, tab or | separated). Include SCR for previously scratched runners.</label>
+<textarea id="manualOddsText" rows="5" placeholder="1, Example Runner, 5/2&#10;2, Another Runner, 7/1"></textarea>
+<div class="flex" style="margin:10px 0;flex-wrap:wrap"><button class="secondary" id="manualOddsNow">Use current observation time</button><input id="manualOddsTime" aria-label="Observed at ISO time" placeholder="Observation time (ISO with timezone)" style="max-width:340px"></div>
+<button class="secondary" id="manualOddsApply">Import verified manual odds</button><div class="small muted" id="manualOddsStatus" style="margin-top:8px">All runner identities must match. No betting authorization; scratches must be verified separately.</div>
+</div><div style="overflow:auto;max-height:540px"><table id="horseTable"><thead><tr><th>Horse</th><th>ML</th><th>Pre-race*</th><th>Style</th><th>Jockey</th><th>Trainer</th><th>PP J Win%</th><th>PP T Win%</th><th>PP Fig</th><th>Handicap Rating</th><th>Fair Odds*</th></tr></thead><tbody></tbody></table></div>
 </div>
 
 <div class="card span12"><div class="spread"><div><div class="kicker">Potentially overlooked angles</div><h3 class="sectiontitle">Things to Consider — Auto Analysis</h3></div><span class="badge gold">PP-driven</span></div>
@@ -90,6 +98,11 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <div class="card span4"><div class="kicker">Transparent comparison</div><h3 class="sectiontitle">Locked V4.4c rules</h3>
 <div class="small muted">The Handicap Rating is not a win probability. It compares the entered PP information and public context. “Things to Consider” stays separate so an angle does not secretly inflate the rating.</div>
 <div id="weights" style="margin-top:12px"></div><button id="resetWeights" class="secondary" style="width:100%;margin-top:8px">Reset weights</button></div>
+
+<div class="card span12">
+<div class="kicker">Illustrative race flow · information only</div><h3 class="sectiontitle">Projected race set up</h3>
+<div class="small muted" style="margin-bottom:10px">Projected running positions by race call. 1 = first, 2 = second, etc. These are rough pace-based illustrations, NOT verified predicted finish orders, handicap ratings, or wagering advice. The stretch marker is a phase estimate, not a measured track pole. Missing pace evidence can prevent a projection.</div>
+<div id="projectedRaceSetup" style="overflow-x:auto"></div></div>
 
 <div class="card span12">
 <div class="kicker">Adaptive evidence model</div><h3 class="sectiontitle">What the Handicap Rating Knows</h3>
@@ -178,7 +191,9 @@ import {passRaceDisplay} from "./pass-race-display.js?v=20261010-passview1";
 import {releaseRace as websiteRace,RELEASE_ID} from "./rankings-release.js?v=20261008-qa1";
 import {parseNyraText as parseNyraEntries} from "./nyra-entry-parser.js?v=20261008-qa1";
 import {displayDistance} from "./race-conditions.js?v=20261008-qa1";
+import {projectRaceSetup} from "./projected-race-setup.js?v=20261010-1";
 import {applyOddsSnapshot} from "./odds-snapshot.js?v=20261008-scratchfix3";
+import {oddsSourceForTrack,parseManualOdds,applyManualOdds} from "./multitrack-odds.js?v=20261010-1";
 import {applyMorningLines} from "./morning-line-overlay.js?v=20261008-odds2";
 import {runnerContext} from "./release-context.js?v=20261008-qa1";
 import {PARSER_ID,restoredPage, parseRestoredCard} from "./release-card-parser.js?v=20261008-qa1";
@@ -267,7 +282,7 @@ document.querySelectorAll(".sortbtn").forEach(b=>b.onclick=()=>{
  else {gridSort.key=key;gridSort.dir=key==="number"?1:-1}
  renderHorses();updateSortButtons();
 });
-function renderAll(){renderReleaseContext();renderJ1Comparison();renderHeader();renderHorses();updateSortButtons();renderPace();renderEdit();renderEvidence();renderConnections();renderLeaderboards();renderWeights();renderThings();renderRaceInsights();renderBetSuggestions();renderResearchBuilder();updateUrl()}
+function renderAll(){renderOddsSource();renderProjectedRaceSetup();renderReleaseContext();renderJ1Comparison();renderHeader();renderHorses();updateSortButtons();renderPace();renderEdit();renderEvidence();renderConnections();renderLeaderboards();renderWeights();renderThings();renderRaceInsights();renderBetSuggestions();renderResearchBuilder();updateUrl()}
 function renderThings(){
  const el=document.getElementById("thingsToConsider"); if(!el)return;
  let rows=[];
@@ -300,9 +315,17 @@ function renderHeader(){
 function selectRace(n){if(!activeCard.races[n])return;race=structuredClone(activeCard.races[n]);restoreRunnerEdits();raceNotes.value=state.cards?.[activeCard.id]?.notes?.[n]||"";renderAll();window.scrollTo({top:0,behavior:"smooth"})}
 function renderHorses(){
  horseTable.querySelector("tbody").innerHTML=sortedGridHorses().map(h=>{let js=h.jockey_win!=null?{win:h.jockey_win}:null,ts=h.trainer_win!=null?{win:h.trainer_win}:null;return `<tr style="${h.odds==="SCR"?"opacity:.48":""}">
-<td><span class="num">${h.n}</span><span class="horse">${escapeText(h.name)}${h.entry_status&&h.entry_status!=="REGULAR"?` <span class="pill">${h.entry_status} excluded</span>`:""}</span></td><td>${h.ml||"—"}</td><td><span class="odds">${h.odds||"—"}</span>${h.pre_race_evidence?`<div class="tiny muted">${h.pre_race_evidence.status==="PUBLIC_PAGE_SNAPSHOT"?"NYRA snapshot":"Pasted snapshot"} · imported ${escapeText(new Date(h.pre_race_evidence.importedAt).toLocaleTimeString())}${h.pre_race_evidence.upstreamAgeSeconds!=null?` · cache age ${h.pre_race_evidence.upstreamAgeSeconds}s`:""}<br>Freshness unverified</div>`:""}</td>
+<td><span class="num">${h.n}</span><span class="horse">${escapeText(h.name)}${h.entry_status&&h.entry_status!=="REGULAR"?` <span class="pill">${h.entry_status} excluded</span>`:""}</span></td><td>${h.ml||"—"}</td><td><span class="odds">${h.odds||"—"}</span>${h.pre_race_evidence?`<div class="tiny muted">${h.pre_race_evidence.status==="PUBLIC_PAGE_SNAPSHOT"?"NYRA snapshot":h.pre_race_evidence.status==="MANUAL_SOURCE_SNAPSHOT"?"Manual source":"Pasted snapshot"} · imported ${escapeText(new Date(h.pre_race_evidence.importedAt).toLocaleTimeString())}${h.pre_race_evidence.upstreamAgeSeconds!=null?` · cache age ${h.pre_race_evidence.upstreamAgeSeconds}s`:""}<br>Freshness unverified</div>`:""}</td>
 <td><span class="pacechip ${h.style}">${h.style||"?"}</span></td><td>${escapeText(h.source_context?.jockey?.name||h.jockey_annual?.jockey||h.j||"—")}</td><td>${escapeText(h.source_context?.trainer?.name||h.t||"—")}</td>
 <td>${js?js.win.toFixed(1)+"%":"—"}</td><td>${ts?ts.win.toFixed(1)+"%":"—"}</td><td>${displayVal(h.last)}</td><td><span class="score">${score(h)}</span><div style="margin-top:4px">${confidenceBadge(h)}</div></td><td><b>${fairOddsMap()[h.n]||"—"}</b></td></tr>`}).join("");
+}
+function renderProjectedRaceSetup(){
+ const target=document.getElementById('projectedRaceSetup');if(!target)return;
+ const projection=projectRaceSetup(race);
+ if(!projection.available){target.innerHTML='<div class="note small muted">'+escapeText(projection.reason)+'</div>';return}
+ const header=projection.markers.map(m=>'<th scope="col">'+escapeText(m.label)+'</th>').join('');
+ const body=projection.rows.map(h=>'<tr><td><b>#'+escapeText(h.program)+' '+escapeText(h.name)+'</b><div class="tiny muted">'+escapeText(h.source)+'</div></td>'+h.positions.map(n=>'<td style="text-align:center"><b>'+n+'</b></td>').join('')+'</tr>').join('');
+ target.innerHTML='<table><thead><tr><th scope="col">Horse</th>'+header+'</tr></thead><tbody>'+body+'</tbody></table><div class="tiny muted" style="margin-top:10px">'+escapeText(projection.method)+' No changes to V4.4c ranking, PASS, or betting rules.</div>';
 }
 function renderPace(){paceMap.innerHTML=["E","EP","P","S"].map(s=>`<div class="pace-lane"><b>${s}</b><div class="lane">${race.horses.filter(h=>h.style===s&&h.odds!=="SCR").map(h=>`<div class="runner"><b>#${h.n}</b> ${h.name}<div class="tiny muted">Rating ${score(h)}</div></div>`).join("")||'<span class="muted">None</span>'}</div></div>`).join("")}
 function renderReleaseContext(){
@@ -352,11 +375,36 @@ function parseNyraText(text){return parseNyraEntries(text,{track:track.value,dat
 
 parsePaste.onclick=()=>{let p=parseNyraText(nyraPaste.value);if(!p){parseStatus.textContent="I couldn't reliably identify the runners. Try copying just the race section with horse, jockey/trainer, program number and odds.";return}try{race=applyMorningLines(race,p,{sourceUrl:raceUrl.value,observedAt:new Date().toISOString(),includeToteSnapshot:true});activeCard.races[race.race]=structuredClone(race);save();renderAll();parseStatus.textContent=`Updated ${p.horses.length} entry references, including scratches and current-odds snapshots. Prices are not a live feed; freshness is unverified. PP rating inputs retained.`}catch(e){parseStatus.textContent="Morning lines were not changed: "+e.message}};
 
+function renderOddsSource(){
+ const source=oddsSourceForTrack(race.track),panel=document.getElementById('manualOddsPanel'),button=document.getElementById('updateOddsSnapshot'),status=document.getElementById('oddsSnapshotStatus');
+ panel.style.display=source.mode==='manual'?'block':'none';
+ button.disabled=source.mode==='unsupported';
+ button.textContent=source.mode==='automatic'?'Update Odds Snapshot':source.mode==='manual'?'Update Odds Snapshot · manual':'Odds source unavailable';
+ if(source.mode==='manual'){
+  document.getElementById('manualOddsSource').textContent=source.label+' · official viewing source; no authorized automatic API connected. Enter observed prices yourself.';
+  document.getElementById('manualOddsLink').href=source.url;
+  status.textContent='Manual source required for '+source.label+'. No automatic live odds connection.';
+ }else if(source.mode==='unsupported')status.textContent='No verified odds source for '+source.label+'. No NYRA fallback.';
+ else status.textContent='NYRA snapshot source: '+source.label+'. Prices may be delayed; freshness unverified.';
+}
+document.getElementById('manualOddsNow').onclick=()=>{document.getElementById('manualOddsTime').value=new Date().toISOString()};
+document.getElementById('manualOddsApply').onclick=()=>{
+ const status=document.getElementById('manualOddsStatus'),source=oddsSourceForTrack(race.track);
+ try{
+  const rows=parseManualOdds(document.getElementById('manualOddsText').value);
+  const updated=applyManualOdds(race,rows,{sourceUrl:source.url,observedAt:document.getElementById('manualOddsTime').value});
+  race=updated;activeCard.races[race.race]=structuredClone(race);save();renderAll();
+  status.textContent='Manual prices imported for '+rows.length+' runners. Verify tote, scratches and post time. Research only; betting not enabled.';
+ }catch(e){status.textContent='Import rejected: '+e.message+'. Existing odds retained.'}
+};
 document.getElementById('updateOddsSnapshot').onclick=async()=>{
  const button=document.getElementById('updateOddsSnapshot'),status=document.getElementById('oddsSnapshotStatus'),initial={card:activeCard.id,date:race.date,race:race.race,track:race.track};
+ const source=oddsSourceForTrack(initial.track);
+ if(source.mode==='manual'){document.getElementById('manualOddsText').focus();status.textContent='Open '+source.label+' official odds and paste the full field below; automatic odds are not connected.';return;}
+ if(source.mode!=='automatic'){status.textContent='No automatic odds provider for '+initial.track+'; NYRA was not queried.';return;}
  button.disabled=true;status.textContent='Fetching NYRA snapshot…';
  try{
-  const venue=initial.track.toLowerCase().includes('saratoga')?'saratoga':initial.track.toLowerCase().includes('aqueduct')?'aqueduct':'belmont';
+  const venue=source.venue;
   const url=new URL('/odds','https://nyra-odds-snapshot.beigebeech4.chatgpt.site');url.search=new URLSearchParams({track:venue,date:initial.date,race:initial.race});
   const response=await fetch(url,{cache:'no-store',signal:AbortSignal.timeout(22000)});
   if(!response.ok)throw Error('Odds service unavailable (HTTP '+response.status+')');
