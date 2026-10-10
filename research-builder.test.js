@@ -1,4 +1,5 @@
-import test from 'node:test';import assert from 'node:assert/strict';import {previewBudget,quoteCapture,money,timestamp} from './research-builder.js';
+import test from 'node:test';import assert from 'node:assert/strict';import {previewBudget,quoteCapture,money,timestamp,preRaceFreeze,sealedResearchExport} from './research-builder.js';
+import {createHash} from 'node:crypto';
 const b={cash:300,dailyStaked:0,outstandingBets:0,alreadyBet:false};
 const now=Date.parse('2026-10-07T17:07:00Z'),input={card:{id:'test',sourceName:'fixture.pdf'},race:{date:'2026-10-07',track:'Belmont Park',race:1,horses:[{n:'3',name:'Runner'}]},rating:{decision:'RATEABLE',rankings:[{n:'3',name:'Runner',v44c_rank:1,v44c_unrounded_score:80}],pass_reasons:[]},horseNumber:'3',odds:'5/2',sourceId:'synthetic-test-only',evidenceRef:'synthetic-test-only',quoteTime:'2026-10-07T13:06:30-04:00',postTime:'2026-10-07T13:10:00-04:00',now,observedLive:true,finalFieldVerified:true,surfaceVerified:true,budget:previewBudget(b)};
 test('fixed $2 preview respects cash, exposure, outstanding and duplicate boundaries',()=>{
@@ -38,4 +39,26 @@ test('stale, late and PASS-race observations remain auditable, never become wage
 test('program-less PPs cannot capture quotes; recorded model matches the frozen rating',()=>{
  const missing=quoteCapture({...input,horseNumber:'',race:{...input.race,horses:[{n:'',name:'Runner'}]}});assert.equal(missing.record,null);
  const {record}=quoteCapture({...input,rating:{...input.rating,model_id:'release-version-test'}});assert.equal(record.model,'release-version-test');
+});
+
+test('late manual submissions cannot backfill a supposedly pre-race quote',()=>{
+ const late=quoteCapture({...input,now:Date.parse('2026-10-07T17:11:00Z')});
+ assert.equal(late.record,null);assert.ok(late.errors.some(e=>e.includes('before the scheduled post time')));
+});
+test('freeze captures the full field before post and rejects post-race or unverified snapshots',()=>{
+ const p={card:input.card,race:input.race,rating:input.rating,postTime:input.postTime,now,finalFieldVerified:true,surfaceVerified:true};
+ const {freeze,errors}=preRaceFreeze(p);assert.deepEqual(errors,[]);assert.equal(freeze.decision,'PASS');assert.equal(freeze.activeField.length,1);assert.equal(freeze.rankingSnapshot[0].rank,1);assert.equal(freeze.untouchedStatus,'NOT_INDEPENDENTLY_VERIFIED');
+ assert.equal(preRaceFreeze({...p,now:Date.parse('2026-10-07T17:10:00Z')}).freeze,null);
+ assert.equal(preRaceFreeze({...p,finalFieldVerified:false}).freeze,null);
+ assert.equal(preRaceFreeze({...p,postTime:'2026-10-08T13:10:00-04:00'}).freeze,null);
+});
+test('export digest covers exact records and frozen rankings, and changes on tampering',async()=>{
+  const freezes=[preRaceFreeze({card:input.card,race:input.race,rating:input.rating,postTime:input.postTime,now,finalFieldVerified:true,surfaceVerified:true}).freeze];
+  const records=[quoteCapture(input).record];
+  const sealed=await sealedResearchExport({records,freezes,exportedAt:'2026-10-07T17:08:00Z'});
+  const payload={schemaVersion:2,mode:'RESEARCH_ONLY',records,freezes};
+  assert.equal(sealed.recordsDigestSha256,createHash('sha256').update(JSON.stringify(payload)).digest('hex'));
+  assert.equal(sealed.anchorStatus,'UNVERIFIED_LOCAL_EXPORT');
+  const modified=await sealedResearchExport({records,freezes:[{...freezes[0],raceDecision:'PASS_TAMPERED'}],exportedAt:'2026-10-07T17:08:00Z'});
+  assert.notEqual(modified.recordsDigestSha256,sealed.recordsDigestSha256);
 });
