@@ -172,6 +172,7 @@ import {fieldConnections} from "./pp-context.js?v=20261008-qa1";
 import {runnerStateKey} from "./card-loader.js?v=20261008-qa1";
 import {researchRace} from "./jockey-research.js?v=20261008-qa1";
 import {evidenceProfile} from "./scoring-engine.js?v=20261008-qa1";
+import {passRaceDisplay} from "./pass-race-display.js?v=20261010-passview1";
 import {releaseRace as websiteRace,RELEASE_ID} from "./rankings-release.js?v=20261008-qa1";
 import {parseNyraText as parseNyraEntries} from "./nyra-entry-parser.js?v=20261008-qa1";
 import {displayDistance} from "./race-conditions.js?v=20261008-qa1";
@@ -219,7 +220,18 @@ function fairOddsMap(){return {}}
 function confidenceRank(h){const ep=evidenceProfile({...h,jockeyRating:h.jockey_win,trainerRating:h.trainer_win});return ({High:3,Medium:2,Low:1})[ep.confidence]||1}
 function valueRows(){return []}
 const escapeText=s=>String(s??"").replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function renderRaceInsights(){const r=currentRating();topContenders.innerHTML=r.decision==="PASS"?'<b>V4.4c: PASS</b><div class="tiny muted">'+r.pass_reasons.map(x=>escapeText((x.horse?x.horse+": ":"")+x.reason)).join('<br>')+'</div>':r.rankings.slice(0,4).map((h,i)=>`<div><b>${i+1}. #${h.n||"—"} ${escapeText(h.name)}</b> <span class="pill">Rating ${h.v44c_display_score}</span><div class="tiny muted">${h.v44c_signals.map(([k,v])=>escapeText(k)+" "+(v>0?"+":"")+v).join(" · ")||"No adjustment"}</div></div>`).join("");bestValue.innerHTML='<div class="muted">Best Value: PASS — probability validation pending. Morning line is reference only. The research win-ticket builder and quote recorder are available in the Bets tab.</div>'}
+function renderRaceInsights(){
+ const r=currentRating();
+ const fullRankings=()=>r.rankings.slice(0,4).map((h,i)=>`<div><b>${i+1}. #${escapeText(h.n||'—')} ${escapeText(h.name)}</b> <span class="pill">Rating ${h.v44c_display_score}</span><div class="tiny muted">${h.v44c_signals.map(([k,v])=>escapeText(k)+' '+(v>0?'+':'')+v).join(' · ')||'No adjustment'}</div></div>`).join('');
+ if(r.decision==='PASS'){
+  const p=passRaceDisplay(r);
+  const contenders=p.ranked.length?p.ranked.map((h,i)=>`<div><b>${i+1}. #${escapeText(h.n||'—')} ${escapeText(h.name)}</b> <span class="pill">Rating ${h.displayScore}</span></div>`).join(''):'<div class="tiny muted">No horses have enough verified evidence for a numerical rating.</div>';
+  const limited=p.unrated.length?p.unrated.map(h=>`<div class="tiny muted">#${escapeText(h.n||'—')} ${escapeText(h.name)} — ${h.reasons.map(escapeText).join('; ')}</div>`).join(''):'<div class="tiny muted">No individually unrated horses identified.</div>';
+  const other=p.general.length?`<div class="tiny muted" style="margin-top:6px">Other pass reasons: ${p.general.map(escapeText).join('; ')}</div>`:'';
+  topContenders.innerHTML='<b>V4.4c: PASS — no wager</b><div class="tiny muted" style="margin:5px 0">Provisional ranking of rated runners only; unrated horses may be competitive. Not an official full-field V4.4c ranking.</div>'+contenders+'<div class="tiny muted" style="margin:10px 0 5px"><b>Limited or missing information</b></div>'+limited+other;
+ }else topContenders.innerHTML=fullRankings();
+ bestValue.innerHTML='<div class="muted">Best Value: PASS — probability validation pending. Morning line is reference only. The research win-ticket builder and quote recorder are available in the Bets tab.</div>';
+}
 function renderJ1Comparison(){
  const base=currentRating(),j1=researchRace(race),panel=document.getElementById("j1Comparison");
  const list=r=>r.decision==="PASS"?"PASS — "+r.pass_reasons.map(x=>escapeText(x.reason)).join("; "):r.rankings.slice(0,4).map((h,i)=>`${i+1}. ${escapeText(h.name)} (${h.v44c_display_score})`).join("<br>");
