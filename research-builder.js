@@ -9,6 +9,26 @@ export function timestamp(v){
  if(date.getUTCFullYear()!==+m[1]||date.getUTCMonth()+1!==+m[2]||date.getUTCDate()!==+m[3]||+m[4]>23||+m[5]>59||+(m[6]||0)>59)return null;
  return Number.isFinite(Date.parse(v))?Date.parse(v):null;
 }
+export function preRaceFreeze({card,race,rating,postTime,now,finalFieldVerified,surfaceVerified}){
+ const post=timestamp(postTime),errors=[];
+ if(post===null)errors.push('Enter a scheduled post time with an explicit time zone.');
+ if(!finite(now)||post!==null&&now>=post)errors.push('Freeze must occur before the recorded post time.');
+ if(finalFieldVerified!==true||surfaceVerified!==true)errors.push('Verify the current field, scratches and surface before freezing.');
+ if(post!==null){const dateET=new Intl.DateTimeFormat('en-CA',{timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(post));if(dateET!==race.date)errors.push('Post date must match the card date in New York time.');}
+ if(!card?.id||!race?.date||!race?.track||!race?.race||!Array.isArray(race.horses)||!Array.isArray(rating?.rankings))errors.push('Race identity and rankings must be loaded.');
+ if(errors.length)return {freeze:null,errors};
+ return {errors:[],freeze:{schemaVersion:1,builder:BUILDER_ID,cardId:card.id,card_date:race.date,track:race.track,race:race.race,model:rating.model_id||RULES.model,recordedAt:new Date(now).toISOString(),recordedEpochMs:now,scheduledPost:new Date(post).toISOString(),postEpochMs:post,surface:race.surface||null,raceDecision:rating.decision,passReasons:structuredClone(rating.pass_reasons||[]),activeField:race.horses.filter(h=>h.n&&h.odds!=='SCR'&&h.included_in_frozen_field!==false).map(h=>({program:String(h.n),horse:h.name})),rankingSnapshot:rating.rankings.map(h=>({horse:h.name,program:String(h.n),rawScore:h.v44c_unrounded_score,rank:h.v44c_rank})),finalFieldVerified:true,surfaceVerified:true,untouchedStatus:'NOT_INDEPENDENTLY_VERIFIED',externalAnchor:null,automatedStake:0,decision:'PASS'}};
+}
+
+export async function sealedResearchExport({records,freezes,exportedAt}){
+ const payload={schemaVersion:2,mode:'RESEARCH_ONLY',records,freezes};
+ if(!globalThis.crypto?.subtle)throw new Error('SHA-256 unavailable; export not sealed.');
+ const bytes=new TextEncoder().encode(JSON.stringify(payload));
+ const digest=await globalThis.crypto.subtle.digest('SHA-256',bytes);
+ const recordsDigestSha256=Array.from(new Uint8Array(digest),b=>b.toString(16).padStart(2,'0')).join('');
+ return {...payload,exportedAt,recordsDigestSha256,digestScope:'SHA-256 of UTF-8 JSON.stringify({schemaVersion:2,mode,records,freezes})',anchorStatus:'UNVERIFIED_LOCAL_EXPORT'};
+}
+
 export function previewBudget({cash,dailyStaked,outstandingBets,alreadyBet,cap=RULES.dailyStakeCap,floor=RULES.bankrollFloor}){
  const reasons=[];for(const [key,v]of Object.entries({cash,dailyStaked,cap,floor}))if(!finite(v)||v<0)reasons.push('invalid-'+key);
  if(!Number.isInteger(outstandingBets)||outstandingBets!==0)reasons.push('outstanding-bet');
@@ -30,6 +50,7 @@ export function quoteCapture({card,race,rating,horseNumber,odds,sourceId,evidenc
  if(q===null||post===null)errors.push('Use full quote/post timestamps with Z or an explicit offset, such as -04:00.');
  if(!finite(now)||q!==null&&q>now)errors.push('Quote time cannot be in the future.');
  if(q!==null&&post!==null&&q>=post)errors.push('Quote must be observed before the recorded post time.');
+ if(post!==null&&finite(now)&&now>=post)errors.push('Research observations must be recorded before the scheduled post time.');
  if(q!==null&&post!==null){const dateET=new Intl.DateTimeFormat('en-CA',{timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(post));if(dateET!==race.date)errors.push('Post date must match the card date in New York time.');}
  if(errors.length)return {record:null,errors};
  const ranked=rating.rankings.find(h=>h.name===horse.name),timing=now-q<=RULES.maxQuoteAgeSeconds*1000&&post-now>=RULES.minSecondsBeforePost*1000;
