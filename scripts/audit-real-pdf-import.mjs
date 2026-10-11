@@ -26,7 +26,9 @@ for(const [file,count] of Object.entries(expected)){
   report.races=races.map(r=>({race:r.race,runner_count:r.horses.length,dist:r.dist,surface:r.surface,horses:r.horses.map(h=>({program:h.n,name:h.name,morning_line:h.ml,beyer_figures:h.figs??h.beyer_figures??null,timeform_early:h.ppEvidence?.timeformEarly??null,timeform_late:h.ppEvidence?.timeformLate??null,pace_source:h.ppEvidence?.source??null}))}));
   const numbers=races.map(r=>Number(r.race));
   report.missing_races=Array.from({length:count},(_,i)=>i+1).filter(n=>!numbers.includes(n));
-  report.empty_races=races.filter(r=>!r.horses.length).map(r=>r.race);\n  report.unexpected_races=numbers.filter(n=>!Number.isInteger(n)||n<1||n>count);\n  report.duplicate_races=numbers.filter((n,i)=>numbers.indexOf(n)!==i);
+  report.empty_races=races.filter(r=>!r.horses.length).map(r=>r.race);
+  report.unexpected_races=numbers.filter(n=>!Number.isInteger(n)||n<1||n>count);
+  report.duplicate_races=numbers.filter((n,i)=>numbers.indexOf(n)!==i);
   report.runner_count_matches=report.runners===report.expected_runners;
   report.duplicate_programs=races.flatMap(r=>r.horses.map(h=>h.n).filter((n,i,a)=>a.indexOf(n)!==i).map(n=>({race:r.race,program:n})));
   report.status=!report.runner_count_matches||report.duplicate_programs.length||report.parsed_races!==count||report.missing_races.length||report.empty_races.length||report.unexpected_races.length||report.duplicate_races.length?'INCOMPLETE':'STRUCTURE_PASS';
