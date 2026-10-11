@@ -11,6 +11,8 @@ function lengthFurlongs(raw){
  if(frac)return 8*Number(frac[1])/Number(frac[2]);
  const mile=t.match(/(\d+(?:\.\d+)?)\s*M(?:ILE|ILES)?\b/);
  if(mile)return Number(mile[1])*8;
+ const mixedFurlong=t.match(/(\d+)\s+(\d+)\/(\d+)\s*F(?:URLONGS?)?\b/);
+ if(mixedFurlong)return Number(mixedFurlong[1])+Number(mixedFurlong[2])/Number(mixedFurlong[3]);
  const furlong=t.match(/(\d+(?:\.\d+)?)\s*F(?:URLONGS?)?\b/);
  if(furlong)return Number(furlong[1]);
  const yards=t.match(/(\d+)\s*Y(?:ARDS?)?\b/);
