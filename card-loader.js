@@ -4,13 +4,13 @@ import {displayDistance} from './race-conditions.js';
 // Extract only the primary scheduled distance from the DRF race heading.
 // Alternate-surface conditions and historical running lines are not distance sources.
 export function primaryRaceDistance(headerLines) {
-  const line = headerLines.map(x => clean(typeof x === 'string' ? x : x.text)).find(x => /\\b(?:MILES?|FURLONGS?|YARDS?)\\b/i.test(x) && /^\\s*(?:\\d|[¼½¾])/.test(x));
+  const line = headerLines.map(x => clean(typeof x === 'string' ? x : x.text)).find(x => /\b(?:MILES?|FURLONGS?|YARDS?)\b/i.test(x) && /^\s*(?:\d|[¼½¾])/.test(x));
   if (!line) return '';
   const normalized = displayDistance(line);
-  const match = normalized.match(/^\\s*(\\d+(?:\\s+\\d+\\/\\d+|\\.\\d+|\\/\\d+)?|[¼½¾])\\s*(MILES?|FURLONGS?|YARDS?)\\b/i);
+  const match = normalized.match(/^\s*(\d+(?:\s+\d+\/\d+|\.\d+|\/\d+)?|[¼½¾])\s*(MILES?|FURLONGS?|YARDS?)\b/i);
   if (!match) return '';
   const unit = /^M/i.test(match[2]) ? 'M' : /^F/i.test(match[2]) ? 'F' : 'Y';
-  return match[1].replace(/\\s+/g,' ') + unit;
+  return match[1].replace(/\s+/g,' ') + unit;
 }
 
 
