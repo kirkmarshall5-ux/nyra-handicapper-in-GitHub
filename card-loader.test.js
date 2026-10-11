@@ -73,3 +73,25 @@ test('FG, RP and GP abbreviated DRF page headers resolve track identity',()=>{
   assert.equal(card.races[1].horses.length,2);
  }
 });
+
+test('strict FG/RP headings retain track identity and strip heading prefix',()=>{
+ for(const [track,name] of [['Fair Grounds','Fair Grounds'],['Remington Park','Remington Park']]){
+  const p=page(1,[[750,[[10,'1 '+track+' 12/20/2025 Maiden 6 Furlongs Dirt']]],...multilineRunner('1','4-1','Test Runner',700)]);
+  const card=parseCard([p]);
+  assert.equal(card.track,name);
+  assert.equal(card.races[1].track,name);
+  assert.ok(!card.races[1].cls.startsWith('1 '+track));
+ }
+});
+test('strict DRF pace evidence is bounded by owner anchors and never imputed',()=>{
+ const p=page(1,[
+  [750,[[10,'1 Fair Grounds 12/20/2025 Maiden 6 Furlongs Dirt']]],
+  ...multilineRunner('1','4-1','Alpha Horse',700),
+  [652,[[45,'TimeformUS Pace: Early 102 Late 78']]],
+  ...multilineRunner('2','8-1','Beta Horse',600),
+  [552,[[45,'No TimeformUS pace supplied']]]
+ ]);
+ const card=parseCard([p]);
+ assert.deepEqual(card.races[1].horses[0].ppEvidence,{timeformEarly:102,timeformLate:78,source:'DRF TimeformUS Pace',status:'extracted'});
+ assert.equal(card.races[1].horses[1].ppEvidence,undefined);
+});
