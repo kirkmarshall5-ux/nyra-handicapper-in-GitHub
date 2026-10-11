@@ -1,9 +1,10 @@
+import {displayDistance} from './race-conditions.js';
 // Display-only, deterministic illustration. No odds, handicap ratings, or betting logic.
 const styleEarly={E:90,EP:72,P:48,S:25};
 const styleLate={E:35,EP:54,P:72,S:90};
 const numberOrNull=x=>x!==''&&x!=null&&Number.isFinite(Number(x))?Number(x):null;
 function lengthFurlongs(raw){
- const t=String(raw||'').toUpperCase().replace(/\s+/g,' ').trim();
+ const t=displayDistance(raw).toUpperCase().replace(/\s+/g,' ').trim();
  const mixed=t.match(/(\d+)\s+(\d+)\/(\d+)\s*M/);
  if(mixed)return (Number(mixed[1])+Number(mixed[2])/Number(mixed[3]))*8;
  const frac=t.match(/(\d+)\/(\d+)\s*M/);
