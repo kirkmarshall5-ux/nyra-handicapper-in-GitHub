@@ -38,11 +38,13 @@ export function contenderFeatures(original,r){
  return {raw,slope,complete,comparable_starts:md.length};
 }
 function percentile(v,observed){if(v===null||observed.length<=1||new Set(observed).size===1)return 0;return 2*(observed.filter(q=>q<v).length+.5*(observed.filter(q=>q===v).length-1))/(observed.length-1)-1;}
-export function rankContenders(race,baseline){
- if(baseline.decision==='PASS')return {decision:'PASS',rankings:[],reason:'Full-field evidence incomplete',model_id:MODEL.model_id};
- const field=race.horses.filter(h=>h.odds!=='SCR'&&(!h.entry_status||h.entry_status==='REGULAR'));
+export function rankContenders(race,baseline,{displayPass=false}={}){
+ if(baseline.decision==='PASS'&&!displayPass)return {decision:'PASS',rankings:[],reason:'Full-field evidence incomplete',model_id:MODEL.model_id};
+ const rated=new Set((baseline.runners||[]).filter(h=>Number.isFinite(h.base_rating)&&!h.unrated_reason&&!(h.parser_blockers||[]).length).map(h=>h.name));
+ const field=race.horses.filter(h=>h.odds!=='SCR'&&(!h.entry_status||h.entry_status==='REGULAR')&&(!displayPass||rated.has(h.name)));
+ if(!field.length)return {decision:baseline.decision,rankings:[],provisional:displayPass,reason:'No horses have enough verified evidence for a numerical rating.',model_id:MODEL.model_id};
  if(!field.every(h=>h.contender_evidence||h.switch_evidence))return {decision:'HOLD',rankings:[],reason:'Re-upload the source PP to populate Contender evidence.',model_id:MODEL.model_id};
  const r={...race,field},es=field.map(h=>contenderFeatures(h,r)),observed=MODEL.features.map((_,j)=>es.map(e=>e.raw[j]).filter(v=>v!==null)),slopes=es.map(e=>e.slope).filter(v=>v!==null);
  const rankings=field.map((h,i)=>{const base=es[i].raw.reduce((s,v,j)=>s+percentile(v,observed[j])*MODEL.contender.coefficients[j],0),adj=.10*percentile(es[i].slope,slopes);return {n:h.n,name:h.name,score:base+adj,base_contender_score:base,matched_beyer_trend:{score_adjustment:adj,status:es[i].slope!==null?'VERIFIED':'UNKNOWN'}};}).sort((a,b)=>b.score-a.score||(a.name<b.name?-1:a.name>b.name?1:0));
- return {decision:'RATEABLE',rankings,model_id:MODEL.model_id};
+ return {decision:displayPass?'PASS':'RATEABLE',rankings,provisional:displayPass,model_id:MODEL.model_id};
 }
