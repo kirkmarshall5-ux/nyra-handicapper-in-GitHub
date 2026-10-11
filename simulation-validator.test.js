@@ -42,3 +42,28 @@ test('no probabilities returns null probability metrics',()=>{
  const r=clone();r.runners.forEach(x=>delete x.winProbability);
  assert.equal(gradeDataset([r]).winBrier,null);
 });
+
+// Stage 2 research safety: absent verified holdout data must never produce accuracy.
+test('Stage 2: no verified historical pairs means no accuracy claim',()=>{
+ const report=gradeDataset([]);
+ assert.equal(report.status,'NO_VALIDATION_DATA');
+ assert.equal(report.races,0);
+ assert.equal(report.top1Accuracy,null);
+ assert.equal(report.top3Recall,null);
+ assert.equal(report.probabilityRaces,0);
+ assert.equal(report.winBrier,null);
+ assert.equal(report.winLogLoss,null);
+ assert.deepEqual(report.perCall,{});
+});
+
+test('Stage 2: predicted positions alone cannot be scored as official outcomes',()=>{
+ const r=clone();
+ for(const runner of r.runners)delete runner.actual;
+ assert.throws(()=>gradeRace(r),/Missing or invalid complete call positions/);
+});
+
+test('Stage 2: reject chart publication at or before prediction freeze',()=>{
+ for(const chartPublishedAt of [example.predictionFrozenAt,'2026-10-10T14:59:59Z']){
+  assert.throws(()=>validateRaceRecord({...clone(),chartPublishedAt}),/Prediction must be frozen before chart publication/);
+ }
+});
