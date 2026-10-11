@@ -42,3 +42,33 @@ test('DRF glyph distance allows an eligible six-horse simulation',()=>{
  assert.equal(result.rows.length,6);
  for(let i=0;i<result.markers.length;i++)assert.deepEqual(result.rows.map(h=>h.positions[i]).sort((a,b)=>a-b),[1,2,3,4,5,6]);
 });
+
+// Screenshot-backed Stage 1 regression fixture: Race 2 five-runner display.
+// This tests ordinal integrity and evidence labels, not historical accuracy.
+test('Stage 1 Race 2: five runners have unique ranks and traceable evidence',()=>{
+ const race={dist:'6ôF',horses:[
+  {n:1,name:'Fantasy Road',style:'P',odds:'3/1'},
+  {n:2,name:'Fairy Tale',style:'P',odds:'4/1'},
+  {n:3,name:'Ethereal Quality',tfEarly:105,tfLate:101,odds:'2/1'},
+  {n:4,name:'Asset Light',tfEarly:100,tfLate:45,odds:'5/1'},
+  {n:5,name:'Turn N Burn',style:'S',odds:'8/1'}
+ ]};
+ const result=projectRaceSetup(race);
+ assert.equal(result.available,true);
+ assert.deepEqual(result.markers.map(x=>x.label),['¼ mile','½ mile','Stretch','Finish']);
+ assert.equal(result.rows.length,5);
+ assert.deepEqual(result.rows.map(x=>x.program),[1,2,3,4,5]);
+ for(let c=0;c<result.markers.length;c++)assert.deepEqual(result.rows.map(x=>x.positions[c]).sort((a,b)=>a-b),[1,2,3,4,5]);
+ assert.deepEqual(result.rows.map(x=>x.source),['Running-style proxy','Running-style proxy','TimeformUS Early/Late','TimeformUS Early/Late','Running-style proxy']);
+});
+
+test('Stage 1 gate: scratch, MTO, AE, and missing evidence cannot create phantom ranks',()=>{
+ const horses=[{n:1,name:'A',style:'E',odds:'2/1'},{n:2,name:'B',style:'S',odds:'4/1'},
+  {n:3,name:'Scratch',style:'E',odds:'SCR'},
+  {n:4,name:'MTO',style:'E',odds:'5/1',entry_status:'MTO'},
+  {n:5,name:'AE',style:'E',odds:'5/1',entry_status:'AE'}];
+ const projected=projectRaceSetup({dist:'6ôF',horses});
+ assert.equal(projected.available,true);
+ assert.deepEqual(projected.rows.map(x=>x.program),[1,2]);
+ assert.equal(projectRaceSetup({dist:'6ôF',horses:[...horses,{n:6,name:'Unknown',odds:'10/1'}]}).available,false);
+});
