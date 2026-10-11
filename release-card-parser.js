@@ -1,4 +1,4 @@
-import {restoredPage as originalPage,parseRestoredCard as originalParse} from './data-corrected-parser.js?v=20261007-safeguards2';
+import {restoredPage as originalPage,parseRestoredCard as originalParse} from './data-corrected-parser.js?v=20261011-contender1';
 import {RELEASE_ID} from './rankings-release.js';
 export const PARSER_ID='V44C-data-integrity-conditions-parser-v2';
 export function restoredPage(items,pageNumber,fonts={}){
