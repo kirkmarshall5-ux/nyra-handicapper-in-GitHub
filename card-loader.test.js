@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {reconstructPage, parseCard, replaceCardAtomically, runnerStateKey} from './card-loader.js';
+import {reconstructPage, parseCard, replaceCardAtomically, runnerStateKey, primaryRaceDistance} from './card-loader.js';
 const items=(rows)=>rows.flatMap(([y,parts])=>parts.map(([x,str])=>({str,transform:[1,0,0,1,x,y]})));
 const page=(n,rows)=>reconstructPage(items(rows),n);
 const header=(race,y=700)=>[[y,[[10,`Race ${race}`],[90,'Maiden $50,000'],[240,'6F Dirt'],[330,'Post Time']]]];
@@ -42,3 +42,16 @@ test('Oct 4 structural DRF headings split races on the same physical page and re
 test('structural DRF recovers runner when PDF.js merges header rows',()=>{const rows=[[760,[[10,'1 Belmont Park Moc75000C']]],[750,[[10,'6 Furlongs MAIDEN OPTIONAL CLAIMING. Purse $80,000']]],[740,[[10,'Post time: 12:35 ET']]],[700,[[10,'9']]],[690,[[10,'30-1']]],[680,[[45,'Bet Bold']]],[670,[[45,'Own: Nova Stables']]],[650,[[10,'10 10-1 First to Engage']]],[640,[[45,'Own: Sure Thing Stables LLC']]],[620,[[45,'TimeformUS Pace: Early 65 Late 47']]]];const card=parseCard([page(1,rows)]);assert.deepEqual(card.races[1].horses.map(h=>[h.n,h.name,h.ml]),[['9','Bet Bold','30-1'],['10','First to Engage','10-1']]);});
 
 test('structural DRF recovers post-owner odds sharing a row with pedigree column text',()=>{const rows=[[760,[[10,'1 Belmont Park Moc75000C']]],[750,[[10,'6 Furlongs MAIDEN OPTIONAL CLAIMING. Purse $80,000']]],[740,[[10,'Post time: 12:35 ET']]],[700,[[10,'9']]],[690,[[10,'30-1']]],[680,[[55,'Bet Bold']]],[670,[[55,'Own: Nova Stables']]],[650,[[35,'10']]],[640,[[55,'First to Engage'],[193,'B. c. 2 (May) EASMAY26 $65,000']]],[630,[[55,'Own: Sure Thing Stables LLC'],[193,'Sire: Engage (Into Mischief) $2,500']]],[620,[[37,'10-1'],[193,'Dam: Regal Madame (Colonel John)']]],[600,[[55,'TimeformUS Pace: Early 65 Late 65']]]];const card=parseCard([page(1,rows)]);assert.deepEqual(card.races[1].horses.map(h=>[h.n,h.name,h.ml]),[['9','Bet Bold','30-1'],['10','First to Engage','10-1']]);});
+
+
+test('simulation Stage 1: DRF primary distances normalize fractional typography',()=>{
+ assert.equal(primaryRaceDistance(['1Â MILES (Turf). MAIDEN SPECIAL WEIGHT.']), '1 1/16M');
+ assert.equal(primaryRaceDistance(['6ô Furlongs MAIDEN SPECIAL WEIGHT']), '6 1/2F');
+ assert.equal(primaryRaceDistance(['6 Furlongs MAIDEN SPECIAL WEIGHT']), '6F');
+ assert.equal(primaryRaceDistance(['(If off turf, run 1 Mile on Tapeta)']), '');
+});
+test('simulation Stage 1: structural DRF parser passes distance to race setup',()=>{
+ const rows=[[760,[[10,'1 Belmont Park Md Sp Wt100k']]],[750,[[10,'1Â MILES (Turf). MAIDEN SPECIAL WEIGHT.']]], [740,[[10,'Post time: 1:10 ET']]],[700,[[10,'1']]],[690,[[10,'3-1']]],[680,[[45,'On Time Delivery']]],[670,[[45,'Own: Gainesway Stable']]]];
+ const card=parseCard([page(1,rows)]);
+ assert.equal(card.races[1].dist,'1 1/16M');
+});

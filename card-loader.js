@@ -1,4 +1,18 @@
 export const SCHEMA_VERSION = 2;
+import {displayDistance} from './race-conditions.js';
+
+// Extract only the primary scheduled distance from the DRF race heading.
+// Alternate-surface conditions and historical running lines are not distance sources.
+export function primaryRaceDistance(headerLines) {
+  const line = headerLines.map(x => clean(typeof x === 'string' ? x : x.text)).find(x => /\b(?:MILES?|FURLONGS?|YARDS?)\b/i.test(x) && /^\s*(?:\d|[¼½¾])/.test(x));
+  if (!line) return '';
+  const normalized = displayDistance(line);
+  const match = normalized.match(/^\s*(\d+(?:\s+\d+\/\d+|\.\d+|\/\d+)?|[¼½¾])\s*(MILES?|FURLONGS?|YARDS?)\b/i);
+  if (!match) return '';
+  const unit = /^M/i.test(match[2]) ? 'M' : /^F/i.test(match[2]) ? 'F' : 'Y';
+  return match[1].replace(/\s+/g,' ') + unit;
+}
+
 
 const clean = value => String(value ?? "").replace(/\s+/g, " ").trim();
 const slug = value => clean(value).normalize("NFKD").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
@@ -137,7 +151,7 @@ export function parseCard(pages, { sourceName = "document" } = {}) {
         claimedOwners.add(ownerKey);
       }
     }
-    if (!races[raceNumber]) races[raceNumber] = { race: raceNumber, horses, track: "", date: "", cls: clean(section.slice(0, 4).map(line => line.text).join(" · ")), dist: "", surface: "", post: "", oddsMode: "Unknown" };
+    if (!races[raceNumber]) races[raceNumber] = { race: raceNumber, horses, track: "", date: "", cls: clean(section.slice(0, 4).map(line => line.text).join(" · ")), dist: primaryRaceDistance(section.slice(0, 12)), surface: "", post: "", oddsMode: "Unknown" };
   };
   const addStrictSection = (raceNumber, section) => {
     const horses = [];
@@ -201,7 +215,7 @@ export function parseCard(pages, { sourceName = "document" } = {}) {
     const postMatch = bodyText.match(/\bPost\s*time:\s*([^ ]+\s*(?:ET|PM|AM)?)/i);
     const surface = /\bInner Turf\b/i.test(bodyText) ? "Inner Turf" : /\bTurf\b/i.test(bodyText) ? "Turf" : /\bTapeta\b|\bSynthetic\b/i.test(bodyText) ? "Synthetic" : "Dirt";
     const headingClass = headerText.replace(/^\s*\d+\s+(?:Belmont Park|Aqueduct|Saratoga|Churchill Downs|Gulfstream Park|Keeneland|Santa Anita(?: Park)?)\s*/i, "");
-    races[raceNumber] = { race: raceNumber, horses, track: "", date: "", cls: headingClass || "Race", dist: "", surface, post: postMatch?.[1] || "", oddsMode: "Morning line (pre-race)" };
+    races[raceNumber] = { race: raceNumber, horses, track: "", date: "", cls: headingClass || "Race", dist: primaryRaceDistance(section.slice(1, 12)), surface, post: postMatch?.[1] || "", oddsMode: "Morning line (pre-race)" };
   };
   const pageAssignments = pages.map(page => {
     const pageLines = page.lines.map(line => ({ ...line, pageNumber: page.pageNumber }));
