@@ -59,7 +59,7 @@ test('simulation Stage 1: structural DRF parser passes distance to race setup',(
 
 test('Fair Grounds and Remington Park DRF race headings parse without altering runner scoring',()=>{
  for(const [track,code] of [['Fair Grounds','fg'],['Remington Park','rp']]){
-  const p=page(1,[[750,[[10,`1 ${track} Md Sp Wt50k`]]],...runner('1','Alpha',700),...runner('2','Beta',600)]);
+  const p=page(1,[[750,[[10,`1 ${track} Md Sp Wt50k`]]],...multilineRunner('1','5-1','Alpha',700),...multilineRunner('2','8-1','Beta',590)]);
   const card=parseCard([p]);
   assert.deepEqual(Object.keys(card.races),['1']);
   assert.deepEqual(card.races[1].horses.map(h=>h.name),['Alpha','Beta']);
