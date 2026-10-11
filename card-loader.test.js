@@ -55,3 +55,21 @@ test('simulation Stage 1: structural DRF parser passes distance to race setup',(
  const card=parseCard([page(1,rows)]);
  assert.equal(card.races[1].dist,'1 1/16M');
 });
+
+
+test('Fair Grounds and Remington Park DRF race headings parse without altering runner scoring',()=>{
+ for(const [track,code] of [['Fair Grounds','fg'],['Remington Park','rp']]){
+  const p=page(1,[[750,[[10,`1 ${track} Md Sp Wt50k`]]],...multilineRunner('1','5-1','Alpha',700),...multilineRunner('2','8-1','Beta',590)]);
+  const card=parseCard([p]);
+  assert.deepEqual(Object.keys(card.races),['1']);
+  assert.deepEqual(card.races[1].horses.map(h=>h.name),['Alpha','Beta']);
+ }
+});
+test('FG, RP and GP abbreviated DRF page headers resolve track identity',()=>{
+ for(const [code,track] of [['Fg','Fair Grounds'],['Rp','Remington Park'],['Gp','Gulfstream Park']]){
+  const p=page(1,[[750,[[10,`${code}, race 1, page:1`]]],...runner('1','Alpha',700),...runner('2','Beta',600)]);
+  const card=parseCard([p]);
+  assert.equal(card.track,track);
+  assert.equal(card.races[1].horses.length,2);
+ }
+});
