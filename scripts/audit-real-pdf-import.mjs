@@ -5,7 +5,7 @@ import {createHash} from 'node:crypto';
 import {parseCard,reconstructPage} from '../card-loader.js';
 const dir=process.argv[2],out=process.argv[3]||'real-pdf-import-audit.json';
 if(!dir){console.error('Usage: node scripts/audit-real-pdf-import.mjs PDF_DIRECTORY [OUTPUT_JSON]');process.exit(2)}
-const expected={'AQU--12-26-2025.pdf':10,'AQU--12-27-2025.pdf':10,'AQU--12-28-2025.pdf':11,'FG--12-20-2025.pdf':12,'GP--12-20-2025.pdf':11,'GP--12-21-2025.pdf':10,'GP--12-26-2025.pdf':10,'GP--12-27-2025.pdf':10,'GP--12-28-2025.pdf':11,'RP--12-20-2025.pdf':12};
+const expected={'AQU--12-26-2025.pdf':10,'AQU--12-27-2025.pdf':11,'AQU--12-28-2025.pdf':10,'FG--12-20-2025.pdf':12,'GP--12-20-2025.pdf':11,'GP--12-21-2025.pdf':10,'GP--12-26-2025.pdf':10,'GP--12-27-2025.pdf':11,'GP--12-28-2025.pdf':10,'RP--12-20-2025.pdf':12};
 const reports=[];
 for(const [file,count] of Object.entries(expected)){
  const report={file,expected_races:count,status:'ERROR'};
@@ -22,11 +22,11 @@ for(const [file,count] of Object.entries(expected)){
   const races=Object.values(card.races);
   report.track=card.track;report.date=card.date;report.parsed_races=races.length;
   report.runners=races.reduce((n,r)=>n+r.horses.length,0);
-  report.races=races.map(r=>({race:r.race,runner_count:r.horses.length,dist:r.dist,surface:r.surface,horses:r.horses.map(h=>({program:h.n,name:h.name,morning_line:h.ml,beyer_figures:h.figs??h.beyer_figures??null,timeform_early:h.tfEarly??null,timeform_late:h.tfLate??null}))}));
+  report.races=races.map(r=>({race:r.race,runner_count:r.horses.length,dist:r.dist,surface:r.surface,horses:r.horses.map(h=>({program:h.n,name:h.name,morning_line:h.ml,beyer_figures:h.figs??h.beyer_figures??null,timeform_early:h.ppEvidence?.timeformEarly??null,timeform_late:h.ppEvidence?.timeformLate??null,pace_source:h.ppEvidence?.source??null}))}));
   const numbers=races.map(r=>Number(r.race));
   report.missing_races=Array.from({length:count},(_,i)=>i+1).filter(n=>!numbers.includes(n));
-  report.empty_races=races.filter(r=>!r.horses.length).map(r=>r.race);
-  report.status=report.missing_races.length||report.empty_races.length?'INCOMPLETE':'STRUCTURE_PASS';
+  report.empty_races=races.filter(r=>!r.horses.length).map(r=>r.race);\n  report.unexpected_races=numbers.filter(n=>!Number.isInteger(n)||n<1||n>count);\n  report.duplicate_races=numbers.filter((n,i)=>numbers.indexOf(n)!==i);
+  report.status=report.parsed_races!==count||report.missing_races.length||report.empty_races.length||report.unexpected_races.length||report.duplicate_races.length?'INCOMPLETE':'STRUCTURE_PASS';
  }catch(e){report.error=String(e?.stack||e)}
  reports.push(report);
  console.log(file,report.status,report.parsed_races??0,report.runners??0);
