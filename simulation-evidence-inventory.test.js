@@ -24,3 +24,10 @@ test('reject missing source provenance and unpaired official charts',()=>{
  assert.equal(x[0].status,'NOT_PAIRED');
  assert.throws(()=>validateChartPairManifest([{raceId:'A',ppSourceId:'p'},{raceId:'A',ppSourceId:'p'}]));
 });
+
+
+test('Stage 2 gate: a chart URL alone is not sufficient to certify a race pair',()=>{
+ const row={raceId:'SAR-2024-08-31-R1',ppSourceId:'SAR--08-31-2024.pdf',officialChartId:'chart-1',officialChartUrl:'https://example.org/chart'};
+ assert.equal(validateChartPairManifest([row])[0].status,'NOT_PAIRED');
+ assert.equal(validateChartPairManifest([{...row,runnerReconciliationVerified:true,callMappingVerified:true,actualChartReviewed:true}])[0].status,'READY_FOR_MANUAL_PAIR_REVIEW');
+});
