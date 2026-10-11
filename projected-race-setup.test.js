@@ -5,6 +5,9 @@ test('distance-specific markers include fractional calls and finish',()=>{
  assert.deepEqual(raceCallMarkers('6F').map(x=>x.label),['¼ mile','½ mile','Stretch','Finish']);
  assert.deepEqual(raceCallMarkers('1 1/16M').map(x=>x.label),['¼ mile','½ mile','¾ mile','Stretch','Finish']);
  assert.deepEqual(raceCallMarkers('1M').map(x=>x.label),['¼ mile','½ mile','¾ mile','Stretch','Finish']);
+ assert.deepEqual(raceCallMarkers('6ôF').map(x=>x.label),['¼ mile','½ mile','Stretch','Finish']);
+ assert.deepEqual(raceCallMarkers('6ô Furlongs').map(x=>x.label),['¼ mile','½ mile','Stretch','Finish']);
+ assert.deepEqual(raceCallMarkers('1ÂM').map(x=>x.label),['¼ mile','½ mile','¾ mile','Stretch','Finish']);
  assert.equal(raceCallMarkers('Unknown'),null);
 });
 test('positions form unique ordinal ranks at every call and early leader can fade',()=>{
@@ -30,4 +33,12 @@ test('scratch and excluded MTO/AE horses are not projected',()=>{
 test('insufficient pace evidence or unsupported distance does not invent rankings',()=>{
  assert.equal(projectRaceSetup({dist:'6F',horses:[{n:1,name:'A',odds:'3/1'},{n:2,name:'B',style:'S',odds:'4/1'}]}).available,false);
  assert.equal(projectRaceSetup({dist:'2 3/8M',horses:[]}).available,false);
+});
+
+test('DRF glyph distance allows an eligible six-horse simulation',()=>{
+ const horses=Array.from({length:6},(_,i)=>({n:i+1,name:'Horse '+(i+1),tfEarly:90-i*4,tfLate:40+i*4,odds:'3/1'}));
+ const result=projectRaceSetup({dist:'6ôF',horses});
+ assert.equal(result.available,true);
+ assert.equal(result.rows.length,6);
+ for(let i=0;i<result.markers.length;i++)assert.deepEqual(result.rows.map(h=>h.positions[i]).sort((a,b)=>a-b),[1,2,3,4,5,6]);
 });
