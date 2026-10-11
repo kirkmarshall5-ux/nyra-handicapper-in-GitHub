@@ -41,7 +41,7 @@ export function fingerprintPages(pages) {
   return (hash >>> 0).toString(36).padStart(7, "0");
 }
 
-const TRACK_ABBREVIATIONS = { bel: "Belmont Park", aqu: "Aqueduct", sar: "Saratoga" };
+const TRACK_ABBREVIATIONS = { bel: "Belmont Park", aqu: "Aqueduct", sar: "Saratoga", gp: "Gulfstream Park", fg: "Fair Grounds", rp: "Remington Park" };
 
 function raceHeaderAt(lines, index) {
   const text = lines[index].text;
@@ -49,7 +49,7 @@ function raceHeaderAt(lines, index) {
   if (drfPageHeader) {
     return { race: +drfPageHeader[2], trackAbbreviation: drfPageHeader[1].toLowerCase(), documentPage: +drfPageHeader[3], kind: "drf-page" };
   }
-  const drfRace = text.match(/^\s*(\d+)\s+(Belmont Park|Aqueduct|Saratoga|Churchill Downs|Gulfstream Park|Keeneland|Santa Anita(?: Park)?)\s+\S+/i);
+  const drfRace = text.match(/^\s*(\d+)\s+(Belmont Park|Aqueduct|Saratoga|Churchill Downs|Gulfstream Park|Fair Grounds|Remington Park|Keeneland|Santa Anita(?: Park)?)\s+\S+/i);
   if (drfRace) return { race: +drfRace[1], track: drfRace[2], kind: "drf-race-heading" };
   const race = text.match(/^\s*Race\s+(\d+)\b/i);
   if (!race) return null;
