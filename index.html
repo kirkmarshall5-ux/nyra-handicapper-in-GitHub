@@ -188,7 +188,7 @@ import {fieldConnections} from "./pp-context.js?v=20261008-qa1";
 import {runnerStateKey} from "./card-loader.js?v=20261008-qa1";
 import {researchRace} from "./jockey-research.js?v=20261008-qa1";
 import {evidenceProfile} from "./scoring-engine.js?v=20261008-qa1";
-import {rankContenders} from "./contender-rankings.js?v=20261011-candidates1";
+import {rankContenders} from "./contender-rankings.js?v=20261011-passdisplay1";
 import {passRaceDisplay} from "./pass-race-display.js?v=20261010-passview1";
 import {releaseRace as websiteRace,RELEASE_ID} from "./rankings-release.js?v=20261008-qa1";
 import {parseNyraText as parseNyraEntries} from "./nyra-entry-parser.js?v=20261008-qa1";
@@ -249,8 +249,14 @@ function renderRaceInsights(){
   const other=p.general.length?`<div class="tiny muted" style="margin-top:6px">Other pass reasons: ${p.general.map(escapeText).join('; ')}</div>`:'';
   topContenders.innerHTML='<b>V4.4c: PASS — no wager</b><div class="tiny muted" style="margin:5px 0">Provisional ranking of rated runners only; unrated horses may be competitive. Not an official full-field V4.4c ranking.</div>'+contenders+'<div class="tiny muted" style="margin:10px 0 5px"><b>Limited or missing information</b></div>'+limited+other;
  }else topContenders.innerHTML=fullRankings();
- const contender=rankContenders(race,r);
- document.getElementById('contenderCandidates').innerHTML=contender.decision==='RATEABLE'?contender.rankings.slice(0,4).map((h,i)=>`<div><b>${i+1}. #${escapeText(h.n||'—')} ${escapeText(h.name)}</b> <span class="pill">Score ${h.score.toFixed(3)}</span></div>`).join(''):`<b>Contender: ${escapeText(contender.decision)}</b><div class="tiny muted">${escapeText(contender.reason)}</div>`;
+ const contender=rankContenders(race,r,{displayPass:r.decision==='PASS'});
+ const contenderList=contender.rankings.slice(0,4).map((h,i)=>`<div><b>${i+1}. #${escapeText(h.n||'—')} ${escapeText(h.name)}</b> <span class="pill">Score ${h.score.toFixed(3)}</span></div>`).join('');
+ const contenderTarget=document.getElementById('contenderCandidates');
+ if(r.decision==='PASS'){
+  const p=passRaceDisplay(r),limited=p.unrated.map(h=>`<div class="tiny muted">#${escapeText(h.n||'—')} ${escapeText(h.name)} — ${h.reasons.map(escapeText).join('; ')}</div>`).join(''),other=p.general.length?`<div class="tiny muted">Other pass reasons: ${p.general.map(escapeText).join('; ')}</div>`:'';
+  contenderTarget.innerHTML='<b>Pass-No wager</b><div class="tiny muted" style="margin:5px 0">Provisional ranking of rated runners only; unrated horses may be competitive. Not an official full-field Contender ranking.</div>'+(contenderList||`<div class="tiny muted">${escapeText(contender.reason||'No horses have enough verified evidence for a numerical rating.')}</div>`)+('<div class="tiny muted" style="margin:10px 0 5px"><b>Limited or missing information</b></div>'+limited)+other;
+ }else contenderTarget.innerHTML=contender.decision==='RATEABLE'?contenderList:`<b>Contender: ${escapeText(contender.decision)}</b><div class="tiny muted">${escapeText(contender.reason)}</div>`;
+
  bestValue.innerHTML='<div class="muted">Best Value: PASS — probability validation pending. Morning line is reference only. The research win-ticket builder and quote recorder are available in the Bets tab.</div>';
 }
 function renderJ1Comparison(){
