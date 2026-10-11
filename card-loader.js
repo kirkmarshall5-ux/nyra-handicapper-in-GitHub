@@ -212,20 +212,20 @@ export function parseCard(pages, { sourceName = "document" } = {}) {
     }
     // Only read the current runner's bounded owner-to-next-runner span.
     // These are source observations, not imputed figures or model inputs.
-    const ownerAnchors = section.map((line,i)=>/^Own\\s*:/i.test(clean(line.text))?i:-1).filter(i=>i>=0);
+    const ownerAnchors = section.map((line,i)=>/^Own\s*:/i.test(clean(line.text))?i:-1).filter(i=>i>=0);
     for (let h=0;h<horses.length;h++){
       const horse=horses[h];
       // Locate the exact program/odds/name/owner signature used for identity.
       const anchorIndex=ownerAnchors.find(i=>{
         const tail=section.slice(Math.max(0,i-4),i).map(line=>clean(line.text)).join(" ");
-        const m=tail.match(/(?:^|\\s)([1-9]\\d?(?:A|B|X)?)\\s+(\\d+(?:\\.\\d+)?-\\d+|\\d+\\/\\d+)\\s+([A-Za-z][A-Za-z0-9'’ .&-]{1,60}(?:\\s+\\([^)]*\\))?)$/i);
-        return m && m[1].toUpperCase()===horse.n && clean(m[3].replace(/\\s+\\([^)]*\\)$/,""))===horse.name;
+        const m=tail.match(/(?:^|\s)([1-9]\d?(?:A|B|X)?)\s+(\d+(?:\.\d+)?-\d+|\d+\/\d+)\s+([A-Za-z][A-Za-z0-9'’ .&-]{1,60}(?:\s+\([^)]*\))?)$/i);
+        return m && m[1].toUpperCase()===horse.n && clean(m[3].replace(/\s+\([^)]*\)$/,""))===horse.name;
       });
       if(anchorIndex===undefined)continue;
       const nextOwner=ownerAnchors.find(i=>i>anchorIndex);
       const span=section.slice(anchorIndex, nextOwner===undefined?Math.min(section.length,anchorIndex+80):nextOwner);
       const text=span.map(line=>clean(line.text)).join(" ");
-      const pace=text.match(/\\bTimeformUS\\s+Pace\\s*:\\s*Early\\s+(\\d{1,3})\\s+Late\\s+(\\d{1,3})\\b/i);
+      const pace=text.match(/\bTimeformUS\s+Pace\s*:\s*Early\s+(\d{1,3})\s+Late\s+(\d{1,3})\b/i);
       if(pace){
         horse.ppEvidence={timeformEarly:Number(pace[1]),timeformLate:Number(pace[2]),source:"DRF TimeformUS Pace",status:"extracted"};
       }
