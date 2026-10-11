@@ -210,11 +210,31 @@ export function parseCard(pages, { sourceName = "document" } = {}) {
       }
       if (program && !horses.some(horse => horse.n === program)) horses.push({ n: program, name, j: "", t: "", odds: "—", ml: odds, style: "P", lifeStarts: null });
     }
+    // Only read the current runner's bounded owner-to-next-runner span.
+    // These are source observations, not imputed figures or model inputs.
+    const ownerAnchors = section.map((line,i)=>/^Own\s*:/i.test(clean(line.text))?i:-1).filter(i=>i>=0);
+    for (let h=0;h<horses.length;h++){
+      const horse=horses[h];
+      // Locate the exact program/odds/name/owner signature used for identity.
+      const anchorIndex=ownerAnchors.find(i=>{
+        const tail=section.slice(Math.max(0,i-4),i).map(line=>clean(line.text)).join(" ");
+        const m=tail.match(/(?:^|\s)([1-9]\d?(?:A|B|X)?)\s+(\d+(?:\.\d+)?-\d+|\d+\/\d+)\s+([A-Za-z][A-Za-z0-9'’ .&-]{1,60}(?:\s+\([^)]*\))?)$/i);
+        return m && m[1].toUpperCase()===horse.n && clean(m[3].replace(/\s+\([^)]*\)$/,""))===horse.name;
+      });
+      if(anchorIndex===undefined)continue;
+      const nextOwner=ownerAnchors.find(i=>i>anchorIndex);
+      const span=section.slice(anchorIndex, nextOwner===undefined?Math.min(section.length,anchorIndex+80):nextOwner);
+      const text=span.map(line=>clean(line.text)).join(" ");
+      const pace=text.match(/\bTimeformUS\s+Pace\s*:\s*Early\s+(\d{1,3})\s+Late\s+(\d{1,3})\b/i);
+      if(pace){
+        horse.ppEvidence={timeformEarly:Number(pace[1]),timeformLate:Number(pace[2]),source:"DRF TimeformUS Pace",status:"extracted"};
+      }
+    }
     const headerText = clean(section[0]?.text || "");
     const bodyText = section.slice(0, 8).map(line => clean(line.text)).join(" ");
     const postMatch = bodyText.match(/\bPost\s*time:\s*([^ ]+\s*(?:ET|PM|AM)?)/i);
     const surface = /\bInner Turf\b/i.test(bodyText) ? "Inner Turf" : /\bTurf\b/i.test(bodyText) ? "Turf" : /\bTapeta\b|\bSynthetic\b/i.test(bodyText) ? "Synthetic" : "Dirt";
-    const headingClass = headerText.replace(/^\s*\d+\s+(?:Belmont Park|Aqueduct|Saratoga|Churchill Downs|Gulfstream Park|Keeneland|Santa Anita(?: Park)?)\s*/i, "");
+    const headingClass = headerText.replace(/^\s*\d+\s+(?:Belmont Park|Aqueduct|Saratoga|Churchill Downs|Gulfstream Park|Fair Grounds|Remington Park|Keeneland|Santa Anita(?: Park)?)\s*/i, "");
     races[raceNumber] = { race: raceNumber, horses, track: "", date: "", cls: headingClass || "Race", dist: primaryRaceDistance(section.slice(1, 12)), surface, post: postMatch?.[1] || "", oddsMode: "Morning line (pre-race)" };
   };
   const pageAssignments = pages.map(page => {
@@ -246,9 +266,10 @@ export function parseCard(pages, { sourceName = "document" } = {}) {
   if (ymdMatch) date = `${ymdMatch[1]}-${ymdMatch[2].padStart(2,"0")}-${ymdMatch[3].padStart(2,"0")}`;
   else if (mdyMatch) date = `${mdyMatch[3]}-${mdyMatch[1].padStart(2,"0")}-${mdyMatch[2].padStart(2,"0")}`;
   else if (monthMatch) date = `${monthMatch[3]}-${String(new Date(`${monthMatch[1]} 1, 2000`).getMonth()+1).padStart(2,"0")}-${monthMatch[2].padStart(2,"0")}`;
-  const trackMatch = allText.match(/\b(Belmont Park|Aqueduct|Saratoga|Churchill Downs|Gulfstream Park|Keeneland|Santa Anita(?: Park)?)\b/i);
+  const trackMatch = allText.match(/\b(Belmont Park|Aqueduct|Saratoga|Churchill Downs|Gulfstream Park|Fair Grounds|Remington Park|Keeneland|Santa Anita(?: Park)?)\b/i);
   const drfTrack = headers.find(header => header.trackAbbreviation)?.trackAbbreviation;
-  const track = trackMatch ? trackMatch[1] : TRACK_ABBREVIATIONS[drfTrack] || (drfTrack ? drfTrack.toUpperCase() : "");
+  const headingTrack = headers.find(header => header.track)?.track;
+  const track = headingTrack || (trackMatch ? trackMatch[1] : TRACK_ABBREVIATIONS[drfTrack] || (drfTrack ? drfTrack.toUpperCase() : ""));
   Object.values(races).forEach(race => { race.track = track || "Unknown track"; race.date = date; });
   const totalRunners = Object.values(races).reduce((sum, race) => sum + race.horses.length, 0);
   if (!totalRunners) throw new Error("Race headers were found, but no bounded runner headers with program number, name, and Own: were found.");
