@@ -267,7 +267,8 @@ export function parseCard(pages, { sourceName = "document" } = {}) {
   else if (mdyMatch) date = `${mdyMatch[3]}-${mdyMatch[1].padStart(2,"0")}-${mdyMatch[2].padStart(2,"0")}`;
   else if (monthMatch) date = `${monthMatch[3]}-${String(new Date(`${monthMatch[1]} 1, 2000`).getMonth()+1).padStart(2,"0")}-${monthMatch[2].padStart(2,"0")}`;
   const trackMatch = allText.match(/\b(Belmont Park|Aqueduct|Saratoga|Churchill Downs|Gulfstream Park|Fair Grounds|Remington Park|Keeneland|Santa Anita(?: Park)?)\b/i);
-  const drfTrack = headers.find(header => header.trackAbbreviation)?.trackAbbreviation;\n  const headingTrack = headers.find(header => header.track)?.track;
+  const drfTrack = headers.find(header => header.trackAbbreviation)?.trackAbbreviation;
+  const headingTrack = headers.find(header => header.track)?.track;
   const track = headingTrack || (trackMatch ? trackMatch[1] : TRACK_ABBREVIATIONS[drfTrack] || (drfTrack ? drfTrack.toUpperCase() : ""));
   Object.values(races).forEach(race => { race.track = track || "Unknown track"; race.date = date; });
   const totalRunners = Object.values(races).reduce((sum, race) => sum + race.horses.length, 0);
