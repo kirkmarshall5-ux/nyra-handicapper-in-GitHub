@@ -25,11 +25,11 @@ export function estimatedWinLine(race,result,model){
 }
 export function winLineFields(line,horse){
  const e=line.entries.find(h=>runnerKey(h)===runnerKey(horse));
- if(!e)return '<span class="pill">Fair Odds —</span> <span class="pill">True Chance —</span>';
+ if(!e)return '<td>—</td><td>—</td>';
  const odds=e.fairOdds<.01?'&lt;0.01':e.fairOdds>999?e.fairOdds.toExponential(2):e.fairOdds.toFixed(2);
  const percent=e.winPercent<.1?'&lt;0.1':e.winPercent>99.9?'&gt;99.9':e.winPercent.toFixed(1);
- return `<span class="pill">Fair Odds ${odds}/1</span> <span class="pill">True Chance ${percent}% (est.)</span>`;
+ return `<td>${odds}/1</td><td>${percent}%</td>`;
 }
 export function winLineNote(line){
- return line.status==='ESTIMATED'?'<div class="tiny muted" style="margin-top:8px">Estimated full-field line · calibration pending · no wager recommendation.</div>':'<div class="tiny muted" style="margin-top:8px">Fair Odds / True Chance unavailable: '+line.reason+'.</div>';
+ return line.status==='ESTIMATED'?'<div class="tiny muted" style="margin-top:8px">True Chance is an estimate · full-field line · calibration pending · no wager recommendation.</div>':'<div class="tiny muted" style="margin-top:8px">Fair Odds / True Chance unavailable: '+line.reason+'.</div>';
 }

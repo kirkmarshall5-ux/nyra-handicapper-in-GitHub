@@ -28,6 +28,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 .pace-lane{display:grid;grid-template-columns:60px 1fr;gap:10px;align-items:center}.lane{min-height:54px;background:#0d1728;border:1px solid var(--line);border-radius:12px;display:flex;gap:8px;align-items:center;padding:8px;overflow:auto}.runner{background:#1f304a;border:1px solid #344a6a;border-radius:10px;padding:8px 10px;white-space:nowrap}.runner b{color:var(--gold)}
 .controls{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}.controls label,.field label{display:block;font-size:11px;color:var(--muted);margin-bottom:4px}
 .ticketgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}.pill{display:inline-block;border:1px solid var(--line);padding:4px 7px;border-radius:999px;font-size:11px;margin:2px}
+.candidate-table{table-layout:fixed;font-size:12px}.candidate-table th,.candidate-table td{padding:8px 4px}.candidate-table th{position:static;text-transform:none;letter-spacing:0;font-size:11px}.candidate-table th:first-child{width:46%}.candidate-table th:nth-child(2){width:16%}.candidate-table th:nth-child(3){width:18%}.candidate-table th:nth-child(4){width:20%}.candidate-table td:first-child{overflow-wrap:anywhere}.candidate-table td:not(:first-child),.candidate-table th:not(:first-child){text-align:right}.candidate-table td:not(:first-child){white-space:nowrap;font-variant-numeric:tabular-nums}
 .weight-row{display:grid;grid-template-columns:140px 1fr 56px;gap:9px;align-items:center;margin:8px 0}.weight-row input[type=range]{padding:0}
 .check{width:auto}.source{border-left:3px solid var(--gold)}
 @media(max-width:900px){.span8,.span7,.span6,.span5,.span4,.span3{grid-column:span 12}.hero{display:block}.controls,.ticketgrid{grid-template-columns:repeat(2,1fr)}.wrap,main{padding-left:12px;padding-right:12px}.metric{font-size:23px}.hide-sm{display:none}.weight-row{grid-template-columns:120px 1fr 48px}}
@@ -188,7 +189,7 @@ import {fieldConnections} from "./pp-context.js?v=20261008-qa1";
 import {runnerStateKey} from "./card-loader.js?v=20261008-qa1";
 import {researchRace} from "./jockey-research.js?v=20261008-qa1";
 import {evidenceProfile} from "./scoring-engine.js?v=20261008-qa1";
-import {estimatedWinLine,winLineFields,winLineNote} from "./fair-odds.js?v=20261011-line1";
+import {estimatedWinLine,winLineFields,winLineNote} from "./fair-odds.js?v=20261011-columns1";
 import {rankContenders} from "./contender-rankings.js?v=20261011-passdisplay1";
 import {passRaceDisplay} from "./pass-race-display.js?v=20261010-passview1";
 import {releaseRace as websiteRace,RELEASE_ID} from "./rankings-release.js?v=20261008-qa1";
@@ -240,12 +241,13 @@ function fairOddsMap(){return {}}
 function confidenceRank(h){const ep=evidenceProfile({...h,jockeyRating:h.jockey_win,trainerRating:h.trainer_win});return ({High:3,Medium:2,Low:1})[ep.confidence]||1}
 function valueRows(){return []}
 const escapeText=s=>String(s??"").replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function candidateTable(rows){return `<table class="candidate-table"><thead><tr><th aria-label="Horse"></th><th scope="col">Rating</th><th scope="col">Fair Odds</th><th scope="col">True Chance</th></tr></thead><tbody>${rows}</tbody></table>`}
 function renderRaceInsights(){
  const r=currentRating(),v44cLine=estimatedWinLine(race,r,'v44c');
- const fullRankings=()=>r.rankings.slice(0,4).map((h,i)=>`<div><b>${i+1}. #${escapeText(h.n||'—')} ${escapeText(h.name)}</b> <span class="pill">Rating ${h.v44c_display_score}</span> ${winLineFields(v44cLine,h)}<div class="tiny muted">${h.v44c_signals.map(([k,v])=>escapeText(k)+' '+(v>0?'+':'')+v).join(' · ')||'No adjustment'}</div></div>`).join('');
+ const fullRankings=()=>candidateTable(r.rankings.slice(0,4).map((h,i)=>`<tr><td><b>${i+1}. #${escapeText(h.n||'—')} ${escapeText(h.name)}</b><div class="tiny muted">${h.v44c_signals.map(([k,v])=>escapeText(k)+' '+(v>0?'+':'')+v).join(' · ')||'No adjustment'}</div></td><td>${h.v44c_display_score}</td>${winLineFields(v44cLine,h)}</tr>`).join(''));
  if(r.decision==='PASS'){
   const p=passRaceDisplay(r);
-  const contenders=p.ranked.length?p.ranked.map((h,i)=>`<div><b>${i+1}. #${escapeText(h.n||'—')} ${escapeText(h.name)}</b> <span class="pill">Rating ${h.displayScore}</span> ${winLineFields(v44cLine,h)}</div>`).join(''):'<div class="tiny muted">No horses have enough verified evidence for a numerical rating.</div>';
+  const contenders=p.ranked.length?candidateTable(p.ranked.map((h,i)=>`<tr><td><b>${i+1}. #${escapeText(h.n||'—')} ${escapeText(h.name)}</b></td><td>${h.displayScore}</td>${winLineFields(v44cLine,h)}</tr>`).join('')):'<div class="tiny muted">No horses have enough verified evidence for a numerical rating.</div>';
   const limited=p.unrated.length?p.unrated.map(h=>`<div class="tiny muted">#${escapeText(h.n||'—')} ${escapeText(h.name)} — ${h.reasons.map(escapeText).join('; ')}</div>`).join(''):'<div class="tiny muted">No individually unrated horses identified.</div>';
   const other=p.general.length?`<div class="tiny muted" style="margin-top:6px">Other pass reasons: ${p.general.map(escapeText).join('; ')}</div>`:'';
   topContenders.innerHTML='<b>V4.4c: PASS — no wager</b><div class="tiny muted" style="margin:5px 0">Provisional ranking of rated runners only; unrated horses may be competitive. Not an official full-field V4.4c ranking.</div>'+contenders+'<div class="tiny muted" style="margin:10px 0 5px"><b>Limited or missing information</b></div>'+limited+other;
@@ -253,7 +255,7 @@ function renderRaceInsights(){
  topContenders.innerHTML+=winLineNote(v44cLine);
  const contender=rankContenders(race,r,{displayPass:r.decision==='PASS'});
  const contenderLine=estimatedWinLine(race,contender,'contender');
- const contenderList=contender.rankings.slice(0,4).map((h,i)=>`<div><b>${i+1}. #${escapeText(h.n||'—')} ${escapeText(h.name)}</b> <span class="pill">Score ${h.score.toFixed(3)}</span> ${winLineFields(contenderLine,h)}</div>`).join('');
+ const contenderList=contender.rankings.length?candidateTable(contender.rankings.slice(0,4).map((h,i)=>`<tr><td><b>${i+1}. #${escapeText(h.n||'—')} ${escapeText(h.name)}</b></td><td>${h.score.toFixed(3)}</td>${winLineFields(contenderLine,h)}</tr>`).join('')):'';
  const contenderTarget=document.getElementById('contenderCandidates');
  if(r.decision==='PASS'){
   const p=passRaceDisplay(r),limited=p.unrated.map(h=>`<div class="tiny muted">#${escapeText(h.n||'—')} ${escapeText(h.name)} — ${h.reasons.map(escapeText).join('; ')}</div>`).join(''),other=p.general.length?`<div class="tiny muted">Other pass reasons: ${p.general.map(escapeText).join('; ')}</div>`:'';
