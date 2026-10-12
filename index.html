@@ -101,6 +101,23 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <div class="small muted">The Handicap Rating is not a win probability. It compares the entered PP information and public context. “Things to Consider” stays separate so an angle does not secretly inflate the rating.</div>
 <div id="weights" style="margin-top:12px"></div><button id="resetWeights" class="secondary" style="width:100%;margin-top:8px">Reset weights</button></div>
 
+<div class="card span12" id="contenderRules">
+<div class="kicker">Transparent comparison · research challenger</div><h3 class="sectiontitle">Locked Contender V2 rules</h3>
+<div class="small muted" style="margin-bottom:12px">Contender ranks horses for top-three contention using frozen feature weights and a matched Beyer-trend adjustment. Its score is a relative rating, not a calibrated chance of winning.</div>
+<div class="grid small">
+<div class="span6 stack">
+<div><b>Figures and suitability.</b> Latest Beyer, weighted recent five, best of latest three, same-surface figures and same-surface/distance figures. Recent-five weights are 50%, 25%, 15%, 7% and 3%, normalized for fewer career starts only when the actual-start sequence is verified; otherwise use the latest verified figure.</div>
+<div><b>Pace and records.</b> Early/Late pace and pressure-related late fit; source-backed surface, distance and placing records. Surface/distance figures use verified rows within 365 days; distance matches are within half a furlong. Record features require at least three starts.</div>
+<div><b>Connections and readiness.</b> Verified annual jockey/trainer counts with at least 25 starts, otherwise qualifying local counts. Rates are smoothed as (wins + 2) ÷ (starts + 20). Readiness uses days since the latest verified start and workout frequency/rank during the past 30 days.</div>
+</div>
+<div class="span6 stack">
+<div><b>Relative scoring.</b> Available factors are compared within the eligible field on a scale from −1 to +1, then combined with locked coefficients. Missing or constant factors contribute zero. Higher totals rank first; negative scores are valid. Scores display to three decimal places; the unrounded score determines rank.</div>
+<div><b>Matched trend.</b> Add 0.10 × the field-relative Beyer trend only with a verified actual-start window and at least three comparable starts among the latest five: same surface, within half a furlong, and within 365 days. Unverified trend adds zero.</div>
+<div><b>Source and PASS rules.</b> Preserve V4.4c full-field PASS decisions and exclude scratched or unconfirmed conditional entrants. PASS rows are provisional rated-runner diagnostics. Trip and opposition features require separately verified evidence; the current upload path leaves them neutral. Missing Contender source evidence requires a PP re-upload.</div>
+</div></div>
+<div class="note small" style="margin-top:12px"><b>Locked for testing.</b> Coefficients were trained for top-three contention, not directly calibrated for race wins. Estimated win chances and Fair Odds remain experimental. V4.4c remains the comparison control; probability and wagering approval remain pending.</div>
+</div>
+
 <div class="card span12">
 <div class="kicker">Illustrative race flow · information only</div><h3 class="sectiontitle">Projected race set up</h3>
 <div class="small muted" style="margin-bottom:10px">Projected running positions by race call. 1 = first, 2 = second, etc. These are rough pace-based illustrations, NOT verified predicted finish orders, handicap ratings, or wagering advice. The stretch marker is a phase estimate, not a measured track pole. Missing pace evidence can prevent a projection.</div>
