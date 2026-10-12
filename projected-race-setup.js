@@ -1,8 +1,15 @@
 import {displayDistance} from './race-conditions.js';
 // Display-only, deterministic illustration. No odds, handicap ratings, or betting logic.
-const styleEarly={E:90,EP:72,P:48,S:25};
-const styleLate={E:35,EP:54,P:72,S:90};
-const numberOrNull=x=>x!==''&&x!=null&&Number.isFinite(Number(x))?Number(x):null;
+const numberOrNull=x=>((typeof x==='number'||typeof x==='string')&&String(x).trim()!==''&&Number.isFinite(Number(x))&&Number(x)>=0)?Number(x):null;
+export function paceEligible(h){return h.odds!=='SCR'&&h.included_in_frozen_field!==false&&(!h.entry_status||h.entry_status==='REGULAR')}
+export function paceProfile(h){
+ const starts=h.life_starts??h.lifeStarts;
+ if(starts===0||starts==='0')return {known:false,style:'UNKNOWN',early:null,late:null,source:'FTS — pace unknown'};
+ const early=numberOrNull(h.tfEarly)??numberOrNull(h.timeform_early),late=numberOrNull(h.tfLate)??numberOrNull(h.timeform_late);
+ if(early===null||late===null)return {known:false,style:'UNKNOWN',early:null,late:null,source:'Missing pace evidence — unknown'};
+ const style=['E','EP','P','S'].includes(h.style)?h.style:early>=105?'E':early>=90?'EP':late>=85?'S':'P';
+ return {known:true,style,early,late,source:'TimeformUS Early/Late'};
+}
 function lengthFurlongs(raw){
  const t=displayDistance(raw).toUpperCase().replace(/\s+/g,' ').trim();
  const mixed=t.match(/(\d+)\s+(\d+)\/(\d+)\s*M/);
@@ -37,19 +44,16 @@ export function projectRaceSetup(race){
  const markers=raceCallMarkers(race.dist);
  if(/hurdle|steeplechase/i.test(String(race.cls||'')+' '+String(race.surface||'')))return {available:false,reason:'Hurdle and steeplechase races are excluded from this illustration.',markers:[],rows:[]};
  if(!markers)return {available:false,reason:'Distance unavailable or unsupported for fractional projection.',markers:[],rows:[]};
- const eligible=(race.horses||[]).filter(h=>h.odds!=='SCR'&&h.included_in_frozen_field!==false&&h.entry_status!=='MTO'&&h.entry_status!=='AE');
+ const eligible=(race.horses||[]).filter(paceEligible);
  if(eligible.length<2)return {available:false,reason:'At least two confirmed runners are required.',markers,rows:[]};
- const profiles=eligible.map(h=>{
-  const early=numberOrNull(h.tfEarly),late=numberOrNull(h.tfLate),style=String(h.style||'').toUpperCase();
-  return {...h,early:early??styleEarly[style]??null,late:late??styleLate[style]??null,source:early!==null&&late!==null?'TimeformUS Early/Late':early!==null||late!==null?'Partial TimeformUS + style proxy':styleEarly[style]!=null?'Running-style proxy':'Missing pace evidence'};
- });
- if(profiles.some(h=>h.early===null||h.late===null))return {available:false,reason:'One or more runners lack usable early/late or style evidence. No complete projection shown.',markers,rows:[]};
- const positions=profiles.map(()=>[]);
+ const profiles=eligible.map(h=>({...h,...paceProfile(h)}));
+ const incomplete=profiles.some(h=>!h.known);
+ const positions=profiles.map(()=>markers.map(()=>null));
  markers.forEach((call,ci)=>{
   const phase=call.label==='Finish'?1:call.label==='Stretch'?.82:Math.min(.7,(call.fraction/markers.at(-1).fraction)*.9);
-  const scored=profiles.map((h,i)=>({i,h,value:(1-phase)*h.early+phase*h.late}));
+  const scored=profiles.map((h,i)=>({i,h,value:h.known?(1-phase)*h.early+phase*h.late:null})).filter(x=>x.h.known);
   scored.sort((a,b)=>b.value-a.value||compareProgram(a.h,b.h));
   scored.forEach((x,rank)=>positions[x.i][ci]=rank+1);
  });
- return {available:true,markers,rows:profiles.map((h,i)=>({program:h.n,name:h.name,source:h.source,positions:positions[i]})).sort((a,b)=>compareProgram({n:a.program},{n:b.program})),method:'Illustrative ranks blend available TimeformUS Early/Late pace figures and/or provisional running-style labels. They are not predicted measured calls, winning probabilities or handicapping selections.'};
+ return {available:true,incomplete,markers,rows:profiles.map((h,i)=>({program:h.n,name:h.name,source:h.source,positions:positions[i]})).sort((a,b)=>compareProgram({n:a.program},{n:b.program})),method:(incomplete?'Incomplete illustration: positions rank only runners with known pace figures; unknown runners could change the race flow. ':'')+'Illustrative ranks blend TimeformUS Early/Late pace figures. FTS and runners missing either figure remain Unknown at every call. These are not predicted measured calls, winning probabilities or handicapping selections.'};
 }

@@ -212,7 +212,7 @@ import {passRaceDisplay} from "./pass-race-display.js?v=20261010-passview1";
 import {releaseRace as websiteRace,RELEASE_ID} from "./rankings-release.js?v=20261008-qa1";
 import {parseNyraText as parseNyraEntries} from "./nyra-entry-parser.js?v=20261008-qa1";
 import {displayDistance} from "./race-conditions.js?v=20261008-qa1";
-import {projectRaceSetup} from "./projected-race-setup.js?v=20261011-fractional2";
+import {projectRaceSetup,paceEligible,paceProfile} from "./projected-race-setup.js?v=20261011-unknownpace1";
 import {applyOddsSnapshot} from "./odds-snapshot.js?v=20261008-scratchfix3";
 import {oddsSourceForTrack,parseManualOdds,applyManualOdds} from "./multitrack-odds.js?v=20261010-1";
 import {applyMorningLines} from "./morning-line-overlay.js?v=20261008-odds2";
@@ -357,10 +357,14 @@ function renderProjectedRaceSetup(){
  const projection=projectRaceSetup(race);
  if(!projection.available){target.innerHTML='<div class="note small muted">'+escapeText(projection.reason)+'</div>';return}
  const header=projection.markers.map(m=>'<th scope="col">'+escapeText(m.label)+'</th>').join('');
- const body=projection.rows.map(h=>'<tr><td><b>#'+escapeText(h.program)+' '+escapeText(h.name)+'</b><div class="tiny muted">'+escapeText(h.source)+'</div></td>'+h.positions.map(n=>'<td style="text-align:center"><b>'+n+'</b></td>').join('')+'</tr>').join('');
+ const body=projection.rows.map(h=>'<tr><td><b>#'+escapeText(h.program)+' '+escapeText(h.name)+'</b><div class="tiny muted">'+escapeText(h.source)+'</div></td>'+h.positions.map(n=>'<td style="text-align:center"><b>'+(n===null?'Unknown':n)+'</b></td>').join('')+'</tr>').join('');
  target.innerHTML='<table><thead><tr><th scope="col">Horse</th>'+header+'</tr></thead><tbody>'+body+'</tbody></table><div class="tiny muted" style="margin-top:10px">'+escapeText(projection.method)+' No changes to V4.4c ranking, PASS, or betting rules.</div>';
 }
-function renderPace(){paceMap.innerHTML=["E","EP","P","S"].map(s=>`<div class="pace-lane"><b>${s}</b><div class="lane">${race.horses.filter(h=>h.style===s&&h.odds!=="SCR").map(h=>`<div class="runner"><b>#${h.n}</b> ${h.name}<div class="tiny muted">Rating ${score(h)}</div></div>`).join("")||'<span class="muted">None</span>'}</div></div>`).join("")}
+function renderPace(){
+ const runners=race.horses.filter(paceEligible).map(h=>({...h,pace:paceProfile(h)})),unknown=runners.filter(h=>!h.pace.known);
+ paceMap.innerHTML=["E","EP","P","S"].map(s=>`<div class="pace-lane"><b>${s}</b><div class="lane">${runners.filter(h=>h.pace.known&&h.pace.style===s).map(h=>`<div class="runner"><b>#${escapeText(h.n)}</b> ${escapeText(h.name)}<div class="tiny muted">Rating ${score(h)}</div></div>`).join("")||'<span class="muted">None</span>'}</div></div>`).join("")+(unknown.length?'<div class="note small"><b>Omitted from pace lanes</b><div>'+unknown.map(h=>'#'+escapeText(h.n)+' '+escapeText(h.name)+' — '+escapeText(h.pace.source)).join('<br>')+'</div><div class="tiny muted">No running style is inferred for these runners; unknown runners could change the pace.</div></div>':'');
+}
+
 function renderReleaseContext(){
  const target=document.getElementById("releaseContext");
  target.innerHTML=race.horses.filter(h=>h.odds!=="SCR").map(h=>{const c=runnerContext(h,race),prior=c.figures.map(f=>`<div class="tiny muted">${escapeText(f.date)} · Beyer ${f.figure} · ${escapeText(f.surface||"unknown surface")} ${escapeText(f.distance_token)} · ${escapeText(f.condition)}${f.trip_text?`<br>Trip source text: ${escapeText(f.trip_text)} (impact unverified)`:""}</div>`).join("");return `<div class="card span4"><b>#${escapeText(h.n)} ${escapeText(h.name)}</b><div class="small">Actual gate: ${c.gate??"Unknown — verify draw"}<br>Style proxy: ${escapeText(c.style.style)} (${c.style.calls.length} source calls)<br>Matching surface/category: ${c.matching}/${c.figures.length}<br>Days since latest figure: ${c.days_since_latest_figure??"Unknown"} (actual layoff unverified)<br>Prior opposition: unavailable</div>${prior||'<div class="tiny muted">Prior condition/trip context unavailable.</div>'}<div class="tiny muted">Context only; no rating adjustment.</div></div>`}).join("");
@@ -386,7 +390,7 @@ function renderEdit(){editTable.querySelector("tbody").innerHTML=race.horses.map
 <td>${confidenceBadge(h)}</td>
 <td><input data-n="${escapeText(h.n||h.name)}" data-k="note" value="${(h.note||"").replace(/"/g,"&quot;")}" style="min-width:180px"></td></tr>`).join("");
  editTable.querySelectorAll("input").forEach(el=>{if(["last","best","form","cls","trip"].includes(el.dataset.k))el.readOnly=true});
- editTable.querySelectorAll("input,select").forEach(el=>el.onchange=()=>{let h=race.horses.find(x=>(x.n||x.name)==el.dataset.n);h[el.dataset.k]=el.value;save();renderHorses();renderPace();renderEvidence()});
+ editTable.querySelectorAll("input,select").forEach(el=>el.onchange=()=>{let h=race.horses.find(x=>(x.n||x.name)==el.dataset.n);h[el.dataset.k]=el.value;save();renderHorses();renderPace();renderProjectedRaceSetup();renderEvidence()});
 }
 function renderLeaderboards(){
  const table=kind=>{const rows=fieldConnections(race.horses,kind);return rows.length?rows.map((x,i)=>`<tr><td>${i+1}</td><td><b>${escapeText(x.name)}</b></td><td>${x.starts}</td><td>${x.wins}</td><td>${x.win==null?'—':x.win.toFixed(1)+'%'}</td><td>${x.top==null?'—':x.top.toFixed(1)+'%'}</td></tr>`).join(""):'<tr><td colspan="6">Source records unavailable. Upload the PP again. Conflicting records are excluded.</td></tr>'};

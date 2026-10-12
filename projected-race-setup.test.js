@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {raceCallMarkers,projectRaceSetup} from './projected-race-setup.js';
+import {raceCallMarkers,projectRaceSetup,paceProfile} from './projected-race-setup.js';
 test('distance-specific markers include fractional calls and finish',()=>{
  assert.deepEqual(raceCallMarkers('6F').map(x=>x.label),['¼ mile','½ mile','Stretch','Finish']);
  assert.deepEqual(raceCallMarkers('1 1/16M').map(x=>x.label),['¼ mile','½ mile','¾ mile','Stretch','Finish']);
@@ -31,7 +31,7 @@ test('scratch and excluded MTO/AE horses are not projected',()=>{
  assert.deepEqual(r.rows.map(h=>h.program),[1,2]);
 });
 test('insufficient pace evidence or unsupported distance does not invent rankings',()=>{
- assert.equal(projectRaceSetup({dist:'6F',horses:[{n:1,name:'A',odds:'3/1'},{n:2,name:'B',style:'S',odds:'4/1'}]}).available,false);
+ const unknown=projectRaceSetup({dist:'6F',horses:[{n:1,name:'A',odds:'3/1'},{n:2,name:'B',style:'S',odds:'4/1'}]});assert.equal(unknown.incomplete,true);assert.ok(unknown.rows.every(h=>h.positions.every(p=>p===null)));
  assert.equal(projectRaceSetup({dist:'2 3/8M',horses:[]}).available,false);
 });
 
@@ -43,32 +43,29 @@ test('DRF glyph distance allows an eligible six-horse simulation',()=>{
  for(let i=0;i<result.markers.length;i++)assert.deepEqual(result.rows.map(h=>h.positions[i]).sort((a,b)=>a-b),[1,2,3,4,5,6]);
 });
 
-// Screenshot-backed Stage 1 regression fixture: Race 2 five-runner display.
-// This tests ordinal integrity and evidence labels, not historical accuracy.
-test('Stage 1 Race 2: five runners have unique ranks and traceable evidence',()=>{
- const race={dist:'6ôF',horses:[
-  {n:1,name:'Fantasy Road',style:'P',odds:'3/1'},
-  {n:2,name:'Fairy Tale',style:'P',odds:'4/1'},
-  {n:3,name:'Ethereal Quality',tfEarly:105,tfLate:101,odds:'2/1'},
-  {n:4,name:'Asset Light',tfEarly:100,tfLate:45,odds:'5/1'},
-  {n:5,name:'Turn N Burn',style:'S',odds:'8/1'}
- ]};
- const result=projectRaceSetup(race);
- assert.equal(result.available,true);
- assert.deepEqual(result.markers.map(x=>x.label),['¼ mile','½ mile','Stretch','Finish']);
- assert.equal(result.rows.length,5);
- assert.deepEqual(result.rows.map(x=>x.program),[1,2,3,4,5]);
- for(let c=0;c<result.markers.length;c++)assert.deepEqual(result.rows.map(x=>x.positions[c]).sort((a,b)=>a-b),[1,2,3,4,5]);
- assert.deepEqual(result.rows.map(x=>x.source),['Running-style proxy','Running-style proxy','TimeformUS Early/Late','TimeformUS Early/Late','Running-style proxy']);
+test('FTS is unknown even with a saved style or provider pace values; known runners remain partial illustration',()=>{
+ const race={dist:'6F',horses:[
+  {n:1,name:'Debut',life_starts:0,style:'E',tfEarly:150,tfLate:150},
+  {n:2,name:'Older saved debut',lifeStarts:0,style:'P'},
+  {n:3,name:'Established early',life_starts:5,tfEarly:110,tfLate:40,style:'E'},
+  {n:4,name:'Established late',life_starts:5,tfEarly:40,tfLate:110,style:'S'}]};
+ const before=structuredClone(race),r=projectRaceSetup(race);
+ assert.equal(r.available,true);assert.equal(r.incomplete,true);
+ assert.ok(r.rows.slice(0,2).every(h=>h.positions.every(p=>p===null)&&h.source==='FTS — pace unknown'));
+ for(let c=0;c<r.markers.length;c++)assert.deepEqual(r.rows.slice(2).map(h=>h.positions[c]).sort(),[1,2]);
+ assert.match(r.method,/positions rank only runners with known pace figures/);assert.deepEqual(race,before);
+ assert.equal(paceProfile(race.horses[0]).known,false);assert.equal(paceProfile(race.horses[1]).style,'UNKNOWN');
 });
-
-test('Stage 1 gate: scratch, MTO, AE, and missing evidence cannot create phantom ranks',()=>{
- const horses=[{n:1,name:'A',style:'E',odds:'2/1'},{n:2,name:'B',style:'S',odds:'4/1'},
-  {n:3,name:'Scratch',style:'E',odds:'SCR'},
-  {n:4,name:'MTO',style:'E',odds:'5/1',entry_status:'MTO'},
-  {n:5,name:'AE',style:'E',odds:'5/1',entry_status:'AE'}];
- const projected=projectRaceSetup({dist:'6ôF',horses});
- assert.equal(projected.available,true);
- assert.deepEqual(projected.rows.map(x=>x.program),[1,2]);
- assert.equal(projectRaceSetup({dist:'6ôF',horses:[...horses,{n:6,name:'Unknown',odds:'10/1'}]}).available,false);
+test('missing or partial pace figures cannot use default P or manually saved style proxies',()=>{
+ for(const h of [{life_starts:5,style:'P'},{life_starts:5,style:'E',tfEarly:120},{life_starts:5,style:'S',tfEarly:'',tfLate:110}]){
+  const p=paceProfile(h);assert.equal(p.known,false);assert.equal(p.style,'UNKNOWN');assert.equal(p.early,null);assert.equal(p.late,null);
+ }
+ const known=paceProfile({life_starts:3,timeform_early:0,timeform_late:90});assert.equal(known.known,true);assert.equal(known.early,0);
+});
+test('all-FTS field displays Unknown for every projected call with no numeric ranks',()=>{
+ const r=projectRaceSetup({dist:'6F',horses:[{n:1,name:'A',life_starts:0,style:'P'},{n:2,name:'B',life_starts:0,style:'E'}]});
+ assert.equal(r.available,true);assert.equal(r.incomplete,true);assert.equal(r.rows.length,2);assert.ok(r.rows.every(h=>h.positions.length===4&&h.positions.every(p=>p===null)));
+});
+test('UI renders null positions as Unknown and excludes unknown runners from pace lanes',async()=>{
+ const fs=await import('node:fs');const html=fs.readFileSync('index.html','utf8');assert.ok(html.includes("n===null?'Unknown':n"));assert.ok(html.includes('h.pace.known&&h.pace.style===s'));assert.ok(html.includes('Omitted from pace lanes'));
 });
