@@ -1,5 +1,5 @@
 import {extractContenderEvidence} from './contender-rankings.js';
-import {raceConditions,conditionBlockers} from './race-conditions.js';
+import {raceConditions,conditionBlockers} from './race-conditions.js?v=20261013-breed1';
 import {ppContext,datedWorkoutText} from './pp-context.js?v=20261007-context1';
 import {parseAnnualJockey} from './jockey-research.js?v=20261006-j1preview1';
 import {pythonRound} from './scoring-engine.js';
@@ -25,22 +25,35 @@ function horseEvidence(lines,roster){
  return {...roster,contender_evidence:extractContenderEvidence(head,text,evidence.slice(0,5)),source_context:ppContext(head,text),jockey_annual_header:head.split('Tr:',1)[0],life_starts:starts,lifeStarts:starts,beyer_figures:figs.slice(0,5),figs:figs.slice(0,5),beyer_evidence:evidence.slice(0,5),available_beyer_rows:figs.length,timeform_early:tf?+tf[1]:null,timeform_late:tf?+tf[2]:null,tfEarly:tf?+tf[1]:'',tfLate:tf?+tf[2]:'',j:j?.[1].trim()||'',t:t?.[1].trim()||'',jockey_local_counts:j?{starts:+j[2],wins:+j[3]}:null,trainer_local_counts:t?{starts:+t[2],wins:+t[3]}:null,jockey_win:j&&+j[2]>0?100*+j[3]/+j[2]:null,trainer_win:t&&+t[2]>0?100*+t[3]/+t[2]:null,trainer_context_score:context,trainerAngles,parser_blockers:[...new Set(blockers)].sort(),last:figs[0]??'',best:figs.length?Math.max(...figs.slice(0,3)):'',style:tf?(+tf[1]>=105?'E':+tf[1]>=90?'EP':+tf[2]>=85?'S':'P'):'P',odds:'—',ml:roster.ml||'—'};
 }
 export function parseRestoredCard(pages,{sourceName='document'}={}){
- const races={},all=pages.flatMap(p=>p.lines),raceLines={};
- for(const p of pages){const footer=p.lines.map(l=>l.text).join('\n').match(/(Sar|Aqu|Bel|BAQ|Med|CD|Kee|FL|FG|GP|RP), race (\d+), page:/i);if(!footer)throw new Error('Race footer unverified on page '+p.pageNumber);(raceLines[+footer[2]]??=[]).push(...p.lines)}
+ const races={},all=pages.flatMap(p=>p.lines),raceLines={},pageTracks=[];
+ for(const p of pages){const footer=p.lines.map(l=>l.text).join('\n').match(/(Sar|Aqu|Bel|BAQ|Med|CD|Kee|FL|FG|GP|RP|Dmr), race (\d+), page:/i);if(!footer)throw new Error('Race footer unverified on page '+p.pageNumber);pageTracks.push(footer[1].toLowerCase());(raceLines[+footer[2]]??=[]).push(...p.lines)}
  for(const [rn,ls] of Object.entries(raceLines)){
   const anchors=[];let status='REGULAR';
   for(let i=0;i<ls.length;i++){const s=ls[i].text;if(/^\s*Entered For Main Track Only\s*$/i.test(s))status='MTO';else if(/^\s*Also[- ]Eligible:?\s*$/i.test(s))status='AE';if(/^Own:/.test(s)){const name=ls[i-1]?.text.trim().replace(/\s*\([^)]*\)$/,'');if(!name)throw new Error('Owner identity missing');let start=i-1,n='',ml='';const prior=ls.slice(Math.max(0,i-4),i-1).map(l=>l.text.trim());const program=prior.findIndex(s=>/^\d{1,2}[ABX]?$/.test(s));if(program>=0){n=prior[program];start=Math.max(0,i-4)+program;const odds=prior.slice(program+1).find(s=>/^\d+\s*(?:-\s*\d+|\/\s*\d+)$/.test(s));if(odds)ml=odds.replace(/\s+/g,'').replace('-','/')}anchors.push({start,own:i,name,status,n,ml})}}
   if(!anchors.length)throw new Error('No owner-anchored runners in race '+rn);
-  const before=ls.slice(0,anchors[0].start).map(l=>l.text).join('\n'),headers=[...before.matchAll(new RegExp('(?:^|\\n)'+rn+'\\s*\\n(?:Saratoga|Aqueduct|Belmont Park|Belmont at the Big A|Meadowlands|Churchill Downs|Keeneland|Finger Lakes|Fair Grounds|Gulfstream Park|Remington Park)\\b[^\\n]*\\n','g'))],header=headers.length?before.slice(headers.at(-1).index):before,blockers=[];
+  const before=ls.slice(0,anchors[0].start).map(l=>l.text).join('\n'),headers=[...before.matchAll(new RegExp('(?:^|\\n)'+rn+'\\s*\\n(?:Saratoga|Aqueduct|Belmont Park|Belmont at the Big A|Meadowlands|Churchill Downs|Keeneland|Finger Lakes|Fair Grounds|Gulfstream Park|Remington Park|Del Mar)\\b[^\\n]*\\n','g'))],header=headers.length?before.slice(headers.at(-1).index):before,blockers=[];
   if(!headers.length)blockers.push({reason:'race-heading-unverified'});const conditions=raceConditions(header);blockers.push(...conditionBlockers(conditions));
   const horses=anchors.map((a,i)=>horseEvidence(ls.slice(a.start,anchors[i+1]?.start??ls.length),{name:a.name,n:a.n,ml:a.ml,entry_status:a.status,included_in_frozen_field:a.status==='REGULAR'}));
   if(new Set(horses.map(h=>h.name)).size!==horses.length)throw new Error('Duplicate horse identity in race '+rn);
   races[rn]={race:+rn,horses,parser_blockers:blockers,surface:conditions.surface,conditions,header,cls:clean(header.split('\n').slice(0,5).join(' ')),oddsMode:'Unknown',dist:header.match(/\n([^\n]*?(?:Furlongs?|MILES?|Miles?))/)?.[1]?.trim()||'',post:header.match(/Post time:\s*([^\n]*?)(?= Wagers:|$|\n)/)?.[1]?.trim()||''};
  }
- const text=all.map(l=>l.text).join('\n'),footers=[...text.matchAll(/Daily Racing Form\s+(Saratoga|Aqueduct|Belmont Park|Belmont at the Big A|Meadowlands|Churchill Downs|Keeneland|Finger Lakes|Fair Grounds|Gulfstream Park|Remington Park)\s*\(\s*(\d{1,2})\/\s*(\d{1,2})\/\s*(20\d{2})\s*\)/g)];
+ const text=all.map(l=>l.text).join('\n'),footers=[...text.matchAll(/Daily Racing Form\s+(Saratoga|Aqueduct|Belmont Park|Belmont at the Big A|Meadowlands|Churchill Downs|Keeneland|Finger Lakes|Fair Grounds|Gulfstream Park|Remington Park|Del Mar)\s*\(\s*(\d{1,2})\/\s*(\d{1,2})\/\s*(20\d{2})\s*\)/g)];
  if(!footers.length)throw new Error('Current card date/track footer unverified');
  const identities=new Set(footers.map(m=>`${m[1]}|${m[4]}-${m[2].padStart(2,'0')}-${m[3].padStart(2,'0')}`));if(identities.size!==1)throw new Error('Conflicting card dates/tracks across PDF pages');const [track,date]=[...identities][0].split('|');
  const [year,month,day]=date.split('-').map(Number),verifiedDate=new Date(Date.UTC(year,month-1,day));if(verifiedDate.getUTCFullYear()!==year||verifiedDate.getUTCMonth()+1!==month||verifiedDate.getUTCDate()!==day)throw new Error('Invalid card date');
+ const trackCodes={sar:['Saratoga'],aqu:['Aqueduct','Belmont at the Big A'],bel:['Belmont Park','Belmont at the Big A'],baq:['Belmont at the Big A'],med:['Meadowlands'],cd:['Churchill Downs'],kee:['Keeneland'],fl:['Finger Lakes'],fg:['Fair Grounds'],gp:['Gulfstream Park'],rp:['Remington Park'],dmr:['Del Mar']};
+ if(pageTracks.some(code=>!trackCodes[code]?.includes(track)))throw new Error('Race footer track conflicts with card identity');
+ for(const r of Object.values(races)){
+  const declared=[];
+  for(const line of r.header.split('\n').filter(x=>/^Scratched\s*-/.test(x))){
+   for(const part of line.replace(/^Scratched\s*-\s*/,'').split(/\s+and\s+(?=Ì[1-9])/)){
+    const m=part.match(/^Ì([1-9][0-9]*[ABX]?)\s+(.+)$/);if(!m)throw new Error('PP scratched-runner identity unverified');declared.push({program:m[1],name:m[2].trim(),status:'PP_DECLARED_SCRATCH',source_line:line});
+   }
+  }
+  if(new Set(declared.map(x=>x.program)).size!==declared.length||declared.some(x=>r.horses.some(h=>h.n===x.program||h.name===x.name)))throw new Error('PP scratched-runner roster conflict');
+  if(declared.length)r.predeclared_scratches=declared;
+ }
  for(const r of Object.values(races)){r.date=date;r.track=track;for(const h of r.horses){h.jockey_annual=parseAnnualJockey(h.jockey_annual_header,year);h.source_context.workout_text=datedWorkoutText(h.source_context.workout_text,date);delete h.jockey_annual_header}}
  return {id:`data-corrected:${track}:${date}`,schemaVersion:3,model_id:MODEL_ID,track,date,races,sourceName,warnings:[],parser_version:'V44C-data-corrected-font-verified-v1'};
 }
+
