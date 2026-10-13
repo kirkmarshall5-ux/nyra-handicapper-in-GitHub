@@ -212,6 +212,7 @@ import {passRaceDisplay} from "./pass-race-display.js?v=20261010-passview1";
 import {releaseRace as websiteRace,RELEASE_ID} from "./rankings-release.js?v=20261008-qa1";
 import {parseNyraText as parseNyraEntries} from "./nyra-entry-parser.js?v=20261008-qa1";
 import {displayDistance} from "./race-conditions.js?v=20261008-qa1";
+import {careerLabel,visibleAngles,displayPaceStyle,clearPaceEvidence} from "./runner-display.js?v=20261013-integrity1";
 import {projectRaceSetup,paceEligible,paceProfile} from "./projected-race-setup.js?v=20261011-unknownpace1";
 import {applyOddsSnapshot} from "./odds-snapshot.js?v=20261008-scratchfix3";
 import {oddsSourceForTrack,parseManualOdds,applyManualOdds} from "./multitrack-odds.js?v=20261010-1";
@@ -320,7 +321,7 @@ function renderThings(){
  const el=document.getElementById("thingsToConsider"); if(!el)return;
  let rows=[];
  for(const h of race.horses.filter(x=>x.odds!=="SCR")){
-   for(const a of (h.angles||[])) rows.push({h,a});
+   for(const a of visibleAngles(h)) rows.push({h,a});
  }
  rows.sort((a,b)=>(b.a.strength||0)-(a.a.strength||0));
  if(!rows.length){el.innerHTML='<div class="muted">No significant angles identified for this race from the currently analyzed PP evidence.</div>';return}
@@ -349,7 +350,7 @@ function selectRace(n){if(!activeCard.races[n])return;race=structuredClone(activ
 function renderHorses(){
  horseTable.querySelector("tbody").innerHTML=sortedGridHorses().map(h=>{let js=h.jockey_win!=null?{win:h.jockey_win}:null,ts=h.trainer_win!=null?{win:h.trainer_win}:null;return `<tr style="${h.odds==="SCR"?"opacity:.48":""}">
 <td><span class="num">${h.n}</span><span class="horse">${escapeText(h.name)}${h.entry_status&&h.entry_status!=="REGULAR"?` <span class="pill">${h.entry_status} excluded</span>`:""}</span></td><td>${h.ml||"—"}</td><td><span class="odds">${h.odds||"—"}</span>${h.pre_race_evidence?`<div class="tiny muted">${h.pre_race_evidence.status==="PUBLIC_PAGE_SNAPSHOT"?"NYRA snapshot":h.pre_race_evidence.status==="MANUAL_SOURCE_SNAPSHOT"?"Manual source":"Pasted snapshot"} · imported ${escapeText(new Date(h.pre_race_evidence.importedAt).toLocaleTimeString())}${h.pre_race_evidence.upstreamAgeSeconds!=null?` · cache age ${h.pre_race_evidence.upstreamAgeSeconds}s`:""}<br>Freshness unverified</div>`:""}</td>
-<td><span class="pacechip ${h.style}">${h.style||"?"}</span></td><td>${escapeText(h.source_context?.jockey?.name||h.jockey_annual?.jockey||h.j||"—")}</td><td>${escapeText(h.source_context?.trainer?.name||h.t||"—")}</td>
+<td><span class="pacechip ${escapeText(displayPaceStyle(h))}">${escapeText(displayPaceStyle(h))}</span></td><td>${escapeText(h.source_context?.jockey?.name||h.jockey_annual?.jockey||h.j||"—")}</td><td>${escapeText(h.source_context?.trainer?.name||h.t||"—")}</td>
 <td>${js?js.win.toFixed(1)+"%":"—"}</td><td>${ts?ts.win.toFixed(1)+"%":"—"}</td><td>${displayVal(h.last)}</td><td><span class="score">${score(h)}</span><div style="margin-top:4px">${confidenceBadge(h)}</div></td><td><b>${fairOddsMap()[h.n]||"—"}</b></td></tr>`}).join("");
 }
 function renderProjectedRaceSetup(){
@@ -373,7 +374,7 @@ function renderEvidence(){
  const el=document.getElementById("evidenceSummary");if(!el)return;
  el.innerHTML=race.horses.filter(h=>h.odds!=="SCR").map(h=>{let context=h.source_context||{},work=h.workText||context.workout_text||"",pedigree=h.pedigree||context.pedigree_text||"",e=evidenceProfile({...h,workText:work,pedigree});
  return `<div class="note"><div class="spread"><b>#${h.n} ${h.name}</b>${confidenceBadge(h)}</div>
- <div class="tiny muted" style="margin-top:6px">${e.starts===null?"Starts unknown":e.starts===0?"First-time starter":e.starts<=2?"Lightly raced":"Experienced"} · Rating ${score(h)}</div>
+ <div class="tiny muted" style="margin-top:6px">${careerLabel(h)} · Rating ${score(h)}</div>
  <div class="small" style="margin-top:7px">Race figures: ${e.hasRace?"✓":"N/A"} · Works: ${e.works?"✓":context.version?"Not listed in source":"Not extracted; reupload PP"} · Pedigree: ${e.pedigree?"✓":context.version?"Not listed in source":"Not extracted; reupload PP"} · Trainer context: ${e.trainer?"✓":"N/A"}</div>
  ${work?`<div class="tiny muted" style="margin-top:6px"><b>Works:</b> ${escapeText(work)}</div>`:""}
  ${(pedigree||h.sire||h.dam||h.damsire)?`<div class="tiny muted" style="margin-top:4px"><b>Pedigree:</b> ${escapeText(pedigree||[h.sire,h.dam,h.damsire].filter(Boolean).join(" / "))}</div>`:""}</div>`}).join("");
@@ -477,7 +478,7 @@ function activateCandidate(candidate){activeCard=candidate;localStorage.setItem(
 analyzeBtn.onclick=()=>loadCandidate(false);
 replaceCard.onclick=async()=>{if(pendingCard)activateCandidate(pendingCard);else await loadCandidate(true)};
 resetSample.onclick=()=>{activeCard=structuredClone(sampleCard);race=structuredClone(activeCard.races[1]);restoreRunnerEdits();save();renderAll();ppStatus.textContent="Bundled October 3 sample card restored."};
-clearPP.onclick=()=>{for(const r of Object.values(activeCard.races))for(const h of r.horses){h.source_context=null;h.last="";h.best="";h.pp="";h.note="";h.form="";h.cls="";h.trip="";h.workText="";h.works=[];h.pedigree="";h.sire="";h.dam="";h.damsire="";h.lifeStarts=null;h.life_starts=null;h.beyer_figures=[];h.figs=[];h.parser_blockers=["PP-evidence-cleared"];h.angles=[]}if(state.cards?.[activeCard.id])state.cards[activeCard.id].runners={};race=structuredClone(activeCard.races[race.race]);save();renderAll();ppResults.innerHTML='<div class="muted">PP enrichment cleared; races and runners preserved.</div>';ppStatus.textContent="PP enrichment cleared."};
+clearPP.onclick=()=>{for(const r of Object.values(activeCard.races))for(const h of r.horses){clearPaceEvidence(h);h.source_context=null;h.last="";h.best="";h.pp="";h.note="";h.form="";h.cls="";h.trip="";h.workText="";h.works=[];h.pedigree="";h.sire="";h.dam="";h.damsire="";h.lifeStarts=null;h.life_starts=null;h.beyer_figures=[];h.figs=[];h.parser_blockers=["PP-evidence-cleared"];h.angles=[]}if(state.cards?.[activeCard.id])state.cards[activeCard.id].runners={};race=structuredClone(activeCard.races[race.race]);save();renderAll();ppResults.innerHTML='<div class="muted">PP enrichment cleared; races and runners preserved.</div>';ppStatus.textContent="PP enrichment cleared."};
 
 calcBtn.onclick=()=>{const cnt=id=>document.getElementById(id).value.split(",").map(x=>x.trim()).filter(Boolean).length;let t=betType.value,legs=t==="Exacta"?2:t==="Trifecta"?3:+t.split(" ")[1],counts=[cnt("leg1"),cnt("leg2"),cnt("leg3"),cnt("leg4"),cnt("leg5")].slice(0,legs),combos=counts.reduce((a,b)=>a*b,1),cost=combos*(+base.value||0);ticketOut.textContent=`${combos} combinations · $${cost.toFixed(2)}`};
 
@@ -486,3 +487,4 @@ initResearchBuilder(()=>({card:activeCard,race,rating:currentRating()}));
 renderAll();
 </script>
 </body></html>
+
