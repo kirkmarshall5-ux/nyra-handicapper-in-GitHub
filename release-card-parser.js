@@ -1,6 +1,6 @@
-import {restoredPage as originalPage,parseRestoredCard as originalParse} from './data-corrected-parser.js?v=20261011-multitrack1';
+import {restoredPage as originalPage,parseRestoredCard as originalParse} from './data-corrected-parser.js?v=20261013-circuits1';
 import {RELEASE_ID} from './rankings-release.js';
-export const PARSER_ID='V44C-data-integrity-conditions-parser-v2';
+export const PARSER_ID='V44C-data-integrity-circuits-parser-v3';
 export function restoredPage(items,pageNumber,fonts={}){
  const page=originalPage(items,pageNumber,fonts),rows=[];let row=[];const flush=()=>{if(row.length){rows.push(row);row=[]}};
  for(const a of items){if(a.str){if(row.length&&Math.abs(a.transform[5]-row.at(-1).transform[5])>3)flush();row.push(a)}if(a.hasEOL)flush()}flush();
@@ -9,3 +9,4 @@ export function restoredPage(items,pageNumber,fonts={}){
  const a=candidates[0],m=a.str.trim().match(/^(\d{1,2})(?:[^\d]|$)/),position=m?+m[1]:null;if(!position||position>p.field_size)return;p.running_call_proxy={position,field_size:p.field_size,token:a.str.split(/\s/)[0],page:pageNumber,x:a.transform[4],status:'PDF_COLUMN_POSITION_PROXY'};});return page;
 }
 export function parseRestoredCard(pages,options){const c=originalParse(pages,options);return {...c,id:`${RELEASE_ID}:${c.track}:${c.date}`,model_id:RELEASE_ID,parser_version:PARSER_ID,odds_source:'MORNING_LINE_ONLY',warnings:[...c.warnings,'Morning lines are reference prices; live quotes and current scratches require verification.']};}
+
