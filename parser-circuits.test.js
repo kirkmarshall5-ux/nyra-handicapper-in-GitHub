@@ -24,3 +24,5 @@ test('Arabian, Quarter Horse and hurdle races are explicitly blocked; ordinary d
 test('unsupported breed blocks the full rating even if numerical figures are available',()=>{
  const r=parseRestoredCard([page()]).races[1];r.conditions=raceConditions('1 MILE ARABIAN.');r.parser_blockers=conditionBlockers(r.conditions);assert.equal(releaseRace(r).decision,'PASS');
 });
+
+for(const [track,code] of [['Santa Anita','SA'],['Tampa Bay Downs','Tam'],['Kentucky Downs','KD']])test(`${track} footers and headings are verified and mismatched page codes refused`,()=>{const c=parseRestoredCard([page(track,code)]);assert.equal(c.track,track);assert.deepEqual(c.races[1].parser_blockers,[]);assert.equal(c.races[1].horses[0].life_starts,1);assert.throws(()=>parseRestoredCard([page(track,'CD')]),/track conflicts/)});

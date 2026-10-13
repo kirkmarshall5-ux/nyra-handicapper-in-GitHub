@@ -1,6 +1,6 @@
-import {restoredPage as originalPage,parseRestoredCard as originalParse} from './data-corrected-parser.js?v=20261013-circuits1';
+import {restoredPage as originalPage,parseRestoredCard as originalParse} from './data-corrected-parser.js?v=20261013-circuits2';
 import {RELEASE_ID} from './rankings-release.js';
-export const PARSER_ID='V44C-data-integrity-circuits-parser-v3';
+export const PARSER_ID='V44C-data-integrity-circuits-parser-v4';
 export function restoredPage(items,pageNumber,fonts={}){
  const page=originalPage(items,pageNumber,fonts),rows=[];let row=[];const flush=()=>{if(row.length){rows.push(row);row=[]}};
  for(const a of items){if(a.str){if(row.length&&Math.abs(a.transform[5]-row.at(-1).transform[5])>3)flush();row.push(a)}if(a.hasEOL)flush()}flush();
