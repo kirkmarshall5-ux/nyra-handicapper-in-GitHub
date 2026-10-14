@@ -386,7 +386,7 @@ function renderEvidence(){
  el.innerHTML=race.horses.filter(h=>h.odds!=="SCR").map(h=>{let context=h.source_context||{},work=h.workText||context.workout_text||"",pedigree=h.pedigree||context.pedigree_text||"",e=evidenceProfile({...h,workText:work,pedigree});
  return `<div class="note"><div class="spread"><b>#${h.n} ${h.name}</b>${confidenceBadge(h)}</div>
  <div class="tiny muted" style="margin-top:6px">${careerLabel(h)} · Rating ${score(h)}</div>
- <div class="small" style="margin-top:7px">Race figures: ${e.hasRace?"✓":"N/A"} · Works: ${e.works?"✓":context.version?"Not listed in source":"Not extracted; reupload PP"} · Pedigree: ${e.pedigree?"✓":context.version?"Not listed in source":"Not extracted; reupload PP"} · Trainer context: ${e.trainer?"✓":"N/A"}</div>
+ <div class="small" style="margin-top:7px">Race figures: ${e.hasRace?"✓":"N/A"} · Works: ${context.workout_status==="EXTRACTION_PENDING"?"Not extracted; review source PP":e.works?"✓":context.version?"Not listed in source":"Not extracted; reupload PP"} · Pedigree: ${e.pedigree?"✓":context.version?"Not listed in source":"Not extracted; reupload PP"} · Trainer context: ${e.trainer?"✓":"N/A"}</div>
  ${work?`<div class="tiny muted" style="margin-top:6px"><b>Works:</b> ${escapeText(work)}</div>`:""}
  ${(pedigree||h.sire||h.dam||h.damsire)?`<div class="tiny muted" style="margin-top:4px"><b>Pedigree:</b> ${escapeText(pedigree||[h.sire,h.dam,h.damsire].filter(Boolean).join(" / "))}</div>`:""}</div>`}).join("");
 }

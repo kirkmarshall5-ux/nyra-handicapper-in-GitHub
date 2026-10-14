@@ -1,12 +1,12 @@
 # PP uploads and provider-specific ratings
 
-Upload the original text-based PDF in Upload Past Performances, click Analyze PDF, review the detected provider, track, date, race count, runner count and warnings, then Replace Active Card. Parsing failures preserve the active card. Refreshing preserves a supported adapter's saved card. Current scratches and live prices remain separate inputs.
+Upload the original text-based PDF in Upload Past Performances, click Load New Card, review the detected provider, track, date, race count, runner count and warnings, then Replace Active Card. Parsing failures preserve the active card. Refreshing preserves a supported adapter's saved card. Current scratches and live prices remain separate inputs.
 
 Supported adapters: the existing DRF parser, unchanged; Brisnet Ultimate positioned-text parser v1. The Brisnet adapter was verified against the supplied 36-page Santa Anita March 17, 2007 sample (10 races, 79 entrants). This is format support, not proof that every modern Brisnet edition parses. A materially different layout must pass the same admission checks.
 
 Brisnet evidence appears separately above Projected Race Set Up. Brisnet-only uploads show PASS in V4.4c and Contender: there are no verified Beyers and no validated Brisnet replacement model. Brisnet Speed is never written to Beyer fields; E1/E2/Late never populate Timeform fields. First-time starters remain Unknown. A former Scratch Watch entry never marks a current scratch.
 
-Each normalized card carries provider, source filename/SHA-256, import time, adapter version, source page and rating-row text. Numeric zero is retained; missing or ambiguous values are null. The sample's old encoded digit six is sometimes discarded by PDF.js: affected class/race-shape cells remain Unknown, never repaired by inference. Different rating scales cannot be compared, averaged or spliced together. Unresolved source rows remain visible in the normalized evidence file.
+Each normalized card carries provider, source filename/SHA-256, import time, adapter version, source page and rating-row text. Numeric zero is retained; missing or ambiguous values are null. The sample's old encoded digit six is sometimes discarded by PDF.js: affected class/race-shape cells remain Unknown, never repaired by inference. Different rating scales cannot be compared, averaged or spliced together. Workout and trainer situational-stat extraction is not certified in v1. Overprinted workout text in this sample is held as raw page evidence and is not assigned as verified horse workouts. Unresolved source rows remain visible in the normalized evidence file.
 
 ## Adding another layout
 
