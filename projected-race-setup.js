@@ -11,7 +11,7 @@ export function paceProfile(h){
  return {known:true,style,early,late,source:'TimeformUS Early/Late'};
 }
 function lengthFurlongs(raw){
- const t=displayDistance(raw).toUpperCase().replace(/\s+/g,' ').trim();
+ const t=displayDistance(String(raw).replace(/(\d)°/g,'$1 1/8')).toUpperCase().replace(/\s+/g,' ').trim();
  const mixed=t.match(/(\d+)\s+(\d+)\/(\d+)\s*M/);
  if(mixed)return (Number(mixed[1])+Number(mixed[2])/Number(mixed[3]))*8;
  const frac=t.match(/(\d+)\/(\d+)\s*M/);
@@ -55,5 +55,6 @@ export function projectRaceSetup(race){
   scored.sort((a,b)=>b.value-a.value||compareProgram(a.h,b.h));
   scored.forEach((x,rank)=>positions[x.i][ci]=rank+1);
  });
- return {available:true,incomplete,markers,rows:profiles.map((h,i)=>({program:h.n,name:h.name,source:h.source,positions:positions[i]})).sort((a,b)=>compareProgram({n:a.program},{n:b.program})),method:(incomplete?'Incomplete illustration: positions rank only runners with known pace figures; unknown runners could change the race flow. ':'')+'Illustrative ranks blend TimeformUS Early/Late pace figures. FTS and runners missing either figure remain Unknown at every call. These are not predicted measured calls, winning probabilities or handicapping selections.'};
+ return {available:true,incomplete,knownPaceCount:profiles.filter(h=>h.known).length,missingPaceReason:profiles.every(h=>!h.known)?'No usable TimeformUS Early/Late pace figures in this race. Numerical pace projections are unavailable; first-time starters remain Unknown. Upload a matching source with those pace figures to enable this illustration.':null,markers,rows:profiles.map((h,i)=>({program:h.n,name:h.name,source:h.source,positions:positions[i]})).sort((a,b)=>compareProgram({n:a.program},{n:b.program})),method:(incomplete?'Incomplete illustration: positions rank only runners with known pace figures; unknown runners could change the race flow. ':'')+'Illustrative ranks blend TimeformUS Early/Late pace figures. FTS and runners missing either figure remain Unknown at every call. These are not predicted measured calls, winning probabilities or handicapping selections.'};
 }
+
