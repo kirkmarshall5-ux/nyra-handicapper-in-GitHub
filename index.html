@@ -213,7 +213,7 @@ import {releaseRace as websiteRace,RELEASE_ID} from "./rankings-release.js?v=202
 import {parseNyraText as parseNyraEntries} from "./nyra-entry-parser.js?v=20261008-qa1";
 import {displayDistance} from "./race-conditions.js?v=20261013-breed1";
 import {careerLabel,visibleAngles,displayPaceStyle,clearPaceEvidence} from "./runner-display.js?v=20261013-integrity1";
-import {projectRaceSetup,paceEligible,paceProfile} from "./projected-race-setup.js?v=20261011-unknownpace1";
+import {projectRaceSetup,paceEligible,paceProfile} from "./projected-race-setup.js?v=20261014-paceavailability1";
 import {applyOddsSnapshot} from "./odds-snapshot.js?v=20261008-scratchfix3";
 import {oddsSourceForTrack,parseManualOdds,applyManualOdds} from "./multitrack-odds.js?v=20261010-1";
 import {applyMorningLines} from "./morning-line-overlay.js?v=20261008-odds2";
@@ -360,11 +360,11 @@ function renderProjectedRaceSetup(){
  if(!projection.available){target.innerHTML='<div class="note small muted">'+escapeText(projection.reason)+'</div>';return}
  const header=projection.markers.map(m=>'<th scope="col">'+escapeText(m.label)+'</th>').join('');
  const body=projection.rows.map(h=>'<tr><td><b>#'+escapeText(h.program)+' '+escapeText(h.name)+'</b><div class="tiny muted">'+escapeText(h.source)+'</div></td>'+h.positions.map(n=>'<td style="text-align:center"><b>'+(n===null?'Unknown':n)+'</b></td>').join('')+'</tr>').join('');
- target.innerHTML='<table><thead><tr><th scope="col">Horse</th>'+header+'</tr></thead><tbody>'+body+'</tbody></table><div class="tiny muted" style="margin-top:10px">'+escapeText(projection.method)+' No changes to V4.4c ranking, PASS, or betting rules.</div>';
+ target.innerHTML=(projection.missingPaceReason?'<div class="note small"><b>Pace projections unavailable</b><div>'+escapeText(projection.missingPaceReason)+'</div></div>':'')+'<table><thead><tr><th scope="col">Horse</th>'+header+'</tr></thead><tbody>'+body+'</tbody></table><div class="tiny muted" style="margin-top:10px">'+escapeText(projection.method)+' No changes to V4.4c ranking, PASS, or betting rules.</div>';
 }
 function renderPace(){
  const runners=race.horses.filter(paceEligible).map(h=>({...h,pace:paceProfile(h)})),unknown=runners.filter(h=>!h.pace.known);
- paceMap.innerHTML=["E","EP","P","S"].map(s=>`<div class="pace-lane"><b>${s}</b><div class="lane">${runners.filter(h=>h.pace.known&&h.pace.style===s).map(h=>`<div class="runner"><b>#${escapeText(h.n)}</b> ${escapeText(h.name)}<div class="tiny muted">Rating ${score(h)}</div></div>`).join("")||'<span class="muted">None</span>'}</div></div>`).join("")+(unknown.length?'<div class="note small"><b>Omitted from pace lanes</b><div>'+unknown.map(h=>'#'+escapeText(h.n)+' '+escapeText(h.name)+' — '+escapeText(h.pace.source)).join('<br>')+'</div><div class="tiny muted">No running style is inferred for these runners; unknown runners could change the pace.</div></div>':'');
+ paceMap.innerHTML=(runners.length&&!runners.some(h=>h.pace.known)?'<div class="note small"><b>Pace figures unavailable in this upload</b><div>This race has no usable TimeformUS Early/Late figures. No pace positions or running styles are invented. First-time starters remain Unknown.</div></div>':'')+["E","EP","P","S"].map(s=>`<div class="pace-lane"><b>${s}</b><div class="lane">${runners.filter(h=>h.pace.known&&h.pace.style===s).map(h=>`<div class="runner"><b>#${escapeText(h.n)}</b> ${escapeText(h.name)}<div class="tiny muted">Rating ${score(h)}</div></div>`).join("")||'<span class="muted">None</span>'}</div></div>`).join("")+(unknown.length?'<div class="note small"><b>Omitted from pace lanes</b><div>'+unknown.map(h=>'#'+escapeText(h.n)+' '+escapeText(h.name)+' — '+escapeText(h.pace.source)).join('<br>')+'</div><div class="tiny muted">No running style is inferred for these runners; unknown runners could change the pace.</div></div>':'');
 }
 
 function renderReleaseContext(){
