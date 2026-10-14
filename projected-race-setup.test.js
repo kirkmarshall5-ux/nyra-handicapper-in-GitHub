@@ -69,3 +69,13 @@ test('all-FTS field displays Unknown for every projected call with no numeric ra
 test('UI renders null positions as Unknown and excludes unknown runners from pace lanes',async()=>{
  const fs=await import('node:fs');const html=fs.readFileSync('index.html','utf8');assert.ok(html.includes("n===null?'Unknown':n"));assert.ok(html.includes('h.pace.known&&h.pace.style===s'));assert.ok(html.includes('Omitted from pace lanes'));
 });
+
+
+test('DRF one-eighth mile symbol supports route projection without changing source distance',()=>{
+ const race={dist:'1° MILES',horses:[{n:1,name:'A',life_starts:5,tfEarly:100,tfLate:60},{n:2,name:'B',life_starts:5,tfEarly:70,tfLate:90}]};
+ const before=structuredClone(race),r=projectRaceSetup(race);assert.equal(r.available,true);assert.equal(r.markers.at(-1).fraction,9);assert.deepEqual(race,before);
+});
+test('missing Timeform evidence is explicit, never replaced by Beyers or running-call proxies',()=>{
+ const race={dist:'1 MILE',horses:[{n:1,name:'A',life_starts:4,beyer_figures:[95],running_call_proxy:{position:1,field_size:6}},{n:2,name:'B',life_starts:4,beyer_figures:[80]}]};
+ const r=projectRaceSetup(race);assert.equal(r.knownPaceCount,0);assert.match(r.missingPaceReason,/No usable TimeformUS/);assert.ok(r.rows.every(h=>h.positions.every(v=>v===null)));
+});
