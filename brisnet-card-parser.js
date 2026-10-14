@@ -45,6 +45,7 @@ export function parseBrisnetCard(input,{sourceName='Brisnet PDF'}={}){
    const a=starts[i],y=a.transform[5],bottom=starts[i+1]?starts[i+1].transform[5]+12:40;
    const items=page.items.filter(b=>b.str&&b.transform[5]<=y+10&&b.transform[5]>bottom),lines=page.lines.filter(l=>l.y<=y+10&&l.y>bottom),text=lines.map(l=>l.text).join('\n');
    const nm=clean(a.str).match(/^(.*?)\s*\((E\/P|E|P|S|NA)\s+([0-8])\)$/),programs=items.filter(b=>b.transform[4]<a.transform[4]-10&&Math.abs(b.transform[5]-(y-5.5))<3&&/^\d+[A-Z]?$/.test(clean(b.str)));
+   if(!nm[1]||nm[1].length>80||! /^[\p{L}\p{N}’' .()&-]+$/u.test(nm[1]))throw Error('Brisnet horse identity contains unsupported characters');
    if(programs.length!==1)throw Error('Brisnet program number ambiguous for '+nm[1]);const program=clean(programs[0].str);
    if(r.horses.some(h=>h.n===program||h.name===nm[1]))throw Error('Duplicate Brisnet runner '+program+' '+nm[1]);
    const life=text.match(/Life:\s*(\d+)\s+(\d+)\s*-\s*(\d+)\s*-\s*(\d+)/);if(!life)throw Error('Career starts unverified for '+nm[1]);

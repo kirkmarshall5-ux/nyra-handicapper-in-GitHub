@@ -332,7 +332,7 @@ function renderThings(){
 }
 function renderHeader(){
  document.getElementById("declaredScratches").textContent=(race.predeclared_scratches||[]).length?"Scratched in PPs (excluded): "+race.predeclared_scratches.map(h=>"#"+h.program+" "+h.name).join(", "):"";
- cardKicker.textContent=`${activeCard.track||race.track||"Race card"} · ${activeCard.date||race.date||"date unknown"} · active DRF card`;
+ cardKicker.textContent=`${activeCard.track||race.track||"Race card"} · ${activeCard.date||race.date||"date unknown"} · active ${activeCard.source_format==="BRISNET_ULTIMATE"?"Brisnet Ultimate":"DRF"} card`;
  raceTitle.textContent=`${race.track} · Race ${race.race}`;
  raceBadges.innerHTML=`<span class="badge gold">${escapeText(displayDistance(race.dist)||"—")} ${race.surface||""}</span><span class="badge">${escapeText(displayDistance(race.cls)||"Race")}</span><span class="badge">${race.post||"—"}</span><span class="badge green">Active card</span>`;
  let active=race.horses.filter(h=>h.odds!=="SCR");
