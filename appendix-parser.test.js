@@ -1,0 +1,11 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {selectPPPages} from './release-card-parser.js';
+const page=(n,text)=>({pageNumber:n,lines:[{text,proofs:[]}]});
+const pp=page(1,'Bel, race 1, page:1');
+const analysis=page(2,'ANALYSIS by David Aragona\nBEST BET: Test\nFirst Race\nSecond Race');
+const selections=page(3,'SELECTIONS\nCONSENSUS\nConsensus Totals Based on 5 points');
+test('verified trailing analyst pages excluded while PP retained',()=>{const s=selectPPPages([pp,analysis,selections]);assert.deepEqual(s.pages,[pp]);assert.equal(s.excluded.length,2)});
+test('unknown or cropped page cannot be silently skipped',()=>{assert.throws(()=>selectPPPages([page(1,'Our Warrior Own: Life 2')]),/original text-based/);assert.throws(()=>selectPPPages([pp,page(2,'mystery page')]),/footer unverified/)});
+test('analyst words cannot hide runner evidence',()=>{assert.throws(()=>selectPPPages([pp,page(2,analysis.lines[0].text+' Life 3 WORKS:')]),/footer unverified/)});
+test('PP after an appendix is rejected',()=>{assert.throws(()=>selectPPPages([pp,analysis,page(3,'Bel, race 2, page:3')]),/after analyst appendix/)});
+test('appendix alone is not a race card',()=>{assert.throws(()=>selectPPPages([analysis,selections]),/footer unverified/)});
