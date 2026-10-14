@@ -18,3 +18,10 @@ test('full-field RATEABLE races never use provisional view',()=>{
 test('general race blocker stays visible even when individual runners rate',()=>{
  const r=rateResearchRace([horse(1,[80])],{raceBlockers:['conditions-unverified']});const v=passRaceDisplay(r);assert.equal(r.decision,'PASS');assert.deepEqual(v.general,['conditions-unverified']);assert.equal(v.ranked.length,1);
 });
+
+
+test('structured race and horse blockers retain readable reasons without enabling rankings',()=>{
+ const field=[horse(1,[80]),{...horse(2,[70]),parser_blockers:[{reason:'verified-figure-missing'}]}];
+ const r=rateResearchRace(field,{raceBlockers:[{reason:'parser-version-reimport-required'}]});const view=passRaceDisplay(r);
+ assert.equal(r.decision,'PASS');assert.equal(r.rankings.length,0);assert.deepEqual(view.general,['parser-version-reimport-required']);assert.deepEqual(view.unrated[0].reasons,['verified-figure-missing']);assert.deepEqual(view.ranked.map(h=>h.n),['1']);
+});
