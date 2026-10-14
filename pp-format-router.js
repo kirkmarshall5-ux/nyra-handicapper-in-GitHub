@@ -1,5 +1,5 @@
 import {parseRestoredCard,PARSER_ID} from './release-card-parser.js';
-import {parseBrisnetCard,BRISNET_PARSER_ID} from './brisnet-card-parser.js';
+import {parseBrisnetCard,BRISNET_PARSER_ID} from './brisnet-card-parser.js?v=20261014-brisnet2';
 export const FORMAT_ROUTER_ID='PP-FORMAT-ROUTER-v1';
 export const SUPPORTED_PARSERS=Object.freeze([PARSER_ID,BRISNET_PARSER_ID]);
 export function detectPPFormat(pages){
