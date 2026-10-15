@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {rankMix1,MIX1_WEIGHTS,mix1Profile,mix1Distance} from './mix1-rankings.js';
 import {releaseRace} from './rankings-release.js';
+import {estimatedWinLine} from './fair-odds.js';
 import {rankContenders} from './contender-rankings.js';
 const horse=(n,figures=[80,70,60],extra={})=>({n:String(n),name:'Runner '+n,life_starts:10,beyer_figures:figures,timeform_early:90,timeform_late:80,jockey_win:20,trainer_win:20,entry_status:'REGULAR',parser_blockers:[],beyer_evidence:figures.map((figure,i)=>({figure,running_date_track:`${10-i}æ26= 1Bel`,source_line:`${10-i}æ26= 1Bel fst 6f ${figure} 1 /8`,font:'Paddock-Bold',post:1,field_size:8})),switch_evidence:{running_lines:[],boxes:{}},...extra});
 const race=horses=>({date:'2026-10-15',surface:'Dirt',conditions:{primaryDistanceLine:'6 Furlongs',surface:'Dirt'},header:'6 Furlongs',horses,parser_blockers:[]});
@@ -52,5 +53,26 @@ test('Race Day includes MIX1 beside controls and shows experimental win-line est
  const html=fs.readFileSync(new URL('./index.html',import.meta.url),'utf8');
  const start=html.indexOf('Top 4 Win Candidates-V4.4c'),end=html.indexOf('Top 3 morning-line favorites');
  const panels=html.slice(start,end);assert.match(panels,/Top 4 Win Candidates-Contender/);assert.match(panels,/Top 4 Win Candidates-MIX1/);assert.match(panels,/id="mix1Candidates"/);
- assert.match(html,/const mix1=rankMix1\(race,r\)/);assert.ok(html.includes("estimatedWinLine(race,mix1,'mix1')"));assert.ok(html.includes('winLineFields(mix1Line,h)'));assert.ok(html.includes('winLineNote(mix1Line)'));assert.match(html,/Best Value: PASS — probability validation pending/);
+ assert.match(html,/const mix1=rankMix1\(race,r,\{displayPass:r.decision==='PASS'\}\)/);assert.ok(html.includes("estimatedWinLine(race,mix1,'mix1')"));assert.ok(html.includes('winLineFields(mix1Line,h)'));assert.ok(html.includes('winLineNote(mix1Line)'));assert.match(html,/Best Value: PASS — probability validation pending/);
+});
+
+test('PASS display ranks verified runners, lists unrated horses and keeps odds unavailable',()=>{
+ const r=race([horse(1,[90,85,80]),horse(2,[70,65,60]),horse(3,[],{life_starts:0}),horse(4,[80],{odds:'SCR'}),horse(5,[80],{entry_status:'AE'})]);
+ const base=releaseRace(r),before=structuredClone({r,base}),out=rankMix1(r,base,{displayPass:true});
+ assert.equal(out.decision,'PASS');assert.equal(out.provisional,true);assert.equal(out.bettingEnabled,false);
+ assert.deepEqual(out.rankings.map(h=>h.n),['1','2']);assert.deepEqual(out.unrated.map(h=>h.n),['3']);assert.ok(out.unrated[0].reasons.includes('FTS-unrated'));
+ assert.equal(estimatedWinLine(r,out,'mix1').status,'UNAVAILABLE');assert.deepEqual({r,base},before);assert.deepEqual(rankMix1(r,base).rankings,[]);
+ const subset=race(r.horses.slice(0,2));assert.deepEqual(out.rankings,rankMix1(subset).rankings);
+});
+test('PASS display isolates missing history and never invents a score for an unrateable horse',()=>{
+ const a=horse(1),b=horse(2);delete b.beyer_evidence;
+ const r=race([a,b,horse(3,[],{life_starts:0})]),out=rankMix1(r,releaseRace(r),{displayPass:true});
+ assert.deepEqual(out.rankings.map(h=>h.n),['1']);assert.equal(out.rankings[0].score,50);assert.equal(out.unrated.length,2);
+ const none=race([horse(1,[],{life_starts:0})]);assert.deepEqual(rankMix1(none,releaseRace(none),{displayPass:true}).rankings,[]);
+ const blocked=race([horse(1,[80],{parser_blockers:['unverified-source']})]);assert.deepEqual(rankMix1(blocked,releaseRace(blocked),{displayPass:true}).rankings,[]);
+});
+test('model explanations use native expandable details in each comparison box',()=>{
+ const html=fs.readFileSync(new URL('./index.html',import.meta.url),'utf8');
+ for(const name of ['V4.4c','Contender','MIX1'])assert.ok(html.includes('<summary>How '+name+' ranks</summary>'));
+ assert.ok(html.includes('Not an official full-field MIX1 ranking.'));assert.ok(html.includes('mix1.unrated'));
 });

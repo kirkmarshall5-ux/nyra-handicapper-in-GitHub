@@ -15,3 +15,7 @@ Validation: `npm test` includes component history, missing/zero inputs, percenti
 ## Experimental win-line display
 
 `MIX1-research-softmax-v1` applies stable softmax to unrounded MIX1 scores over every eligible runner, with temperature 10. The 10-point scale is an explicit provisional assumption shared with the V4.4c display, not a fitted or calibrated MIX1 probability model. Percentages sum to 100% across the complete field; fair fractional odds are `(1-p)/p`. The displayed top four are not renormalized. Scratch changes recompute the line. PASS/HOLD, incomplete fields, missing scores and source blockers withhold estimates. Neither this display nor the name “True Chance” establishes validated win probabilities or betting approval. Ranking weights and order remain unchanged.
+
+## PASS display and model explanations
+
+Race Day requests a display-only provisional MIX1 ranking on PASS races. Only runners with valid individual inputs and matched verified Beyer history receive numerical ratings; missing/blocked runners are listed with reasons. Relative components use the rated subset, and the original non-pace adjustment signals are recomputed for display. The result remains PASS with `provisional: true`, so no win line or wager is produced. The default research/replay API and all rateable-race rankings remain unchanged. Each model box has native expandable “How … ranks” details.
