@@ -64,8 +64,8 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <div><div class="muted small" style="margin-bottom:5px">Race</div><div class="racebar" id="racebar"></div></div>
 </div><div id="declaredScratches" class="small muted" role="status"></div></div>
 
-<div class="card span4"><div class="kicker">Top 4 Win Candidates-V4.4c</div><div id="topContenders" class="stack small"></div></div>
-<div class="card span4"><div class="kicker">Top 4 Win Candidates-Contender</div><div id="contenderCandidates" class="stack small"></div></div>
+<div class="card span4"><div class="kicker">Top 4 Win Candidates-V4.4c</div><div id="topContenders" class="stack small"></div><details class="tiny muted" style="margin-top:10px"><summary>How V4.4c ranks</summary><p>Latest Beyer 40 weight points · best Beyer from the latest three starts 22 · jockey 7 · trainer 8. Jockey and trainer win percentages are multiplied by three, capped at 100. Horses with one or two starts can also use a verified trainer-context score at 12 weight points. Missing inputs redistribute the available weights; verified zero counts. Field strength, pace fit, rebound protection and lightly raced upside can adjust the base rating by up to ±6 points. PASS races show provisional rated runners only.</p></details></div>
+<div class="card span4"><div class="kicker">Top 4 Win Candidates-Contender</div><div id="contenderCandidates" class="stack small"></div><details class="tiny muted" style="margin-top:10px"><summary>How Contender ranks</summary><p>Contender V2 combines relative field scores using frozen coefficients for recent Beyers, surface and distance form, Timeform Early and Late pace, race pressure, career records, jockey and trainer records, layoffs, workouts, verified trip comments and prior opposition. It also uses a surface/distance matched Beyer trend when at least three comparable starts are verified. Missing features are neutral. This model was trained for top-three contention; its win chances remain experimental. PASS races show provisional rated runners only.</p></details></div>
 <div class="card span4"><div class="kicker">Top 4 Win Candidates-MIX1</div><div class="tiny muted" style="margin:6px 0">Experimental · Timeform version</div><div id="mix1Candidates" class="stack small" aria-live="polite"></div><details class="tiny muted" style="margin-top:10px"><summary>How MIX1 ranks</summary><p>Recent two Beyers 37% · best Beyer from starts 3–5 12% · jockey 7% · trainer 17% · Timeform Early 17% · surface/distance 10%. Components use relative field scores. Missing inputs redistribute the remaining weights; non-pace adjustments are capped at ±15%.</p></details></div>
 <div class="card span3"><div class="kicker">Top 3 morning-line favorites</div><div id="topMl" class="stack small"></div></div>
 <div class="card span3"><div class="kicker">Top jockeys · this race</div><div id="topJockeys" class="stack small"></div></div>
@@ -209,7 +209,7 @@ import {researchRace} from "./jockey-research.js?v=20261008-qa1";
 import {evidenceProfile} from "./scoring-engine.js?v=20261008-qa1";
 import {estimatedWinLine,winLineFields,winLineNote} from "./fair-odds.js?v=20261015-mix1-line1";
 import {rankContenders} from "./contender-rankings.js?v=20261011-passdisplay1";
-import {rankMix1} from "./mix1-rankings.js?v=20261015-mix1";
+import {rankMix1} from "./mix1-rankings.js?v=20261015-pass1";
 import {passRaceDisplay} from "./pass-race-display.js?v=20261013-releaseqa1";
 import {releaseRace as websiteRace,RELEASE_ID} from "./rankings-release.js?v=20261008-qa1";
 import {parseNyraText as parseNyraEntries} from "./nyra-entry-parser.js?v=20261008-qa1";
@@ -286,10 +286,15 @@ function renderRaceInsights(){
  }else contenderTarget.innerHTML=contender.decision==='RATEABLE'?contenderList:`<b>Contender: ${escapeText(contender.decision)}</b><div class="tiny muted">${escapeText(contender.reason)}</div>`;
 
  contenderTarget.innerHTML+=winLineNote(contenderLine);
- const mix1=rankMix1(race,r),mix1Target=document.getElementById('mix1Candidates');
+ const mix1=rankMix1(race,r,{displayPass:r.decision==='PASS'}),mix1Target=document.getElementById('mix1Candidates');
  const mix1Line=estimatedWinLine(race,mix1,'mix1');
  const mix1List=mix1.rankings.length?candidateTable(mix1.rankings.slice(0,4).map((h,i)=>`<tr><td><b>${i+1}. #${escapeText(h.n||'—')} ${escapeText(h.name)}</b></td><td>${h.score.toFixed(1)}</td>${winLineFields(mix1Line,h)}</tr>`).join('')):'';
  mix1Target.innerHTML=mix1.decision==='RATEABLE'?mix1List+`<div class="tiny muted">All six inputs: ${mix1.complete_inputs}/${mix1.eligible_count} runners. Missing components reweighted.</div>`:`<b>MIX1: ${escapeText(mix1.decision)} — no wager</b><div class="tiny muted">${escapeText(mix1.reason)}</div>`;
+ if(mix1.provisional){
+  const limited=(mix1.unrated||[]).map(h=>`<div class="tiny muted">#${escapeText(h.n||'—')} ${escapeText(h.name)} — ${h.reasons.map(escapeText).join('; ')}</div>`).join('');
+  const general=(mix1.pass_reasons||[]).filter(x=>!x?.horse).map(x=>escapeText(typeof x==='string'?x:x.reason||'Source verification pending')).join('; ');
+  mix1Target.innerHTML='<b>MIX1: PASS — no wager</b><div class="tiny muted" style="margin:5px 0">Provisional ranking of rated runners only; unrated horses may be competitive. Not an official full-field MIX1 ranking.</div>'+(mix1List||`<div class="tiny muted">${escapeText(mix1.reason)}</div>`)+(limited?'<div class="tiny muted" style="margin:10px 0 5px"><b>Limited or missing information</b></div>'+limited:'')+(general?`<div class="tiny muted">Other pass reasons: ${general}</div>`:'');
+ }
  mix1Target.innerHTML+=winLineNote(mix1Line);
  bestValue.innerHTML='<div class="muted">Best Value: PASS — probability validation pending. Morning line is reference only. The research win-ticket builder and quote recorder are available in the Bets tab.</div>';
 }

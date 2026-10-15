@@ -1,4 +1,5 @@
 import {releaseRace} from './rankings-release.js';
+import {adjustment} from './scoring-engine.js';
 import {validatedInputs} from './data-corrected-research.js';
 
 // Retained MIX1 specification, not the later recent-three or form-cycle variants.
@@ -27,9 +28,26 @@ function percentile(value,observed){
  if(value==null)return null;if(observed.length<=1)return 50;
  return 100*(observed.filter(v=>v<value).length+.5*(observed.filter(v=>v===value).length-1))/(observed.length-1);
 }
-export function rankMix1(race,baseline=releaseRace(race)){
+function historyVerified(h){
+ const proofs=(h.contender_evidence?.beyer_evidence||h.beyer_evidence||[]).slice(0,5),figs=h.beyer_figures?.slice(0,5)||[];
+ return proofs.length>0&&proofs.length===figs.length&&proofs.every((p,i)=>finite(p.figure)&&p.figure===figs[i]);
+}
+export function rankMix1(race,baseline=releaseRace(race),{displayPass=false}={}){
  const meta={model_id:MIX1_ID,research_only:true,probabilityCalibrated:false,bettingEnabled:false};
  const hold=(decision,reason)=>({...meta,decision,reason,rankings:[]});
+ // Display-only subset: preserve PASS and never feed provisional scores to a win line.
+ if(baseline.decision==='PASS'&&displayPass){
+  const all=baseline.runners||[],unrated=[];
+  const field=all.filter(h=>{
+   const reasons=[...(h.unrated_reason?[h.unrated_reason]:[]),...(h.parser_blockers||[]).map(x=>typeof x==='string'?x:x.reason||'Source verification pending')];
+   if(!finite(h.base_rating)&&!reasons.length)reasons.push('Insufficient verified rating evidence');
+   if(!reasons.length&&validatedInputs(h).reason)reasons.push('Verified model inputs required');
+   if(!reasons.length&&!historyVerified(h))reasons.push('Re-upload DRF PPs to verify MIX1 Beyer history');
+   if(reasons.length){unrated.push({n:h.n,name:h.name,reasons});return false}return true;
+  }).map(h=>({...h,v44c_signals:adjustment(h,all).signals}));
+  const result=field.length?rankMix1(race,{decision:'RATEABLE',runners:field,rankings:field}):hold('PASS','No horses have enough verified evidence for a numerical MIX1 rating.');
+  return {...result,decision:'PASS',provisional:true,unrated,pass_reasons:baseline.pass_reasons||[],reason:result.reason||'Provisional ranking of rated runners only; unrated horses may be competitive.'};
+ }
  if(baseline.decision!=='RATEABLE')return hold(baseline.decision||'PASS','Original V4.4c race eligibility applies.');
  const field=baseline.runners||[],rows=baseline.rankings||[];
  if(!field.length||field.length!==rows.length)return hold('HOLD','Complete original rated field required.');
@@ -38,8 +56,8 @@ export function rankMix1(race,baseline=releaseRace(race)){
  for(const h of field){
   const key=norm(h.name);if(!key||seen.has(key))return hold('HOLD','Unique source runner identities required.');seen.add(key);
   const input=validatedInputs(h);if(input.reason)return hold('HOLD','Verified model inputs required.');
-  const proofs=(h.contender_evidence?.beyer_evidence||h.beyer_evidence||[]).slice(0,5),figs=h.beyer_figures?.slice(0,5)||[];
-  if(!proofs.length||proofs.length!==figs.length||proofs.some((p,i)=>!finite(p.figure)||p.figure!==figs[i]))return hold('HOLD','Re-upload DRF PPs to verify MIX1 Beyer history.');
+  const proofs=(h.contender_evidence?.beyer_evidence||h.beyer_evidence||[]).slice(0,5);
+  if(!historyVerified(h))return hold('HOLD','Re-upload DRF PPs to verify MIX1 Beyer history.');
   const figures=proofs.map(p=>p.figure),parts=Object.fromEntries(input.parts.map(([v,w,k])=>[k,v]));
   const matched=proofs.map(p=>mix1Profile(p,race.date)).filter(p=>p&&p.surface===surface&&distance!=null&&p.distance!=null&&Math.abs(p.distance-distance)<=.5).sort((a,b)=>b.date.localeCompare(a.date)).slice(0,3);
   const signals=h.v44c_signals||[];
