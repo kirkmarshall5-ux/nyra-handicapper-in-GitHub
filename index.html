@@ -264,7 +264,7 @@ function fairOddsMap(){return {}}
 function confidenceRank(h){const ep=evidenceProfile({...h,jockeyRating:h.jockey_win,trainerRating:h.trainer_win});return ({High:3,Medium:2,Low:1})[ep.confidence]||1}
 function valueRows(){return []}
 const escapeText=s=>String(s??"").replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function candidateTable(rows){return `<table class="candidate-table"><thead><tr><th aria-label="Horse"></th><th scope="col">Rating</th><th scope="col">Fair Odds</th><th scope="col">True Chance</th></tr></thead><tbody>${rows}</tbody></table>`}
+function candidateTable(rows){return `<div class="tiny muted" style="margin:5px 0">Experimental, uncalibrated estimates — no betting authorization.</div><table class="candidate-table"><thead><tr><th aria-label="Horse"></th><th scope="col">Rating</th><th scope="col">Est. Fair Odds</th><th scope="col">Est. Win %</th></tr></thead><tbody>${rows}</tbody></table>`}
 function renderRaceInsights(){
  const r=currentRating(),v44cLine=estimatedWinLine(race,r,'v44c');
  const fullRankings=()=>candidateTable(r.rankings.slice(0,4).map((h,i)=>`<tr><td><b>${i+1}. #${escapeText(h.n||'—')} ${escapeText(h.name)}</b><div class="tiny muted">${h.v44c_signals.map(([k,v])=>escapeText(k)+' '+(v>0?'+':'')+v).join(' · ')||'No adjustment'}</div></td><td>${h.v44c_display_score}</td>${winLineFields(v44cLine,h)}</tr>`).join(''));
@@ -331,7 +331,8 @@ document.querySelectorAll(".sortbtn").forEach(b=>b.onclick=()=>{
  else {gridSort.key=key;gridSort.dir=key==="number"?1:-1}
  renderHorses();updateSortButtons();
 });
-function renderAll(){document.getElementById("releaseStatus").textContent=`Rankings: ${RELEASE_ID} · PP formats: DRF / Brisnet Ultimate · Saved card: ${activeCard.parser_version||"sample / legacy evidence"}. Betting disabled. Verify scratches, surface, post time and odds before wagering.`;renderOddsSource();renderBrisnetEvidence();renderProjectedRaceSetup();renderReleaseContext();renderJ1Comparison();renderHeader();renderHorses();updateSortButtons();renderPace();renderEdit();renderEvidence();renderConnections();renderLeaderboards();renderWeights();renderThings();renderRaceInsights();renderBetSuggestions();renderResearchBuilder();updateUrl()}
+function syncRaceNotes(){raceNotes.value=state.cards?.[activeCard.id]?.notes?.[race.race]||""}
+function renderAll(){syncRaceNotes();document.getElementById("releaseStatus").textContent=`Rankings: ${RELEASE_ID} · PP formats: DRF / Brisnet Ultimate · Saved card: ${activeCard.parser_version||"sample / legacy evidence"}. Betting disabled. Verify scratches, surface, post time and odds before wagering.`;renderOddsSource();renderBrisnetEvidence();renderProjectedRaceSetup();renderReleaseContext();renderJ1Comparison();renderHeader();renderHorses();updateSortButtons();renderPace();renderEdit();renderEvidence();renderConnections();renderLeaderboards();renderWeights();renderThings();renderRaceInsights();renderBetSuggestions();renderResearchBuilder();updateUrl()}
 function renderThings(){
  const el=document.getElementById("thingsToConsider"); if(!el)return;
  let rows=[];
@@ -362,7 +363,7 @@ function renderHeader(){
  else if(trackName.includes("aqueduct"))track.value="aqueduct";
  else if(trackName.includes("belmont"))track.value="belmont";
 }
-function selectRace(n){if(!activeCard.races[n])return;race=structuredClone(activeCard.races[n]);restoreRunnerEdits();raceNotes.value=state.cards?.[activeCard.id]?.notes?.[n]||"";renderAll();window.scrollTo({top:0,behavior:"smooth"})}
+function selectRace(n){if(!activeCard.races[n])return;race=structuredClone(activeCard.races[n]);restoreRunnerEdits();renderAll();window.scrollTo({top:0,behavior:"smooth"})}
 function renderHorses(){
  horseTable.querySelector("tbody").innerHTML=sortedGridHorses().map(h=>{let js=h.jockey_win!=null?{win:h.jockey_win}:null,ts=h.trainer_win!=null?{win:h.trainer_win}:null;return `<tr style="${h.odds==="SCR"?"opacity:.48":""}">
 <td><span class="num">${h.n}</span><span class="horse">${escapeText(h.name)}${h.entry_status&&h.entry_status!=="REGULAR"?` <span class="pill">${h.entry_status} excluded</span>`:""}</span></td><td>${h.ml||"—"}</td><td><span class="odds">${h.odds||"—"}</span>${h.pre_race_evidence?`<div class="tiny muted">${h.pre_race_evidence.status==="PUBLIC_PAGE_SNAPSHOT"?"NYRA snapshot":h.pre_race_evidence.status==="MANUAL_SOURCE_SNAPSHOT"?"Manual source":"Pasted snapshot"} · imported ${escapeText(new Date(h.pre_race_evidence.importedAt).toLocaleTimeString())}${h.pre_race_evidence.upstreamAgeSeconds!=null?` · cache age ${h.pre_race_evidence.upstreamAgeSeconds}s`:""}<br>Freshness unverified</div>`:""}</td>
@@ -427,7 +428,7 @@ function renderWeights(){weightsDiv()}
 function weightsDiv(){document.getElementById("weights").innerHTML='<div class="small">Last verified Beyer: 40 · best of latest 3: 22 · PP jockey: 7 · PP trainer: 8 · trainer context for ≤2 starts: 12. Verified zero figures remain included; only missing components are omitted. Figure values require source verification. V4.4c adjustments are capped at ±6. Rank unrounded totals, then horse name.</div>';resetWeights.disabled=true;resetWeights.textContent="V4.4c weights locked"}
 
 document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));b.classList.add("active");["raceday","pace","connections","pp","public","bets","knowledge"].forEach(id=>document.getElementById(id).classList.toggle("hidden",id!==b.dataset.tab))});
-raceNotes.value=state.cards?.[activeCard.id]?.notes?.[1]||"";raceNotes.oninput=e=>{const cs=state.cards[activeCard.id]||(state.cards[activeCard.id]={runners:{},notes:{}});cs.notes=cs.notes||{};cs.notes[race.race]=e.target.value;save()};
+raceNotes.oninput=e=>{const cs=state.cards[activeCard.id]||(state.cards[activeCard.id]={runners:{},notes:{}});cs.notes=cs.notes||{};cs.notes[race.race]=e.target.value;save()};
 
 function updateUrl(){const venue=["belmont","aqueduct","saratoga"].includes(track.value)?track.value:"belmont";const url=`https://www.nyra.com/${venue}/racing/entries/?day=${race.date}&limit=entries&race=${race.race}`;raceUrl.value=url;openRace.href=url;nyraRaceLink.href=url}
 [track,raceDate,raceNo].forEach(el=>el.onchange=updateUrl);updateUrl();
