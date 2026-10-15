@@ -48,9 +48,9 @@ test('surface/distance parser keeps exact frozen horizon and fractions',()=>{
  assert.equal(mix1Profile(p,'2026-10-16'),null);assert.equal(mix1Profile(p,'2025-10-15'),null);
  assert.equal(mix1Profile({...p,running_date_track:'31á26= 1Bel'},'2026-10-15'),null);
 });
-test('Race Day includes MIX1 beside controls and leaves unavailable probability cells empty',()=>{
+test('Race Day includes MIX1 beside controls and shows experimental win-line estimates',()=>{
  const html=fs.readFileSync(new URL('./index.html',import.meta.url),'utf8');
  const start=html.indexOf('Top 4 Win Candidates-V4.4c'),end=html.indexOf('Top 3 morning-line favorites');
  const panels=html.slice(start,end);assert.match(panels,/Top 4 Win Candidates-Contender/);assert.match(panels,/Top 4 Win Candidates-MIX1/);assert.match(panels,/id="mix1Candidates"/);
- assert.match(html,/const mix1=rankMix1\(race,r\)/);assert.match(html,/Relative rating · Fair Odds \/ True Chance unavailable/);assert.match(html,/Best Value: PASS — probability validation pending/);
+ assert.match(html,/const mix1=rankMix1\(race,r\)/);assert.ok(html.includes("estimatedWinLine(race,mix1,'mix1')"));assert.ok(html.includes('winLineFields(mix1Line,h)'));assert.ok(html.includes('winLineNote(mix1Line)'));assert.match(html,/Best Value: PASS — probability validation pending/);
 });

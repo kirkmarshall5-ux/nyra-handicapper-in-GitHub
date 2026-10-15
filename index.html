@@ -207,7 +207,7 @@ import {fieldConnections} from "./pp-context.js?v=20261008-qa1";
 import {runnerStateKey} from "./card-loader.js?v=20261008-qa1";
 import {researchRace} from "./jockey-research.js?v=20261008-qa1";
 import {evidenceProfile} from "./scoring-engine.js?v=20261008-qa1";
-import {estimatedWinLine,winLineFields,winLineNote} from "./fair-odds.js?v=20261011-columns1";
+import {estimatedWinLine,winLineFields,winLineNote} from "./fair-odds.js?v=20261015-mix1-line1";
 import {rankContenders} from "./contender-rankings.js?v=20261011-passdisplay1";
 import {rankMix1} from "./mix1-rankings.js?v=20261015-mix1";
 import {passRaceDisplay} from "./pass-race-display.js?v=20261013-releaseqa1";
@@ -287,9 +287,10 @@ function renderRaceInsights(){
 
  contenderTarget.innerHTML+=winLineNote(contenderLine);
  const mix1=rankMix1(race,r),mix1Target=document.getElementById('mix1Candidates');
- const mix1List=mix1.rankings.length?candidateTable(mix1.rankings.slice(0,4).map((h,i)=>`<tr><td><b>${i+1}. #${escapeText(h.n||'—')} ${escapeText(h.name)}</b></td><td>${h.score.toFixed(1)}</td><td>—</td><td>—</td></tr>`).join('')):'';
+ const mix1Line=estimatedWinLine(race,mix1,'mix1');
+ const mix1List=mix1.rankings.length?candidateTable(mix1.rankings.slice(0,4).map((h,i)=>`<tr><td><b>${i+1}. #${escapeText(h.n||'—')} ${escapeText(h.name)}</b></td><td>${h.score.toFixed(1)}</td>${winLineFields(mix1Line,h)}</tr>`).join('')):'';
  mix1Target.innerHTML=mix1.decision==='RATEABLE'?mix1List+`<div class="tiny muted">All six inputs: ${mix1.complete_inputs}/${mix1.eligible_count} runners. Missing components reweighted.</div>`:`<b>MIX1: ${escapeText(mix1.decision)} — no wager</b><div class="tiny muted">${escapeText(mix1.reason)}</div>`;
- mix1Target.innerHTML+='<div class="tiny muted" style="margin-top:8px">Relative rating · Fair Odds / True Chance unavailable · no wager recommendation.</div>';
+ mix1Target.innerHTML+=winLineNote(mix1Line);
  bestValue.innerHTML='<div class="muted">Best Value: PASS — probability validation pending. Morning line is reference only. The research win-ticket builder and quote recorder are available in the Bets tab.</div>';
 }
 function renderJ1Comparison(){
