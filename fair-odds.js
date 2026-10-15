@@ -2,7 +2,10 @@
 // The score scales are explicit assumptions; do not use for live value decisions.
 export const LINE_MODELS=Object.freeze({
  v44c:Object.freeze({id:'V44C-research-softmax-v1',scoreKey:'v44c_unrounded_score',temperature:10}),
- contender:Object.freeze({id:'CONTENDER-research-softmax-v1',scoreKey:'score',temperature:1})
+ contender:Object.freeze({id:'CONTENDER-research-softmax-v1',scoreKey:'score',temperature:1}),
+ // MIX1 uses the same provisional 10-point scale as the other 100-point rating.
+ // This is a display assumption, not a fitted or validated MIX1 win model.
+ mix1:Object.freeze({id:'MIX1-research-softmax-v1',scoreKey:'score',temperature:10})
 });
 export function fairOddsFromProbability(p){
  return typeof p==='number'&&Number.isFinite(p)&&p>0&&p<=1?(1-p)/p:null;
