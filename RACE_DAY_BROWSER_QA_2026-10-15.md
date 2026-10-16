@@ -2,6 +2,12 @@
 
 Status: **NOT YET ACCEPTED**. Automated Node checks and GitHub Pages deployment are not browser acceptance. Record a result, screenshot, time and tested commit for each case. Do not record a PASS without observing it.
 
+
+## Automated browser smoke (not manual acceptance)
+- PR #90 ran 12/12 checks in headless desktop Chromium and touch/iPad-size **Chromium emulation**, with screenshot/JSON artifacts: https://github.com/kirkmarshall5-ux/nyra-handicapper-in-GitHub/actions/runs/38828658293 . These runs exercise locally served source, not a physical iPad.
+- The `Live Pages browser smoke` workflow will run after successful GitHub Pages deployment, verify the published URL and repeat the same smoke tests against the public site. Its result must be checked separately; do not claim a PASS before it runs.
+- Neither Chromium emulation nor a live URL smoke test substitutes for physical iPad Chrome checks, independent DRF/Brisnet source comparisons, scratch eligibility checks, or genuine pre-race GitHub digest anchoring.
+
 ## Preconditions
 - Use the exact published GitHub Pages URL and record the main commit shown in GitHub.
 - Test desktop Chrome and iPad Chrome separately. Use an ordinary browser tab (not only a cached PWA); refresh after deploying.
