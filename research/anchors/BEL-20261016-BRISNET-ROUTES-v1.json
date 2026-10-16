@@ -1,0 +1,33 @@
+{
+  "batch_id": "BEL-20261016-BRISNET-ROUTES-v1",
+  "status": "PRELIMINARY_RESEARCH_ONLY_FINAL_FIELD_NOT_CERTIFIED",
+  "snapshot_file": "FROZEN_PRELIMINARY_v1.json",
+  "snapshot_sha256": "c51952a5433ab5feb167e022be547c144e879aa7809b7643cd618c8ab18bcaa4",
+  "digest_scope": "SHA-256 of exact archived UTF-8 snapshot bytes including final newline",
+  "source_pdf_sha256": "0ccc4797e4c57024e3c17c11af6bc5525e837b62ce0c4045155609b3dd204153",
+  "local_capture_at": "2026-10-16T16:00:55.340Z",
+  "earliest_printed_scheduled_post": "2026-10-16T13:10:00-04:00",
+  "actual_off_and_starters": "PENDING_OFFICIAL_VERIFICATION",
+  "model_ids": {
+    "v44c": "V44C-BRISNET-BASE-20261016-v1",
+    "contender": "CONTENDER-BRISNET-20261016-v1",
+    "mix1": "MIX1-BRISNET-20261016-v1"
+  },
+  "dirt_routes": [
+    1,
+    2,
+    7
+  ],
+  "turf_routes": [
+    3,
+    6,
+    9
+  ],
+  "complete_native_candidates": [
+    3,
+    7
+  ],
+  "original_DR1_DR2_TRX1": "HELD_PROVIDER_MISMATCH",
+  "betting_enabled": false,
+  "results_reviewed": false
+}
