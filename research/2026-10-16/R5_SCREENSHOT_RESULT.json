@@ -1,0 +1,243 @@
+{
+  "schema_version": 1,
+  "recordedAt": "2026-10-16T19:51:56.502924+00:00",
+  "race_key": "Belmont Park|2026-10-16|5",
+  "status": "SCREENSHOT_RESULT_RECORDED_FROZEN_FIELD_AND_SURFACE_DIFFER",
+  "source": {
+    "filename": "IMG_1299.png",
+    "library_file_id": "libfile_21177980a6e48191921b3c43d3ba1e00",
+    "sha256": "6cbe8a255f7f0c3f9c5adc596ddbb4de11ad9fdb3f5ca6a0dd7d4adb36d815ab",
+    "date_printed": false,
+    "date_source": "User current-card upload"
+  },
+  "observed_first4": [
+    "10",
+    "3",
+    "7",
+    "2"
+  ],
+  "finishers_shown": [
+    {
+      "position": 1,
+      "n": "10",
+      "name": "Worth Waiting For"
+    },
+    {
+      "position": 2,
+      "n": "3",
+      "name": "Boer War"
+    },
+    {
+      "position": 3,
+      "n": "7",
+      "name": "Summer Brother"
+    },
+    {
+      "position": 4,
+      "n": "2",
+      "name": "Riddle Me This"
+    }
+  ],
+  "observed_scratches": [
+    {
+      "n": "5",
+      "name": "Coastal Evacuation"
+    }
+  ],
+  "frozen_pp_surface": "Turf",
+  "observed_surface": "Synth",
+  "surface_status": "Scheduled turf versus displayed synthetic; official confirmation pending",
+  "observed_going": "Fast",
+  "observed_distance_furlongs": 6,
+  "observed_class": "Maiden Optional Claiming",
+  "observed_purse": 80000,
+  "observed_runner_count_label": 10,
+  "actual_starter_count": null,
+  "starter_count_note": "Display says 10 runners and also lists #5 scratched; actual starters need chart verification",
+  "official_order_verified": false,
+  "final_field_verified": false,
+  "forecast_pre_off_verified": false,
+  "actual_off": null,
+  "full_order": null,
+  "diagnostics": {
+    "v44c": {
+      "frozen_first4": [
+        "5",
+        "3",
+        "6",
+        "1"
+      ],
+      "frozen_first_choice": "5",
+      "frozen_first_choice_status": "SCRATCHED_ON_RESULT_SCREEN",
+      "winner_rank_in_original_rated_list": 6,
+      "winner_in_frozen_first4": false,
+      "winner_was_rated": true,
+      "ordered_first2": false,
+      "first4_set": false,
+      "ordered_first4": false,
+      "full_field_rank_error": null,
+      "evaluation_status": "PARTIAL_FIELD_CHANGED_SURFACE_AND_SCRATCH_DIAGNOSTIC_ONLY"
+    },
+    "contender": {
+      "frozen_first4": [
+        "5",
+        "3",
+        "4",
+        "1"
+      ],
+      "frozen_first_choice": "5",
+      "frozen_first_choice_status": "SCRATCHED_ON_RESULT_SCREEN",
+      "winner_rank_in_original_rated_list": 6,
+      "winner_in_frozen_first4": false,
+      "winner_was_rated": true,
+      "ordered_first2": false,
+      "first4_set": false,
+      "ordered_first4": false,
+      "full_field_rank_error": null,
+      "evaluation_status": "PARTIAL_FIELD_CHANGED_SURFACE_AND_SCRATCH_DIAGNOSTIC_ONLY"
+    },
+    "mix1": {
+      "frozen_first4": [
+        "5",
+        "3",
+        "1",
+        "4"
+      ],
+      "frozen_first_choice": "5",
+      "frozen_first_choice_status": "SCRATCHED_ON_RESULT_SCREEN",
+      "winner_rank_in_original_rated_list": 6,
+      "winner_in_frozen_first4": false,
+      "winner_was_rated": true,
+      "ordered_first2": false,
+      "first4_set": false,
+      "ordered_first4": false,
+      "full_field_rank_error": null,
+      "evaluation_status": "PARTIAL_FIELD_CHANGED_SURFACE_AND_SCRATCH_DIAGNOSTIC_ONLY"
+    },
+    "BASE": {
+      "frozen_first4": [
+        "5",
+        "3",
+        "6",
+        "1"
+      ],
+      "frozen_first_choice": "5",
+      "frozen_first_choice_status": "SCRATCHED_ON_RESULT_SCREEN",
+      "winner_rank_in_original_rated_list": 6,
+      "winner_in_frozen_first4": false,
+      "winner_was_rated": true,
+      "ordered_first2": false,
+      "first4_set": false,
+      "ordered_first4": false,
+      "full_field_rank_error": null,
+      "evaluation_status": "PARTIAL_FIELD_CHANGED_SURFACE_AND_SCRATCH_DIAGNOSTIC_ONLY"
+    },
+    "FLAT": {
+      "frozen_first4": [
+        "5",
+        "3",
+        "6",
+        "1"
+      ],
+      "frozen_first_choice": "5",
+      "frozen_first_choice_status": "SCRATCHED_ON_RESULT_SCREEN",
+      "winner_rank_in_original_rated_list": 6,
+      "winner_in_frozen_first4": false,
+      "winner_was_rated": true,
+      "ordered_first2": false,
+      "first4_set": false,
+      "ordered_first4": false,
+      "full_field_rank_error": null,
+      "evaluation_status": "PARTIAL_FIELD_CHANGED_SURFACE_AND_SCRATCH_DIAGNOSTIC_ONLY"
+    },
+    "CONDITION": {
+      "frozen_first4": [
+        "5",
+        "3",
+        "6",
+        "1"
+      ],
+      "frozen_first_choice": "5",
+      "frozen_first_choice_status": "SCRATCHED_ON_RESULT_SCREEN",
+      "winner_rank_in_original_rated_list": 6,
+      "winner_in_frozen_first4": false,
+      "winner_was_rated": true,
+      "ordered_first2": false,
+      "first4_set": false,
+      "ordered_first4": false,
+      "full_field_rank_error": null,
+      "evaluation_status": "PARTIAL_FIELD_CHANGED_SURFACE_AND_SCRATCH_DIAGNOSTIC_ONLY"
+    },
+    "TURN": {
+      "frozen_first4": [
+        "5",
+        "3",
+        "6",
+        "1"
+      ],
+      "frozen_first_choice": "5",
+      "frozen_first_choice_status": "SCRATCHED_ON_RESULT_SCREEN",
+      "winner_rank_in_original_rated_list": 6,
+      "winner_in_frozen_first4": false,
+      "winner_was_rated": true,
+      "ordered_first2": false,
+      "first4_set": false,
+      "ordered_first4": false,
+      "full_field_rank_error": null,
+      "evaluation_status": "PARTIAL_FIELD_CHANGED_SURFACE_AND_SCRATCH_DIAGNOSTIC_ONLY"
+    }
+  },
+  "printed_payouts": [
+    {
+      "type": "win",
+      "n": "10",
+      "unit": 2,
+      "return": 19.8
+    },
+    {
+      "type": "place",
+      "n": "10",
+      "unit": 2,
+      "return": 7.26
+    },
+    {
+      "type": "show",
+      "n": "10",
+      "unit": 2,
+      "return": 4.62
+    },
+    {
+      "type": "place",
+      "n": "3",
+      "unit": 2,
+      "return": 5.54
+    },
+    {
+      "type": "show",
+      "n": "3",
+      "unit": 2,
+      "return": 3.46
+    },
+    {
+      "type": "show",
+      "n": "7",
+      "unit": 2,
+      "return": 3.06
+    },
+    {
+      "type": "exacta",
+      "combination": "10-3",
+      "unit": 1,
+      "return": 48.38
+    }
+  ],
+  "financial_grade": null,
+  "notes": [
+    "All seven frozen arms ranked winner #10 Worth Waiting For sixth among six rated runners; the PP verifies one prior start. This is a rated-runner selection miss, not a missing-figure/FTS winner.",
+    "Third #7 Summer Brother and fourth #2 Riddle Me This were FTS and unrated.",
+    "All arms selected #5 first, now shown scratched. Do not count a scratched selection as a losing starter or promote #3 after the race and call it the original selection.",
+    "No independently anchored pre-off scratch/surface-adjusted candidate version has been provided. Preserve original forecasts, hold forward/financial grading, and retain descriptive diagnostics.",
+    "BRIS-PACE-CONTEXT-v1 does not have a synthetic weighting profile; do not score this as turf-sprint validation or rerank using outcomes.",
+    "Do not retain or report the visible account balance; it is unrelated to research grading."
+  ]
+}
