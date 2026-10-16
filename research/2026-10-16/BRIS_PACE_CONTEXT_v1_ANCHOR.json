@@ -1,0 +1,3560 @@
+{
+  "batch_id": "BEL-20261016-BRIS-PACE-CONTEXT-v1",
+  "capturedAt": "2026-10-16T17:35:38.550Z",
+  "snapshot_sha256": "e64fbd63b58f6ea5093a15191bed65ef221152a35f1c29ea6483f8ad264a3eb5",
+  "source_pdf_sha256": "0ccc4797e4c57024e3c17c11af6bc5525e837b62ce0c4045155609b3dd204153",
+  "production_commit": "1dbde73e7532f61be32ccdc891dc292a9fd550db",
+  "code_sha256": {
+    "brisnet-pace-candidate.js": "ad819863d22bfd83dd1c04fcf478d71a349074bcbced28329bf64384949ffdc5",
+    "brisnet-pace-display.js": "6abf35a5d9f6920460baeb353e9bf3dba36845dde00a2255cf1f334cb4cefc1f",
+    "brisnet-models.js": "750d2144f49572d4d31d0d045e1df220becf4f02db75dcd0b180f13dec9401a2",
+    "race-selector.js": "52399804a9aaa3cdfa50fbc49c801f94efaf2a452354e2c20503876ebc5d9f64",
+    "mix1-rankings.js": "23ed6649ef366171ccb3548f3e750274a61bf627d631b06bc8077b8fdef453f4",
+    "rankings-release.js": "6622d4fb14230111b23e12bf1d7da710fe8790747ae1c2f68c97462925842401",
+    "contender-rankings.js": "4e8b64c9db1730436a80260f74a18e077449ca44e9d03d18a3660099701acc7c",
+    "pp-format-router.js": "4a1a0a94ade940df68645fad7af72254d1ee077d1eb9c6622f3b577439837dcc",
+    "brisnet-premium-parser.js": "9d1896f391a742882be80ee2bd9c5006d5919321f72542a66ce6138fc9fd6286"
+  },
+  "timing_status": "INDEPENDENT_ANCHOR_PENDING; ACTUAL_OFF_AND_FINAL_FIELD_UNVERIFIED",
+  "excluded_forward_races": [
+    1
+  ],
+  "bettingEnabled": false,
+  "results": null,
+  "races": [
+    {
+      "race": 1,
+      "group": "Dirt route",
+      "scheduled_post": "( 1:10)/12:10/11:10/10:10 (printed zones; verify local time)",
+      "scheduled_post_status": "Printed multiple timezones; local time and actual off require official verification",
+      "candidates": {
+        "BASE": {
+          "model_id": "BRIS-PACE-CONTEXT-v1:BASE",
+          "status": "PARTIAL_RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "5",
+              "name": "Chambered",
+              "score": 100
+            },
+            {
+              "n": "6",
+              "name": "The Gabe Digger",
+              "score": 80
+            },
+            {
+              "n": "3",
+              "name": "Cybertapping",
+              "score": 60
+            },
+            {
+              "n": "1",
+              "name": "Rhythm Riot",
+              "score": 40
+            },
+            {
+              "n": "2",
+              "name": "Tutto a Posto",
+              "score": 20
+            },
+            {
+              "n": "7",
+              "name": "Diamond Juan",
+              "score": 0
+            }
+          ],
+          "unrated": [
+            {
+              "n": "4",
+              "name": "Malachi Miracle",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            }
+          ]
+        },
+        "FLAT": {
+          "model_id": "BRIS-PACE-CONTEXT-v1:FLAT",
+          "status": "PARTIAL_RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "5",
+              "name": "Chambered",
+              "score": 87.5
+            },
+            {
+              "n": "6",
+              "name": "The Gabe Digger",
+              "score": 72.5
+            },
+            {
+              "n": "3",
+              "name": "Cybertapping",
+              "score": 57.5
+            },
+            {
+              "n": "1",
+              "name": "Rhythm Riot",
+              "score": 42.5
+            },
+            {
+              "n": "2",
+              "name": "Tutto a Posto",
+              "score": 27.5
+            },
+            {
+              "n": "7",
+              "name": "Diamond Juan",
+              "score": 12.499999999999998
+            }
+          ],
+          "unrated": [
+            {
+              "n": "4",
+              "name": "Malachi Miracle",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            }
+          ]
+        },
+        "CONDITION": {
+          "model_id": "BRIS-PACE-CONTEXT-v1:CONDITION",
+          "status": "PARTIAL_RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "5",
+              "name": "Chambered",
+              "score": 87.5
+            },
+            {
+              "n": "6",
+              "name": "The Gabe Digger",
+              "score": 72.5
+            },
+            {
+              "n": "3",
+              "name": "Cybertapping",
+              "score": 57.5
+            },
+            {
+              "n": "1",
+              "name": "Rhythm Riot",
+              "score": 42.5
+            },
+            {
+              "n": "2",
+              "name": "Tutto a Posto",
+              "score": 27.5
+            },
+            {
+              "n": "7",
+              "name": "Diamond Juan",
+              "score": 12.5
+            }
+          ],
+          "unrated": [
+            {
+              "n": "4",
+              "name": "Malachi Miracle",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            }
+          ]
+        },
+        "TURN": {
+          "model_id": "BRIS-PACE-CONTEXT-v1:TURN",
+          "status": "PARTIAL_RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "5",
+              "name": "Chambered",
+              "score": 87.5
+            },
+            {
+              "n": "6",
+              "name": "The Gabe Digger",
+              "score": 72.5
+            },
+            {
+              "n": "3",
+              "name": "Cybertapping",
+              "score": 57.5
+            },
+            {
+              "n": "1",
+              "name": "Rhythm Riot",
+              "score": 42.5
+            },
+            {
+              "n": "2",
+              "name": "Tutto a Posto",
+              "score": 27.5
+            },
+            {
+              "n": "7",
+              "name": "Diamond Juan",
+              "score": 12.5
+            }
+          ],
+          "unrated": [
+            {
+              "n": "4",
+              "name": "Malachi Miracle",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            }
+          ]
+        }
+      },
+      "parents": {
+        "v44c": {
+          "model_id": "V44C-BRISNET-BASE-20261016-v1",
+          "status": "PARTIAL_RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "5",
+              "name": "Chambered",
+              "score": 67.88639643185097
+            },
+            {
+              "n": "6",
+              "name": "The Gabe Digger",
+              "score": 67
+            },
+            {
+              "n": "3",
+              "name": "Cybertapping",
+              "score": 65.63936525723891
+            },
+            {
+              "n": "1",
+              "name": "Rhythm Riot",
+              "score": 62.87012987012987
+            },
+            {
+              "n": "2",
+              "name": "Tutto a Posto",
+              "score": 60.95050895050895
+            },
+            {
+              "n": "7",
+              "name": "Diamond Juan",
+              "score": 48.467532467532465
+            }
+          ],
+          "unrated": [
+            {
+              "n": "4",
+              "name": "Malachi Miracle",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            }
+          ]
+        },
+        "contender": {
+          "model_id": "CONTENDER-BRISNET-20261016-v1",
+          "status": "PARTIAL_RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "1",
+              "name": "Rhythm Riot",
+              "score": 0.8181033258246534
+            },
+            {
+              "n": "5",
+              "name": "Chambered",
+              "score": 0.38357259495652224
+            },
+            {
+              "n": "3",
+              "name": "Cybertapping",
+              "score": 0.10678185462102405
+            },
+            {
+              "n": "6",
+              "name": "The Gabe Digger",
+              "score": -0.12184647144493689
+            },
+            {
+              "n": "2",
+              "name": "Tutto a Posto",
+              "score": -0.3898768380471204
+            },
+            {
+              "n": "7",
+              "name": "Diamond Juan",
+              "score": -0.7967344659101422
+            }
+          ],
+          "unrated": [
+            {
+              "n": "4",
+              "name": "Malachi Miracle",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            }
+          ]
+        },
+        "mix1": {
+          "model_id": "MIX1-BRISNET-20261016-v1",
+          "status": "PARTIAL_RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "5",
+              "name": "Chambered",
+              "score": 75.1639344262295
+            },
+            {
+              "n": "3",
+              "name": "Cybertapping",
+              "score": 72.8688524590164
+            },
+            {
+              "n": "1",
+              "name": "Rhythm Riot",
+              "score": 70.49180327868852
+            },
+            {
+              "n": "6",
+              "name": "The Gabe Digger",
+              "score": 54.69387755102041
+            },
+            {
+              "n": "2",
+              "name": "Tutto a Posto",
+              "score": 30.57377049180328
+            },
+            {
+              "n": "7",
+              "name": "Diamond Juan",
+              "score": 5.821917808219178
+            }
+          ],
+          "unrated": [
+            {
+              "n": "4",
+              "name": "Malachi Miracle",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "race": 2,
+      "group": "Dirt route",
+      "scheduled_post": "( 1:43)/12:43/11:43/10:43 (printed zones; verify local time)",
+      "scheduled_post_status": "Printed multiple timezones; local time and actual off require official verification",
+      "candidates": {
+        "BASE": {
+          "model_id": "BRIS-PACE-CONTEXT-v1:BASE",
+          "status": "PARTIAL_RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "1",
+              "name": "E Z Speaker",
+              "score": 100
+            },
+            {
+              "n": "2",
+              "name": "Louden",
+              "score": 66.66666666666667
+            },
+            {
+              "n": "3",
+              "name": "D. C.'s Army",
+              "score": 33.333333333333336
+            },
+            {
+              "n": "7",
+              "name": "Shahnameh",
+              "score": 0
+            }
+          ],
+          "unrated": [
+            {
+              "n": "4",
+              "name": "Dream More",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "5",
+              "name": "El Mercado",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "6",
+              "name": "Nevada",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            }
+          ]
+        },
+        "FLAT": {
+          "model_id": "BRIS-PACE-CONTEXT-v1:FLAT",
+          "status": "PARTIAL_RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "1",
+              "name": "E Z Speaker",
+              "score": 83.33333333333333
+            },
+            {
+              "n": "2",
+              "name": "Louden",
+              "score": 66.66666666666666
+            },
+            {
+              "n": "3",
+              "name": "D. C.'s Army",
+              "score": 37.5
+            },
+            {
+              "n": "7",
+              "name": "Shahnameh",
+              "score": 12.499999999999998
+            }
+          ],
+          "unrated": [
+            {
+              "n": "4",
+              "name": "Dream More",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "5",
+              "name": "El Mercado",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "6",
+              "name": "Nevada",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            }
+          ]
+        },
+        "CONDITION": {
+          "model_id": "BRIS-PACE-CONTEXT-v1:CONDITION",
+          "status": "PARTIAL_RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "1",
+              "name": "E Z Speaker",
+              "score": 86.25
+            },
+            {
+              "n": "2",
+              "name": "Louden",
+              "score": 63.75
+            },
+            {
+              "n": "3",
+              "name": "D. C.'s Army",
+              "score": 37.5
+            },
+            {
+              "n": "7",
+              "name": "Shahnameh",
+              "score": 12.5
+            }
+          ],
+          "unrated": [
+            {
+              "n": "4",
+              "name": "Dream More",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "5",
+              "name": "El Mercado",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "6",
+              "name": "Nevada",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            }
+          ]
+        },
+        "TURN": {
+          "model_id": "BRIS-PACE-CONTEXT-v1:TURN",
+          "status": "PARTIAL_RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "1",
+              "name": "E Z Speaker",
+              "score": 86.375
+            },
+            {
+              "n": "2",
+              "name": "Louden",
+              "score": 63.625
+            },
+            {
+              "n": "3",
+              "name": "D. C.'s Army",
+              "score": 37.5
+            },
+            {
+              "n": "7",
+              "name": "Shahnameh",
+              "score": 12.5
+            }
+          ],
+          "unrated": [
+            {
+              "n": "4",
+              "name": "Dream More",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "5",
+              "name": "El Mercado",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "6",
+              "name": "Nevada",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            }
+          ]
+        }
+      },
+      "parents": {
+        "v44c": {
+          "model_id": "V44C-BRISNET-BASE-20261016-v1",
+          "status": "PARTIAL_RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "1",
+              "name": "E Z Speaker",
+              "score": 75.9390175042349
+            },
+            {
+              "n": "2",
+              "name": "Louden",
+              "score": 73.76123876123876
+            },
+            {
+              "n": "3",
+              "name": "D. C.'s Army",
+              "score": 70.25147579693034
+            },
+            {
+              "n": "7",
+              "name": "Shahnameh",
+              "score": 50.05083930507659
+            }
+          ],
+          "unrated": [
+            {
+              "n": "4",
+              "name": "Dream More",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "5",
+              "name": "El Mercado",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "6",
+              "name": "Nevada",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            }
+          ]
+        },
+        "contender": {
+          "model_id": "CONTENDER-BRISNET-20261016-v1",
+          "status": "PARTIAL_RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "1",
+              "name": "E Z Speaker",
+              "score": 0.8367327653906721
+            },
+            {
+              "n": "3",
+              "name": "D. C.'s Army",
+              "score": 0.020612966362867764
+            },
+            {
+              "n": "2",
+              "name": "Louden",
+              "score": -0.11861633710488832
+            },
+            {
+              "n": "7",
+              "name": "Shahnameh",
+              "score": -0.7387293946486514
+            }
+          ],
+          "unrated": [
+            {
+              "n": "4",
+              "name": "Dream More",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "5",
+              "name": "El Mercado",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "6",
+              "name": "Nevada",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            }
+          ]
+        },
+        "mix1": {
+          "model_id": "MIX1-BRISNET-20261016-v1",
+          "status": "PARTIAL_RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "3",
+              "name": "D. C.'s Army",
+              "score": 59.016393442622956
+            },
+            {
+              "n": "1",
+              "name": "E Z Speaker",
+              "score": 57.69230769230769
+            },
+            {
+              "n": "2",
+              "name": "Louden",
+              "score": 43.58974358974359
+            },
+            {
+              "n": "7",
+              "name": "Shahnameh",
+              "score": 39.34426229508197
+            }
+          ],
+          "unrated": [
+            {
+              "n": "4",
+              "name": "Dream More",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "5",
+              "name": "El Mercado",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "6",
+              "name": "Nevada",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "race": 3,
+      "group": "Turf route",
+      "scheduled_post": "( 2:16)/ 1:16/12:16/11:16 (printed zones; verify local time)",
+      "scheduled_post_status": "Printed multiple timezones; local time and actual off require official verification",
+      "candidates": {
+        "BASE": {
+          "model_id": "BRIS-PACE-CONTEXT-v1:BASE",
+          "status": "RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "1",
+              "name": "Key Actress",
+              "score": 100
+            },
+            {
+              "n": "4",
+              "name": "Twirly",
+              "score": 85.71428571428571
+            },
+            {
+              "n": "8",
+              "name": "Putonahappyface",
+              "score": 71.42857142857143
+            },
+            {
+              "n": "6",
+              "name": "Nickel Saver",
+              "score": 57.142857142857146
+            },
+            {
+              "n": "2",
+              "name": "Mermaid",
+              "score": 42.857142857142854
+            },
+            {
+              "n": "7",
+              "name": "Queen Sally",
+              "score": 28.571428571428573
+            },
+            {
+              "n": "5",
+              "name": "Smokin Hot Blonde",
+              "score": 14.285714285714286
+            },
+            {
+              "n": "3",
+              "name": "Luckforyou",
+              "score": 0
+            }
+          ],
+          "unrated": []
+        },
+        "FLAT": {
+          "model_id": "BRIS-PACE-CONTEXT-v1:FLAT",
+          "status": "RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "1",
+              "name": "Key Actress",
+              "score": 87.5
+            },
+            {
+              "n": "4",
+              "name": "Twirly",
+              "score": 78.17460317460316
+            },
+            {
+              "n": "8",
+              "name": "Putonahappyface",
+              "score": 69.54365079365078
+            },
+            {
+              "n": "2",
+              "name": "Mermaid",
+              "score": 50.198412698412696
+            },
+            {
+              "n": "6",
+              "name": "Nickel Saver",
+              "score": 47.023809523809526
+            },
+            {
+              "n": "7",
+              "name": "Queen Sally",
+              "score": 33.92857142857143
+            },
+            {
+              "n": "5",
+              "name": "Smokin Hot Blonde",
+              "score": 18.353174603174605
+            },
+            {
+              "n": "3",
+              "name": "Luckforyou",
+              "score": 15.277777777777775
+            }
+          ],
+          "unrated": []
+        },
+        "CONDITION": {
+          "model_id": "BRIS-PACE-CONTEXT-v1:CONDITION",
+          "status": "RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "1",
+              "name": "Key Actress",
+              "score": 93.75
+            },
+            {
+              "n": "4",
+              "name": "Twirly",
+              "score": 81.78571428571428
+            },
+            {
+              "n": "8",
+              "name": "Putonahappyface",
+              "score": 70.0297619047619
+            },
+            {
+              "n": "6",
+              "name": "Nickel Saver",
+              "score": 50.98214285714286
+            },
+            {
+              "n": "2",
+              "name": "Mermaid",
+              "score": 45.26785714285714
+            },
+            {
+              "n": "7",
+              "name": "Queen Sally",
+              "score": 33.92857142857143
+            },
+            {
+              "n": "5",
+              "name": "Smokin Hot Blonde",
+              "score": 15.92261904761905
+            },
+            {
+              "n": "3",
+              "name": "Luckforyou",
+              "score": 8.333333333333334
+            }
+          ],
+          "unrated": []
+        },
+        "TURN": {
+          "model_id": "BRIS-PACE-CONTEXT-v1:TURN",
+          "status": "RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "1",
+              "name": "Key Actress",
+              "score": 93.125
+            },
+            {
+              "n": "4",
+              "name": "Twirly",
+              "score": 82.1190476190476
+            },
+            {
+              "n": "8",
+              "name": "Putonahappyface",
+              "score": 70.4672619047619
+            },
+            {
+              "n": "6",
+              "name": "Nickel Saver",
+              "score": 51.0029761904762
+            },
+            {
+              "n": "2",
+              "name": "Mermaid",
+              "score": 44.163690476190474
+            },
+            {
+              "n": "7",
+              "name": "Queen Sally",
+              "score": 33.92857142857143
+            },
+            {
+              "n": "5",
+              "name": "Smokin Hot Blonde",
+              "score": 15.61011904761905
+            },
+            {
+              "n": "3",
+              "name": "Luckforyou",
+              "score": 9.583333333333334
+            }
+          ],
+          "unrated": []
+        }
+      },
+      "parents": {
+        "v44c": {
+          "model_id": "V44C-BRISNET-BASE-20261016-v1",
+          "status": "RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "1",
+              "name": "Key Actress",
+              "score": 84.23504259867896
+            },
+            {
+              "n": "4",
+              "name": "Twirly",
+              "score": 83.1600264142637
+            },
+            {
+              "n": "8",
+              "name": "Putonahappyface",
+              "score": 77.05009276437848
+            },
+            {
+              "n": "6",
+              "name": "Nickel Saver",
+              "score": 73.50356685567954
+            },
+            {
+              "n": "2",
+              "name": "Mermaid",
+              "score": 65.62337662337663
+            },
+            {
+              "n": "7",
+              "name": "Queen Sally",
+              "score": 61.52597402597402
+            },
+            {
+              "n": "5",
+              "name": "Smokin Hot Blonde",
+              "score": 56.116883116883116
+            },
+            {
+              "n": "3",
+              "name": "Luckforyou",
+              "score": 55.66233766233766
+            }
+          ],
+          "unrated": []
+        },
+        "contender": {
+          "model_id": "CONTENDER-BRISNET-20261016-v1",
+          "status": "RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "8",
+              "name": "Putonahappyface",
+              "score": 0.8226050250886431
+            },
+            {
+              "n": "1",
+              "name": "Key Actress",
+              "score": 0.6748864524933765
+            },
+            {
+              "n": "4",
+              "name": "Twirly",
+              "score": 0.671380118595124
+            },
+            {
+              "n": "2",
+              "name": "Mermaid",
+              "score": 0.018371880253385334
+            },
+            {
+              "n": "6",
+              "name": "Nickel Saver",
+              "score": -0.13977333442021903
+            },
+            {
+              "n": "7",
+              "name": "Queen Sally",
+              "score": -0.47498719323131255
+            },
+            {
+              "n": "3",
+              "name": "Luckforyou",
+              "score": -0.5535294000590165
+            },
+            {
+              "n": "5",
+              "name": "Smokin Hot Blonde",
+              "score": -1.0189535487199806
+            }
+          ],
+          "unrated": []
+        },
+        "mix1": {
+          "model_id": "MIX1-BRISNET-20261016-v1",
+          "status": "RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "1",
+              "name": "Key Actress",
+              "score": 74.80952380952381
+            },
+            {
+              "n": "4",
+              "name": "Twirly",
+              "score": 74.42857142857143
+            },
+            {
+              "n": "8",
+              "name": "Putonahappyface",
+              "score": 70.47619047619048
+            },
+            {
+              "n": "2",
+              "name": "Mermaid",
+              "score": 58.309523809523796
+            },
+            {
+              "n": "6",
+              "name": "Nickel Saver",
+              "score": 51.19047619047619
+            },
+            {
+              "n": "3",
+              "name": "Luckforyou",
+              "score": 39.714285714285715
+            },
+            {
+              "n": "5",
+              "name": "Smokin Hot Blonde",
+              "score": 12.547619047619047
+            },
+            {
+              "n": "7",
+              "name": "Queen Sally",
+              "score": 7.045009784735813
+            }
+          ],
+          "unrated": []
+        }
+      }
+    },
+    {
+      "race": 4,
+      "group": "Dirt sprint",
+      "scheduled_post": "( 2:49)/ 1:49/12:49/11:49 (printed zones; verify local time)",
+      "scheduled_post_status": "Printed multiple timezones; local time and actual off require official verification",
+      "candidates": {
+        "BASE": {
+          "model_id": "BRIS-PACE-CONTEXT-v1:BASE",
+          "status": "PARTIAL_RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "4",
+              "name": "Under the Moon",
+              "score": 100
+            },
+            {
+              "n": "6",
+              "name": "In the Queue",
+              "score": 75
+            },
+            {
+              "n": "9",
+              "name": "White Star",
+              "score": 50
+            },
+            {
+              "n": "8",
+              "name": "Lilyluvsyellow",
+              "score": 25
+            },
+            {
+              "n": "3",
+              "name": "Judysdancin Tonite",
+              "score": 0
+            }
+          ],
+          "unrated": [
+            {
+              "n": "1",
+              "name": "Cy'fashion",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "2",
+              "name": "Daddy's Ready",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "5",
+              "name": "Golden Chick",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "7",
+              "name": "As Pretty She Is",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            }
+          ]
+        },
+        "FLAT": {
+          "model_id": "BRIS-PACE-CONTEXT-v1:FLAT",
+          "status": "PARTIAL_RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "4",
+              "name": "Under the Moon",
+              "score": 91.66666666666666
+            },
+            {
+              "n": "6",
+              "name": "In the Queue",
+              "score": 72.91666666666666
+            },
+            {
+              "n": "9",
+              "name": "White Star",
+              "score": 41.666666666666664
+            },
+            {
+              "n": "8",
+              "name": "Lilyluvsyellow",
+              "score": 31.25
+            },
+            {
+              "n": "3",
+              "name": "Judysdancin Tonite",
+              "score": 12.499999999999998
+            }
+          ],
+          "unrated": [
+            {
+              "n": "1",
+              "name": "Cy'fashion",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "2",
+              "name": "Daddy's Ready",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "5",
+              "name": "Golden Chick",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "7",
+              "name": "As Pretty She Is",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            }
+          ]
+        },
+        "CONDITION": {
+          "model_id": "BRIS-PACE-CONTEXT-v1:CONDITION",
+          "status": "PARTIAL_RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "4",
+              "name": "Under the Moon",
+              "score": 89.375
+            },
+            {
+              "n": "6",
+              "name": "In the Queue",
+              "score": 77.5
+            },
+            {
+              "n": "9",
+              "name": "White Star",
+              "score": 39.375
+            },
+            {
+              "n": "8",
+              "name": "Lilyluvsyellow",
+              "score": 31.25
+            },
+            {
+              "n": "3",
+              "name": "Judysdancin Tonite",
+              "score": 12.5
+            }
+          ],
+          "unrated": [
+            {
+              "n": "1",
+              "name": "Cy'fashion",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "2",
+              "name": "Daddy's Ready",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "5",
+              "name": "Golden Chick",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "7",
+              "name": "As Pretty She Is",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            }
+          ]
+        },
+        "TURN": {
+          "model_id": "BRIS-PACE-CONTEXT-v1:TURN",
+          "status": "PARTIAL_RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "4",
+              "name": "Under the Moon",
+              "score": 89.1875
+            },
+            {
+              "n": "6",
+              "name": "In the Queue",
+              "score": 77.875
+            },
+            {
+              "n": "9",
+              "name": "White Star",
+              "score": 39.1875
+            },
+            {
+              "n": "8",
+              "name": "Lilyluvsyellow",
+              "score": 31.25
+            },
+            {
+              "n": "3",
+              "name": "Judysdancin Tonite",
+              "score": 12.5
+            }
+          ],
+          "unrated": [
+            {
+              "n": "1",
+              "name": "Cy'fashion",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "2",
+              "name": "Daddy's Ready",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "5",
+              "name": "Golden Chick",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "7",
+              "name": "As Pretty She Is",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            }
+          ]
+        }
+      },
+      "parents": {
+        "v44c": {
+          "model_id": "V44C-BRISNET-BASE-20261016-v1",
+          "status": "PARTIAL_RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "4",
+              "name": "Under the Moon",
+              "score": 73.97746169174742
+            },
+            {
+              "n": "6",
+              "name": "In the Queue",
+              "score": 64.5089505089505
+            },
+            {
+              "n": "9",
+              "name": "White Star",
+              "score": 54.285714285714285
+            },
+            {
+              "n": "8",
+              "name": "Lilyluvsyellow",
+              "score": 34.62337662337662
+            },
+            {
+              "n": "3",
+              "name": "Judysdancin Tonite",
+              "score": 17.423280423280424
+            }
+          ],
+          "unrated": [
+            {
+              "n": "1",
+              "name": "Cy'fashion",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "2",
+              "name": "Daddy's Ready",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "5",
+              "name": "Golden Chick",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "7",
+              "name": "As Pretty She Is",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            }
+          ]
+        },
+        "contender": {
+          "model_id": "CONTENDER-BRISNET-20261016-v1",
+          "status": "PARTIAL_RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "4",
+              "name": "Under the Moon",
+              "score": 1.0069914823207275
+            },
+            {
+              "n": "6",
+              "name": "In the Queue",
+              "score": 0.20556053048154357
+            },
+            {
+              "n": "9",
+              "name": "White Star",
+              "score": -0.14949783925700885
+            },
+            {
+              "n": "8",
+              "name": "Lilyluvsyellow",
+              "score": -0.5217259284445606
+            },
+            {
+              "n": "3",
+              "name": "Judysdancin Tonite",
+              "score": -0.5413282451007015
+            }
+          ],
+          "unrated": [
+            {
+              "n": "1",
+              "name": "Cy'fashion",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "2",
+              "name": "Daddy's Ready",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "5",
+              "name": "Golden Chick",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "7",
+              "name": "As Pretty She Is",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            }
+          ]
+        },
+        "mix1": {
+          "model_id": "MIX1-BRISNET-20261016-v1",
+          "status": "PARTIAL_RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "6",
+              "name": "In the Queue",
+              "score": 79.82954545454545
+            },
+            {
+              "n": "4",
+              "name": "Under the Moon",
+              "score": 79.16666666666667
+            },
+            {
+              "n": "3",
+              "name": "Judysdancin Tonite",
+              "score": 36.47540983606557
+            },
+            {
+              "n": "9",
+              "name": "White Star",
+              "score": 27.5
+            },
+            {
+              "n": "8",
+              "name": "Lilyluvsyellow",
+              "score": 20.081967213114755
+            }
+          ],
+          "unrated": [
+            {
+              "n": "1",
+              "name": "Cy'fashion",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "2",
+              "name": "Daddy's Ready",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "5",
+              "name": "Golden Chick",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "7",
+              "name": "As Pretty She Is",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "race": 5,
+      "group": "Turf sprint",
+      "scheduled_post": "( 3:23)/ 2:23/ 1:23/12:23 (printed zones; verify local time)",
+      "scheduled_post_status": "Printed multiple timezones; local time and actual off require official verification",
+      "candidates": {
+        "BASE": {
+          "model_id": "BRIS-PACE-CONTEXT-v1:BASE",
+          "status": "PARTIAL_RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "5",
+              "name": "Coastal Evacuation",
+              "score": 100
+            },
+            {
+              "n": "3",
+              "name": "Boer War",
+              "score": 80
+            },
+            {
+              "n": "6",
+              "name": "Gus's Boy",
+              "score": 60
+            },
+            {
+              "n": "1",
+              "name": "Fire Marshal",
+              "score": 40
+            },
+            {
+              "n": "4",
+              "name": "Papa Vegas",
+              "score": 20
+            },
+            {
+              "n": "10",
+              "name": "Worth Waiting For",
+              "score": 0
+            }
+          ],
+          "unrated": [
+            {
+              "n": "2",
+              "name": "Riddle Me This",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "7",
+              "name": "Summer Brother",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "8",
+              "name": "Shake My Hand",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "9",
+              "name": "Justin Knows All",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            }
+          ]
+        },
+        "FLAT": {
+          "model_id": "BRIS-PACE-CONTEXT-v1:FLAT",
+          "status": "PARTIAL_RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "5",
+              "name": "Coastal Evacuation",
+              "score": 87.5
+            },
+            {
+              "n": "3",
+              "name": "Boer War",
+              "score": 72.5
+            },
+            {
+              "n": "6",
+              "name": "Gus's Boy",
+              "score": 57.5
+            },
+            {
+              "n": "1",
+              "name": "Fire Marshal",
+              "score": 42.5
+            },
+            {
+              "n": "4",
+              "name": "Papa Vegas",
+              "score": 27.5
+            },
+            {
+              "n": "10",
+              "name": "Worth Waiting For",
+              "score": 12.499999999999998
+            }
+          ],
+          "unrated": [
+            {
+              "n": "2",
+              "name": "Riddle Me This",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "7",
+              "name": "Summer Brother",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "8",
+              "name": "Shake My Hand",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "9",
+              "name": "Justin Knows All",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            }
+          ]
+        },
+        "CONDITION": {
+          "model_id": "BRIS-PACE-CONTEXT-v1:CONDITION",
+          "status": "PARTIAL_RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "5",
+              "name": "Coastal Evacuation",
+              "score": 87.5
+            },
+            {
+              "n": "3",
+              "name": "Boer War",
+              "score": 72.5
+            },
+            {
+              "n": "6",
+              "name": "Gus's Boy",
+              "score": 57.5
+            },
+            {
+              "n": "1",
+              "name": "Fire Marshal",
+              "score": 42.5
+            },
+            {
+              "n": "4",
+              "name": "Papa Vegas",
+              "score": 27.5
+            },
+            {
+              "n": "10",
+              "name": "Worth Waiting For",
+              "score": 12.5
+            }
+          ],
+          "unrated": [
+            {
+              "n": "2",
+              "name": "Riddle Me This",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "7",
+              "name": "Summer Brother",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "8",
+              "name": "Shake My Hand",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "9",
+              "name": "Justin Knows All",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            }
+          ]
+        },
+        "TURN": {
+          "model_id": "BRIS-PACE-CONTEXT-v1:TURN",
+          "status": "PARTIAL_RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "5",
+              "name": "Coastal Evacuation",
+              "score": 87.5
+            },
+            {
+              "n": "3",
+              "name": "Boer War",
+              "score": 72.5
+            },
+            {
+              "n": "6",
+              "name": "Gus's Boy",
+              "score": 57.5
+            },
+            {
+              "n": "1",
+              "name": "Fire Marshal",
+              "score": 42.5
+            },
+            {
+              "n": "4",
+              "name": "Papa Vegas",
+              "score": 27.5
+            },
+            {
+              "n": "10",
+              "name": "Worth Waiting For",
+              "score": 12.5
+            }
+          ],
+          "unrated": [
+            {
+              "n": "2",
+              "name": "Riddle Me This",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "7",
+              "name": "Summer Brother",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "8",
+              "name": "Shake My Hand",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "9",
+              "name": "Justin Knows All",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            }
+          ]
+        }
+      },
+      "parents": {
+        "v44c": {
+          "model_id": "V44C-BRISNET-BASE-20261016-v1",
+          "status": "PARTIAL_RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "5",
+              "name": "Coastal Evacuation",
+              "score": 70.3051948051948
+            },
+            {
+              "n": "3",
+              "name": "Boer War",
+              "score": 67.63079777365492
+            },
+            {
+              "n": "6",
+              "name": "Gus's Boy",
+              "score": 65.34246575342466
+            },
+            {
+              "n": "1",
+              "name": "Fire Marshal",
+              "score": 62.15291750503018
+            },
+            {
+              "n": "4",
+              "name": "Papa Vegas",
+              "score": 57.97402597402598
+            },
+            {
+              "n": "10",
+              "name": "Worth Waiting For",
+              "score": 50.42857142857143
+            }
+          ],
+          "unrated": [
+            {
+              "n": "2",
+              "name": "Riddle Me This",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "7",
+              "name": "Summer Brother",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "8",
+              "name": "Shake My Hand",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "9",
+              "name": "Justin Knows All",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            }
+          ]
+        },
+        "contender": {
+          "model_id": "CONTENDER-BRISNET-20261016-v1",
+          "status": "PARTIAL_RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "5",
+              "name": "Coastal Evacuation",
+              "score": 0.5634754354520611
+            },
+            {
+              "n": "3",
+              "name": "Boer War",
+              "score": 0.23393895863418962
+            },
+            {
+              "n": "4",
+              "name": "Papa Vegas",
+              "score": 0.2137870208374626
+            },
+            {
+              "n": "1",
+              "name": "Fire Marshal",
+              "score": 0.10008485491485285
+            },
+            {
+              "n": "6",
+              "name": "Gus's Boy",
+              "score": -0.5516608549344043
+            },
+            {
+              "n": "10",
+              "name": "Worth Waiting For",
+              "score": -0.559625414904162
+            }
+          ],
+          "unrated": [
+            {
+              "n": "2",
+              "name": "Riddle Me This",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "7",
+              "name": "Summer Brother",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "8",
+              "name": "Shake My Hand",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "9",
+              "name": "Justin Knows All",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            }
+          ]
+        },
+        "mix1": {
+          "model_id": "MIX1-BRISNET-20261016-v1",
+          "status": "PARTIAL_RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "5",
+              "name": "Coastal Evacuation",
+              "score": 88.0327868852459
+            },
+            {
+              "n": "3",
+              "name": "Boer War",
+              "score": 70.65573770491804
+            },
+            {
+              "n": "1",
+              "name": "Fire Marshal",
+              "score": 46.25
+            },
+            {
+              "n": "4",
+              "name": "Papa Vegas",
+              "score": 45.24590163934426
+            },
+            {
+              "n": "6",
+              "name": "Gus's Boy",
+              "score": 41.80327868852459
+            },
+            {
+              "n": "10",
+              "name": "Worth Waiting For",
+              "score": 9.672131147540984
+            }
+          ],
+          "unrated": [
+            {
+              "n": "2",
+              "name": "Riddle Me This",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "7",
+              "name": "Summer Brother",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "8",
+              "name": "Shake My Hand",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            },
+            {
+              "n": "9",
+              "name": "Justin Knows All",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "race": 6,
+      "group": "Turf route",
+      "scheduled_post": "( 3:57)/ 2:57/ 1:57/12:57 (printed zones; verify local time)",
+      "scheduled_post_status": "Printed multiple timezones; local time and actual off require official verification",
+      "candidates": {
+        "BASE": {
+          "model_id": "BRIS-PACE-CONTEXT-v1:BASE",
+          "status": "PARTIAL_RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "3",
+              "name": "Jarndyce",
+              "score": 100
+            },
+            {
+              "n": "1",
+              "name": "Ganderella",
+              "score": 85.71428571428571
+            },
+            {
+              "n": "5",
+              "name": "Felixyn",
+              "score": 71.42857142857143
+            },
+            {
+              "n": "6",
+              "name": "Italianne",
+              "score": 57.142857142857146
+            },
+            {
+              "n": "8",
+              "name": "Fifty Shades Free",
+              "score": 42.857142857142854
+            },
+            {
+              "n": "9",
+              "name": "Alesiamae",
+              "score": 28.571428571428573
+            },
+            {
+              "n": "7",
+              "name": "Vicked",
+              "score": 14.285714285714286
+            },
+            {
+              "n": "4",
+              "name": "Lady Vortex",
+              "score": 0
+            }
+          ],
+          "unrated": [
+            {
+              "n": "2",
+              "name": "Burgundie Rose",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            }
+          ]
+        },
+        "FLAT": {
+          "model_id": "BRIS-PACE-CONTEXT-v1:FLAT",
+          "status": "PARTIAL_RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "1",
+              "name": "Ganderella",
+              "score": 80.95238095238093
+            },
+            {
+              "n": "3",
+              "name": "Jarndyce",
+              "score": 79.16666666666667
+            },
+            {
+              "n": "5",
+              "name": "Felixyn",
+              "score": 70.23809523809524
+            },
+            {
+              "n": "6",
+              "name": "Italianne",
+              "score": 55.35714285714286
+            },
+            {
+              "n": "8",
+              "name": "Fifty Shades Free",
+              "score": 44.64285714285714
+            },
+            {
+              "n": "9",
+              "name": "Alesiamae",
+              "score": 33.92857142857143
+            },
+            {
+              "n": "7",
+              "name": "Vicked",
+              "score": 23.214285714285715
+            },
+            {
+              "n": "4",
+              "name": "Lady Vortex",
+              "score": 12.499999999999998
+            }
+          ],
+          "unrated": [
+            {
+              "n": "2",
+              "name": "Burgundie Rose",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            }
+          ]
+        },
+        "CONDITION": {
+          "model_id": "BRIS-PACE-CONTEXT-v1:CONDITION",
+          "status": "PARTIAL_RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "3",
+              "name": "Jarndyce",
+              "score": 83.125
+            },
+            {
+              "n": "5",
+              "name": "Felixyn",
+              "score": 74.19642857142857
+            },
+            {
+              "n": "1",
+              "name": "Ganderella",
+              "score": 73.03571428571428
+            },
+            {
+              "n": "6",
+              "name": "Italianne",
+              "score": 55.35714285714286
+            },
+            {
+              "n": "8",
+              "name": "Fifty Shades Free",
+              "score": 44.64285714285714
+            },
+            {
+              "n": "9",
+              "name": "Alesiamae",
+              "score": 33.92857142857143
+            },
+            {
+              "n": "7",
+              "name": "Vicked",
+              "score": 23.214285714285715
+            },
+            {
+              "n": "4",
+              "name": "Lady Vortex",
+              "score": 12.5
+            }
+          ],
+          "unrated": [
+            {
+              "n": "2",
+              "name": "Burgundie Rose",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            }
+          ]
+        },
+        "TURN": {
+          "model_id": "BRIS-PACE-CONTEXT-v1:TURN",
+          "status": "PARTIAL_RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "3",
+              "name": "Jarndyce",
+              "score": 83.5625
+            },
+            {
+              "n": "1",
+              "name": "Ganderella",
+              "score": 74.66071428571428
+            },
+            {
+              "n": "5",
+              "name": "Felixyn",
+              "score": 72.13392857142857
+            },
+            {
+              "n": "6",
+              "name": "Italianne",
+              "score": 55.35714285714286
+            },
+            {
+              "n": "8",
+              "name": "Fifty Shades Free",
+              "score": 44.64285714285714
+            },
+            {
+              "n": "9",
+              "name": "Alesiamae",
+              "score": 33.92857142857143
+            },
+            {
+              "n": "7",
+              "name": "Vicked",
+              "score": 23.214285714285715
+            },
+            {
+              "n": "4",
+              "name": "Lady Vortex",
+              "score": 12.5
+            }
+          ],
+          "unrated": [
+            {
+              "n": "2",
+              "name": "Burgundie Rose",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            }
+          ]
+        }
+      },
+      "parents": {
+        "v44c": {
+          "model_id": "V44C-BRISNET-BASE-20261016-v1",
+          "status": "PARTIAL_RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "3",
+              "name": "Jarndyce",
+              "score": 72.57644417228006
+            },
+            {
+              "n": "1",
+              "name": "Ganderella",
+              "score": 70.35310635310636
+            },
+            {
+              "n": "5",
+              "name": "Felixyn",
+              "score": 69.80124223602485
+            },
+            {
+              "n": "6",
+              "name": "Italianne",
+              "score": 67.90536802917053
+            },
+            {
+              "n": "8",
+              "name": "Fifty Shades Free",
+              "score": 66.08960097114812
+            },
+            {
+              "n": "9",
+              "name": "Alesiamae",
+              "score": 63.04239675668248
+            },
+            {
+              "n": "7",
+              "name": "Vicked",
+              "score": 53.94805194805195
+            },
+            {
+              "n": "4",
+              "name": "Lady Vortex",
+              "score": 36.54112554112554
+            }
+          ],
+          "unrated": [
+            {
+              "n": "2",
+              "name": "Burgundie Rose",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            }
+          ]
+        },
+        "contender": {
+          "model_id": "CONTENDER-BRISNET-20261016-v1",
+          "status": "PARTIAL_RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "1",
+              "name": "Ganderella",
+              "score": 0.7672215168042786
+            },
+            {
+              "n": "5",
+              "name": "Felixyn",
+              "score": 0.7275407321969198
+            },
+            {
+              "n": "8",
+              "name": "Fifty Shades Free",
+              "score": 0.05922360514118107
+            },
+            {
+              "n": "3",
+              "name": "Jarndyce",
+              "score": -0.08170328646799799
+            },
+            {
+              "n": "6",
+              "name": "Italianne",
+              "score": -0.1419297831415824
+            },
+            {
+              "n": "9",
+              "name": "Alesiamae",
+              "score": -0.364560980559098
+            },
+            {
+              "n": "7",
+              "name": "Vicked",
+              "score": -0.3696917083185714
+            },
+            {
+              "n": "4",
+              "name": "Lady Vortex",
+              "score": -0.5961000956551297
+            }
+          ],
+          "unrated": [
+            {
+              "n": "2",
+              "name": "Burgundie Rose",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            }
+          ]
+        },
+        "mix1": {
+          "model_id": "MIX1-BRISNET-20261016-v1",
+          "status": "PARTIAL_RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "1",
+              "name": "Ganderella",
+              "score": 76.8121693121693
+            },
+            {
+              "n": "5",
+              "name": "Felixyn",
+              "score": 72.25
+            },
+            {
+              "n": "8",
+              "name": "Fifty Shades Free",
+              "score": 70.14051522248245
+            },
+            {
+              "n": "6",
+              "name": "Italianne",
+              "score": 47.40704500978473
+            },
+            {
+              "n": "3",
+              "name": "Jarndyce",
+              "score": 45.55035128805621
+            },
+            {
+              "n": "9",
+              "name": "Alesiamae",
+              "score": 28.473581213307238
+            },
+            {
+              "n": "7",
+              "name": "Vicked",
+              "score": 19.652615144418423
+            },
+            {
+              "n": "4",
+              "name": "Lady Vortex",
+              "score": 17.48633879781421
+            }
+          ],
+          "unrated": [
+            {
+              "n": "2",
+              "name": "Burgundie Rose",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "race": 7,
+      "group": "Dirt route",
+      "scheduled_post": "( 4:31)/ 3:31/ 2:31/ 1:31 (printed zones; verify local time)",
+      "scheduled_post_status": "Printed multiple timezones; local time and actual off require official verification",
+      "candidates": {
+        "BASE": {
+          "model_id": "BRIS-PACE-CONTEXT-v1:BASE",
+          "status": "RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "2",
+              "name": "Papa Yo",
+              "score": 100
+            },
+            {
+              "n": "1",
+              "name": "Moe Eighty Eight",
+              "score": 83.33333333333333
+            },
+            {
+              "n": "6",
+              "name": "Three B's",
+              "score": 66.66666666666667
+            },
+            {
+              "n": "5",
+              "name": "Willintoriskitall",
+              "score": 50
+            },
+            {
+              "n": "7",
+              "name": "Filoso",
+              "score": 33.333333333333336
+            },
+            {
+              "n": "3",
+              "name": "First Call Bob",
+              "score": 16.666666666666668
+            },
+            {
+              "n": "4",
+              "name": "Cocktailsnkringle",
+              "score": 0
+            }
+          ],
+          "unrated": []
+        },
+        "FLAT": {
+          "model_id": "BRIS-PACE-CONTEXT-v1:FLAT",
+          "status": "RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "2",
+              "name": "Papa Yo",
+              "score": 94.44444444444444
+            },
+            {
+              "n": "1",
+              "name": "Moe Eighty Eight",
+              "score": 70.13888888888889
+            },
+            {
+              "n": "6",
+              "name": "Three B's",
+              "score": 68.05555555555556
+            },
+            {
+              "n": "5",
+              "name": "Willintoriskitall",
+              "score": 47.22222222222222
+            },
+            {
+              "n": "7",
+              "name": "Filoso",
+              "score": 38.19444444444444
+            },
+            {
+              "n": "3",
+              "name": "First Call Bob",
+              "score": 29.166666666666664
+            },
+            {
+              "n": "4",
+              "name": "Cocktailsnkringle",
+              "score": 2.7777777777777777
+            }
+          ],
+          "unrated": []
+        },
+        "CONDITION": {
+          "model_id": "BRIS-PACE-CONTEXT-v1:CONDITION",
+          "status": "RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "2",
+              "name": "Papa Yo",
+              "score": 95.41666666666667
+            },
+            {
+              "n": "1",
+              "name": "Moe Eighty Eight",
+              "score": 72.8125
+            },
+            {
+              "n": "6",
+              "name": "Three B's",
+              "score": 67.08333333333334
+            },
+            {
+              "n": "5",
+              "name": "Willintoriskitall",
+              "score": 46.25
+            },
+            {
+              "n": "7",
+              "name": "Filoso",
+              "score": 39.895833333333336
+            },
+            {
+              "n": "3",
+              "name": "First Call Bob",
+              "score": 26.25
+            },
+            {
+              "n": "4",
+              "name": "Cocktailsnkringle",
+              "score": 2.291666666666667
+            }
+          ],
+          "unrated": []
+        },
+        "TURN": {
+          "model_id": "BRIS-PACE-CONTEXT-v1:TURN",
+          "status": "RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "2",
+              "name": "Papa Yo",
+              "score": 94.625
+            },
+            {
+              "n": "1",
+              "name": "Moe Eighty Eight",
+              "score": 72.61458333333333
+            },
+            {
+              "n": "6",
+              "name": "Three B's",
+              "score": 67.45833333333334
+            },
+            {
+              "n": "5",
+              "name": "Willintoriskitall",
+              "score": 45.791666666666664
+            },
+            {
+              "n": "7",
+              "name": "Filoso",
+              "score": 40.07291666666667
+            },
+            {
+              "n": "3",
+              "name": "First Call Bob",
+              "score": 27.375
+            },
+            {
+              "n": "4",
+              "name": "Cocktailsnkringle",
+              "score": 2.0625000000000004
+            }
+          ],
+          "unrated": []
+        }
+      },
+      "parents": {
+        "v44c": {
+          "model_id": "V44C-BRISNET-BASE-20261016-v1",
+          "status": "RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "2",
+              "name": "Papa Yo",
+              "score": 88.18481980269345
+            },
+            {
+              "n": "1",
+              "name": "Moe Eighty Eight",
+              "score": 79.71985157699443
+            },
+            {
+              "n": "6",
+              "name": "Three B's",
+              "score": 78.51762523191096
+            },
+            {
+              "n": "5",
+              "name": "Willintoriskitall",
+              "score": 78.31229002657574
+            },
+            {
+              "n": "7",
+              "name": "Filoso",
+              "score": 78.27801827801828
+            },
+            {
+              "n": "3",
+              "name": "First Call Bob",
+              "score": 76.9090909090909
+            },
+            {
+              "n": "4",
+              "name": "Cocktailsnkringle",
+              "score": 67.05194805194805
+            }
+          ],
+          "unrated": []
+        },
+        "contender": {
+          "model_id": "CONTENDER-BRISNET-20261016-v1",
+          "status": "RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "2",
+              "name": "Papa Yo",
+              "score": 1.005012594302078
+            },
+            {
+              "n": "1",
+              "name": "Moe Eighty Eight",
+              "score": 0.5452007673555956
+            },
+            {
+              "n": "3",
+              "name": "First Call Bob",
+              "score": 0.24988899154270588
+            },
+            {
+              "n": "7",
+              "name": "Filoso",
+              "score": -0.13246420384696542
+            },
+            {
+              "n": "6",
+              "name": "Three B's",
+              "score": -0.2294078274038281
+            },
+            {
+              "n": "5",
+              "name": "Willintoriskitall",
+              "score": -0.3239833150594817
+            },
+            {
+              "n": "4",
+              "name": "Cocktailsnkringle",
+              "score": -1.1142470068901045
+            }
+          ],
+          "unrated": []
+        },
+        "mix1": {
+          "model_id": "MIX1-BRISNET-20261016-v1",
+          "status": "RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "2",
+              "name": "Papa Yo",
+              "score": 89.16666666666666
+            },
+            {
+              "n": "3",
+              "name": "First Call Bob",
+              "score": 58.66666666666667
+            },
+            {
+              "n": "7",
+              "name": "Filoso",
+              "score": 53
+            },
+            {
+              "n": "6",
+              "name": "Three B's",
+              "score": 48.08333333333333
+            },
+            {
+              "n": "1",
+              "name": "Moe Eighty Eight",
+              "score": 45.83333333333334
+            },
+            {
+              "n": "5",
+              "name": "Willintoriskitall",
+              "score": 37.91666666666667
+            },
+            {
+              "n": "4",
+              "name": "Cocktailsnkringle",
+              "score": 17.333333333333336
+            }
+          ],
+          "unrated": []
+        }
+      }
+    },
+    {
+      "race": 8,
+      "group": "Turf sprint",
+      "scheduled_post": "( 5:05)/ 4:05/ 3:05/ 2:05 (printed zones; verify local time)",
+      "scheduled_post_status": "Printed multiple timezones; local time and actual off require official verification",
+      "candidates": {
+        "BASE": {
+          "model_id": "BRIS-PACE-CONTEXT-v1:BASE",
+          "status": "RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "6",
+              "name": "No Evidence",
+              "score": 100
+            },
+            {
+              "n": "5",
+              "name": "Bosun",
+              "score": 88.88888888888889
+            },
+            {
+              "n": "1",
+              "name": "Final Verdict",
+              "score": 77.77777777777777
+            },
+            {
+              "n": "7",
+              "name": "Mischievous Angel",
+              "score": 66.66666666666667
+            },
+            {
+              "n": "2",
+              "name": "Attfield",
+              "score": 55.55555555555556
+            },
+            {
+              "n": "4",
+              "name": "War Stride",
+              "score": 44.44444444444444
+            },
+            {
+              "n": "10",
+              "name": "Candytown",
+              "score": 33.333333333333336
+            },
+            {
+              "n": "9",
+              "name": "Heart Headed",
+              "score": 22.22222222222222
+            },
+            {
+              "n": "3",
+              "name": "Flat to Da Mat",
+              "score": 11.11111111111111
+            },
+            {
+              "n": "8",
+              "name": "Amoudi Bay",
+              "score": 0
+            }
+          ],
+          "unrated": []
+        },
+        "FLAT": {
+          "model_id": "BRIS-PACE-CONTEXT-v1:FLAT",
+          "status": "RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "6",
+              "name": "No Evidence",
+              "score": 92.85714285714286
+            },
+            {
+              "n": "5",
+              "name": "Bosun",
+              "score": 84.52380952380952
+            },
+            {
+              "n": "1",
+              "name": "Final Verdict",
+              "score": 67.85714285714286
+            },
+            {
+              "n": "7",
+              "name": "Mischievous Angel",
+              "score": 58.33333333333333
+            },
+            {
+              "n": "2",
+              "name": "Attfield",
+              "score": 54.16666666666667
+            },
+            {
+              "n": "4",
+              "name": "War Stride",
+              "score": 42.26190476190476
+            },
+            {
+              "n": "10",
+              "name": "Candytown",
+              "score": 37.5
+            },
+            {
+              "n": "9",
+              "name": "Heart Headed",
+              "score": 30.357142857142854
+            },
+            {
+              "n": "3",
+              "name": "Flat to Da Mat",
+              "score": 17.857142857142854
+            },
+            {
+              "n": "8",
+              "name": "Amoudi Bay",
+              "score": 14.285714285714285
+            }
+          ],
+          "unrated": []
+        },
+        "CONDITION": {
+          "model_id": "BRIS-PACE-CONTEXT-v1:CONDITION",
+          "status": "RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "6",
+              "name": "No Evidence",
+              "score": 91.60714285714286
+            },
+            {
+              "n": "5",
+              "name": "Bosun",
+              "score": 84.61309523809523
+            },
+            {
+              "n": "1",
+              "name": "Final Verdict",
+              "score": 69.58333333333333
+            },
+            {
+              "n": "7",
+              "name": "Mischievous Angel",
+              "score": 63.75
+            },
+            {
+              "n": "2",
+              "name": "Attfield",
+              "score": 54.16666666666667
+            },
+            {
+              "n": "4",
+              "name": "War Stride",
+              "score": 42.26190476190476
+            },
+            {
+              "n": "10",
+              "name": "Candytown",
+              "score": 37.5
+            },
+            {
+              "n": "9",
+              "name": "Heart Headed",
+              "score": 29.07738095238095
+            },
+            {
+              "n": "3",
+              "name": "Flat to Da Mat",
+              "score": 17.26190476190476
+            },
+            {
+              "n": "8",
+              "name": "Amoudi Bay",
+              "score": 10.178571428571429
+            }
+          ],
+          "unrated": []
+        },
+        "TURN": {
+          "model_id": "BRIS-PACE-CONTEXT-v1:TURN",
+          "status": "RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "6",
+              "name": "No Evidence",
+              "score": 90.48214285714286
+            },
+            {
+              "n": "5",
+              "name": "Bosun",
+              "score": 82.81845238095238
+            },
+            {
+              "n": "1",
+              "name": "Final Verdict",
+              "score": 68.99404761904762
+            },
+            {
+              "n": "7",
+              "name": "Mischievous Angel",
+              "score": 64.69642857142857
+            },
+            {
+              "n": "2",
+              "name": "Attfield",
+              "score": 54.16666666666667
+            },
+            {
+              "n": "4",
+              "name": "War Stride",
+              "score": 42.44047619047619
+            },
+            {
+              "n": "10",
+              "name": "Candytown",
+              "score": 37.5
+            },
+            {
+              "n": "9",
+              "name": "Heart Headed",
+              "score": 29.26488095238095
+            },
+            {
+              "n": "3",
+              "name": "Flat to Da Mat",
+              "score": 18.69047619047619
+            },
+            {
+              "n": "8",
+              "name": "Amoudi Bay",
+              "score": 10.946428571428573
+            }
+          ],
+          "unrated": []
+        }
+      },
+      "parents": {
+        "v44c": {
+          "model_id": "V44C-BRISNET-BASE-20261016-v1",
+          "status": "RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "6",
+              "name": "No Evidence",
+              "score": 85.13704968250423
+            },
+            {
+              "n": "5",
+              "name": "Bosun",
+              "score": 82.23609320461621
+            },
+            {
+              "n": "1",
+              "name": "Final Verdict",
+              "score": 81.1948051948052
+            },
+            {
+              "n": "7",
+              "name": "Mischievous Angel",
+              "score": 79.27960275019099
+            },
+            {
+              "n": "2",
+              "name": "Attfield",
+              "score": 78.0878073683315
+            },
+            {
+              "n": "4",
+              "name": "War Stride",
+              "score": 77.71878021375004
+            },
+            {
+              "n": "10",
+              "name": "Candytown",
+              "score": 77.24148824148824
+            },
+            {
+              "n": "9",
+              "name": "Heart Headed",
+              "score": 75.83645983645984
+            },
+            {
+              "n": "3",
+              "name": "Flat to Da Mat",
+              "score": 72.38057594579334
+            },
+            {
+              "n": "8",
+              "name": "Amoudi Bay",
+              "score": 72.08946608946609
+            }
+          ],
+          "unrated": []
+        },
+        "contender": {
+          "model_id": "CONTENDER-BRISNET-20261016-v1",
+          "status": "RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "5",
+              "name": "Bosun",
+              "score": 0.822241378431686
+            },
+            {
+              "n": "9",
+              "name": "Heart Headed",
+              "score": 0.7509858794468449
+            },
+            {
+              "n": "6",
+              "name": "No Evidence",
+              "score": 0.579303870051169
+            },
+            {
+              "n": "1",
+              "name": "Final Verdict",
+              "score": -0.06088843632680629
+            },
+            {
+              "n": "8",
+              "name": "Amoudi Bay",
+              "score": -0.08858481381131847
+            },
+            {
+              "n": "4",
+              "name": "War Stride",
+              "score": -0.10143911471154399
+            },
+            {
+              "n": "10",
+              "name": "Candytown",
+              "score": -0.22109617303653406
+            },
+            {
+              "n": "2",
+              "name": "Attfield",
+              "score": -0.2785727406917073
+            },
+            {
+              "n": "3",
+              "name": "Flat to Da Mat",
+              "score": -0.6401675353261047
+            },
+            {
+              "n": "7",
+              "name": "Mischievous Angel",
+              "score": -0.7617823140256847
+            }
+          ],
+          "unrated": []
+        },
+        "mix1": {
+          "model_id": "MIX1-BRISNET-20261016-v1",
+          "status": "RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "6",
+              "name": "No Evidence",
+              "score": 78.95238095238095
+            },
+            {
+              "n": "5",
+              "name": "Bosun",
+              "score": 75.56349206349206
+            },
+            {
+              "n": "1",
+              "name": "Final Verdict",
+              "score": 66.40476190476191
+            },
+            {
+              "n": "4",
+              "name": "War Stride",
+              "score": 59.091710758377424
+            },
+            {
+              "n": "9",
+              "name": "Heart Headed",
+              "score": 58.88007054673721
+            },
+            {
+              "n": "8",
+              "name": "Amoudi Bay",
+              "score": 47.198412698412696
+            },
+            {
+              "n": "2",
+              "name": "Attfield",
+              "score": 35.61643835616438
+            },
+            {
+              "n": "7",
+              "name": "Mischievous Angel",
+              "score": 25.888888888888886
+            },
+            {
+              "n": "10",
+              "name": "Candytown",
+              "score": 24.200913242009133
+            },
+            {
+              "n": "3",
+              "name": "Flat to Da Mat",
+              "score": 15.72310405643739
+            }
+          ],
+          "unrated": []
+        }
+      }
+    },
+    {
+      "race": 9,
+      "group": "Turf route",
+      "scheduled_post": "( 5:38)/ 4:38/ 3:38/ 2:38 (printed zones; verify local time)",
+      "scheduled_post_status": "Printed multiple timezones; local time and actual off require official verification",
+      "candidates": {
+        "BASE": {
+          "model_id": "BRIS-PACE-CONTEXT-v1:BASE",
+          "status": "PARTIAL_RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "10",
+              "name": "Mom's On Break",
+              "score": 100
+            },
+            {
+              "n": "4",
+              "name": "Twice the Fun",
+              "score": 90
+            },
+            {
+              "n": "12",
+              "name": "Seismic Activity",
+              "score": 80
+            },
+            {
+              "n": "7",
+              "name": "Naughty Nancy",
+              "score": 70
+            },
+            {
+              "n": "6",
+              "name": "Nater Tot",
+              "score": 60
+            },
+            {
+              "n": "9",
+              "name": "Convincing",
+              "score": 50
+            },
+            {
+              "n": "8",
+              "name": "Mc Cruiser",
+              "score": 40
+            },
+            {
+              "n": "11",
+              "name": "The Paper Lady",
+              "score": 30
+            },
+            {
+              "n": "3",
+              "name": "Baby Dancer",
+              "score": 20
+            },
+            {
+              "n": "1",
+              "name": "Coursiere",
+              "score": 10
+            },
+            {
+              "n": "2",
+              "name": "Cara's Chrome",
+              "score": 0
+            }
+          ],
+          "unrated": [
+            {
+              "n": "5",
+              "name": "Stars and Tapit",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            }
+          ]
+        },
+        "FLAT": {
+          "model_id": "BRIS-PACE-CONTEXT-v1:FLAT",
+          "status": "PARTIAL_RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "10",
+              "name": "Mom's On Break",
+              "score": 87.5
+            },
+            {
+              "n": "4",
+              "name": "Twice the Fun",
+              "score": 80
+            },
+            {
+              "n": "12",
+              "name": "Seismic Activity",
+              "score": 79.79166666666666
+            },
+            {
+              "n": "7",
+              "name": "Naughty Nancy",
+              "score": 65
+            },
+            {
+              "n": "6",
+              "name": "Nater Tot",
+              "score": 57.5
+            },
+            {
+              "n": "9",
+              "name": "Convincing",
+              "score": 50
+            },
+            {
+              "n": "8",
+              "name": "Mc Cruiser",
+              "score": 39.375
+            },
+            {
+              "n": "11",
+              "name": "The Paper Lady",
+              "score": 36.041666666666664
+            },
+            {
+              "n": "3",
+              "name": "Baby Dancer",
+              "score": 22.291666666666664
+            },
+            {
+              "n": "1",
+              "name": "Coursiere",
+              "score": 20
+            },
+            {
+              "n": "2",
+              "name": "Cara's Chrome",
+              "score": 12.499999999999998
+            }
+          ],
+          "unrated": [
+            {
+              "n": "5",
+              "name": "Stars and Tapit",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            }
+          ]
+        },
+        "CONDITION": {
+          "model_id": "BRIS-PACE-CONTEXT-v1:CONDITION",
+          "status": "PARTIAL_RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "10",
+              "name": "Mom's On Break",
+              "score": 87.5
+            },
+            {
+              "n": "4",
+              "name": "Twice the Fun",
+              "score": 80
+            },
+            {
+              "n": "12",
+              "name": "Seismic Activity",
+              "score": 80
+            },
+            {
+              "n": "7",
+              "name": "Naughty Nancy",
+              "score": 65
+            },
+            {
+              "n": "6",
+              "name": "Nater Tot",
+              "score": 57.5
+            },
+            {
+              "n": "9",
+              "name": "Convincing",
+              "score": 50
+            },
+            {
+              "n": "8",
+              "name": "Mc Cruiser",
+              "score": 47.03125
+            },
+            {
+              "n": "11",
+              "name": "The Paper Lady",
+              "score": 28.90625
+            },
+            {
+              "n": "3",
+              "name": "Baby Dancer",
+              "score": 24.53125
+            },
+            {
+              "n": "1",
+              "name": "Coursiere",
+              "score": 17.03125
+            },
+            {
+              "n": "2",
+              "name": "Cara's Chrome",
+              "score": 12.5
+            }
+          ],
+          "unrated": [
+            {
+              "n": "5",
+              "name": "Stars and Tapit",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            }
+          ]
+        },
+        "TURN": {
+          "model_id": "BRIS-PACE-CONTEXT-v1:TURN",
+          "status": "PARTIAL_RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "10",
+              "name": "Mom's On Break",
+              "score": 87.5
+            },
+            {
+              "n": "4",
+              "name": "Twice the Fun",
+              "score": 80
+            },
+            {
+              "n": "12",
+              "name": "Seismic Activity",
+              "score": 79.875
+            },
+            {
+              "n": "7",
+              "name": "Naughty Nancy",
+              "score": 65
+            },
+            {
+              "n": "6",
+              "name": "Nater Tot",
+              "score": 57.5
+            },
+            {
+              "n": "9",
+              "name": "Convincing",
+              "score": 50
+            },
+            {
+              "n": "8",
+              "name": "Mc Cruiser",
+              "score": 47.828125
+            },
+            {
+              "n": "11",
+              "name": "The Paper Lady",
+              "score": 28.265625
+            },
+            {
+              "n": "3",
+              "name": "Baby Dancer",
+              "score": 24.515625
+            },
+            {
+              "n": "1",
+              "name": "Coursiere",
+              "score": 17.015625
+            },
+            {
+              "n": "2",
+              "name": "Cara's Chrome",
+              "score": 12.5
+            }
+          ],
+          "unrated": [
+            {
+              "n": "5",
+              "name": "Stars and Tapit",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            }
+          ]
+        }
+      },
+      "parents": {
+        "v44c": {
+          "model_id": "V44C-BRISNET-BASE-20261016-v1",
+          "status": "PARTIAL_RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "10",
+              "name": "Mom's On Break",
+              "score": 72.09354830280384
+            },
+            {
+              "n": "4",
+              "name": "Twice the Fun",
+              "score": 71.34565434565435
+            },
+            {
+              "n": "12",
+              "name": "Seismic Activity",
+              "score": 63.9820488391917
+            },
+            {
+              "n": "7",
+              "name": "Naughty Nancy",
+              "score": 61.679506933744214
+            },
+            {
+              "n": "6",
+              "name": "Nater Tot",
+              "score": 60.31107612925795
+            },
+            {
+              "n": "9",
+              "name": "Convincing",
+              "score": 57.5
+            },
+            {
+              "n": "8",
+              "name": "Mc Cruiser",
+              "score": 55.9390175042349
+            },
+            {
+              "n": "11",
+              "name": "The Paper Lady",
+              "score": 50.563244974203876
+            },
+            {
+              "n": "3",
+              "name": "Baby Dancer",
+              "score": 49.65734265734266
+            },
+            {
+              "n": "1",
+              "name": "Coursiere",
+              "score": 48.753246753246756
+            },
+            {
+              "n": "2",
+              "name": "Cara's Chrome",
+              "score": 41.35064935064935
+            }
+          ],
+          "unrated": [
+            {
+              "n": "5",
+              "name": "Stars and Tapit",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            }
+          ]
+        },
+        "contender": {
+          "model_id": "CONTENDER-BRISNET-20261016-v1",
+          "status": "PARTIAL_RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "4",
+              "name": "Twice the Fun",
+              "score": 0.7289918212448103
+            },
+            {
+              "n": "10",
+              "name": "Mom's On Break",
+              "score": 0.5433206030295094
+            },
+            {
+              "n": "12",
+              "name": "Seismic Activity",
+              "score": 0.47798045412507845
+            },
+            {
+              "n": "9",
+              "name": "Convincing",
+              "score": 0.466197230749983
+            },
+            {
+              "n": "7",
+              "name": "Naughty Nancy",
+              "score": 0.27419832137941047
+            },
+            {
+              "n": "8",
+              "name": "Mc Cruiser",
+              "score": 0.0976187591899349
+            },
+            {
+              "n": "6",
+              "name": "Nater Tot",
+              "score": -0.3147231919228251
+            },
+            {
+              "n": "1",
+              "name": "Coursiere",
+              "score": -0.3278682426033463
+            },
+            {
+              "n": "11",
+              "name": "The Paper Lady",
+              "score": -0.5118206272824616
+            },
+            {
+              "n": "2",
+              "name": "Cara's Chrome",
+              "score": -0.5947620255903364
+            },
+            {
+              "n": "3",
+              "name": "Baby Dancer",
+              "score": -0.839133102319757
+            }
+          ],
+          "unrated": [
+            {
+              "n": "5",
+              "name": "Stars and Tapit",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            }
+          ]
+        },
+        "mix1": {
+          "model_id": "MIX1-BRISNET-20261016-v1",
+          "status": "PARTIAL_RESEARCH_RANKING",
+          "rankings": [
+            {
+              "n": "4",
+              "name": "Twice the Fun",
+              "score": 89.34426229508196
+            },
+            {
+              "n": "10",
+              "name": "Mom's On Break",
+              "score": 84.91803278688525
+            },
+            {
+              "n": "12",
+              "name": "Seismic Activity",
+              "score": 73.3974358974359
+            },
+            {
+              "n": "7",
+              "name": "Naughty Nancy",
+              "score": 62.78688524590164
+            },
+            {
+              "n": "6",
+              "name": "Nater Tot",
+              "score": 55.98360655737705
+            },
+            {
+              "n": "9",
+              "name": "Convincing",
+              "score": 54.75409836065574
+            },
+            {
+              "n": "1",
+              "name": "Coursiere",
+              "score": 44.725
+            },
+            {
+              "n": "11",
+              "name": "The Paper Lady",
+              "score": 40.16025641025641
+            },
+            {
+              "n": "3",
+              "name": "Baby Dancer",
+              "score": 29.583333333333332
+            },
+            {
+              "n": "8",
+              "name": "Mc Cruiser",
+              "score": 20.352564102564102
+            },
+            {
+              "n": "2",
+              "name": "Cara's Chrome",
+              "score": 7.540983606557377
+            }
+          ],
+          "unrated": [
+            {
+              "n": "5",
+              "name": "Stars and Tapit",
+              "reasons": [
+                "First-time starter: no measured Speed or pace history"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
