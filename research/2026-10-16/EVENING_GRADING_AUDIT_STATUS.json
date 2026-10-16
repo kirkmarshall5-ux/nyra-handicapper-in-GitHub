@@ -1,0 +1,66 @@
+{
+  "date": "2026-10-16",
+  "status": "PARTIAL_GRADING_OFFICIAL_RESULTS_RECOVERED_CHARTS_PENDING",
+  "audit_library_file_id": "libfile_6e1dbed35788819183aa5eef1466aa67",
+  "audit_filename": "Belmont_2026-10-16_Evening_Grading_Audit.zip",
+  "verified_snapshot_count": 3,
+  "route_replays": 18,
+  "paper_plans_verified": 36,
+  "pace_variant_replays": 36,
+  "pace_parent_replays": 27,
+  "NYRA_first4": {
+    "R1": "1-6-7-3",
+    "R2": "6-3-7-1",
+    "R3": "8-4-5-2",
+    "R4": "4-5-3-2",
+    "R5": "10-3-7-2",
+    "R6": "5-7-1-9",
+    "R7": "2-7-4-1",
+    "R8": "2-1-6-8",
+    "R9": "10-7-12-3"
+  },
+  "NYRA_Tapeta_races": [
+    3,
+    5,
+    6,
+    8,
+    9
+  ],
+  "reported_scratches": {
+    "R5": [
+      "5"
+    ],
+    "R6": [
+      "4"
+    ],
+    "R8": [
+      "3"
+    ]
+  },
+  "certified_graded_races": 0,
+  "rank_error": null,
+  "portfolio_ROI": null,
+  "actual_stake": 0,
+  "bettingEnabled": false,
+  "remaining_complete_matching_surface_candidate": 7,
+  "holds": "Detailed official charts, complete ordinal finishes and special outcomes, actual off times and final-field certification. R3/R8 excluded from frozen turf selector/pace cohorts. R3 excluded from frozen turf paper plan. Do not post-hoc rerank after surface or field changes.",
+  "resume": "Use the immutable snapshots inside the saved audit and tomorrow's supplied Equibase charts. Frozen weights and plans remain unchanged. Do not mark pending returns as zero. No model adoption or profit conclusion.",
+  "primary_results_source": "NYRA date-and-horse-matched results pages; exact URLs in audit PRIMARY_RESULTS.json",
+  "R7_descriptive_coverage": {
+    "all_models_and_selector_and_pace_first_choice_winner": "2 Papa Yo",
+    "exact_first2": false,
+    "correct_first4_set": false,
+    "contender_expanded_contains_exacta": true,
+    "mix1_expanded_contains_exacta": true,
+    "v44c_expanded_contains_exacta": false,
+    "NYRA_exacta_unit": 1,
+    "NYRA_exacta_payout": 18.48
+  },
+  "sources": [
+    "https://www.nyra.com/belmont/racing/?day=2026-10-16&race=3",
+    "https://www.nyra.com/belmont/racing/?race=6",
+    "https://www.nyra.com/belmont/racing/?race=7",
+    "https://www.nyra.com/belmont/racing/?day=2026-10-16&race=8",
+    "https://www.nyra.com/belmont/racing/"
+  ]
+}
