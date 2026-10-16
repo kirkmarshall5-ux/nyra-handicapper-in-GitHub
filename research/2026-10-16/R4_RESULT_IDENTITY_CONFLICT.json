@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "recordedAt": "2026-10-16T19:02:08.319336+00:00",
+  "intended_race_key": "Belmont Park|2026-10-16|4",
+  "status": "HOLD_RUNNER_IDENTITY_AND_DNF_CONFLICT",
+  "source": {
+    "filename": "R4 Result(5).JPG",
+    "library_file_id": "libfile_f4a5176499188191803f2f430587ca84",
+    "sha256": "8e830414d45b0ab8c4b6f9228ea4699a426b64c17b5535a682b2276339033e24"
+  },
+  "user_report": {
+    "program": "6",
+    "status": "DID_NOT_FINISH",
+    "verification": "USER_REPORTED_HORSE_IDENTITY_UNRESOLVED"
+  },
+  "screenshot": {
+    "track_label": "BELMONT",
+    "race_label": 4,
+    "date_printed": false,
+    "distance_furlongs": 6,
+    "surface": "Dirt",
+    "going": "Fast",
+    "class_label": "Starter Optional Claiming",
+    "purse": 75000,
+    "first4": [
+      {
+        "position": 1,
+        "n": "1",
+        "name": "Disparate Impact"
+      },
+      {
+        "position": 2,
+        "n": "6",
+        "name": "Sea Vista"
+      },
+      {
+        "position": 3,
+        "n": "2",
+        "name": "Helmet Of Will"
+      },
+      {
+        "position": 4,
+        "n": "5",
+        "name": "Math Tutor"
+      }
+    ],
+    "printed_exacta": {
+      "combination": "1-6",
+      "unit": 1,
+      "return": 97.21
+    }
+  },
+  "frozen_pp_runners": [
+    {
+      "n": "1",
+      "name": "Cy'fashion"
+    },
+    {
+      "n": "2",
+      "name": "Daddy's Ready"
+    },
+    {
+      "n": "3",
+      "name": "Judysdancin Tonite"
+    },
+    {
+      "n": "4",
+      "name": "Under the Moon"
+    },
+    {
+      "n": "5",
+      "name": "Golden Chick"
+    },
+    {
+      "n": "6",
+      "name": "In the Queue"
+    },
+    {
+      "n": "7",
+      "name": "As Pretty She Is"
+    },
+    {
+      "n": "8",
+      "name": "Lilyluvsyellow"
+    },
+    {
+      "n": "9",
+      "name": "White Star"
+    }
+  ],
+  "conflicts": [
+    "Screenshot #6 Sea Vista is placed second; user reports #6 did not finish.",
+    "Frozen current-card R4 #6 is In the Queue, not Sea Vista.",
+    "Screenshot first-four horse names do not match frozen R4 program identities."
+  ],
+  "model_metrics": null,
+  "financial_metrics": null,
+  "required_resolution": "Correct result image or confirmed track/date/race/horse identity. Do not match by program number alone, assign DNF to Sea Vista or In the Queue without confirmation, or grade against this unrelated roster. Preserve user DNF report as provisional."
+}
