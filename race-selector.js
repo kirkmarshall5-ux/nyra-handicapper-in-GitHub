@@ -13,8 +13,11 @@ const dateOK=d=>typeof d==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(d)&&Number.isFin
 function expectedIds(family){return family==='BRISNET'?BRISNET_MODEL_IDS:family==='DRF_TIMEFORM'?{v44c:RELEASE_ID,contender:MODEL.model_id,mix1:MIX1_ID}:null;}
 function weightsOK(w){return w&&Object.keys(w).length===3&&MODEL_KEYS.every(k=>finite(w[k])&&w[k]>=0)&&Math.abs(MODEL_KEYS.reduce((s,k)=>s+w[k],0)-1)<1e-9;}
 export function classifyRace(race){
- const raw=race.conditions?.surface||race.surface,surface=({Dirt:'Dirt',Turf:'Turf',Synth:'Synthetic',Synthetic:'Synthetic'})[raw];
- const furlongs=finite(race.distance_furlongs)?race.distance_furlongs:mix1Distance(race);
+ const surfaces={Dirt:'Dirt',Turf:'Turf',Synth:'Synthetic',Synthetic:'Synthetic'},raw=race.conditions?.surface||race.surface,surface=surfaces[raw];
+ if(race.surface&&race.conditions?.surface&&surfaces[race.surface]!==surfaces[race.conditions.surface])return {status:'HOLD',reason:'Surface evidence conflicts; verify current race conditions'};
+ const parsedDistance=mix1Distance(race);
+ if(finite(race.distance_furlongs)&&finite(parsedDistance)&&Math.abs(race.distance_furlongs-parsedDistance)>1e-8)return {status:'HOLD',reason:'Distance evidence conflicts; verify current race conditions'};
+ const furlongs=finite(race.distance_furlongs)?race.distance_furlongs:parsedDistance;
  if(race.conditions?.unsupported||/hurdle|steeplechase/i.test([race.header,race.cls,raw].join(' ')))return {status:'HOLD',reason:'Unsupported race type'};
  if(!surface||!finite(furlongs)||furlongs<=0)return {status:'HOLD',reason:'Verified surface and distance required'};
  const category=furlongs>=8?'route':'sprint',field=(race.horses||[]).filter(active);
