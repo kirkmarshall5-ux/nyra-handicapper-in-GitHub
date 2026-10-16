@@ -209,6 +209,8 @@ import {researchRace} from "./jockey-research.js?v=20261008-qa1";
 import {evidenceProfile} from "./scoring-engine.js?v=20261008-qa1";
 import {estimatedWinLine,winLineFields,winLineNote} from "./fair-odds.js?v=20261015-mix1-line1";
 import {rankContenders} from "./contender-rankings.js?v=20261011-passdisplay1";
+import {rankBrisnetModels} from "./brisnet-models.js?v=20261016-native1";
+import {brisnetRankingHtml,updateBrisnetMethods} from "./brisnet-ranking-display.js?v=20261016-native1";
 import {rankMix1} from "./mix1-rankings.js?v=20261015-pass1";
 import {passRaceDisplay} from "./pass-race-display.js?v=20261013-releaseqa1";
 import {releaseRace as websiteRace,RELEASE_ID} from "./rankings-release.js?v=20261008-qa1";
@@ -255,9 +257,9 @@ function trainerContextScore(h){
 }
 function workScore(h){return h.workRating!==""&&h.workRating!=null&&Number.isFinite(+h.workRating)?+h.workRating:null}
 function pedigreeScore(h){return h.pedigreeRating!==""&&h.pedigreeRating!=null&&Number.isFinite(+h.pedigreeRating)?+h.pedigreeRating:null}
-function currentRating(){return websiteRace(race)}
+function currentRating(){return rankBrisnetModels(race)?.v44c||websiteRace(race)}
 function score(h){const r=currentRating();return r.rankings.find(x=>x.name===h.name)?.v44c_display_score??"N/A"}
-function confidenceBadge(h){let x=evidenceProfile({...h,jockeyRating:h.jockey_win,trainerRating:h.trainer_win}).confidence;return `<span class="conf ${x.toLowerCase()}">${x} core coverage</span>`}
+function confidenceBadge(h){if(h.ratings?.provider==="BRISNET"){const ranked=currentRating().rankings.some(x=>x.name===h.name);return `<span class="conf low">${ranked?"Brisnet research":"Unrated"}</span>`;}let x=evidenceProfile({...h,jockeyRating:h.jockey_win,trainerRating:h.trainer_win}).confidence;return `<span class="conf ${x.toLowerCase()}">${x} core coverage</span>`}
 function displayVal(v){return (v===""||v==null)?'<span class="na">N/A</span>':v}
 // A calibrated probability/value model is a separate, unfinished betting gate.
 function fairOddsMap(){return {}}
@@ -266,6 +268,13 @@ function valueRows(){return []}
 const escapeText=s=>String(s??"").replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function candidateTable(rows){return `<div class="tiny muted" style="margin:5px 0">Experimental, uncalibrated estimates — no betting authorization.</div><table class="candidate-table"><thead><tr><th aria-label="Horse"></th><th scope="col">Rating</th><th scope="col">Est. Fair Odds</th><th scope="col">Est. Win %</th></tr></thead><tbody>${rows}</tbody></table>`}
 function renderRaceInsights(){
+ const native=rankBrisnetModels(race);
+ for(const [key,id] of [['v44c','topContenders'],['contender','contenderCandidates'],['mix1','mix1Candidates']])updateBrisnetMethods(document.getElementById(id),key,!!native);
+ if(native){
+  for(const [key,id] of [['v44c','topContenders'],['contender','contenderCandidates'],['mix1','mix1Candidates']])document.getElementById(id).innerHTML=brisnetRankingHtml(native[key],key);
+  bestValue.innerHTML='<div class="muted">Best Value: PASS — Brisnet ranking and probability validation pending.</div>';
+  return;
+ }
  const r=currentRating(),v44cLine=estimatedWinLine(race,r,'v44c');
  const fullRankings=()=>candidateTable(r.rankings.slice(0,4).map((h,i)=>`<tr><td><b>${i+1}. #${escapeText(h.n||'—')} ${escapeText(h.name)}</b><div class="tiny muted">${h.v44c_signals.map(([k,v])=>escapeText(k)+' '+(v>0?'+':'')+v).join(' · ')||'No adjustment'}</div></td><td>${h.v44c_display_score}</td>${winLineFields(v44cLine,h)}</tr>`).join(''));
  if(r.decision==='PASS'){
@@ -299,6 +308,7 @@ function renderRaceInsights(){
  bestValue.innerHTML='<div class="muted">Best Value: PASS — probability validation pending. Morning line is reference only. The research win-ticket builder and quote recorder are available in the Bets tab.</div>';
 }
 function renderJ1Comparison(){
+ if(rankBrisnetModels(race)){document.getElementById("j1Comparison").innerHTML='<div class="muted">J1 comparison requires the original DRF/Beyer inputs. Brisnet research rankings are shown on Race Day.</div>';return;}
  const base=currentRating(),j1=researchRace(race),panel=document.getElementById("j1Comparison");
  const list=r=>r.decision==="PASS"?"PASS — "+r.pass_reasons.map(x=>escapeText(x.reason)).join("; "):r.rankings.slice(0,4).map((h,i)=>`${i+1}. ${escapeText(h.name)} (${h.v44c_display_score})`).join("<br>");
  panel.innerHTML=`<div class="grid"><div class="span6"><b>V4.4c · default</b><div>${list(base)}</div></div><div class="span6"><b>J1 · research only</b><div>${list(j1)}</div></div></div><div class="muted" style="margin-top:8px">Verified annual jockey inputs: ${j1.annual_coverage}/${j1.eligible_count}. ${j1.fallbacks.length?"Baseline input retained for: "+j1.fallbacks.map(escapeText).join(", ")+". Upload the source PP again to extract annual counts from older saved cards.":"All eligible runners have source-card annual counts."} Baseline race grid and betting PASS remain in force.</div>`;
@@ -332,7 +342,7 @@ document.querySelectorAll(".sortbtn").forEach(b=>b.onclick=()=>{
  renderHorses();updateSortButtons();
 });
 function syncRaceNotes(){raceNotes.value=state.cards?.[activeCard.id]?.notes?.[race.race]||""}
-function renderAll(){syncRaceNotes();document.getElementById("releaseStatus").textContent=`Rankings: ${RELEASE_ID} · PP formats: DRF / Brisnet Ultimate / Premium Plus · Saved card: ${activeCard.parser_version||"sample / legacy evidence"}. Betting disabled. Verify scratches, surface, post time and odds before wagering.`;renderOddsSource();renderBrisnetEvidence();renderProjectedRaceSetup();renderReleaseContext();renderJ1Comparison();renderHeader();renderHorses();updateSortButtons();renderPace();renderEdit();renderEvidence();renderConnections();renderLeaderboards();renderWeights();renderThings();renderRaceInsights();renderBetSuggestions();renderResearchBuilder();updateUrl()}
+function renderAll(){syncRaceNotes();document.getElementById("releaseStatus").textContent=`Rankings: ${currentRating().model_id} · PP formats: DRF / Brisnet Ultimate / Premium Plus · Saved card: ${activeCard.parser_version||"sample / legacy evidence"}. Betting disabled. Verify scratches, surface, post time and odds before wagering.`;renderOddsSource();renderBrisnetEvidence();renderProjectedRaceSetup();renderReleaseContext();renderJ1Comparison();renderHeader();renderHorses();updateSortButtons();renderPace();renderEdit();renderEvidence();renderConnections();renderLeaderboards();renderWeights();renderThings();renderRaceInsights();renderBetSuggestions();renderResearchBuilder();updateUrl()}
 function renderThings(){
  const el=document.getElementById("thingsToConsider"); if(!el)return;
  let rows=[];
@@ -368,13 +378,13 @@ function renderHorses(){
  horseTable.querySelector("tbody").innerHTML=sortedGridHorses().map(h=>{let js=h.jockey_win!=null?{win:h.jockey_win}:null,ts=h.trainer_win!=null?{win:h.trainer_win}:null;return `<tr style="${h.odds==="SCR"?"opacity:.48":""}">
 <td><span class="num">${h.n}</span><span class="horse">${escapeText(h.name)}${h.entry_status&&h.entry_status!=="REGULAR"?` <span class="pill">${h.entry_status} excluded</span>`:""}</span></td><td>${h.ml||"—"}</td><td><span class="odds">${h.odds||"—"}</span>${h.pre_race_evidence?`<div class="tiny muted">${h.pre_race_evidence.status==="PUBLIC_PAGE_SNAPSHOT"?"NYRA snapshot":h.pre_race_evidence.status==="MANUAL_SOURCE_SNAPSHOT"?"Manual source":"Pasted snapshot"} · imported ${escapeText(new Date(h.pre_race_evidence.importedAt).toLocaleTimeString())}${h.pre_race_evidence.upstreamAgeSeconds!=null?` · cache age ${h.pre_race_evidence.upstreamAgeSeconds}s`:""}<br>Freshness unverified</div>`:""}</td>
 <td><span class="pacechip ${escapeText(displayPaceStyle(h))}">${escapeText(displayPaceStyle(h))}</span></td><td>${escapeText(h.source_context?.jockey?.name||h.jockey_annual?.jockey||h.j||"—")}</td><td>${escapeText(h.source_context?.trainer?.name||h.t||"—")}</td>
-<td>${js?js.win.toFixed(1)+"%":"—"}</td><td>${ts?ts.win.toFixed(1)+"%":"—"}</td><td>${displayVal(h.last)}</td><td><span class="score">${score(h)}</span><div style="margin-top:4px">${confidenceBadge(h)}</div></td><td><b>${fairOddsMap()[h.n]||"—"}</b></td></tr>`}).join("");
+<td>${js?js.win.toFixed(1)+"%":"—"}</td><td>${ts?ts.win.toFixed(1)+"%":"—"}</td><td>${displayVal(h.ratings?.provider==="BRISNET"?h.ratings.lines?.[0]?.speed:h.last)}</td><td><span class="score">${score(h)}</span><div style="margin-top:4px">${confidenceBadge(h)}</div></td><td><b>${fairOddsMap()[h.n]||"—"}</b></td></tr>`}).join("");
 }
 function renderBrisnetEvidence(){
  const target=document.getElementById("brisnetEvidence");if(!target)return;const evidence=brisnetPaceEvidence(race);
  if(!evidence.available){target.innerHTML="";return;}
  const value=x=>x==null?"Unknown":escapeText(x);
- target.innerHTML="<h3 class=sectiontitle>Brisnet pace evidence - separate source</h3><div class=note><b>Model scores: PASS - Brisnet validation pending</b><div>Brisnet Speed is not a Beyer. E1/E2/Late are not TimeformUS Early/Late. These source figures are available for review; they do not change either locked model.</div></div>"+(evidence.pars?"<div class=small>Printed race pars E1 / E2 / Late / Speed: "+[evidence.pars.e1,evidence.pars.e2,evidence.pars.late,evidence.pars.speed].map(value).join(" / ")+"</div>":"")+"<div style=overflow-x:auto><table><thead><tr><th>Horse / matched date</th><th>Style / points</th><th>E1</th><th>E2</th><th>Late</th><th>Turn</th><th>Shape 1 / 2</th><th>BRIS Speed</th><th>Prime Power</th></tr></thead><tbody>"+evidence.rows.map(h=>"<tr><td><b>#"+escapeText(h.program)+" "+escapeText(h.name)+"</b><div class='tiny muted'>"+value(h.date)+" | "+escapeText(h.status)+" | page "+value(h.source_page)+"</div></td><td>"+value(h.style)+" / "+value(h.quirin)+"</td><td>"+value(h.e1)+"</td><td>"+value(h.e2)+"</td><td>"+value(h.late)+"</td><td>"+value(h.turn)+"</td><td>"+value(h.shape1)+" / "+value(h.shape2)+"</td><td>"+value(h.speed)+"</td><td>"+value(h.prime_power)+"</td></tr>").join("")+"</tbody></table></div><div class='small muted'>"+escapeText(evidence.method)+"</div>";
+ target.innerHTML="<h3 class=sectiontitle>Brisnet pace evidence - separate source</h3><div class=note><b>Native Brisnet rankings available — betting PASS</b><div>Brisnet Speed is not a Beyer. E1/E2/Late are not TimeformUS Early/Late. Separate experimental Brisnet versions rank on Race Day. The locked Beyer/Timeform models remain unchanged.</div></div>"+(evidence.pars?"<div class=small>Printed race pars E1 / E2 / Late / Speed: "+[evidence.pars.e1,evidence.pars.e2,evidence.pars.late,evidence.pars.speed].map(value).join(" / ")+"</div>":"")+"<div style=overflow-x:auto><table><thead><tr><th>Horse / matched date</th><th>Style / points</th><th>E1</th><th>E2</th><th>Late</th><th>Turn</th><th>Shape 1 / 2</th><th>BRIS Speed</th><th>Prime Power</th></tr></thead><tbody>"+evidence.rows.map(h=>"<tr><td><b>#"+escapeText(h.program)+" "+escapeText(h.name)+"</b><div class='tiny muted'>"+value(h.date)+" | "+escapeText(h.status)+" | page "+value(h.source_page)+"</div></td><td>"+value(h.style)+" / "+value(h.quirin)+"</td><td>"+value(h.e1)+"</td><td>"+value(h.e2)+"</td><td>"+value(h.late)+"</td><td>"+value(h.turn)+"</td><td>"+value(h.shape1)+" / "+value(h.shape2)+"</td><td>"+value(h.speed)+"</td><td>"+value(h.prime_power)+"</td></tr>").join("")+"</tbody></table></div><div class='small muted'>"+escapeText(evidence.method)+"</div>";
  target.innerHTML+='<details style="margin-top:12px"><summary>Review latest five source lines, including unmatched races and class ratings</summary>'+race.horses.filter(h=>h.ratings?.provider==='BRISNET').map(h=>'<h4>#'+escapeText(h.n)+' '+escapeText(h.name)+'</h4><div style="overflow-x:auto"><table><thead><tr><th>Date / source</th><th>Surface / furlongs</th><th>E1 / E2 / Late</th><th>Shape 1 / 2</th><th>BRIS Speed</th><th>Race / Class</th></tr></thead><tbody>'+h.ratings.lines.slice(0,5).map(l=>'<tr><td>'+escapeText(l.date)+' / '+escapeText(l.track)+' p'+l.source.page+'</td><td>'+value(l.surface)+' / '+value(l.furlongs)+'</td><td>'+[l.e1,l.e2,l.late].map(value).join(' / ')+'</td><td>'+[l.shape1,l.shape2].map(value).join(' / ')+'</td><td>'+value(l.speed)+'</td><td>'+[l.race_rating,l.class_rating].map(value).join(' / ')+'</td></tr>').join('')+'</tbody></table></div>').join('')+'</details>';
 }
 function renderProjectedRaceSetup(){
@@ -508,7 +518,7 @@ clearPP.onclick=()=>{pendingCard=null;pendingFile=null;for(const r of Object.val
 calcBtn.onclick=()=>{const cnt=id=>document.getElementById(id).value.split(",").map(x=>x.trim()).filter(Boolean).length;let t=betType.value,legs=t==="Exacta"?2:t==="Trifecta"?3:+t.split(" ")[1],counts=[cnt("leg1"),cnt("leg2"),cnt("leg3"),cnt("leg4"),cnt("leg5")].slice(0,legs),combos=counts.reduce((a,b)=>a*b,1),cost=combos*(+base.value||0);ticketOut.textContent=`${combos} combinations · $${cost.toFixed(2)}`};
 
 initKnowledgeBase(()=>({card:activeCard,race,rating:currentRating()}));
-initResearchBuilder(()=>{const rating=currentRating();return {card:activeCard,race,rating,contenderRating:rankContenders(race,rating,{displayPass:rating.decision==='PASS'}),mix1Rating:rankMix1(race,rating,{displayPass:rating.decision==='PASS'})}});
+initResearchBuilder(()=>{const native=rankBrisnetModels(race),rating=native?.v44c||currentRating();return {card:activeCard,race,rating,contenderRating:native?.contender||rankContenders(race,rating,{displayPass:rating.decision==='PASS'}),mix1Rating:native?.mix1||rankMix1(race,rating,{displayPass:rating.decision==='PASS'})}});
 renderAll();
 </script>
 </body></html>
