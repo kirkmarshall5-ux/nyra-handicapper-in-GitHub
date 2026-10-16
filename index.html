@@ -123,7 +123,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <div class="card span12">
 <div class="kicker" id="callSourceLabel">Illustrative race flow · information only</div><h3 class="sectiontitle" id="callRanksTitle">Projected race set up</h3>
 <div class="small muted" id="callRanksDescription" style="margin-bottom:10px">Projected running positions by race call. 1 = first, 2 = second, etc. These are rough pace-based illustrations, NOT verified predicted finish orders, handicap ratings, or wagering advice. The stretch marker is a phase estimate, not a measured track pole. Missing pace evidence can prevent a projection.</div>
-<div id="brisnetEvidence"></div><div id="projectedRaceSetup" style="overflow-x:auto"></div></div>
+<div id="brisnetPaceCandidate"></div><div id="brisnetCandidateExportControls" class="hidden" style="margin:12px 0"><button id="exportBrisnetCandidate" class="secondary">Export Brisnet candidate test — all races</button><div class="tiny muted">Separate research export; does not alter the three-model freeze. Local capture is not independently certified pre-race evidence.</div></div><div id="brisnetEvidence"></div><div id="projectedRaceSetup" style="overflow-x:auto"></div></div>
 
 <div class="card span12">
 <div class="kicker">Adaptive evidence model</div><h3 class="sectiontitle">What the Handicap Rating Knows</h3>
@@ -228,6 +228,8 @@ import {runnerContext} from "./release-context.js?v=20261008-qa1";
 import {PARSER_ID,restoredPage, parseRestoredCard} from "./release-card-parser.js?v=20261014-appendices1";
 
 import {parsePPCard,SUPPORTED_PARSERS} from "./pp-format-router.js?v=20261016-premium1";
+import {rankBrisnetPace,paceCandidateBatch} from "./brisnet-pace-candidate.js?v=20261016-context1";
+import {paceCandidateHtml} from "./brisnet-pace-candidate-display.js?v=20261016-context1";
 import {brisnetPaceDisplay,brisnetPaceMapHtml,brisnetCallRanksHtml,brisnetEvidenceHtml,brisnetContextHtml} from "./brisnet-pace-display.js?v=20261016-pace1";
 import {BRISNET_METHODS} from "./brisnet-models.js?v=20261016-native1";
 
@@ -406,7 +408,16 @@ function updatePaceSourceLabels(native){
  const rules=document.getElementById('contenderRules');if(!rules.dataset.originalHtml)rules.dataset.originalHtml=rules.innerHTML;
  rules.innerHTML=native?'<h3 class="sectiontitle">Native Brisnet model methods · experimental</h3>'+['contender','mix1','pace'].map(k=>'<p class="small">'+escapeText(BRISNET_METHODS[k])+'</p>').join('')+'<div class="note small">Contender consumes early pace and LP. MIX1 consumes early pace only; LP has no weight. V4.4c-Brisnet base has no pace component. Source styles, turn index and race shapes add no score bonus. The original Beyer/Timeform controls are unchanged; Brisnet variants require separate validation.</div>':rules.dataset.originalHtml;
 }
+document.getElementById('exportBrisnetCandidate').onclick=()=>{
+ const card=structuredClone(activeCard);card.races[race.race]=structuredClone(race);
+ const snapshot=paceCandidateBatch(card);snapshot.races.forEach(row=>{row.source_race=structuredClone(card.races[row.race]);});
+ const blob=new Blob([JSON.stringify(snapshot,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='BRIS-PACE-CONTEXT-v1_'+card.date+'_LOCAL-UNVERIFIED.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+};
 function renderPace(){
+ const candidate=rankBrisnetPace(race),candidateTarget=document.getElementById('brisnetPaceCandidate');
+ const isNative=race.ratings_provider==='BRISNET'||race.horses.some(h=>h.ratings?.provider==='BRISNET');
+ candidateTarget.innerHTML=isNative?paceCandidateHtml(candidate):'';
+ document.getElementById('brisnetCandidateExportControls').classList.toggle('hidden',!isNative);
  const native=brisnetPaceDisplay(race);updatePaceSourceLabels(native.available);
  if(native.available){paceMap.innerHTML=brisnetPaceMapHtml(native);return;}
  const runners=race.horses.filter(paceEligible).map(h=>({...h,pace:paceProfile(h)})),unknown=runners.filter(h=>!h.pace.known);
