@@ -1,4 +1,4 @@
-import {quoteCapture,previewBudget,money,preRaceFreeze,sealedResearchExport} from './research-builder.js?v=20261015-three-model-freeze1';
+import {quoteCapture,previewBudget,money,preRaceFreeze,sealedResearchExport} from './research-builder.js?v=20261016-selector1';
 const key='nyraResearchQuoteLogV1',settingsKey='nyraResearchBudgetV1',freezeKey='nyraResearchFreezesV1';
 let context,lastRace='',records=[],freezes=[];
 const el=id=>document.getElementById(id),escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -41,7 +41,7 @@ export function initResearchBuilder(getContext){
   const c=context(),result=preRaceFreeze({...c,postTime:el('researchPostTime').value,now:Date.now(),finalFieldVerified:el('researchField').checked,surfaceVerified:el('researchSurface').checked});
   if(result.errors.length){el('researchStatus').textContent=result.errors.join(' ');return}
   if(freezes.some(f=>f.cardId===result.freeze.cardId&&String(f.race)===String(result.freeze.race))){el('researchStatus').textContent='Race already frozen on this device. Existing snapshot will not be overwritten.';return}
-  const next=[...freezes,result.freeze];try{localStorage.setItem(freezeKey,JSON.stringify(next));freezes=next;el('researchStatus').textContent='Three-model pre-race snapshot frozen locally (V4.4c, Contender V2, MIX1). Export and externally anchor the SHA-256 digest BEFORE post time; local time alone is not proof.';renderLog()}catch{el('researchStatus').textContent='Freeze could not be saved. Check available device storage.'}
+  const next=[...freezes,result.freeze];try{localStorage.setItem(freezeKey,JSON.stringify(next));freezes=next;el('researchStatus').textContent='Three parent models frozen locally; Race Selector research output included when supplied. Export and externally anchor the SHA-256 digest BEFORE post time; local time alone is not proof.';renderLog()}catch{el('researchStatus').textContent='Freeze could not be saved. Check available device storage.'}
  };
  el('researchExport').onclick=async()=>{
   el('researchStatus').textContent='Preparing SHA-256 research export...';
@@ -52,3 +52,4 @@ export function initResearchBuilder(getContext){
   }catch(e){el('researchStatus').textContent='Export failed; no integrity seal created: '+String(e?.message||e)}
  };
 }
+

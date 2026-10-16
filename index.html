@@ -67,6 +67,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <div class="card span4"><div class="kicker">Top 4 Win Candidates-V4.4c</div><div id="topContenders" class="stack small"></div><details class="tiny muted" style="margin-top:10px"><summary>How V4.4c ranks</summary><p>Latest Beyer 40 weight points · best Beyer from the latest three starts 22 · jockey 7 · trainer 8. Jockey and trainer win percentages are multiplied by three, capped at 100. Horses with one or two starts can also use a verified trainer-context score at 12 weight points. Missing inputs redistribute the available weights; verified zero counts. Field strength, pace fit, rebound protection and lightly raced upside can adjust the base rating by up to ±6 points. PASS races show provisional rated runners only.</p></details></div>
 <div class="card span4"><div class="kicker">Top 4 Win Candidates-Contender</div><div id="contenderCandidates" class="stack small"></div><details class="tiny muted" style="margin-top:10px"><summary>How Contender ranks</summary><p>Contender V2 combines relative field scores using frozen coefficients for recent Beyers, surface and distance form, Timeform Early and Late pace, race pressure, career records, jockey and trainer records, layoffs, workouts, verified trip comments and prior opposition. It also uses a surface/distance matched Beyer trend when at least three comparable starts are verified. Missing features are neutral. This model was trained for top-three contention; its win chances remain experimental. PASS races show provisional rated runners only.</p></details></div>
 <div class="card span4"><div class="kicker">Top 4 Win Candidates-MIX1</div><div class="tiny muted" style="margin:6px 0">Experimental · Timeform version</div><div id="mix1Candidates" class="stack small" aria-live="polite"></div><details class="tiny muted" style="margin-top:10px"><summary>How MIX1 ranks</summary><p>Recent two Beyers 37% · best Beyer from starts 3–5 12% · jockey 7% · trainer 17% · Timeform Early 17% · surface/distance 10%. Components use relative field scores. Missing inputs redistribute the remaining weights; non-pace adjustments are capped at ±15%.</p></details></div>
+<div class="card span12"><div class="kicker">Race Selector · experimental</div><div id="raceSelector" aria-live="polite"></div></div>
 <div class="card span3"><div class="kicker">Top 3 morning-line favorites</div><div id="topMl" class="stack small"></div></div>
 <div style="display:none" aria-hidden="true" class="card span3"><div class="kicker">Top jockeys · this race</div><div id="topJockeys" class="stack small"></div></div>
 <div style="display:none" aria-hidden="true" class="card span3"><div class="kicker">Top trainers · this race</div><div id="topTrainers" class="stack small"></div></div>
@@ -191,7 +192,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <div id="researchPreview" class="note" style="margin-top:12px"></div>
 <div class="flex" style="margin-top:12px"><button id="researchFreeze" class="secondary">Freeze All 3 Models</button><button id="researchRecord" class="primary">Record Quote &amp; Ranking Snapshot</button><button id="researchExport" class="secondary">Export Research Log</button></div>
 <div id="researchStatus" class="small muted" role="status" style="margin-top:8px"></div><div id="researchCount" class="tiny muted" style="margin-top:8px"></div><div id="researchLog" class="stack" style="margin-top:10px"></div>
-<div class="tiny muted" style="margin-top:10px">Before the race: verify field and surface, enter scheduled post time, freeze V4.4c, Contender V2 and MIX1 together (PASS/HOLD preserved), export and anchor the SHA-256 digest on GitHub before post time. Local clock timestamps and hashes alone are not independent proof. Candidate timing: quote ≤60 seconds old and decision ≥60 seconds before recorded post. Manual records require source review; recording does not certify calibration, freshness later, or an untouched race. Source screenshots are referenced, not uploaded here. Research logs are saved on this device; export them for testing.</div></div>
+<div class="tiny muted" style="margin-top:10px">Before the race: verify field and surface, enter scheduled post time, freeze V4.4c, Contender V2 and MIX1 together, with the separate Race Selector research output (PASS/HOLD preserved), export and anchor the SHA-256 digest on GitHub before post time. Local clock timestamps and hashes alone are not independent proof. Candidate timing: quote ≤60 seconds old and decision ≥60 seconds before recorded post. Manual records require source review; recording does not certify calibration, freshness later, or an untouched race. Source screenshots are referenced, not uploaded here. Research logs are saved on this device; export them for testing.</div></div>
 
 <div class="card span12"><div class="kicker">Model + price + confidence</div><h3 class="sectiontitle">Suggested Wager Opportunities</h3><div class="small muted" style="margin-bottom:12px">Win-bet value rules are awaiting validation. The calculator below estimates ticket cost only.</div><div id="betSuggestions" class="stack"></div></div>
 <div class="card span12"><div class="kicker">Optional cost calculator</div><h3 class="sectiontitle">Ticket Calculator</h3><div class="ticketgrid"><div><label>Bet</label><select id="betType"><option>Exacta</option><option>Trifecta</option><option>Pick 3</option><option>Pick 4</option><option>Pick 5</option></select></div><div><label>Leg 1</label><input id="leg1" value=""></div><div><label>Leg 2</label><input id="leg2" value=""></div><div><label>Leg 3</label><input id="leg3" value=""></div><div><label>Leg 4</label><input id="leg4" value=""></div><div><label>Leg 5</label><input id="leg5" value=""></div><div><label>Base wager</label><input id="base" type="number" step=".1" value=".5"></div></div><div class="flex" style="margin-top:14px"><button class="primary" id="calcBtn">Calculate Cost</button><div id="ticketOut" class="metric" style="font-size:22px"></div></div></div></div></section>
@@ -201,7 +202,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 
 <script type="module">
 import {initKnowledgeBase} from "./knowledge-base.js?v=20261008-kb1";
-import {initResearchBuilder,renderResearchBuilder} from "./research-builder-ui.js?v=20261015-three-model-freeze1";
+import {initResearchBuilder,renderResearchBuilder} from "./research-builder-ui.js?v=20261016-selector1";
 import {connectionRows,LEADER_SCOPE,LEADER_SOURCE} from "./connection-research.js?v=20261008-jt1";
 import {fieldConnections} from "./pp-context.js?v=20261008-qa1";
 import {runnerStateKey} from "./card-loader.js?v=20261008-qa1";
@@ -209,6 +210,8 @@ import {researchRace} from "./jockey-research.js?v=20261008-qa1";
 import {evidenceProfile} from "./scoring-engine.js?v=20261008-qa1";
 import {estimatedWinLine,winLineFields,winLineNote} from "./fair-odds.js?v=20261015-mix1-line1";
 import {rankContenders} from "./contender-rankings.js?v=20261011-passdisplay1";
+import {rankRaceSelector} from "./race-selector.js?v=20261016-selector1";
+import {selectorHtml} from "./race-selector-display.js?v=20261016-selector1";
 import {rankBrisnetModels} from "./brisnet-models.js?v=20261016-native1";
 import {brisnetRankingHtml,updateBrisnetMethods} from "./brisnet-ranking-display.js?v=20261016-native1";
 import {rankMix1} from "./mix1-rankings.js?v=20261015-pass1";
@@ -258,6 +261,8 @@ function trainerContextScore(h){
 function workScore(h){return h.workRating!==""&&h.workRating!=null&&Number.isFinite(+h.workRating)?+h.workRating:null}
 function pedigreeScore(h){return h.pedigreeRating!==""&&h.pedigreeRating!=null&&Number.isFinite(+h.pedigreeRating)?+h.pedigreeRating:null}
 function currentRating(){return rankBrisnetModels(race)?.v44c||websiteRace(race)}
+function currentSelector(){const native=rankBrisnetModels(race),base=native?.v44c||websiteRace(race);return rankRaceSelector(race,native||{v44c:base,contender:rankContenders(race,base,{displayPass:base.decision==='PASS'}),mix1:rankMix1(race,base,{displayPass:base.decision==='PASS'})})}
+function renderRaceSelector(){document.getElementById('raceSelector').innerHTML=selectorHtml(currentSelector())}
 function score(h){const r=currentRating();return r.rankings.find(x=>x.name===h.name)?.v44c_display_score??"N/A"}
 function confidenceBadge(h){if(h.ratings?.provider==="BRISNET"){const ranked=currentRating().rankings.some(x=>x.name===h.name);return `<span class="conf low">${ranked?"Brisnet research":"Unrated"}</span>`;}let x=evidenceProfile({...h,jockeyRating:h.jockey_win,trainerRating:h.trainer_win}).confidence;return `<span class="conf ${x.toLowerCase()}">${x} core coverage</span>`}
 function displayVal(v){return (v===""||v==null)?'<span class="na">N/A</span>':v}
@@ -342,7 +347,7 @@ document.querySelectorAll(".sortbtn").forEach(b=>b.onclick=()=>{
  renderHorses();updateSortButtons();
 });
 function syncRaceNotes(){raceNotes.value=state.cards?.[activeCard.id]?.notes?.[race.race]||""}
-function renderAll(){syncRaceNotes();document.getElementById("releaseStatus").textContent=`Rankings: ${currentRating().model_id} · PP formats: DRF / Brisnet Ultimate / Premium Plus · Saved card: ${activeCard.parser_version||"sample / legacy evidence"}. Betting disabled. Verify scratches, surface, post time and odds before wagering.`;renderOddsSource();renderBrisnetEvidence();renderProjectedRaceSetup();renderReleaseContext();renderJ1Comparison();renderHeader();renderHorses();updateSortButtons();renderPace();renderEdit();renderEvidence();renderConnections();renderLeaderboards();renderWeights();renderThings();renderRaceInsights();renderBetSuggestions();renderResearchBuilder();updateUrl()}
+function renderAll(){syncRaceNotes();document.getElementById("releaseStatus").textContent=`Rankings: ${currentRating().model_id} · PP formats: DRF / Brisnet Ultimate / Premium Plus · Saved card: ${activeCard.parser_version||"sample / legacy evidence"}. Betting disabled. Verify scratches, surface, post time and odds before wagering.`;renderOddsSource();renderBrisnetEvidence();renderProjectedRaceSetup();renderReleaseContext();renderJ1Comparison();renderHeader();renderHorses();updateSortButtons();renderPace();renderEdit();renderEvidence();renderConnections();renderLeaderboards();renderWeights();renderThings();renderRaceInsights();renderRaceSelector();renderBetSuggestions();renderResearchBuilder();updateUrl()}
 function renderThings(){
  const el=document.getElementById("thingsToConsider"); if(!el)return;
  let rows=[];
@@ -518,7 +523,7 @@ clearPP.onclick=()=>{pendingCard=null;pendingFile=null;for(const r of Object.val
 calcBtn.onclick=()=>{const cnt=id=>document.getElementById(id).value.split(",").map(x=>x.trim()).filter(Boolean).length;let t=betType.value,legs=t==="Exacta"?2:t==="Trifecta"?3:+t.split(" ")[1],counts=[cnt("leg1"),cnt("leg2"),cnt("leg3"),cnt("leg4"),cnt("leg5")].slice(0,legs),combos=counts.reduce((a,b)=>a*b,1),cost=combos*(+base.value||0);ticketOut.textContent=`${combos} combinations · $${cost.toFixed(2)}`};
 
 initKnowledgeBase(()=>({card:activeCard,race,rating:currentRating()}));
-initResearchBuilder(()=>{const native=rankBrisnetModels(race),rating=native?.v44c||currentRating();return {card:activeCard,race,rating,contenderRating:native?.contender||rankContenders(race,rating,{displayPass:rating.decision==='PASS'}),mix1Rating:native?.mix1||rankMix1(race,rating,{displayPass:rating.decision==='PASS'})}});
+initResearchBuilder(()=>{const native=rankBrisnetModels(race),rating=native?.v44c||currentRating();return {card:activeCard,race,rating,contenderRating:native?.contender||rankContenders(race,rating,{displayPass:rating.decision==='PASS'}),mix1Rating:native?.mix1||rankMix1(race,rating,{displayPass:rating.decision==='PASS'}),selectorRating:currentSelector()}});
 renderAll();
 </script>
 </body></html>

@@ -1,0 +1,10 @@
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+export function selectorHtml(s){
+ const c=s.context||{},heading=`<div class="small"><b>${esc(c.group||'Race type unverified')}${c.furlongs?' · '+c.furlongs+'f':''}</b> · ${esc(c.provider_family||'Source unknown')} · ${c.field_size??0} eligible runners</div>`;
+ const note='<div class="tiny muted" style="margin-top:8px">Research only · betting PASS · rating is a rank blend, not a win probability. Original model rankings remain unchanged. Selector output is recorded alongside the three parent models in new pre-race freezes.</div>';
+ if(s.status!=='RESEARCH_RANKED')return heading+`<div class="note small" style="margin-top:8px"><b>Selector HOLD</b> · ${esc(s.reason)}</div>`+note;
+ const weights=Object.entries(s.weights).map(([k,v])=>({v44c:'V4.4c',contender:'Contender',mix1:'MIX1'})[k]+' '+(v*100).toFixed(1)+'%').join(' · ');
+ const rows=s.rankings.map((h,i)=>`<tr><td>${i+1}. #${esc(h.n)} ${esc(h.name)}</td><td>${h.score.toFixed(1)}</td><td>${h.parent_ranks.v44c}</td><td>${h.parent_ranks.contender}</td><td>${h.parent_ranks.mix1}</td></tr>`);
+ const table=a=>'<div style="overflow-x:auto"><table class="candidate-table"><thead><tr><th>Horse</th><th>Blend score</th><th>V4.4c rank</th><th>Contender rank</th><th>MIX1 rank</th></tr></thead><tbody>'+a.join('')+'</tbody></table></div>';
+ return heading+`<div class="tiny muted" style="margin:6px 0">${esc(weights)}. ${esc(s.reason)}</div>`+table(rows.slice(0,4))+(rows.length>4?'<details class="tiny muted"><summary>Remaining selector ranks</summary>'+table(rows.slice(4))+'</details>':'')+note+'<details class="tiny muted" style="margin-top:8px"><summary>How the Race Selector works</summary><p>Each parent ranking is converted to the same 0–100 rank scale. Equal-weight v1 averages those rank scores; ties retain V4.4c order. No condition-specific weights are active yet. Research fitting is separate and requires earlier, verified full-field forecasts and official finishing orders. Future weight policies need independent forward testing.</p></details>';
+}
