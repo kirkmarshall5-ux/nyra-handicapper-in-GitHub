@@ -1,0 +1,393 @@
+{
+  "schema_version": 1,
+  "recordedAt": "2026-10-16T18:36:17.713574+00:00",
+  "race_key": "Belmont Park|2026-10-16|3",
+  "date_source": "User upload in current Belmont card; image has no printed date",
+  "source_type": "USER_UPLOADED_QUICK_RESULTS_SCREENSHOT",
+  "source": {
+    "filename": "R3 Result(5).JPG",
+    "library_file_id": "libfile_f6d2aeb3eed08191aefb0e83fa183677",
+    "sha256": "30ace7fdd126586c779d4da64a18f13e00262542ad2950cc1a38c1c0975e1f03"
+  },
+  "observed_first4": [
+    "8",
+    "4",
+    "5",
+    "2"
+  ],
+  "finishers_shown": [
+    {
+      "position": 1,
+      "n": "8",
+      "name": "Putonahappyface"
+    },
+    {
+      "position": 2,
+      "n": "4",
+      "name": "Twirly"
+    },
+    {
+      "position": 3,
+      "n": "5",
+      "name": "Smokin Hot Blonde"
+    },
+    {
+      "position": 4,
+      "n": "2",
+      "name": "Mermaid"
+    }
+  ],
+  "full_official_order": null,
+  "observed_surface": "Synthetic",
+  "frozen_pp_surface": "Turf",
+  "observed_distance_furlongs": 8.5,
+  "observed_going": "Fast",
+  "surface_status": "CONFLICT_REQUIRES_OFFICIAL_CHART_OR_CORRECTION",
+  "official_order_verified": false,
+  "final_field_verified": false,
+  "forecast_pre_off_verified": false,
+  "status": "HOLD_SURFACE_CONFLICT_AND_INCOMPLETE_OFFICIAL_ORDER",
+  "diagnostics": {
+    "v44c": {
+      "predicted_first4": [
+        "1",
+        "4",
+        "8",
+        "6"
+      ],
+      "winner_rank": 3,
+      "third_finisher_5_rank": 7,
+      "first_choice_winner": false,
+      "winner_in_first4": true,
+      "ordered_first2": false,
+      "first4_set": false,
+      "ordered_first4": false,
+      "full_field_rank_error": null,
+      "status": "SCREENSHOT_ONLY_SURFACE_CONFLICT_HOLD"
+    },
+    "contender": {
+      "predicted_first4": [
+        "8",
+        "1",
+        "4",
+        "2"
+      ],
+      "winner_rank": 1,
+      "third_finisher_5_rank": 8,
+      "first_choice_winner": true,
+      "winner_in_first4": true,
+      "ordered_first2": false,
+      "first4_set": false,
+      "ordered_first4": false,
+      "full_field_rank_error": null,
+      "status": "SCREENSHOT_ONLY_SURFACE_CONFLICT_HOLD"
+    },
+    "mix1": {
+      "predicted_first4": [
+        "1",
+        "4",
+        "8",
+        "2"
+      ],
+      "winner_rank": 3,
+      "third_finisher_5_rank": 7,
+      "first_choice_winner": false,
+      "winner_in_first4": true,
+      "ordered_first2": false,
+      "first4_set": false,
+      "ordered_first4": false,
+      "full_field_rank_error": null,
+      "status": "SCREENSHOT_ONLY_SURFACE_CONFLICT_HOLD"
+    },
+    "BASE": {
+      "predicted_first4": [
+        "1",
+        "4",
+        "8",
+        "6"
+      ],
+      "winner_rank": 3,
+      "third_finisher_5_rank": 7,
+      "first_choice_winner": false,
+      "winner_in_first4": true,
+      "ordered_first2": false,
+      "first4_set": false,
+      "ordered_first4": false,
+      "full_field_rank_error": null,
+      "status": "SCREENSHOT_ONLY_SURFACE_CONFLICT_HOLD"
+    },
+    "FLAT": {
+      "predicted_first4": [
+        "1",
+        "4",
+        "8",
+        "2"
+      ],
+      "winner_rank": 3,
+      "third_finisher_5_rank": 7,
+      "first_choice_winner": false,
+      "winner_in_first4": true,
+      "ordered_first2": false,
+      "first4_set": false,
+      "ordered_first4": false,
+      "full_field_rank_error": null,
+      "status": "SCREENSHOT_ONLY_SURFACE_CONFLICT_HOLD"
+    },
+    "CONDITION": {
+      "predicted_first4": [
+        "1",
+        "4",
+        "8",
+        "6"
+      ],
+      "winner_rank": 3,
+      "third_finisher_5_rank": 7,
+      "first_choice_winner": false,
+      "winner_in_first4": true,
+      "ordered_first2": false,
+      "first4_set": false,
+      "ordered_first4": false,
+      "full_field_rank_error": null,
+      "status": "SCREENSHOT_ONLY_SURFACE_CONFLICT_HOLD"
+    },
+    "TURN": {
+      "predicted_first4": [
+        "1",
+        "4",
+        "8",
+        "6"
+      ],
+      "winner_rank": 3,
+      "third_finisher_5_rank": 7,
+      "first_choice_winner": false,
+      "winner_in_first4": true,
+      "ordered_first2": false,
+      "first4_set": false,
+      "ordered_first4": false,
+      "full_field_rank_error": null,
+      "status": "SCREENSHOT_ONLY_SURFACE_CONFLICT_HOLD"
+    }
+  },
+  "paper_ticket_diagnostics": [
+    {
+      "id": "BEL-2026-10-16-R3:v44c:WIN",
+      "structure": "WIN",
+      "model": "v44c",
+      "hypothetical_stake": 2,
+      "combination_match_on_screenshot": false,
+      "certified_return": null,
+      "certified_roi": null,
+      "status": "SURFACE_CONFLICT_HOLD_NO_CERTIFIED_FINANCIAL_GRADE"
+    },
+    {
+      "id": "BEL-2026-10-16-R3:v44c:TOP2_BOX",
+      "structure": "TOP2_BOX",
+      "model": "v44c",
+      "hypothetical_stake": 2,
+      "combination_match_on_screenshot": false,
+      "certified_return": null,
+      "certified_roi": null,
+      "status": "SURFACE_CONFLICT_HOLD_NO_CERTIFIED_FINANCIAL_GRADE"
+    },
+    {
+      "id": "BEL-2026-10-16-R3:v44c:TOP3_BOX",
+      "structure": "TOP3_BOX",
+      "model": "v44c",
+      "hypothetical_stake": 6,
+      "combination_match_on_screenshot": true,
+      "certified_return": null,
+      "certified_roi": null,
+      "status": "SURFACE_CONFLICT_HOLD_NO_CERTIFIED_FINANCIAL_GRADE"
+    },
+    {
+      "id": "BEL-2026-10-16-R3:v44c:EXPANDED",
+      "structure": "EXPANDED",
+      "model": "v44c",
+      "hypothetical_stake": 9,
+      "combination_match_on_screenshot": true,
+      "certified_return": null,
+      "certified_roi": null,
+      "status": "SURFACE_CONFLICT_HOLD_NO_CERTIFIED_FINANCIAL_GRADE"
+    },
+    {
+      "id": "BEL-2026-10-16-R3:v44c:ONE_TWO_3",
+      "structure": "ONE_TWO_3",
+      "model": "v44c",
+      "hypothetical_stake": 4,
+      "combination_match_on_screenshot": false,
+      "certified_return": null,
+      "certified_roi": null,
+      "status": "SURFACE_CONFLICT_HOLD_NO_CERTIFIED_FINANCIAL_GRADE"
+    },
+    {
+      "id": "BEL-2026-10-16-R3:v44c:ONE_TWO_34",
+      "structure": "ONE_TWO_34",
+      "model": "v44c",
+      "hypothetical_stake": 6,
+      "combination_match_on_screenshot": false,
+      "certified_return": null,
+      "certified_roi": null,
+      "status": "SURFACE_CONFLICT_HOLD_NO_CERTIFIED_FINANCIAL_GRADE"
+    },
+    {
+      "id": "BEL-2026-10-16-R3:contender:WIN",
+      "structure": "WIN",
+      "model": "contender",
+      "hypothetical_stake": 2,
+      "combination_match_on_screenshot": true,
+      "certified_return": null,
+      "certified_roi": null,
+      "status": "SURFACE_CONFLICT_HOLD_NO_CERTIFIED_FINANCIAL_GRADE"
+    },
+    {
+      "id": "BEL-2026-10-16-R3:contender:TOP2_BOX",
+      "structure": "TOP2_BOX",
+      "model": "contender",
+      "hypothetical_stake": 2,
+      "combination_match_on_screenshot": false,
+      "certified_return": null,
+      "certified_roi": null,
+      "status": "SURFACE_CONFLICT_HOLD_NO_CERTIFIED_FINANCIAL_GRADE"
+    },
+    {
+      "id": "BEL-2026-10-16-R3:contender:TOP3_BOX",
+      "structure": "TOP3_BOX",
+      "model": "contender",
+      "hypothetical_stake": 6,
+      "combination_match_on_screenshot": true,
+      "certified_return": null,
+      "certified_roi": null,
+      "status": "SURFACE_CONFLICT_HOLD_NO_CERTIFIED_FINANCIAL_GRADE"
+    },
+    {
+      "id": "BEL-2026-10-16-R3:contender:EXPANDED",
+      "structure": "EXPANDED",
+      "model": "contender",
+      "hypothetical_stake": 9,
+      "combination_match_on_screenshot": true,
+      "certified_return": null,
+      "certified_roi": null,
+      "status": "SURFACE_CONFLICT_HOLD_NO_CERTIFIED_FINANCIAL_GRADE"
+    },
+    {
+      "id": "BEL-2026-10-16-R3:contender:ONE_TWO_3",
+      "structure": "ONE_TWO_3",
+      "model": "contender",
+      "hypothetical_stake": 4,
+      "combination_match_on_screenshot": true,
+      "certified_return": null,
+      "certified_roi": null,
+      "status": "SURFACE_CONFLICT_HOLD_NO_CERTIFIED_FINANCIAL_GRADE"
+    },
+    {
+      "id": "BEL-2026-10-16-R3:contender:ONE_TWO_34",
+      "structure": "ONE_TWO_34",
+      "model": "contender",
+      "hypothetical_stake": 6,
+      "combination_match_on_screenshot": true,
+      "certified_return": null,
+      "certified_roi": null,
+      "status": "SURFACE_CONFLICT_HOLD_NO_CERTIFIED_FINANCIAL_GRADE"
+    },
+    {
+      "id": "BEL-2026-10-16-R3:mix1:WIN",
+      "structure": "WIN",
+      "model": "mix1",
+      "hypothetical_stake": 2,
+      "combination_match_on_screenshot": false,
+      "certified_return": null,
+      "certified_roi": null,
+      "status": "SURFACE_CONFLICT_HOLD_NO_CERTIFIED_FINANCIAL_GRADE"
+    },
+    {
+      "id": "BEL-2026-10-16-R3:mix1:TOP2_BOX",
+      "structure": "TOP2_BOX",
+      "model": "mix1",
+      "hypothetical_stake": 2,
+      "combination_match_on_screenshot": false,
+      "certified_return": null,
+      "certified_roi": null,
+      "status": "SURFACE_CONFLICT_HOLD_NO_CERTIFIED_FINANCIAL_GRADE"
+    },
+    {
+      "id": "BEL-2026-10-16-R3:mix1:TOP3_BOX",
+      "structure": "TOP3_BOX",
+      "model": "mix1",
+      "hypothetical_stake": 6,
+      "combination_match_on_screenshot": true,
+      "certified_return": null,
+      "certified_roi": null,
+      "status": "SURFACE_CONFLICT_HOLD_NO_CERTIFIED_FINANCIAL_GRADE"
+    },
+    {
+      "id": "BEL-2026-10-16-R3:mix1:EXPANDED",
+      "structure": "EXPANDED",
+      "model": "mix1",
+      "hypothetical_stake": 9,
+      "combination_match_on_screenshot": true,
+      "certified_return": null,
+      "certified_roi": null,
+      "status": "SURFACE_CONFLICT_HOLD_NO_CERTIFIED_FINANCIAL_GRADE"
+    },
+    {
+      "id": "BEL-2026-10-16-R3:mix1:ONE_TWO_3",
+      "structure": "ONE_TWO_3",
+      "model": "mix1",
+      "hypothetical_stake": 4,
+      "combination_match_on_screenshot": false,
+      "certified_return": null,
+      "certified_roi": null,
+      "status": "SURFACE_CONFLICT_HOLD_NO_CERTIFIED_FINANCIAL_GRADE"
+    },
+    {
+      "id": "BEL-2026-10-16-R3:mix1:ONE_TWO_34",
+      "structure": "ONE_TWO_34",
+      "model": "mix1",
+      "hypothetical_stake": 6,
+      "combination_match_on_screenshot": false,
+      "certified_return": null,
+      "certified_roi": null,
+      "status": "SURFACE_CONFLICT_HOLD_NO_CERTIFIED_FINANCIAL_GRADE"
+    }
+  ],
+  "printed_payouts": [
+    {
+      "type": "exacta",
+      "combination": "8-4",
+      "unit": 1,
+      "return": 19.22
+    },
+    {
+      "type": "trifecta",
+      "combination": "8-4-5",
+      "unit": 0.5,
+      "return": 159.9
+    },
+    {
+      "type": "superfecta",
+      "combination": "8-4-5-2",
+      "unit": 0.1,
+      "return": 137.51
+    },
+    {
+      "type": "daily double",
+      "combination": "6-8",
+      "unit": 1,
+      "return": 20.17
+    },
+    {
+      "type": "pick3",
+      "combination": "1-6-8",
+      "unit": 1,
+      "return": 120.86
+    }
+  ],
+  "winner_win_place_show_shown": {
+    "win": 8.88,
+    "place": 5.08,
+    "show": 3.96,
+    "unit": null,
+    "unit_status": "Not printed; verify official denomination"
+  },
+  "note": "Do not assume moved surface versus feed label error. Verify official source. Do not alter or rerank frozen turf forecasts after outcome. If synthetic is confirmed, exclude from turf-route performance and retain original held paper plans; BRIS-PACE-CONTEXT-v1 has no synthetic profile. All models put #5 outside their top four. Exacta ticket combination matches are descriptive only until final field, timing, surface and payout-source gates pass."
+}
