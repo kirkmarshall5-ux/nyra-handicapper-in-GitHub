@@ -77,3 +77,24 @@ test('three-model freeze fails closed on missing, inconsistent, or invented mode
  const tamper={...p,mix1Rating:{...p.mix1Rating,rankings:[{...p.mix1Rating.rankings[0],score:NaN}]}};
  assert.equal(preRaceFreeze(tamper).freeze,null);
 });
+
+test('frozen three-model scores do not mutate and each model is covered by SHA-256',async()=>{
+ const p={card:input.card,race:input.race,rating:input.rating,...modelFixtures,postTime:input.postTime,now,finalFieldVerified:true,surfaceVerified:true};
+ const {freeze,errors}=preRaceFreeze(p);assert.deepEqual(errors,[]);
+ const original=freeze.models.MIX1.rankings[0].rawScore;
+ p.mix1Rating.rankings[0].score=999;
+ assert.equal(freeze.models.MIX1.rankings[0].rawScore,original);
+ p.mix1Rating.rankings[0].score=78.5;
+ const digest=async f=>(await sealedResearchExport({records:[],freezes:[f],exportedAt:'2026-10-07T17:08:00Z'})).recordsDigestSha256;
+ const baseline=await digest(freeze);
+ for(const name of ['V44C','CONTENDER','MIX1']){
+  const changed=structuredClone(freeze);changed.models[name].rankings[0].rawScore+=1;
+  assert.notEqual(await digest(changed),baseline,name+' changes must invalidate anchored digest');
+ }
+});
+test('web freeze UI supplies three actual model outputs, not synthetic fallback rankings',()=>{
+ const html=readFileSync(new URL('./index.html',import.meta.url),'utf8');
+ assert.match(html,/initResearchBuilder\(\(\)=>\{const rating=currentRating\(\);return \{card:activeCard,race,rating,contenderRating:rankContenders\(race,rating,/);
+ assert.match(html,/mix1Rating:rankMix1\(race,rating,/);
+ assert.match(html,/Freeze All 3 Models/);
+});
