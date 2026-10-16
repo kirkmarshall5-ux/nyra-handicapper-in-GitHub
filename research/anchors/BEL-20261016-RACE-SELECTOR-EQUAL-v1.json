@@ -1,0 +1,29 @@
+{
+  "batch_id": "BEL-20261016-RACE-SELECTOR-EQUAL-v1",
+  "snapshot_file": "SELECTOR_PRE_RACE_v1.json",
+  "snapshot_sha256": "754e94a91685af1e2df2faefc16a9da130fb4891952446bbf18f9540128243af",
+  "digest_scope": "SHA-256 of exact archived UTF-8 JSON bytes including final newline",
+  "local_capture_at": "2026-10-16T16:24:46.899Z",
+  "earliest_printed_post": "2026-10-16T13:10:00-04:00",
+  "provider_family": "BRISNET",
+  "policy": "EQUAL-THIRDS-v1",
+  "selector_version": "RACE-SELECTOR-v1",
+  "ranked_races": [
+    3,
+    7,
+    8
+  ],
+  "held_races": [
+    1,
+    2,
+    4,
+    5,
+    6,
+    9
+  ],
+  "status": "PRELIMINARY_RESEARCH_ONLY_FINAL_FIELD_NOT_CERTIFIED",
+  "previous_route_snapshot_sha256": "c51952a5433ab5feb167e022be547c144e879aa7809b7643cd618c8ab18bcaa4",
+  "previous_route_test_unchanged": true,
+  "bettingEnabled": false,
+  "results_reviewed": false
+}
