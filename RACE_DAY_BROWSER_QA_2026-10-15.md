@@ -28,8 +28,9 @@ Status: **NOT YET ACCEPTED**. Automated Node checks and GitHub Pages deployment 
 | D13 | Test odds source routing and refresh | NYRA only when supported; other tracks manual; stale/failing requests do not silently overwrite valid quotes | Pending | Pending |
 | D14 | Rotate iPad, scroll candidate tables and navigate back | No inaccessible controls, overlapping data, clipped action buttons, or lost race context | Pending | Pending |
 | D15 | Reload and verify persisted notes/export | Per-card/per-race notes intact; no false claim of independently verified evidence | Pending | Pending |
+| D16 | Analyze PDF A, select PDF B before clicking Replace Active Card | Replacement is blocked and asks to analyze PDF B; never silently loads A | Pending | Pending |
 
 ## Required evidence
 For each failure record: browser/version, device, commit, card filename and source hash if available, race, reproduction steps, expected/actual behavior, screenshot, and whether the issue could affect identity, model display, or wagering safety.
 
-**Release decision:** PASS only after both browser columns have evidence for critical cases D01–D09, D12–D15. D10–D11 require a genuine future race and are separate prospective-evidence gates. Keep wagering disabled regardless of browser QA outcome. No prospective race counts without an independently anchored pre-race digest and official result.
+**Release decision:** PASS only after both browser columns have evidence for critical cases D01–D09, D12–D16. D10–D11 require a genuine future race and are separate prospective-evidence gates. Keep wagering disabled regardless of browser QA outcome. No prospective race counts without an independently anchored pre-race digest and official result.
