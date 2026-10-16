@@ -91,10 +91,23 @@ for(const profile of profiles){
     assert.match(await target.innerText(),/probability conversion has not been validated/);
    }
    assert.match(await page.locator('#releaseStatus').innerText(),/V44C-BRISNET-BASE/);
+   assert.match(await page.locator('#raceSelector').innerText(),/Dirt route/);
+   assert.match(await page.locator('#raceSelector').innerText(),/Selector HOLD/);
+   assert.equal(await page.locator('#raceSelector tbody tr').count(),0);
    assert.match(await page.locator('#horseTable tbody tr').first().innerText(),/76/);
    await page.locator('[data-tab="bets"]').click();
    assert.match(await page.locator('#researchPreview').innerText(),/Automated betting: PASS/);
    assert.equal(errors.length,0,'Brisnet page errors: '+errors.join(' | '));
+   await page.evaluate(()=>{
+    const c=JSON.parse(localStorage.getItem('nyraV44cReleaseActiveCard')),h=c.races[1].horses[2];
+    h.life_starts=1;h.lifeStarts=1;h.ratings.run_style='P';h.ratings.lines=structuredClone(c.races[1].horses[0].ratings.lines);h.ratings.lines[0].speed=82;
+    localStorage.setItem('nyraV44cReleaseActiveCard',JSON.stringify(c));
+   });
+   await page.reload({waitUntil:'domcontentloaded'});
+   await page.locator('#raceSelector').getByText('33.3%',{exact:false}).waitFor({timeout:20000});
+   assert.equal(await page.locator('#raceSelector tbody tr').count(),3);
+   assert.match(await page.locator('#raceSelector').innerText(),/not a win probability/);
+   assert.equal(errors.length,0,'Full-field selector errors: '+errors.join(' | '));
   }finally{
    await page.evaluate(value=>{if(value===null)localStorage.removeItem('nyraV44cReleaseActiveCard');else localStorage.setItem('nyraV44cReleaseActiveCard',value);},original);
    await page.reload({waitUntil:'domcontentloaded'});
@@ -109,4 +122,5 @@ await browser.close();
 writeFileSync(`${out}/results.json`,JSON.stringify({source:root,profiles:profiles.map(p=>p.name),results,failures,scope:'Automated Chromium smoke; iPad emulation is NOT device acceptance; no genuine pre-race anchor'},null,2));
 console.log(JSON.stringify({total:results.length,failures},null,2));
 if(failures)process.exitCode=1;
+
 
