@@ -1,0 +1,38 @@
+name: Browser smoke QA (Chromium)
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  browser-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install browser test runner (no package manifest changes)
+        run: npm install --no-save --package-lock=false playwright@1.56.1
+      - name: Install Chromium for browser QA
+        run: npx playwright install --with-deps chromium
+      - name: Start local app server
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/nyra-qa-http.log 2>&1 &
+          for i in $(seq 1 20); do
+            if curl -fsS http://127.0.0.1:8765/ > /dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/nyra-qa-http.log
+          exit 1
+      - name: Browser QA (desktop Chromium and emulated iPad viewport)
+        run: node scripts/browser-qa.mjs
+      - name: Upload QA report and screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-qa-${{ github.run_id }}
+          path: browser-qa-artifacts/
+          if-no-files-found: warn
