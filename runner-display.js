@@ -16,6 +16,7 @@ export function visibleAngles(h){
  return (h.angles||[]).filter(a=>!/^\s*(?:first[- ]time starter|FTS|1stStart)\s*$/i.test(a.label||'')||starts===0).map(a=>({...a}));
 }
 export function displayPaceStyle(h){
+ if(h.ratings?.provider==='BRISNET')return careerStarts(h)>0&&['E','E/P','P','S'].includes(h.ratings.run_style)?h.ratings.run_style:'Unknown';
  const profile=paceProfile(h);
  return profile.known?profile.style:'Unknown';
 }
