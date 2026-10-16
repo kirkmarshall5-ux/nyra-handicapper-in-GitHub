@@ -1,5 +1,6 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {previewBudget,quoteCapture,money,timestamp,preRaceFreeze,sealedResearchExport} from './research-builder.js';
 import {createHash} from 'node:crypto';
+import {readFileSync} from 'node:fs';
 const b={cash:300,dailyStaked:0,outstandingBets:0,alreadyBet:false};
 const now=Date.parse('2026-10-07T17:07:00Z'),input={card:{id:'test',sourceName:'fixture.pdf'},race:{date:'2026-10-07',track:'Belmont Park',race:1,horses:[{n:'3',name:'Runner'}]},rating:{model_id:'V44C-test',decision:'RATEABLE',rankings:[{n:'3',name:'Runner',v44c_rank:1,v44c_unrounded_score:80}],pass_reasons:[]},horseNumber:'3',odds:'5/2',sourceId:'synthetic-test-only',evidenceRef:'synthetic-test-only',quoteTime:'2026-10-07T13:06:30-04:00',postTime:'2026-10-07T13:10:00-04:00',now,observedLive:true,finalFieldVerified:true,surfaceVerified:true,budget:previewBudget(b)};
 const modelFixtures={contenderRating:{model_id:'CONTENDER-V2-test',decision:'RATEABLE',rankings:[{n:'3',name:'Runner',score:1.234}]},mix1Rating:{model_id:'MIX1-test',decision:'RATEABLE',rankings:[{n:'3',name:'Runner',score:78.5}]}};
