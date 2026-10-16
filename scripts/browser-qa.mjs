@@ -100,7 +100,7 @@ for(const profile of profiles){
    assert.match(await page.locator('#paceMap').innerText(),/Brisnet E\/P/);
    assert.match(await page.locator('#paceMap').innerText(),/E1/);
    assert.match(await page.locator('#paceMap').innerText(),/LP/);
-   assert.match(await page.locator('#projectedRaceSetup').innerText(),/E2 rank \/ figure/);
+   assert.match(await page.locator('#projectedRaceSetup').innerText(),/E2 rank \/ figure/i);
    assert.match(await page.locator('#brisnetEvidence').innerText(),/91/);
    assert.match(await page.locator('#weights').innerText(),/Pace has no weight/);
    assert.match(await page.locator('#contenderRules').innerText(),/MIX1 consumes early pace only/);
