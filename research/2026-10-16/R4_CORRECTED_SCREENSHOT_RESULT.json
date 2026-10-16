@@ -1,0 +1,237 @@
+{
+  "schema_version": 1,
+  "recordedAt": "2026-10-16T19:04:21.746111+00:00",
+  "race_key": "Belmont Park|2026-10-16|4",
+  "status": "CORRECTED_SCREENSHOT_ROSTER_MATCHES_PARTIAL_FIELD_DNF_PENDING_OFFICIAL_CHART",
+  "supersedes_for_current_race": "research/2026-10-16/R4_RESULT_IDENTITY_CONFLICT.json",
+  "prior_image_disposition": "R4 Result(5).JPG contains different horse identities and must not be graded against this card",
+  "source": {
+    "filename": "R4 Result(6).JPG",
+    "library_file_id": "libfile_fe1468168c2881919edf7a795ac1ce9b",
+    "sha256": "3060a3da924137b834117872baa99bbe6828dcee5859978e1df30ed1912bbd09"
+  },
+  "date_source": "User replacement upload for today; date not printed in image",
+  "observed_first4": [
+    "4",
+    "5",
+    "3",
+    "2"
+  ],
+  "finishers_shown": [
+    {
+      "position": 1,
+      "n": "4",
+      "name": "Under the Moon"
+    },
+    {
+      "position": 2,
+      "n": "5",
+      "name": "Golden Chick"
+    },
+    {
+      "position": 3,
+      "n": "3",
+      "name": "Judysdancin Tonite"
+    },
+    {
+      "position": 4,
+      "n": "2",
+      "name": "Daddy's Ready"
+    }
+  ],
+  "nonfinishers": [
+    {
+      "n": "6",
+      "name": "In the Queue",
+      "status": "DNF",
+      "source": "USER_REPORTED; not displayed in top-four screenshot",
+      "officially_verified": false
+    }
+  ],
+  "actual_order": null,
+  "nonfinishers_present": true,
+  "observed_surface": "Dirt",
+  "observed_distance_furlongs": 6,
+  "observed_going": "Good",
+  "observed_class": "Maiden Special Weight",
+  "observed_purse": 100000,
+  "shown_runner_identities_match_frozen_snapshot": true,
+  "official_order_verified": false,
+  "final_field_verified": false,
+  "forecast_pre_off_verified": false,
+  "diagnostics": {
+    "v44c": {
+      "predicted_first4": [
+        "4",
+        "6",
+        "9",
+        "8"
+      ],
+      "first_choice": "4",
+      "first_choice_winner": true,
+      "first_choice_user_reported_DNF": false,
+      "winner_rank": 1,
+      "winner_in_first4": true,
+      "ordered_first2": false,
+      "first4_set": false,
+      "ordered_first4": false,
+      "full_field_rank_error": null,
+      "status": "PARTIAL_FIELD_SCREENSHOT_DIAGNOSTIC_DNF_REQUIRES_OFFICIAL_RECONCILIATION"
+    },
+    "contender": {
+      "predicted_first4": [
+        "4",
+        "6",
+        "9",
+        "8"
+      ],
+      "first_choice": "4",
+      "first_choice_winner": true,
+      "first_choice_user_reported_DNF": false,
+      "winner_rank": 1,
+      "winner_in_first4": true,
+      "ordered_first2": false,
+      "first4_set": false,
+      "ordered_first4": false,
+      "full_field_rank_error": null,
+      "status": "PARTIAL_FIELD_SCREENSHOT_DIAGNOSTIC_DNF_REQUIRES_OFFICIAL_RECONCILIATION"
+    },
+    "mix1": {
+      "predicted_first4": [
+        "6",
+        "4",
+        "3",
+        "9"
+      ],
+      "first_choice": "6",
+      "first_choice_winner": false,
+      "first_choice_user_reported_DNF": true,
+      "winner_rank": 2,
+      "winner_in_first4": true,
+      "ordered_first2": false,
+      "first4_set": false,
+      "ordered_first4": false,
+      "full_field_rank_error": null,
+      "status": "PARTIAL_FIELD_SCREENSHOT_DIAGNOSTIC_DNF_REQUIRES_OFFICIAL_RECONCILIATION"
+    },
+    "BASE": {
+      "predicted_first4": [
+        "4",
+        "6",
+        "9",
+        "8"
+      ],
+      "first_choice": "4",
+      "first_choice_winner": true,
+      "first_choice_user_reported_DNF": false,
+      "winner_rank": 1,
+      "winner_in_first4": true,
+      "ordered_first2": false,
+      "first4_set": false,
+      "ordered_first4": false,
+      "full_field_rank_error": null,
+      "status": "PARTIAL_FIELD_SCREENSHOT_DIAGNOSTIC_DNF_REQUIRES_OFFICIAL_RECONCILIATION"
+    },
+    "FLAT": {
+      "predicted_first4": [
+        "4",
+        "6",
+        "9",
+        "8"
+      ],
+      "first_choice": "4",
+      "first_choice_winner": true,
+      "first_choice_user_reported_DNF": false,
+      "winner_rank": 1,
+      "winner_in_first4": true,
+      "ordered_first2": false,
+      "first4_set": false,
+      "ordered_first4": false,
+      "full_field_rank_error": null,
+      "status": "PARTIAL_FIELD_SCREENSHOT_DIAGNOSTIC_DNF_REQUIRES_OFFICIAL_RECONCILIATION"
+    },
+    "CONDITION": {
+      "predicted_first4": [
+        "4",
+        "6",
+        "9",
+        "8"
+      ],
+      "first_choice": "4",
+      "first_choice_winner": true,
+      "first_choice_user_reported_DNF": false,
+      "winner_rank": 1,
+      "winner_in_first4": true,
+      "ordered_first2": false,
+      "first4_set": false,
+      "ordered_first4": false,
+      "full_field_rank_error": null,
+      "status": "PARTIAL_FIELD_SCREENSHOT_DIAGNOSTIC_DNF_REQUIRES_OFFICIAL_RECONCILIATION"
+    },
+    "TURN": {
+      "predicted_first4": [
+        "4",
+        "6",
+        "9",
+        "8"
+      ],
+      "first_choice": "4",
+      "first_choice_winner": true,
+      "first_choice_user_reported_DNF": false,
+      "winner_rank": 1,
+      "winner_in_first4": true,
+      "ordered_first2": false,
+      "first4_set": false,
+      "ordered_first4": false,
+      "full_field_rank_error": null,
+      "status": "PARTIAL_FIELD_SCREENSHOT_DIAGNOSTIC_DNF_REQUIRES_OFFICIAL_RECONCILIATION"
+    }
+  },
+  "printed_payouts": [
+    {
+      "type": "quinella",
+      "combination": "4-5",
+      "unit": 1,
+      "return": 6.61
+    },
+    {
+      "type": "exacta",
+      "combination": "4-5",
+      "unit": 1,
+      "return": 12.42
+    },
+    {
+      "type": "trifecta",
+      "combination": "4-5-3",
+      "unit": 0.5,
+      "return": 52.52
+    },
+    {
+      "type": "superfecta",
+      "combination": "4-5-3-2",
+      "unit": 0.1,
+      "return": 45.34
+    },
+    {
+      "type": "daily double",
+      "combination": "8-4",
+      "unit": 1,
+      "return": 10.67
+    },
+    {
+      "type": "pick3",
+      "combination": "6-8-4",
+      "unit": 1,
+      "return": 94.01
+    }
+  ],
+  "winner_win_place_show_shown": {
+    "win": 4.48,
+    "place": 2.96,
+    "show": 2.48,
+    "unit": null,
+    "unit_status": "Not printed; official denomination pending"
+  },
+  "financial_grade": null,
+  "note": "The replacement image resolves roster mismatch. Winner #4 was first choice of V4.4c-Brisnet, Contender-Brisnet and all four pace candidate arms. MIX1 first choice #6 In the Queue is recorded DNF from the user report, pending official chart. #5 Golden Chick and #2 Daddy's Ready were FTS/unrated, preventing an exacta or first-four set hit for all models. Preserve #6 in frozen selections and loss/coverage diagnostics; do not remove or assign an invented final ordinal. Full-field rank-error grading remains HOLD for partial forecasts, incomplete order and nonfinishers."
+}
