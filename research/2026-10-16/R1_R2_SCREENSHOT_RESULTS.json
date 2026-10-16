@@ -1,0 +1,435 @@
+{
+  "schema_version": 1,
+  "recordedAt": "2026-10-16T18:16:50.302533+00:00",
+  "status": "SCREENSHOT_RESULTS_RECORDED_OFFICIAL_CHART_PENDING",
+  "frozen_candidate_sha256": "e64fbd63b58f6ea5093a15191bed65ef221152a35f1c29ea6483f8ad264a3eb5",
+  "records": [
+    {
+      "race_key": "Belmont Park|2026-10-16|1",
+      "date_source": "User identified these as today; date not printed in screenshots",
+      "source_type": "USER_UPLOADED_QUICK_RESULTS_SCREENSHOT",
+      "source": {
+        "filename": "R1 Result(5).JPG",
+        "library_file_id": "libfile_bcec800146148191958d46c2dcf96ac1",
+        "sha256": "038ac1c176fe89ab93643ea391d1a4bcb3e8f66f2db56931006cee2dca1403aa"
+      },
+      "actual_order": [
+        "1",
+        "6",
+        "7",
+        "3",
+        "4",
+        "5",
+        "2"
+      ],
+      "finishers": [
+        {
+          "position": 1,
+          "n": "1",
+          "name": "Rhythm Riot"
+        },
+        {
+          "position": 2,
+          "n": "6",
+          "name": "The Gabe Digger"
+        },
+        {
+          "position": 3,
+          "n": "7",
+          "name": "Diamond Juan"
+        },
+        {
+          "position": 4,
+          "n": "3",
+          "name": "Cybertapping"
+        },
+        {
+          "position": 5,
+          "n": "4",
+          "name": "Malachi Miracle"
+        },
+        {
+          "position": 6,
+          "n": "5",
+          "name": "Chambered"
+        },
+        {
+          "position": 7,
+          "n": "2",
+          "name": "Tutto a Posto"
+        }
+      ],
+      "observed_surface": "Dirt",
+      "observed_distance_furlongs": 8,
+      "observed_going": "Good",
+      "roster_matches_frozen_snapshot": true,
+      "official_order_verified": false,
+      "final_field_verified": false,
+      "forecast_pre_off_verified": false,
+      "actual_off": null,
+      "financial_portfolio_results": null,
+      "printed_payouts": [
+        {
+          "type": "exacta",
+          "combination": "1-6",
+          "unit": 1,
+          "return": 33.49
+        },
+        {
+          "type": "trifecta",
+          "combination": "1-6-7",
+          "unit": 0.5,
+          "return": 224.17
+        },
+        {
+          "type": "superfecta",
+          "combination": "1-6-7-3",
+          "unit": 0.1,
+          "return": 159.18
+        }
+      ],
+      "diagnostics": {
+        "v44c": {
+          "predicted_first4": [
+            "5",
+            "6",
+            "3",
+            "1"
+          ],
+          "winner_rank_among_rated": 4,
+          "winner_unrated": false,
+          "first_choice_winner": false,
+          "winner_in_first4": true,
+          "ordered_first2": false,
+          "correct_first4_set": false,
+          "ordered_first4": false,
+          "full_field_rank_error": null,
+          "evaluation_scope": "PARTIAL_FIELD_SCREENSHOT_DIAGNOSTIC_ONLY"
+        },
+        "contender": {
+          "predicted_first4": [
+            "1",
+            "5",
+            "3",
+            "6"
+          ],
+          "winner_rank_among_rated": 1,
+          "winner_unrated": false,
+          "first_choice_winner": true,
+          "winner_in_first4": true,
+          "ordered_first2": false,
+          "correct_first4_set": false,
+          "ordered_first4": false,
+          "full_field_rank_error": null,
+          "evaluation_scope": "PARTIAL_FIELD_SCREENSHOT_DIAGNOSTIC_ONLY"
+        },
+        "mix1": {
+          "predicted_first4": [
+            "5",
+            "3",
+            "1",
+            "6"
+          ],
+          "winner_rank_among_rated": 3,
+          "winner_unrated": false,
+          "first_choice_winner": false,
+          "winner_in_first4": true,
+          "ordered_first2": false,
+          "correct_first4_set": false,
+          "ordered_first4": false,
+          "full_field_rank_error": null,
+          "evaluation_scope": "PARTIAL_FIELD_SCREENSHOT_DIAGNOSTIC_ONLY"
+        },
+        "BASE": {
+          "predicted_first4": [
+            "5",
+            "6",
+            "3",
+            "1"
+          ],
+          "winner_rank_among_rated": 4,
+          "winner_unrated": false,
+          "first_choice_winner": false,
+          "winner_in_first4": true,
+          "ordered_first2": false,
+          "correct_first4_set": false,
+          "ordered_first4": false,
+          "full_field_rank_error": null,
+          "evaluation_scope": "PARTIAL_FIELD_SCREENSHOT_DIAGNOSTIC_ONLY"
+        },
+        "FLAT": {
+          "predicted_first4": [
+            "5",
+            "6",
+            "3",
+            "1"
+          ],
+          "winner_rank_among_rated": 4,
+          "winner_unrated": false,
+          "first_choice_winner": false,
+          "winner_in_first4": true,
+          "ordered_first2": false,
+          "correct_first4_set": false,
+          "ordered_first4": false,
+          "full_field_rank_error": null,
+          "evaluation_scope": "PARTIAL_FIELD_SCREENSHOT_DIAGNOSTIC_ONLY"
+        },
+        "CONDITION": {
+          "predicted_first4": [
+            "5",
+            "6",
+            "3",
+            "1"
+          ],
+          "winner_rank_among_rated": 4,
+          "winner_unrated": false,
+          "first_choice_winner": false,
+          "winner_in_first4": true,
+          "ordered_first2": false,
+          "correct_first4_set": false,
+          "ordered_first4": false,
+          "full_field_rank_error": null,
+          "evaluation_scope": "PARTIAL_FIELD_SCREENSHOT_DIAGNOSTIC_ONLY"
+        },
+        "TURN": {
+          "predicted_first4": [
+            "5",
+            "6",
+            "3",
+            "1"
+          ],
+          "winner_rank_among_rated": 4,
+          "winner_unrated": false,
+          "first_choice_winner": false,
+          "winner_in_first4": true,
+          "ordered_first2": false,
+          "correct_first4_set": false,
+          "ordered_first4": false,
+          "full_field_rank_error": null,
+          "evaluation_scope": "PARTIAL_FIELD_SCREENSHOT_DIAGNOSTIC_ONLY"
+        }
+      },
+      "note": "R1 candidate capture after printed post; excluded from prospective grading. Both races have unrated entrants and are excluded from complete-field grading. R2 winner Nevada is a verified first-time starter in the PP, life_starts 0, with no running lines."
+    },
+    {
+      "race_key": "Belmont Park|2026-10-16|2",
+      "date_source": "User identified these as today; date not printed in screenshots",
+      "source_type": "USER_UPLOADED_QUICK_RESULTS_SCREENSHOT",
+      "source": {
+        "filename": "R2 Result(5).JPG",
+        "library_file_id": "libfile_d02f22310dac8191b03c8c8c9dcef4bd",
+        "sha256": "bc57308c70a18e6cf4acc0799ac4c48703d5c146e66b199fd2e23ae919185694"
+      },
+      "actual_order": [
+        "6",
+        "3",
+        "7",
+        "1",
+        "4",
+        "2",
+        "5"
+      ],
+      "finishers": [
+        {
+          "position": 1,
+          "n": "6",
+          "name": "Nevada"
+        },
+        {
+          "position": 2,
+          "n": "3",
+          "name": "D. C.'s Army"
+        },
+        {
+          "position": 3,
+          "n": "7",
+          "name": "Shahnameh"
+        },
+        {
+          "position": 4,
+          "n": "1",
+          "name": "E Z Speaker"
+        },
+        {
+          "position": 5,
+          "n": "4",
+          "name": "Dream More"
+        },
+        {
+          "position": 6,
+          "n": "2",
+          "name": "Louden"
+        },
+        {
+          "position": 7,
+          "n": "5",
+          "name": "El Mercado"
+        }
+      ],
+      "observed_surface": "Dirt",
+      "observed_distance_furlongs": 8,
+      "observed_going": "Good",
+      "roster_matches_frozen_snapshot": true,
+      "official_order_verified": false,
+      "final_field_verified": false,
+      "forecast_pre_off_verified": false,
+      "actual_off": null,
+      "financial_portfolio_results": null,
+      "printed_payouts": [
+        {
+          "type": "quinella",
+          "combination": "3-6",
+          "unit": 1,
+          "return": 18.25
+        },
+        {
+          "type": "exacta",
+          "combination": "6-3",
+          "unit": 1,
+          "return": 30.04
+        },
+        {
+          "type": "trifecta",
+          "combination": "6-3-7",
+          "unit": 0.5,
+          "return": 78.53
+        },
+        {
+          "type": "superfecta",
+          "combination": "6-3-7-1",
+          "unit": 0.1,
+          "return": 60.06
+        },
+        {
+          "type": "daily double",
+          "combination": "1-6",
+          "unit": 1,
+          "return": 12.86
+        }
+      ],
+      "diagnostics": {
+        "v44c": {
+          "predicted_first4": [
+            "1",
+            "2",
+            "3",
+            "7"
+          ],
+          "winner_rank_among_rated": null,
+          "winner_unrated": true,
+          "first_choice_winner": false,
+          "winner_in_first4": false,
+          "ordered_first2": false,
+          "correct_first4_set": false,
+          "ordered_first4": false,
+          "full_field_rank_error": null,
+          "evaluation_scope": "PARTIAL_FIELD_SCREENSHOT_DIAGNOSTIC_ONLY"
+        },
+        "contender": {
+          "predicted_first4": [
+            "1",
+            "3",
+            "2",
+            "7"
+          ],
+          "winner_rank_among_rated": null,
+          "winner_unrated": true,
+          "first_choice_winner": false,
+          "winner_in_first4": false,
+          "ordered_first2": false,
+          "correct_first4_set": false,
+          "ordered_first4": false,
+          "full_field_rank_error": null,
+          "evaluation_scope": "PARTIAL_FIELD_SCREENSHOT_DIAGNOSTIC_ONLY"
+        },
+        "mix1": {
+          "predicted_first4": [
+            "3",
+            "1",
+            "2",
+            "7"
+          ],
+          "winner_rank_among_rated": null,
+          "winner_unrated": true,
+          "first_choice_winner": false,
+          "winner_in_first4": false,
+          "ordered_first2": false,
+          "correct_first4_set": false,
+          "ordered_first4": false,
+          "full_field_rank_error": null,
+          "evaluation_scope": "PARTIAL_FIELD_SCREENSHOT_DIAGNOSTIC_ONLY"
+        },
+        "BASE": {
+          "predicted_first4": [
+            "1",
+            "2",
+            "3",
+            "7"
+          ],
+          "winner_rank_among_rated": null,
+          "winner_unrated": true,
+          "first_choice_winner": false,
+          "winner_in_first4": false,
+          "ordered_first2": false,
+          "correct_first4_set": false,
+          "ordered_first4": false,
+          "full_field_rank_error": null,
+          "evaluation_scope": "PARTIAL_FIELD_SCREENSHOT_DIAGNOSTIC_ONLY"
+        },
+        "FLAT": {
+          "predicted_first4": [
+            "1",
+            "2",
+            "3",
+            "7"
+          ],
+          "winner_rank_among_rated": null,
+          "winner_unrated": true,
+          "first_choice_winner": false,
+          "winner_in_first4": false,
+          "ordered_first2": false,
+          "correct_first4_set": false,
+          "ordered_first4": false,
+          "full_field_rank_error": null,
+          "evaluation_scope": "PARTIAL_FIELD_SCREENSHOT_DIAGNOSTIC_ONLY"
+        },
+        "CONDITION": {
+          "predicted_first4": [
+            "1",
+            "2",
+            "3",
+            "7"
+          ],
+          "winner_rank_among_rated": null,
+          "winner_unrated": true,
+          "first_choice_winner": false,
+          "winner_in_first4": false,
+          "ordered_first2": false,
+          "correct_first4_set": false,
+          "ordered_first4": false,
+          "full_field_rank_error": null,
+          "evaluation_scope": "PARTIAL_FIELD_SCREENSHOT_DIAGNOSTIC_ONLY"
+        },
+        "TURN": {
+          "predicted_first4": [
+            "1",
+            "2",
+            "3",
+            "7"
+          ],
+          "winner_rank_among_rated": null,
+          "winner_unrated": true,
+          "first_choice_winner": false,
+          "winner_in_first4": false,
+          "ordered_first2": false,
+          "correct_first4_set": false,
+          "ordered_first4": false,
+          "full_field_rank_error": null,
+          "evaluation_scope": "PARTIAL_FIELD_SCREENSHOT_DIAGNOSTIC_ONLY"
+        }
+      },
+      "note": "R1 candidate capture after printed post; excluded from prospective grading. Both races have unrated entrants and are excluded from complete-field grading. R2 winner Nevada is a verified first-time starter in the PP, life_starts 0, with no running lines."
+    }
+  ],
+  "controls_changed": false
+}
