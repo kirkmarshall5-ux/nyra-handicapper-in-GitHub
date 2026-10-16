@@ -72,6 +72,36 @@ for(const profile of profiles){
   assert.equal(await page.locator('#researchExport').isVisible(),true);
   assert.equal(errors.length,0,'Uncaught page errors: '+errors.join(' | '));
  });
+
+ await check('D15-Brisnet-native-rankings-and-original-source-restore',async()=>{
+  const original=await page.evaluate(()=>localStorage.getItem('nyraV44cReleaseActiveCard'));
+  try{
+   await page.evaluate(()=>{
+    const date='2026-10-16',track='Belmont Park';
+    const horses=[1,2,3].map(n=>({n:String(n),name:'QA Brisnet Runner '+n,ml:'4/1',odds:'—',entry_status:'REGULAR',included_in_frozen_field:true,life_starts:n===3?0:1,lifeStarts:n===3?0:1,style:'UNKNOWN',beyer_figures:[],figs:[],last:null,best:null,timeform_early:null,timeform_late:null,parser_blockers:['BRISNET_SPEED_NOT_BEYER'],angles:[],source_context:{workout_text:'',pedigree_text:''},ratings:{provider:'BRISNET',run_style:n===3?'NA':'E/P',quirin_points:n===3?null:5,lines:n===3?[]:[{date:'2026-09-20',track:'Bel',surface:'Dirt',furlongs:8,e1:85+n,e2:90+n,late:80+n,speed:75+n,source:{provider:'BRISNET',page:1,text:'Synthetic QA source line'}}]}}));
+    const race={race:1,date,track,surface:'Dirt',dist:'1 Mile',header:'1 Mile',distance_furlongs:8,cls:'QA maiden',post:'1:10 ET',horses,ratings_provider:'BRISNET',source_format:'BRISNET_PREMIUM_PLUS',parser_blockers:['BRISNET_SOURCE_MODEL_VALIDATION_PENDING']};
+    localStorage.setItem('nyraV44cReleaseActiveCard',JSON.stringify({id:'qa-native-brisnet',schemaVersion:2,track,date,races:{1:race},parser_version:'BRISNET-PREMIUM-PLUS-positioned-v1',source_format:'BRISNET_PREMIUM_PLUS',warnings:[]}));
+   });
+   await page.reload({waitUntil:'domcontentloaded'});
+   await page.locator('#topContenders').getByText('V4.4c-Brisnet base · experimental',{exact:false}).waitFor({timeout:20000});
+   for(const id of ['topContenders','contenderCandidates','mix1Candidates']){
+    const target=page.locator('#'+id);assert.equal(await target.locator('tbody tr').count(),2,id+' must rank the two experienced runners');
+    assert.match(await target.innerText(),/Ranked 2\/3/);
+    assert.match(await target.innerText(),/First-time starter/);
+    assert.match(await target.innerText(),/probability conversion has not been validated/);
+   }
+   assert.match(await page.locator('#releaseStatus').innerText(),/V44C-BRISNET-BASE/);
+   assert.match(await page.locator('#horseTable tbody tr').first().innerText(),/76/);
+   await page.locator('[data-tab="bets"]').click();
+   assert.match(await page.locator('#researchPreview').innerText(),/Automated betting: PASS/);
+   assert.equal(errors.length,0,'Brisnet page errors: '+errors.join(' | '));
+  }finally{
+   await page.evaluate(value=>{if(value===null)localStorage.removeItem('nyraV44cReleaseActiveCard');else localStorage.setItem('nyraV44cReleaseActiveCard',value);},original);
+   await page.reload({waitUntil:'domcontentloaded'});
+   await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
+  }
+  assert.doesNotMatch(await page.locator('#releaseStatus').innerText(),/V44C-BRISNET-BASE/);
+ });
  await page.screenshot({path:`${out}/${profile.name}-final.png`,fullPage:true});
  await context.close();
 }
@@ -79,3 +109,4 @@ await browser.close();
 writeFileSync(`${out}/results.json`,JSON.stringify({source:root,profiles:profiles.map(p=>p.name),results,failures,scope:'Automated Chromium smoke; iPad emulation is NOT device acceptance; no genuine pre-race anchor'},null,2));
 console.log(JSON.stringify({total:results.length,failures},null,2));
 if(failures)process.exitCode=1;
+

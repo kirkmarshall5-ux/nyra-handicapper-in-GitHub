@@ -95,7 +95,25 @@ test('frozen three-model scores do not mutate and each model is covered by SHA-2
 });
 test('web freeze UI supplies three actual model outputs, not synthetic fallback rankings',()=>{
  const html=readFileSync(new URL('./index.html',import.meta.url),'utf8');
- assert.match(html,/initResearchBuilder\(\(\)=>\{const rating=currentRating\(\);return \{card:activeCard,race,rating,contenderRating:rankContenders\(race,rating,/);
- assert.match(html,/mix1Rating:rankMix1\(race,rating,/);
+ assert.match(html,/initResearchBuilder\(\(\)=>\{const native=rankBrisnetModels\(race\),rating=native\?\.v44c\|\|currentRating\(\);return \{card:activeCard,race,rating,contenderRating:native\?\.contender\|\|rankContenders\(race,rating,/);
+ assert.match(html,/mix1Rating:native\?\.mix1\|\|rankMix1\(race,rating,/);
  assert.match(html,/Freeze All 3 Models/);
+});
+
+test('native Brisnet snapshots retain three distinct model versions and partial-field PASS',async()=>{
+ const {rankBrisnetModels}=await import('./brisnet-models.js');
+ const race={...input.race,surface:'Dirt',distance_furlongs:8,ratings_provider:'BRISNET',horses:[
+  {n:'3',name:'Runner',life_starts:1,ratings:{provider:'BRISNET',lines:[{date:'2026-09-20',speed:80,e1:85,e2:90,late:80,surface:'Dirt',furlongs:8,source:{provider:'BRISNET',page:1,text:'synthetic verified fixture'}}]}},
+  {n:'4',name:'Debut',life_starts:0,ratings:{provider:'BRISNET',lines:[]}}
+ ]};
+ const m=rankBrisnetModels(race);
+ const {freeze,errors}=preRaceFreeze({card:input.card,race,rating:m.v44c,contenderRating:m.contender,mix1Rating:m.mix1,postTime:input.postTime,now,finalFieldVerified:true,surfaceVerified:true});
+ assert.deepEqual(errors,[]);assert.equal(freeze.decision,'PASS');
+ for(const [key,kind]of [['V44C','v44c'],['CONTENDER','contender'],['MIX1','mix1']]){
+  assert.equal(freeze.models[key].modelId,m[kind].model_id);
+  assert.equal(freeze.models[key].rankings.length,1);
+  assert.equal(freeze.models[key].rankings[0].rawScore,m[kind].rankings[0].score);
+  assert.equal(freeze.models[key].fullFieldRanked,false);
+  assert.equal(freeze.models[key].decision,'PASS');
+ }
 });
