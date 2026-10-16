@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {mkdirSync,writeFileSync} from 'node:fs';
+import {mkdirSync,writeFileSync,readFileSync} from 'node:fs';
 import {chromium} from 'playwright';
 
 // Automated Chromium checks only. The iPad profile emulates viewport/touch;
@@ -106,6 +106,16 @@ for(const profile of profiles){
    assert.match(await page.locator('#contenderRules').innerText(),/MIX1 consumes early pace only/);
    assert.match(await page.locator('#evidenceSummary').innerText(),/Brisnet Speed/);
    assert.equal(await page.locator('#callRanksTitle').innerText(),'Brisnet historical pace ranks');
+   assert.match(await page.locator('#brisnetPaceCandidate').innerText(),/Dirt route/);
+   assert.match(await page.locator('#brisnetPaceCandidate').innerText(),/Base 75% \+ pace 25%/);
+   assert.match(await page.locator('#brisnetPaceCandidate').innerText(),/Unrated runners/);
+   assert.equal(await page.locator('#brisnetPaceCandidate tbody tr').count(),2);
+   const downloaded=page.waitForEvent('download');await page.locator('#exportBrisnetCandidate').click();
+   const file=await downloaded,exported=JSON.parse(readFileSync(await file.path(),'utf8'));
+   assert.equal(exported.forecast_pre_off_verified,false);
+   assert.deepEqual(Object.keys(exported.races[0].candidates),['BASE','FLAT','CONDITION','TURN']);
+   assert.equal(exported.races[0].source_race.horses[0].ratings.lines[0].e2,91);
+
 
    await page.locator('[data-tab="bets"]').click();
    assert.match(await page.locator('#researchPreview').innerText(),/Automated betting: PASS/);
@@ -132,6 +142,7 @@ for(const profile of profiles){
    assert.match(await page.locator('#brisnetEvidence').innerText(),/Unmatched - context only/);
    assert.match(await page.locator('#brisnetEvidence').innerText(),/91/);
    assert.match(await page.locator('#projectedRaceSetup').innerText(),/Unknown/);
+   assert.match(await page.locator('#brisnetPaceCandidate').innerText(),/neutral pace preserves base order/);
    assert.equal(errors.length,0,'Unmatched Brisnet pace errors: '+errors.join(' | '));
 
   }finally{
@@ -143,6 +154,8 @@ for(const profile of profiles){
   await page.locator('[data-tab="pace"]').click();
   assert.equal(await page.locator('#callRanksTitle').innerText(),'Projected race set up');
   assert.match(await page.locator('#weights').innerText(),/Last verified Beyer/);
+  assert.equal(await page.locator('#brisnetPaceCandidate').innerText(),'');
+  assert.equal(await page.locator('#exportBrisnetCandidate').isVisible(),false);
 
  });
  await page.screenshot({path:`${out}/${profile.name}-final.png`,fullPage:true});
