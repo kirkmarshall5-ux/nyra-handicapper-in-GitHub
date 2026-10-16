@@ -9,15 +9,46 @@ export function timestamp(v){
  if(date.getUTCFullYear()!==+m[1]||date.getUTCMonth()+1!==+m[2]||date.getUTCDate()!==+m[3]||+m[4]>23||+m[5]>59||+(m[6]||0)>59)return null;
  return Number.isFinite(Date.parse(v))?Date.parse(v):null;
 }
-export function preRaceFreeze({card,race,rating,postTime,now,finalFieldVerified,surfaceVerified}){
+function frozenModelSnapshot(result,kind,activeField){
+ const rankings=result.rankings.map((h,i)=>({
+  program:String(h.n),horse:h.name,rank:i+1,
+  rawScore:kind==='V44C'?(h.v44c_unrounded_score??null):(h.score??null),
+  scoreSource:kind==='V44C'?'v44c_unrounded_score':'score'
+ }));
+ return {modelId:result.model_id,decision:result.decision,
+  reason:result.reason||null,passReasons:structuredClone(result.pass_reasons||[]),
+  provisional:result.provisional===true,rankedFieldCount:rankings.length,
+  activeFieldCount:activeField.length,
+  fullFieldRanked:result.decision==='RATEABLE'&&rankings.length===activeField.length,
+  rankings};
+}
+export function preRaceFreeze({card,race,rating,contenderRating,mix1Rating,postTime,now,finalFieldVerified,surfaceVerified}){
  const post=timestamp(postTime),errors=[];
  if(post===null)errors.push('Enter a scheduled post time with an explicit time zone.');
  if(!finite(now)||post!==null&&now>=post)errors.push('Freeze must occur before the recorded post time.');
  if(finalFieldVerified!==true||surfaceVerified!==true)errors.push('Verify the current field, scratches and surface before freezing.');
  if(post!==null){const dateET=new Intl.DateTimeFormat('en-CA',{timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(post));if(dateET!==race.date)errors.push('Post date must match the card date in New York time.');}
- if(!card?.id||!race?.date||!race?.track||!race?.race||!Array.isArray(race.horses)||!Array.isArray(rating?.rankings))errors.push('Race identity and rankings must be loaded.');
+ if(!card?.id||!race?.date||!race?.track||!race?.race||!Array.isArray(race.horses))errors.push('Race identity and rankings must be loaded.');
+ const models=[['V44C',rating],['CONTENDER',contenderRating],['MIX1',mix1Rating]];
+ for(const [name,result] of models)if(!result?.model_id||!['RATEABLE','PASS','HOLD'].includes(result.decision)||!Array.isArray(result.rankings))errors.push(name+' model output unavailable; do not freeze an incomplete three-model snapshot.');
  if(errors.length)return {freeze:null,errors};
- return {errors:[],freeze:{schemaVersion:1,builder:BUILDER_ID,cardId:card.id,card_date:race.date,track:race.track,race:race.race,model:rating.model_id||RULES.model,recordedAt:new Date(now).toISOString(),recordedEpochMs:now,scheduledPost:new Date(post).toISOString(),postEpochMs:post,surface:race.surface||null,raceDecision:rating.decision,passReasons:structuredClone(rating.pass_reasons||[]),activeField:race.horses.filter(h=>h.n&&h.odds!=='SCR'&&h.included_in_frozen_field!==false).map(h=>({program:String(h.n),horse:h.name})),rankingSnapshot:rating.rankings.map(h=>({horse:h.name,program:String(h.n),rawScore:h.v44c_unrounded_score,rank:h.v44c_rank})),finalFieldVerified:true,surfaceVerified:true,untouchedStatus:'NOT_INDEPENDENTLY_VERIFIED',externalAnchor:null,automatedStake:0,decision:'PASS'}};
+ const activeField=race.horses.filter(h=>h.n&&h.odds!=='SCR'&&h.included_in_frozen_field!==false&&(!h.entry_status||h.entry_status==='REGULAR')).map(h=>({program:String(h.n),horse:h.name}));
+ const identities=new Set(activeField.map(h=>h.program+'|'+h.horse));
+ if(!activeField.length||identities.size!==activeField.length||new Set(activeField.map(h=>h.program)).size!==activeField.length)errors.push('Active field must contain unique runner identities and program numbers.');
+ for(const [name,result] of models){
+  const seen=new Set();
+  for(const h of result.rankings){
+   const key=String(h.n)+'|'+h.name;
+   if(!identities.has(key)||seen.has(key)||!finite(name==='V44C'?h.v44c_unrounded_score:h.score)){
+    errors.push(name+' has duplicate, unverified, ineligible or nonnumeric ranking entries.');break;
+   }
+   seen.add(key);
+  }
+  if(result.decision==='RATEABLE'&&result.rankings.length!==activeField.length)errors.push(name+' RATEABLE ranking does not cover the verified full field.');
+ }
+ if(errors.length)return {freeze:null,errors};
+ const snapshots=Object.fromEntries(models.map(([name,result])=>[name,frozenModelSnapshot(result,name,activeField)]));
+ return {errors:[],freeze:{schemaVersion:2,builder:BUILDER_ID,cardId:card.id,sourceName:card.sourceName||null,parserVersion:card.parser_version||null,card_date:race.date,track:race.track,race:race.race,model:rating.model_id||RULES.model,recordedAt:new Date(now).toISOString(),recordedEpochMs:now,scheduledPost:new Date(post).toISOString(),postEpochMs:post,surface:race.surface||null,raceDecision:rating.decision,passReasons:structuredClone(rating.pass_reasons||[]),activeField,fieldSnapshot:race.horses.filter(h=>h.n).map(h=>({program:String(h.n),horse:h.name,odds:h.odds??null,entryStatus:h.entry_status||'REGULAR',includedInFrozenField:h.included_in_frozen_field!==false,scratched:h.odds==='SCR'})),rankingSnapshot:snapshots.V44C.rankings.map(h=>({horse:h.horse,program:h.program,rawScore:h.rawScore,rank:h.rank})),models:snapshots,finalFieldVerified:true,surfaceVerified:true,untouchedStatus:'NOT_INDEPENDENTLY_VERIFIED',externalAnchor:null,automatedStake:0,decision:'PASS'}};
 }
 
 export async function sealedResearchExport({records,freezes,exportedAt}){

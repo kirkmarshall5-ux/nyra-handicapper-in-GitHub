@@ -1,7 +1,9 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {previewBudget,quoteCapture,money,timestamp,preRaceFreeze,sealedResearchExport} from './research-builder.js';
 import {createHash} from 'node:crypto';
+import {readFileSync} from 'node:fs';
 const b={cash:300,dailyStaked:0,outstandingBets:0,alreadyBet:false};
-const now=Date.parse('2026-10-07T17:07:00Z'),input={card:{id:'test',sourceName:'fixture.pdf'},race:{date:'2026-10-07',track:'Belmont Park',race:1,horses:[{n:'3',name:'Runner'}]},rating:{decision:'RATEABLE',rankings:[{n:'3',name:'Runner',v44c_rank:1,v44c_unrounded_score:80}],pass_reasons:[]},horseNumber:'3',odds:'5/2',sourceId:'synthetic-test-only',evidenceRef:'synthetic-test-only',quoteTime:'2026-10-07T13:06:30-04:00',postTime:'2026-10-07T13:10:00-04:00',now,observedLive:true,finalFieldVerified:true,surfaceVerified:true,budget:previewBudget(b)};
+const now=Date.parse('2026-10-07T17:07:00Z'),input={card:{id:'test',sourceName:'fixture.pdf'},race:{date:'2026-10-07',track:'Belmont Park',race:1,horses:[{n:'3',name:'Runner'}]},rating:{model_id:'V44C-test',decision:'RATEABLE',rankings:[{n:'3',name:'Runner',v44c_rank:1,v44c_unrounded_score:80}],pass_reasons:[]},horseNumber:'3',odds:'5/2',sourceId:'synthetic-test-only',evidenceRef:'synthetic-test-only',quoteTime:'2026-10-07T13:06:30-04:00',postTime:'2026-10-07T13:10:00-04:00',now,observedLive:true,finalFieldVerified:true,surfaceVerified:true,budget:previewBudget(b)};
+const modelFixtures={contenderRating:{model_id:'CONTENDER-V2-test',decision:'RATEABLE',rankings:[{n:'3',name:'Runner',score:1.234}]},mix1Rating:{model_id:'MIX1-test',decision:'RATEABLE',rankings:[{n:'3',name:'Runner',score:78.5}]}};
 test('fixed $2 preview respects cash, exposure, outstanding and duplicate boundaries',()=>{
  assert.equal(previewBudget(b).cashAfterPreview,298);assert.equal(previewBudget({...b,cash:242,dailyStaked:28}).allowed,true);
  for(const patch of [{cash:241.99},{dailyStaked:28.01},{dailyStaked:-1},{outstandingBets:1},{alreadyBet:true},{cash:NaN},{floor:NaN},{cap:-1}])assert.equal(previewBudget({...b,...patch}).allowed,false);
@@ -46,14 +48,15 @@ test('late manual submissions cannot backfill a supposedly pre-race quote',()=>{
  assert.equal(late.record,null);assert.ok(late.errors.some(e=>e.includes('before the scheduled post time')));
 });
 test('freeze captures the full field before post and rejects post-race or unverified snapshots',()=>{
- const p={card:input.card,race:input.race,rating:input.rating,postTime:input.postTime,now,finalFieldVerified:true,surfaceVerified:true};
+ const p={card:input.card,race:input.race,rating:input.rating,...modelFixtures,postTime:input.postTime,now,finalFieldVerified:true,surfaceVerified:true};
  const {freeze,errors}=preRaceFreeze(p);assert.deepEqual(errors,[]);assert.equal(freeze.decision,'PASS');assert.equal(freeze.activeField.length,1);assert.equal(freeze.rankingSnapshot[0].rank,1);assert.equal(freeze.untouchedStatus,'NOT_INDEPENDENTLY_VERIFIED');
+ assert.equal(freeze.schemaVersion,2);assert.deepEqual(Object.keys(freeze.models),['V44C','CONTENDER','MIX1']);assert.equal(freeze.models.CONTENDER.rankings[0].rawScore,1.234);assert.equal(freeze.models.MIX1.rankings[0].rawScore,78.5);assert.equal(freeze.models.V44C.fullFieldRanked,true);
  assert.equal(preRaceFreeze({...p,now:Date.parse('2026-10-07T17:10:00Z')}).freeze,null);
  assert.equal(preRaceFreeze({...p,finalFieldVerified:false}).freeze,null);
  assert.equal(preRaceFreeze({...p,postTime:'2026-10-08T13:10:00-04:00'}).freeze,null);
 });
 test('export digest covers exact records and frozen rankings, and changes on tampering',async()=>{
-  const freezes=[preRaceFreeze({card:input.card,race:input.race,rating:input.rating,postTime:input.postTime,now,finalFieldVerified:true,surfaceVerified:true}).freeze];
+  const freezes=[preRaceFreeze({card:input.card,race:input.race,rating:input.rating,...modelFixtures,postTime:input.postTime,now,finalFieldVerified:true,surfaceVerified:true}).freeze];
   const records=[quoteCapture(input).record];
   const sealed=await sealedResearchExport({records,freezes,exportedAt:'2026-10-07T17:08:00Z'});
   const payload={schemaVersion:2,mode:'RESEARCH_ONLY',records,freezes};
@@ -61,4 +64,38 @@ test('export digest covers exact records and frozen rankings, and changes on tam
   assert.equal(sealed.anchorStatus,'UNVERIFIED_LOCAL_EXPORT');
   const modified=await sealedResearchExport({records,freezes:[{...freezes[0],raceDecision:'PASS_TAMPERED'}],exportedAt:'2026-10-07T17:08:00Z'});
   assert.notEqual(modified.recordsDigestSha256,sealed.recordsDigestSha256);
+});
+
+test('three-model freeze fails closed on missing, inconsistent, or invented model data',()=>{
+ const p={card:input.card,race:input.race,rating:input.rating,...modelFixtures,postTime:input.postTime,now,finalFieldVerified:true,surfaceVerified:true};
+ assert.equal(preRaceFreeze({...p,contenderRating:null}).freeze,null);
+ assert.equal(preRaceFreeze({...p,mix1Rating:{...p.mix1Rating,rankings:[{n:'99',name:'Not in field',score:80}]}}).freeze,null);
+ assert.equal(preRaceFreeze({...p,contenderRating:{...p.contenderRating,rankings:[]}}).freeze,null);
+ const pass={...p,rating:{...p.rating,decision:'PASS',rankings:[],pass_reasons:['missing-evidence']},contenderRating:{...p.contenderRating,decision:'PASS',provisional:true,rankings:[]},mix1Rating:{...p.mix1Rating,decision:'PASS',provisional:true,rankings:[]}};
+ const frozen=preRaceFreeze(pass).freeze;
+ assert.equal(frozen.decision,'PASS');assert.equal(frozen.models.MIX1.provisional,true);assert.equal(frozen.models.MIX1.fullFieldRanked,false);
+ assert.equal(frozen.models.V44C.fullFieldRanked,false);
+ const tamper={...p,mix1Rating:{...p.mix1Rating,rankings:[{...p.mix1Rating.rankings[0],score:NaN}]}};
+ assert.equal(preRaceFreeze(tamper).freeze,null);
+});
+
+test('frozen three-model scores do not mutate and each model is covered by SHA-256',async()=>{
+ const p={card:input.card,race:input.race,rating:input.rating,...modelFixtures,postTime:input.postTime,now,finalFieldVerified:true,surfaceVerified:true};
+ const {freeze,errors}=preRaceFreeze(p);assert.deepEqual(errors,[]);
+ const original=freeze.models.MIX1.rankings[0].rawScore;
+ p.mix1Rating.rankings[0].score=999;
+ assert.equal(freeze.models.MIX1.rankings[0].rawScore,original);
+ p.mix1Rating.rankings[0].score=78.5;
+ const digest=async f=>(await sealedResearchExport({records:[],freezes:[f],exportedAt:'2026-10-07T17:08:00Z'})).recordsDigestSha256;
+ const baseline=await digest(freeze);
+ for(const name of ['V44C','CONTENDER','MIX1']){
+  const changed=structuredClone(freeze);changed.models[name].rankings[0].rawScore+=1;
+  assert.notEqual(await digest(changed),baseline,name+' changes must invalidate anchored digest');
+ }
+});
+test('web freeze UI supplies three actual model outputs, not synthetic fallback rankings',()=>{
+ const html=readFileSync(new URL('./index.html',import.meta.url),'utf8');
+ assert.match(html,/initResearchBuilder\(\(\)=>\{const rating=currentRating\(\);return \{card:activeCard,race,rating,contenderRating:rankContenders\(race,rating,/);
+ assert.match(html,/mix1Rating:rankMix1\(race,rating,/);
+ assert.match(html,/Freeze All 3 Models/);
 });
