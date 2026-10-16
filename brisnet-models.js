@@ -29,6 +29,7 @@ function connection(h,kind,reliable=false){
 function weighted(rows,weights){const valid=rows.map((l,i)=>({l,w:weights[i]})).filter(x=>finite(x.l.speed));if(!valid.length)return null;return valid.reduce((s,x)=>s+x.l.speed*x.w,0)/valid.reduce((s,x)=>s+x.w,0);}
 function decayed(rows){if(!rows.length)return null;const ws=rows.map(l=>2**(-l.age/90));return rows.reduce((s,l,i)=>s+l.speed*ws[i],0)/ws.reduce((a,b)=>a+b,0);}
 function features(h,r){
+ if((h.parser_blockers||[]).some(b=>(typeof b==='string'?b:b.reason)!=='BRISNET_SPEED_NOT_BEYER'))return {reason:'Runner source verification pending'};
  if(h.ratings?.provider!=='BRISNET')return {reason:'Brisnet source identity unavailable'};
  if(!Number.isInteger(h.life_starts)||h.life_starts<0)return {reason:'Career starts unverified'};
  if(h.life_starts===0)return {reason:'First-time starter: no measured Speed or pace history'};
@@ -61,6 +62,8 @@ export function rankBrisnetModels(race){
  if(!isBrisnetRace(race))return null;
  const field=(race.horses||[]).filter(active),seen=new Set(),programs=new Set();let error=!validDate(race.date)?'Card date unverified':null;
  for(const h of field){if(!h.n||!h.name||seen.has(h.name)||programs.has(String(h.n)))error='Runner identities must be unique';seen.add(h.name);programs.add(String(h.n));}
+ if(race.conditions?.unsupported||/hurdle|steeplechase/i.test([race.cls,race.surface,race.header].join(' ')))error='Unsupported race type';
+ if((race.parser_blockers||[]).some(b=>(typeof b==='string'?b:b.reason)!=='BRISNET_SOURCE_MODEL_VALIDATION_PENDING'))error='Card source verification pending; review or re-upload source';
  const candidates=error?[]:field.map(h=>features(h,race));
  const good=candidates.filter(x=>!x.reason),unrated=field.flatMap((h,i)=>error||candidates[i]?.reason?[{n:h.n,name:h.name,reasons:[error||candidates[i].reason]}]:[]);
  const baseWeights={latest:40,best3:22,jockey:7,trainer:8},mixWeights={recent:37,older:12,jockey:7,trainer:17,early:17,surfaceDistance:10};
