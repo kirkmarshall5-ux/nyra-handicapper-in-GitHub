@@ -1,0 +1,77 @@
+{
+  "protocol_id": "STRONGEST-OPINION-PAPER-v1",
+  "created_at": "2026-10-17T01:13:30.126458+00:00",
+  "scope": "FUTURE_PAPER_ONLY_NOT_FORECAST_NOT_WAGER_APPROVAL",
+  "planned_first_card_date_local": "2026-10-17",
+  "timezone": "America/New_York",
+  "model_policy": "Keep unchanged V4.4c/Contender/MIX1 within each native provider family; MIX1 L5 latest LP is separate research candidate. No best-model choice after outcomes. Provider families and hypotheses kept separate.",
+  "source_and_field_requirements": [
+    "Complete rated final field, minimum five starters",
+    "Current verified surface/distance/going/course identity; report unknown going",
+    "Independently anchored before verified actual off",
+    "Preserve current provider-specific orders, scores, model/source hashes and exact paper tickets",
+    "Late field/surface changes require independently preserved valid pre-off replacement or HOLD; no post-off promotion",
+    "Never convert input completeness into betting approval"
+  ],
+  "arms": {
+    "A_FIRST_WIN": {
+      "stake": 4,
+      "tickets": "$4 win first choice"
+    },
+    "B_TWO_WIN": {
+      "stake": 4,
+      "tickets": "$2 win each first two"
+    },
+    "C_WIN_NARROW_EXACTA": {
+      "stake": 4,
+      "tickets": "$2 win first; $1 exacta first-second; $1 exacta first-third"
+    },
+    "D_GAP_POLICY": {
+      "stake": 4,
+      "tickets": "A if (score1-score2)/population_SD(all scores)>=0.5; otherwise B",
+      "status": "EXPLORATORY_UNTRAINED_THRESHOLD_NOT_PROBABILITY"
+    }
+  },
+  "portfolio_rule": "Each model/arm is independent, not a combined $16 bankroll. Original tickets from previous cards remain unchanged.",
+  "gap_rule": {
+    "threshold": 0.5,
+    "sd": "population, all final rated starters",
+    "all_equal_scores": "HOLD",
+    "primary_opinions": "One if threshold met; otherwise first two. Third only underneath in arm C.",
+    "evidence": "Chosen prospectively as simple hypothesis, not fitted or calibrated; do not select threshold from upcoming results."
+  },
+  "frozen_before_off": [
+    "full rankings and score gap",
+    "source pace dates and per-component effective weights",
+    "trainer/jockey sample counts",
+    "current field/conditions verification",
+    "selected D branch and exact tickets",
+    "tote quotes with timestamps if available; no overlay claim without calibrated probability"
+  ],
+  "metrics": [
+    "full-field rank MAE",
+    "first-choice winner",
+    "winner-in-first-two",
+    "ordered-first-two",
+    "first-four set and exact order",
+    "winner-in-first-four",
+    "outside-top-four winner recovery",
+    "displaced correct first-choice winners",
+    "hypothetical stake/return/net/ROI by model/arm/provider/surface",
+    "losing runs and max drawdown in actual chronological race order"
+  ],
+  "grading_gates": [
+    "Official full order, starters, actual off, surface/distance/going",
+    "Explicit payout denominations; winning payout missing means relevant ROI pending, never loss",
+    "No invented ordinals for DNF, dead heats or DQ; use separately supported grading or HOLD"
+  ],
+  "review_checkpoint": {
+    "eligible_dirt_routes": 30,
+    "race_dates": 5,
+    "note": "Operational review point, not proof of statistical power. Paired arms, uncertainty and trigger counts required. No adoption solely on a tiny cohort."
+  },
+  "actual_stake": 0,
+  "bettingEnabled": false,
+  "code_sha256": "548b258c3c7a4565171c5353f2ffe0110d764c1c03c6cefa2dca6e3f120bd752",
+  "source_note": "Protocol parameters only; no October17 card or forecasts supplied yet. Local time is not independently certified; retain GitHub receipt separately."
+}
