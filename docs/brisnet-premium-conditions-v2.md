@@ -1,0 +1,17 @@
+# Premium Plus condition decoding v2
+
+Premium Plus PDF.js sometimes merges date/track and condition tokens into one item beginning in the date column. The v1 x-position selection discarded that item's readable surface/distance. V2 decodes the anchored historical prefix independently of item start position, supports 40/70-yard mile extensions and the verified mile-fraction glyphs, and distinguishes inner turf, off-turf dirt, all-weather and off-turf all-weather markers. Unknown/contradictory tokens remain unknown and generate review notes; the parser never scans later fractions or comments to guess.
+
+Source validation on the supplied October16 card: same9 races,79 entries,311 historical lines; all1866 E1/E2/LP/shape/Speed cells unchanged. Recovered28 unknown historical conditions, including special-yardage/fractions and merged text; corrected3 off-turf/all-weather rows previously classified as Dirt. All311 historical conditions in this card now decode. These counts cover all extracted history; they do not imply all those lines enter the latest-five model window.
+
+Matched LP coverage among65 rated runners increases36 to38. The27 remaining unmatched horses all have printed LP:12 have no matching surface,12 no matching sprint/route category,3 no distance within0.5f in the allowed window. That is the existing filter policy, not missing numeric extraction. Six-component MIX1 completeness rises21 to23 of65. Fourteen FTS remain unrated. Unknown and zero remain distinct.
+
+The helper preserves raw token, course marker, about-distance flag, units and yard extension for audit. `æ` all-weather/off-turf mapping is cross-checked against this card's AW record and corresponding DRF synthetic running lines. Filoso July18 Monmouth1m70y and Candytown February8 Tampa1m40y are independently confirmed in the supplied DRF text. No conversion between Brisnet and Beyer/Timeform figures occurs.
+
+This is an input correction, not a new model weighting. Native model code, parent IDs, connection record selection, original DRF/Ultimate parsers, scores from frozen exports and existing tickets are not rewritten. Reparsed October16 ratings are outcome-known diagnostics, never replacement pre-off forecasts or new ROI evidence.
+
+Premium parser ID changes to `BRISNET-PREMIUM-PLUS-positioned-v2`. Module cache versions change. Existing v1 cards are preserved but require PP re-upload before they can rank under the corrected parser; do not silently rewrite saved source history. Browser QA verifies that the old card survives and does not silently rerank. Newly uploaded PPs receive v2 evidence.
+
+Connection policy is separate: all51 rated horses with local trainer samples below25 on this card have a source annual trainer record of at least25 starts. Contender already uses reliable annual/local records with smoothing; native base and MIX1 use the local record. An annual/career fallback for these two is a separately versioned scoring-input experiment, not bundled into this parser fix. Career totals are not assumed to be present in the PP. Broader records must have verified dates/counts; no small-sample win rate is invented or made zero.
+
+Tests cover merged conditions with invariant numeric columns, 40/70-yard extensions, fractions, turf/synthetic/off-turf distinctions, about markers, unsupported/conflicting tokens, explicit unresolved-condition warnings and saved-card reimport behavior. Full local regression:322 tests passed. Desktop and iPad-sized Chromium checks run in CI; emulation is not a physical iPad acceptance test.

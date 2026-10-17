@@ -1,7 +1,8 @@
 // Separate modern Premium Plus adapter. Brisnet figures never become Beyer/Timeform.
 import {reconstructPage,fingerprintPages} from './card-loader.js';
 import {brisnetDistance} from './brisnet-card-parser.js';
-export const PREMIUM_PARSER_ID='BRISNET-PREMIUM-PLUS-positioned-v1';
+import {premiumHistoryConditions} from './brisnet-premium-conditions.js';
+export const PREMIUM_PARSER_ID='BRISNET-PREMIUM-PLUS-positioned-v2';
 const clean=x=>String(x??'').replace(/\s+/g,' ').trim();
 const months={January:1,February:2,March:3,April:4,May:5,June:6,July:7,August:8,September:9,October:10,November:11,December:12};
 const short={Jan:1,Feb:2,Mar:3,Apr:4,May:5,Jun:6,Jul:7,Jly:7,Aug:8,Sep:9,Oct:10,Nov:11,Dec:12};
@@ -47,12 +48,11 @@ function parsePace(row,heading,today){
   if(value!==null&&n<3&&value<0)throw Error('Premium Plus negative pace figure');
   values[keys[n]]=value;cells[keys[n]]={text,x:items[0]?.x??null,status:value===null?'MISSING_OR_AMBIGUOUS':'POSITIONED_NUMBER_VERIFIED'};
  }
- const dist=row.items.filter(i=>i.x>=labels.E1-170&&i.x<85).map(i=>i.str).join(' ');
- const dm=dist.match(/(\d+(?:[½¼¾ˆ„]|\.\d+)?)(f|m)?\s+(ft|fm|gd|sy|my|yl|sf|hy)\b/);
- let furlongs=null,surface=null;
- if(dm){const token=dm[1],fraction={'½':.5,'¼':.25,'¾':.75,'ˆ':.0625,'„':.125},base=parseFloat(token),num=base+(fraction[token.at(-1)]||0);furlongs=(dm[2]==='f'||base>=4)?num:num*8;surface=/[à˜~]/.test(dist)||/fm|yl|sf|hy/.test(dm[3])?'Turf':/[Ì]|\bAW\b/.test(dist)?'Synth':'Dirt';}
+ // Some PDF text items begin in the date column and also contain distance/going.
+ // Selecting by item start-x discarded those complete, readable condition tokens.
+ const conditions=premiumHistoryConditions(row.text);
  const pp=row.items.find(i=>i.x>ends[5]&&i.x<ends[5]+gap&&/^\d+$/.test(i.str));
- return {...d,...values,furlongs,surface,going:dm?.[3]||null,turn_time:values.e1!==null&&values.e2!==null?values.e2-values.e1:null,race_rating:null,class_rating:null,past_post:pp?+pp.str:null,status:values.e2!==null&&values.late!==null?'PACE_SOURCE_SEQUENCE_VERIFIED':'RATING_COLUMNS_UNRESOLVED',source:{provider:'BRISNET',page:row.pageNumber,y:row.y,text:row.text,cells}};
+ return {...d,...values,...conditions,turn_time:values.e1!==null&&values.e2!==null?values.e2-values.e1:null,race_rating:null,class_rating:null,past_post:pp?+pp.str:null,status:values.e2!==null&&values.late!==null?'PACE_SOURCE_SEQUENCE_VERIFIED':'RATING_COLUMNS_UNRESOLVED',source:{provider:'BRISNET',page:row.pageNumber,y:row.y,text:row.text,cells}};
 }
 export function parsePremiumCard(input,{sourceName='Brisnet Premium Plus PDF'}={}){
  const pages=input.map(p=>{const r=reconstructPage(p.items,p.pageNumber,.65);const widths=new Map(p.items.map(q=>[clean(q.str)+'|'+q.transform[4].toFixed(2)+'|'+q.transform[5].toFixed(2),q.width]));for(const row of r.lines)for(const i of row.items)i.width=widths.get(i.str+'|'+i.x.toFixed(2)+'|'+i.y.toFixed(2))||0;return r;});
@@ -90,6 +90,7 @@ export function parsePremiumCard(input,{sourceName='Brisnet Premium Plus PDF'}={
    if(+life[1]===0&&history.length)throw Error('Premium Plus FTS/running-line contradiction');
    if(+life[1]>0&&!history.length)issues.push('#'+program+' '+nm[1]+': experienced runner without extracted running lines');
    const unresolved=history.filter(l=>l.status==='RATING_COLUMNS_UNRESOLVED');if(unresolved.length)issues.push('#'+program+' '+nm[1]+': '+unresolved.length+' rows have missing pace; Unknown retained');
+   const unknownConditions=history.filter(l=>l.condition_evidence.status==='UNRESOLVED');if(unknownConditions.length)issues.push('#'+program+' '+nm[1]+': '+unknownConditions.length+' historical conditions unresolved; excluded from matching');
    const jockey=connection(block,'jockey'),trainer=connection(block,'trainer'),sire=block.match(/Sire\s*:\s*(.+)/),dam=block.match(/Dam:\s*(.+)/),power=block.match(/Prime Power:\s*(\d+\.\d+)/);
    // Conditional entry markers must be in the runner heading region, never historical notes.
    const headerRegion=lines.filter(l=>l.y>y-40).map(l=>l.text).join(' '),conditional=headerRegion.match(/\b(?:Also[- ]Eligible|AE|Main Track Only|MTO)\b/i),entry=conditional?/MTO|Main Track Only/i.test(conditional[0])?'MTO':'AE':'REGULAR';
