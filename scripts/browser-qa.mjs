@@ -164,6 +164,39 @@ for(const profile of profiles){
   assert.equal(await page.locator('#exportBrisnetCandidate').isVisible(),false);
 
  });
+ await check('D16-V44c-Pace-live-box-and-source-holds',async()=>{
+  const original=await page.evaluate(()=>localStorage.getItem('nyraV44cReleaseActiveCard'));
+  try{
+   await page.evaluate(()=>{
+    const date='2026-10-17',track='Belmont Park';
+    const horses=[1,2,3,4,5].map(n=>({n:String(n),name:'QA Pace Runner '+n,ml:'4/1',odds:'—',entry_status:'REGULAR',included_in_frozen_field:true,life_starts:1,lifeStarts:1,style:'UNKNOWN',beyer_figures:[],figs:[],last:null,best:null,timeform_early:null,timeform_late:null,parser_blockers:['BRISNET_SPEED_NOT_BEYER'],angles:[],source_context:{workout_text:'',pedigree_text:''},ratings:{provider:'BRISNET',run_style:'E/P',quirin_points:5,lines:[{date:'2026-09-20',track:'Bel',surface:'Dirt',furlongs:8,e1:85+n,e2:90+n,late:80+n,speed:75+n,source:{provider:'BRISNET',page:1,text:'QA complete pace source'}}]}}));
+    const race={race:1,date,track,surface:'Dirt',dist:'1 Mile',header:'1 Mile',distance_furlongs:8,cls:'QA',post:'1:10 ET',horses,ratings_provider:'BRISNET',source_format:'BRISNET_PREMIUM_PLUS',parser_blockers:['BRISNET_SOURCE_MODEL_VALIDATION_PENDING']};
+    localStorage.setItem('nyraV44cReleaseActiveCard',JSON.stringify({id:'qa-pace-live',schemaVersion:2,track,date,races:{1:race},parser_version:'BRISNET-PREMIUM-PLUS-positioned-v2',source_format:'BRISNET_PREMIUM_PLUS',warnings:[]}));
+   });
+   await page.reload({waitUntil:'domcontentloaded'});
+   const box=page.locator('#v44PaceCandidates');
+   await box.getByText('5 fully rated runners',{exact:false}).waitFor({timeout:20000});
+   assert.equal(await box.locator(':scope > table tbody tr').count(),4);
+   assert.match(await box.innerText(),/PASS — no wager/);
+   assert.match(await box.innerText(),/probability conversion has not been validated/);
+   assert.match(await box.locator('tbody tr').first().innerText(),/#5 QA Pace Runner 5/);
+   assert.equal(await page.locator('#v44PaceCard > details > summary').innerText(),'How V4.4c-Pace ranks');
+   if(profile.name==='desktop-chromium'){
+    const a=await page.locator('#topContenders').boundingBox(),b=await box.boundingBox();assert.ok(b.x>a.x);assert.ok(Math.abs(b.y-a.y)<50);
+   }
+   await page.evaluate(()=>{const c=JSON.parse(localStorage.getItem('nyraV44cReleaseActiveCard'));c.races[1].horses[0].ratings.lines[0].late=null;localStorage.setItem('nyraV44cReleaseActiveCard',JSON.stringify(c));});
+   await page.reload({waitUntil:'domcontentloaded'});
+   await box.getByText('HOLD — inputs incomplete or unsupported',{exact:true}).waitFor({timeout:20000});
+   assert.equal(await box.locator('tbody tr').count(),0,'Incomplete pace must clear the previous candidate ranking');
+  }finally{
+   await page.evaluate(value=>{if(value===null)localStorage.removeItem('nyraV44cReleaseActiveCard');else localStorage.setItem('nyraV44cReleaseActiveCard',value);},original);
+   await page.reload({waitUntil:'domcontentloaded'});
+   await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
+  }
+  assert.match(await page.locator('#v44PaceCandidates').innerText(),/HOLD/);
+  assert.equal(await page.locator('#v44PaceCandidates tbody tr').count(),0);
+  assert.equal(errors.length,0,'Pace box page errors: '+errors.join(' | '));
+ });
  await page.screenshot({path:`${out}/${profile.name}-final.png`,fullPage:true});
  await context.close();
 }
