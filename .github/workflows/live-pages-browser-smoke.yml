@@ -44,7 +44,12 @@ jobs:
       - name: Verify published Pages URL responds
         run: |
           curl --fail --location --retry 5 --retry-delay 5 --max-time 30 --output /tmp/live-nyra-index.html https://kirkmarshall5-ux.github.io/nyra-handicapper-in-GitHub/
-          grep -q 'Freeze All 3 Models' /tmp/live-nyra-index.html
+          grep -q 'id="topContenders"' /tmp/live-nyra-index.html
+          grep -q 'id="contenderCandidates"' /tmp/live-nyra-index.html
+          if grep -Eq 'data-tab="bets"|id="mix1Candidates"|id="v44PaceCandidates"|id="raceSelector"|id="updateOddsSnapshot"' /tmp/live-nyra-index.html; then
+            echo "Retired model or betting control found on the live page"
+            exit 1
+          fi
       - name: Exercise live published site in desktop and iPad-size Chromium
         env:
           QA_URL: https://kirkmarshall5-ux.github.io/nyra-handicapper-in-GitHub/
