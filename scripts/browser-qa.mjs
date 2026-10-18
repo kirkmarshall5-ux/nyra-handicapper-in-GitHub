@@ -169,6 +169,28 @@ for(const profile of profiles){
    await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
   }
  });
+ await check('D17-Premium-five-sixteenths-upload-routing',async()=>{
+  const original=await page.evaluate(()=>localStorage.getItem('nyraV44cReleaseActiveCard'));
+  try{
+   const parsed=await page.evaluate(async()=>{
+    const {parsePPCard}=await import('./pp-format-router.js?v=20261018-premium4');
+    const item=(str,x,y)=>({str,transform:[1,0,0,1,x,y],width:str.length*3.16});
+    const pages=[{pageNumber:1,items:[item("Premium Plus PP's",10,760),item('Belmont Park',120,760),item('Mdn 100k 1Š Mile (T) Sunday, October 18, 2026 Race 1',200,760),item('brisnet.com Bloodstock Research',10,20),item('QA Fraction Runner (NA 0)',45,650),item('1',17,645),item('Life: 0 0 - 0 - 0',390,650),item('8/1',17,636)]}];
+    const c=parsePPCard(pages,{sourceName:'QA-five-sixteenths.pdf'});localStorage.setItem('nyraV44cReleaseActiveCard',JSON.stringify(c));return {distance:c.races[1].distance_furlongs,surface:c.races[1].surface};
+   });
+   assert.equal(parsed.distance,10.5);assert.equal(parsed.surface,'Turf');
+   await page.reload({waitUntil:'domcontentloaded'});
+   await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
+   assert.match(await page.locator('#raceBadges').innerText(),/1 5\/16M/);
+   assert.match(await page.locator('#finisherCandidates').innerText(),/QA Fraction Runner/);
+   assert.equal(await page.locator('#finisherCandidates tbody tr').count(),0,'FTS must remain unranked');
+   assert.equal(errors.length,0,'Fraction upload routing page errors: '+errors.join(' | '));
+  }finally{
+   await page.evaluate(value=>{if(value===null)localStorage.removeItem('nyraV44cReleaseActiveCard');else localStorage.setItem('nyraV44cReleaseActiveCard',value);},original);
+   await page.reload({waitUntil:'domcontentloaded'});
+   await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
+  }
+ });
  await page.screenshot({path:`${out}/${profile.name}-final.png`,fullPage:true});
  await context.close();
 }

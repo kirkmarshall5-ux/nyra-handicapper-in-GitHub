@@ -1,6 +1,6 @@
 // Separate modern Premium Plus adapter. Brisnet figures never become Beyer/Timeform.
 import {reconstructPage,fingerprintPages} from './card-loader.js';
-import {brisnetDistance} from './brisnet-card-parser.js?v=20261017-distance3';
+import {brisnetDistance} from './brisnet-card-parser.js?v=20261018-distance4';
 import {premiumHistoryConditions} from './brisnet-premium-conditions.js';
 export const PREMIUM_PARSER_ID='BRISNET-PREMIUM-PLUS-positioned-v2';
 const clean=x=>String(x??'').replace(/\s+/g,' ').trim();
