@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-18",
+  "instruction": "Keep V4.4c as control and preserve Finisher current weights while investigating disagreements.",
+  "model_id": "FINISHER-3F-v1-20261018",
+  "weights": {
+    "recent_speed": 0.6,
+    "matched_speed": 0.25,
+    "late_pace": 0.15
+  },
+  "code_sha256": {
+    "finisher-model.js": "d4c4aaa0696f4ce64d08e3c7fdabaae91c1621b0ca09a269e5d3b9b4bfd6ae39",
+    "finisher-inputs.js": "03be3e90fd0cb2cee5c39202e0c342656793c5cf9f6190f6d3d7600b60707fbc"
+  },
+  "control_sha256": {
+    "rankings-release.js": "6622d4fb14230111b23e12bf1d7da710fe8790747ae1c2f68c97462925842401",
+    "scoring-engine.js": "c5a45fb15f8fbaba33b3bb3016d08fab395f546a8c6f16fad5e9bb984792208c",
+    "data-corrected-research.js": "b3b943cd3d1b0998d9f7e8d900a96ed87d8279ff7a04476f54198c01f01f03ca",
+    "contender-rankings.js": "4e8b64c9db1730436a80260f74a18e077449ca44e9d03d18a3660099701acc7c",
+    "brisnet-models.js": "750d2144f49572d4d31d0d045e1df220becf4f02db75dcd0b180f13dec9401a2"
+  },
+  "changes_permitted_this_step": "Diagnostic analysis and documentation only; no score, eligibility, coefficient, parser or live-site changes."
+}
