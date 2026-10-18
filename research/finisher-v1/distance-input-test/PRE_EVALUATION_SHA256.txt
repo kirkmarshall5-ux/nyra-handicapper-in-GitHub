@@ -1,0 +1,4 @@
+8a80025d7982de407fb4a4c76b307d4cd93abdb59143af9378c6fb8be712d55e  research/finisher-v1/distance-input-test/drf-distance.js
+609340027c7114ebdd33fd3b2ef706c59579273d1edc3c0bfd569076b34a865b  research/finisher-v1/distance-input-test/PROTOCOL.md
+d4c4aaa0696f4ce64d08e3c7fdabaae91c1621b0ca09a269e5d3b9b4bfd6ae39  finisher-model.js
+03be3e90fd0cb2cee5c39202e0c342656793c5cf9f6190f6d3d7600b60707fbc  finisher-inputs.js
