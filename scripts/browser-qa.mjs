@@ -191,6 +191,34 @@ for(const profile of profiles){
    await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
   }
  });
+ await check('D18-direct-NYRA-update-scratches-persist-and-fail-safe',async()=>{
+  const original=await page.evaluate(()=>localStorage.getItem('nyraV44cReleaseActiveCard'));
+  const service='https://nyra-odds-snapshot.beigebeech4.chatgpt.site/odds?*';let fail=false,pause=false,release=null;
+  await page.route(service,async route=>{
+   if(pause)await new Promise(resolve=>{release=resolve;});
+   if(fail){await route.fulfill({status:503,headers:{'access-control-allow-origin':'*'},body:'Unavailable'});return;}
+   await route.fulfill({status:200,contentType:'application/json',headers:{'access-control-allow-origin':'*'},body:JSON.stringify({schemaVersion:1,track:'belmont',date:'2026-10-18',race:1,fetchedAt:new Date().toISOString(),sourceUrl:'https://www.nyra.com/belmont/racing/entries/',upstreamAgeSeconds:null,runners:[1,2,3].map(n=>({program:String(n),name:'QA Update Runner '+n,odds:n===3?'SCR':'3/1'}))})});
+  });
+  try{
+   await page.evaluate(()=>{
+    const date='2026-10-18',track='Belmont Park',horses=[1,2,3].map(n=>({n:String(n),name:'QA Update Runner '+n,ml:'4/1',odds:'—',entry_status:'REGULAR',included_in_frozen_field:true,life_starts:1,lifeStarts:1,beyer_figures:[],figs:[],angles:[],source_context:{},parser_blockers:['BRISNET_SPEED_NOT_BEYER'],ratings:{provider:'BRISNET',run_style:'P',lines:[{date:'2026-09-20',surface:'Dirt',furlongs:8,speed:75+n,e1:85+n,e2:90+n,late:80+n,source:{provider:'BRISNET',text:'Synthetic QA row'}}]}}));
+    const race={race:1,date,track,surface:'Dirt',dist:'1 Mile',distance_furlongs:8,header:'1 Mile',cls:'QA allowance',horses,parser_blockers:['BRISNET_SOURCE_MODEL_VALIDATION_PENDING']};
+    localStorage.setItem('nyraV44cReleaseActiveCard',JSON.stringify({id:'qa-direct-update',schemaVersion:2,track,date,races:{1:race,2:{...structuredClone(race),race:2}},parser_version:'BRISNET-PREMIUM-PLUS-positioned-v2',source_format:'BRISNET_PREMIUM_PLUS',warnings:[]}));
+   });
+   await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
+   assert.equal(await page.locator('#updateOddsScratches').isVisible(),true);await page.locator('#updateOddsScratches').click();
+   await page.locator('#nyraUpdateStatus').getByText('All three model panels refreshed.',{exact:false}).waitFor({timeout:10000});
+   assert.match(await page.locator('#nyraUpdateStatus').innerText(),/#3 QA Update Runner 3/);
+   for(const id of ['topContenders','finisherCandidates','contenderCandidates']){assert.equal(await page.locator('#'+id+' tbody tr').count(),2);assert.doesNotMatch(await page.locator('#'+id+' tbody').innerText(),/QA Update Runner 3/);}
+   const saved=await page.evaluate(()=>JSON.parse(localStorage.getItem('nyraV44cReleaseActiveCard')).races[1]);assert.equal(saved.horses[2].odds,'SCR');assert.equal(saved.horses[2].ratings.lines[0].speed,78);assert.equal(saved.horses[0].ml,'4/1');
+   await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});assert.match(await page.locator('#nyraUpdateStatus').innerText(),/Last NYRA update/);assert.equal(await page.locator('#finisherCandidates tbody tr').count(),2);
+   fail=true;await page.locator('#updateOddsScratches').click();await page.locator('#nyraUpdateStatus').getByText('Update failed:',{exact:false}).waitFor({timeout:10000});assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('nyraV44cReleaseActiveCard')).races[1].horses[2].odds),'SCR');assert.equal(await page.locator('#updateOddsScratches').isEnabled(),true);
+   fail=false;pause=true;const pending=page.waitForRequest(service);await page.locator('#updateOddsScratches').click();await pending;await page.locator('#racebar button').nth(1).click();await new Promise(r=>setTimeout(r,20));assert.ok(release);release();await page.waitForFunction(()=>!document.getElementById('updateOddsScratches').disabled);assert.doesNotMatch(await page.locator('#nyraUpdateStatus').innerText(),/Fetching/);assert.equal(await page.locator('#finisherCandidates tbody tr').count(),3,'Late Race 1 response must not scratch Race 2');
+   assert.equal(errors.length,0,'NYRA update page errors: '+errors.join(' | '));
+  }finally{
+   await page.unroute(service);await page.evaluate(value=>{if(value===null)localStorage.removeItem('nyraV44cReleaseActiveCard');else localStorage.setItem('nyraV44cReleaseActiveCard',value);},original);await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
+  }
+ });
  await page.screenshot({path:`${out}/${profile.name}-final.png`,fullPage:true});
  await context.close();
 }

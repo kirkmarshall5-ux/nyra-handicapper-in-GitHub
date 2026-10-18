@@ -62,7 +62,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <div><div class="kicker" id="cardKicker">Active race card</div><h2 id="raceTitle">Belmont Park · Race 1</h2>
 <div class="badges" id="raceBadges"><span class="badge gold">1 1/16M Dirt</span><span class="badge">Maiden Special Weight · $100,000</span><span class="badge">12:05 PM</span><span class="badge green">Public NYRA card</span></div></div>
 <div><div class="muted small" style="margin-bottom:5px">Race</div><div class="racebar" id="racebar"></div></div>
-</div><div id="declaredScratches" class="small muted" role="status"></div></div>
+</div><div id="declaredScratches" class="small muted" role="status"></div><div class="flex" style="margin-top:12px;flex-wrap:wrap"><button class="primary" id="updateOddsScratches">Update Odds &amp; Scratches</button><span class="small muted" id="nyraUpdateStatus" role="status" aria-live="polite">Fetch NYRA updates for the selected race.</span></div></div>
 
 <div class="card span4"><div class="kicker">Top 4 Win Candidates-V4.4c</div><div id="topContenders" class="stack small"></div><details class="tiny muted" style="margin-top:10px"><summary>How V4.4c ranks</summary><p>Latest Beyer 40 weight points · best Beyer from the latest three starts 22 · jockey 7 · trainer 8. Jockey and trainer win percentages are multiplied by three, capped at 100. Horses with one or two starts can also use a verified trainer-context score at 12 weight points. Missing inputs redistribute the available weights; verified zero counts. Field strength, pace fit, rebound protection and lightly raced upside can adjust the base rating by up to ±6 points. PASS races show provisional rated runners only.</p></details></div>
 <div class="card span4"><div class="kicker">Top 4 Candidates-Finisher</div><div id="finisherCandidates" class="stack small" aria-live="polite"></div><details class="tiny muted" style="margin-top:10px"><summary>How Finisher ranks</summary><p>Fixed weights: recent speed 60%, same-surface/distance speed 25%, Late pace 15%. Inputs use field percentiles from 0 to 100. Recent speed uses the latest five starts at 50/25/15/7/3, normalized for available figures. Matching speed uses the latest five proof rows, within 365 days and half a furlong, with a 90-day decay half-life. Verified DRF fractional distances are decoded separately from the control. Missing optional inputs stay neutral at 50 without redistributing weights. First-time starters and runners without verified recent speed remain unranked; partial fields show PASS. Brisnet uses native Speed and matched LP. Exact score ties use horse name. V4.4c remains the control.</p></details></div>
@@ -163,6 +163,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 </main>
 
 <script type="module">
+import {fetchNyraRaceUpdate,nyraRaceUpdateSource} from "./nyra-race-update.js?v=20261018-restore1";
 import {initKnowledgeBase} from "./knowledge-base.js?v=20261008-kb1";
 import {connectionRows,LEADER_SCOPE,LEADER_SOURCE} from "./connection-research.js?v=20261008-jt1";
 import {fieldConnections} from "./pp-context.js?v=20261008-qa1";
@@ -292,7 +293,7 @@ document.querySelectorAll(".sortbtn").forEach(b=>b.onclick=()=>{
  renderHorses();updateSortButtons();
 });
 function syncRaceNotes(){raceNotes.value=state.cards?.[activeCard.id]?.notes?.[race.race]||""}
-function renderAll(){syncRaceNotes();document.getElementById("releaseStatus").textContent=`Rankings: ${currentRating().model_id} · PP formats: DRF / Brisnet Ultimate / Premium Plus · Saved card: ${activeCard.parser_version||"sample / legacy evidence"}. V4.4c, Finisher and Contender. Morning line is reference only. Verify scratches and surface against official entries.`;renderBrisnetEvidence();renderProjectedRaceSetup();renderReleaseContext();renderJ1Comparison();renderHeader();renderHorses();updateSortButtons();renderPace();renderEdit();renderEvidence();renderConnections();renderLeaderboards();renderWeights();renderThings();renderRaceInsights();updateUrl()}
+function renderAll(){syncRaceNotes();document.getElementById("releaseStatus").textContent=`Rankings: ${currentRating().model_id} · PP formats: DRF / Brisnet Ultimate / Premium Plus · Saved card: ${activeCard.parser_version||"sample / legacy evidence"}. V4.4c, Finisher and Contender. Morning line is reference only. Verify scratches and surface against official entries.`;renderBrisnetEvidence();renderProjectedRaceSetup();renderReleaseContext();renderJ1Comparison();renderHeader();renderHorses();updateSortButtons();renderPace();renderEdit();renderEvidence();renderConnections();renderLeaderboards();renderWeights();renderThings();renderRaceInsights();renderNyraUpdateControls();updateUrl()}
 function renderThings(){
  const el=document.getElementById("thingsToConsider"); if(!el)return;
  let rows=[];
@@ -398,6 +399,28 @@ function weightsDiv(){if(brisnetPaceDisplay(race).available){document.getElement
 document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));b.classList.add("active");["raceday","pace","connections","pp","public","knowledge"].forEach(id=>document.getElementById(id).classList.toggle("hidden",id!==b.dataset.tab))});
 raceNotes.oninput=e=>{const cs=state.cards[activeCard.id]||(state.cards[activeCard.id]={runners:{},notes:{}});cs.notes=cs.notes||{};cs.notes[race.race]=e.target.value;save()};
 
+let nyraUpdatePending=false;
+function renderNyraUpdateControls(){
+ const button=document.getElementById('updateOddsScratches'),status=document.getElementById('nyraUpdateStatus'),source=nyraRaceUpdateSource(race);
+ button.disabled=nyraUpdatePending||source.mode!=='automatic';
+ if(source.mode!=='automatic'){status.textContent='Automatic NYRA updates are unavailable for '+source.label+'.';return;}
+ const last=race.odds_snapshot?.fetchedAt,scratches=race.horses.filter(h=>h.odds==='SCR').map(h=>'#'+h.n).join(', ');
+ status.textContent=nyraUpdatePending?'Fetching NYRA odds and scratches…':last?'Last NYRA update '+new Date(last).toLocaleTimeString()+'. Scratches: '+(scratches||'none')+'. Prices may be delayed.':'Fetch NYRA odds and scratches for Race '+race.race+' without pasting. Prices may be delayed.';
+}
+document.getElementById('updateOddsScratches').onclick=async()=>{
+ if(nyraUpdatePending)return;
+ const initial={card:activeCard.id,race:race.race,date:race.date,track:race.track},unchanged=()=>activeCard.id===initial.card&&race.race===initial.race&&race.date===initial.date&&race.track===initial.track;
+ const before=JSON.stringify(race),status=document.getElementById('nyraUpdateStatus');nyraUpdatePending=true;renderNyraUpdateControls();
+ try{
+  const result=await fetchNyraRaceUpdate(race);
+  if(!unchanged())return;
+  if(JSON.stringify(race)!==before)throw Error('Race information changed during the request; please update again');
+  race=result.race;activeCard.races[race.race]=structuredClone(race);save();nyraUpdatePending=false;renderAll();
+  const scratches=race.horses.filter(h=>h.odds==='SCR').map(h=>'#'+h.n+' '+h.name).join(', ');
+  status.textContent='Updated '+result.snapshot.runners.length+' runners at '+new Date(result.snapshot.fetchedAt).toLocaleTimeString()+'. Scratches: '+(scratches||'none')+'. All three model panels refreshed. Prices may be delayed.';
+ }catch(e){if(unchanged())status.textContent='Update failed: '+e.message+'. Previous odds and scratches retained.';}
+ finally{nyraUpdatePending=false;document.getElementById('updateOddsScratches').disabled=nyraRaceUpdateSource(race).mode!=='automatic';if(!unchanged())renderNyraUpdateControls();}
+};
 function updateUrl(){const venue=["belmont","aqueduct","saratoga"].includes(track.value)?track.value:"belmont";const url=`https://www.nyra.com/${venue}/racing/entries/?day=${race.date}&limit=entries&race=${race.race}`;raceUrl.value=url;openRace.href=url;nyraRaceLink.href=url}
 [track,raceDate,raceNo].forEach(el=>el.onchange=updateUrl);updateUrl();
 
