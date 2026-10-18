@@ -26,8 +26,12 @@ for(const profile of profiles){
   await page.locator('#raceTitle').waitFor();
   assert.equal(errors.length,0,'Uncaught page errors: '+errors.join(' | '));
  });
- await check('D02-two-model-panels-and-hidden-panels',async()=>{
-  for(const id of ['topContenders','contenderCandidates'])assert.equal(await page.locator('#'+id).count(),1);
+ await check('D02-three-model-panels-and-hidden-panels',async()=>{
+  for(const id of ['topContenders','finisherCandidates','contenderCandidates'])assert.equal(await page.locator('#'+id).count(),1);
+  const boxes=await Promise.all(['topContenders','finisherCandidates','contenderCandidates'].map(id=>page.locator('#'+id).boundingBox()));
+  assert.ok(boxes.every(Boolean));
+  if(profile.viewport.width>1100){assert.ok(boxes[0].x<boxes[1].x&&boxes[1].x<boxes[2].x,'Finisher must be between the other models');}
+  else{assert.ok(boxes[0].y<boxes[1].y&&boxes[1].y<boxes[2].y,'Mobile panels must retain model order');}
   for(const id of ['topJockeys','topTrainers','topPairings'])assert.equal(await page.locator('#'+id).isVisible(),false,id+' must remain hidden');
   assert.equal(await page.getByText('Potentially overlooked angles',{exact:false}).isVisible(),false);
  });
@@ -75,6 +79,9 @@ for(const profile of profiles){
     assert.match(await target.innerText(),/First-time starter/);
     assert.match(await target.innerText(),/probability conversion has not been validated/);
    }
+   assert.match(await page.locator('#finisherCandidates').innerText(),/Ranked 2\/3/);
+   assert.match(await page.locator('#finisherCandidates').innerText(),/Finisher: PASS/);
+   assert.equal(await page.locator('#finisherCandidates tbody tr').count(),2);
    assert.match(await page.locator('#releaseStatus').innerText(),/V44C-BRISNET-BASE/);
    assert.match(await page.locator('#horseTable tbody tr').first().innerText(),/76/);
    assert.match(await page.locator('#horseTable tbody tr').first().innerText(),/E\/P/);
@@ -99,6 +106,7 @@ for(const profile of profiles){
    await page.reload({waitUntil:'domcontentloaded'});
    await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
    assert.equal(await page.locator('#contenderCandidates tbody tr').count(),3);
+   assert.equal(await page.locator('#finisherCandidates tbody tr').count(),3);
    assert.equal(errors.length,0,'Full-field core model errors: '+errors.join(' | '));
    await page.evaluate(()=>{
     const c=JSON.parse(localStorage.getItem('nyraV44cReleaseActiveCard'));
@@ -118,6 +126,7 @@ for(const profile of profiles){
    await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
    assert.match(await page.locator('#ppStatus').innerText(),/saved card is preserved.*Re-upload/i);
    assert.equal(await page.locator('#topContenders tbody tr').count(),0,'Retired parser must not silently rerank saved source');
+   assert.equal(await page.locator('#finisherCandidates tbody tr').count(),0,'Finisher must hold retired parser evidence');
    assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('nyraV44cReleaseActiveCard')).races[1].horses[0].ratings.lines[0].e2),91);
 
   }finally{
@@ -130,6 +139,35 @@ for(const profile of profiles){
   assert.equal(await page.locator('#callRanksTitle').innerText(),'Projected race set up');
   assert.match(await page.locator('#weights').innerText(),/Last verified Beyer/);
 
+ });
+ await check('D16-Finisher-DRF-scratches-FTS-and-full-field',async()=>{
+  const original=await page.evaluate(()=>localStorage.getItem('nyraV44cReleaseActiveCard'));
+  try{
+   await page.evaluate(async()=>{
+    const {PARSER_ID}=await import('./release-card-parser.js'),date='2026-10-18',track='Belmont Park';
+    const horses=[1,2,3,4,5,6].map(n=>({n:String(n),name:'QA Finisher Runner '+n,ml:'4/1',odds:n===5?'SCR':'—',entry_status:'REGULAR',included_in_frozen_field:true,life_starts:n===6?0:1,lifeStarts:n===6?0:1,beyer_figures:n===6?[]:[90-n],figs:n===6?[]:[90-n],timeform_early:n===6?null:85,timeform_late:n===6?null:90,parser_blockers:[],angles:[],source_context:{workout_text:'',pedigree_text:''},contender_evidence:{beyer_evidence:[],switch_evidence:{running_lines:[]}}}));
+    const race={race:1,date,track,surface:'Dirt',header:'6 Furlongs',dist:'6 Furlongs',cls:'QA maiden',post:'1:10 ET',horses,parser_blockers:[]};
+    localStorage.setItem('nyraV44cReleaseActiveCard',JSON.stringify({id:'qa-finisher-drf',schemaVersion:3,track,date,races:{1:race},parser_version:PARSER_ID,warnings:[]}));
+   });
+   await page.reload({waitUntil:'domcontentloaded'});
+   await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
+   const target=page.locator('#finisherCandidates');
+   assert.equal(await target.locator('tbody tr').count(),4);
+   assert.match(await target.innerText(),/Ranked 4\/5/);assert.match(await target.innerText(),/PASS/);
+   assert.match(await target.innerText(),/QA Finisher Runner 6/);assert.doesNotMatch(await target.innerText(),/QA Finisher Runner 5/);
+   assert.match(await target.innerText(),/Fair odds and win percentages are unavailable/);
+   await page.evaluate(()=>{const c=JSON.parse(localStorage.getItem('nyraV44cReleaseActiveCard')),h=c.races[1].horses[5];h.life_starts=1;h.lifeStarts=1;h.beyer_figures=[95];h.figs=[95];localStorage.setItem('nyraV44cReleaseActiveCard',JSON.stringify(c));});
+   await page.reload({waitUntil:'domcontentloaded'});
+   await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
+   assert.match(await target.innerText(),/Complete field ranked/);assert.match(await target.innerText(),/Ranked 5\/5/);
+   assert.match(await target.locator('tbody tr').first().innerText(),/Runner 6/);
+   await page.screenshot({path:`${out}/${profile.name}-finisher-raceday.png`,fullPage:true});
+   assert.equal(errors.length,0,'Finisher page errors: '+errors.join(' | '));
+  }finally{
+   await page.evaluate(value=>{if(value===null)localStorage.removeItem('nyraV44cReleaseActiveCard');else localStorage.setItem('nyraV44cReleaseActiveCard',value);},original);
+   await page.reload({waitUntil:'domcontentloaded'});
+   await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
+  }
  });
  await page.screenshot({path:`${out}/${profile.name}-final.png`,fullPage:true});
  await context.close();
