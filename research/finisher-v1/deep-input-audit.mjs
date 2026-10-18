@@ -1,0 +1,27 @@
+// Read-only evidence extraction; never reranks or modifies any model.
+import fs from 'node:fs';import path from 'node:path';import zlib from 'node:zlib';import assert from 'node:assert/strict';
+import {contenderFeatures} from '../../contender-rankings.js';import {validatedInputs} from '../../data-corrected-research.js';
+const root=process.argv[2],out=new URL('./',import.meta.url),load=p=>JSON.parse(fs.readFileSync(path.join(root,p)));const ev=JSON.parse(zlib.gunzipSync(fs.readFileSync(new URL('EVALUATION.json.gz',out))));
+const norm=s=>String(s).replace(/\s*\([A-Z]{2,3}\)/g,'').toLowerCase().replace(/[^a-z0-9]/g,'');
+const bp='review_extract/Beyer_Three_Tests_Finishing_Order_Evidence/',historical=load(bp+'priority2/priority2/historical_run/predictions.json').cards,supp=load(bp+'priority2/priority2/historical_run/supplemental_predictions.json').cards,bmeta=load(bp+'beyer_test_run/RESULTS.json').race_details,attrs=load(bp+'comparison/verified_comparison/FEATURE_ATTRIBUTION.json');
+const sar=load('review_extract/Saratoga_Ten_Card_Retest_Evidence/ten_card_test_run/ALIGNED_FROZEN_CARDS.json').cards;
+const kp='review_extract/Keeneland_Five_Card_Test_20261017/keeneland_five_v1/',kee=load(kp+'MODEL_REPLAY.json').rows;const rows=[];
+for(const r of ev.rows.filter(r=>['DRF58','SAR47','KEE25'].includes(r.cohort)&&r.finisher_metrics)){
+ const parts=r.key.split('_'),date=parts[1],rn=parts[2].slice(1);let src;
+ if(r.cohort==='DRF58'){const track=parts[0]==='BAQ'?'Belmont at the Big A':parts[0]==='CD'?'Churchill Downs':'Saratoga';const candidates=[...historical,...supp].filter(c=>c.date===date&&(c.track===track||parts[0]==='BAQ'&&/Belmont|Aqueduct/.test(c.track)));if(candidates.length!==1)throw Error('Source ambiguity '+r.key+' '+candidates.length);src=candidates[0].races[rn];}
+ else if(r.cohort==='SAR47')src=sar.find(c=>c.date===date).races[rn];else src=load(kp+'cards/'+date+'.json').races[rn];
+ assert.ok(src,r.key);const key=h=>r.identity==='name'?norm(h.name):String(h.n),allowed=new Set(r.control),field=src.horses.filter(h=>allowed.has(key(h)));assert.equal(field.length,r.inputs.length,r.key);
+ const source=new Map(field.map(h=>[key(h),h]));const modelRows=[];
+ for(const i of r.inputs){const id=key(i),h=source.get(id);assert.ok(h,r.key+' '+id);const x=contenderFeatures(h,{...src,field});const archived=r.prediction.rankings.find(q=>key(q)===id);assert.ok(archived);
+  const raw={recent_speed:x.raw[1],matched_speed:x.raw[4],late_pace:x.raw[7]},mismatch=Object.keys(raw).filter(k=>raw[k]===null?i[k]!==null:i[k]===null||Math.abs(raw[k]-i[k])>1e-7);
+  const vi=validatedInputs(h);const original=r.cohort==='DRF58'?attrs.find(a=>a.race_key===r.key).horses.find(q=>norm(q.name)===norm(h.name)):r.cohort==='SAR47'?src.frozen_models['V4.4c'].rankings.find(q=>norm(q.name)===norm(h.name)):kee.find(q=>q.race_key===r.key).models.v44c.rankings.find(q=>String(q.n)===String(h.n));
+  const controlScore=r.cohort==='DRF58'?original.v4_score:r.cohort==='SAR47'?original.score:original.v44c_unrounded_score;const ps=r.cohort==='DRF58'?original.v4_parts:vi.parts;const availableWeight=ps.reduce((s,[v,w])=>s+w,0);const contributions=Object.fromEntries(ps.map(([v,w,k])=>[k,v*w/availableWeight]));contributions.adjustment_residual=controlScore-ps.reduce((s,[v,w])=>s+v*w,0)/availableWeight;
+  assert.ok(Math.abs(contributions.adjustment_residual)<=6.000001,r.key+' control residual');
+  const connection_counts=Object.fromEntries(['jockey','trainer'].map(k=>[k,h[k+'_local_counts']||h.source_context?.[k]||null]));const ce=h.contender_evidence?{...h,...h.contender_evidence}:h;
+  modelRows.push({id,name:h.name,n:h.n||null,latest:h.beyer_figures?.[0]??null,figures:h.beyer_figures?.slice(0,5)||[],life_starts:h.life_starts,connection_counts,recent_sequence_verified:x.complete,recent_fallback:!x.complete,source_lines:ce.switch_evidence?.running_lines?.slice(0,5)||[],source_proofs:ce.beyer_evidence?.slice(0,5)||[],feature_mismatch:mismatch,stored_features:{recent_speed:i.recent_speed,matched_speed:i.matched_speed,late_pace:i.late_pace},reextracted_features:raw,control_score:controlScore,control_parts:ps,control_contributions:contributions,finisher_score:archived.score,finisher_components:archived.components});
+ }
+ const meta=r.cohort==='DRF58'?bmeta.find(q=>q.race_key===r.key):r.cohort==='KEE25'?kee.find(q=>q.race_key===r.key):null;
+ rows.push({key:r.key,cohort:r.cohort,disagreement:r.control[0]!==r.prediction_order[0],outcome:r.control_metrics.win?'V4.4c':r.finisher_metrics.win?'Finisher':'Neither',surface:src.surface,distance:meta?.distance??meta?.distance_furlongs??null,header:src.header,type:src.cls,full_order:r.full_order,actual:r.actual,control:r.control,finisher:r.prediction_order,control_metrics:r.control_metrics,finisher_metrics:r.finisher_metrics,horses:modelRows});
+}
+fs.writeFileSync(new URL('DEEP_INPUT_AUDIT.json',out),JSON.stringify({scope:'Read-only extraction and control-contribution reconciliation. Archived predictions preserved. No scoring rules or weights changed.',rows},null,2));
+console.log(JSON.stringify({races:rows.length,feature_mismatch_rows:rows.flatMap(r=>r.horses.filter(h=>h.feature_mismatch.length).map(h=>({key:r.key,name:h.name,fields:h.feature_mismatch,old:h.stored_features,new:h.reextracted_features}))),fallback_horses:rows.flatMap(r=>r.horses.filter(h=>h.recent_fallback).map(h=>({key:r.key,name:h.name,figures:h.figures}))).length},null,2));
