@@ -50,7 +50,7 @@ test('surface/distance parser keeps exact frozen horizon and fractions',()=>{
  assert.equal(mix1Profile({...p,running_date_track:'31á26= 1Bel'},'2026-10-15'),null);
 });
 test('Race Day includes MIX1 beside controls and shows experimental win-line estimates',()=>{
- const html=fs.readFileSync(new URL('./index.html',import.meta.url),'utf8');
+ const html=fs.readFileSync(new URL('./archive/testing/index.html',import.meta.url),'utf8');
  const start=html.indexOf('Top 4 Win Candidates-V4.4c'),end=html.indexOf('Top 3 morning-line favorites');
  const panels=html.slice(start,end);assert.match(panels,/Top 4 Win Candidates-Contender/);assert.match(panels,/Top 4 Win Candidates-MIX1/);assert.match(panels,/id="mix1Candidates"/);
  assert.match(html,/const mix1=rankMix1\(race,r,\{displayPass:r.decision==='PASS'\}\)/);assert.ok(html.includes("estimatedWinLine(race,mix1,'mix1')"));assert.ok(html.includes('winLineFields(mix1Line,h)'));assert.ok(html.includes('winLineNote(mix1Line)'));assert.match(html,/Best Value: PASS — probability validation pending/);
@@ -72,7 +72,7 @@ test('PASS display isolates missing history and never invents a score for an unr
  const blocked=race([horse(1,[80],{parser_blockers:['unverified-source']})]);assert.deepEqual(rankMix1(blocked,releaseRace(blocked),{displayPass:true}).rankings,[]);
 });
 test('model explanations use native expandable details in each comparison box',()=>{
- const html=fs.readFileSync(new URL('./index.html',import.meta.url),'utf8');
+ const html=fs.readFileSync(new URL('./archive/testing/index.html',import.meta.url),'utf8');
  for(const name of ['V4.4c','Contender','MIX1'])assert.ok(html.includes('<summary>How '+name+' ranks</summary>'));
  assert.ok(html.includes('Not an official full-field MIX1 ranking.'));assert.ok(html.includes('mix1.unrated'));
 });

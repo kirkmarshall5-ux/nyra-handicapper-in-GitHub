@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {mkdirSync,writeFileSync,readFileSync} from 'node:fs';
+import {mkdirSync,writeFileSync} from 'node:fs';
 import {chromium} from 'playwright';
 
 // Automated Chromium checks only. The iPad profile emulates viewport/touch;
@@ -26,8 +26,8 @@ for(const profile of profiles){
   await page.locator('#raceTitle').waitFor();
   assert.equal(errors.length,0,'Uncaught page errors: '+errors.join(' | '));
  });
- await check('D02-three-model-panels-and-hidden-panels',async()=>{
-  for(const id of ['topContenders','contenderCandidates','mix1Candidates'])assert.equal(await page.locator('#'+id).count(),1);
+ await check('D02-two-model-panels-and-hidden-panels',async()=>{
+  for(const id of ['topContenders','contenderCandidates'])assert.equal(await page.locator('#'+id).count(),1);
   for(const id of ['topJockeys','topTrainers','topPairings'])assert.equal(await page.locator('#'+id).isVisible(),false,id+' must remain hidden');
   assert.equal(await page.getByText('Potentially overlooked angles',{exact:false}).isVisible(),false);
  });
@@ -49,27 +49,12 @@ for(const profile of profiles){
   await page.locator('#racebar button').first().click();
   assert.equal(await page.locator('#raceNotes').inputValue(),'QA smoke note race 1');
  });
- await check('D08-D09-research-only-and-PASS',async()=>{
-  await page.locator('[data-tab="bets"]').click();
-  await page.locator('#betSuggestions').getByText('BETTING: PASS',{exact:false}).waitFor();
-  assert.match(await page.locator('#researchPreview').innerText(),/Automated betting: PASS/);
-  assert.equal((await page.locator('#researchFreeze').innerText()).trim(),'Freeze All 3 Models');
-  assert.match(await page.locator('#releaseStatus').innerText(),/Betting disabled/i);
- });
- await check('D12-missing-attestations-block-freeze',async()=>{
-  await page.locator('#researchPostTime').fill('');
-  await page.locator('#researchField').uncheck();
-  await page.locator('#researchSurface').uncheck();
-  await page.locator('#researchFreeze').click();
-  assert.match(await page.locator('#researchStatus').innerText(),/post time|verify/i);
-  assert.match(await page.locator('#researchCount').innerText(),/0 frozen pre-race snapshots/);
- });
  await check('D14-viewport-and-controls',async()=>{
   await page.locator('[data-tab="raceday"]').click();
   assert.equal(await page.locator('#raceTitle').isVisible(),true);
-  await page.locator('[data-tab="bets"]').click();
-  assert.equal(await page.locator('#researchFreeze').isVisible(),true);
-  assert.equal(await page.locator('#researchExport').isVisible(),true);
+  for(const id of ['bets','researchFreeze','mix1Candidates','v44PaceCandidates','raceSelector','updateOddsSnapshot','manualOddsPanel'])assert.equal(await page.locator('#'+id).count(),0);
+  await page.locator('[data-tab="pace"]').click();
+  assert.equal(await page.locator('#paceMap').isVisible(),true);
   assert.equal(errors.length,0,'Uncaught page errors: '+errors.join(' | '));
  });
 
@@ -84,16 +69,13 @@ for(const profile of profiles){
    });
    await page.reload({waitUntil:'domcontentloaded'});
    await page.locator('#topContenders').getByText('V4.4c-Brisnet base · experimental',{exact:false}).waitFor({timeout:20000});
-   for(const id of ['topContenders','contenderCandidates','mix1Candidates']){
+   for(const id of ['topContenders','contenderCandidates']){
     const target=page.locator('#'+id);assert.equal(await target.locator('tbody tr').count(),2,id+' must rank the two experienced runners');
     assert.match(await target.innerText(),/Ranked 2\/3/);
     assert.match(await target.innerText(),/First-time starter/);
     assert.match(await target.innerText(),/probability conversion has not been validated/);
    }
    assert.match(await page.locator('#releaseStatus').innerText(),/V44C-BRISNET-BASE/);
-   assert.match(await page.locator('#raceSelector').innerText(),/Dirt route/);
-   assert.match(await page.locator('#raceSelector').innerText(),/Selector HOLD/);
-   assert.equal(await page.locator('#raceSelector tbody tr').count(),0);
    assert.match(await page.locator('#horseTable tbody tr').first().innerText(),/76/);
    assert.match(await page.locator('#horseTable tbody tr').first().innerText(),/E\/P/);
    await page.locator('[data-tab="pace"]').click();
@@ -103,22 +85,11 @@ for(const profile of profiles){
    assert.match(await page.locator('#projectedRaceSetup').innerText(),/E2 rank \/ figure/i);
    assert.match(await page.locator('#brisnetEvidence').innerText(),/91/);
    assert.match(await page.locator('#weights').innerText(),/Pace has no weight/);
-   assert.match(await page.locator('#contenderRules').innerText(),/MIX1 consumes early pace only/);
    assert.match(await page.locator('#evidenceSummary').innerText(),/Brisnet Speed/);
    assert.equal(await page.locator('#callRanksTitle').innerText(),'Brisnet historical pace ranks');
-   assert.match(await page.locator('#brisnetPaceCandidate').innerText(),/Dirt route/);
-   assert.match(await page.locator('#brisnetPaceCandidate').innerText(),/Base 75% \+ pace 25%/);
-   assert.match(await page.locator('#brisnetPaceCandidate').innerText(),/Unrated runners/);
-   assert.equal(await page.locator('#brisnetPaceCandidate tbody tr').count(),2);
-   const downloaded=page.waitForEvent('download');await page.locator('#exportBrisnetCandidate').click();
-   const file=await downloaded,exported=JSON.parse(readFileSync(await file.path(),'utf8'));
-   assert.equal(exported.forecast_pre_off_verified,false);
-   assert.deepEqual(Object.keys(exported.races[0].candidates),['BASE','FLAT','CONDITION','TURN']);
-   assert.equal(exported.races[0].source_race.horses[0].ratings.lines[0].e2,91);
 
 
-   await page.locator('[data-tab="bets"]').click();
-   assert.match(await page.locator('#researchPreview').innerText(),/Automated betting: PASS/);
+   assert.match(await page.locator('#contenderRules').innerText(),/Contender consumes early pace and LP/);
    assert.equal(errors.length,0,'Brisnet page errors: '+errors.join(' | '));
    await page.evaluate(()=>{
     const c=JSON.parse(localStorage.getItem('nyraV44cReleaseActiveCard')),h=c.races[1].horses[2];
@@ -126,10 +97,9 @@ for(const profile of profiles){
     localStorage.setItem('nyraV44cReleaseActiveCard',JSON.stringify(c));
    });
    await page.reload({waitUntil:'domcontentloaded'});
-   await page.locator('#raceSelector').getByText('33.3%',{exact:false}).waitFor({timeout:20000});
-   assert.equal(await page.locator('#raceSelector tbody tr').count(),3);
-   assert.match(await page.locator('#raceSelector').innerText(),/not a win probability/);
-   assert.equal(errors.length,0,'Full-field selector errors: '+errors.join(' | '));
+   await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
+   assert.equal(await page.locator('#contenderCandidates tbody tr').count(),3);
+   assert.equal(errors.length,0,'Full-field core model errors: '+errors.join(' | '));
    await page.evaluate(()=>{
     const c=JSON.parse(localStorage.getItem('nyraV44cReleaseActiveCard'));
     c.races[1].horses.forEach(h=>h.ratings.lines.forEach(l=>l.furlongs=6));
@@ -142,7 +112,6 @@ for(const profile of profiles){
    assert.match(await page.locator('#brisnetEvidence').innerText(),/Unmatched - context only/);
    assert.match(await page.locator('#brisnetEvidence').innerText(),/91/);
    assert.match(await page.locator('#projectedRaceSetup').innerText(),/Unknown/);
-   assert.match(await page.locator('#brisnetPaceCandidate').innerText(),/neutral pace preserves base order/);
    assert.equal(errors.length,0,'Unmatched Brisnet pace errors: '+errors.join(' | '));
    await page.evaluate(()=>{const c=JSON.parse(localStorage.getItem('nyraV44cReleaseActiveCard'));c.parser_version='BRISNET-PREMIUM-PLUS-positioned-v1';localStorage.setItem('nyraV44cReleaseActiveCard',JSON.stringify(c));});
    await page.reload({waitUntil:'domcontentloaded'});
@@ -160,42 +129,7 @@ for(const profile of profiles){
   await page.locator('[data-tab="pace"]').click();
   assert.equal(await page.locator('#callRanksTitle').innerText(),'Projected race set up');
   assert.match(await page.locator('#weights').innerText(),/Last verified Beyer/);
-  assert.equal(await page.locator('#brisnetPaceCandidate').innerText(),'');
-  assert.equal(await page.locator('#exportBrisnetCandidate').isVisible(),false);
 
- });
- await check('D16-V44c-Pace-live-box-and-source-holds',async()=>{
-  const original=await page.evaluate(()=>localStorage.getItem('nyraV44cReleaseActiveCard'));
-  try{
-   await page.evaluate(()=>{
-    const date='2026-10-17',track='Belmont Park';
-    const horses=[1,2,3,4,5].map(n=>({n:String(n),name:'QA Pace Runner '+n,ml:'4/1',odds:'—',entry_status:'REGULAR',included_in_frozen_field:true,life_starts:1,lifeStarts:1,style:'UNKNOWN',beyer_figures:[],figs:[],last:null,best:null,timeform_early:null,timeform_late:null,parser_blockers:['BRISNET_SPEED_NOT_BEYER'],angles:[],source_context:{workout_text:'',pedigree_text:''},ratings:{provider:'BRISNET',run_style:'E/P',quirin_points:5,lines:[{date:'2026-09-20',track:'Bel',surface:'Dirt',furlongs:8,e1:85+n,e2:90+n,late:80+n,speed:75+n,source:{provider:'BRISNET',page:1,text:'QA complete pace source'}}]}}));
-    const race={race:1,date,track,surface:'Dirt',dist:'1 Mile',header:'1 Mile',distance_furlongs:8,cls:'QA',post:'1:10 ET',horses,ratings_provider:'BRISNET',source_format:'BRISNET_PREMIUM_PLUS',parser_blockers:['BRISNET_SOURCE_MODEL_VALIDATION_PENDING']};
-    localStorage.setItem('nyraV44cReleaseActiveCard',JSON.stringify({id:'qa-pace-live',schemaVersion:2,track,date,races:{1:race},parser_version:'BRISNET-PREMIUM-PLUS-positioned-v2',source_format:'BRISNET_PREMIUM_PLUS',warnings:[]}));
-   });
-   await page.reload({waitUntil:'domcontentloaded'});
-   const box=page.locator('#v44PaceCandidates');
-   await box.getByText('5 fully rated runners',{exact:false}).waitFor({timeout:20000});
-   assert.equal(await box.locator(':scope > table tbody tr').count(),4);
-   assert.match(await box.innerText(),/PASS — no wager/);
-   assert.match(await box.innerText(),/probability conversion has not been validated/);
-   assert.match(await box.locator('tbody tr').first().innerText(),/#5 QA Pace Runner 5/);
-   assert.equal(await page.locator('#v44PaceCard > details > summary').innerText(),'How V4.4c-Pace ranks');
-   if(profile.name==='desktop-chromium'){
-    const a=await page.locator('#topContenders').boundingBox(),b=await box.boundingBox();assert.ok(b.x>a.x);assert.ok(Math.abs(b.y-a.y)<50);
-   }
-   await page.evaluate(()=>{const c=JSON.parse(localStorage.getItem('nyraV44cReleaseActiveCard'));c.races[1].horses[0].ratings.lines[0].late=null;localStorage.setItem('nyraV44cReleaseActiveCard',JSON.stringify(c));});
-   await page.reload({waitUntil:'domcontentloaded'});
-   await box.getByText('HOLD — inputs incomplete or unsupported',{exact:true}).waitFor({timeout:20000});
-   assert.equal(await box.locator('tbody tr').count(),0,'Incomplete pace must clear the previous candidate ranking');
-  }finally{
-   await page.evaluate(value=>{if(value===null)localStorage.removeItem('nyraV44cReleaseActiveCard');else localStorage.setItem('nyraV44cReleaseActiveCard',value);},original);
-   await page.reload({waitUntil:'domcontentloaded'});
-   await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
-  }
-  assert.match(await page.locator('#v44PaceCandidates').innerText(),/HOLD/);
-  assert.equal(await page.locator('#v44PaceCandidates tbody tr').count(),0);
-  assert.equal(errors.length,0,'Pace box page errors: '+errors.join(' | '));
  });
  await page.screenshot({path:`${out}/${profile.name}-final.png`,fullPage:true});
  await context.close();
