@@ -1,0 +1,3891 @@
+{
+  "scope": "Descriptive attribution of frozen outcome-known historical predictions. No weight changes or new model selection. Within each case, component margins explain the Finisher score difference, not why the horse won. Control score units and Finisher units are different and not subtracted.",
+  "frozen_spec": {
+    "id": "FINISHER-3F-v1-20261018",
+    "weights": {
+      "recent_speed": 0.6,
+      "matched_speed": 0.25,
+      "late_pace": 0.15
+    },
+    "missing_percentile": 50,
+    "recent_window": 5,
+    "recent_weights": [
+      0.5,
+      0.25,
+      0.15,
+      0.07,
+      0.03
+    ],
+    "history_days": 365,
+    "distance_tolerance_furlongs": 0.5,
+    "matched_decay_half_life_days": 90
+  },
+  "all_historical_races": 130,
+  "top_pick_agreement": {
+    "races": 66,
+    "winners": 17
+  },
+  "top_pick_disagreement": {
+    "races": 64,
+    "finisher_only_winners": 18,
+    "v44c_only_winners": 12,
+    "neither_winner": 34
+  },
+  "exclusive_win_cases": {
+    "Finisher": {
+      "races": 18,
+      "cohorts": {
+        "DRF58": 7,
+        "SAR47": 7,
+        "KEE25": 4
+      },
+      "surfaces": {
+        "Turf": 7,
+        "Dirt": 11
+      },
+      "field_size_mean": 6.5,
+      "finisher_advantage_driver": {
+        "recent_speed": 12,
+        "matched_speed": 5,
+        "late_pace": 1
+      },
+      "winner_larger_recent": 13,
+      "winner_lower_latest": 9,
+      "winner_lower_best3": 7,
+      "missing_matched_in_either_pick": 9,
+      "missing_late_in_either_pick": 1,
+      "winner_other_model_rank": {
+        "2": 6,
+        "3": 10,
+        "5": 2
+      }
+    },
+    "V4.4c": {
+      "races": 12,
+      "cohorts": {
+        "DRF58": 6,
+        "SAR47": 3,
+        "KEE25": 3
+      },
+      "surfaces": {
+        "Turf": 5,
+        "Dirt": 7
+      },
+      "field_size_mean": 7.166666666666667,
+      "finisher_advantage_driver": {
+        "recent_speed": 9,
+        "matched_speed": 3
+      },
+      "winner_larger_recent": 2,
+      "winner_lower_latest": 8,
+      "winner_lower_best3": 9,
+      "missing_matched_in_either_pick": 6,
+      "missing_late_in_either_pick": 0,
+      "winner_other_model_rank": {
+        "2": 7,
+        "3": 3,
+        "4": 1,
+        "6": 1
+      }
+    }
+  },
+  "cases": [
+    {
+      "key": "BAQ_2026-05-22_R3",
+      "cohort": "DRF58",
+      "winner_model": "V4.4c",
+      "winner_id": "seatatthetable",
+      "surface": "Turf",
+      "distance": 8,
+      "type": "Not available in frozen feature archive",
+      "field_size": 5,
+      "v44c_pick": {
+        "name": "Seat At the Table",
+        "program": "5",
+        "latest_speed": 76,
+        "best3_speed": 76,
+        "control_score": 74.47192028985508,
+        "control_parts": [
+          [
+            76,
+            40,
+            "latest"
+          ],
+          [
+            76,
+            22,
+            "best3"
+          ],
+          [
+            60.9375,
+            7,
+            "jockey_win"
+          ]
+        ],
+        "control_adjustment": 0,
+        "control_signals": [],
+        "id": "seatatthetable",
+        "finisher_score": 61.25,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 75.56,
+            "percentile": 75,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": 75.7845717832214,
+            "percentile": 50,
+            "weight": 0.25,
+            "status": "AVAILABLE"
+          },
+          "late_pace": {
+            "raw": 80,
+            "percentile": 25,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 1,
+        "actual_finish_scope": "FULL_ORDER",
+        "v44c_rank": 1,
+        "finisher_rank": 2
+      },
+      "finisher_pick": {
+        "name": "Notable Exchange",
+        "program": "3",
+        "latest_speed": 83,
+        "best3_speed": 83,
+        "control_score": 71.47727272727273,
+        "control_parts": [
+          [
+            83,
+            40,
+            "latest"
+          ],
+          [
+            83,
+            22,
+            "best3"
+          ],
+          [
+            42.85714285714286,
+            7,
+            "jockey_win"
+          ],
+          [
+            0,
+            8,
+            "trainer_win"
+          ]
+        ],
+        "control_adjustment": 0.75,
+        "control_signals": [
+          [
+            "field-relative",
+            0.75
+          ]
+        ],
+        "id": "notableexchange",
+        "finisher_score": 100,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 77.29,
+            "percentile": 100,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": 77.1844010844614,
+            "percentile": 100,
+            "weight": 0.25,
+            "status": "AVAILABLE"
+          },
+          "late_pace": {
+            "raw": 91,
+            "percentile": 100,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 3,
+        "actual_finish_scope": "FULL_ORDER",
+        "v44c_rank": 3,
+        "finisher_rank": 1
+      },
+      "finisher_margin": 38.75,
+      "finisher_component_margin": {
+        "recent_speed": 15.0,
+        "matched_speed": 12.5,
+        "late_pace": 11.25
+      },
+      "largest_finisher_advantage": "recent_speed",
+      "winner_v44c_rank": 1,
+      "winner_finisher_rank": 2,
+      "input_coverage": {
+        "recent_speed": {
+          "available": 5,
+          "field": 5
+        },
+        "matched_speed": {
+          "available": 5,
+          "field": 5
+        },
+        "late_pace": {
+          "available": 5,
+          "field": 5
+        }
+      }
+    },
+    {
+      "key": "BAQ_2026-05-22_R6",
+      "cohort": "DRF58",
+      "winner_model": "Finisher",
+      "winner_id": "scythian",
+      "surface": "Turf",
+      "distance": 8.5,
+      "type": "Not available in frozen feature archive",
+      "field_size": 6,
+      "v44c_pick": {
+        "name": "Downtown Channel",
+        "program": "6",
+        "latest_speed": 76,
+        "best3_speed": 76,
+        "control_score": 78.32498751248751,
+        "control_parts": [
+          [
+            76,
+            40,
+            "latest"
+          ],
+          [
+            76,
+            22,
+            "best3"
+          ],
+          [
+            60.9375,
+            7,
+            "jockey_win"
+          ],
+          [
+            92.3076923076923,
+            8,
+            "trainer_win"
+          ]
+        ],
+        "control_adjustment": 2,
+        "control_signals": [
+          [
+            "pace-fit",
+            2
+          ]
+        ],
+        "id": "downtownchannel",
+        "finisher_score": 51,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 73.07000000000001,
+            "percentile": 60,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": 75.80097763239402,
+            "percentile": 60,
+            "weight": 0.25,
+            "status": "AVAILABLE"
+          },
+          "late_pace": {
+            "raw": 82,
+            "percentile": 0,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 4,
+        "actual_finish_scope": "FULL_ORDER",
+        "v44c_rank": 1,
+        "finisher_rank": 3
+      },
+      "finisher_pick": {
+        "name": "Scythian",
+        "program": "5",
+        "latest_speed": 76,
+        "best3_speed": 88,
+        "control_score": 71.3530106257379,
+        "control_parts": [
+          [
+            76,
+            40,
+            "latest"
+          ],
+          [
+            88,
+            22,
+            "best3"
+          ],
+          [
+            42.85714285714286,
+            7,
+            "jockey_win"
+          ],
+          [
+            27.272727272727273,
+            8,
+            "trainer_win"
+          ]
+        ],
+        "control_adjustment": 0,
+        "control_signals": [],
+        "id": "scythian",
+        "finisher_score": 97,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 80.52,
+            "percentile": 100,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": 80.93057747775428,
+            "percentile": 100,
+            "weight": 0.25,
+            "status": "AVAILABLE"
+          },
+          "late_pace": {
+            "raw": 95,
+            "percentile": 80,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 1,
+        "actual_finish_scope": "FULL_ORDER",
+        "v44c_rank": 3,
+        "finisher_rank": 1
+      },
+      "finisher_margin": 46,
+      "finisher_component_margin": {
+        "recent_speed": 24.0,
+        "matched_speed": 10.0,
+        "late_pace": 12.0
+      },
+      "largest_finisher_advantage": "recent_speed",
+      "winner_v44c_rank": 3,
+      "winner_finisher_rank": 1,
+      "input_coverage": {
+        "recent_speed": {
+          "available": 6,
+          "field": 6
+        },
+        "matched_speed": {
+          "available": 6,
+          "field": 6
+        },
+        "late_pace": {
+          "available": 6,
+          "field": 6
+        }
+      }
+    },
+    {
+      "key": "BAQ_2026-05-22_R7",
+      "cohort": "DRF58",
+      "winner_model": "Finisher",
+      "winner_id": "tkraft",
+      "surface": "Dirt",
+      "distance": 6.5,
+      "type": "Not available in frozen feature archive",
+      "field_size": 7,
+      "v44c_pick": {
+        "name": "Raise the Bar",
+        "program": "5",
+        "latest_speed": 88,
+        "best3_speed": 99,
+        "control_score": 92.6203919324609,
+        "control_parts": [
+          [
+            88,
+            40,
+            "latest"
+          ],
+          [
+            99,
+            22,
+            "best3"
+          ],
+          [
+            70.37037037037038,
+            7,
+            "jockey_win"
+          ],
+          [
+            93.10344827586206,
+            8,
+            "trainer_win"
+          ]
+        ],
+        "control_adjustment": 2.55,
+        "control_signals": [
+          [
+            "field-relative",
+            0.55
+          ],
+          [
+            "pace-fit",
+            2
+          ]
+        ],
+        "id": "raisethebar",
+        "finisher_score": 70,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 86.08,
+            "percentile": 100,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": 76.67732657946428,
+            "percentile": 40,
+            "weight": 0.25,
+            "status": "AVAILABLE"
+          },
+          "late_pace": {
+            "raw": 67,
+            "percentile": 0,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 5,
+        "actual_finish_scope": "FULL_ORDER",
+        "v44c_rank": 1,
+        "finisher_rank": 2
+      },
+      "finisher_pick": {
+        "name": "T Kraft",
+        "program": "7",
+        "latest_speed": 87,
+        "best3_speed": 88,
+        "control_score": 77.06729634002362,
+        "control_parts": [
+          [
+            87,
+            40,
+            "latest"
+          ],
+          [
+            88,
+            22,
+            "best3"
+          ],
+          [
+            42.85714285714286,
+            7,
+            "jockey_win"
+          ],
+          [
+            27.272727272727273,
+            8,
+            "trainer_win"
+          ]
+        ],
+        "control_adjustment": 0,
+        "control_signals": [],
+        "id": "tkraft",
+        "finisher_score": 83.75,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 85.24,
+            "percentile": 83.33333333333333,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": 83.26894968383915,
+            "percentile": 100,
+            "weight": 0.25,
+            "status": "AVAILABLE"
+          },
+          "late_pace": {
+            "raw": 77,
+            "percentile": 58.333333333333336,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 1,
+        "actual_finish_scope": "FULL_ORDER",
+        "v44c_rank": 3,
+        "finisher_rank": 1
+      },
+      "finisher_margin": 13.75,
+      "finisher_component_margin": {
+        "recent_speed": -10.000000000000002,
+        "matched_speed": 15.0,
+        "late_pace": 8.75
+      },
+      "largest_finisher_advantage": "matched_speed",
+      "winner_v44c_rank": 3,
+      "winner_finisher_rank": 1,
+      "input_coverage": {
+        "recent_speed": {
+          "available": 7,
+          "field": 7
+        },
+        "matched_speed": {
+          "available": 6,
+          "field": 7
+        },
+        "late_pace": {
+          "available": 7,
+          "field": 7
+        }
+      }
+    },
+    {
+      "key": "BAQ_2026-06-18_R1",
+      "cohort": "DRF58",
+      "winner_model": "V4.4c",
+      "winner_id": "longtermmarket",
+      "surface": "Dirt",
+      "distance": 8,
+      "type": "Not available in frozen feature archive",
+      "field_size": 5,
+      "v44c_pick": {
+        "name": "Long Term Market",
+        "program": "5",
+        "latest_speed": 83,
+        "best3_speed": 83,
+        "control_score": 83.01616717014757,
+        "control_parts": [
+          [
+            83,
+            40,
+            "latest"
+          ],
+          [
+            83,
+            22,
+            "best3"
+          ],
+          [
+            70.12987012987014,
+            7,
+            "jockey_win"
+          ],
+          [
+            82.97872340425532,
+            8,
+            "trainer_win"
+          ],
+          [
+            81,
+            12,
+            "trainer_context_score"
+          ]
+        ],
+        "control_adjustment": 1.3,
+        "control_signals": [
+          [
+            "field-relative",
+            1.3
+          ]
+        ],
+        "id": "longtermmarket",
+        "finisher_score": 72.5,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 83,
+            "percentile": 100,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": null,
+            "percentile": 50,
+            "weight": 0.25,
+            "status": "UNKNOWN_NEUTRAL"
+          },
+          "late_pace": {
+            "raw": 54,
+            "percentile": 0,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 1,
+        "actual_finish_scope": "FULL_ORDER",
+        "v44c_rank": 1,
+        "finisher_rank": 2
+      },
+      "finisher_pick": {
+        "name": "Phantom Blue",
+        "program": "4",
+        "latest_speed": 83,
+        "best3_speed": 83,
+        "control_score": 76.52994771387252,
+        "control_parts": [
+          [
+            83,
+            40,
+            "latest"
+          ],
+          [
+            83,
+            22,
+            "best3"
+          ],
+          [
+            50.4950495049505,
+            7,
+            "jockey_win"
+          ],
+          [
+            0,
+            8,
+            "trainer_win"
+          ],
+          [
+            70,
+            12,
+            "trainer_context_score"
+          ]
+        ],
+        "control_adjustment": 5.3,
+        "control_signals": [
+          [
+            "field-relative",
+            1.3
+          ],
+          [
+            "pace-fit",
+            3
+          ],
+          [
+            "lightly-raced-upside",
+            1
+          ]
+        ],
+        "id": "phantomblue",
+        "finisher_score": 73.75,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 82.33333333333333,
+            "percentile": 75,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": 83,
+            "percentile": 100,
+            "weight": 0.25,
+            "status": "AVAILABLE"
+          },
+          "late_pace": {
+            "raw": 70,
+            "percentile": 25,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 2,
+        "actual_finish_scope": "FULL_ORDER",
+        "v44c_rank": 2,
+        "finisher_rank": 1
+      },
+      "finisher_margin": 1.25,
+      "finisher_component_margin": {
+        "recent_speed": -15.0,
+        "matched_speed": 12.5,
+        "late_pace": 3.75
+      },
+      "largest_finisher_advantage": "matched_speed",
+      "winner_v44c_rank": 1,
+      "winner_finisher_rank": 2,
+      "input_coverage": {
+        "recent_speed": {
+          "available": 5,
+          "field": 5
+        },
+        "matched_speed": {
+          "available": 3,
+          "field": 5
+        },
+        "late_pace": {
+          "available": 5,
+          "field": 5
+        }
+      }
+    },
+    {
+      "key": "BAQ_2026-06-21_R4",
+      "cohort": "DRF58",
+      "winner_model": "V4.4c",
+      "winner_id": "twirlinglad",
+      "surface": "Turf",
+      "distance": 8.5,
+      "type": "Not available in frozen feature archive",
+      "field_size": 7,
+      "v44c_pick": {
+        "name": "Twirling Lad",
+        "program": null,
+        "latest_speed": 67,
+        "best3_speed": 70,
+        "control_score": 67.18475073313783,
+        "control_parts": [
+          [
+            67,
+            40,
+            "latest"
+          ],
+          [
+            70,
+            22,
+            "best3"
+          ],
+          [
+            29.032258064516128,
+            7,
+            "jockey_win"
+          ],
+          [
+            93.75,
+            8,
+            "trainer_win"
+          ]
+        ],
+        "control_adjustment": 0,
+        "control_signals": [],
+        "id": "twirlinglad",
+        "finisher_score": 57.5,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 55.57,
+            "percentile": 50,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": 67.37333089343058,
+            "percentile": 100,
+            "weight": 0.25,
+            "status": "AVAILABLE"
+          },
+          "late_pace": {
+            "raw": 54,
+            "percentile": 16.666666666666668,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 1,
+        "actual_finish_scope": "FULL_ORDER",
+        "v44c_rank": 1,
+        "finisher_rank": 4
+      },
+      "finisher_pick": {
+        "name": "Ohonte's Own",
+        "program": null,
+        "latest_speed": 73,
+        "best3_speed": 73,
+        "control_score": 60.15908375400314,
+        "control_parts": [
+          [
+            73,
+            40,
+            "latest"
+          ],
+          [
+            73,
+            22,
+            "best3"
+          ],
+          [
+            28.695652173913043,
+            7,
+            "jockey_win"
+          ],
+          [
+            11.11111111111111,
+            8,
+            "trainer_win"
+          ],
+          [
+            33,
+            12,
+            "trainer_context_score"
+          ]
+        ],
+        "control_adjustment": 1.6,
+        "control_signals": [
+          [
+            "field-relative",
+            0.6
+          ],
+          [
+            "lightly-raced-upside",
+            1
+          ]
+        ],
+        "id": "ohontesown",
+        "finisher_score": 93.33333333333333,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 68,
+            "percentile": 100,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": 66.30555240337266,
+            "percentile": 83.33333333333333,
+            "weight": 0.25,
+            "status": "AVAILABLE"
+          },
+          "late_pace": {
+            "raw": 84,
+            "percentile": 83.33333333333333,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 3,
+        "actual_finish_scope": "FULL_ORDER",
+        "v44c_rank": 5,
+        "finisher_rank": 1
+      },
+      "finisher_margin": 35.83333333333333,
+      "finisher_component_margin": {
+        "recent_speed": 30.0,
+        "matched_speed": -4.166666666666668,
+        "late_pace": 9.999999999999998
+      },
+      "largest_finisher_advantage": "recent_speed",
+      "winner_v44c_rank": 1,
+      "winner_finisher_rank": 4,
+      "input_coverage": {
+        "recent_speed": {
+          "available": 7,
+          "field": 7
+        },
+        "matched_speed": {
+          "available": 7,
+          "field": 7
+        },
+        "late_pace": {
+          "available": 7,
+          "field": 7
+        }
+      }
+    },
+    {
+      "key": "BAQ_2026-06-25_R2",
+      "cohort": "DRF58",
+      "winner_model": "Finisher",
+      "winner_id": "ladywisdom",
+      "surface": "Dirt",
+      "distance": 8,
+      "type": "Not available in frozen feature archive",
+      "field_size": 5,
+      "v44c_pick": {
+        "name": "That'sthefactjack",
+        "program": "4",
+        "latest_speed": 57,
+        "best3_speed": 57,
+        "control_score": 59.09340659340659,
+        "control_parts": [
+          [
+            57,
+            40,
+            "latest"
+          ],
+          [
+            57,
+            22,
+            "best3"
+          ],
+          [
+            25.384615384615387,
+            7,
+            "jockey_win"
+          ],
+          [
+            100,
+            8,
+            "trainer_win"
+          ]
+        ],
+        "control_adjustment": 0.5,
+        "control_signals": [
+          [
+            "field-relative",
+            0.5
+          ]
+        ],
+        "id": "thatsthefactjack",
+        "finisher_score": 28.75,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 51.620000000000005,
+            "percentile": 25,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": 45.74987290446314,
+            "percentile": 25,
+            "weight": 0.25,
+            "status": "AVAILABLE"
+          },
+          "late_pace": {
+            "raw": 62,
+            "percentile": 50,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 5,
+        "actual_finish_scope": "FULL_ORDER",
+        "v44c_rank": 1,
+        "finisher_rank": 4
+      },
+      "finisher_pick": {
+        "name": "Lady Wisdom",
+        "program": "5",
+        "latest_speed": 57,
+        "best3_speed": 61,
+        "control_score": 56.80883750395946,
+        "control_parts": [
+          [
+            57,
+            40,
+            "latest"
+          ],
+          [
+            61,
+            22,
+            "best3"
+          ],
+          [
+            67.6829268292683,
+            7,
+            "jockey_win"
+          ],
+          [
+            30,
+            8,
+            "trainer_win"
+          ]
+        ],
+        "control_adjustment": 0.5,
+        "control_signals": [
+          [
+            "field-relative",
+            0.5
+          ]
+        ],
+        "id": "ladywisdom",
+        "finisher_score": 83.75,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 56.160000000000004,
+            "percentile": 100,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": 56.78873460454911,
+            "percentile": 50,
+            "weight": 0.25,
+            "status": "AVAILABLE"
+          },
+          "late_pace": {
+            "raw": 65,
+            "percentile": 75,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 1,
+        "actual_finish_scope": "FULL_ORDER",
+        "v44c_rank": 2,
+        "finisher_rank": 1
+      },
+      "finisher_margin": 55.0,
+      "finisher_component_margin": {
+        "recent_speed": 45.0,
+        "matched_speed": 6.25,
+        "late_pace": 3.75
+      },
+      "largest_finisher_advantage": "recent_speed",
+      "winner_v44c_rank": 2,
+      "winner_finisher_rank": 1,
+      "input_coverage": {
+        "recent_speed": {
+          "available": 5,
+          "field": 5
+        },
+        "matched_speed": {
+          "available": 5,
+          "field": 5
+        },
+        "late_pace": {
+          "available": 5,
+          "field": 5
+        }
+      }
+    },
+    {
+      "key": "BAQ_2026-06-25_R4",
+      "cohort": "DRF58",
+      "winner_model": "Finisher",
+      "winner_id": "leslieshumor",
+      "surface": "Turf",
+      "distance": 6,
+      "type": "Not available in frozen feature archive",
+      "field_size": 6,
+      "v44c_pick": {
+        "name": "Munnings Express",
+        "program": "6",
+        "latest_speed": 83,
+        "best3_speed": 90,
+        "control_score": 83.47412433126719,
+        "control_parts": [
+          [
+            83,
+            40,
+            "latest"
+          ],
+          [
+            90,
+            22,
+            "best3"
+          ],
+          [
+            48.64864864864865,
+            7,
+            "jockey_win"
+          ],
+          [
+            79.12087912087912,
+            8,
+            "trainer_win"
+          ]
+        ],
+        "control_adjustment": 2,
+        "control_signals": [
+          [
+            "pace-fit",
+            2
+          ]
+        ],
+        "id": "munningsexpress",
+        "finisher_score": 72.5,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 84.07,
+            "percentile": 100,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": null,
+            "percentile": 50,
+            "weight": 0.25,
+            "status": "UNKNOWN_NEUTRAL"
+          },
+          "late_pace": {
+            "raw": 57,
+            "percentile": 0,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 3,
+        "actual_finish_scope": "FULL_ORDER",
+        "v44c_rank": 1,
+        "finisher_rank": 2
+      },
+      "finisher_pick": {
+        "name": "Leslie's Humor",
+        "program": "3",
+        "latest_speed": 82,
+        "best3_speed": 91,
+        "control_score": 81.78490633790173,
+        "control_parts": [
+          [
+            82,
+            40,
+            "latest"
+          ],
+          [
+            91,
+            22,
+            "best3"
+          ],
+          [
+            53.225806451612904,
+            7,
+            "jockey_win"
+          ],
+          [
+            80.35714285714286,
+            8,
+            "trainer_win"
+          ]
+        ],
+        "control_adjustment": 0,
+        "control_signals": [],
+        "id": "leslieshumor",
+        "finisher_score": 76,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 82,
+            "percentile": 60,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": 83.31129090058043,
+            "percentile": 100,
+            "weight": 0.25,
+            "status": "AVAILABLE"
+          },
+          "late_pace": {
+            "raw": 81,
+            "percentile": 100,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 1,
+        "actual_finish_scope": "FULL_ORDER",
+        "v44c_rank": 2,
+        "finisher_rank": 1
+      },
+      "finisher_margin": 3.5,
+      "finisher_component_margin": {
+        "recent_speed": -24.0,
+        "matched_speed": 12.5,
+        "late_pace": 15.0
+      },
+      "largest_finisher_advantage": "late_pace",
+      "winner_v44c_rank": 2,
+      "winner_finisher_rank": 1,
+      "input_coverage": {
+        "recent_speed": {
+          "available": 6,
+          "field": 6
+        },
+        "matched_speed": {
+          "available": 5,
+          "field": 6
+        },
+        "late_pace": {
+          "available": 6,
+          "field": 6
+        }
+      }
+    },
+    {
+      "key": "BAQ_2026-06-25_R7",
+      "cohort": "DRF58",
+      "winner_model": "V4.4c",
+      "winner_id": "mursal",
+      "surface": "Dirt",
+      "distance": 6,
+      "type": "Not available in frozen feature archive",
+      "field_size": 7,
+      "v44c_pick": {
+        "name": "Mursal",
+        "program": "1",
+        "latest_speed": 76,
+        "best3_speed": 80,
+        "control_score": 76.04672309257563,
+        "control_parts": [
+          [
+            76,
+            40,
+            "latest"
+          ],
+          [
+            80,
+            22,
+            "best3"
+          ],
+          [
+            53.225806451612904,
+            7,
+            "jockey_win"
+          ],
+          [
+            79.12087912087912,
+            8,
+            "trainer_win"
+          ]
+        ],
+        "control_adjustment": 0.65,
+        "control_signals": [
+          [
+            "field-relative",
+            0.65
+          ]
+        ],
+        "id": "mursal",
+        "finisher_score": 77.5,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 75.88000000000001,
+            "percentile": 83.33333333333333,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": null,
+            "percentile": 50,
+            "weight": 0.25,
+            "status": "UNKNOWN_NEUTRAL"
+          },
+          "late_pace": {
+            "raw": 92,
+            "percentile": 100,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 1,
+        "actual_finish_scope": "FULL_ORDER",
+        "v44c_rank": 1,
+        "finisher_rank": 2
+      },
+      "finisher_pick": {
+        "name": "Despo's Dream",
+        "program": "7",
+        "latest_speed": 83,
+        "best3_speed": 83,
+        "control_score": 72.9973245424652,
+        "control_parts": [
+          [
+            83,
+            40,
+            "latest"
+          ],
+          [
+            83,
+            22,
+            "best3"
+          ],
+          [
+            26.08695652173913,
+            7,
+            "jockey_win"
+          ],
+          [
+            23.52941176470588,
+            8,
+            "trainer_win"
+          ]
+        ],
+        "control_adjustment": 1.35,
+        "control_signals": [
+          [
+            "field-relative",
+            1.35
+          ]
+        ],
+        "id": "desposdream",
+        "finisher_score": 95,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 77.88,
+            "percentile": 100,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": 71,
+            "percentile": 100,
+            "weight": 0.25,
+            "status": "AVAILABLE"
+          },
+          "late_pace": {
+            "raw": 71,
+            "percentile": 66.66666666666667,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 3,
+        "actual_finish_scope": "FULL_ORDER",
+        "v44c_rank": 3,
+        "finisher_rank": 1
+      },
+      "finisher_margin": 17.5,
+      "finisher_component_margin": {
+        "recent_speed": 10.000000000000002,
+        "matched_speed": 12.5,
+        "late_pace": -4.999999999999999
+      },
+      "largest_finisher_advantage": "matched_speed",
+      "winner_v44c_rank": 1,
+      "winner_finisher_rank": 2,
+      "input_coverage": {
+        "recent_speed": {
+          "available": 7,
+          "field": 7
+        },
+        "matched_speed": {
+          "available": 6,
+          "field": 7
+        },
+        "late_pace": {
+          "available": 7,
+          "field": 7
+        }
+      }
+    },
+    {
+      "key": "BAQ_2026-06-26_R3",
+      "cohort": "DRF58",
+      "winner_model": "Finisher",
+      "winner_id": "cocktailsnkringle",
+      "surface": "Dirt",
+      "distance": 7,
+      "type": "Not available in frozen feature archive",
+      "field_size": 6,
+      "v44c_pick": {
+        "name": "Golden Symphony",
+        "program": null,
+        "latest_speed": 83,
+        "best3_speed": 83,
+        "control_score": 80.70451325677806,
+        "control_parts": [
+          [
+            83,
+            40,
+            "latest"
+          ],
+          [
+            83,
+            22,
+            "best3"
+          ],
+          [
+            67.6829268292683,
+            7,
+            "jockey_win"
+          ],
+          [
+            79.12087912087912,
+            8,
+            "trainer_win"
+          ]
+        ],
+        "control_adjustment": -0.5,
+        "control_signals": [
+          [
+            "field-relative",
+            0.5
+          ],
+          [
+            "pace-fit",
+            -1
+          ]
+        ],
+        "id": "goldensymphony",
+        "finisher_score": 9.25,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 70.39,
+            "percentile": 0,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": 68.05497439140869,
+            "percentile": 25,
+            "weight": 0.25,
+            "status": "AVAILABLE"
+          },
+          "late_pace": {
+            "raw": 63,
+            "percentile": 20,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 2,
+        "actual_finish_scope": "FULL_ORDER",
+        "v44c_rank": 1,
+        "finisher_rank": 6
+      },
+      "finisher_pick": {
+        "name": "Cocktailsnkringle",
+        "program": null,
+        "latest_speed": 86,
+        "best3_speed": 86,
+        "control_score": 79.60991735537189,
+        "control_parts": [
+          [
+            86,
+            40,
+            "latest"
+          ],
+          [
+            86,
+            22,
+            "best3"
+          ],
+          [
+            19.48051948051948,
+            7,
+            "jockey_win"
+          ],
+          [
+            75,
+            8,
+            "trainer_win"
+          ]
+        ],
+        "control_adjustment": 0.8,
+        "control_signals": [
+          [
+            "field-relative",
+            0.8
+          ]
+        ],
+        "id": "cocktailsnkringle",
+        "finisher_score": 87.5,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 84.1,
+            "percentile": 100,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": null,
+            "percentile": 50,
+            "weight": 0.25,
+            "status": "UNKNOWN_NEUTRAL"
+          },
+          "late_pace": {
+            "raw": 94,
+            "percentile": 100,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 1,
+        "actual_finish_scope": "FULL_ORDER",
+        "v44c_rank": 3,
+        "finisher_rank": 1
+      },
+      "finisher_margin": 78.25,
+      "finisher_component_margin": {
+        "recent_speed": 60.0,
+        "matched_speed": 6.25,
+        "late_pace": 12.0
+      },
+      "largest_finisher_advantage": "recent_speed",
+      "winner_v44c_rank": 3,
+      "winner_finisher_rank": 1,
+      "input_coverage": {
+        "recent_speed": {
+          "available": 6,
+          "field": 6
+        },
+        "matched_speed": {
+          "available": 5,
+          "field": 6
+        },
+        "late_pace": {
+          "available": 6,
+          "field": 6
+        }
+      }
+    },
+    {
+      "key": "BAQ_2026-06-26_R7",
+      "cohort": "DRF58",
+      "winner_model": "Finisher",
+      "winner_id": "sebastianthefirst",
+      "surface": "Dirt",
+      "distance": 6.5,
+      "type": "Not available in frozen feature archive",
+      "field_size": 6,
+      "v44c_pick": {
+        "name": "Nantz",
+        "program": null,
+        "latest_speed": 54,
+        "best3_speed": 71,
+        "control_score": 64.39393939393939,
+        "control_parts": [
+          [
+            54,
+            40,
+            "latest"
+          ],
+          [
+            71,
+            22,
+            "best3"
+          ],
+          [
+            73.33333333333333,
+            7,
+            "jockey_win"
+          ],
+          [
+            100,
+            8,
+            "trainer_win"
+          ]
+        ],
+        "control_adjustment": -1,
+        "control_signals": [
+          [
+            "field-relative",
+            -1
+          ]
+        ],
+        "id": "nantz",
+        "finisher_score": 46.5,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 60.57,
+            "percentile": 40,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": 65.64773894536899,
+            "percentile": 60,
+            "weight": 0.25,
+            "status": "AVAILABLE"
+          },
+          "late_pace": {
+            "raw": 64,
+            "percentile": 50,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 4,
+        "actual_finish_scope": "FULL_ORDER",
+        "v44c_rank": 1,
+        "finisher_rank": 4
+      },
+      "finisher_pick": {
+        "name": "Sebastianthe First",
+        "program": null,
+        "latest_speed": 67,
+        "best3_speed": 67,
+        "control_score": 59.857142857142854,
+        "control_parts": [
+          [
+            67,
+            40,
+            "latest"
+          ],
+          [
+            67,
+            22,
+            "best3"
+          ],
+          [
+            65,
+            7,
+            "jockey_win"
+          ],
+          [
+            0,
+            8,
+            "trainer_win"
+          ]
+        ],
+        "control_adjustment": 0,
+        "control_signals": [],
+        "id": "sebastianthefirst",
+        "finisher_score": 80,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 65.68,
+            "percentile": 100,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": 64.60053532306914,
+            "percentile": 20,
+            "weight": 0.25,
+            "status": "AVAILABLE"
+          },
+          "late_pace": {
+            "raw": 73,
+            "percentile": 100,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 1,
+        "actual_finish_scope": "FULL_ORDER",
+        "v44c_rank": 3,
+        "finisher_rank": 1
+      },
+      "finisher_margin": 33.5,
+      "finisher_component_margin": {
+        "recent_speed": 36.0,
+        "matched_speed": -10.0,
+        "late_pace": 7.5
+      },
+      "largest_finisher_advantage": "recent_speed",
+      "winner_v44c_rank": 3,
+      "winner_finisher_rank": 1,
+      "input_coverage": {
+        "recent_speed": {
+          "available": 6,
+          "field": 6
+        },
+        "matched_speed": {
+          "available": 6,
+          "field": 6
+        },
+        "late_pace": {
+          "available": 6,
+          "field": 6
+        }
+      }
+    },
+    {
+      "key": "CD_2026-04-30_R3",
+      "cohort": "DRF58",
+      "winner_model": "V4.4c",
+      "winner_id": "freshout",
+      "surface": "Dirt",
+      "distance": 8,
+      "type": "Not available in frozen feature archive",
+      "field_size": 8,
+      "v44c_pick": {
+        "name": "Fresh Out",
+        "program": "2",
+        "latest_speed": 44,
+        "best3_speed": 50,
+        "control_score": 53.285714285714285,
+        "control_parts": [
+          [
+            44,
+            40,
+            "latest"
+          ],
+          [
+            50,
+            22,
+            "best3"
+          ],
+          [
+            100,
+            8,
+            "trainer_win"
+          ]
+        ],
+        "control_adjustment": 1,
+        "control_signals": [
+          [
+            "lightly-raced-upside",
+            1
+          ]
+        ],
+        "id": "freshout",
+        "finisher_score": 66.07142857142857,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 43.3,
+            "percentile": 71.42857142857143,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": null,
+            "percentile": 50,
+            "weight": 0.25,
+            "status": "UNKNOWN_NEUTRAL"
+          },
+          "late_pace": {
+            "raw": 50,
+            "percentile": 71.42857142857143,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 1,
+        "actual_finish_scope": "FULL_ORDER",
+        "v44c_rank": 1,
+        "finisher_rank": 3
+      },
+      "finisher_pick": {
+        "name": "Spotted",
+        "program": "5",
+        "latest_speed": 52,
+        "best3_speed": 52,
+        "control_score": 50.06748971193415,
+        "control_parts": [
+          [
+            52,
+            40,
+            "latest"
+          ],
+          [
+            52,
+            22,
+            "best3"
+          ],
+          [
+            66.66666666666666,
+            7,
+            "jockey_win"
+          ],
+          [
+            25,
+            12,
+            "trainer_context_score"
+          ]
+        ],
+        "control_adjustment": 0.8,
+        "control_signals": [
+          [
+            "field-relative",
+            0.8
+          ]
+        ],
+        "id": "spotted",
+        "finisher_score": 80,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 52,
+            "percentile": 100,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": null,
+            "percentile": 50,
+            "weight": 0.25,
+            "status": "UNKNOWN_NEUTRAL"
+          },
+          "late_pace": {
+            "raw": 40,
+            "percentile": 50,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 6,
+        "actual_finish_scope": "FULL_ORDER",
+        "v44c_rank": 2,
+        "finisher_rank": 1
+      },
+      "finisher_margin": 13.92857142857143,
+      "finisher_component_margin": {
+        "recent_speed": 17.142857142857142,
+        "matched_speed": 0.0,
+        "late_pace": -3.2142857142857144
+      },
+      "largest_finisher_advantage": "recent_speed",
+      "winner_v44c_rank": 1,
+      "winner_finisher_rank": 3,
+      "input_coverage": {
+        "recent_speed": {
+          "available": 8,
+          "field": 8
+        },
+        "matched_speed": {
+          "available": 0,
+          "field": 8
+        },
+        "late_pace": {
+          "available": 8,
+          "field": 8
+        }
+      }
+    },
+    {
+      "key": "CD_2026-04-30_R10",
+      "cohort": "DRF58",
+      "winner_model": "V4.4c",
+      "winner_id": "maximumbourbon",
+      "surface": "Dirt",
+      "distance": 6,
+      "type": "Not available in frozen feature archive",
+      "field_size": 8,
+      "v44c_pick": {
+        "name": "Maximum Bourbon",
+        "program": "9",
+        "latest_speed": 103,
+        "best3_speed": 103,
+        "control_score": 102.75942028985507,
+        "control_parts": [
+          [
+            103,
+            40,
+            "latest"
+          ],
+          [
+            103,
+            22,
+            "best3"
+          ],
+          [
+            75,
+            7,
+            "jockey_win"
+          ]
+        ],
+        "control_adjustment": 2.6,
+        "control_signals": [
+          [
+            "field-relative",
+            1.6
+          ],
+          [
+            "pace-fit",
+            -1
+          ],
+          [
+            "lightly-raced-upside",
+            2
+          ]
+        ],
+        "id": "maximumbourbon",
+        "finisher_score": 80,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 95.32,
+            "percentile": 100,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": 95.21146645251594,
+            "percentile": 71.42857142857143,
+            "weight": 0.25,
+            "status": "AVAILABLE"
+          },
+          "late_pace": {
+            "raw": 63,
+            "percentile": 14.285714285714286,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 1,
+        "actual_finish_scope": "FULL_ORDER",
+        "v44c_rank": 1,
+        "finisher_rank": 2
+      },
+      "finisher_pick": {
+        "name": "Built",
+        "program": "2",
+        "latest_speed": 106,
+        "best3_speed": 106,
+        "control_score": 96.14637681159421,
+        "control_parts": [
+          [
+            106,
+            40,
+            "latest"
+          ],
+          [
+            106,
+            22,
+            "best3"
+          ],
+          [
+            0,
+            7,
+            "jockey_win"
+          ]
+        ],
+        "control_adjustment": 0.8999999999999999,
+        "control_signals": [
+          [
+            "field-relative",
+            1.9
+          ],
+          [
+            "pace-fit",
+            -1
+          ]
+        ],
+        "id": "built",
+        "finisher_score": 82.85714285714285,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 94.52999999999999,
+            "percentile": 85.71428571428571,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": 100.18693651031259,
+            "percentile": 100,
+            "weight": 0.25,
+            "status": "AVAILABLE"
+          },
+          "late_pace": {
+            "raw": 73,
+            "percentile": 42.857142857142854,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 3,
+        "actual_finish_scope": "FULL_ORDER",
+        "v44c_rank": 2,
+        "finisher_rank": 1
+      },
+      "finisher_margin": 2.857142857142847,
+      "finisher_component_margin": {
+        "recent_speed": -8.571428571428575,
+        "matched_speed": 7.142857142857142,
+        "late_pace": 4.285714285714286
+      },
+      "largest_finisher_advantage": "matched_speed",
+      "winner_v44c_rank": 1,
+      "winner_finisher_rank": 2,
+      "input_coverage": {
+        "recent_speed": {
+          "available": 8,
+          "field": 8
+        },
+        "matched_speed": {
+          "available": 8,
+          "field": 8
+        },
+        "late_pace": {
+          "available": 8,
+          "field": 8
+        }
+      }
+    },
+    {
+      "key": "CD_2026-04-30_R11",
+      "cohort": "DRF58",
+      "winner_model": "Finisher",
+      "winner_id": "cyfair",
+      "surface": "Turf",
+      "distance": 5.5,
+      "type": "Not available in frozen feature archive",
+      "field_size": 9,
+      "v44c_pick": {
+        "name": "Hen Party",
+        "program": "6",
+        "latest_speed": 86,
+        "best3_speed": 86,
+        "control_score": 88.4840579710145,
+        "control_parts": [
+          [
+            86,
+            40,
+            "latest"
+          ],
+          [
+            86,
+            22,
+            "best3"
+          ],
+          [
+            75,
+            7,
+            "jockey_win"
+          ]
+        ],
+        "control_adjustment": 3.6,
+        "control_signals": [
+          [
+            "field-relative",
+            1.6
+          ],
+          [
+            "lightly-raced-upside",
+            2
+          ]
+        ],
+        "id": "henparty",
+        "finisher_score": 74.375,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 86,
+            "percentile": 87.5,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": null,
+            "percentile": 50,
+            "weight": 0.25,
+            "status": "UNKNOWN_NEUTRAL"
+          },
+          "late_pace": {
+            "raw": 71,
+            "percentile": 62.5,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 3,
+        "actual_finish_scope": "FULL_ORDER",
+        "v44c_rank": 1,
+        "finisher_rank": 3
+      },
+      "finisher_pick": {
+        "name": "Cy Fair",
+        "program": "5",
+        "latest_speed": 90,
+        "best3_speed": 90,
+        "control_score": 80.20915926179084,
+        "control_parts": [
+          [
+            90,
+            40,
+            "latest"
+          ],
+          [
+            90,
+            22,
+            "best3"
+          ],
+          [
+            63.15789473684211,
+            7,
+            "jockey_win"
+          ],
+          [
+            0,
+            8,
+            "trainer_win"
+          ]
+        ],
+        "control_adjustment": 2,
+        "control_signals": [
+          [
+            "field-relative",
+            2
+          ],
+          [
+            "pace-fit",
+            -1
+          ],
+          [
+            "lightly-raced-upside",
+            1
+          ]
+        ],
+        "id": "cyfair",
+        "finisher_score": 93.95833333333333,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 87.44,
+            "percentile": 100,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": 87.2455704650919,
+            "percentile": 83.33333333333333,
+            "weight": 0.25,
+            "status": "AVAILABLE"
+          },
+          "late_pace": {
+            "raw": 78,
+            "percentile": 87.5,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 1,
+        "actual_finish_scope": "FULL_ORDER",
+        "v44c_rank": 3,
+        "finisher_rank": 1
+      },
+      "finisher_margin": 19.58333333333333,
+      "finisher_component_margin": {
+        "recent_speed": 7.5,
+        "matched_speed": 8.333333333333332,
+        "late_pace": 3.75
+      },
+      "largest_finisher_advantage": "matched_speed",
+      "winner_v44c_rank": 3,
+      "winner_finisher_rank": 1,
+      "input_coverage": {
+        "recent_speed": {
+          "available": 9,
+          "field": 9
+        },
+        "matched_speed": {
+          "available": 7,
+          "field": 9
+        },
+        "late_pace": {
+          "available": 9,
+          "field": 9
+        }
+      }
+    },
+    {
+      "key": "SAR_2026-06-05_R4",
+      "cohort": "SAR47",
+      "winner_model": "Finisher",
+      "winner_id": "waysandmeans",
+      "surface": "Dirt",
+      "distance": 7,
+      "type": "4 Saratoga \u00e7BedORos-G2 7 Furlongs (1:20\u00a7) THE BED O' ROSES S. PRESENTED BY BOLDYN NETWORKS. Grade II. Purse $300,000 For Fillies And Mares Four Year Olds And Upward. Lasix not allowed within 48 hours of post time pursuant to HISA Rule 4212. By subscription of $300 each which should accompany the nomination. $1,500 to pass",
+      "field_size": 6,
+      "v44c_pick": {
+        "name": "Grand Job",
+        "program": "1",
+        "latest_speed": 108,
+        "best3_speed": 108,
+        "control_score": 112,
+        "source_jockey_win": null,
+        "source_trainer_win": null,
+        "id": "grandjob",
+        "finisher_score": 73,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 97.67999999999999,
+            "percentile": 80,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": 105.05285118185489,
+            "percentile": 100,
+            "weight": 0.25,
+            "status": "AVAILABLE"
+          },
+          "late_pace": {
+            "raw": 76,
+            "percentile": 0,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 2,
+        "actual_finish_scope": "FIRST_FOUR_ONLY",
+        "v44c_rank": 1,
+        "finisher_rank": 2
+      },
+      "finisher_pick": {
+        "name": "Ways and Means",
+        "program": "3",
+        "latest_speed": 98,
+        "best3_speed": 111,
+        "control_score": 104.01290322580645,
+        "source_jockey_win": null,
+        "source_trainer_win": null,
+        "id": "waysandmeans",
+        "finisher_score": 87.5,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 101.8,
+            "percentile": 100,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": 98.94895994027348,
+            "percentile": 80,
+            "weight": 0.25,
+            "status": "AVAILABLE"
+          },
+          "late_pace": {
+            "raw": 93,
+            "percentile": 50,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 1,
+        "actual_finish_scope": "FIRST_FOUR_ONLY",
+        "v44c_rank": 2,
+        "finisher_rank": 1
+      },
+      "finisher_margin": 14.5,
+      "finisher_component_margin": {
+        "recent_speed": 12.0,
+        "matched_speed": -5.0,
+        "late_pace": 7.5
+      },
+      "largest_finisher_advantage": "recent_speed",
+      "winner_v44c_rank": 2,
+      "winner_finisher_rank": 1,
+      "input_coverage": {
+        "recent_speed": {
+          "available": 6,
+          "field": 6
+        },
+        "matched_speed": {
+          "available": 6,
+          "field": 6
+        },
+        "late_pace": {
+          "available": 6,
+          "field": 6
+        }
+      }
+    },
+    {
+      "key": "SAR_2026-06-05_R10",
+      "cohort": "SAR47",
+      "winner_model": "Finisher",
+      "winner_id": "countingstars",
+      "surface": "Dirt",
+      "distance": 9.0,
+      "type": "10 Saratoga \u00e7Acorn-G1 1\u00b0 MILES (1:46\u00a8) THE DRAFTKINGS ACORN. Grade I. Purse $500,000 For Fillies Three Years Old. Lasix not allowed within 48 hours of post time pursuant to HISA Rule 4212. By subscription of $500 each which should accompany the nomination. $3,500 to pass the entry box and an additional $4,000 to start. For horses not originally",
+      "field_size": 5,
+      "v44c_pick": {
+        "name": "Always a Runner",
+        "program": "5",
+        "latest_speed": 94,
+        "best3_speed": 94,
+        "control_score": 95,
+        "source_jockey_win": null,
+        "source_trainer_win": null,
+        "id": "alwaysarunner",
+        "finisher_score": 85,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 88.16666666666666,
+            "percentile": 75,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": 94,
+            "percentile": 100,
+            "weight": 0.25,
+            "status": "AVAILABLE"
+          },
+          "late_pace": {
+            "raw": 107,
+            "percentile": 100,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 2,
+        "actual_finish_scope": "FIRST_FOUR_ONLY",
+        "v44c_rank": 1,
+        "finisher_rank": 2
+      },
+      "finisher_pick": {
+        "name": "Counting Stars",
+        "program": "2",
+        "latest_speed": 90,
+        "best3_speed": 92,
+        "control_score": 89.70967741935483,
+        "source_jockey_win": null,
+        "source_trainer_win": null,
+        "id": "countingstars",
+        "finisher_score": 86.25,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 90,
+            "percentile": 100,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": 89.85434501986715,
+            "percentile": 75,
+            "weight": 0.25,
+            "status": "AVAILABLE"
+          },
+          "late_pace": {
+            "raw": 90,
+            "percentile": 50,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 1,
+        "actual_finish_scope": "FIRST_FOUR_ONLY",
+        "v44c_rank": 3,
+        "finisher_rank": 1
+      },
+      "finisher_margin": 1.25,
+      "finisher_component_margin": {
+        "recent_speed": 15.0,
+        "matched_speed": -6.25,
+        "late_pace": -7.5
+      },
+      "largest_finisher_advantage": "recent_speed",
+      "winner_v44c_rank": 3,
+      "winner_finisher_rank": 1,
+      "input_coverage": {
+        "recent_speed": {
+          "available": 5,
+          "field": 5
+        },
+        "matched_speed": {
+          "available": 5,
+          "field": 5
+        },
+        "late_pace": {
+          "available": 5,
+          "field": 5
+        }
+      }
+    },
+    {
+      "key": "SAR_2026-06-07_R1",
+      "cohort": "SAR47",
+      "winner_model": "Finisher",
+      "winner_id": "allofit",
+      "surface": "Turf",
+      "distance": 8.5,
+      "type": "1 Saratoga \u00d0\u00e7Alw 105000N1X 1\u00c2 MILES (Inner Turf). (1:39) ALLOWANCE. Purse $105,000 Inner Turf For Fillies And Mares Three Years Old And Upward Foaled In New York State And Approved By The New York State-bred Registry Which",
+      "field_size": 10,
+      "v44c_pick": {
+        "name": "Bryant and Cooper",
+        "program": null,
+        "latest_speed": 73,
+        "best3_speed": 73,
+        "control_score": 78.58571428571429,
+        "source_jockey_win": null,
+        "source_trainer_win": 50,
+        "id": "bryantandcooper",
+        "finisher_score": 80.41666666666666,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 67.45,
+            "percentile": 77.77777777777777,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": 68.77283065139821,
+            "percentile": 75,
+            "weight": 0.25,
+            "status": "AVAILABLE"
+          },
+          "late_pace": {
+            "raw": 105,
+            "percentile": 100,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": null,
+        "actual_finish_scope": "FIRST_FOUR_ONLY",
+        "v44c_rank": 1,
+        "finisher_rank": 3
+      },
+      "finisher_pick": {
+        "name": "All of It",
+        "program": null,
+        "latest_speed": 76,
+        "best3_speed": 76,
+        "control_score": 71.33536021150033,
+        "source_jockey_win": 29.41176470588235,
+        "source_trainer_win": 12.5,
+        "id": "allofit",
+        "finisher_score": 90.83333333333333,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 76,
+            "percentile": 100,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": 76,
+            "percentile": 100,
+            "weight": 0.25,
+            "status": "AVAILABLE"
+          },
+          "late_pace": {
+            "raw": 81,
+            "percentile": 38.888888888888886,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 1,
+        "actual_finish_scope": "FIRST_FOUR_ONLY",
+        "v44c_rank": 3,
+        "finisher_rank": 1
+      },
+      "finisher_margin": 10.416666666666671,
+      "finisher_component_margin": {
+        "recent_speed": 13.333333333333337,
+        "matched_speed": 6.25,
+        "late_pace": -9.166666666666666
+      },
+      "largest_finisher_advantage": "recent_speed",
+      "winner_v44c_rank": 3,
+      "winner_finisher_rank": 1,
+      "input_coverage": {
+        "recent_speed": {
+          "available": 10,
+          "field": 10
+        },
+        "matched_speed": {
+          "available": 9,
+          "field": 10
+        },
+        "late_pace": {
+          "available": 10,
+          "field": 10
+        }
+      }
+    },
+    {
+      "key": "SAR_2026-06-07_R3",
+      "cohort": "SAR47",
+      "winner_model": "Finisher",
+      "winner_id": "scottishlassie",
+      "surface": "Dirt",
+      "distance": 7,
+      "type": "3 Saratoga \u00e7OC 80k/C 7 Furlongs (1:20\u00a7) ALLOWANCE OPTIONAL CLAIMING. Purse $125,000 (UP TO $21,750 NYSBFOA ) For Fillies And Mares Three Years Old And Upward Which Have Never Won $20,000 Twice Other Than Maiden, Claiming, Starter Or State Bred Allowance Or Which Have Never Won Three Races Or Which Have Not Won A",
+      "field_size": 5,
+      "v44c_pick": {
+        "name": "Filly Freedom",
+        "program": null,
+        "latest_speed": 82,
+        "best3_speed": 82,
+        "control_score": 84.43697478991596,
+        "source_jockey_win": 29.41176470588235,
+        "source_trainer_win": 50,
+        "id": "fillyfreedom",
+        "finisher_score": 81.25,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 79.02000000000001,
+            "percentile": 75,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": 81.90117682428418,
+            "percentile": 100,
+            "weight": 0.25,
+            "status": "AVAILABLE"
+          },
+          "late_pace": {
+            "raw": 96,
+            "percentile": 75,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 4,
+        "actual_finish_scope": "FIRST_FOUR_ONLY",
+        "v44c_rank": 1,
+        "finisher_rank": 2
+      },
+      "finisher_pick": {
+        "name": "Scottish Lassie",
+        "program": null,
+        "latest_speed": 89,
+        "best3_speed": 99,
+        "control_score": 83.54087089381207,
+        "source_jockey_win": 29.41176470588235,
+        "source_trainer_win": 0,
+        "id": "scottishlassie",
+        "finisher_score": 87.5,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 90.17999999999999,
+            "percentile": 100,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": null,
+            "percentile": 50,
+            "weight": 0.25,
+            "status": "UNKNOWN_NEUTRAL"
+          },
+          "late_pace": {
+            "raw": 111,
+            "percentile": 100,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 1,
+        "actual_finish_scope": "FIRST_FOUR_ONLY",
+        "v44c_rank": 2,
+        "finisher_rank": 1
+      },
+      "finisher_margin": 6.25,
+      "finisher_component_margin": {
+        "recent_speed": 15.0,
+        "matched_speed": -12.5,
+        "late_pace": 3.75
+      },
+      "largest_finisher_advantage": "recent_speed",
+      "winner_v44c_rank": 2,
+      "winner_finisher_rank": 1,
+      "input_coverage": {
+        "recent_speed": {
+          "available": 5,
+          "field": 5
+        },
+        "matched_speed": {
+          "available": 3,
+          "field": 5
+        },
+        "late_pace": {
+          "available": 5,
+          "field": 5
+        }
+      }
+    },
+    {
+      "key": "SAR_2026-07-03_R7",
+      "cohort": "SAR47",
+      "winner_model": "Finisher",
+      "winner_id": "whitesmokerising",
+      "surface": "Dirt",
+      "distance": 7,
+      "type": "7 Saratoga Alw 120000N1X 7 Furlongs (1:20\u00a7) ALLOWANCE. Purse $120,000 (UP TO $20,880 NYSBFOA ) For Three Year Olds And Upward Which Have Never Won $22,000 Other Than Maiden, Claiming, Starter Or State Bred Allowance Or Which Have Never Won Two Races. Three Year Olds, 122 lbs.; Older, 126 lbs. (Non-Starters For A Claiming Price Of",
+      "field_size": 7,
+      "v44c_pick": {
+        "name": "Hit the Post",
+        "program": "3",
+        "latest_speed": 98,
+        "best3_speed": 98,
+        "control_score": 101.5,
+        "source_jockey_win": null,
+        "source_trainer_win": null,
+        "id": "hitthepost",
+        "finisher_score": 75,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 85.07,
+            "percentile": 100,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": 68,
+            "percentile": 60,
+            "weight": 0.25,
+            "status": "AVAILABLE"
+          },
+          "late_pace": {
+            "raw": 53,
+            "percentile": 0,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": null,
+        "actual_finish_scope": "FIRST_FOUR_ONLY",
+        "v44c_rank": 1,
+        "finisher_rank": 2
+      },
+      "finisher_pick": {
+        "name": "White Smoke Rising",
+        "program": "7",
+        "latest_speed": 83,
+        "best3_speed": 84,
+        "control_score": 79.89189189189189,
+        "source_jockey_win": null,
+        "source_trainer_win": null,
+        "id": "whitesmokerising",
+        "finisher_score": 85,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 83.33333333333333,
+            "percentile": 83.33333333333333,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": 83,
+            "percentile": 100,
+            "weight": 0.25,
+            "status": "AVAILABLE"
+          },
+          "late_pace": {
+            "raw": 82,
+            "percentile": 66.66666666666667,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 1,
+        "actual_finish_scope": "FIRST_FOUR_ONLY",
+        "v44c_rank": 5,
+        "finisher_rank": 1
+      },
+      "finisher_margin": 10,
+      "finisher_component_margin": {
+        "recent_speed": -10.000000000000002,
+        "matched_speed": 10.0,
+        "late_pace": 10.0
+      },
+      "largest_finisher_advantage": "matched_speed",
+      "winner_v44c_rank": 5,
+      "winner_finisher_rank": 1,
+      "input_coverage": {
+        "recent_speed": {
+          "available": 7,
+          "field": 7
+        },
+        "matched_speed": {
+          "available": 6,
+          "field": 7
+        },
+        "late_pace": {
+          "available": 7,
+          "field": 7
+        }
+      }
+    },
+    {
+      "key": "SAR_2026-07-03_R11",
+      "cohort": "SAR47",
+      "winner_model": "V4.4c",
+      "winner_id": "brokealltherules",
+      "surface": "Turf",
+      "distance": 8.5,
+      "type": "11 Saratoga \u00e7OC45k/SAL 1\u00c2 MILES (Inner Turf). (1:39) STARTER OPTIONAL CLAIMING. Purse $78,000 Inner Turf (Up To $13,572 Nysbfoa) For Fillies And Mares Three Years Old And Upward Which Have Started For A Claiming Price Of $55,000 Or Less And Which Have Never Won A Race Other Than Maiden, Claiming, Or State Bred Allowance Or",
+      "field_size": 8,
+      "v44c_pick": {
+        "name": "Brokealltherules",
+        "program": "10",
+        "latest_speed": 77,
+        "best3_speed": 77,
+        "control_score": 81.95,
+        "source_jockey_win": null,
+        "source_trainer_win": null,
+        "id": "brokealltherules",
+        "finisher_score": 34.285714285714285,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 69.35000000000001,
+            "percentile": 57.142857142857146,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": 60,
+            "percentile": 0,
+            "weight": 0.25,
+            "status": "AVAILABLE"
+          },
+          "late_pace": {
+            "raw": 57,
+            "percentile": 0,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 1,
+        "actual_finish_scope": "FIRST_FOUR_ONLY",
+        "v44c_rank": 1,
+        "finisher_rank": 6
+      },
+      "finisher_pick": {
+        "name": "Dividend Recap",
+        "program": "5",
+        "latest_speed": 73,
+        "best3_speed": 78,
+        "control_score": 75.3241935483871,
+        "source_jockey_win": null,
+        "source_trainer_win": null,
+        "id": "dividendrecap",
+        "finisher_score": 100,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 73.16,
+            "percentile": 100,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": 73.68121193448098,
+            "percentile": 100,
+            "weight": 0.25,
+            "status": "AVAILABLE"
+          },
+          "late_pace": {
+            "raw": 91,
+            "percentile": 100,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 2,
+        "actual_finish_scope": "FIRST_FOUR_ONLY",
+        "v44c_rank": 2,
+        "finisher_rank": 1
+      },
+      "finisher_margin": 65.71428571428572,
+      "finisher_component_margin": {
+        "recent_speed": 25.71428571428571,
+        "matched_speed": 25.0,
+        "late_pace": 15.0
+      },
+      "largest_finisher_advantage": "recent_speed",
+      "winner_v44c_rank": 1,
+      "winner_finisher_rank": 6,
+      "input_coverage": {
+        "recent_speed": {
+          "available": 8,
+          "field": 8
+        },
+        "matched_speed": {
+          "available": 8,
+          "field": 8
+        },
+        "late_pace": {
+          "available": 8,
+          "field": 8
+        }
+      }
+    },
+    {
+      "key": "SAR_2026-07-10_R1",
+      "cohort": "SAR47",
+      "winner_model": "Finisher",
+      "winner_id": "commerce",
+      "surface": "Dirt",
+      "distance": 9.0,
+      "type": "1 Saratoga Md Sp Wt 115k 1\u00b0 MILES (1:46\u00a8) MAIDEN SPECIAL WEIGHT. Purse $115,000 (UP TO $20,010 NYSBFOA ) For Maidens, Three Years Old And Upward. Three Year Olds, 121 lbs.; Older, 126 lbs. (Non-Starters For A Claiming Price Of",
+      "field_size": 5,
+      "v44c_pick": {
+        "name": "Asked and Answered",
+        "program": "2",
+        "latest_speed": 76,
+        "best3_speed": 76,
+        "control_score": 78.11326644370122,
+        "source_jockey_win": 23.076923076923077,
+        "source_trainer_win": null,
+        "id": "askedandanswered",
+        "finisher_score": 83.75,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 73.44329896907217,
+            "percentile": 100,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": null,
+            "percentile": 50,
+            "weight": 0.25,
+            "status": "UNKNOWN_NEUTRAL"
+          },
+          "late_pace": {
+            "raw": 87,
+            "percentile": 75,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 4,
+        "actual_finish_scope": "FIRST_FOUR_ONLY",
+        "v44c_rank": 1,
+        "finisher_rank": 2
+      },
+      "finisher_pick": {
+        "name": "Commerce",
+        "program": "4",
+        "latest_speed": 70,
+        "best3_speed": 70,
+        "control_score": 56.04494382022472,
+        "source_jockey_win": 0,
+        "source_trainer_win": 0,
+        "id": "commerce",
+        "finisher_score": 85,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 70,
+            "percentile": 75,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": 70,
+            "percentile": 100,
+            "weight": 0.25,
+            "status": "AVAILABLE"
+          },
+          "late_pace": {
+            "raw": 91,
+            "percentile": 100,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 1,
+        "actual_finish_scope": "FIRST_FOUR_ONLY",
+        "v44c_rank": 5,
+        "finisher_rank": 1
+      },
+      "finisher_margin": 1.25,
+      "finisher_component_margin": {
+        "recent_speed": -15.0,
+        "matched_speed": 12.5,
+        "late_pace": 3.75
+      },
+      "largest_finisher_advantage": "matched_speed",
+      "winner_v44c_rank": 5,
+      "winner_finisher_rank": 1,
+      "input_coverage": {
+        "recent_speed": {
+          "available": 5,
+          "field": 5
+        },
+        "matched_speed": {
+          "available": 2,
+          "field": 5
+        },
+        "late_pace": {
+          "available": 5,
+          "field": 5
+        }
+      }
+    },
+    {
+      "key": "SAR_2026-07-10_R8",
+      "cohort": "SAR47",
+      "winner_model": "V4.4c",
+      "winner_id": "babysassicaia",
+      "surface": "Dirt",
+      "distance": 7,
+      "type": "8 Saratoga \u00e7OC12k/SAL10k 7 Furlongs (1:20\u00a7) STARTER OPTIONAL CLAIMING. Purse $37,000 For Fillies And Mares Four Years Old And Upward Which Have Started For A Claiming Price Of $10,000 Or Less Since April 10, 2025 Or Claiming Price $12,500. Weight, 123 lbs. Non-winners Of A Race Since January 10, 2026 Allowed 2 lbs. Claiming Price $12,500 (1.5%",
+      "field_size": 8,
+      "v44c_pick": {
+        "name": "Baby Sassicaia",
+        "program": "2",
+        "latest_speed": 66,
+        "best3_speed": 72,
+        "control_score": 68.12903225806451,
+        "source_jockey_win": null,
+        "source_trainer_win": null,
+        "id": "babysassicaia",
+        "finisher_score": 84.28571428571428,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 63.480000000000004,
+            "percentile": 85.71428571428571,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": 62.87920030526595,
+            "percentile": 80,
+            "weight": 0.25,
+            "status": "AVAILABLE"
+          },
+          "late_pace": {
+            "raw": 81,
+            "percentile": 85.71428571428571,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 1,
+        "actual_finish_scope": "FIRST_FOUR_ONLY",
+        "v44c_rank": 1,
+        "finisher_rank": 2
+      },
+      "finisher_pick": {
+        "name": "Jackie the Joker",
+        "program": "5",
+        "latest_speed": 77,
+        "best3_speed": 77,
+        "control_score": 63.5,
+        "source_jockey_win": 0,
+        "source_trainer_win": 0,
+        "id": "jackiethejoker",
+        "finisher_score": 87.14285714285714,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 68.5,
+            "percentile": 100,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": 63.79171207535462,
+            "percentile": 100,
+            "weight": 0.25,
+            "status": "AVAILABLE"
+          },
+          "late_pace": {
+            "raw": 43,
+            "percentile": 14.285714285714286,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": null,
+        "actual_finish_scope": "FIRST_FOUR_ONLY",
+        "v44c_rank": 2,
+        "finisher_rank": 1
+      },
+      "finisher_margin": 2.857142857142861,
+      "finisher_component_margin": {
+        "recent_speed": 8.571428571428575,
+        "matched_speed": 5.0,
+        "late_pace": -10.714285714285712
+      },
+      "largest_finisher_advantage": "recent_speed",
+      "winner_v44c_rank": 1,
+      "winner_finisher_rank": 2,
+      "input_coverage": {
+        "recent_speed": {
+          "available": 8,
+          "field": 8
+        },
+        "matched_speed": {
+          "available": 6,
+          "field": 8
+        },
+        "late_pace": {
+          "available": 8,
+          "field": 8
+        }
+      }
+    },
+    {
+      "key": "SAR_2026-07-11_R4",
+      "cohort": "SAR47",
+      "winner_model": "Finisher",
+      "winner_id": "soundslikeaplan",
+      "surface": "Turf",
+      "distance": 8,
+      "type": "4 Saratoga OC 80k/N2X 1 MILE (Inner Turf). (1:32) ALLOWANCE OPTIONAL CLAIMING. Purse $125,000 Inner Turf (Up To $21,750 Nysbfoa) For Three Year Olds And Upward Which Have Never Won $22,000 Twice Other Than Maiden, Claiming, Starter Or State Bred Allowance Or Which Have Never Won Three Races Or Claiming Price $80,000.",
+      "field_size": 9,
+      "v44c_pick": {
+        "name": "Life and Times",
+        "program": "7",
+        "latest_speed": 93,
+        "best3_speed": 97,
+        "control_score": 87.30563826417486,
+        "source_jockey_win": 29.26829268292683,
+        "source_trainer_win": 8.333333333333334,
+        "id": "lifeandtimes",
+        "finisher_score": 78.125,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 94.52000000000001,
+            "percentile": 100,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": null,
+            "percentile": 50,
+            "weight": 0.25,
+            "status": "UNKNOWN_NEUTRAL"
+          },
+          "late_pace": {
+            "raw": 85,
+            "percentile": 37.5,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 3,
+        "actual_finish_scope": "FIRST_FOUR_ONLY",
+        "v44c_rank": 1,
+        "finisher_rank": 2
+      },
+      "finisher_pick": {
+        "name": "Sounds Like a Plan",
+        "program": "1",
+        "latest_speed": 92,
+        "best3_speed": 92,
+        "control_score": 84.02694805194804,
+        "source_jockey_win": 9.375,
+        "source_trainer_win": 25,
+        "id": "soundslikeaplan",
+        "finisher_score": 81.25,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 89.51,
+            "percentile": 87.5,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": 90.05615954191728,
+            "percentile": 100,
+            "weight": 0.25,
+            "status": "AVAILABLE"
+          },
+          "late_pace": {
+            "raw": 73,
+            "percentile": 25,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 1,
+        "actual_finish_scope": "FIRST_FOUR_ONLY",
+        "v44c_rank": 3,
+        "finisher_rank": 1
+      },
+      "finisher_margin": 3.125,
+      "finisher_component_margin": {
+        "recent_speed": -7.5,
+        "matched_speed": 12.5,
+        "late_pace": -1.875
+      },
+      "largest_finisher_advantage": "matched_speed",
+      "winner_v44c_rank": 3,
+      "winner_finisher_rank": 1,
+      "input_coverage": {
+        "recent_speed": {
+          "available": 9,
+          "field": 9
+        },
+        "matched_speed": {
+          "available": 7,
+          "field": 9
+        },
+        "late_pace": {
+          "available": 9,
+          "field": 9
+        }
+      }
+    },
+    {
+      "key": "SAR_2026-07-11_R7",
+      "cohort": "SAR47",
+      "winner_model": "V4.4c",
+      "winner_id": "yinzer",
+      "surface": "Turf",
+      "distance": 8,
+      "type": "7 Saratoga OC 80k/N2X 1 MILE (Inner Turf). (1:32) ALLOWANCE OPTIONAL CLAIMING. Purse $125,000 Inner Turf (Up To $21,750 Nysbfoa) For Three Year Olds And Upward Which Have Never Won $22,000 Twice Other Than Maiden, Claiming, Starter Or State Bred Allowance Or Which Have Never Won Three Races Or Claiming Price $80,000.",
+      "field_size": 9,
+      "v44c_pick": {
+        "name": "Yinzer",
+        "program": "4",
+        "latest_speed": 89,
+        "best3_speed": 89,
+        "control_score": 92.73420969274629,
+        "source_jockey_win": 29.26829268292683,
+        "source_trainer_win": 33.333333333333336,
+        "id": "yinzer",
+        "finisher_score": 70,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 83.1,
+            "percentile": 75,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": 86.57058905774456,
+            "percentile": 100,
+            "weight": 0.25,
+            "status": "AVAILABLE"
+          },
+          "late_pace": {
+            "raw": 74,
+            "percentile": 0,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 1,
+        "actual_finish_scope": "FIRST_FOUR_ONLY",
+        "v44c_rank": 1,
+        "finisher_rank": 3
+      },
+      "finisher_pick": {
+        "name": "Unit Economics",
+        "program": "2",
+        "latest_speed": 90,
+        "best3_speed": 91,
+        "control_score": 82.61501425403864,
+        "source_jockey_win": 19.51219512195122,
+        "source_trainer_win": 12,
+        "id": "uniteconomics",
+        "finisher_score": 87.5,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 90.35000000000001,
+            "percentile": 100,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": null,
+            "percentile": 50,
+            "weight": 0.25,
+            "status": "UNKNOWN_NEUTRAL"
+          },
+          "late_pace": {
+            "raw": 117,
+            "percentile": 100,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": null,
+        "actual_finish_scope": "FIRST_FOUR_ONLY",
+        "v44c_rank": 2,
+        "finisher_rank": 1
+      },
+      "finisher_margin": 17.5,
+      "finisher_component_margin": {
+        "recent_speed": 15.0,
+        "matched_speed": -12.5,
+        "late_pace": 15.0
+      },
+      "largest_finisher_advantage": "recent_speed",
+      "winner_v44c_rank": 1,
+      "winner_finisher_rank": 3,
+      "input_coverage": {
+        "recent_speed": {
+          "available": 9,
+          "field": 9
+        },
+        "matched_speed": {
+          "available": 6,
+          "field": 9
+        },
+        "late_pace": {
+          "available": 9,
+          "field": 9
+        }
+      }
+    },
+    {
+      "key": "KEE_2026-10-09_R4",
+      "cohort": "KEE25",
+      "winner_model": "V4.4c",
+      "winner_id": "8",
+      "surface": "Dirt",
+      "distance": 8.5,
+      "type": "4 Keeneland \u00e7Md 30000 1\u00c2 MILES (1:40\u00a8) MAIDEN CLAIMING. Purse $53,000 (includes $17,600 KTDF - Kentucky TB Devt Fund) For Maidens, Fillies And Mares Three Years Old And Upward. Three Year Olds, 120 lbs.; Older, 124 lbs. Claiming Price $30,000.",
+      "field_size": 5,
+      "v44c_pick": {
+        "name": "Watershed Moment",
+        "program": "8",
+        "latest_speed": 47,
+        "best3_speed": 59,
+        "control_score": 50.33333333333333,
+        "source_jockey_win": 22.22222222222222,
+        "source_trainer_win": 0,
+        "id": "8",
+        "finisher_score": 55,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 50.56,
+            "percentile": 50,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": 55.966106795798964,
+            "percentile": 100,
+            "weight": 0.25,
+            "status": "AVAILABLE"
+          },
+          "late_pace": {
+            "raw": 48,
+            "percentile": 0,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 1,
+        "actual_finish_scope": "FULL_ORDER",
+        "v44c_rank": 1,
+        "finisher_rank": 3
+      },
+      "finisher_pick": {
+        "name": "Wangshu",
+        "program": "6",
+        "latest_speed": 59,
+        "best3_speed": 59,
+        "control_score": 48.55955056179776,
+        "source_jockey_win": 0,
+        "source_trainer_win": 0,
+        "id": "6",
+        "finisher_score": 87.5,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 55.666666666666664,
+            "percentile": 100,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": null,
+            "percentile": 50,
+            "weight": 0.25,
+            "status": "UNKNOWN_NEUTRAL"
+          },
+          "late_pace": {
+            "raw": 78,
+            "percentile": 100,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 3,
+        "actual_finish_scope": "FULL_ORDER",
+        "v44c_rank": 3,
+        "finisher_rank": 1
+      },
+      "finisher_margin": 32.5,
+      "finisher_component_margin": {
+        "recent_speed": 30.0,
+        "matched_speed": -12.5,
+        "late_pace": 15.0
+      },
+      "largest_finisher_advantage": "recent_speed",
+      "winner_v44c_rank": 1,
+      "winner_finisher_rank": 3,
+      "input_coverage": {
+        "recent_speed": {
+          "available": 5,
+          "field": 5
+        },
+        "matched_speed": {
+          "available": 3,
+          "field": 5
+        },
+        "late_pace": {
+          "available": 5,
+          "field": 5
+        }
+      }
+    },
+    {
+      "key": "KEE_2026-10-10_R3",
+      "cohort": "KEE25",
+      "winner_model": "Finisher",
+      "winner_id": "6",
+      "surface": "Turf",
+      "distance": 8.5,
+      "type": "3 Keeneland Alw 120000N2L 1\u00c2 MILES (Turf). (1:39) ALLOWANCE. Purse $120,000 (includes $36,000 KTDF - Kentucky TB Devt Fund) For Two Year Olds Which Have Never Won Two Races. Weight, 122 lbs. Non-winners Of A Race Other Than Claiming Or Starter At A Mile Or Over On The Turf Allowed 2 lbs. In the event that this race is taken off the turf it",
+      "field_size": 5,
+      "v44c_pick": {
+        "name": "Battlefield Hero",
+        "program": "4",
+        "latest_speed": 72,
+        "best3_speed": 72,
+        "control_score": 69.94494382022472,
+        "source_jockey_win": 0,
+        "source_trainer_win": 33.333333333333336,
+        "id": "4",
+        "finisher_score": 57.5,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 65.66666666666667,
+            "percentile": 75,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": null,
+            "percentile": 50,
+            "weight": 0.25,
+            "status": "UNKNOWN_NEUTRAL"
+          },
+          "late_pace": {
+            "raw": 37,
+            "percentile": 0,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 4,
+        "actual_finish_scope": "FULL_ORDER",
+        "v44c_rank": 1,
+        "finisher_rank": 3
+      },
+      "finisher_pick": {
+        "name": "Merlin Monroan",
+        "program": "6",
+        "latest_speed": 73,
+        "best3_speed": 73,
+        "control_score": 64.01666020922123,
+        "source_jockey_win": 20.689655172413794,
+        "source_trainer_win": 0,
+        "id": "6",
+        "finisher_score": 80,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 73,
+            "percentile": 100,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": null,
+            "percentile": 50,
+            "weight": 0.25,
+            "status": "UNKNOWN_NEUTRAL"
+          },
+          "late_pace": {
+            "raw": null,
+            "percentile": 50,
+            "weight": 0.15,
+            "status": "UNKNOWN_NEUTRAL"
+          }
+        },
+        "actual_finish": 1,
+        "actual_finish_scope": "FULL_ORDER",
+        "v44c_rank": 2,
+        "finisher_rank": 1
+      },
+      "finisher_margin": 22.5,
+      "finisher_component_margin": {
+        "recent_speed": 15.0,
+        "matched_speed": 0.0,
+        "late_pace": 7.5
+      },
+      "largest_finisher_advantage": "recent_speed",
+      "winner_v44c_rank": 2,
+      "winner_finisher_rank": 1,
+      "input_coverage": {
+        "recent_speed": {
+          "available": 5,
+          "field": 5
+        },
+        "matched_speed": {
+          "available": 1,
+          "field": 5
+        },
+        "late_pace": {
+          "available": 4,
+          "field": 5
+        }
+      }
+    },
+    {
+      "key": "KEE_2026-10-11_R1",
+      "cohort": "KEE25",
+      "winner_model": "Finisher",
+      "winner_id": "3",
+      "surface": "Dirt",
+      "distance": 8.5,
+      "type": "1 Keeneland Alw 20000s 1\u00c2 MILES (1:40\u00a8) STARTER ALLOWANCE. Purse $69,000 (includes $23,000 KTDF - Kentucky TB Devt Fund) For Three Year Olds And Upward Which Have Started For A Claiming Price Of $20,000 Or Less In 2025 -",
+      "field_size": 6,
+      "v44c_pick": {
+        "name": "Creative Minister",
+        "program": "5",
+        "latest_speed": 77,
+        "best3_speed": 77,
+        "control_score": 76.6103896103896,
+        "source_jockey_win": 25,
+        "source_trainer_win": 25,
+        "id": "5",
+        "finisher_score": 27.5,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 73.62,
+            "percentile": 20,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": 74.37732619112641,
+            "percentile": 20,
+            "weight": 0.25,
+            "status": "AVAILABLE"
+          },
+          "late_pace": {
+            "raw": 91,
+            "percentile": 70,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 5,
+        "actual_finish_scope": "FULL_ORDER",
+        "v44c_rank": 1,
+        "finisher_rank": 5
+      },
+      "finisher_pick": {
+        "name": "Indy Charges On",
+        "program": "3",
+        "latest_speed": 81,
+        "best3_speed": 86,
+        "control_score": 71.42207792207792,
+        "source_jockey_win": 17.5,
+        "source_trainer_win": 0,
+        "id": "3",
+        "finisher_score": 88,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 82.86999999999999,
+            "percentile": 100,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": 84.11227668279454,
+            "percentile": 100,
+            "weight": 0.25,
+            "status": "AVAILABLE"
+          },
+          "late_pace": {
+            "raw": 74,
+            "percentile": 20,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 1,
+        "actual_finish_scope": "FULL_ORDER",
+        "v44c_rank": 2,
+        "finisher_rank": 1
+      },
+      "finisher_margin": 60.5,
+      "finisher_component_margin": {
+        "recent_speed": 48.0,
+        "matched_speed": 20.0,
+        "late_pace": -7.5
+      },
+      "largest_finisher_advantage": "recent_speed",
+      "winner_v44c_rank": 2,
+      "winner_finisher_rank": 1,
+      "input_coverage": {
+        "recent_speed": {
+          "available": 6,
+          "field": 6
+        },
+        "matched_speed": {
+          "available": 6,
+          "field": 6
+        },
+        "late_pace": {
+          "available": 6,
+          "field": 6
+        }
+      }
+    },
+    {
+      "key": "KEE_2026-10-11_R3",
+      "cohort": "KEE25",
+      "winner_model": "V4.4c",
+      "winner_id": "5",
+      "surface": "Dirt",
+      "distance": 8,
+      "type": "3 Keeneland \u00e7Clm 20000 1 MILE (1:33\u00a9) CLAIMING. Purse $57,000 (includes $18,800 KTDF - Kentucky TB Devt Fund) For Fillies And Mares Three Years Old And Upward. Three Year Olds, 120 lbs.; Older, 124 lbs. Non-winners Of Two Races At A Mile Or Over Since August 11 Allowed 2 lbs. Claiming Price $20,000 (Races Where Entered For $16,000 Or Less Not",
+      "field_size": 5,
+      "v44c_pick": {
+        "name": "Wits and Wagers",
+        "program": "5",
+        "latest_speed": 65,
+        "best3_speed": 67,
+        "control_score": 68.71948051948053,
+        "source_jockey_win": 25,
+        "source_trainer_win": 25,
+        "id": "5",
+        "finisher_score": 85,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 59.129999999999995,
+            "percentile": 75,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": 63.91890327735347,
+            "percentile": 100,
+            "weight": 0.25,
+            "status": "AVAILABLE"
+          },
+          "late_pace": {
+            "raw": 87,
+            "percentile": 100,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 1,
+        "actual_finish_scope": "FULL_ORDER",
+        "v44c_rank": 1,
+        "finisher_rank": 2
+      },
+      "finisher_pick": {
+        "name": "Cora's Legacy",
+        "program": "8",
+        "latest_speed": 59,
+        "best3_speed": 72,
+        "control_score": 51.82077922077922,
+        "source_jockey_win": 0,
+        "source_trainer_win": 0,
+        "id": "8",
+        "finisher_score": 87.91666666666667,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 61.6,
+            "percentile": 100,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": 62.135971200492854,
+            "percentile": 66.66666666666667,
+            "weight": 0.25,
+            "status": "AVAILABLE"
+          },
+          "late_pace": {
+            "raw": 74,
+            "percentile": 75,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 3,
+        "actual_finish_scope": "FULL_ORDER",
+        "v44c_rank": 4,
+        "finisher_rank": 1
+      },
+      "finisher_margin": 2.9166666666666714,
+      "finisher_component_margin": {
+        "recent_speed": 15.0,
+        "matched_speed": -8.333333333333332,
+        "late_pace": -3.75
+      },
+      "largest_finisher_advantage": "recent_speed",
+      "winner_v44c_rank": 1,
+      "winner_finisher_rank": 2,
+      "input_coverage": {
+        "recent_speed": {
+          "available": 5,
+          "field": 5
+        },
+        "matched_speed": {
+          "available": 4,
+          "field": 5
+        },
+        "late_pace": {
+          "available": 5,
+          "field": 5
+        }
+      }
+    },
+    {
+      "key": "KEE_2026-10-11_R8",
+      "cohort": "KEE25",
+      "winner_model": "Finisher",
+      "winner_id": "3",
+      "surface": "Turf",
+      "distance": 5.5,
+      "type": "8 Keeneland \u00e7Franklin-G2 5\u00f4 Furlongs (Turf). (1:00\u00a9) THE FRANKLIN. Grade II. Purse $400,000 (includes $100,000 KTDF - Kentucky TB Devt Fund) For Fillies And Mares, Three Years Old And Upward. Post time: 4:44 ET Wagers: Double-exacta ($1 Min)-trifecta ($0.50 Min)-superfecta($0.10 Min) Beyer par: 98",
+      "field_size": 7,
+      "v44c_pick": {
+        "name": "Kehoe Beach",
+        "program": "6",
+        "latest_speed": 96,
+        "best3_speed": 96,
+        "control_score": 89.86363636363636,
+        "source_jockey_win": 17.5,
+        "source_trainer_win": 25,
+        "id": "6",
+        "finisher_score": 35,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 76.78999999999999,
+            "percentile": 33.333333333333336,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": null,
+            "percentile": 50,
+            "weight": 0.25,
+            "status": "UNKNOWN_NEUTRAL"
+          },
+          "late_pace": {
+            "raw": 58,
+            "percentile": 16.666666666666668,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 2,
+        "actual_finish_scope": "FULL_ORDER",
+        "v44c_rank": 1,
+        "finisher_rank": 5
+      },
+      "finisher_pick": {
+        "name": "Time to Dazzle",
+        "program": "3",
+        "latest_speed": 89,
+        "best3_speed": 93,
+        "control_score": 85.32600732600731,
+        "source_jockey_win": 20.512820512820515,
+        "source_trainer_win": 22.22222222222222,
+        "id": "3",
+        "finisher_score": 85,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 89.69,
+            "percentile": 100,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": 87.45380072777596,
+            "percentile": 50,
+            "weight": 0.25,
+            "status": "AVAILABLE"
+          },
+          "late_pace": {
+            "raw": 90,
+            "percentile": 83.33333333333333,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 1,
+        "actual_finish_scope": "FULL_ORDER",
+        "v44c_rank": 3,
+        "finisher_rank": 1
+      },
+      "finisher_margin": 50,
+      "finisher_component_margin": {
+        "recent_speed": 39.99999999999999,
+        "matched_speed": 0.0,
+        "late_pace": 9.999999999999998
+      },
+      "largest_finisher_advantage": "recent_speed",
+      "winner_v44c_rank": 3,
+      "winner_finisher_rank": 1,
+      "input_coverage": {
+        "recent_speed": {
+          "available": 7,
+          "field": 7
+        },
+        "matched_speed": {
+          "available": 5,
+          "field": 7
+        },
+        "late_pace": {
+          "available": 7,
+          "field": 7
+        }
+      }
+    },
+    {
+      "key": "KEE_2026-10-14_R3",
+      "cohort": "KEE25",
+      "winner_model": "Finisher",
+      "winner_id": "9",
+      "surface": "Dirt",
+      "distance": 6,
+      "type": "3 Keeneland Clm 16000 6 Furlongs (1:07\u00a9) CLAIMING. Purse $51,000 (includes $17,000 KTDF - Kentucky TB Devt Fund) For Three Year Olds And Upward. Three Year Olds, 120 lbs.; Older, 123 lbs. Non-winners Of Two Races Since August 14 Allowed 2 lbs. Claiming Price $16,000 (Races Where Entered For $12,500 Or Less Not Considered In Allowances).",
+      "field_size": 7,
+      "v44c_pick": {
+        "name": "West Coast Bull",
+        "program": "6",
+        "latest_speed": 78,
+        "best3_speed": 78,
+        "control_score": 69.78571428571429,
+        "source_jockey_win": null,
+        "source_trainer_win": 0,
+        "id": "6",
+        "finisher_score": 63.74999999999999,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 71.44,
+            "percentile": 83.33333333333333,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": null,
+            "percentile": 50,
+            "weight": 0.25,
+            "status": "UNKNOWN_NEUTRAL"
+          },
+          "late_pace": {
+            "raw": 45,
+            "percentile": 8.333333333333334,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 5,
+        "actual_finish_scope": "FULL_ORDER",
+        "v44c_rank": 1,
+        "finisher_rank": 3
+      },
+      "finisher_pick": {
+        "name": "Lucky Shot",
+        "program": "9",
+        "latest_speed": 69,
+        "best3_speed": 80,
+        "control_score": 63.95584415584415,
+        "source_jockey_win": 20,
+        "source_trainer_win": 0,
+        "id": "9",
+        "finisher_score": 85,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 72.66,
+            "percentile": 100,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": 73.74677701745506,
+            "percentile": 80,
+            "weight": 0.25,
+            "status": "AVAILABLE"
+          },
+          "late_pace": {
+            "raw": 52,
+            "percentile": 33.333333333333336,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 1,
+        "actual_finish_scope": "FULL_ORDER",
+        "v44c_rank": 3,
+        "finisher_rank": 1
+      },
+      "finisher_margin": 21.250000000000007,
+      "finisher_component_margin": {
+        "recent_speed": 10.000000000000002,
+        "matched_speed": 7.5,
+        "late_pace": 3.75
+      },
+      "largest_finisher_advantage": "recent_speed",
+      "winner_v44c_rank": 3,
+      "winner_finisher_rank": 1,
+      "input_coverage": {
+        "recent_speed": {
+          "available": 7,
+          "field": 7
+        },
+        "matched_speed": {
+          "available": 6,
+          "field": 7
+        },
+        "late_pace": {
+          "available": 7,
+          "field": 7
+        }
+      }
+    },
+    {
+      "key": "KEE_2026-10-14_R4",
+      "cohort": "KEE25",
+      "winner_model": "V4.4c",
+      "winner_id": "4",
+      "surface": "Turf",
+      "distance": 8,
+      "type": "4 Keeneland \u00e7Alw 120000N1X 1 MILE (Turf). (1:32\u00a9) ALLOWANCE. Purse $120,000 (includes $36,000 KTDF - Kentucky TB Devt Fund) For Fillies And Mares Three Years Old And Upward Which Have Never Won A Race Other Than Maiden, Claiming, Or Starter Or Which Have Never Won Two Races. Three Year Olds, 120 lbs.; Older, 124 lbs. Non-winners Of A Race",
+      "field_size": 11,
+      "v44c_pick": {
+        "name": "Smell the Lilies",
+        "program": "4",
+        "latest_speed": 77,
+        "best3_speed": 77,
+        "control_score": 73.25769944341371,
+        "source_jockey_win": 25,
+        "source_trainer_win": 10.714285714285714,
+        "id": "4",
+        "finisher_score": 74.67857142857143,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 67.98,
+            "percentile": 80,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": 73.23079243919942,
+            "percentile": 85.71428571428571,
+            "weight": 0.25,
+            "status": "AVAILABLE"
+          },
+          "late_pace": {
+            "raw": 60,
+            "percentile": 35,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 1,
+        "actual_finish_scope": "FULL_ORDER",
+        "v44c_rank": 1,
+        "finisher_rank": 2
+      },
+      "finisher_pick": {
+        "name": "Moonlight Dash",
+        "program": "3",
+        "latest_speed": 73,
+        "best3_speed": 77,
+        "control_score": 70.0026973026973,
+        "source_jockey_win": 11.538461538461538,
+        "source_trainer_win": 20,
+        "id": "3",
+        "finisher_score": 74.75,
+        "finisher_components": {
+          "recent_speed": {
+            "raw": 73.08,
+            "percentile": 100,
+            "weight": 0.6,
+            "status": "AVAILABLE"
+          },
+          "matched_speed": {
+            "raw": null,
+            "percentile": 50,
+            "weight": 0.25,
+            "status": "UNKNOWN_NEUTRAL"
+          },
+          "late_pace": {
+            "raw": 55,
+            "percentile": 15,
+            "weight": 0.15,
+            "status": "AVAILABLE"
+          }
+        },
+        "actual_finish": 2,
+        "actual_finish_scope": "FULL_ORDER",
+        "v44c_rank": 2,
+        "finisher_rank": 1
+      },
+      "finisher_margin": 0.0714285714285694,
+      "finisher_component_margin": {
+        "recent_speed": 12.0,
+        "matched_speed": -8.928571428571427,
+        "late_pace": -3.0
+      },
+      "largest_finisher_advantage": "recent_speed",
+      "winner_v44c_rank": 1,
+      "winner_finisher_rank": 2,
+      "input_coverage": {
+        "recent_speed": {
+          "available": 11,
+          "field": 11
+        },
+        "matched_speed": {
+          "available": 8,
+          "field": 11
+        },
+        "late_pace": {
+          "available": 11,
+          "field": 11
+        }
+      }
+    }
+  ],
+  "repro_source_sha256": "8819e43c3bacbe1fbbf1b886e93d039499fc199a4ebdf07247770ea3d2cddaab"
+}
