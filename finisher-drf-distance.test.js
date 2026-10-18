@@ -9,3 +9,15 @@ test('historical half-mile glyph is 12 furlongs, not 9.5',()=>{assert.equal(deco
 test('matched history is recovered from a spaced primary header, with zero retained',()=>{const r=correctedMatchedSpeed({header:'1 ¶ MILES (Turf)',surface:'Turf',date:'2026-10-17',proofs:[proof('1¶',0)]});assert.equal(r.value,0);assert.equal(r.matched.length,1);});
 test('false 1.5-mile-to-9-furlong match is removed; matching half-furlong boundary is retained',()=>{let r=correctedMatchedSpeed({header:'1° MILES (Turf)',surface:'Turf',date:'2026-10-17',proofs:[proof('1¶',95),proof('1±',80)]});assert.equal(r.value,80);assert.equal(r.matched.length,1);});
 test('five-start/365-day/surface restrictions, dates and original objects remain intact',()=>{const ps=[proof('1¶',80,'1æ26= 2Sar','ê'),proof('1¶',120,'1æ25= 2Sar','ê'),proof('1¶',110,'1æ26= 2Sar','ú'),proof('1¶',100,'1ä26= 2Sar','ê'),proof('1¶',90,'31á26= 2Sar','ê'),proof('1¶',200)];const before=structuredClone(ps),r=correctedMatchedSpeed({header:'1 ¶ MILES',surface:'Turf',date:'2026-10-17',proofs:ps});assert.equal(r.value,80);assert.equal(r.rows.length,5);assert.deepEqual(ps,before);});
+test('Belmont Oct 18 five-sixteenths glyph matches the verified 10.5-furlong source',()=>{
+ assert.equal(decodeDistanceToken('1³','MILES'),10.5);
+ assert.equal(decodeDistanceToken('1 5/16','MILES'),10.5);
+ assert.equal(decodeTodayDistance('1³ MILES (Turf). MAIDEN SPECIAL WEIGHT.').furlongs,10.5);
+ assert.equal(decodeHistoryDistance(proof('1³'),'2026-10-18').furlongs,10.5);
+ const ps=[proof('1³',70),proof('1²',80,'2Ý26= 2Sar'),proof('1´',90,'1Û26= 2Sar')];
+ const result=correctedMatchedSpeed({header:'1³ MILES (Turf)',surface:'Turf',date:'2026-10-18',proofs:ps});
+ assert.equal(result.used_distance,10.5);assert.equal(result.matched.length,3);
+ assert.ok(result.value>=70&&result.value<=90);
+ assert.equal(decodeTodayDistance('1³ MILES (Turf).\nIf transferred 1± MILES').furlongs,10.5);
+ assert.equal(decodeTodayDistance('1³x MILES').furlongs,null);
+});

@@ -1,10 +1,10 @@
 // Verified DRF distance decoding for Finisher only; V4.4c and Contender inputs are unchanged.
-export const DISTANCE_INPUT_ID='DRF-distance-input-v1-20261018';
-export const FRACTIONS=Object.freeze({'Â':1/16,'°':1/8,'±':3/16,'²':1/4,'´':3/8,'¶':1/2,'ô':1/2,'¼':1/4,'½':1/2,'¾':3/4,'⅛':1/8,'⅜':3/8,'⅝':5/8,'⅞':7/8});
+export const DISTANCE_INPUT_ID='DRF-distance-input-v1.1-20261018-5316';
+export const FRACTIONS=Object.freeze({'Â':1/16,'°':1/8,'±':3/16,'²':1/4,'´':3/8,'³':5/16,'¶':1/2,'ô':1/2,'¼':1/4,'½':1/2,'¾':3/4,'⅛':1/8,'⅜':3/8,'⅝':5/8,'⅞':7/8});
 const MONTHS={'â':1,'á':2,'à':3,'ß':4,'Ü':5,'Þ':6,'Û':7,'Ý':8,'æ':9,'å':10,'ä':11,'ã':12};
-const TOK='\\d+(?:\\.\\d+)?(?:\\s+[1-9]\\d*\\/[1-9]\\d*|\\s*[Â°±²´¶ô¼½¾⅛⅜⅝⅞])?';
+const TOK='\\d+(?:\\.\\d+)?(?:\\s+[1-9]\\d*\\/[1-9]\\d*|\\s*[Â°±²´³¶ô¼½¾⅛⅜⅝⅞])?';
 export function decodeDistanceToken(token,unit){
- let n=null;const s=String(token).trim(),fraction=s.match(/^(\d+)\s+([1-9]\d*)\/([1-9]\d*)$/),glyph=s.match(/^(\d+)\s*([Â°±²´¶ô¼½¾⅛⅜⅝⅞])$/);
+ let n=null;const s=String(token).trim(),fraction=s.match(/^(\d+)\s+([1-9]\d*)\/([1-9]\d*)$/),glyph=s.match(/^(\d+)\s*([Â°±²´³¶ô¼½¾⅛⅜⅝⅞])$/);
  if(fraction){if(+fraction[2]>=+fraction[3])return null;n=+fraction[1]+ +fraction[2]/+fraction[3];}
  else if(glyph)n=+glyph[1]+FRACTIONS[glyph[2]];
  else if(/^\d+(?:\.\d+)?$/.test(s))n=+s;

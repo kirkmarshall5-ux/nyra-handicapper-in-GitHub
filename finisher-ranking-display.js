@@ -1,4 +1,4 @@
-import {rankFinishers} from './finisher-inputs.js';
+import {rankFinishers} from './finisher-inputs.js?v=20261018-5316';
 const escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export function finisherRankingHtml(race,{baselineDecision=null}={}){
  const result=rankFinishers(race),native=result.rankings.some(h=>h.source==='BRISNET')||(race.horses||[]).some(h=>h.ratings?.provider==='BRISNET');
