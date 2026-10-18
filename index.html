@@ -171,10 +171,11 @@ import {runnerStateKey} from "./card-loader.js?v=20261008-qa1";
 import {researchRace} from "./jockey-research.js?v=20261008-qa1";
 import {evidenceProfile} from "./scoring-engine.js?v=20261008-qa1";
 import {estimatedWinLine,winLineFields,winLineNote} from "./fair-odds.js?v=20261015-mix1-line1";
-import {finisherRankingHtml} from "./finisher-ranking-display.js?v=20261018-5316";
+import {finisherRankingHtml} from "./finisher-ranking-display.js?v=20261018-evidence1";
 import {rankContenders} from "./contender-rankings.js?v=20261011-passdisplay1";
 import {rankBrisnetModels} from "./brisnet-models.js?v=20261016-native1";
-import {brisnetRankingHtml,updateBrisnetMethods} from "./brisnet-ranking-display.js?v=20261016-native1";
+import {brisnetRankingHtml,updateBrisnetMethods} from "./brisnet-ranking-display.js?v=20261018-evidence1";
+import {modelEvidenceHtml} from "./model-evidence-display.js?v=20261018-evidence1";
 import {passRaceDisplay} from "./pass-race-display.js?v=20261013-releaseqa1";
 import {releaseRace as websiteRace,RELEASE_ID} from "./rankings-release.js?v=20261008-qa1";
 import {parseNyraText as parseNyraEntries} from "./nyra-entry-parser.js?v=20261008-qa1";
@@ -234,7 +235,7 @@ function renderRaceInsights(){
  document.getElementById("finisherCandidates").innerHTML=finisherRankingHtml(race,{baselineDecision:currentRating().decision});
  for(const [key,id] of [['v44c','topContenders'],['contender','contenderCandidates']])updateBrisnetMethods(document.getElementById(id),key,!!native);
  if(native){
-  for(const [key,id] of [['v44c','topContenders'],['contender','contenderCandidates']])document.getElementById(id).innerHTML=brisnetRankingHtml(native[key],key);
+  for(const [key,id] of [['v44c','topContenders'],['contender','contenderCandidates']])document.getElementById(id).innerHTML=brisnetRankingHtml(native[key],key,race);
   return;
  }
  const r=currentRating(),v44cLine=estimatedWinLine(race,r,'v44c');
@@ -242,21 +243,20 @@ function renderRaceInsights(){
  if(r.decision==='PASS'){
   const p=passRaceDisplay(r);
   const contenders=p.ranked.length?candidateTable(p.ranked.map((h,i)=>`<tr><td><b>${i+1}. #${escapeText(h.n||'—')} ${escapeText(h.name)}</b></td><td>${h.displayScore}</td>${winLineFields(v44cLine,h)}</tr>`).join('')):'<div class="tiny muted">No horses have enough verified evidence for a numerical rating.</div>';
-  const limited=p.unrated.length?p.unrated.map(h=>`<div class="tiny muted">#${escapeText(h.n||'—')} ${escapeText(h.name)} — ${h.reasons.map(escapeText).join('; ')}</div>`).join(''):'<div class="tiny muted">No individually unrated horses identified.</div>';
   const other=p.general.length?`<div class="tiny muted" style="margin-top:6px">Other pass reasons: ${p.general.map(escapeText).join('; ')}</div>`:'';
-  topContenders.innerHTML='<b>V4.4c: PASS — no wager</b><div class="tiny muted" style="margin:5px 0">Provisional ranking of rated runners only; unrated horses may be competitive. Not an official full-field V4.4c ranking.</div>'+contenders+'<div class="tiny muted" style="margin:10px 0 5px"><b>Limited or missing information</b></div>'+limited+other;
+  topContenders.innerHTML='<b>V4.4c: PASS — no wager</b><div class="tiny muted" style="margin:5px 0">Provisional ranking of rated runners only; unrated horses may be competitive. Not an official full-field V4.4c ranking.</div>'+contenders+other;
  }else topContenders.innerHTML=fullRankings();
- topContenders.innerHTML+=winLineNote(v44cLine);
+ topContenders.innerHTML=modelEvidenceHtml(race,r,{model:'v44c'})+topContenders.innerHTML+winLineNote(v44cLine);
  const contender=rankContenders(race,r,{displayPass:r.decision==='PASS'});
  const contenderLine=estimatedWinLine(race,contender,'contender');
  const contenderList=contender.rankings.length?candidateTable(contender.rankings.slice(0,4).map((h,i)=>`<tr><td><b>${i+1}. #${escapeText(h.n||'—')} ${escapeText(h.name)}</b></td><td>${h.score.toFixed(3)}</td>${winLineFields(contenderLine,h)}</tr>`).join('')):'';
  const contenderTarget=document.getElementById('contenderCandidates');
  if(r.decision==='PASS'){
-  const p=passRaceDisplay(r),limited=p.unrated.map(h=>`<div class="tiny muted">#${escapeText(h.n||'—')} ${escapeText(h.name)} — ${h.reasons.map(escapeText).join('; ')}</div>`).join(''),other=p.general.length?`<div class="tiny muted">Other pass reasons: ${p.general.map(escapeText).join('; ')}</div>`:'';
-  contenderTarget.innerHTML='<b>Pass-No wager</b><div class="tiny muted" style="margin:5px 0">Provisional ranking of rated runners only; unrated horses may be competitive. Not an official full-field Contender ranking.</div>'+(contenderList||`<div class="tiny muted">${escapeText(contender.reason||'No horses have enough verified evidence for a numerical rating.')}</div>`)+('<div class="tiny muted" style="margin:10px 0 5px"><b>Limited or missing information</b></div>'+limited)+other;
+  const p=passRaceDisplay(r),other=p.general.length?`<div class="tiny muted">Other pass reasons: ${p.general.map(escapeText).join('; ')}</div>`:'';
+  contenderTarget.innerHTML='<b>Pass-No wager</b><div class="tiny muted" style="margin:5px 0">Provisional ranking of rated runners only; unrated horses may be competitive. Not an official full-field Contender ranking.</div>'+(contenderList||`<div class="tiny muted">${escapeText(contender.reason||'No horses have enough verified evidence for a numerical rating.')}</div>`)+other;
  }else contenderTarget.innerHTML=contender.decision==='RATEABLE'?contenderList:`<b>Contender: ${escapeText(contender.decision)}</b><div class="tiny muted">${escapeText(contender.reason)}</div>`;
 
- contenderTarget.innerHTML+=winLineNote(contenderLine);
+ contenderTarget.innerHTML=modelEvidenceHtml(race,contender,{model:'contender'})+contenderTarget.innerHTML+winLineNote(contenderLine);
 
 }
 function renderJ1Comparison(){

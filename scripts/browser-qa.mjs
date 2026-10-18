@@ -145,7 +145,7 @@ for(const profile of profiles){
   try{
    await page.evaluate(async()=>{
     const {PARSER_ID}=await import('./release-card-parser.js'),date='2026-10-18',track='Belmont Park';
-    const horses=[1,2,3,4,5,6].map(n=>({n:String(n),name:'QA Finisher Runner '+n,ml:'4/1',odds:n===5?'SCR':'—',entry_status:'REGULAR',included_in_frozen_field:true,life_starts:n===6?0:1,lifeStarts:n===6?0:1,beyer_figures:n===6?[]:[90-n],figs:n===6?[]:[90-n],timeform_early:n===6?null:85,timeform_late:n===6?null:90,parser_blockers:[],angles:[],source_context:{workout_text:'',pedigree_text:''},contender_evidence:{beyer_evidence:[],switch_evidence:{running_lines:[]}}}));
+    const horses=[1,2,3,4,5,6,7].map(n=>({n:String(n),name:'QA Finisher Runner '+n,ml:n===7?'6/5':'4/1',odds:n===5?'SCR':'—',entry_status:'REGULAR',included_in_frozen_field:true,life_starts:n===7?0:1,lifeStarts:n===7?0:1,beyer_figures:n===7?[]:[90-n],figs:n===7?[]:[90-n],timeform_early:n===7?null:85,timeform_late:n===7?null:90,parser_blockers:[],angles:[],source_context:{workout_text:'',pedigree_text:''},contender_evidence:{beyer_evidence:[],switch_evidence:{running_lines:[]}}}));
     const race={race:1,date,track,surface:'Dirt',header:'6 Furlongs',dist:'6 Furlongs',cls:'QA maiden',post:'1:10 ET',horses,parser_blockers:[]};
     localStorage.setItem('nyraV44cReleaseActiveCard',JSON.stringify({id:'qa-finisher-drf',schemaVersion:3,track,date,races:{1:race},parser_version:PARSER_ID,warnings:[]}));
    });
@@ -153,14 +153,16 @@ for(const profile of profiles){
    await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
    const target=page.locator('#finisherCandidates');
    assert.equal(await target.locator('tbody tr').count(),4);
-   assert.match(await target.innerText(),/Ranked 4\/5/);assert.match(await target.innerText(),/PASS/);
-   assert.match(await target.innerText(),/QA Finisher Runner 6/);assert.doesNotMatch(await target.innerText(),/QA Finisher Runner 5/);
+   assert.match(await target.innerText(),/Ranked 5\/6/);assert.match(await target.innerText(),/PASS/);
+   assert.match(await target.innerText(),/QA Finisher Runner 7/);assert.doesNotMatch(await target.innerText(),/QA Finisher Runner 5/);
    assert.match(await target.innerText(),/Fair odds and win percentages are unavailable/);
-   await page.evaluate(()=>{const c=JSON.parse(localStorage.getItem('nyraV44cReleaseActiveCard')),h=c.races[1].horses[5];h.life_starts=1;h.lifeStarts=1;h.beyer_figures=[95];h.figs=[95];localStorage.setItem('nyraV44cReleaseActiveCard',JSON.stringify(c));});
+   for(const id of ['topContenders','finisherCandidates','contenderCandidates']){const notice=page.locator('#'+id+' .model-evidence-note');assert.match(await notice.innerText(),/ranked 5\/6 starters/);assert.match(await notice.innerText(),/16\.7%/);assert.match(await notice.innerText(),/Morning-line favorite — UNRANKED/);assert.match(await notice.innerText(),/at or below 20% does not clear missing evidence/);assert.match(await notice.innerText(),/ML 6\/5/);}
+   await page.screenshot({path:`${out}/${profile.name}-missing-favorite.png`,fullPage:true});
+   await page.evaluate(()=>{const c=JSON.parse(localStorage.getItem('nyraV44cReleaseActiveCard')),h=c.races[1].horses[6];h.life_starts=1;h.lifeStarts=1;h.beyer_figures=[95];h.figs=[95];localStorage.setItem('nyraV44cReleaseActiveCard',JSON.stringify(c));});
    await page.reload({waitUntil:'domcontentloaded'});
    await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
-   assert.match(await target.innerText(),/Complete field ranked/);assert.match(await target.innerText(),/Ranked 5\/5/);
-   assert.match(await target.locator('tbody tr').first().innerText(),/Runner 6/);
+   assert.match(await target.innerText(),/Complete field ranked/);assert.match(await target.innerText(),/Ranked 6\/6/);
+   assert.match(await target.locator('tbody tr').first().innerText(),/Runner 7/);
    await page.screenshot({path:`${out}/${profile.name}-finisher-raceday.png`,fullPage:true});
    assert.equal(errors.length,0,'Finisher page errors: '+errors.join(' | '));
   }finally{
