@@ -31,6 +31,12 @@ test('candidate win lines are visibly experimental and not betting approval',()=
   assert.match(html,/Est\. Fair Odds<\/th>/);
   assert.match(html,/Est\. Win %<\/th>/);
   assert.doesNotMatch(html,/True Chance<\/th>/);
-  assert.match(html,/BETTING: PASS — validation pending/);
-  assert.match(html,/Best Value: PASS — probability validation pending/);
+  assert.doesNotMatch(html,/id="bets"/);
 });
+
+ test('main site exposes only the two core systems and no betting or tote controls',()=>{
+  for(const id of ['topContenders','contenderCandidates'])assert.match(html,new RegExp('id="'+id+'"'));
+  for(const id of ['mix1Candidates','v44PaceCandidates','raceSelector','bets','updateOddsSnapshot','manualOddsPanel','researchFreeze'])assert.doesNotMatch(html,new RegExp('id="'+id+'"'));
+  assert.doesNotMatch(html,/import .*from "\.\/(mix1-rankings|v44c-pace|race-selector|research-builder-ui|odds-snapshot|multitrack-odds)\.js/);
+  assert.match(html,/includeToteSnapshot:false/);
+ });

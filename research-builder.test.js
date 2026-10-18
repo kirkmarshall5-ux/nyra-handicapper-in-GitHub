@@ -94,7 +94,7 @@ test('frozen three-model scores do not mutate and each model is covered by SHA-2
  }
 });
 test('web freeze UI supplies three actual model outputs, not synthetic fallback rankings',()=>{
- const html=readFileSync(new URL('./index.html',import.meta.url),'utf8');
+ const html=readFileSync(new URL('./archive/testing/index.html',import.meta.url),'utf8');
  assert.match(html,/initResearchBuilder\(\(\)=>\{const native=rankBrisnetModels\(race\),rating=native\?\.v44c\|\|currentRating\(\);return \{card:activeCard,race,rating,contenderRating:native\?\.contender\|\|rankContenders\(race,rating,/);
  assert.match(html,/mix1Rating:native\?\.mix1\|\|rankMix1\(race,rating,/);
  assert.match(html,/Freeze All 3 Models/);

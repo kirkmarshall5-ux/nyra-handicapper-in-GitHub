@@ -43,14 +43,13 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 </head>
 <body>
 <header><div class="wrap">
-<div class="brand"><div class="logo">NH</div><div><h1>Race Day Handicapper <span style="color:var(--gold)">V4.4c</span></h1><div class="sub">Locked V4.4c · verified PP figures, pace and explicit race passes</div></div></div>
+<div class="brand"><div class="logo">NH</div><div><h1>Race Day Handicapper <span style="color:var(--gold)">V4.4c</span></h1><div class="sub">V4.4c and Contender · verified PP figures and pace</div></div></div>
 <nav>
 <button class="tab active" data-tab="raceday">Race Day</button>
 <button class="tab" data-tab="pace">Pace & Ratings</button>
 <button class="tab" data-tab="connections">Jockey / Trainer</button>
 <button class="tab" data-tab="pp">PP Lab</button>
 <button class="tab" data-tab="public">Load NYRA</button>
-<button class="tab" data-tab="bets">Bet Builder</button>
 <button class="tab" data-tab="knowledge">Knowledge Base</button>
 </nav></div></header>
 
@@ -64,27 +63,16 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <div><div class="muted small" style="margin-bottom:5px">Race</div><div class="racebar" id="racebar"></div></div>
 </div><div id="declaredScratches" class="small muted" role="status"></div></div>
 
-<div class="card span3"><div class="kicker">Top 4 Win Candidates-V4.4c</div><div id="topContenders" class="stack small"></div><details class="tiny muted" style="margin-top:10px"><summary>How V4.4c ranks</summary><p>Latest Beyer 40 weight points · best Beyer from the latest three starts 22 · jockey 7 · trainer 8. Jockey and trainer win percentages are multiplied by three, capped at 100. Horses with one or two starts can also use a verified trainer-context score at 12 weight points. Missing inputs redistribute the available weights; verified zero counts. Field strength, pace fit, rebound protection and lightly raced upside can adjust the base rating by up to ±6 points. PASS races show provisional rated runners only.</p></details></div>
-<div class="card span3" id="v44PaceCard"><div class="kicker">Top 4 Win Candidates-V4.4c-Pace</div><div class="tiny muted" style="margin:6px 0">Experimental · Brisnet version</div><div id="v44PaceCandidates" class="stack small" aria-live="polite"></div><details class="tiny muted" style="margin-top:10px"><summary>How V4.4c-Pace ranks</summary><p>75% V4.4c-Brisnet score percentile plus 25% matched pace percentile. Within the pace component: dirt sprint E1/E2/LP 45/40/15; turf sprint 15/30/55; dirt route 10/45/45; turf route 10/25/65. Requires a fully rated field and matching E1/E2/LP for every runner. Uses the latest available figure among five starts within 365 days, same surface and sprint/route category, within half a furlong. Synthetic and DRF cards remain HOLD. This is the tested main PACE candidate; pressure, turn and wider LP matching are separate experiments. Scores are not win probabilities. PASS — no wager.</p></details></div>
-<div class="card span3"><div class="kicker">Top 4 Win Candidates-Contender</div><div id="contenderCandidates" class="stack small"></div><details class="tiny muted" style="margin-top:10px"><summary>How Contender ranks</summary><p>Contender V2 combines relative field scores using frozen coefficients for recent Beyers, surface and distance form, Timeform Early and Late pace, race pressure, career records, jockey and trainer records, layoffs, workouts, verified trip comments and prior opposition. It also uses a surface/distance matched Beyer trend when at least three comparable starts are verified. Missing features are neutral. This model was trained for top-three contention; its win chances remain experimental. PASS races show provisional rated runners only.</p></details></div>
-<div class="card span3"><div class="kicker">Top 4 Win Candidates-MIX1</div><div class="tiny muted" style="margin:6px 0">Experimental · Timeform version</div><div id="mix1Candidates" class="stack small" aria-live="polite"></div><details class="tiny muted" style="margin-top:10px"><summary>How MIX1 ranks</summary><p>Recent two Beyers 37% · best Beyer from starts 3–5 12% · jockey 7% · trainer 17% · Timeform Early 17% · surface/distance 10%. Components use relative field scores. Missing inputs redistribute the remaining weights; non-pace adjustments are capped at ±15%.</p></details></div>
-<div class="card span12"><div class="kicker">Race Selector · experimental</div><div id="raceSelector" aria-live="polite"></div></div>
+<div class="card span6"><div class="kicker">Top 4 Win Candidates-V4.4c</div><div id="topContenders" class="stack small"></div><details class="tiny muted" style="margin-top:10px"><summary>How V4.4c ranks</summary><p>Latest Beyer 40 weight points · best Beyer from the latest three starts 22 · jockey 7 · trainer 8. Jockey and trainer win percentages are multiplied by three, capped at 100. Horses with one or two starts can also use a verified trainer-context score at 12 weight points. Missing inputs redistribute the available weights; verified zero counts. Field strength, pace fit, rebound protection and lightly raced upside can adjust the base rating by up to ±6 points. PASS races show provisional rated runners only.</p></details></div>
+<div class="card span6"><div class="kicker">Top 4 Win Candidates-Contender</div><div id="contenderCandidates" class="stack small"></div><details class="tiny muted" style="margin-top:10px"><summary>How Contender ranks</summary><p>Contender V2 combines relative field scores using frozen coefficients for recent Beyers, surface and distance form, Timeform Early and Late pace, race pressure, career records, jockey and trainer records, layoffs, workouts, verified trip comments and prior opposition. It also uses a surface/distance matched Beyer trend when at least three comparable starts are verified. Missing features are neutral. This model was trained for top-three contention; its win chances remain experimental. PASS races show provisional rated runners only.</p></details></div>
 <div class="card span3"><div class="kicker">Top 3 morning-line favorites</div><div id="topMl" class="stack small"></div></div>
 <div style="display:none" aria-hidden="true" class="card span3"><div class="kicker">Top jockeys · this race</div><div id="topJockeys" class="stack small"></div></div>
 <div style="display:none" aria-hidden="true" class="card span3"><div class="kicker">Top trainers · this race</div><div id="topTrainers" class="stack small"></div></div>
 <div style="display:none" aria-hidden="true" class="card span12"><div class="kicker">Top Jockey/Trainer This Race</div><div id="topPairings" class="stack small"></div></div>
 <div class="card span12" style="display:none" aria-hidden="true"><h3 class="sectiontitle">J1 research comparison</h3><div class="small muted">Compare source-card annual jockey rates with the baseline. Historical improvement is unvalidated; these rankings do not authorize bets.</div><div id="j1Comparison" class="small" style="margin-top:10px"></div></div>
 <div class="card span12">
-<div class="spread"><h3 class="sectiontitle">Race handicapping grid</h3><div class="small muted">Verified PP evidence · V4.4c scoring is locked</div></div><div class="sortbar" style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 12px"><span class="small muted" style="align-self:center">Sort:</span><button class="secondary sortbtn" data-sort="number">Horse # ↕</button><button class="secondary sortbtn" data-sort="ml">ML ↕</button><button class="secondary sortbtn" data-sort="prerace">Pre-Race ↕</button></div>
-<div class="flex" style="margin-bottom:10px"><button class="primary" id="updateOddsSnapshot">Update Odds Snapshot</button><span class="small muted" id="oddsSnapshotStatus">Fetch NYRA prices for the selected race. Snapshots may be delayed.</span></div>
-<div id="manualOddsPanel" class="card" style="display:none;margin:0 0 14px">
-<h3 class="sectiontitle">Multi-track odds · manual source</h3><div class="small muted" id="manualOddsSource"></div>
-<div class="small" style="margin:10px 0"><a id="manualOddsLink" href="#" target="_blank" rel="noopener noreferrer" style="text-decoration:underline">Open official odds source</a></div>
-<label class="small" for="manualOddsText">Paste full field: program number, horse name, current odds (one per line; comma, tab or | separated). Include SCR for previously scratched runners.</label>
-<textarea id="manualOddsText" rows="5" placeholder="1, Example Runner, 5/2&#10;2, Another Runner, 7/1"></textarea>
-<div class="flex" style="margin:10px 0;flex-wrap:wrap"><button class="secondary" id="manualOddsNow">Use current observation time</button><input id="manualOddsTime" aria-label="Observed at ISO time" placeholder="Observation time (ISO with timezone)" style="max-width:340px"></div>
-<button class="secondary" id="manualOddsApply">Import verified manual odds</button><div class="small muted" id="manualOddsStatus" style="margin-top:8px">All runner identities must match. No betting authorization; scratches must be verified separately.</div>
-</div><div style="overflow:auto;max-height:540px"><table id="horseTable"><thead><tr><th>Horse</th><th>ML</th><th>Pre-race*</th><th>Style</th><th>Jockey</th><th>Trainer</th><th>PP J Win%</th><th>PP T Win%</th><th>PP Fig</th><th>Handicap Rating</th><th>Fair Odds*</th></tr></thead><tbody></tbody></table></div>
+<div class="spread"><h3 class="sectiontitle">Race handicapping grid</h3><div class="small muted">Verified PP evidence · V4.4c scoring is locked</div></div><div class="sortbar" style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 12px"><span class="small muted" style="align-self:center">Sort:</span><button class="secondary sortbtn" data-sort="number">Horse # ↕</button><button class="secondary sortbtn" data-sort="ml">ML ↕</button></div>
+<div style="overflow:auto;max-height:540px"><table id="horseTable"><thead><tr><th>Horse</th><th>ML</th><th>Style</th><th>Jockey</th><th>Trainer</th><th>PP J Win%</th><th>PP T Win%</th><th>PP Fig</th><th>Handicap Rating</th><th>Fair Odds*</th></tr></thead><tbody></tbody></table></div>
 </div>
 
 <div style="display:none" aria-hidden="true" class="card span12"><div class="spread"><div><div class="kicker">Potentially overlooked angles</div><h3 class="sectiontitle">Things to Consider — Auto Analysis</h3></div><span class="badge gold">PP-driven</span></div>
@@ -124,13 +112,13 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <div class="card span12">
 <div class="kicker" id="callSourceLabel">Illustrative race flow · information only</div><h3 class="sectiontitle" id="callRanksTitle">Projected race set up</h3>
 <div class="small muted" id="callRanksDescription" style="margin-bottom:10px">Projected running positions by race call. 1 = first, 2 = second, etc. These are rough pace-based illustrations, NOT verified predicted finish orders, handicap ratings, or wagering advice. The stretch marker is a phase estimate, not a measured track pole. Missing pace evidence can prevent a projection.</div>
-<div id="brisnetPaceCandidate"></div><div id="brisnetCandidateExportControls" class="hidden" style="margin:12px 0"><button id="exportBrisnetCandidate" class="secondary">Export Brisnet candidate test — all races</button><div class="tiny muted">Separate research export; does not alter the three-model freeze. Local capture is not independently certified pre-race evidence.</div></div><div id="brisnetEvidence"></div><div id="projectedRaceSetup" style="overflow-x:auto"></div></div>
+<div id="brisnetEvidence"></div><div id="projectedRaceSetup" style="overflow-x:auto"></div></div>
 
 <div class="card span12">
 <div class="kicker">Adaptive evidence model</div><h3 class="sectiontitle">What the Handicap Rating Knows</h3>
 <div class="small muted" id="ratingEvidenceDescription" style="margin-bottom:10px">Missing race information is unknown. First-time starters and missing verified career/Beyer evidence force a race PASS. Core coverage describes the ranking inputs, not the chance of winning or completeness of context. Workouts and pedigree below are source notes only; they do not change the locked score. Older saved cards must be uploaded again to extract these notes.</div>
 <div id="evidenceSummary" class="evidence"></div></div>
-<div class="card span12"><h3 class="sectiontitle">Conditions, trips and readiness</h3><div class="small muted" id="contextDescription">Some PPs omit program numbers and morning lines: import official NYRA entry text before recording quotes. Actual gates remain unknown until verified separately from program numbers. Style labels below use available source calls and remain provisional. Days since a figure is not necessarily the actual layoff. No context changes the score.</div><div id="releaseContext" class="grid" style="margin-top:12px"></div></div>
+<div class="card span12"><h3 class="sectiontitle">Conditions, trips and readiness</h3><div class="small muted" id="contextDescription">Some PPs omit program numbers and morning lines: import official NYRA entry text to verify entries and scratches. Actual gates remain unknown until verified separately from program numbers. Style labels below use available source calls and remain provisional. Days since a figure is not necessarily the actual layoff. No context changes the score.</div><div id="releaseContext" class="grid" style="margin-top:12px"></div></div>
 <div class="card span12" style="display:none" aria-hidden="true"><h3 class="sectiontitle">Edit runners</h3><div style="overflow:auto"><table id="editTable"><thead><tr><th>#</th><th>Horse</th><th>Style</th><th>Last Fig</th><th>Best 3</th><th>Form</th><th>Class</th><th>Trip</th><th>Works</th><th>Pedigree</th><th>Core coverage</th><th>Note</th></tr></thead><tbody></tbody></table></div></div>
 <div class="card span12" style="display:none" aria-hidden="true"><div class="note small"><b>Tip:</b> when your PP file is parsed, the dashboard will try to fill Last Fig / Best 3 and snippets. Verified rating inputs are locked. Notes and pace labels are saved locally on this device.</div></div>
 </div></section>
@@ -163,47 +151,17 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 </div>
 <div class="card span5"><h3 class="sectiontitle">Why a fallback?</h3><div class="note small">Browsers can block one website from reading another website directly (CORS). This is a browser security rule, not a data problem. V2 therefore includes a no-server fallback: open the NYRA race page, select/copy the race text, paste it here, and parse it locally.</div></div>
 <div class="card span12"><h3 class="sectiontitle">Paste NYRA entry text</h3><textarea id="nyraPaste" rows="9" placeholder="Paste the visible race section from NYRA here…"></textarea>
-<div class="flex" style="margin-top:10px"><button class="primary" id="parsePaste">Update Entries, Scratches & Odds</button><button class="secondary" id="loadSample">Restore Oct. 3 full card</button></div>
+<div class="flex" style="margin-top:10px"><button class="primary" id="parsePaste">Update Entries & Scratches</button><button class="secondary" id="loadSample">Restore Oct. 3 full card</button></div>
 <div id="parseStatus" class="small muted" style="margin-top:8px"></div></div>
 </div></section>
 
 <section id="knowledge" class="hidden"></section>
-<section id="bets" class="hidden"><div class="grid">
-<div class="card span12"><div class="spread"><div><div class="kicker">Price vs. our line</div><h3 class="sectiontitle">Best Value</h3></div><span class="badge gold">Probability validation pending</span></div><div id="bestValue" class="stack small"></div><div class="tiny muted" style="margin-top:8px">A win-bet value rule must be frozen and validated before automated wager recommendations are enabled.</div></div>
 
-<div class="card span12"><div class="kicker">Research only · no betting recommendations</div><h3 class="sectiontitle">Win Bet Builder &amp; Quote Recorder</h3>
-<div id="researchRace" class="small muted"></div>
-<div class="controls" style="margin-top:12px">
-<div><label>Runner to observe</label><select id="researchHorse"></select></div>
-<div><label>Available net odds (5/2 or 2.5)</label><input id="researchOdds" placeholder="Copy from live tote"></div>
-<div><label>Tote source</label><input id="researchSource" placeholder="Provider / page name"></div>
-<div><label>Evidence reference</label><input id="researchEvidence" placeholder="Saved screenshot name or page reference"></div>
-<div><label>Quote observed at (include time zone)</label><input id="researchQuoteTime" placeholder="2026-10-07T13:05:00-04:00"><button id="researchNow" class="secondary" style="margin-top:6px">Use current time</button></div>
-<div><label>Recorded post time (include time zone)</label><input id="researchPostTime" placeholder="2026-10-07T13:10:00-04:00"></div>
-<div><label>Current available cash ($)</label><input id="researchCash" type="number" min="0" step=".01" value="300"></div>
-<div><label>Already staked today ($)</label><input id="researchDaily" type="number" min="0" step=".01" value="0"></div>
-<div><label>Daily gross stake limit ($)</label><input id="researchCap" type="number" min="0" step=".01" value="30"></div>
-<div><label>Cash reserve ($)</label><input id="researchFloor" type="number" min="0" step=".01" value="240"></div>
-</div>
-<div class="small" style="margin-top:10px"><label><input id="researchObserved" type="checkbox" style="width:auto"> I copied this quote from a live tote, not morning line or final-result odds.</label>
-<label><input id="researchField" type="checkbox" style="width:auto"> I checked the current field and scratches.</label>
-<label><input id="researchSurface" type="checkbox" style="width:auto"> I checked today's surface.</label>
-<label><input id="researchOutstanding" type="checkbox" style="width:auto"> I have an unsettled bet.</label>
-<label><input id="researchDuplicate" type="checkbox" style="width:auto"> I already bet this race.</label></div>
-<div id="researchPreview" class="note" style="margin-top:12px"></div>
-<div class="flex" style="margin-top:12px"><button id="researchFreeze" class="secondary">Freeze All 3 Models</button><button id="researchRecord" class="primary">Record Quote &amp; Ranking Snapshot</button><button id="researchExport" class="secondary">Export Research Log</button></div>
-<div id="researchStatus" class="small muted" role="status" style="margin-top:8px"></div><div id="researchCount" class="tiny muted" style="margin-top:8px"></div><div id="researchLog" class="stack" style="margin-top:10px"></div>
-<div class="tiny muted" style="margin-top:10px">Before the race: verify field and surface, enter scheduled post time, freeze V4.4c, Contender V2 and MIX1 together, with the separate Race Selector research output (PASS/HOLD preserved), export and anchor the SHA-256 digest on GitHub before post time. Local clock timestamps and hashes alone are not independent proof. Candidate timing: quote ≤60 seconds old and decision ≥60 seconds before recorded post. Manual records require source review; recording does not certify calibration, freshness later, or an untouched race. Source screenshots are referenced, not uploaded here. Research logs are saved on this device; export them for testing.</div></div>
-
-<div class="card span12"><div class="kicker">Model + price + confidence</div><h3 class="sectiontitle">Suggested Wager Opportunities</h3><div class="small muted" style="margin-bottom:12px">Win-bet value rules are awaiting validation. The calculator below estimates ticket cost only.</div><div id="betSuggestions" class="stack"></div></div>
-<div class="card span12"><div class="kicker">Optional cost calculator</div><h3 class="sectiontitle">Ticket Calculator</h3><div class="ticketgrid"><div><label>Bet</label><select id="betType"><option>Exacta</option><option>Trifecta</option><option>Pick 3</option><option>Pick 4</option><option>Pick 5</option></select></div><div><label>Leg 1</label><input id="leg1" value=""></div><div><label>Leg 2</label><input id="leg2" value=""></div><div><label>Leg 3</label><input id="leg3" value=""></div><div><label>Leg 4</label><input id="leg4" value=""></div><div><label>Leg 5</label><input id="leg5" value=""></div><div><label>Base wager</label><input id="base" type="number" step=".1" value=".5"></div></div><div class="flex" style="margin-top:14px"><button class="primary" id="calcBtn">Calculate Cost</button><div id="ticketOut" class="metric" style="font-size:22px"></div></div></div></div></section>
-
-<footer id="releaseStatus" class="muted small" style="margin-top:20px">Rankings release: V44C-data-integrity-rankings-20261007-v2 · betting disabled. Personal handicapping tool. Verify scratches, surface, post time and odds on NYRA immediately before wagering. Bet responsibly.</footer>
+<footer id="releaseStatus" class="muted small" style="margin-top:20px">V4.4c and Contender · Morning line is reference only. Probability validation pending.</footer>
 </main>
 
 <script type="module">
 import {initKnowledgeBase} from "./knowledge-base.js?v=20261008-kb1";
-import {initResearchBuilder,renderResearchBuilder} from "./research-builder-ui.js?v=20261016-selector1";
 import {connectionRows,LEADER_SCOPE,LEADER_SOURCE} from "./connection-research.js?v=20261008-jt1";
 import {fieldConnections} from "./pp-context.js?v=20261008-qa1";
 import {runnerStateKey} from "./card-loader.js?v=20261008-qa1";
@@ -211,28 +169,19 @@ import {researchRace} from "./jockey-research.js?v=20261008-qa1";
 import {evidenceProfile} from "./scoring-engine.js?v=20261008-qa1";
 import {estimatedWinLine,winLineFields,winLineNote} from "./fair-odds.js?v=20261015-mix1-line1";
 import {rankContenders} from "./contender-rankings.js?v=20261011-passdisplay1";
-import {rankRaceSelector} from "./race-selector.js?v=20261016-selector2";
-import {selectorHtml} from "./race-selector-display.js?v=20261016-selector1";
-import {rankV44Pace} from "./v44c-pace.js?v=20261017-live1";
-import {v44PaceHtml} from "./v44c-pace-display.js?v=20261017-live1";
 import {rankBrisnetModels} from "./brisnet-models.js?v=20261016-native1";
 import {brisnetRankingHtml,updateBrisnetMethods} from "./brisnet-ranking-display.js?v=20261016-native1";
-import {rankMix1} from "./mix1-rankings.js?v=20261015-pass1";
 import {passRaceDisplay} from "./pass-race-display.js?v=20261013-releaseqa1";
 import {releaseRace as websiteRace,RELEASE_ID} from "./rankings-release.js?v=20261008-qa1";
 import {parseNyraText as parseNyraEntries} from "./nyra-entry-parser.js?v=20261008-qa1";
 import {displayDistance} from "./race-conditions.js?v=20261013-breed1";
 import {careerLabel,visibleAngles,displayPaceStyle,clearPaceEvidence} from "./runner-display.js?v=20261016-brisnet1";
 import {projectRaceSetup,paceEligible,paceProfile} from "./projected-race-setup.js?v=20261014-paceavailability1";
-import {applyOddsSnapshot} from "./odds-snapshot.js?v=20261008-scratchfix3";
-import {oddsSourceForTrack,parseManualOdds,applyManualOdds} from "./multitrack-odds.js?v=20261010-1";
 import {applyMorningLines} from "./morning-line-overlay.js?v=20261008-odds2";
 import {runnerContext} from "./release-context.js?v=20261008-qa1";
 import {PARSER_ID,restoredPage, parseRestoredCard} from "./release-card-parser.js?v=20261014-appendices1";
 
 import {parsePPCard,SUPPORTED_PARSERS} from "./pp-format-router.js?v=20261017-premium3";
-import {rankBrisnetPace,paceCandidateBatch} from "./brisnet-pace-candidate.js?v=20261016-context1";
-import {paceCandidateHtml} from "./brisnet-pace-candidate-display.js?v=20261016-context1";
 import {brisnetPaceDisplay,brisnetPaceMapHtml,brisnetCallRanksHtml,brisnetEvidenceHtml,brisnetContextHtml} from "./brisnet-pace-display.js?v=20261016-pace1";
 import {BRISNET_METHODS} from "./brisnet-models.js?v=20261016-native1";
 
@@ -267,8 +216,6 @@ function trainerContextScore(h){
 function workScore(h){return h.workRating!==""&&h.workRating!=null&&Number.isFinite(+h.workRating)?+h.workRating:null}
 function pedigreeScore(h){return h.pedigreeRating!==""&&h.pedigreeRating!=null&&Number.isFinite(+h.pedigreeRating)?+h.pedigreeRating:null}
 function currentRating(){return rankBrisnetModels(race)?.v44c||websiteRace(race)}
-function currentSelector(){const native=rankBrisnetModels(race),base=native?.v44c||websiteRace(race);return rankRaceSelector(race,native||{v44c:base,contender:rankContenders(race,base,{displayPass:base.decision==='PASS'}),mix1:rankMix1(race,base,{displayPass:base.decision==='PASS'})})}
-function renderRaceSelector(){document.getElementById('raceSelector').innerHTML=selectorHtml(currentSelector())}
 function score(h){const r=currentRating();return r.rankings.find(x=>x.name===h.name)?.v44c_display_score??"N/A"}
 function confidenceBadge(h){if(h.ratings?.provider==="BRISNET"){const ranked=currentRating().rankings.some(x=>x.name===h.name);return `<span class="conf low">${ranked?"Brisnet research":"Unrated"}</span>`;}let x=evidenceProfile({...h,jockeyRating:h.jockey_win,trainerRating:h.trainer_win}).confidence;return `<span class="conf ${x.toLowerCase()}">${x} core coverage</span>`}
 function displayVal(v){return (v===""||v==null)?'<span class="na">N/A</span>':v}
@@ -279,12 +226,10 @@ function valueRows(){return []}
 const escapeText=s=>String(s??"").replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function candidateTable(rows){return `<div class="tiny muted" style="margin:5px 0">Experimental, uncalibrated estimates — no betting authorization.</div><table class="candidate-table"><thead><tr><th aria-label="Horse"></th><th scope="col">Rating</th><th scope="col">Est. Fair Odds</th><th scope="col">Est. Win %</th></tr></thead><tbody>${rows}</tbody></table>`}
 function renderRaceInsights(){
- document.getElementById("v44PaceCandidates").innerHTML=v44PaceHtml(rankV44Pace(race));
  const native=rankBrisnetModels(race);
- for(const [key,id] of [['v44c','topContenders'],['contender','contenderCandidates'],['mix1','mix1Candidates']])updateBrisnetMethods(document.getElementById(id),key,!!native);
+ for(const [key,id] of [['v44c','topContenders'],['contender','contenderCandidates']])updateBrisnetMethods(document.getElementById(id),key,!!native);
  if(native){
-  for(const [key,id] of [['v44c','topContenders'],['contender','contenderCandidates'],['mix1','mix1Candidates']])document.getElementById(id).innerHTML=brisnetRankingHtml(native[key],key);
-  bestValue.innerHTML='<div class="muted">Best Value: PASS — Brisnet ranking and probability validation pending.</div>';
+  for(const [key,id] of [['v44c','topContenders'],['contender','contenderCandidates']])document.getElementById(id).innerHTML=brisnetRankingHtml(native[key],key);
   return;
  }
  const r=currentRating(),v44cLine=estimatedWinLine(race,r,'v44c');
@@ -307,17 +252,7 @@ function renderRaceInsights(){
  }else contenderTarget.innerHTML=contender.decision==='RATEABLE'?contenderList:`<b>Contender: ${escapeText(contender.decision)}</b><div class="tiny muted">${escapeText(contender.reason)}</div>`;
 
  contenderTarget.innerHTML+=winLineNote(contenderLine);
- const mix1=rankMix1(race,r,{displayPass:r.decision==='PASS'}),mix1Target=document.getElementById('mix1Candidates');
- const mix1Line=estimatedWinLine(race,mix1,'mix1');
- const mix1List=mix1.rankings.length?candidateTable(mix1.rankings.slice(0,4).map((h,i)=>`<tr><td><b>${i+1}. #${escapeText(h.n||'—')} ${escapeText(h.name)}</b></td><td>${h.score.toFixed(1)}</td>${winLineFields(mix1Line,h)}</tr>`).join('')):'';
- mix1Target.innerHTML=mix1.decision==='RATEABLE'?mix1List+`<div class="tiny muted">All six inputs: ${mix1.complete_inputs}/${mix1.eligible_count} runners. Missing components reweighted.</div>`:`<b>MIX1: ${escapeText(mix1.decision)} — no wager</b><div class="tiny muted">${escapeText(mix1.reason)}</div>`;
- if(mix1.provisional){
-  const limited=(mix1.unrated||[]).map(h=>`<div class="tiny muted">#${escapeText(h.n||'—')} ${escapeText(h.name)} — ${h.reasons.map(escapeText).join('; ')}</div>`).join('');
-  const general=(mix1.pass_reasons||[]).filter(x=>!x?.horse).map(x=>escapeText(typeof x==='string'?x:x.reason||'Source verification pending')).join('; ');
-  mix1Target.innerHTML='<b>MIX1: PASS — no wager</b><div class="tiny muted" style="margin:5px 0">Provisional ranking of rated runners only; unrated horses may be competitive. Not an official full-field MIX1 ranking.</div>'+(mix1List||`<div class="tiny muted">${escapeText(mix1.reason)}</div>`)+(limited?'<div class="tiny muted" style="margin:10px 0 5px"><b>Limited or missing information</b></div>'+limited:'')+(general?`<div class="tiny muted">Other pass reasons: ${general}</div>`:'');
- }
- mix1Target.innerHTML+=winLineNote(mix1Line);
- bestValue.innerHTML='<div class="muted">Best Value: PASS — probability validation pending. Morning line is reference only. The research win-ticket builder and quote recorder are available in the Bets tab.</div>';
+
 }
 function renderJ1Comparison(){
  if(rankBrisnetModels(race)){document.getElementById("j1Comparison").innerHTML='<div class="muted">J1 comparison requires the original DRF/Beyer inputs. Brisnet research rankings are shown on Race Day.</div>';return;}
@@ -325,7 +260,6 @@ function renderJ1Comparison(){
  const list=r=>r.decision==="PASS"?"PASS — "+r.pass_reasons.map(x=>escapeText(x.reason)).join("; "):r.rankings.slice(0,4).map((h,i)=>`${i+1}. ${escapeText(h.name)} (${h.v44c_display_score})`).join("<br>");
  panel.innerHTML=`<div class="grid"><div class="span6"><b>V4.4c · default</b><div>${list(base)}</div></div><div class="span6"><b>J1 · research only</b><div>${list(j1)}</div></div></div><div class="muted" style="margin-top:8px">Verified annual jockey inputs: ${j1.annual_coverage}/${j1.eligible_count}. ${j1.fallbacks.length?"Baseline input retained for: "+j1.fallbacks.map(escapeText).join(", ")+". Upload the source PP again to extract annual counts from older saved cards.":"All eligible runners have source-card annual counts."} Baseline race grid and betting PASS remain in force.</div>`;
 }
-function renderBetSuggestions(){document.getElementById("betSuggestions").innerHTML='<div class="note"><b>BETTING: PASS — validation pending</b><div class="small muted">V4.4c ranks eligible races. A validated win-bet value rule, exacta strategy and multi-race structure have not yet been deployed.</div></div>'}
 let gridSort={key:"number",dir:1};
 function oddsNumber(o){if(!o||o==="SCR")return Infinity;if(/^\d+(\.\d+)?$/.test(String(o)))return +o;if(String(o).includes("/")){let [a,b]=String(o).split("/").map(Number);return b?a/b:Infinity}return Infinity}
 function sortedGridHorses(){
@@ -354,7 +288,7 @@ document.querySelectorAll(".sortbtn").forEach(b=>b.onclick=()=>{
  renderHorses();updateSortButtons();
 });
 function syncRaceNotes(){raceNotes.value=state.cards?.[activeCard.id]?.notes?.[race.race]||""}
-function renderAll(){syncRaceNotes();document.getElementById("releaseStatus").textContent=`Rankings: ${currentRating().model_id} · PP formats: DRF / Brisnet Ultimate / Premium Plus · Saved card: ${activeCard.parser_version||"sample / legacy evidence"}. Betting disabled. Verify scratches, surface, post time and odds before wagering.`;renderOddsSource();renderBrisnetEvidence();renderProjectedRaceSetup();renderReleaseContext();renderJ1Comparison();renderHeader();renderHorses();updateSortButtons();renderPace();renderEdit();renderEvidence();renderConnections();renderLeaderboards();renderWeights();renderThings();renderRaceInsights();renderRaceSelector();renderBetSuggestions();renderResearchBuilder();updateUrl()}
+function renderAll(){syncRaceNotes();document.getElementById("releaseStatus").textContent=`Rankings: ${currentRating().model_id} · PP formats: DRF / Brisnet Ultimate / Premium Plus · Saved card: ${activeCard.parser_version||"sample / legacy evidence"}. V4.4c and Contender. Morning line is reference only. Verify scratches and surface against official entries.`;renderBrisnetEvidence();renderProjectedRaceSetup();renderReleaseContext();renderJ1Comparison();renderHeader();renderHorses();updateSortButtons();renderPace();renderEdit();renderEvidence();renderConnections();renderLeaderboards();renderWeights();renderThings();renderRaceInsights();updateUrl()}
 function renderThings(){
  const el=document.getElementById("thingsToConsider"); if(!el)return;
  let rows=[];
@@ -388,7 +322,7 @@ function renderHeader(){
 function selectRace(n){if(!activeCard.races[n])return;race=structuredClone(activeCard.races[n]);restoreRunnerEdits();renderAll();window.scrollTo({top:0,behavior:"smooth"})}
 function renderHorses(){
  horseTable.querySelector("tbody").innerHTML=sortedGridHorses().map(h=>{let js=h.jockey_win!=null?{win:h.jockey_win}:null,ts=h.trainer_win!=null?{win:h.trainer_win}:null;return `<tr style="${h.odds==="SCR"?"opacity:.48":""}">
-<td><span class="num">${h.n}</span><span class="horse">${escapeText(h.name)}${h.entry_status&&h.entry_status!=="REGULAR"?` <span class="pill">${h.entry_status} excluded</span>`:""}</span></td><td>${h.ml||"—"}</td><td><span class="odds">${h.odds||"—"}</span>${h.pre_race_evidence?`<div class="tiny muted">${h.pre_race_evidence.status==="PUBLIC_PAGE_SNAPSHOT"?"NYRA snapshot":h.pre_race_evidence.status==="MANUAL_SOURCE_SNAPSHOT"?"Manual source":"Pasted snapshot"} · imported ${escapeText(new Date(h.pre_race_evidence.importedAt).toLocaleTimeString())}${h.pre_race_evidence.upstreamAgeSeconds!=null?` · cache age ${h.pre_race_evidence.upstreamAgeSeconds}s`:""}<br>Freshness unverified</div>`:""}</td>
+<td><span class="num">${h.n}</span><span class="horse">${escapeText(h.name)}${h.entry_status&&h.entry_status!=="REGULAR"?` <span class="pill">${h.entry_status} excluded</span>`:""}</span></td><td>${h.ml||"—"}</td>
 <td><span class="pacechip ${escapeText(displayPaceStyle(h))}">${escapeText(displayPaceStyle(h))}</span></td><td>${escapeText(h.source_context?.jockey?.name||h.jockey_annual?.jockey||h.j||"—")}</td><td>${escapeText(h.source_context?.trainer?.name||h.t||"—")}</td>
 <td>${js?js.win.toFixed(1)+"%":"—"}</td><td>${ts?ts.win.toFixed(1)+"%":"—"}</td><td>${displayVal(h.ratings?.provider==="BRISNET"?h.ratings.lines?.[0]?.speed:h.last)}</td><td><span class="score">${score(h)}</span><div style="margin-top:4px">${confidenceBadge(h)}</div></td><td><b>${fairOddsMap()[h.n]||"—"}</b></td></tr>`}).join("");
 }
@@ -410,18 +344,9 @@ function updatePaceSourceLabels(native){
  const labels={paceSourceLabel:'Brisnet native source · historical evidence',paceDescription:'Source E1, E2 and LP ranks, printed running styles and early-speed points. Unmatched history is shown as context and does not enter matched pace scoring.',paceRulesTitle:'V4.4c-Brisnet base rules',callSourceLabel:'Comparable historical calls · information only',callRanksTitle:'Brisnet historical pace ranks',callRanksDescription:'E1, E2 and LP are separate pace ratings. Higher is faster. The ranks below compare matched history, not projected positions or finishing order.',ratingEvidenceDescription:'Brisnet Speed and pace remain separate source inputs. Native research models show rated runners and identify missing history. Missing components are reweighted where supported. First-time starters remain unrated; all native models remain betting PASS.',contextDescription:'Printed Brisnet styles and verified running lines provide context. Unmatched history is visible but excluded from the matching pace rule. Workouts, trip and opposition adjustments remain unscored.'};
  for(const [id,text] of Object.entries(labels)){const el=document.getElementById(id);if(!el)continue;if(!el.dataset.originalText)el.dataset.originalText=el.textContent;el.textContent=native?text:el.dataset.originalText;}
  const rules=document.getElementById('contenderRules');if(!rules.dataset.originalHtml)rules.dataset.originalHtml=rules.innerHTML;
- rules.innerHTML=native?'<h3 class="sectiontitle">Native Brisnet model methods · experimental</h3>'+['contender','mix1','pace'].map(k=>'<p class="small">'+escapeText(BRISNET_METHODS[k])+'</p>').join('')+'<div class="note small">Contender consumes early pace and LP. MIX1 consumes early pace only; LP has no weight. V4.4c-Brisnet base has no pace component. Source styles, turn index and race shapes add no score bonus. The original Beyer/Timeform controls are unchanged; Brisnet variants require separate validation.</div>':rules.dataset.originalHtml;
+ rules.innerHTML=native?'<h3 class="sectiontitle">Native Brisnet model methods · experimental</h3>'+['contender'].map(k=>'<p class="small">'+escapeText(BRISNET_METHODS[k])+'</p>').join('')+'<div class="note small">Contender consumes early pace and LP. V4.4c-Brisnet base has no pace component. Source styles, turn index and race shapes add no score bonus. The original Beyer/Timeform controls are unchanged; Brisnet variants require separate validation.</div>':rules.dataset.originalHtml;
 }
-document.getElementById('exportBrisnetCandidate').onclick=()=>{
- const card=structuredClone(activeCard);card.races[race.race]=structuredClone(race);
- const snapshot=paceCandidateBatch(card);snapshot.races.forEach(row=>{row.source_race=structuredClone(card.races[row.race]);});
- const blob=new Blob([JSON.stringify(snapshot,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='BRIS-PACE-CONTEXT-v1_'+card.date+'_LOCAL-UNVERIFIED.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
-};
 function renderPace(){
- const candidate=rankBrisnetPace(race),candidateTarget=document.getElementById('brisnetPaceCandidate');
- const isNative=race.ratings_provider==='BRISNET'||race.horses.some(h=>h.ratings?.provider==='BRISNET');
- candidateTarget.innerHTML=isNative?paceCandidateHtml(candidate):'';
- document.getElementById('brisnetCandidateExportControls').classList.toggle('hidden',!isNative);
  const native=brisnetPaceDisplay(race);updatePaceSourceLabels(native.available);
  if(native.available){paceMap.innerHTML=brisnetPaceMapHtml(native);return;}
  const runners=race.horses.filter(paceEligible).map(h=>({...h,pace:paceProfile(h)})),unknown=runners.filter(h=>!h.pace.known);
@@ -466,7 +391,7 @@ function renderConnections(){
 function renderWeights(){weightsDiv()}
 function weightsDiv(){if(brisnetPaceDisplay(race).available){document.getElementById("weights").textContent=BRISNET_METHODS.v44c+" Pace has no weight in this native base version. No calibrated winning probabilities.";resetWeights.disabled=true;resetWeights.textContent="Brisnet research weights locked";return;}document.getElementById("weights").innerHTML='<div class="small">Last verified Beyer: 40 · best of latest 3: 22 · PP jockey: 7 · PP trainer: 8 · trainer context for ≤2 starts: 12. Verified zero figures remain included; only missing components are omitted. Figure values require source verification. V4.4c adjustments are capped at ±6. Rank unrounded totals, then horse name.</div>';resetWeights.disabled=true;resetWeights.textContent="V4.4c weights locked"}
 
-document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));b.classList.add("active");["raceday","pace","connections","pp","public","bets","knowledge"].forEach(id=>document.getElementById(id).classList.toggle("hidden",id!==b.dataset.tab))});
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));b.classList.add("active");["raceday","pace","connections","pp","public","knowledge"].forEach(id=>document.getElementById(id).classList.toggle("hidden",id!==b.dataset.tab))});
 raceNotes.oninput=e=>{const cs=state.cards[activeCard.id]||(state.cards[activeCard.id]={runners:{},notes:{}});cs.notes=cs.notes||{};cs.notes[race.race]=e.target.value;save()};
 
 function updateUrl(){const venue=["belmont","aqueduct","saratoga"].includes(track.value)?track.value:"belmont";const url=`https://www.nyra.com/${venue}/racing/entries/?day=${race.date}&limit=entries&race=${race.race}`;raceUrl.value=url;openRace.href=url;nyraRaceLink.href=url}
@@ -474,50 +399,7 @@ function updateUrl(){const venue=["belmont","aqueduct","saratoga"].includes(trac
 
 function parseNyraText(text){return parseNyraEntries(text,{track:track.value,date:raceDate.value,race:+raceNo.value})}
 
-parsePaste.onclick=()=>{let p=parseNyraText(nyraPaste.value);if(!p){parseStatus.textContent="I couldn't reliably identify the runners. Try copying just the race section with horse, jockey/trainer, program number and odds.";return}try{race=applyMorningLines(race,p,{sourceUrl:raceUrl.value,observedAt:new Date().toISOString(),includeToteSnapshot:true});activeCard.races[race.race]=structuredClone(race);save();renderAll();parseStatus.textContent=`Updated ${p.horses.length} entry references, including scratches and current-odds snapshots. Prices are not a live feed; freshness is unverified. PP rating inputs retained.`}catch(e){parseStatus.textContent="Morning lines were not changed: "+e.message}};
-
-function renderOddsSource(){
- const source=oddsSourceForTrack(race.track),panel=document.getElementById('manualOddsPanel'),button=document.getElementById('updateOddsSnapshot'),status=document.getElementById('oddsSnapshotStatus');
- panel.style.display=source.mode==='manual'?'block':'none';
- button.disabled=source.mode==='unsupported';
- button.textContent=source.mode==='automatic'?'Update Odds Snapshot':source.mode==='manual'?'Update Odds Snapshot · manual':'Odds source unavailable';
- if(source.mode==='manual'){
-  document.getElementById('manualOddsSource').textContent=source.label+' · official viewing source; no authorized automatic API connected. Enter observed prices yourself.';
-  document.getElementById('manualOddsLink').href=source.url;
-  status.textContent='Manual source required for '+source.label+'. No automatic live odds connection.';
- }else if(source.mode==='unsupported')status.textContent='No verified odds source for '+source.label+'. No NYRA fallback.';
- else status.textContent='NYRA snapshot source: '+source.label+'. Prices may be delayed; freshness unverified.';
-}
-document.getElementById('manualOddsNow').onclick=()=>{document.getElementById('manualOddsTime').value=new Date().toISOString()};
-document.getElementById('manualOddsApply').onclick=()=>{
- const status=document.getElementById('manualOddsStatus'),source=oddsSourceForTrack(race.track);
- try{
-  const rows=parseManualOdds(document.getElementById('manualOddsText').value);
-  const updated=applyManualOdds(race,rows,{sourceUrl:source.url,observedAt:document.getElementById('manualOddsTime').value});
-  race=updated;activeCard.races[race.race]=structuredClone(race);save();renderAll();
-  status.textContent='Manual prices imported for '+rows.length+' runners. Verify tote, scratches and post time. Research only; betting not enabled.';
- }catch(e){status.textContent='Import rejected: '+e.message+'. Existing odds retained.'}
-};
-document.getElementById('updateOddsSnapshot').onclick=async()=>{
- const button=document.getElementById('updateOddsSnapshot'),status=document.getElementById('oddsSnapshotStatus'),initial={card:activeCard.id,date:race.date,race:race.race,track:race.track};
- const source=oddsSourceForTrack(initial.track);
- if(source.mode==='manual'){document.getElementById('manualOddsText').focus();status.textContent='Open '+source.label+' official odds and paste the full field below; automatic odds are not connected.';return;}
- if(source.mode!=='automatic'){status.textContent='No automatic odds provider for '+initial.track+'; NYRA was not queried.';return;}
- button.disabled=true;status.textContent='Fetching NYRA snapshot…';
- try{
-  const venue=source.venue;
-  const url=new URL('/odds','https://nyra-odds-snapshot.beigebeech4.chatgpt.site');url.search=new URLSearchParams({track:venue,date:initial.date,race:initial.race});
-  const response=await fetch(url,{cache:'no-store',signal:AbortSignal.timeout(22000)});
-  if(!response.ok)throw Error('Odds service unavailable (HTTP '+response.status+')');
-  if(!(response.headers.get('content-type')||'').includes('application/json'))throw Error('Odds service access is not enabled');
-  const snapshot=await response.json();
-  if(activeCard.id!==initial.card||race.date!==initial.date||race.race!==initial.race||race.track!==initial.track)throw Error('Race changed during update; response discarded');
-  const updated=applyOddsSnapshot(race,snapshot);
-  race=updated;activeCard.races[race.race]=structuredClone(race);save();renderAll();
-  status.textContent='Updated '+snapshot.runners.length+' runners at '+new Date(snapshot.fetchedAt).toLocaleTimeString()+'. '+(snapshot.upstreamAgeSeconds==null?'Source age unknown.':'Source cache age '+snapshot.upstreamAgeSeconds+' seconds. ')+(snapshot.upstreamAgeSeconds>120?'Delayed snapshot. ':'')+'Freshness unverified.';
- }catch(e){status.textContent='Update failed: '+e.message+'. Previous prices retained; they may be stale.';}
- finally{button.disabled=false;}
-};
+parsePaste.onclick=()=>{let p=parseNyraText(nyraPaste.value);if(!p){parseStatus.textContent="I couldn't reliably identify the runners. Try copying just the race section with horse, jockey/trainer, program number and odds.";return}try{race=applyMorningLines(race,p,{sourceUrl:raceUrl.value,observedAt:new Date().toISOString(),includeToteSnapshot:false});activeCard.races[race.race]=structuredClone(race);save();renderAll();parseStatus.textContent=`Updated ${p.horses.length} entry references, including scratches and morning lines. PP rating inputs retained.`}catch(e){parseStatus.textContent="Morning lines were not changed: "+e.message}};
 
 loadSample.onclick=()=>{resetSample.click();parseStatus.textContent="October 3 full card restored. All 11 races / 107 runners are bundled."};
 tryLoad.onclick=async()=>{loadStatus.textContent="Trying NYRA directly…";try{let r=await fetch(raceUrl.value);if(!r.ok)throw new Error("HTTP "+r.status);let txt=await r.text();let doc=new DOMParser().parseFromString(txt,"text/html");let p=parseNyraText(doc.body.innerText);if(!p)throw new Error("Could not parse");race=applyMorningLines(race,p,{sourceUrl:raceUrl.value,observedAt:new Date().toISOString()});activeCard.races[race.race]=structuredClone(race);save();renderAll();loadStatus.textContent=`Updated ${p.horses.length} entry references, including scratches; rankings recalculated from retained PP inputs.`}catch(e){loadStatus.textContent="Direct browser load was blocked or could not be parsed. Open the NYRA page and use the paste fallback below."}};
@@ -544,10 +426,8 @@ replaceCard.onclick=async()=>{if(pendingCard){if(ppFile.files[0]!==pendingFile){
 resetSample.onclick=()=>{pendingCard=null;pendingFile=null;activeCard=structuredClone(sampleCard);race=structuredClone(activeCard.races[1]);restoreRunnerEdits();save();renderAll();ppStatus.textContent="Bundled October 3 sample card restored."};
 clearPP.onclick=()=>{pendingCard=null;pendingFile=null;for(const r of Object.values(activeCard.races))for(const h of r.horses){clearPaceEvidence(h);h.source_context=null;h.last="";h.best="";h.pp="";h.note="";h.form="";h.cls="";h.trip="";h.workText="";h.works=[];h.pedigree="";h.sire="";h.dam="";h.damsire="";h.lifeStarts=null;h.life_starts=null;h.beyer_figures=[];h.figs=[];h.ratings=null;h.parser_blockers=["PP-evidence-cleared"];h.angles=[]}if(state.cards?.[activeCard.id])state.cards[activeCard.id].runners={};race=structuredClone(activeCard.races[race.race]);save();renderAll();ppResults.innerHTML='<div class="muted">PP enrichment cleared; races and runners preserved.</div>';ppStatus.textContent="PP enrichment cleared."};
 
-calcBtn.onclick=()=>{const cnt=id=>document.getElementById(id).value.split(",").map(x=>x.trim()).filter(Boolean).length;let t=betType.value,legs=t==="Exacta"?2:t==="Trifecta"?3:+t.split(" ")[1],counts=[cnt("leg1"),cnt("leg2"),cnt("leg3"),cnt("leg4"),cnt("leg5")].slice(0,legs),combos=counts.reduce((a,b)=>a*b,1),cost=combos*(+base.value||0);ticketOut.textContent=`${combos} combinations · $${cost.toFixed(2)}`};
 
 initKnowledgeBase(()=>({card:activeCard,race,rating:currentRating()}));
-initResearchBuilder(()=>{const native=rankBrisnetModels(race),rating=native?.v44c||currentRating();return {card:activeCard,race,rating,contenderRating:native?.contender||rankContenders(race,rating,{displayPass:rating.decision==='PASS'}),mix1Rating:native?.mix1||rankMix1(race,rating,{displayPass:rating.decision==='PASS'}),selectorRating:currentSelector()}});
 renderAll();
 </script>
 </body></html>
