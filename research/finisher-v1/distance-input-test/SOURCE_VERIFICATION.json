@@ -1,0 +1,38 @@
+{
+  "visually_checked_sources": [
+    {
+      "file": "../review_extract/Saratoga_Ten_Card_Retest_Evidence/upload/SAR--06-04-2026(1).pdf",
+      "sha256": "54e9d1349978feed6719f637316718c651b4a2c34e1fa61d388f71e78d283cff",
+      "checks": [
+        {
+          "pdf_page": 5,
+          "horse": "Noble Dynasty",
+          "date_of_prior_start": "2026-04-19",
+          "extracted_token": "1\u00b1",
+          "printed_miles": "1 3/16",
+          "expected_furlongs": 9.5
+        },
+        {
+          "pdf_page": 13,
+          "race": 7,
+          "extracted_token": "1\u00b4",
+          "printed_miles": "1 3/8",
+          "expected_furlongs": 11
+        }
+      ]
+    },
+    {
+      "file": "../review_extract/Saratoga_Ten_Card_Retest_Evidence/upload/SAR--07-12-2026.pdf",
+      "sha256": "ad6ba7759eb8f72637b25e43e1f00830e06dbc7b60b4ae1cb65390f95181672f",
+      "checks": [
+        {
+          "pdf_page": 3,
+          "race": 2,
+          "extracted_token": "1 \u00b6",
+          "printed_miles": "1 1/2",
+          "expected_furlongs": 12
+        }
+      ]
+    }
+  ]
+}

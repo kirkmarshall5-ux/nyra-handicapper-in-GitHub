@@ -1,0 +1,142 @@
+cohort,race,changed_runner_inputs,original_top3,corrected_top3,actual_top3,top_pick_changed,whole_order_changed
+DRF58,BAQ_2026-05-22_R2,0,Apalta | Shipsational | Petrolo,Apalta | Shipsational | Petrolo,Apalta | Shipsational | Petrolo,False,False
+DRF58,BAQ_2026-05-22_R3,0,Notable Exchange | Seat At the Table | Stillthinkingofyou,Notable Exchange | Seat At the Table | Stillthinkingofyou,Seat At the Table | Stillthinkingofyou | Notable Exchange,False,False
+DRF58,BAQ_2026-05-22_R4,0,Celestial Glaze | Curvino | Gypsy Dreaming,Celestial Glaze | Curvino | Gypsy Dreaming,Paradise Valley | Windsor Gold | Celestial Glaze,False,False
+DRF58,BAQ_2026-05-22_R5,0,Alma's Law | Quell | My Girl Aubree,Alma's Law | Quell | My Girl Aubree,Call Me Jal | Alma's Law | Fifteen Over,False,False
+DRF58,BAQ_2026-05-22_R6,0,Scythian | Can't Fool Me | Downtown Channel,Scythian | Can't Fool Me | Downtown Channel,Scythian | Saratoga Snow | Considerate City,False,False
+DRF58,BAQ_2026-05-22_R7,0,T Kraft | Raise the Bar | El Grande O,T Kraft | Raise the Bar | El Grande O,T Kraft | Over and Ollie | Tuscan Sky,False,False
+DRF58,BAQ_2026-05-22_R8,0,Oligarch | Two Ducks | Felonious,Oligarch | Two Ducks | Felonious,Felonious | Oligarch | Two Ducks,False,False
+DRF58,BAQ_2026-05-23_R1,0,Lough Currane | Bootsy's a Rascal | Hafu,Lough Currane | Bootsy's a Rascal | Hafu,Charlie Charmer | Hafu | Lough Currane,False,False
+DRF58,BAQ_2026-05-23_R3,0,Salming | Red Miller | Thorsness,Salming | Red Miller | Thorsness,Thorsness | Whitby | Raging Sea Captain,False,False
+DRF58,BAQ_2026-05-23_R5,0,Curlin's Magic | Baby Sassicaia | Floge,Curlin's Magic | Baby Sassicaia | Floge,Jackie the Joker | Baby Sassicaia | Curlin's Magic,False,False
+DRF58,BAQ_2026-05-23_R6,0,Heeere's Johnny | Gold Sovereign | Peak Performer,Heeere's Johnny | Gold Sovereign | Peak Performer,Versailles Road | Gold Sovereign | Orgonite,False,False
+DRF58,BAQ_2026-05-23_R7,0,Glorious Boy | Itza Lock | Azizam,Glorious Boy | Itza Lock | Azizam,Intricate Spirit | Capanaparo | Chasing Freedom,False,False
+DRF58,BAQ_2026-05-23_R8,1,Dreamlike | Whittington Park | Classicist,Dreamlike | Whittington Park | Classicist,Classicist | Dreamlike | Otello,False,False
+DRF58,BAQ_2026-05-23_R9,0,Carc Brothers | Freaky | Kid Cairo,Carc Brothers | Freaky | Kid Cairo,Carc Brothers | Middle Market | Madagascar,False,False
+DRF58,BAQ_2026-06-18_R1,0,Phantom Blue | Long Term Market | Full of Tact,Phantom Blue | Long Term Market | Full of Tact,Long Term Market | Phantom Blue | Jadorlinija,False,False
+DRF58,BAQ_2026-06-18_R3,0,Concurrently | Krissys Star | Hand Over Heart,Concurrently | Krissys Star | Hand Over Heart,Concurrently | Krissys Star | Hand Over Heart,False,False
+DRF58,BAQ_2026-06-18_R5,5,Mutaawid | Emergence | Coiled,Mutaawid | Emergence | Coiled,Harrow | Mutaawid | Mayor of Midnight,False,True
+DRF58,BAQ_2026-06-18_R7,0,Lady Rose | L'Eclair | Call Me Jal,Lady Rose | L'Eclair | Call Me Jal,Lady Rose | Cravings | Dee's On Dow,False,False
+DRF58,BAQ_2026-06-18_R8,0,Roagna | Leslie's Star | Bossy Dish,Roagna | Leslie's Star | Bossy Dish,Smiling Rosie | Roagna | Greyjoy,False,False
+DRF58,BAQ_2026-06-19_R3,0,Power of Women | Icy Legs | So Vain,Power of Women | Icy Legs | So Vain,Power of Women | Ishkabibble | So Vain,False,False
+DRF58,BAQ_2026-06-19_R6,0,Concorde Spirit | Ez Roll | Shadow Dragon,Concorde Spirit | Ez Roll | Shadow Dragon,Ez Roll | Whittington Park | Concorde Spirit,False,False
+DRF58,BAQ_2026-06-19_R8,0,Middle Market | Snookie Bear | Chips and Fish,Middle Market | Snookie Bear | Chips and Fish,Chummers | In the Dark | Tim and Sam,False,False
+DRF58,BAQ_2026-06-20_R1,0,Shape Note | Keewaydin | Masseto,Shape Note | Keewaydin | Masseto,Keewaydin | Shape Note | War Stride,False,False
+DRF58,BAQ_2026-06-20_R2,0,Burninhunkoflove | Riyadh Moon | Kunshan Bridge,Burninhunkoflove | Riyadh Moon | Kunshan Bridge,Kunshan Bridge | Riyadh Moon | Burninhunkoflove,False,False
+DRF58,BAQ_2026-06-20_R5,0,Twirly | Amy's Light | Timia,Twirly | Amy's Light | Timia,Baseball Lady | A. P. Slingshot | Timia,False,False
+DRF58,BAQ_2026-06-20_R6,0,Late Call | Bar Fourteen | High Tide,Late Call | Bar Fourteen | High Tide,Shared Success | Bar Fourteen | Late Call,False,False
+DRF58,BAQ_2026-06-20_R7,0,Sunday Boy | Illmatic | Wit Storm,Sunday Boy | Illmatic | Wit Storm,Nessuna Pagina | Illmatic | Spirit of New York,False,False
+DRF58,BAQ_2026-06-20_R9,0,Tapwrits Temper | Red Miller | Reside,Tapwrits Temper | Red Miller | Reside,Tapwrits Temper | Red Miller | Shellac,False,False
+DRF58,BAQ_2026-06-21_R1,0,Oligarch | Two Ducks | Daw Samaa,Oligarch | Two Ducks | Daw Samaa,Hafu | Two Ducks | Nod to Tran,False,False
+DRF58,BAQ_2026-06-21_R2,4,Relaxx | Lady Firefoot | Sol d'Oro,Lady Firefoot | Relaxx | Sol d'Oro,Massarat | Relaxx | Sol d'Oro,True,True
+DRF58,BAQ_2026-06-21_R3,0,Whistler's Style | My First Love | Luna Moth,Whistler's Style | My First Love | Luna Moth,Miss Lao | Luna Moth | Whistler's Style,False,False
+DRF58,BAQ_2026-06-21_R4,0,Ohonte's Own | Sleep Walking | High Leverage,Ohonte's Own | Sleep Walking | High Leverage,Twirling Lad | Emotionlyavailble | Ohonte's Own,False,False
+DRF58,BAQ_2026-06-21_R6,0,Adrian | Sarir | Higher Force,Adrian | Sarir | Higher Force,Higher Force | Sarir | Racing Colors,False,False
+DRF58,BAQ_2026-06-21_R7,0,Moonlight Gal | Better With Vino | Will of a Womanne,Moonlight Gal | Better With Vino | Will of a Womanne,Moonlight Gal | Dat Dares Right | Better With Vino,False,False
+DRF58,BAQ_2026-06-21_R8,0,Nonna Lynne | Downtown Channel | Mommy's Turn,Nonna Lynne | Downtown Channel | Mommy's Turn,Sail With the Wind | Nonna Lynne | Saratoga Snow,False,False
+DRF58,BAQ_2026-06-25_R2,0,Lady Wisdom | Pocket Queens | Blenheim Baby,Lady Wisdom | Pocket Queens | Blenheim Baby,Lady Wisdom | Blenheim Baby | Pocket Queens,False,False
+DRF58,BAQ_2026-06-25_R4,0,Leslie's Humor | Munnings Express | Ready to Jam,Leslie's Humor | Munnings Express | Ready to Jam,Leslie's Humor | Les Reys | Munnings Express,False,False
+DRF58,BAQ_2026-06-25_R6,0,Determinedly | Celestial Glaze | Frizzante,Determinedly | Celestial Glaze | Frizzante,Secured Landing | Three Technique | Frizzante,False,False
+DRF58,BAQ_2026-06-25_R7,0,Despo's Dream | Mursal | Proud Foot,Despo's Dream | Mursal | Proud Foot,Mursal | Proud Foot | Despo's Dream,False,False
+DRF58,BAQ_2026-06-25_R8,0,Artistic Success | Heads in Beds | Rockyta,Artistic Success | Heads in Beds | Rockyta,Midnightloveaffair | Scorch | Artistic Success,False,False
+DRF58,BAQ_2026-06-26_R2,0,Expensive Cut | Shipsational | Sagamore Mischief,Expensive Cut | Shipsational | Sagamore Mischief,Quiet Wisdom | Sagamore Mischief | Expensive Cut,False,False
+DRF58,BAQ_2026-06-26_R3,0,Cocktailsnkringle | Gypsy Dreaming | Master Freud,Cocktailsnkringle | Gypsy Dreaming | Master Freud,Cocktailsnkringle | Golden Symphony | Master Freud,False,False
+DRF58,BAQ_2026-06-26_R5,4,Iron Sight | Gold Sovereign | Duty,Iron Sight | Gold Sovereign | Duty,Iron Sight | Protect and Defend | Duty,False,False
+DRF58,BAQ_2026-06-26_R6,1,Inspeightofcharlie | Willpowered | Oat Coutour,Inspeightofcharlie | Willpowered | Oat Coutour,English Castle | Oat Coutour | Willpowered,False,True
+DRF58,BAQ_2026-06-26_R7,0,Sebastianthe First | Executive Order | Typhoon Fury,Sebastianthe First | Executive Order | Typhoon Fury,Sebastianthe First | Epitaph | Typhoon Fury,False,False
+DRF58,SAR_2026-06-04_R2,0,Mythical | Irish Jig | Carmel Coast,Mythical | Irish Jig | Carmel Coast,Goodall | Carmel Coast | Mythical,False,False
+DRF58,SAR_2026-06-04_R3,1,West End Kid | Noble Dynasty | Blinging It Back,West End Kid | Noble Dynasty | Blinging It Back,West End Kid | Blackmail | Bottas,False,True
+DRF58,SAR_2026-06-04_R4,0,Directive | U Lite Up My Life | Metfardeh,Directive | U Lite Up My Life | Metfardeh,Directive | Measure | U Lite Up My Life,False,False
+DRF58,SAR_2026-06-04_R7,2,Operation Overlord | Right to Vote | Greystone,Operation Overlord | Right to Vote | Greystone,Right to Vote | Operation Overlord | Monterey Bay,False,True
+DRF58,SAR_2026-06-04_R8,0,Shoot It True | In Our Time | Creed's Gold,Shoot It True | In Our Time | Creed's Gold,Roja | Italian Soiree | Shoot It True,False,False
+DRF58,SAR_2026-06-04_R9,0,Georgia Magic | Cocktailsnkringle | Miami Frank,Georgia Magic | Cocktailsnkringle | Miami Frank,Magnanimous Max | Cocktailsnkringle | First Blessing,False,False
+DRF58,SAR_2026-06-04_R10,0,Corruption | Flashiest | Tawny Port,Corruption | Flashiest | Tawny Port,Tawny Port | Navy Seal | Miztertonic,False,False
+DRF58,SAR_2026-06-04_R11,0,Dividend Recap | Pretty Lavish | Autonome,Dividend Recap | Pretty Lavish | Autonome,Mo Complex | River Tay | Pretty Lavish,False,False
+DRF58,CD_2026-04-30_R1,0,You Ain't Poppn | Banned for Life | Tejon Pass,You Ain't Poppn | Banned for Life | Tejon Pass,Star's Image | Keep On Moving | Banned for Life,False,False
+DRF58,CD_2026-04-30_R3,0,Spotted | Souperrazzledazzle | Fresh Out,Spotted | Souperrazzledazzle | Fresh Out,Fresh Out | Silvertown | My Secret Dreams,False,False
+DRF58,CD_2026-04-30_R9,0,Lagynos | Chasing the Crown | Quatrocento,Lagynos | Chasing the Crown | Quatrocento,Lagynos | Chasing the Crown | Quatrocento,False,False
+DRF58,CD_2026-04-30_R10,0,Built | Maximum Bourbon | Back Em Up,Built | Maximum Bourbon | Back Em Up,Maximum Bourbon | Bourbon Bash | Built,False,False
+DRF58,CD_2026-04-30_R11,0,Cy Fair | Slay the Day | Hen Party,Cy Fair | Slay the Day | Hen Party,Cy Fair | Slay the Day | Hen Party,False,False
+SAR47,SAR_2026-06-05_R2,0,On the Hill | Factually Correct | Russi,On the Hill | Factually Correct | Russi,Hit the Post | Kenny Be | Projectability,False,False
+SAR47,SAR_2026-06-05_R4,0,Ways and Means | Grand Job | Scalable,Ways and Means | Grand Job | Scalable,Ways and Means | Grand Job | Senza Parole,False,False
+SAR47,SAR_2026-06-05_R5,0,Di Natale | Silsbee | Emblaze,Di Natale | Silsbee | Emblaze,Pillar of Beauty | Silsbee | Di Natale,False,False
+SAR47,SAR_2026-06-05_R7,0,Full Screen | Bendoog | Money Game,Full Screen | Bendoog | Money Game,Money Game | Bendoog | Bourbon Day,False,False
+SAR47,SAR_2026-06-05_R8,0,Final Verdict | Straight Arrow | Whatchatalkinabout,Final Verdict | Straight Arrow | Whatchatalkinabout,Determined Kingdom | Spiced Up | Final Verdict,False,False
+SAR47,SAR_2026-06-05_R9,0,Lion Lake | Time to Dream | Coach Mazzula,Lion Lake | Time to Dream | Coach Mazzula,Fitz Right | Lion Lake | Time to Dream,False,False
+SAR47,SAR_2026-06-05_R10,0,Counting Stars | Always a Runner | Meaning,Counting Stars | Always a Runner | Meaning,Counting Stars | Always a Runner | Meaning,False,False
+SAR47,SAR_2026-06-05_R13,0,Grace and Grit | Karley B | Cloudy Chance,Grace and Grit | Karley B | Cloudy Chance,Irish Fortune | Grace and Grit | Graceful Rose,False,False
+SAR47,SAR_2026-06-07_R1,0,All of It | Considerate City | Bryant and Cooper,All of It | Considerate City | Bryant and Cooper,All of It | Considerate City | Bertrille,False,False
+SAR47,SAR_2026-06-07_R3,0,Scottish Lassie | Filly Freedom | Limes Don't Lie,Scottish Lassie | Filly Freedom | Limes Don't Lie,Scottish Lassie | Limes Don't Lie | Midtown Lights,False,False
+SAR47,SAR_2026-06-07_R4,0,Zulu Kingdom | Ridari | Pass the Hat,Zulu Kingdom | Ridari | Pass the Hat,Pass the Hat | Capitol Hill | Zulu Kingdom,False,False
+SAR47,SAR_2026-06-07_R9,0,Gatsby | Shoot the Nickel | Secured Landing,Gatsby | Shoot the Nickel | Secured Landing,Princip | Shoot the Nickel | Forgiving Spirit,False,False
+SAR47,SAR_2026-06-07_R10,0,Toscano | Bold Love | Mo for the King,Toscano | Bold Love | Mo for the King,Long Pour | Anyway | Mo for the King,False,False
+SAR47,SAR_2026-07-03_R1,0,Founders | Fact | Chillax,Founders | Fact | Chillax,McAfee | Chillax | Pretty Boy Miah,False,False
+SAR47,SAR_2026-07-03_R3,0,Mo for the King | Anyway | Fireballin,Mo for the King | Anyway | Fireballin,Anyway | B Provocateur | Mo for the King,False,False
+SAR47,SAR_2026-07-03_R5,0,Paula's a Star | Ratu Jawa | One Last Knock,Paula's a Star | Ratu Jawa | One Last Knock,Oscar's Encore | Kilby Girl | One Last Knock,False,False
+SAR47,SAR_2026-07-03_R6,0,Metatron's Muse | Shipsational | Polar Bear Plunge,Metatron's Muse | Shipsational | Polar Bear Plunge,Metatron's Muse | Polar Bear Plunge | Petrolo,False,False
+SAR47,SAR_2026-07-03_R7,0,White Smoke Rising | Hit the Post | Fort Nelson,White Smoke Rising | Hit the Post | Fort Nelson,White Smoke Rising | Private Desire | Silver Talent,False,False
+SAR47,SAR_2026-07-03_R8,0,Smexy | To a Flame | Pillar of Beauty,Smexy | To a Flame | Pillar of Beauty,To a Flame | Pillar of Beauty | Code,False,False
+SAR47,SAR_2026-07-03_R10,0,Siyouincanada | Blinging It Back | Glavine,Siyouincanada | Blinging It Back | Glavine,Heeere's Johnny | Blinging It Back | Glavine,False,False
+SAR47,SAR_2026-07-03_R11,0,Dividend Recap | River Tay | Pretty Lavish,Dividend Recap | River Tay | Pretty Lavish,Brokealltherules | Dividend Recap | Lotus Petal,False,False
+SAR47,SAR_2026-07-04_R1,0,Mashallah | Lovely Christina | Feminism,Mashallah | Lovely Christina | Feminism,Mashallah | Feminism | Lovely Christina,False,False
+SAR47,SAR_2026-07-04_R4,0,Grace and Grit | Queens Cat | Lightning Strike,Grace and Grit | Queens Cat | Lightning Strike,Grace and Grit | Lightning Strike | Queens Cat,False,False
+SAR47,SAR_2026-07-04_R10,0,Bramito | Full Screen | Warp Nine,Bramito | Full Screen | Warp Nine,Warp Nine | Full Screen | Reasoned Analysis,False,False
+SAR47,SAR_2026-07-05_R3,0,Always Angels | Kyle's Mom | Pistol Liz Ablazen,Always Angels | Kyle's Mom | Pistol Liz Ablazen,Princess Becca | Pens Street | Kyle's Mom,False,False
+SAR47,SAR_2026-07-09_R4,0,Karey | Heavens Lee | Defining Role,Karey | Heavens Lee | Defining Role,Karey | Margarita Molly | Miss American Pie,False,False
+SAR47,SAR_2026-07-09_R5,0,Will Not Be Swayed | Soaring High | Brunch With Amy,Will Not Be Swayed | Soaring High | Brunch With Amy,Soaring High | Hidden Rose | Brunch With Amy,False,False
+SAR47,SAR_2026-07-09_R7,0,Red State | War Master | Factually Correct,Red State | War Master | Factually Correct,Gatsby | Red State | Factually Correct,False,False
+SAR47,SAR_2026-07-09_R8,0,Counter Move | Kid Billy | After Taxes,Counter Move | Kid Billy | After Taxes,After Taxes | Joker On Fire | Ambassador Blue,False,False
+SAR47,SAR_2026-07-10_R1,0,Commerce | Asked and Answered | Pauillac,Commerce | Asked and Answered | Pauillac,Commerce | Presidential Power | Pauillac,False,False
+SAR47,SAR_2026-07-10_R3,0,B Thedonald | On the Hill | Kenny Be,B Thedonald | On the Hill | Kenny Be,New York Scrappy | Kenny Be | On the Hill,False,False
+SAR47,SAR_2026-07-10_R4,0,Favorable Scenario | Elnajd | Golden Channel,Favorable Scenario | Elnajd | Golden Channel,Elnajd | Favorable Scenario | Sardis,False,False
+SAR47,SAR_2026-07-10_R5,0,Contrary Thinking | Dapper Moon | Tiger Twenty Four,Contrary Thinking | Dapper Moon | Tiger Twenty Four,Whatchatalkinabout | Contrary Thinking | Commuted,False,False
+SAR47,SAR_2026-07-10_R6,0,Private Property | Loveontheleftbank | Gum,Private Property | Loveontheleftbank | Gum,Jordan's Love | Felixyn | Gum,False,False
+SAR47,SAR_2026-07-10_R7,0,Quiet Confidence | Abientot | Capturing,Quiet Confidence | Abientot | Capturing,Capturing | Quiet Confidence | Abientot,False,False
+SAR47,SAR_2026-07-10_R8,0,Jackie the Joker | Baby Sassicaia | Curlin's Magic,Jackie the Joker | Baby Sassicaia | Curlin's Magic,Baby Sassicaia | Ah Ca Ira | Curlin's Magic,False,False
+SAR47,SAR_2026-07-10_R9,0,Mythical | Goodall | Sneaky Good,Mythical | Goodall | Sneaky Good,Sippin Pretty | Goodall | A Fine Chardonnay,False,False
+SAR47,SAR_2026-07-11_R3,0,Army Gal | Speightful Lily | Next On Stage,Army Gal | Speightful Lily | Next On Stage,Next On Stage | Speightful Lily | Army Gal,False,False
+SAR47,SAR_2026-07-11_R4,0,Sounds Like a Plan | Life and Times | Intellect,Sounds Like a Plan | Life and Times | Intellect,Sounds Like a Plan | Intellect | Life and Times,False,False
+SAR47,SAR_2026-07-11_R5,0,In Our Time | Sunna | Movin' On Up,In Our Time | Sunna | Movin' On Up,Movin' On Up | Zeitlos | In Our Time,False,False
+SAR47,SAR_2026-07-11_R7,0,Unit Economics | Walley World | Yinzer,Unit Economics | Walley World | Yinzer,Yinzer | Starship Titan | Walley World,False,False
+SAR47,SAR_2026-07-11_R8,0,Cyclonite | Mission Improbable | Oil Capital,Cyclonite | Mission Improbable | Oil Capital,No Evidence | Bosun | Grunge,False,False
+SAR47,SAR_2026-07-11_R9,0,Toscano | Judge Boushay | King Farro,Toscano | Judge Boushay | King Farro,Sunday Boy | Judge Boushay | King Farro,False,False
+SAR47,SAR_2026-07-12_R2,3,Midnight Concerto | Tricky Kitty | Scarlett's Halo,Midnight Concerto | Tricky Kitty | Scarlett's Halo,Malibu Smart | Trading Strategy | Midnight Concerto,False,True
+SAR47,SAR_2026-07-12_R3,0,Belle Cherie | Vino Frizzante | Calling an Audible,Belle Cherie | Vino Frizzante | Calling an Audible,Bellacose | Belle Cherie | Vino Frizzante,False,False
+SAR47,SAR_2026-07-12_R6,0,Alyeska | Strong State | Limes Don't Lie,Alyeska | Strong State | Limes Don't Lie,Strong State | Ultimate Authority | She's a Gamer,False,False
+SAR47,SAR_2026-07-12_R8,0,Hard Circle | City of Oscars | Remi's Moon,Hard Circle | City of Oscars | Remi's Moon,Highlands Way | Hard Circle | Rabaja,False,False
+KEE25,KEE_2026-10-09_R1,0,Tiger's Legacy | Colonel Caliente | Musical,Tiger's Legacy | Colonel Caliente | Musical,Horsetron Supreme | Musical | Tiger's Legacy,False,False
+KEE25,KEE_2026-10-09_R3,0,Early Autumn | Smoke | Dazzling,Early Autumn | Smoke | Dazzling,Silver Road | Dazzling | Early Autumn,False,False
+KEE25,KEE_2026-10-09_R4,0,Wangshu | Summer Date | Watershed Moment,Wangshu | Summer Date | Watershed Moment,Watershed Moment | Lunar Loop | Wangshu,False,False
+KEE25,KEE_2026-10-09_R8,0,Cold Spell | You're in Heaven | Feasible,Cold Spell | You're in Heaven | Feasible,Chatter | Debbie Doll | You're in Heaven,False,False
+KEE25,KEE_2026-10-09_R9,7,Tiz Dashing | Vote No | Layabout,Tiz Dashing | Layabout | Vote No,Lambeth | Limited Liability | Vote No,False,True
+KEE25,KEE_2026-10-10_R1,0,Unlimited Gold | Lost Chord | Lexico,Unlimited Gold | Lost Chord | Lexico,Lost Chord | Lexico | Unlimited Gold,False,False
+KEE25,KEE_2026-10-10_R2,0,Dolly P | R Ruth of My Life | Kefka,Dolly P | R Ruth of My Life | Kefka,Dolly P | Take That Girl | Maple Ridge,False,False
+KEE25,KEE_2026-10-10_R3,0,Merlin Monroan | Admiral's Order | Battlefield Hero,Merlin Monroan | Admiral's Order | Battlefield Hero,Merlin Monroan | Admiral's Order | Tolstoy,False,False
+KEE25,KEE_2026-10-10_R4,1,Morunning | Overstatement | Money Supply,Morunning | Overstatement | Money Supply,Money Supply | Overstatement | Morunning,False,False
+KEE25,KEE_2026-10-10_R8,0,Bold Strength | Steeze | Doroteo,Bold Strength | Steeze | Doroteo,Steeze | Thailand | American Promise,False,False
+KEE25,KEE_2026-10-11_R1,0,Indy Charges On | Pike Place | Trusty Rusty,Indy Charges On | Pike Place | Trusty Rusty,Indy Charges On | Pike Place | Bebedouro,False,False
+KEE25,KEE_2026-10-11_R2,0,Wicked Gun | Flume's Vino | Diamond Eyed Jack,Wicked Gun | Flume's Vino | Diamond Eyed Jack,Bourbonkoma | Mr. All In | Page Two,False,False
+KEE25,KEE_2026-10-11_R3,0,Cora's Legacy | Wits and Wagers | Nilo's Rose,Cora's Legacy | Wits and Wagers | Nilo's Rose,Wits and Wagers | Fugitive Star | Cora's Legacy,False,False
+KEE25,KEE_2026-10-11_R4,1,Oraia | French Mistress | Easter Promise,Oraia | French Mistress | Easter Promise,Love Knicks Hart | Oraia | French Mistress,False,False
+KEE25,KEE_2026-10-11_R7,0,Modo | Inefficiency | Landed,Modo | Inefficiency | Landed,Landed | Inefficiency | Taliesin,False,False
+KEE25,KEE_2026-10-11_R8,0,Time to Dazzle | Ag Bullet | Movin' On Up,Time to Dazzle | Ag Bullet | Movin' On Up,Time to Dazzle | Kehoe Beach | Itzel,False,False
+KEE25,KEE_2026-10-14_R1,0,Hold My Halo | West Coast Dream | Cara Felce,Hold My Halo | West Coast Dream | Cara Felce,West Coast Dream | Cara Felce | Hold My Halo,False,False
+KEE25,KEE_2026-10-14_R3,0,Lucky Shot | Heavenlyconveyance | West Coast Bull,Lucky Shot | Heavenlyconveyance | West Coast Bull,Lucky Shot | Eli's Promise | Heavenlyconveyance,False,False
+KEE25,KEE_2026-10-14_R4,0,Moonlight Dash | Smell the Lilies | Cotillard,Moonlight Dash | Smell the Lilies | Cotillard,Smell the Lilies | Moonlight Dash | Risen Power,False,False
+KEE25,KEE_2026-10-14_R6,0,Blast Furnace | Ironsides | Tough Little Nut,Blast Furnace | Ironsides | Tough Little Nut,Blast Furnace | Tough Little Nut | Sushi Man,False,False
+KEE25,KEE_2026-10-14_R7,1,Hop Sing | Admiral Hall | Culprit,Hop Sing | Admiral Hall | Culprit,King of Ashes | Admiral Hall | Hop Sing,False,False
+KEE25,KEE_2026-10-15_R1,0,Spurgeon | Go for Rocket | Uncle Evco,Spurgeon | Go for Rocket | Uncle Evco,Uncle Evco | Spurgeon | Ramblin,False,False
+KEE25,KEE_2026-10-15_R3,0,Lil Muggs | Murdock | Kirin,Lil Muggs | Murdock | Kirin,Banned for Life | Map to the Stars | Lil Muggs,False,False
+KEE25,KEE_2026-10-15_R6,0,Take Charge Omaha | Roswell | In Just My Heels,Take Charge Omaha | Roswell | In Just My Heels,Roswell | Take Charge Omaha | In Just My Heels,False,False
+KEE25,KEE_2026-10-15_R8,0,Caribbean Life | Showa | Hes Steelin Mylady,Caribbean Life | Showa | Hes Steelin Mylady,Showa | Caribbean Life | Hes Steelin Mylady,False,False
+OCT17_BEL_DRF,BEL_2026-10-17_R1,0,Commuted | Run Classic | Conniving,Commuted | Run Classic | Conniving,Commuted | Run Classic | Kunshan Bridge,False,False
+OCT17_BEL_DRF,BEL_2026-10-17_R2,0,Gift of Gab | Delightful Flame | River Seine,Gift of Gab | Delightful Flame | River Seine,River Seine | Gift of Gab | Delightful Flame,False,False
+OCT17_BEL_DRF,BEL_2026-10-17_R3,2,Le Gris | Missouri River | Sharp Spark,Le Gris | Missouri River | Sharp Spark,Frizzante | Le Gris | Sharp Spark,False,False
+OCT17_BEL_DRF,BEL_2026-10-17_R4,1,Lady Firefoot | Seat At the Table | Notable Exchange,Lady Firefoot | Seat At the Table | Notable Exchange,Seat At the Table | Bow Draw | Planet Clare,False,False
+OCT17_BEL_DRF,BEL_2026-10-17_R5,0,Bite and Strike | Mission Improbable | Global Prosperity,Bite and Strike | Mission Improbable | Global Prosperity,Mission Improbable | Billionaires Row | Bite and Strike,False,False
+OCT17_BEL_DRF,BEL_2026-10-17_R6,0,Will Not Be Swayed | Meg's Foxy Grey | City Blocks,Will Not Be Swayed | Meg's Foxy Grey | City Blocks,Meg's Foxy Grey | Will Not Be Swayed | Mascara,False,False
+OCT17_BEL_DRF,BEL_2026-10-17_R7,0,Carc Brothers | Interceptor | Write Off Jerry,Carc Brothers | Interceptor | Write Off Jerry,Carc Brothers | Write Off Jerry | Emergence,False,False
+OCT17_BEL_DRF,BEL_2026-10-17_R8,0,Despo's Dream | Snide | Mursal,Despo's Dream | Snide | Mursal,Brunch With Amy | Mursal | Bam's Bliss Kiss,False,False
+OCT17_BEL_DRF,BEL_2026-10-17_R9,0,Georgia Magic | Magnanimous Max | Barb,Georgia Magic | Magnanimous Max | Barb,Georgia Magic | Fateful Lightning | Sharp Swinger,False,False
+OCT17_BEL_DRF,BEL_2026-10-17_R10,0,Unit Economics | Paros | Highlands Way,Unit Economics | Paros | Highlands Way,Unit Economics | Hammerhead | Highlands Way,False,False
+OCT17_BEL_DRF,BEL_2026-10-17_R11,0,Normandy Coast | Shoot the Nickel | Secured Landing,Normandy Coast | Shoot the Nickel | Secured Landing,Pineapple Man | Shoot the Nickel | Normandy Coast,False,False
