@@ -411,7 +411,7 @@ function renderConnections(){
 function renderWeights(){weightsDiv()}
 function weightsDiv(){if(brisnetPaceDisplay(race).available){document.getElementById("weights").textContent=BRISNET_METHODS.v44c+" Pace has no weight in this native base version. No calibrated winning probabilities.";resetWeights.disabled=true;resetWeights.textContent="Brisnet research weights locked";return;}document.getElementById("weights").innerHTML='<div class="small">Last verified Beyer: 40 · best of latest 3: 22 · PP jockey: 7 · PP trainer: 8 · trainer context for ≤2 starts: 12. Verified zero figures remain included; only missing components are omitted. Figure values require source verification. V4.4c adjustments are capped at ±6. Rank unrounded totals, then horse name.</div>';resetWeights.disabled=true;resetWeights.textContent="V4.4c weights locked"}
 
-document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));b.classList.add("active");["raceday","pace","connections","pp","public","knowledge"].forEach(id=>document.getElementById(id).classList.toggle("hidden",id!==b.dataset.tab))});
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));b.classList.add("active");["raceday","pace","connections","public","knowledge"].forEach(id=>document.getElementById(id).classList.toggle("hidden",id!==b.dataset.tab))});
 raceNotes.oninput=e=>{const cs=state.cards[activeCard.id]||(state.cards[activeCard.id]={runners:{},notes:{}});cs.notes=cs.notes||{};cs.notes[race.race]=e.target.value;save()};
 
 let nyraUpdatePending=false;
