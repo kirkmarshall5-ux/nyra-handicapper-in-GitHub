@@ -64,10 +64,16 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <div><div class="muted small" style="margin-bottom:5px">Race</div><div class="racebar" id="racebar"></div></div>
 </div><div id="declaredScratches" class="small muted" role="status"></div><div class="flex" style="margin-top:12px;flex-wrap:wrap"><button class="primary" id="updateOddsScratches">Update Odds &amp; Scratches</button><span class="small muted" id="nyraUpdateStatus" role="status" aria-live="polite">Fetch NYRA updates for the selected race.</span></div></div>
 
-<div class="card span4"><div class="kicker">Top 4 Win Candidates-V4.4c</div><div id="topContenders" class="stack small"></div><details class="tiny muted" style="margin-top:10px"><summary>How V4.4c ranks</summary><p>Latest Beyer 40 weight points · best Beyer from the latest three starts 22 · jockey 7 · trainer 8. Jockey and trainer win percentages are multiplied by three, capped at 100. Horses with one or two starts can also use a verified trainer-context score at 12 weight points. Missing inputs redistribute the available weights; verified zero counts. Field strength, pace fit, rebound protection and lightly raced upside can adjust the base rating by up to ±6 points. PASS races show provisional rated runners only.</p></details></div>
-<div class="card span4"><div class="kicker">Top 4 Candidates-Finisher</div><div id="finisherCandidates" class="stack small" aria-live="polite"></div><details class="tiny muted" style="margin-top:10px"><summary>How Finisher ranks</summary><p>Fixed weights: recent speed 60%, same-surface/distance speed 25%, Late pace 15%. Inputs use field percentiles from 0 to 100. Recent speed uses the latest five starts at 50/25/15/7/3, normalized for available figures. Matching speed uses the latest five proof rows, within 365 days and half a furlong, with a 90-day decay half-life. Verified DRF fractional distances are decoded separately from the control. Missing optional inputs stay neutral at 50 without redistributing weights. First-time starters and runners without verified recent speed remain unranked; partial fields show PASS. Brisnet uses native Speed and matched LP. Exact score ties use horse name. V4.4c remains the control.</p></details></div>
-<div class="card span4"><div class="kicker">Top 4 Win Candidates-Contender</div><div id="contenderCandidates" class="stack small"></div><details class="tiny muted" style="margin-top:10px"><summary>How Contender ranks</summary><p>Contender V2 combines relative field scores using frozen coefficients for recent Beyers, surface and distance form, Timeform Early and Late pace, race pressure, career records, jockey and trainer records, layoffs, workouts, verified trip comments and prior opposition. It also uses a surface/distance matched Beyer trend when at least three comparable starts are verified. Missing features are neutral. This model was trained for top-three contention; its win chances remain experimental. PASS races show provisional rated runners only.</p></details></div>
-<div class="card span3"><div class="kicker">Top 3 morning-line favorites</div><div id="topMl" class="stack small"></div></div>
+<div class="card span12"><div class="kicker">Keep both PP sources loaded</div><div class="flex" style="flex-wrap:wrap;margin-top:8px"><button class="primary" id="uploadBrisnet">1. Upload Brisnet PP</button><input id="brisnetFile" type="file" accept=".pdf" hidden><button class="primary" id="uploadDrf">2. Upload DRF PP</button><input id="drfFile" type="file" accept=".pdf" hidden><label for="ppSourceView" class="small">Horse grid / Pace source</label><select id="ppSourceView" style="width:auto"><option value="BRISNET">Brisnet</option><option value="DRF">DRF</option></select></div><div class="small muted" id="providerCardsStatus" role="status" style="margin-top:10px"></div><div class="small" id="providerUploadStatus" role="status" style="margin-top:6px"></div></div>
+<div class="card span12"><div class="kicker">Morning lines · both PP sources</div><div id="topMl" class="stack small"></div></div>
+<div class="span12 kicker">Brisnet models</div>
+<div class="card span4"><div class="kicker">Brisnet · V4.4c</div><div id="brisTopContenders" class="stack small"></div><details class="tiny muted" style="margin-top:10px"><summary>How V4.4c ranks</summary><p>Latest Beyer 40 weight points · best Beyer from the latest three starts 22 · jockey 7 · trainer 8. Jockey and trainer win percentages are multiplied by three, capped at 100. Horses with one or two starts can also use a verified trainer-context score at 12 weight points. Missing inputs redistribute the available weights; verified zero counts. Field strength, pace fit, rebound protection and lightly raced upside can adjust the base rating by up to ±6 points. PASS races show provisional rated runners only.</p></details></div>
+<div class="card span4"><div class="kicker">Brisnet · Finisher</div><div id="brisFinisherCandidates" class="stack small" aria-live="polite"></div><details class="tiny muted" style="margin-top:10px"><summary>How Finisher ranks</summary><p>Fixed weights: recent speed 60%, same-surface/distance speed 25%, Late pace 15%. Inputs use field percentiles from 0 to 100. Recent speed uses the latest five starts at 50/25/15/7/3, normalized for available figures. Matching speed uses the latest five proof rows, within 365 days and half a furlong, with a 90-day decay half-life. Verified DRF fractional distances are decoded separately from the control. Missing optional inputs stay neutral at 50 without redistributing weights. First-time starters and runners without verified recent speed remain unranked; partial fields show PASS. Brisnet uses native Speed and matched LP. Exact score ties use horse name. V4.4c remains the control.</p></details></div>
+<div class="card span4"><div class="kicker">Brisnet · Contender</div><div id="brisContenderCandidates" class="stack small"></div><details class="tiny muted" style="margin-top:10px"><summary>How Contender ranks</summary><p>Contender V2 combines relative field scores using frozen coefficients for recent Beyers, surface and distance form, Timeform Early and Late pace, race pressure, career records, jockey and trainer records, layoffs, workouts, verified trip comments and prior opposition. It also uses a surface/distance matched Beyer trend when at least three comparable starts are verified. Missing features are neutral. This model was trained for top-three contention; its win chances remain experimental. PASS races show provisional rated runners only.</p></details></div>
+<div class="span12 kicker">DRF models</div>
+<div class="card span4"><div class="kicker">DRF · V4.4c</div><div id="topContenders" class="stack small"></div><details class="tiny muted" style="margin-top:10px"><summary>How V4.4c ranks</summary><p>Latest Beyer 40 weight points · best Beyer from the latest three starts 22 · jockey 7 · trainer 8. Jockey and trainer win percentages are multiplied by three, capped at 100. Horses with one or two starts can also use a verified trainer-context score at 12 weight points. Missing inputs redistribute the available weights; verified zero counts. Field strength, pace fit, rebound protection and lightly raced upside can adjust the base rating by up to ±6 points. PASS races show provisional rated runners only.</p></details></div>
+<div class="card span4"><div class="kicker">DRF · Finisher</div><div id="finisherCandidates" class="stack small" aria-live="polite"></div><details class="tiny muted" style="margin-top:10px"><summary>How Finisher ranks</summary><p>Fixed weights: recent speed 60%, same-surface/distance speed 25%, Late pace 15%. Inputs use field percentiles from 0 to 100. Recent speed uses the latest five starts at 50/25/15/7/3, normalized for available figures. Matching speed uses the latest five proof rows, within 365 days and half a furlong, with a 90-day decay half-life. Verified DRF fractional distances are decoded separately from the control. Missing optional inputs stay neutral at 50 without redistributing weights. First-time starters and runners without verified recent speed remain unranked; partial fields show PASS. Brisnet uses native Speed and matched LP. Exact score ties use horse name. V4.4c remains the control.</p></details></div>
+<div class="card span4"><div class="kicker">DRF · Contender</div><div id="contenderCandidates" class="stack small"></div><details class="tiny muted" style="margin-top:10px"><summary>How Contender ranks</summary><p>Contender V2 combines relative field scores using frozen coefficients for recent Beyers, surface and distance form, Timeform Early and Late pace, race pressure, career records, jockey and trainer records, layoffs, workouts, verified trip comments and prior opposition. It also uses a surface/distance matched Beyer trend when at least three comparable starts are verified. Missing features are neutral. This model was trained for top-three contention; its win chances remain experimental. PASS races show provisional rated runners only.</p></details></div>
 <div style="display:none" aria-hidden="true" class="card span3"><div class="kicker">Top jockeys · this race</div><div id="topJockeys" class="stack small"></div></div>
 <div style="display:none" aria-hidden="true" class="card span3"><div class="kicker">Top trainers · this race</div><div id="topTrainers" class="stack small"></div></div>
 <div style="display:none" aria-hidden="true" class="card span12"><div class="kicker">Top Jockey/Trainer This Race</div><div id="topPairings" class="stack small"></div></div>
@@ -163,7 +169,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 </main>
 
 <script type="module">
-import {fetchNyraRaceUpdate,nyraRaceUpdateSource} from "./nyra-race-update.js?v=20261018-restore1";
+import {fetchNyraRaceUpdate,nyraRaceUpdateSource,applyNyraSnapshotToRace} from "./nyra-race-update.js?v=20261018-dual1";
 import {initKnowledgeBase} from "./knowledge-base.js?v=20261008-kb1";
 import {connectionRows,LEADER_SCOPE,LEADER_SOURCE} from "./connection-research.js?v=20261008-jt1";
 import {fieldConnections} from "./pp-context.js?v=20261008-qa1";
@@ -175,6 +181,7 @@ import {finisherRankingHtml} from "./finisher-ranking-display.js?v=20261018-evid
 import {rankContenders} from "./contender-rankings.js?v=20261011-passdisplay1";
 import {rankBrisnetModels} from "./brisnet-models.js?v=20261016-native1";
 import {brisnetRankingHtml,updateBrisnetMethods} from "./brisnet-ranking-display.js?v=20261018-evidence1";
+import {cardProvider,matchingCard,pairedRace,putProviderCard,readProviderCards,writeProviderCard} from "./dual-pp-cards.js?v=20261018-dual1";
 import {modelEvidenceHtml} from "./model-evidence-display.js?v=20261018-evidence1";
 import {passRaceDisplay} from "./pass-race-display.js?v=20261013-releaseqa1";
 import {releaseRace as websiteRace,RELEASE_ID} from "./rankings-release.js?v=20261008-qa1";
@@ -196,7 +203,12 @@ state.schemaVersion=3;state.cards=state.cards||{};state.betLog=state.betLog||{};
 const deepFreeze=o=>{Object.freeze(o);Object.values(o).forEach(v=>v&&typeof v==="object"&&!Object.isFrozen(v)&&deepFreeze(v));return o};
 deepFreeze(SAMPLE_RACES);
 const sampleCard={id:"v4.4c:sample:belmont-park:2026-10-03",schemaVersion:2,track:"Belmont Park",date:"2026-10-03",races:SAMPLE_RACES,warnings:[]};
-let activeCard=JSON.parse(localStorage.getItem("nyraV44cReleaseActiveCard")||"null")||structuredClone(sampleCard);
+let providerCards={};
+try{providerCards=await readProviderCards();}catch(e){console.warn('PP slot restore unavailable',e);}
+let activeCard=JSON.parse(localStorage.getItem("nyraV44cReleaseActiveCard")||"null")||providerCards[localStorage.getItem('nyraPPSelectedProvider')]||providerCards.BRISNET||providerCards.DRF||structuredClone(sampleCard);
+providerCards=putProviderCard(providerCards,activeCard);
+function persistProvider(card){providerCards=putProviderCard(providerCards,card);return writeProviderCard(cardProvider(card),card).catch(e=>{document.getElementById('providerUploadStatus').textContent='This session is retained, but browser storage failed: '+e.message+'. Keep this tab open until the PP can be saved.';});}
+for(const card of Object.values(providerCards))if(card.id!==sampleCard.id&&!SUPPORTED_PARSERS.includes(card.parser_version))for(const r of Object.values(card.races))r.parser_blockers=[...(r.parser_blockers||[]).filter(b=>b.reason!=="parser-version-reimport-required"),{reason:"parser-version-reimport-required"}];
 const needsPPReupload=activeCard.id!==sampleCard.id&&!SUPPORTED_PARSERS.includes(activeCard.parser_version);
 if(needsPPReupload){for(const r of Object.values(activeCard.races))r.parser_blockers=[...(r.parser_blockers||[]).filter(b=>b.reason!=="parser-version-reimport-required"),{reason:"parser-version-reimport-required"}];document.getElementById("ppStatus").textContent="Your saved card is preserved. Re-upload its PPs to verify figures and primary race conditions with the updated parser.";}
 let race=structuredClone(activeCard.races[Object.keys(activeCard.races).sort((a,b)=>+a-+b)[0]]);
@@ -207,7 +219,8 @@ function fracToProb(o){if(!o||o==="SCR"||!o.includes("/"))return 0;let [a,b]=o.s
 function save(){
  state.weights=weights;state.cards=state.cards||{};const cardState=state.cards[activeCard.id]||(state.cards[activeCard.id]={runners:{},notes:{}});
  for(const h of race.horses)cardState.runners[runnerStateKey(activeCard.id,race.race,h)]={style:h.style,last:h.last??"",best:h.best??"",form:h.form??"",cls:h.cls??"",trip:h.trip??"",note:h.note||"",pp:h.pp||"",angles:h.angles||[],tfEarly:h.tfEarly||"",tfLate:h.tfLate||"",trainerAngles:h.trainerAngles||"",workText:h.workText||"",works:h.works||[],pedigree:h.pedigree||"",sire:h.sire||"",dam:h.dam||"",damsire:h.damsire||"",tripNotes:h.tripNotes||[],lifeStarts:h.lifeStarts??null};
- localStorage.setItem("nyraV44cReleaseState",JSON.stringify(state));localStorage.setItem("nyraV44cReleaseActiveCard",JSON.stringify(activeCard));
+ activeCard.races[race.race]=structuredClone(race);
+ localStorage.setItem("nyraV44cReleaseState",JSON.stringify(state));localStorage.setItem("nyraV44cReleaseActiveCard",JSON.stringify(activeCard));localStorage.setItem("nyraPPSelectedProvider",cardProvider(activeCard));persistProvider(activeCard);
 }
 function restoreRunnerEdits(){const rr=state.cards?.[activeCard.id]?.runners||{};for(const h of race.horses){const e=rr[runnerStateKey(activeCard.id,race.race,h)];if(e)for(const k of ["note","style"])if(k in e)h[k]=e[k]}}
 restoreRunnerEdits();
@@ -230,12 +243,14 @@ function confidenceRank(h){const ep=evidenceProfile({...h,jockeyRating:h.jockey_
 function valueRows(){return []}
 const escapeText=s=>String(s??"").replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function candidateTable(rows){return `<div class="tiny muted" style="margin:5px 0">Experimental, uncalibrated estimates — no betting authorization.</div><table class="candidate-table"><thead><tr><th aria-label="Horse"></th><th scope="col">Rating</th><th scope="col">Est. Fair Odds</th><th scope="col">Est. Win %</th></tr></thead><tbody>${rows}</tbody></table>`}
-function renderRaceInsights(){
+function renderModelRow(race,ids){
+ const topContenders=document.getElementById(ids[0]),contenderTarget=document.getElementById(ids[2]);
+ const currentRating=()=>rankBrisnetModels(race)?.v44c||websiteRace(race);
  const native=rankBrisnetModels(race);
- document.getElementById("finisherCandidates").innerHTML=finisherRankingHtml(race,{baselineDecision:currentRating().decision});
- for(const [key,id] of [['v44c','topContenders'],['contender','contenderCandidates']])updateBrisnetMethods(document.getElementById(id),key,!!native);
+ document.getElementById(ids[1]).innerHTML=finisherRankingHtml(race,{baselineDecision:currentRating().decision});
+ for(const [key,id] of [['v44c',ids[0]],['contender',ids[2]]])updateBrisnetMethods(document.getElementById(id),key,!!native);
  if(native){
-  for(const [key,id] of [['v44c','topContenders'],['contender','contenderCandidates']])document.getElementById(id).innerHTML=brisnetRankingHtml(native[key],key,race);
+  for(const [key,id] of [['v44c',ids[0]],['contender',ids[2]]])document.getElementById(id).innerHTML=brisnetRankingHtml(native[key],key,race);
   return;
  }
  const r=currentRating(),v44cLine=estimatedWinLine(race,r,'v44c');
@@ -250,13 +265,23 @@ function renderRaceInsights(){
  const contender=rankContenders(race,r,{displayPass:r.decision==='PASS'});
  const contenderLine=estimatedWinLine(race,contender,'contender');
  const contenderList=contender.rankings.length?candidateTable(contender.rankings.slice(0,4).map((h,i)=>`<tr><td><b>${i+1}. #${escapeText(h.n||'—')} ${escapeText(h.name)}</b></td><td>${h.score.toFixed(3)}</td>${winLineFields(contenderLine,h)}</tr>`).join('')):'';
- const contenderTarget=document.getElementById('contenderCandidates');
+
  if(r.decision==='PASS'){
   const p=passRaceDisplay(r),other=p.general.length?`<div class="tiny muted">Other pass reasons: ${p.general.map(escapeText).join('; ')}</div>`:'';
   contenderTarget.innerHTML='<b>Pass-No wager</b><div class="tiny muted" style="margin:5px 0">Provisional ranking of rated runners only; unrated horses may be competitive. Not an official full-field Contender ranking.</div>'+(contenderList||`<div class="tiny muted">${escapeText(contender.reason||'No horses have enough verified evidence for a numerical rating.')}</div>`)+other;
  }else contenderTarget.innerHTML=contender.decision==='RATEABLE'?contenderList:`<b>Contender: ${escapeText(contender.decision)}</b><div class="tiny muted">${escapeText(contender.reason)}</div>`;
 
  contenderTarget.innerHTML=modelEvidenceHtml(race,contender,{model:'contender'})+contenderTarget.innerHTML+winLineNote(contenderLine);
+
+}
+function providerRace(provider){if(provider===cardProvider(activeCard))return {race,reason:null};return pairedRace(providerCards,provider,race);}
+function renderRaceInsights(){
+ const ids={BRISNET:['brisTopContenders','brisFinisherCandidates','brisContenderCandidates'],DRF:['topContenders','finisherCandidates','contenderCandidates']};
+ for(const provider of ['BRISNET','DRF']){const source=providerRace(provider);if(source.race)renderModelRow(source.race,ids[provider]);else for(const id of ids[provider])document.getElementById(id).innerHTML='<div class="note small">'+escapeText(source.reason)+'</div>';}
+ document.getElementById('ppSourceView').value=cardProvider(activeCard);
+ document.getElementById('providerCardsStatus').textContent=['BRISNET','DRF'].map(p=>{const c=providerCards[p];return p+': '+(c?c.track+' · '+c.date+' · '+(c.sourceName||'saved card'):'not loaded');}).join(' | ');
+ const br=providerRace('BRISNET').race,dr=providerRace('DRF').race;
+ if(br&&dr){const signature=r=>r.horses.map(h=>String(h.n)+'|'+normalizeName(h.name)+'|'+(h.odds==='SCR')+'|'+(h.entry_status||'REGULAR')).sort().join(';');if(signature(br)!==signature(dr))document.getElementById('providerCardsStatus').textContent+=' | Entrants or scratch states differ between sources. Verify both fields before comparing.';}
 
 }
 function renderJ1Comparison(){
@@ -310,8 +335,7 @@ function renderHeader(){
  raceTitle.textContent=`${race.track} · Race ${race.race}`;
  raceBadges.innerHTML=`<span class="badge gold">${escapeText(displayDistance(race.dist)||"—")} ${race.surface||""}</span><span class="badge">${escapeText(displayDistance(race.cls)||"Race")}</span><span class="badge">${race.post||"—"}</span><span class="badge green">Active card</span>`;
  let active=race.horses.filter(h=>h.odds!=="SCR");
- const ml=active.filter(h=>h.included_in_frozen_field!==false&&Number.isFinite(oddsNumber(h.ml))).sort((a,b)=>oddsNumber(a.ml)-oddsNumber(b.ml)).slice(0,3);
- topMl.innerHTML=ml.length?ml.map((h,i)=>`<div><b>${i+1}. #${h.n} ${h.name}</b> <span class="pill">${h.ml||"—"}</span></div>`).join(""):"<span class=\"muted\">Verified morning line unavailable</span>";
+ topMl.innerHTML=['BRISNET','DRF'].map(provider=>{const source=providerRace(provider);if(!source.race)return '<div><b>'+provider+'</b> · '+escapeText(source.reason)+'</div>';const ml=source.race.horses.filter(h=>h.odds!=='SCR'&&h.included_in_frozen_field!==false&&(!h.entry_status||h.entry_status==='REGULAR')&&Number.isFinite(oddsNumber(h.ml))).sort((a,b)=>oddsNumber(a.ml)-oddsNumber(b.ml)).slice(0,3);return '<div><b>'+provider+'</b> · '+(ml.length?ml.map(h=>'#'+escapeText(h.n)+' '+escapeText(h.name)+' <span class="pill">'+escapeText(h.ml)+'</span>').join(' · '):'Verified morning line unavailable')+'</div>';}).join('');
  const panel=kind=>{const rows=fieldConnections(active,kind).slice(0,3);return rows.length?rows.map((x,i)=>`<div><b>${i+1}. ${escapeText(x.name)}</b> <span class="pill">${x.win==null?'No starts':x.win.toFixed(1)+'%'}</span><div class="tiny muted">${x.wins}/${x.starts} · uploaded PP local record</div></div>`).join(""):"<span class=\"muted\">Source record unavailable; upload the PP again.</span>"};
  topJockeys.innerHTML=panel('jockey');topTrainers.innerHTML=panel('trainer');
  const pairs=connectionRows(race).filter(x=>x.topPair);
@@ -324,6 +348,7 @@ function renderHeader(){
  else if(trackName.includes("aqueduct"))track.value="aqueduct";
  else if(trackName.includes("belmont"))track.value="belmont";
 }
+document.getElementById('ppSourceView').onchange=()=>{const provider=document.getElementById('ppSourceView').value,card=providerCards[provider];if(!card){document.getElementById('providerUploadStatus').textContent='Upload a '+provider+' card first.';document.getElementById('ppSourceView').value=cardProvider(activeCard);return;}save();activeCard=structuredClone(card);const n=activeCard.races[race.race]?race.race:+Object.keys(activeCard.races).sort((a,b)=>+a-+b)[0];race=structuredClone(activeCard.races[n]);restoreRunnerEdits();save();renderAll();};
 function selectRace(n){if(!activeCard.races[n])return;race=structuredClone(activeCard.races[n]);restoreRunnerEdits();renderAll();window.scrollTo({top:0,behavior:"smooth"})}
 function renderHorses(){
  horseTable.querySelector("tbody").innerHTML=sortedGridHorses().map(h=>{let js=h.jockey_win!=null?{win:h.jockey_win}:null,ts=h.trainer_win!=null?{win:h.trainer_win}:null;return `<tr style="${h.odds==="SCR"?"opacity:.48":""}">
@@ -415,9 +440,12 @@ document.getElementById('updateOddsScratches').onclick=async()=>{
   const result=await fetchNyraRaceUpdate(race);
   if(!unchanged())return;
   if(JSON.stringify(race)!==before)throw Error('Race information changed during the request; please update again');
-  race=result.race;activeCard.races[race.race]=structuredClone(race);save();nyraUpdatePending=false;renderAll();
+  race=result.race;activeCard.races[race.race]=structuredClone(race);save();
+  let pairedUpdate='';const other=cardProvider(activeCard)==='BRISNET'?'DRF':'BRISNET',source=pairedRace(providerCards,other,race);
+  if(source.race){try{const updated=applyNyraSnapshotToRace(source.race,result.snapshot);for(const h of updated.horses)if(h.odds==='SCR')h.scratch_evidence={sourceUrl:result.snapshot.sourceUrl,observedAt:result.snapshot.fetchedAt,status:'NYRA_PUBLIC_PAGE_SCRATCH_SNAPSHOT'};const card=structuredClone(providerCards[other]);card.races[race.race]=updated;await persistProvider(card);pairedUpdate=' Matching '+other+' odds and scratches also refreshed.';}catch(e){pairedUpdate=' '+other+' retained its prior field: '+e.message;}}
+  nyraUpdatePending=false;renderAll();
   const scratches=race.horses.filter(h=>h.odds==='SCR').map(h=>'#'+h.n+' '+h.name).join(', ');
-  status.textContent='Updated '+result.snapshot.runners.length+' runners at '+new Date(result.snapshot.fetchedAt).toLocaleTimeString()+'. Scratches: '+(scratches||'none')+'. All three model panels refreshed. Prices may be delayed.';
+  status.textContent='Updated '+result.snapshot.runners.length+' runners at '+new Date(result.snapshot.fetchedAt).toLocaleTimeString()+'. Scratches: '+(scratches||'none')+'. Selected-source models refreshed.'+pairedUpdate+' Prices may be delayed.';
  }catch(e){if(unchanged())status.textContent='Update failed: '+e.message+'. Previous odds and scratches retained.';}
  finally{nyraUpdatePending=false;document.getElementById('updateOddsScratches').disabled=nyraRaceUpdateSource(race).mode!=='automatic';if(!unchanged())renderNyraUpdateControls();}
 };
@@ -439,6 +467,11 @@ async function extractPdf(file){
  return pages;
 }
 
+let ppUploadBusy=false;
+async function loadProviderFile(provider,file){if(!file||ppUploadBusy)return;ppUploadBusy=true;for(const id of ['uploadBrisnet','uploadDrf','analyzeBtn','replaceCard'])document.getElementById(id).disabled=true;const status=document.getElementById('providerUploadStatus');try{status.textContent='Reading '+provider+' PP: '+file.name+'…';const pages=await extractPdf(file),candidate=parsePPCard(pages,{sourceName:file.name});putProviderCard({},candidate,provider);candidate.source_sha256=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',await file.arrayBuffer()))).map(x=>x.toString(16).padStart(2,'0')).join('');candidate.imported_at=new Date().toISOString();await writeProviderCard(provider,candidate);activateCandidate(candidate);status.textContent=provider+' card saved. The other PP source is retained.';}catch(e){status.textContent='Upload failed; both saved sources are preserved: '+(e.message||e);ppProg.style.width='0';}finally{ppUploadBusy=false;for(const id of ['uploadBrisnet','uploadDrf','analyzeBtn','replaceCard'])document.getElementById(id).disabled=false;}}
+document.getElementById('uploadBrisnet').onclick=()=>document.getElementById('brisnetFile').click();
+document.getElementById('uploadDrf').onclick=()=>document.getElementById('drfFile').click();
+for(const [id,provider]of [['brisnetFile','BRISNET'],['drfFile','DRF']])document.getElementById(id).onchange=e=>{loadProviderFile(provider,e.target.files[0]);e.target.value='';};
 let pendingCard=null,pendingFile=null;
 async function loadCandidate(replaceImmediately=false){let f=ppFile.files[0];if(!f){ppStatus.textContent="Choose a supported text-based PP PDF first.";return}ppProg.style.width="8%";ppStatus.textContent="Reading and detecting PP format for "+f.name+"…";try{
  if(!f.name.toLowerCase().endsWith(".pdf"))throw new Error("Card discovery requires a PDF with positioned text items.");
@@ -447,7 +480,7 @@ async function loadCandidate(replaceImmediately=false){let f=ppFile.files[0];if(
  pendingCard=candidate;pendingFile=f;if(!replaceImmediately){ppStatus.textContent=`Validated ${candidate.source_format} · ${candidate.track} · ${candidate.date||"date unknown"} · ${Object.keys(candidate.races).length} races · ${Object.values(candidate.races).reduce((n,r)=>n+r.horses.length,0)} runners. Click Replace Active Card to confirm. ${candidate.warnings.join(" ")}`;ppProg.style.width="90%";return}
  activateCandidate(candidate);
  }catch(e){console.error(e);pendingCard=null;pendingFile=null;ppStatus.textContent="Card load failed; active card was not changed: "+(e?.message||String(e));ppProg.style.width="0"}}
-function activateCandidate(candidate){activeCard=candidate;localStorage.setItem("nyraV44cReleaseActiveCard",JSON.stringify(activeCard));const first=+Object.keys(activeCard.races).sort((a,b)=>+a-+b)[0];race=structuredClone(activeCard.races[first]);restoreRunnerEdits();save();renderAll();ppProg.style.width="100%";const runners=Object.values(activeCard.races).reduce((n,r)=>n+r.horses.length,0);ppStatus.textContent=`${activeCard.track} · ${activeCard.date||"date unknown"} · ${Object.keys(activeCard.races).length} races · ${runners} runners loaded. ${activeCard.warnings.join(" ")}`;ppResults.innerHTML=`<div class="note"><b>Active card replaced.</b><div class="small muted">${activeCard.warnings.join(" ")||"No parser warnings."}</div></div>`;pendingCard=null;pendingFile=null}
+function activateCandidate(candidate){save();providerCards=putProviderCard(providerCards,candidate);activeCard=candidate;localStorage.setItem("nyraV44cReleaseActiveCard",JSON.stringify(activeCard));const first=+Object.keys(activeCard.races).sort((a,b)=>+a-+b)[0];race=structuredClone(activeCard.races[first]);restoreRunnerEdits();save();renderAll();ppProg.style.width="100%";const runners=Object.values(activeCard.races).reduce((n,r)=>n+r.horses.length,0);ppStatus.textContent=`${activeCard.track} · ${activeCard.date||"date unknown"} · ${Object.keys(activeCard.races).length} races · ${runners} runners loaded. ${activeCard.warnings.join(" ")}`;ppResults.innerHTML=`<div class="note"><b>Selected provider card loaded; other source retained.</b><div class="small muted">${activeCard.warnings.join(" ")||"No parser warnings."}</div></div>`;pendingCard=null;pendingFile=null}
 analyzeBtn.onclick=()=>loadCandidate(false);
 replaceCard.onclick=async()=>{if(pendingCard){if(ppFile.files[0]!==pendingFile){pendingCard=null;pendingFile=null;ppStatus.textContent="The selected PDF changed after analysis. Analyze the selected file before replacing the active card.";return}activateCandidate(pendingCard)}else await loadCandidate(true)};
 resetSample.onclick=()=>{pendingCard=null;pendingFile=null;activeCard=structuredClone(sampleCard);race=structuredClone(activeCard.races[1]);restoreRunnerEdits();save();renderAll();ppStatus.textContent="Bundled October 3 sample card restored."};

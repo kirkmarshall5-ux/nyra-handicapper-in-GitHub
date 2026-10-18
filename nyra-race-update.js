@@ -13,3 +13,6 @@ export async function fetchNyraRaceUpdate(race,{fetcher=globalThis.fetch,now=()=
  for(const h of updated.horses)if(h.odds==='SCR')h.scratch_evidence={sourceUrl:snapshot.sourceUrl,observedAt:snapshot.fetchedAt,status:'NYRA_PUBLIC_PAGE_SCRATCH_SNAPSHOT'};
  return {race:updated,snapshot};
 }
+
+// Reuse the strict snapshot validator for a matching saved PP source.
+export {applyOddsSnapshot as applyNyraSnapshotToRace} from './odds-snapshot.js';

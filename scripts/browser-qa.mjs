@@ -72,16 +72,16 @@ for(const profile of profiles){
     localStorage.setItem('nyraV44cReleaseActiveCard',JSON.stringify({id:'qa-native-brisnet',schemaVersion:2,track,date,races:{1:race},parser_version:'BRISNET-PREMIUM-PLUS-positioned-v2',source_format:'BRISNET_PREMIUM_PLUS',warnings:[]}));
    });
    await page.reload({waitUntil:'domcontentloaded'});
-   await page.locator('#topContenders').getByText('V4.4c-Brisnet base · experimental',{exact:false}).waitFor({timeout:20000});
-   for(const id of ['topContenders','contenderCandidates']){
+   await page.locator('#brisTopContenders').getByText('V4.4c-Brisnet base · experimental',{exact:false}).waitFor({timeout:20000});
+   for(const id of ['brisTopContenders','brisContenderCandidates']){
     const target=page.locator('#'+id);assert.equal(await target.locator('tbody tr').count(),2,id+' must rank the two experienced runners');
     assert.match(await target.innerText(),/Ranked 2\/3/);
     assert.match(await target.innerText(),/First-time starter/);
     assert.match(await target.innerText(),/probability conversion has not been validated/);
    }
-   assert.match(await page.locator('#finisherCandidates').innerText(),/Ranked 2\/3/);
-   assert.match(await page.locator('#finisherCandidates').innerText(),/Finisher: PASS/);
-   assert.equal(await page.locator('#finisherCandidates tbody tr').count(),2);
+   assert.match(await page.locator('#brisFinisherCandidates').innerText(),/Ranked 2\/3/);
+   assert.match(await page.locator('#brisFinisherCandidates').innerText(),/Finisher: PASS/);
+   assert.equal(await page.locator('#brisFinisherCandidates tbody tr').count(),2);
    assert.match(await page.locator('#releaseStatus').innerText(),/V44C-BRISNET-BASE/);
    assert.match(await page.locator('#horseTable tbody tr').first().innerText(),/76/);
    assert.match(await page.locator('#horseTable tbody tr').first().innerText(),/E\/P/);
@@ -105,8 +105,8 @@ for(const profile of profiles){
    });
    await page.reload({waitUntil:'domcontentloaded'});
    await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
-   assert.equal(await page.locator('#contenderCandidates tbody tr').count(),3);
-   assert.equal(await page.locator('#finisherCandidates tbody tr').count(),3);
+   assert.equal(await page.locator('#brisContenderCandidates tbody tr').count(),3);
+   assert.equal(await page.locator('#brisFinisherCandidates tbody tr').count(),3);
    assert.equal(errors.length,0,'Full-field core model errors: '+errors.join(' | '));
    await page.evaluate(()=>{
     const c=JSON.parse(localStorage.getItem('nyraV44cReleaseActiveCard'));
@@ -114,7 +114,7 @@ for(const profile of profiles){
     localStorage.setItem('nyraV44cReleaseActiveCard',JSON.stringify(c));
    });
    await page.reload({waitUntil:'domcontentloaded'});
-   await page.locator('#topContenders').getByText('V4.4c-Brisnet base · experimental',{exact:false}).waitFor({timeout:20000});
+   await page.locator('#brisTopContenders').getByText('V4.4c-Brisnet base · experimental',{exact:false}).waitFor({timeout:20000});
    await page.locator('[data-tab="pace"]').click();
    assert.match(await page.locator('#paceMap').innerText(),/0\/3 eligible runners/);
    assert.match(await page.locator('#brisnetEvidence').innerText(),/Unmatched - context only/);
@@ -125,8 +125,8 @@ for(const profile of profiles){
    await page.reload({waitUntil:'domcontentloaded'});
    await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
    assert.match(await page.locator('#ppStatus').innerText(),/saved card is preserved.*Re-upload/i);
-   assert.equal(await page.locator('#topContenders tbody tr').count(),0,'Retired parser must not silently rerank saved source');
-   assert.equal(await page.locator('#finisherCandidates tbody tr').count(),0,'Finisher must hold retired parser evidence');
+   assert.equal(await page.locator('#brisTopContenders tbody tr').count(),0,'Retired parser must not silently rerank saved source');
+   assert.equal(await page.locator('#brisFinisherCandidates tbody tr').count(),0,'Finisher must hold retired parser evidence');
    assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('nyraV44cReleaseActiveCard')).races[1].horses[0].ratings.lines[0].e2),91);
 
   }finally{
@@ -211,14 +211,39 @@ for(const profile of profiles){
    assert.equal(await page.locator('#updateOddsScratches').isVisible(),true);await page.locator('#updateOddsScratches').click();
    await page.locator('#nyraUpdateStatus').getByText('All three model panels refreshed.',{exact:false}).waitFor({timeout:10000});
    assert.match(await page.locator('#nyraUpdateStatus').innerText(),/#3 QA Update Runner 3/);
-   for(const id of ['topContenders','finisherCandidates','contenderCandidates']){assert.equal(await page.locator('#'+id+' tbody tr').count(),2);assert.doesNotMatch(await page.locator('#'+id+' tbody').innerText(),/QA Update Runner 3/);}
+   for(const id of ['topContenders','brisFinisherCandidates','contenderCandidates']){assert.equal(await page.locator('#'+id+' tbody tr').count(),2);assert.doesNotMatch(await page.locator('#'+id+' tbody').innerText(),/QA Update Runner 3/);}
    const saved=await page.evaluate(()=>JSON.parse(localStorage.getItem('nyraV44cReleaseActiveCard')).races[1]);assert.equal(saved.horses[2].odds,'SCR');assert.equal(saved.horses[2].ratings.lines[0].speed,78);assert.equal(saved.horses[0].ml,'4/1');
-   await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});assert.match(await page.locator('#nyraUpdateStatus').innerText(),/Last NYRA update/);assert.equal(await page.locator('#finisherCandidates tbody tr').count(),2);
+   await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});assert.match(await page.locator('#nyraUpdateStatus').innerText(),/Last NYRA update/);assert.equal(await page.locator('#brisFinisherCandidates tbody tr').count(),2);
    fail=true;await page.locator('#updateOddsScratches').click();await page.locator('#nyraUpdateStatus').getByText('Update failed:',{exact:false}).waitFor({timeout:10000});assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('nyraV44cReleaseActiveCard')).races[1].horses[2].odds),'SCR');assert.equal(await page.locator('#updateOddsScratches').isEnabled(),true);
-   fail=false;pause=true;const pending=page.waitForRequest(service);await page.locator('#updateOddsScratches').click();await pending;await page.locator('#racebar button').nth(1).click();await new Promise(r=>setTimeout(r,20));assert.ok(release);release();await page.waitForFunction(()=>!document.getElementById('updateOddsScratches').disabled);assert.doesNotMatch(await page.locator('#nyraUpdateStatus').innerText(),/Fetching/);assert.equal(await page.locator('#finisherCandidates tbody tr').count(),3,'Late Race 1 response must not scratch Race 2');
+   fail=false;pause=true;const pending=page.waitForRequest(service);await page.locator('#updateOddsScratches').click();await pending;await page.locator('#racebar button').nth(1).click();await new Promise(r=>setTimeout(r,20));assert.ok(release);release();await page.waitForFunction(()=>!document.getElementById('updateOddsScratches').disabled);assert.doesNotMatch(await page.locator('#nyraUpdateStatus').innerText(),/Fetching/);assert.equal(await page.locator('#brisFinisherCandidates tbody tr').count(),3,'Late Race 1 response must not scratch Race 2');
    assert.equal(errors.length,0,'NYRA update page errors: '+errors.join(' | '));
   }finally{
    await page.unroute(service);await page.evaluate(value=>{if(value===null)localStorage.removeItem('nyraV44cReleaseActiveCard');else localStorage.setItem('nyraV44cReleaseActiveCard',value);},original);await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
+  }
+ });
+ await check('D19-two-provider-retention-matching-and-source-isolation',async()=>{
+  const original=await page.evaluate(async()=>{const m=await import('./dual-pp-cards.js');return {cards:await m.readProviderCards(),active:localStorage.getItem('nyraV44cReleaseActiveCard')};});
+  try{
+   await page.evaluate(async()=>{
+    const {writeProviderCard}=await import('./dual-pp-cards.js'),{PARSER_ID}=await import('./release-card-parser.js'),{PREMIUM_PARSER_ID}=await import('./brisnet-premium-parser.js');
+    const track='Belmont Park',date='2026-10-18';let drf;
+    for(const provider of ['DRF','BRISNET']){const races={};for(const rn of [1,2]){const horses=[1,2,3].map(n=>({n:String(n),name:'QA Paired R'+rn+' Runner '+n,ml:n===3?'6/5':'4/1',odds:'—',entry_status:'REGULAR',included_in_frozen_field:true,life_starts:n===3?0:1,lifeStarts:n===3?0:1,beyer_figures:provider==='DRF'&&n!==3?[90+n]:[],figs:provider==='DRF'&&n!==3?[90+n]:[],timeform_early:n===3?null:85,timeform_late:n===3?null:90,style:'UNKNOWN',parser_blockers:provider==='BRISNET'?['BRISNET_SPEED_NOT_BEYER']:[],angles:[],source_context:{workout_text:'',pedigree_text:''},contender_evidence:{beyer_evidence:[],switch_evidence:{running_lines:[]}},...(provider==='BRISNET'?{ratings:{provider:'BRISNET',run_style:n===3?'NA':'E/P',lines:n===3?[]:[{date:'2026-10-01',surface:'Dirt',furlongs:6,speed:70+n,e1:85,e2:85,late:90,source:{provider:'BRISNET',text:'Synthetic dual-provider QA'}}]}}:{})}));races[rn]={race:rn,date,track,header:'6 Furlongs',dist:'6 Furlongs',surface:'Dirt',conditions:{surface:'Dirt'},cls:'QA maiden',distance_furlongs:6,post:'1:10 ET',horses,parser_blockers:provider==='BRISNET'?['BRISNET_SOURCE_MODEL_VALIDATION_PENDING']:[],...(provider==='BRISNET'?{ratings_provider:'BRISNET'}:{})};}
+     const c={id:'qa-paired-'+provider,schemaVersion:3,track,date,races,source_format:provider==='DRF'?'DRF':'BRISNET_PREMIUM_PLUS',parser_version:provider==='DRF'?PARSER_ID:PREMIUM_PARSER_ID,warnings:[]};await writeProviderCard(provider,c);if(provider==='DRF')drf=c;
+    }localStorage.setItem('nyraV44cReleaseActiveCard',JSON.stringify(drf));
+   });
+   await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});await page.locator('[data-tab="raceday"]').click();
+   for(const id of ['brisTopContenders','brisFinisherCandidates','brisContenderCandidates','topContenders','finisherCandidates','contenderCandidates']){assert.match(await page.locator('#'+id).innerText(),/ranked 2\/3 starters/);assert.match(await page.locator('#'+id).innerText(),/Morning-line favorite — UNRANKED/);}
+   const brBox=await page.locator('#brisTopContenders').boundingBox(),drBox=await page.locator('#topContenders').boundingBox(),mlBox=await page.locator('#topMl').boundingBox();assert.ok(brBox.y<drBox.y);assert.ok(mlBox.y<brBox.y);
+   await page.locator('#raceNotes').fill('Paired DRF note');await page.locator('#ppSourceView').selectOption('BRISNET');assert.match(await page.locator('#horseTable tbody tr').first().innerText(),/71/);await page.locator('#raceNotes').fill('Paired Brisnet note');
+   await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});assert.equal(await page.locator('#raceNotes').inputValue(),'Paired Brisnet note');await page.locator('#ppSourceView').selectOption('DRF');assert.equal(await page.locator('#raceNotes').inputValue(),'Paired DRF note');assert.match(await page.locator('#horseTable tbody tr').first().innerText(),/91/);
+   await page.locator('#racebar button').nth(1).click();for(const id of ['brisFinisherCandidates','finisherCandidates'])assert.match(await page.locator('#'+id).innerText(),/QA Paired R2/);
+   await page.screenshot({path:`${out}/${profile.name}-paired-PPs.png`,fullPage:true});
+   await page.evaluate(async()=>{const m=await import('./dual-pp-cards.js'),cards=await m.readProviderCards(),b=cards.BRISNET;b.date='2026-10-17';Object.values(b.races).forEach(r=>r.date=b.date);await m.writeProviderCard('BRISNET',b);});
+   await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});assert.match(await page.locator('#brisTopContenders').innerText(),/does not match/);assert.equal(await page.locator('#brisTopContenders tbody tr').count(),0);assert.match(await page.locator('#topContenders').innerText(),/QA Paired/);
+   assert.equal(errors.length,0,'Dual-provider page errors: '+errors.join(' | '));
+  }finally{
+   await page.evaluate(async original=>{const db=await new Promise((resolve,reject)=>{const r=indexedDB.open('nyra-provider-pps-v1',1);r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error);});await new Promise((resolve,reject)=>{const t=db.transaction('cards','readwrite');t.objectStore('cards').clear();for(const[p,c]of Object.entries(original.cards))t.objectStore('cards').put(c,p);t.oncomplete=resolve;t.onerror=()=>reject(t.error);});db.close();if(original.active===null)localStorage.removeItem('nyraV44cReleaseActiveCard');else localStorage.setItem('nyraV44cReleaseActiveCard',original.active);},original);
+   await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
   }
  });
  await page.screenshot({path:`${out}/${profile.name}-final.png`,fullPage:true});
