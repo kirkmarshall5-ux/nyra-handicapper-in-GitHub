@@ -100,6 +100,8 @@ for(const profile of profiles){
    const records=await page.evaluate(()=>JSON.parse(localStorage.getItem('nyraResearchProviderFreezesV3')||'[]'));
    assert.equal(records.length,2);assert.deepEqual(records.map(r=>r.provider).sort(),['BRISNET','DRF']);
    for(const r of records){assert.equal(r.models.length,3);assert.equal(r.bettingDecision,'PASS');assert.equal(r.anchorStatus,'UNVERIFIED_LOCAL');}
+   await page.locator('[data-tab="raceday"]').click();
+   await page.locator('summary').filter({hasText:'Research verification & export'}).click();
    await page.locator('#researchExport').click();assert.match(await page.locator('#researchFreezeStatus').innerText(),/SHA-256/);
   }finally{
    await page.evaluate(async(base)=>{const {readProviderCards,writeProviderCard}=await import('./dual-pp-cards.js');const cards=await readProviderCards();for(const provider of ['BRISNET','DRF']){if(cards[provider]?.id?.startsWith('qa-freeze-')){ /* QA cards remain in test-only browser context */ }}if(base.active===null)localStorage.removeItem('nyraV44cReleaseActiveCard');else localStorage.setItem('nyraV44cReleaseActiveCard',base.active);if(base.saved===null)localStorage.removeItem('nyraResearchProviderFreezesV3');else localStorage.setItem('nyraResearchProviderFreezesV3',base.saved);},base);
