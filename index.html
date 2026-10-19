@@ -94,6 +94,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 </div></section>
 
 <section id="pace" class="hidden"><div class="grid">
+<div class="card span12"><div class="kicker">Pace &amp; Ratings source · Brisnet preferred</div><div id="paceCardStatus" class="small" role="status"></div><div class="tiny muted">Opening this tab selects the matching Brisnet card when available. This also updates the Horse grid / Pace source on Race Day. Upload Brisnet PPs there to use their E1, E2 and LP figures.</div></div>
 <div class="card span8"><div class="kicker" id="paceSourceLabel">Pace-label proxy · not a validated scenario</div><h3 class="sectiontitle">Pace map</h3><div class="small muted" id="paceDescription">These lanes are Early/Late-derived display hints, not verified running styles. Source-call proxies are in the PP context panel.</div><div id="paceMap" class="stack"></div></div>
 <div class="card span4"><div class="kicker">Transparent comparison</div><h3 class="sectiontitle" id="paceRulesTitle">Locked V4.4c rules</h3>
 <div class="small muted">The Handicap Rating is not a win probability. It compares the entered PP information and public context. “Things to Consider” stays separate so an angle does not secretly inflate the rating.</div>
@@ -308,7 +309,7 @@ document.querySelectorAll(".sortbtn").forEach(b=>b.onclick=()=>{
  renderHorses();updateSortButtons();
 });
 function syncRaceNotes(){raceNotes.value=state.cards?.[activeCard.id]?.notes?.[race.race]||""}
-function renderAll(){syncRaceNotes();document.getElementById("releaseStatus").textContent=`Rankings: ${currentRating().model_id} · PP formats: DRF / Brisnet Ultimate / Premium Plus · Saved card: ${activeCard.parser_version||"sample / legacy evidence"}. V4.4c, Finisher and Contender. Morning line is reference only. Verify scratches and surface against official entries.`;renderBrisnetEvidence();renderProjectedRaceSetup();renderReleaseContext();renderJ1Comparison();renderHeader();renderHorses();updateSortButtons();renderPace();renderEdit();renderEvidence();renderConnections();renderLeaderboards();renderWeights();renderThings();renderRaceInsights();renderNyraUpdateControls();updateUrl()}
+function renderAll(){syncRaceNotes();renderPaceCardStatus();document.getElementById("releaseStatus").textContent=`Rankings: ${currentRating().model_id} · PP formats: DRF / Brisnet Ultimate / Premium Plus · Saved card: ${activeCard.parser_version||"sample / legacy evidence"}. V4.4c, Finisher and Contender. Morning line is reference only. Verify scratches and surface against official entries.`;renderBrisnetEvidence();renderProjectedRaceSetup();renderReleaseContext();renderJ1Comparison();renderHeader();renderHorses();updateSortButtons();renderPace();renderEdit();renderEvidence();renderConnections();renderLeaderboards();renderWeights();renderThings();renderRaceInsights();renderNyraUpdateControls();updateUrl()}
 function renderThings(){
  const el=document.getElementById("thingsToConsider"); if(!el)return;
  let rows=[];
@@ -337,6 +338,15 @@ function renderHeader(){
  if(trackName.includes("saratoga"))track.value="saratoga";
  else if(trackName.includes("aqueduct"))track.value="aqueduct";
  else if(trackName.includes("belmont"))track.value="belmont";
+}
+function preferBrisnetPaceCard(){
+ if(cardProvider(activeCard)==='BRISNET')return;
+ const source=pairedRace(providerCards,'BRISNET',race);if(!source.race)return;
+ save();activeCard=structuredClone(providerCards.BRISNET);race=source.race;restoreRunnerEdits();save();
+}
+function renderPaceCardStatus(){
+ const provider=cardProvider(activeCard),source=provider==='BRISNET'?null:pairedRace(providerCards,'BRISNET',race);
+ document.getElementById('paceCardStatus').textContent='Showing '+(provider==='BRISNET'?'Brisnet':'DRF')+' · '+(race.track||activeCard.track)+' · '+race.date+' · Race '+race.race+' · '+(activeCard.sourceName||'saved card')+'.'+(source?.reason?' Brisnet unavailable for this race: '+source.reason+' Showing the selected DRF card as fallback.':'');
 }
 document.getElementById('ppSourceView').onchange=()=>{const provider=document.getElementById('ppSourceView').value,card=providerCards[provider];if(!card){document.getElementById('providerUploadStatus').textContent='Upload a '+provider+' card first.';document.getElementById('ppSourceView').value=cardProvider(activeCard);return;}save();activeCard=structuredClone(card);const n=activeCard.races[race.race]?race.race:+Object.keys(activeCard.races).sort((a,b)=>+a-+b)[0];race=structuredClone(activeCard.races[n]);restoreRunnerEdits();save();renderAll();};
 function selectRace(n){if(!activeCard.races[n])return;race=structuredClone(activeCard.races[n]);restoreRunnerEdits();renderAll();window.scrollTo({top:0,behavior:"smooth"})}
@@ -411,7 +421,7 @@ function renderConnections(){
 function renderWeights(){weightsDiv()}
 function weightsDiv(){if(brisnetPaceDisplay(race).available){document.getElementById("weights").textContent=BRISNET_METHODS.v44c+" Pace has no weight in this native base version. No calibrated winning probabilities.";resetWeights.disabled=true;resetWeights.textContent="Brisnet research weights locked";return;}document.getElementById("weights").innerHTML='<div class="small">Last verified Beyer: 40 · best of latest 3: 22 · PP jockey: 7 · PP trainer: 8 · trainer context for ≤2 starts: 12. Verified zero figures remain included; only missing components are omitted. Figure values require source verification. V4.4c adjustments are capped at ±6. Rank unrounded totals, then horse name.</div>';resetWeights.disabled=true;resetWeights.textContent="V4.4c weights locked"}
 
-document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));b.classList.add("active");["raceday","pace","connections","public","knowledge"].forEach(id=>document.getElementById(id).classList.toggle("hidden",id!==b.dataset.tab))});
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));b.classList.add("active");if(b.dataset.tab==="pace"){preferBrisnetPaceCard();renderAll();}["raceday","pace","connections","public","knowledge"].forEach(id=>document.getElementById(id).classList.toggle("hidden",id!==b.dataset.tab))});
 raceNotes.oninput=e=>{const cs=state.cards[activeCard.id]||(state.cards[activeCard.id]={runners:{},notes:{}});cs.notes=cs.notes||{};cs.notes[race.race]=e.target.value;save()};
 
 let nyraUpdatePending=false;
