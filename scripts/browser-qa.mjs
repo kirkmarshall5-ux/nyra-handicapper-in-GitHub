@@ -86,6 +86,7 @@ for(const profile of profiles){
     localStorage.removeItem('nyraResearchProviderFreezesV3');
    });
    await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});await page.locator('[data-tab="raceday"]').click();
+   await page.locator('summary').filter({hasText:'Research verification & export'}).click();
    for(const provider of ['BRISNET','DRF']){
     await page.locator('#ppSourceView').selectOption(provider);
     const date=await page.evaluate(()=>new Date(Date.now()+86400000).toISOString().slice(0,10));
