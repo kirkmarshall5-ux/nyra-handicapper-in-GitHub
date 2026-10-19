@@ -22,3 +22,9 @@ A single subdued `Freeze Predictions` button alongside the race selector, plus s
 5. Only then mark PR ready, review, merge and deploy.
 
 Until then **do not use this code as proof of prospective performance**.
+
+## Deferred follow-up — manual official scratches (2026-10-19)
+- User explicitly deferred manual scratch verification; do not implement as part of the timestamp gate.
+- Finger Lakes 2026-10-19 Race 8: official change sheet marked #3 Ringgood scratched at 11:01 AM ET, while uploaded DRF card still listed #3 active.
+- No manual scratch editor currently exists under Manage saved cards; NYRA automatic updates do not support Finger Lakes.
+- Keep the Race 8 prospective freeze on HOLD. Do not claim certified field or rankings until official scratches are reconciled. Revisit as separate priority after timestamp work.
