@@ -7,7 +7,7 @@ import {cardProvider} from './dual-pp-cards.js';
 const eligible=h=>h.n&&h.odds!=='SCR'&&h.included_in_frozen_field!==false&&(!h.entry_status||h.entry_status==='REGULAR');
 function convert(family,result,field,provider){
  if(!result?.model_id||!Array.isArray(result.rankings))throw Error(family+' model unavailable');
- const status=family==='FINISHER'?(result.status==='COMPLETE_FIELD'?'RATEABLE':result.status==='HOLD'?'HOLD':'PASS'):result.decision;
+ const status=family==='FINISHER'?(provider==='BRISNET'||result.status!=='COMPLETE_FIELD'?'PASS':'RATEABLE'):result.decision;
  if(!['RATEABLE','PASS','HOLD'].includes(status))throw Error(family+' decision unavailable');
  const rankings=result.rankings.map(h=>({program:String(h.n),horse:h.name,score:family==='V44C'?(h.v44c_unrounded_score??h.base_rating??h.score):h.score}));
  const fullFieldRanked=status==='RATEABLE'&&rankings.length===field.length;
