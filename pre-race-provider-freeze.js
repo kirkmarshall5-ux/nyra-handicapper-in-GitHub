@@ -48,3 +48,23 @@ export async function sealResearchSnapshots(records) {
   const digest=await globalThis.crypto.subtle.digest('SHA-256',data);
   return {...payload,digestSha256:Array.from(new Uint8Array(digest),b=>b.toString(16).padStart(2,'0')).join(''),anchorStatus:'UNVERIFIED_LOCAL_EXPORT'};
 }
+
+// Verifies export integrity only. A valid digest does not establish a trusted pre-race timestamp.
+export async function verifyResearchExport(exported){
+ const errors=[];
+ if(exported?.schemaVersion!==FREEZE_SCHEMA||exported?.mode!=='RESEARCH_ONLY'||!Array.isArray(exported?.records))errors.push('Invalid research export schema.');
+ if(exported?.anchorStatus!=='UNVERIFIED_LOCAL_EXPORT')errors.push('Unsupported export anchor status.');
+ if(!/^[0-9a-f]{64}$/.test(exported?.digestSha256||''))errors.push('Missing or invalid SHA-256 digest.');
+ if(errors.length)return {valid:false,errors,independentlyTimestamped:false};
+ const sealed=await sealResearchSnapshots(exported.records);
+ if(sealed.digestSha256!==exported.digestSha256)errors.push('Research export digest mismatch: content may have changed.');
+ const keys=new Set();
+ for(const record of exported.records){
+  if(record?.schemaVersion!==FREEZE_SCHEMA||record?.mode!=='RESEARCH_ONLY'||record?.anchorStatus!=='UNVERIFIED_LOCAL'||record?.bettingDecision!=='PASS')errors.push('Invalid research-only record metadata.');
+  const key=snapshotKey(record);
+  if(keys.has(key))errors.push('Duplicate frozen race in export.');
+  keys.add(key);
+  if(!Number.isFinite(Date.parse(record?.recordedAt||''))||!(Date.parse(record.recordedAt)<Date.parse(record.scheduledPost)))errors.push('Freeze timestamp is missing or not before scheduled post.');
+ }
+ return {valid:errors.length===0,errors:[...new Set(errors)],independentlyTimestamped:false};
+}
