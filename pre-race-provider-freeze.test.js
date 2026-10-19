@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {freezeResearchSnapshot,sealResearchSnapshots} from './pre-race-provider-freeze.js';
+import {freezeResearchSnapshot,sealResearchSnapshots,verifyResearchExport} from './pre-race-provider-freeze.js';
 const now=Date.parse('2026-10-19T15:00:00Z');
 const fixture=(provider='BRISNET')=>({provider,cardId:provider+'-card',track:'Belmont Park',date:'2026-10-19',race:1,parserVersion:'verified-parser',sourceName:provider+'.pdf',scheduledPost:'2026-10-19T16:00:00Z',postTimeEvidence:{scheduledPost:'2026-10-19T16:00:00Z',verification:'USER_CONFIRMED_OFFICIAL_REFERENCE_NOT_INDEPENDENTLY_ANCHORED',sourceUrl:'https://www.nyra.com/'},fieldVerified:true,surfaceVerified:true,surface:'Dirt',field:[{program:'1',horse:'A'},{program:'2',horse:'B'}],models:['V44C','FINISHER','CONTENDER'].map(family=>({family,provider,modelId:provider+'-'+family,decision:'RATEABLE',fullFieldRanked:true,rankings:[{program:'1',horse:'A',score:75},{program:'2',horse:'B',score:70}]}))});
 test('provider isolation, duplicate protection and no bet',()=>{
@@ -29,4 +29,18 @@ test('all three models and exact provider/runner identities are mandatory',()=>{
  const missing=fixture();missing.models.pop();assert.match(freezeResearchSnapshot({snapshot:missing,now}).errors.join(' '),/three provider model families/);
  const wrongProvider=fixture();wrongProvider.models[1].provider='DRF';assert.match(freezeResearchSnapshot({snapshot:wrongProvider,now}).errors.join(' '),/provider mismatch/);
  const wrongHorse=fixture();wrongHorse.models[2].rankings[0].horse='Other';assert.match(freezeResearchSnapshot({snapshot:wrongHorse,now}).errors.join(' '),/ineligible/);
+});
+
+test('export verification detects tampering and never certifies an independent timestamp',async()=>{
+ const record=freezeResearchSnapshot({snapshot:fixture(),now}).record;
+ const sealed=await sealResearchSnapshots([record]);
+ const verified=await verifyResearchExport(sealed);
+ assert.equal(verified.valid,true);assert.equal(verified.independentlyTimestamped,false);
+ const altered=structuredClone(sealed);altered.records[0].models[0].rankings[0].score=999;
+ assert.match((await verifyResearchExport(altered)).errors.join(' '),/digest mismatch/);
+ const duplicate=await sealResearchSnapshots([record,record]);
+ assert.match((await verifyResearchExport(duplicate)).errors.join(' '),/Duplicate frozen race/);
+ const late=structuredClone(record);late.recordedAt='2026-10-19T17:00:00Z';
+ const lateExport=await sealResearchSnapshots([late]);
+ assert.match((await verifyResearchExport(lateExport)).errors.join(' '),/not before scheduled post/);
 });
