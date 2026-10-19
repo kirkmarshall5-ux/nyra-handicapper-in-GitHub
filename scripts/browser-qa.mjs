@@ -122,13 +122,13 @@ for(const profile of profiles){
    try{
     await page.locator('#researchReceiptUrl').fill(issueUrl);
     await page.locator('#researchVerifyReceipt').click();
-    assert.match(await page.locator('#researchFreezeStatus').innerText(),/Independent GitHub timestamp verified/);
+    await page.getByText('Independent GitHub timestamp verified:',{exact:false}).waitFor({timeout:10000});
     receipt={...receipt,body:'SHA-256: '+'0'.repeat(64)};
     await page.locator('#researchVerifyReceipt').click();
-    assert.match(await page.locator('#researchFreezeStatus').innerText(),/Receipt NOT verified:.*digest/);
+    await page.waitForFunction(()=>/Receipt NOT verified:.*digest/i.test(document.querySelector('#researchFreezeStatus')?.textContent||''),{timeout:10000});
     receipt={...receipt,body:'SHA-256: '+digest,updated_at:new Date(Date.now()+86400000*3).toISOString()};
     await page.locator('#researchVerifyReceipt').click();
-    assert.match(await page.locator('#researchFreezeStatus').innerText(),/Receipt NOT verified:/);
+    await page.waitForFunction(()=>/Receipt NOT verified:/i.test(document.querySelector('#researchFreezeStatus')?.textContent||''),{timeout:10000});
    }finally{await page.unroute('https://api.github.com/repos/kirkmarshall5-ux/nyra-handicapper-in-GitHub/issues/987654');}
 
   }finally{
