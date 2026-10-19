@@ -20,12 +20,13 @@ export function validateSnapshot(s, now=Date.now()) {
     if(!h?.program||!h?.horse||identities.has(String(h.program)))errors.push('Invalid or duplicate active runner.');
     identities.add(String(h.program));
   }
-  if(!Array.isArray(s?.models)||!s.models.length)errors.push('Model evidence required.');
+  if(!Array.isArray(s?.models)||s.models.length!==3||new Set(s.models.map(m=>m.family)).size!==3||!['V44C','CONTENDER','FINISHER'].every(f=>s.models.some(m=>m.family===f)))errors.push('All three provider model families required.');
   for(const m of s?.models||[]){
     if(!['V44C','CONTENDER','FINISHER'].includes(m?.family)||!m?.modelId||!['RATEABLE','PASS','HOLD'].includes(m?.decision)||!Array.isArray(m?.rankings)) {errors.push('Model output missing or unverified.');continue;}
+    if(m.provider!==s.provider)errors.push('Model provider mismatch.');
     const seen=new Set();
     for(const h of m.rankings){
-      if(!identities.has(String(h.program))||seen.has(String(h.program))||typeof h.score!=='number'||!Number.isFinite(h.score))errors.push('Model has ineligible, duplicate or unscored runner.');
+      if(!identities.has(String(h.program))||seen.has(String(h.program))||typeof h.score!=='number'||!Number.isFinite(h.score)||s.field.find(f=>String(f.program)===String(h.program))?.horse!==h.horse)errors.push('Model has ineligible, duplicate or unscored runner.');
       seen.add(String(h.program));
     }
     if(m.decision==='RATEABLE'&&seen.size!==identities.size)errors.push('RATEABLE model must cover complete active field.');
