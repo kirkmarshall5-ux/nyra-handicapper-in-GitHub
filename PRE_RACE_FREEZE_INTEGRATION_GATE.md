@@ -1,6 +1,6 @@
 # Race Day Freeze Predictions — integration gate (issue #114)
 
-Status: **NOT DEPLOYABLE**. Foundation and model adapter exist on draft PR #115. The Race Day button is not connected.
+Status: **DRAFT / NOT DEPLOYABLE**. Freeze, export, and GitHub issue receipt controls are wired on PR #115; live deployment is intentionally blocked pending an actual independent receipt and real-device acceptance.
 
 ## User interface
 A single subdued `Freeze Predictions` button alongside the race selector, plus small status text (not a new tab). Button must never place or suggest a wager. A separate research export action may be available from a disclosure.
@@ -28,3 +28,10 @@ Until then **do not use this code as proof of prospective performance**.
 - Finger Lakes 2026-10-19 Race 8: official change sheet marked #3 Ringgood scratched at 11:01 AM ET, while uploaded DRF card still listed #3 active.
 - No manual scratch editor currently exists under Manage saved cards; NYRA automatic updates do not support Finger Lakes.
 - Keep the Race 8 prospective freeze on HOLD. Do not claim certified field or rankings until official scratches are reconciled. Revisit as separate priority after timestamp work.
+
+## Timestamp receipt acceptance (automated and manual)
+- Automated: validate the exact export SHA-256 against GitHub issue body; verify GitHub-issued created_at and updated_at both precede each frozen race's scheduled post; reject future/late/modified/mismatched receipts.
+- Browser QA: mock GitHub API to exercise the real receipt URL input and Verify receipt button on desktop and iPad emulation. This is not an actual GitHub server timestamp.
+- Manual outstanding: user must submit one genuine GitHub issue containing the digest BEFORE scheduled post, supply its URL and the corresponding research export; verify API timestamps and digest independently.
+- Never use the Finger Lakes 2026-10-19 Race 8 snapshot for certification until the #3 Ringgood scratch is reconciled.
+- Distinguish digest integrity from chronology: even a valid GitHub issue timestamp does not independently establish that the displayed rankings came from a genuine PP unless source and field are verified.
