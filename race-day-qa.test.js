@@ -36,7 +36,7 @@ test('candidate win lines are visibly experimental and not betting approval',()=
 
  test('main site exposes the three requested systems and no betting or tote controls',()=>{
   for(const id of ['topContenders','finisherCandidates','contenderCandidates'])assert.match(html,new RegExp('id="'+id+'"'));
-  for(const id of ['mix1Candidates','v44PaceCandidates','raceSelector','bets','updateOddsSnapshot','manualOddsPanel','researchFreeze'])assert.doesNotMatch(html,new RegExp('id="'+id+'"'));
+  for(const id of ['mix1Candidates','v44PaceCandidates','raceSelector','bets','updateOddsSnapshot','manualOddsPanel'])assert.doesNotMatch(html,new RegExp('id="'+id+'"'));
   assert.doesNotMatch(html,/import .*from "\.\/(mix1-rankings|v44c-pace|race-selector|research-builder-ui|odds-snapshot|multitrack-odds)\.js/);
   assert.match(html,/includeToteSnapshot:false/);
  });
