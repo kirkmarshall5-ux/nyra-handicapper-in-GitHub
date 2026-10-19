@@ -292,11 +292,11 @@ document.getElementById('researchFreeze').addEventListener('click',()=>{
   const verifiedByUser=document.getElementById('freezeVerifyOfficial').checked;
   const now=Date.now(),source=providerRace(cardProvider(activeCard));
   if(!source.race)throw Error(source.reason||'Selected PP source is unavailable.');
-  if(activeCard.id===sampleCard.id||!activeCard.parser_version||!activeCard.sourceName)throw Error('Upload a verified source PP; sample or unidentified cards cannot be frozen.');
+  if(activeCard.id===sampleCard.id||!activeCard.parser_version||!(activeCard.sourceName||activeCard.source_name))throw Error('Upload a verified source PP; sample or unidentified cards cannot be frozen.');
   const post=verifyPostTimeEvidence({scheduledPost,sourceType:'MANUAL_OFFICIAL_REFERENCE',sourceUrl,verifiedByUser,observedAt:new Date(now).toISOString()},{now,raceDate:activeCard.date,track:activeCard.track,raceNumber:source.race.race});
   if(!post.verified)throw Error(post.errors.join(' '));
   const output=displayedProviderModels(activeCard,source.race);
-  const snapshot={provider:output.provider,cardId:activeCard.id,track:activeCard.track,date:activeCard.date,race:Number(source.race.race),parserVersion:activeCard.parser_version,sourceName:activeCard.sourceName,scheduledPost,postTimeEvidence:post.postTimeEvidence,fieldVerified:verifiedByUser,surfaceVerified:verifiedByUser,surface:source.race.surface,field:output.field,models:output.models,scratches:(source.race.horses||[]).filter(h=>h.odds==='SCR').map(h=>({program:String(h.n),horse:h.name}))};
+  const snapshot={provider:output.provider,cardId:activeCard.id,track:activeCard.track,date:activeCard.date,race:Number(source.race.race),parserVersion:activeCard.parser_version,sourceName:(activeCard.sourceName||activeCard.source_name),scheduledPost,postTimeEvidence:post.postTimeEvidence,fieldVerified:verifiedByUser,surfaceVerified:verifiedByUser,surface:source.race.surface,field:output.field,models:output.models,scratches:(source.race.horses||[]).filter(h=>h.odds==='SCR').map(h=>({program:String(h.n),horse:h.name}))};
   const saved=readResearchFreezes();
   const result=freezeResearchSnapshot({snapshot,existing:saved,now});
   if(result.errors.length)throw Error(result.errors.join(' '));
@@ -393,7 +393,7 @@ function preferBrisnetPaceCard(){
 }
 function renderPaceCardStatus(){
  const provider=cardProvider(activeCard),source=provider==='BRISNET'?null:pairedRace(providerCards,'BRISNET',race);
- document.getElementById('paceCardStatus').textContent='Showing '+(provider==='BRISNET'?'Brisnet':'DRF')+' · '+(race.track||activeCard.track)+' · '+race.date+' · Race '+race.race+' · '+(activeCard.sourceName||'saved card')+'.'+(source?.reason?' Brisnet unavailable for this race: '+source.reason+' Showing the selected DRF card as fallback.':'');
+ document.getElementById('paceCardStatus').textContent='Showing '+(provider==='BRISNET'?'Brisnet':'DRF')+' · '+(race.track||activeCard.track)+' · '+race.date+' · Race '+race.race+' · '+((activeCard.sourceName||activeCard.source_name)||'saved card')+'.'+(source?.reason?' Brisnet unavailable for this race: '+source.reason+' Showing the selected DRF card as fallback.':'');
 }
 document.getElementById('ppSourceView').onchange=()=>{const provider=document.getElementById('ppSourceView').value,card=providerCards[provider];if(!card){document.getElementById('providerUploadStatus').textContent='Upload a '+provider+' card first.';document.getElementById('ppSourceView').value=cardProvider(activeCard);return;}save();activeCard=structuredClone(card);const n=activeCard.races[race.race]?race.race:+Object.keys(activeCard.races).sort((a,b)=>+a-+b)[0];race=structuredClone(activeCard.races[n]);restoreRunnerEdits();save();renderAll();};
 function selectRace(n){if(!activeCard.races[n])return;race=structuredClone(activeCard.races[n]);restoreRunnerEdits();renderAll();window.scrollTo({top:0,behavior:"smooth"})}
