@@ -9,7 +9,7 @@ function convert(family,result,field,provider){
  if(!result?.model_id||!Array.isArray(result.rankings))throw Error(family+' model unavailable');
  const status=family==='FINISHER'?(result.status==='COMPLETE_FIELD'?'RATEABLE':result.status==='HOLD'?'HOLD':'PASS'):result.decision;
  if(!['RATEABLE','PASS','HOLD'].includes(status))throw Error(family+' decision unavailable');
- const rankings=result.rankings.map(h=>({program:String(h.n),horse:h.name,score:family==='V44C'?(h.v44c_unrounded_score??h.score):h.score}));
+ const rankings=result.rankings.map(h=>({program:String(h.n),horse:h.name,score:family==='V44C'?(h.v44c_unrounded_score??h.base_rating??h.score):h.score}));
  const fullFieldRanked=status==='RATEABLE'&&rankings.length===field.length;
  return {family,modelId:result.model_id,decision:status,fullFieldRanked,rankings,reason:result.reason||null,provider};
 }
