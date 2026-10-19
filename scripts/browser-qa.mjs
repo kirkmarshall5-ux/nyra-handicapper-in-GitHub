@@ -57,7 +57,8 @@ for(const profile of profiles){
  await check('D14-viewport-and-controls',async()=>{
   await page.locator('[data-tab="raceday"]').click();
   assert.equal(await page.locator('#raceTitle').isVisible(),true);
-  for(const id of ['bets','researchFreeze','mix1Candidates','v44PaceCandidates','raceSelector','updateOddsSnapshot','manualOddsPanel'])assert.equal(await page.locator('#'+id).count(),0);
+  assert.equal(await page.locator('#researchFreeze').count(),1);
+  for(const id of ['bets','mix1Candidates','v44PaceCandidates','raceSelector','updateOddsSnapshot','manualOddsPanel'])assert.equal(await page.locator('#'+id).count(),0);
   await page.locator('[data-tab="pace"]').click();
   assert.equal(await page.locator('#paceMap').isVisible(),true);
   assert.equal(errors.length,0,'Uncaught page errors: '+errors.join(' | '));
