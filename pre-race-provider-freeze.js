@@ -9,6 +9,7 @@ export function validateSnapshot(s, now=Date.now()) {
   if(!['BRISNET','DRF'].includes(s?.provider)) errors.push('Verified PP provider required.');
   if(!s?.cardId||!s?.track||!/^\d{4}-\d{2}-\d{2}$/.test(s?.date||'')||!Number.isInteger(Number(s?.race))||Number(s.race)<1)errors.push('Complete card and race identity required.');
   if(!s?.parserVersion||!s?.sourceName)errors.push('Parser version and source filename required.');
+  if(s?.postTimeEvidence?.verification!=='USER_CONFIRMED_OFFICIAL_REFERENCE_NOT_INDEPENDENTLY_ANCHORED'||s?.postTimeEvidence?.scheduledPost!==s?.scheduledPost)errors.push('Verified official post-time evidence must match scheduled post.');
   const post=Date.parse(s?.scheduledPost||'');
   if(!Number.isFinite(post)||!/Z|[+-]\d\d:\d\d$/.test(s?.scheduledPost||''))errors.push('Scheduled post needs an explicit timezone.');
   else if(now>=post)errors.push('Cannot freeze at or after scheduled post.');
