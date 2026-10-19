@@ -115,6 +115,22 @@ for(const profile of profiles){
    await page.locator('[data-tab="raceday"]').click();
    await page.locator('summary').filter({hasText:'Research verification & export'}).click();
    await page.locator('#researchExport').click();assert.match(await page.locator('#researchFreezeStatus').innerText(),/SHA-256/);
+   const digest=await page.evaluate(async()=>{const {sealResearchSnapshots}=await import('./pre-race-provider-freeze.js');return (await sealResearchSnapshots(JSON.parse(localStorage.getItem('nyraResearchProviderFreezesV3')))).digestSha256;});
+   const issueUrl='https://github.com/kirkmarshall5-ux/nyra-handicapper-in-GitHub/issues/987654';
+   let receipt={html_url:issueUrl,created_at:new Date(Date.now()-60000).toISOString(),updated_at:new Date(Date.now()-60000).toISOString(),body:'SHA-256: '+digest};
+   await page.route('https://api.github.com/repos/kirkmarshall5-ux/nyra-handicapper-in-GitHub/issues/987654',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(receipt)}));
+   try{
+    await page.locator('#researchReceiptUrl').fill(issueUrl);
+    await page.locator('#researchVerifyReceipt').click();
+    assert.match(await page.locator('#researchFreezeStatus').innerText(),/Independent GitHub timestamp verified/);
+    receipt={...receipt,body:'SHA-256: '+'0'.repeat(64)};
+    await page.locator('#researchVerifyReceipt').click();
+    assert.match(await page.locator('#researchFreezeStatus').innerText(),/Receipt NOT verified:.*digest/);
+    receipt={...receipt,body:'SHA-256: '+digest,updated_at:new Date(Date.now()+86400000*3).toISOString()};
+    await page.locator('#researchVerifyReceipt').click();
+    assert.match(await page.locator('#researchFreezeStatus').innerText(),/Receipt NOT verified:/);
+   }finally{await page.unroute('https://api.github.com/repos/kirkmarshall5-ux/nyra-handicapper-in-GitHub/issues/987654');}
+
   }finally{
    await page.evaluate(async(base)=>{const {readProviderCards,writeProviderCard}=await import('./dual-pp-cards.js');const cards=await readProviderCards();for(const provider of ['BRISNET','DRF']){if(cards[provider]?.id?.startsWith('qa-freeze-')){ /* QA cards remain in test-only browser context */ }}if(base.active===null)localStorage.removeItem('nyraV44cReleaseActiveCard');else localStorage.setItem('nyraV44cReleaseActiveCard',base.active);if(base.saved===null)localStorage.removeItem('nyraResearchProviderFreezesV3');else localStorage.setItem('nyraResearchProviderFreezesV3',base.saved);},base);
    await page.reload({waitUntil:'domcontentloaded'});
