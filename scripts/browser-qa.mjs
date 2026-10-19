@@ -95,6 +95,8 @@ for(const profile of profiles){
     await page.locator('#freezeVerifyOfficial').check();
     await page.locator('#researchFreeze').click();
     assert.match(await page.locator('#researchFreezeStatus').innerText(),/Frozen locally/);
+    await page.locator('#researchFreeze').click();
+    assert.match(await page.locator('#researchFreezeStatus').innerText(),/Not frozen:.*already frozen/,'Second freeze must fail without overwriting');
    }
    await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
    const records=await page.evaluate(()=>JSON.parse(localStorage.getItem('nyraResearchProviderFreezesV3')||'[]'));
