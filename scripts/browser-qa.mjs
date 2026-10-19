@@ -54,6 +54,20 @@ for(const profile of profiles){
   await page.locator('#racebar button').first().click();
   assert.equal(await page.locator('#raceNotes').inputValue(),'QA smoke note race 1');
  });
+ await check('D13-freeze-research-fail-closed-and-local-export',async()=>{
+  await page.locator('[data-tab="raceday"]').click();
+  const freeze=page.locator('#researchFreeze');
+  await freeze.click();
+  assert.match(await page.locator('#researchFreezeStatus').innerText(),/Not frozen:/);
+  await page.locator('summary').filter({hasText:'Research verification & export'}).click();
+  await page.locator('#researchExport').click();
+  const download=page.waitForEvent('download');
+  await page.locator('#researchExport').click();
+  const file=await download;
+  assert.match(file.suggestedFilename(),/NYRA_RESEARCH_FREEZES_V3\.json/);
+  assert.match(await page.locator('#researchFreezeStatus').innerText(),/SHA-256/);
+  assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('nyraResearchProviderFreezesV3')||'[]').length),0);
+ });
  await check('D14-viewport-and-controls',async()=>{
   await page.locator('[data-tab="raceday"]').click();
   assert.equal(await page.locator('#raceTitle').isVisible(),true);
