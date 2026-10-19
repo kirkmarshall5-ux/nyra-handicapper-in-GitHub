@@ -99,7 +99,17 @@ for(const profile of profiles){
    await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
    const records=await page.evaluate(()=>JSON.parse(localStorage.getItem('nyraResearchProviderFreezesV3')||'[]'));
    assert.equal(records.length,2);assert.deepEqual(records.map(r=>r.provider).sort(),['BRISNET','DRF']);
-   for(const r of records){assert.equal(r.models.length,3);assert.equal(r.bettingDecision,'PASS');assert.equal(r.anchorStatus,'UNVERIFIED_LOCAL');}
+   for(const r of records){
+    assert.equal(r.models.length,3);assert.equal(r.bettingDecision,'PASS');assert.equal(r.anchorStatus,'UNVERIFIED_LOCAL');
+    const comparison=await page.evaluate(async record=>{
+     const {readProviderCards}=await import('./dual-pp-cards.js');
+     const {displayedProviderModels}=await import('./pre-race-provider-adapter.js');
+     const cards=await readProviderCards(),card=cards[record.provider];
+     return displayedProviderModels(card,card.races[record.race]);
+    },r);
+    assert.deepEqual(r.field,comparison.field,'Frozen active field differs from current model source');
+    assert.deepEqual(r.models,comparison.models,'Frozen model rankings differ from provider model outputs');
+   }
    await page.locator('[data-tab="raceday"]').click();
    await page.locator('summary').filter({hasText:'Research verification & export'}).click();
    await page.locator('#researchExport').click();assert.match(await page.locator('#researchFreezeStatus').innerText(),/SHA-256/);
