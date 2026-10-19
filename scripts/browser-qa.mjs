@@ -117,7 +117,7 @@ for(const profile of profiles){
    await page.locator('#researchExport').click();assert.match(await page.locator('#researchFreezeStatus').innerText(),/SHA-256/);
    const digest=await page.evaluate(async()=>{const {sealResearchSnapshots}=await import('./pre-race-provider-freeze.js');return (await sealResearchSnapshots(JSON.parse(localStorage.getItem('nyraResearchProviderFreezesV3')))).digestSha256;});
    const issueUrl='https://github.com/kirkmarshall5-ux/nyra-handicapper-in-GitHub/issues/987654';
-   let receipt={html_url:issueUrl,created_at:new Date(Date.now()-60000).toISOString(),updated_at:new Date(Date.now()-60000).toISOString(),body:'SHA-256: '+digest};
+   let receipt={html_url:issueUrl,created_at:new Date().toISOString(),updated_at:new Date().toISOString(),body:'SHA-256: '+digest};
    await page.route('https://api.github.com/repos/kirkmarshall5-ux/nyra-handicapper-in-GitHub/issues/987654',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(receipt)}));
    try{
     await page.locator('#researchReceiptUrl').fill(issueUrl);
