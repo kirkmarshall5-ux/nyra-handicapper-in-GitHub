@@ -491,13 +491,17 @@ async function loadProviderFile(provider,file){
   stage='file fingerprint';
   candidate.source_sha256=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',await file.arrayBuffer()))).map(x=>x.toString(16).padStart(2,'0')).join('');
   candidate.imported_at=new Date().toISOString();
+  stage='card activation preflight';
+  const raceIds=Object.keys(candidate.races||{}).filter(id=>Number.isInteger(Number(id))&&Number(id)>0).sort((a,b)=>Number(a)-Number(b));
+  if(!raceIds.length||!candidate.races[raceIds[0]]?.horses?.length||!Array.isArray(candidate.warnings))throw Error('Parsed card lacks a valid first race, runners, or warnings list; saved cards are unchanged.');
+  structuredClone(candidate.races[raceIds[0]]);
   stage='browser storage';
   await writeProviderCard(provider,candidate);
   stage='card activation';
   activateCandidate(candidate);
   status.textContent=provider+' card saved. The other PP source is retained.';
  }catch(e){
-  status.textContent=provider+' upload failed during '+stage+' ('+file.name+'). '+ppImportDiagnostic(provider,stage,e)+' Previous saved cards were not overwritten by this import.';
+  status.textContent=provider+' upload failed during '+stage+' ('+file.name+'). '+ppImportDiagnostic(provider,stage,e)+(stage==='card activation'?' The new source may already be saved; reload to inspect it before retrying.':' Previous saved cards were not overwritten by this import.');
   ppProg.style.width='0';
  }finally{
   ppUploadBusy=false;
