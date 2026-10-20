@@ -29,14 +29,29 @@ jobs:
       - name: Restore private test cards if configured
         env:
           PRIVATE_PDF_BUNDLE_BASE64: ${{ secrets.BRISNET_AUDIT_PDFS_BASE64 }}
+          PRIVATE_PDF_BUNDLE_URL: ${{ secrets.BRISNET_AUDIT_BUNDLE_URL }}
         run: |
           mkdir -p "$RUNNER_TEMP/brisnet-cards" audit-results
-          if [ -z "$PRIVATE_PDF_BUNDLE_BASE64" ]; then
-            echo 'SOURCE_PDFS_UNAVAILABLE: research audit remains HOLD' | tee audit-results/status.txt
+          set -euo pipefail
+          if [ -n "$PRIVATE_PDF_BUNDLE_URL" ]; then
+            case "$PRIVATE_PDF_BUNDLE_URL" in https://*) ;; *) echo 'Only HTTPS signed URLs accepted' >&2; exit 1;; esac
+            curl --fail --location --silent --show-error --retry 2 --max-time 120 "$PRIVATE_PDF_BUNDLE_URL" -o "$RUNNER_TEMP/brisnet-input.tar.gz"
+          elif [ -n "$PRIVATE_PDF_BUNDLE_BASE64" ]; then
+            printf '%s' "$PRIVATE_PDF_BUNDLE_BASE64" | base64 -d > "$RUNNER_TEMP/brisnet-input.tar.gz"
+          else
+            echo 'SOURCE_PDFS_UNAVAILABLE: set BRISNET_AUDIT_BUNDLE_URL or BRISNET_AUDIT_PDFS_BASE64' | tee audit-results/status.txt
             exit 0
           fi
-          printf '%s' "$PRIVATE_PDF_BUNDLE_BASE64" | base64 -d | tar -xz -C "$RUNNER_TEMP/brisnet-cards"
-          echo 'Private PDFs restored into temporary runner directory' > audit-results/status.txt
+          tar -tzf "$RUNNER_TEMP/brisnet-input.tar.gz" | while IFS= read -r entry; do
+            case "$entry" in /*|../*|*/../*|*'/..') echo 'Unsafe archive entry' >&2; exit 1;; esac
+          done
+          tar -xzf "$RUNNER_TEMP/brisnet-input.tar.gz" --no-same-owner --no-same-permissions -C "$RUNNER_TEMP/brisnet-cards"
+          count=$(find "$RUNNER_TEMP/brisnet-cards" -maxdepth 1 -type f -name '*.pdf' | wc -l)
+          if [ "$count" -lt 3 ]; then
+            echo "EXPECTED_AT_LEAST_THREE_PDFS: got $count" | tee audit-results/status.txt
+            exit 1
+          fi
+          echo "Private PDFs restored ($count files) into temporary runner directory" > audit-results/status.txt
       - name: Run production PDF.js importer audit
         env:
           CARD_DIR: ${{ runner.temp }}/brisnet-cards
@@ -64,7 +79,7 @@ jobs:
             echo 'PDFJS_IMPORT_COMPLETED: independent field parity still required' >> audit-results/status.txt
           fi
           exit 0
-      - name: Enforce source-PDF acceptance gate
+      - name: Enforce source-PDF execution gate
         if: always()
         run: |
           if ! ls audit-results/*.json >/dev/null 2>&1; then
@@ -75,7 +90,7 @@ jobs:
             echo 'BLOCKED: Source PDFs unavailable or audit flags present.' >&2
             exit 1
           fi
-          echo 'PDF.js extraction executed; independent field parity is a separate gate.'
+          echo 'PDF.js extraction executed; independent source field parity remains a separate gate.'
       - name: Upload research-only audit outputs
         if: always()
         uses: actions/upload-artifact@v4
