@@ -41,7 +41,7 @@ export function fingerprintPages(pages) {
   return (hash >>> 0).toString(36).padStart(7, "0");
 }
 
-const TRACK_ABBREVIATIONS = { bel: "Belmont Park", aqu: "Aqueduct", sar: "Saratoga", gp: "Gulfstream Park", fg: "Fair Grounds", rp: "Remington Park" };
+const TRACK_ABBREVIATIONS = { bel: "Belmont Park", aqu: "Aqueduct", sar: "Saratoga", gp: "Gulfstream Park", fg: "Fair Grounds", rp: "Remington Park", fl: "Finger Lakes" };
 
 function raceHeaderAt(lines, index) {
   const text = lines[index].text;
@@ -49,7 +49,7 @@ function raceHeaderAt(lines, index) {
   if (drfPageHeader) {
     return { race: +drfPageHeader[2], trackAbbreviation: drfPageHeader[1].toLowerCase(), documentPage: +drfPageHeader[3], kind: "drf-page" };
   }
-  const drfRace = text.match(/^\s*(\d+)\s+(Belmont Park|Aqueduct|Saratoga|Churchill Downs|Gulfstream Park|Fair Grounds|Remington Park|Keeneland|Santa Anita(?: Park)?)\s+\S+/i);
+  const drfRace = text.match(/^\s*(\d+)\s+(Belmont Park|Aqueduct|Saratoga|Churchill Downs|Gulfstream Park|Fair Grounds|Remington Park|Keeneland|Santa Anita(?: Park)?|Finger Lakes)\s+\S+/i);
   if (drfRace) return { race: +drfRace[1], track: drfRace[2], kind: "drf-race-heading" };
   const race = text.match(/^\s*Race\s+(\d+)\b/i);
   if (!race) return null;
@@ -234,7 +234,7 @@ export function parseCard(pages, { sourceName = "document" } = {}) {
     const bodyText = section.slice(0, 8).map(line => clean(line.text)).join(" ");
     const postMatch = bodyText.match(/\bPost\s*time:\s*([^ ]+\s*(?:ET|PM|AM)?)/i);
     const surface = /\bInner Turf\b/i.test(bodyText) ? "Inner Turf" : /\bTurf\b/i.test(bodyText) ? "Turf" : /\bTapeta\b|\bSynthetic\b/i.test(bodyText) ? "Synthetic" : "Dirt";
-    const headingClass = headerText.replace(/^\s*\d+\s+(?:Belmont Park|Aqueduct|Saratoga|Churchill Downs|Gulfstream Park|Fair Grounds|Remington Park|Keeneland|Santa Anita(?: Park)?)\s*/i, "");
+    const headingClass = headerText.replace(/^\s*\d+\s+(?:Belmont Park|Aqueduct|Saratoga|Churchill Downs|Gulfstream Park|Fair Grounds|Remington Park|Keeneland|Santa Anita(?: Park)?|Finger Lakes)\s*/i, "");
     races[raceNumber] = { race: raceNumber, horses, track: "", date: "", cls: headingClass || "Race", dist: primaryRaceDistance(section.slice(1, 12)), surface, post: postMatch?.[1] || "", oddsMode: "Morning line (pre-race)" };
   };
   const pageAssignments = pages.map(page => {
@@ -266,7 +266,7 @@ export function parseCard(pages, { sourceName = "document" } = {}) {
   if (ymdMatch) date = `${ymdMatch[1]}-${ymdMatch[2].padStart(2,"0")}-${ymdMatch[3].padStart(2,"0")}`;
   else if (mdyMatch) date = `${mdyMatch[3]}-${mdyMatch[1].padStart(2,"0")}-${mdyMatch[2].padStart(2,"0")}`;
   else if (monthMatch) date = `${monthMatch[3]}-${String(new Date(`${monthMatch[1]} 1, 2000`).getMonth()+1).padStart(2,"0")}-${monthMatch[2].padStart(2,"0")}`;
-  const trackMatch = allText.match(/\b(Belmont Park|Aqueduct|Saratoga|Churchill Downs|Gulfstream Park|Fair Grounds|Remington Park|Keeneland|Santa Anita(?: Park)?)\b/i);
+  const trackMatch = allText.match(/\b(Belmont Park|Aqueduct|Saratoga|Churchill Downs|Gulfstream Park|Fair Grounds|Remington Park|Keeneland|Santa Anita(?: Park)?|Finger Lakes)\b/i);
   const drfTrack = headers.find(header => header.trackAbbreviation)?.trackAbbreviation;
   const headingTrack = headers.find(header => header.track)?.track;
   const track = headingTrack || (trackMatch ? trackMatch[1] : TRACK_ABBREVIATIONS[drfTrack] || (drfTrack ? drfTrack.toUpperCase() : ""));
