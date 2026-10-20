@@ -75,3 +75,24 @@ test('scratch excluded from verified field cannot enter any frozen ranking',()=>
  snap.models[1].rankings.push({program:'2',horse:'B',score:70});
  assert.match(freezeResearchSnapshot({snapshot:snap,now}).errors.join(' '),/ineligible/);
 });
+
+
+test('resealing an invalid model field cannot launder it into valid research evidence',async()=>{
+ const record=freezeResearchSnapshot({snapshot:fixture(),now}).record;
+ const invalid=structuredClone(record);
+ invalid.models[0].rankings[1].horse='Altered runner';
+ const sealed=await sealResearchSnapshots([invalid]);
+ const result=await verifyResearchExport(sealed);
+ assert.equal(result.valid,false);
+ assert.match(result.errors.join(' '),/Invalid frozen snapshot: Model has ineligible/);
+});
+
+test('resealing incomplete rateable model is rejected even with a correct digest',async()=>{
+ const record=freezeResearchSnapshot({snapshot:fixture(),now}).record;
+ const invalid=structuredClone(record);
+ invalid.models[1].rankings.pop();
+ const sealed=await sealResearchSnapshots([invalid]);
+ const result=await verifyResearchExport(sealed);
+ assert.equal(result.valid,false);
+ assert.match(result.errors.join(' '),/complete active field/);
+});
