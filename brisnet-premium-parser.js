@@ -64,7 +64,7 @@ export function parsePremiumCard(input,{sourceName='Brisnet Premium Plus PDF'}={
   const ti=head.items.findIndex(i=>/Premium Plus PP'?s/i.test(i.str)),name=clean(head.items[ti+1]?.str),day=dateHeading(head.text),rn=+head.text.match(/\bRace\s+(\d+)/)[1];
   if(!/^[A-Za-z][A-Za-z .'-]+$/.test(name))throw Error('Premium Plus track heading unverified');
   if(track&&(name!==track||day!==date))throw Error('Mixed Premium Plus track/date');track=name;date=day;
-  const distance=brisnetDistance(head.text);if(!distance)throw Error('Premium Plus primary distance unverified');
+  const distance=brisnetDistance(head.text);if(!distance)throw Error('Premium Plus primary distance unverified: race '+rn+', PDF page '+page.pageNumber+', heading '+JSON.stringify(clean(head.text).slice(0,240)));
   const surface=/\([Tt]\)|\bTurf\b/.test(head.text)?'Turf':/All Weather|Synthetic|Tapeta/i.test(head.text)?'Synth':'Dirt';
   const r=races[rn]??={race:rn,track,date,header:head.text,dist:distance.display,distance_furlongs:distance.furlongs,surface,cls:head.items.slice(ti+2).map(i=>i.str).join(' '),conditions:{surface,primaryDistanceLine:distance.display,unsupported:false},post:'Unverified',oddsMode:'Morning line (pre-race)',horses:[],parser_blockers:['BRISNET_SOURCE_MODEL_VALIDATION_PENDING'],source_format:'BRISNET_PREMIUM_PLUS',ratings_provider:'BRISNET',source_pages:[],brisnet_pars:null};
   if(r.distance_furlongs!==distance.furlongs||r.surface!==surface)throw Error('Conflicting Premium Plus race conditions');r.source_pages.push(page.pageNumber);
