@@ -44,3 +44,12 @@ test('export verification detects tampering and never certifies an independent t
  const lateExport=await sealResearchSnapshots([late]);
  assert.match((await verifyResearchExport(lateExport)).errors.join(' '),/not before scheduled post/);
 });
+
+test('official post-time reference must be present and HTTPS',()=>{
+ const missing=fixture();delete missing.postTimeEvidence.sourceUrl;
+ assert.match(freezeResearchSnapshot({snapshot:missing,now}).errors.join(' '),/reference URL required/);
+ const insecure=fixture();insecure.postTimeEvidence.sourceUrl='http://example.org/post';
+ assert.match(freezeResearchSnapshot({snapshot:insecure,now}).errors.join(' '),/reference URL required/);
+ const valid=fixture();
+ assert.deepEqual(freezeResearchSnapshot({snapshot:valid,now}).errors,[]);
+});
