@@ -16,10 +16,13 @@ export function validateSnapshot(s, now=Date.now()) {
   else if(now>=post)errors.push('Cannot freeze at or after scheduled post.');
   if(s?.fieldVerified!==true||s?.surfaceVerified!==true||!s?.surface)errors.push('Verify official field, scratches and surface.');
   if(!Array.isArray(s?.field)||!s.field.length)errors.push('Active field required.');
-  const identities=new Set();
+  const identities=new Set(),horseNames=new Set();
   for(const h of s?.field||[]){
-    if(!h?.program||!h?.horse||identities.has(String(h.program)))errors.push('Invalid or duplicate active runner.');
-    identities.add(String(h.program));
+    const program=String(h?.program??'').trim(),horse=String(h?.horse??'').trim();
+    const normalizedHorse=horse.normalize('NFKC').replace(/\s+/g,' ').toLocaleLowerCase('en-US');
+    if(!program||!horse||identities.has(program)||horseNames.has(normalizedHorse))errors.push('Invalid or duplicate active runner.');
+    identities.add(program);
+    horseNames.add(normalizedHorse);
   }
   if(!Array.isArray(s?.models)||s.models.length!==3||new Set(s.models.map(m=>m.family)).size!==3||!['V44C','CONTENDER','FINISHER'].every(f=>s.models.some(m=>m.family===f)))errors.push('All three provider model families required.');
   for(const m of s?.models||[]){
