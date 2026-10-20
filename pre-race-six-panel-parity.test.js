@@ -38,3 +38,25 @@ test('V4.4c preserves exact unrounded source score',()=>{
  const result=raw();result.rankings[0].v44c_unrounded_score=87.123456;
  assert.equal(convertDisplayedModel('V44C',result,field,'DRF').rankings[0].score,87.123456);
 });
+
+
+test('panel adapter preserves PASS and HOLD rankings without promoting decisions',()=>{
+ for(const provider of ['BRISNET','DRF'])for(const family of ['V44C','CONTENDER'])for(const decision of ['PASS','HOLD']){
+  const result=raw(decision);
+  const frozen=convertDisplayedModel(family,result,field,provider);
+  assert.equal(frozen.decision,decision);
+  assert.equal(frozen.fullFieldRanked,false);
+  assert.deepEqual(frozen.rankings,[{program:'2',horse:'Beta',score:87},{program:'1',horse:'Alpha',score:80}]);
+ }
+});
+
+test('panel adapter never reorders tied scores or rounds decimal evidence',()=>{
+ const tied={model_id:'v',decision:'RATEABLE',rankings:[{n:'2',name:'Beta',score:87.125},{n:'1',name:'Alpha',score:87.125}]};
+ const frozen=convertDisplayedModel('V44C',tied,field,'DRF');
+ assert.deepEqual(frozen.rankings,[{program:'2',horse:'Beta',score:87.125},{program:'1',horse:'Alpha',score:87.125}]);
+});
+
+test('panel adapter rejects missing model identifier or invalid decision',()=>{
+ assert.throws(()=>convertDisplayedModel('V44C',{decision:'RATEABLE',rankings:rows},field,'DRF'),/model unavailable/);
+ assert.throws(()=>convertDisplayedModel('CONTENDER',{model_id:'x',decision:'UNKNOWN',rankings:rows},field,'DRF'),/decision unavailable/);
+});
