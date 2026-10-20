@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {verifyGitHubTimestampReceipt} from './pre-race-github-timestamp.js';
+import {verifyGitHubTimestampReceipt,verifySealedGitHubTimestampReceipt} from './pre-race-github-timestamp.js';
 const digest='a'.repeat(64);
 const exported={schemaVersion:3,mode:'RESEARCH_ONLY',anchorStatus:'UNVERIFIED_LOCAL_EXPORT',digestSha256:digest,records:[{recordedAt:'2026-10-19T13:00:00Z',scheduledPost:'2026-10-19T15:00:00Z'}]};
 const issue=()=>({html_url:'https://github.com/kirkmarshall5-ux/nyra-handicapper-in-GitHub/issues/123',created_at:'2026-10-19T13:10:00Z',updated_at:'2026-10-19T13:10:00Z',body:'Research digest SHA-256: '+digest});
@@ -26,4 +26,19 @@ test('receipt cannot certify an unsealed or non-research export',()=>{
  assert.match(verifyGitHubTimestampReceipt(fake,issue(),{now}).errors.join(' '),/metadata invalid/);
  const missing={...exported};delete missing.anchorStatus;
  assert.equal(verifyGitHubTimestampReceipt(missing,issue(),{now}).verified,false);
+});
+
+
+test('sealed timestamp gate rejects tampered prediction payload even when GitHub receipt matches digest',async()=>{
+ const {freezeResearchSnapshot,sealResearchSnapshots}=await import('./pre-race-provider-freeze.js');
+ const snapshot={provider:'DRF',cardId:'drf-test',track:'Finger Lakes',date:'2026-10-19',race:1,parserVersion:'test',sourceName:'test.pdf',scheduledPost:'2026-10-19T15:00:00Z',postTimeEvidence:{verification:'USER_CONFIRMED_OFFICIAL_REFERENCE_NOT_INDEPENDENTLY_ANCHORED',scheduledPost:'2026-10-19T15:00:00Z',sourceUrl:'https://www.nyra.com/'},fieldVerified:true,surfaceVerified:true,surface:'Dirt',field:[{program:'1',horse:'A'}],models:['V44C','CONTENDER','FINISHER'].map(family=>({family,modelId:family,provider:'DRF',decision:'RATEABLE',fullFieldRanked:true,rankings:[{program:'1',horse:'A',score:75}]}))};
+ const record=freezeResearchSnapshot({snapshot,now:Date.parse('2026-10-19T13:00:00Z')}).record;
+ assert.ok(record);
+ const sealed=await sealResearchSnapshots([record]);
+ const receipt={...issue(),body:'SHA-256: '+sealed.digestSha256};
+ assert.equal((await verifySealedGitHubTimestampReceipt(sealed,receipt,{now})).verified,true);
+ const tampered=structuredClone(sealed);tampered.records[0].models[0].rankings[0].score=999;
+ const rejected=await verifySealedGitHubTimestampReceipt(tampered,receipt,{now});
+ assert.equal(rejected.verified,false);
+ assert.match(rejected.errors.join(' '),/digest mismatch/);
 });
