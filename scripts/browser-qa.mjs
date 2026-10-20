@@ -54,10 +54,93 @@ for(const profile of profiles){
   await page.locator('#racebar button').first().click();
   assert.equal(await page.locator('#raceNotes').inputValue(),'QA smoke note race 1');
  });
+ await check('D13-freeze-research-fail-closed-and-local-export',async()=>{
+  await page.locator('[data-tab="raceday"]').click();
+  const freeze=page.locator('#researchFreeze');
+  await freeze.click();
+  assert.match(await page.locator('#researchFreezeStatus').innerText(),/Not frozen:/);
+  await page.locator('summary').filter({hasText:'Research verification & export'}).click();
+  await page.locator('#researchExport').click();
+  const download=page.waitForEvent('download');
+  await page.locator('#researchExport').click();
+  const file=await download;
+  assert.match(file.suggestedFilename(),/NYRA_RESEARCH_FREEZES_V3\.json/);
+  assert.match(await page.locator('#researchFreezeStatus').innerText(),/SHA-256/);
+  assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('nyraResearchProviderFreezesV3')||'[]').length),0);
+ });
+ await check('D13b-freeze-positive-save-reload-export-both-providers',async()=>{
+  const base=await page.evaluate(()=>({active:localStorage.getItem('nyraV44cReleaseActiveCard'),saved:localStorage.getItem('nyraResearchProviderFreezesV3')}));
+  try{
+   await page.evaluate(async()=>{
+    const {writeProviderCard}=await import('./dual-pp-cards.js');
+    const {PARSER_ID}=await import('./release-card-parser.js');
+    const {PREMIUM_PARSER_ID}=await import('./brisnet-premium-parser.js');
+    const date=new Date(Date.now()+86400000).toISOString().slice(0,10);
+    for(const provider of ['BRISNET','DRF']){
+     const horses=[1,2,3,4].map(n=>({n:String(n),name:'Freeze QA '+n,odds:'—',ml:'4/1',entry_status:'REGULAR',included_in_frozen_field:true,life_starts:3,lifeStarts:3,beyer_figures:[75+n],figs:[75+n],last:75+n,best:75+n,timeform_early:80,timeform_late:80,style:'P',parser_blockers:[],angles:[],source_context:{workout_text:'',pedigree_text:''},contender_evidence:{beyer_evidence:[],switch_evidence:{running_lines:[]}},...(provider==='BRISNET'?{ratings:{provider:'BRISNET',run_style:'P',lines:[{date:'2026-10-01',surface:'Dirt',furlongs:6,speed:75+n,e1:80,e2:80,late:80,source:{provider:'BRISNET',text:'QA'}}]}}:{})}));
+     const race={race:1,date,track:'Belmont Park',header:'6 Furlongs',dist:'6 Furlongs',surface:'Dirt',conditions:{surface:'Dirt'},cls:'QA',distance_furlongs:6,post:'1:10 ET',horses,parser_blockers:[],...(provider==='BRISNET'?{ratings_provider:'BRISNET'}:{})};
+     const card={id:'qa-freeze-'+provider,schemaVersion:3,track:'Belmont Park',date,races:{1:race},source_format:provider==='DRF'?'DRF':'BRISNET_PREMIUM_PLUS',parser_version:provider==='DRF'?PARSER_ID:PREMIUM_PARSER_ID,sourceName:provider+'.pdf',warnings:[]};
+     await writeProviderCard(provider,card);
+     if(provider==='BRISNET')localStorage.setItem('nyraV44cReleaseActiveCard',JSON.stringify(card));
+    }
+    localStorage.removeItem('nyraResearchProviderFreezesV3');
+   });
+   await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});await page.locator('[data-tab="raceday"]').click();
+   await page.locator('summary').filter({hasText:'Research verification & export'}).click();
+   for(const provider of ['BRISNET','DRF']){
+    await page.locator('#ppSourceView').selectOption(provider);
+    const date=await page.evaluate(()=>new Date(Date.now()+86400000).toISOString().slice(0,10));
+    await page.locator('#freezePostTime').fill(date+'T23:59:00-04:00');
+    await page.locator('#freezeSourceUrl').fill('https://www.nyra.com/');
+    await page.locator('#freezeVerifyOfficial').check();
+    await page.locator('#researchFreeze').click();
+    assert.match(await page.locator('#researchFreezeStatus').innerText(),/Frozen locally/);
+    await page.locator('#researchFreeze').click();
+    assert.match(await page.locator('#researchFreezeStatus').innerText(),/Not frozen:.*already frozen/,'Second freeze must fail without overwriting');
+   }
+   await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
+   const records=await page.evaluate(()=>JSON.parse(localStorage.getItem('nyraResearchProviderFreezesV3')||'[]'));
+   assert.equal(records.length,2);assert.deepEqual(records.map(r=>r.provider).sort(),['BRISNET','DRF']);
+   for(const r of records){
+    assert.equal(r.models.length,3);assert.equal(r.bettingDecision,'PASS');assert.equal(r.anchorStatus,'UNVERIFIED_LOCAL');
+    const comparison=await page.evaluate(async record=>{
+     const {readProviderCards}=await import('./dual-pp-cards.js');
+     const {displayedProviderModels}=await import('./pre-race-provider-adapter.js');
+     const cards=await readProviderCards(),card=cards[record.provider];
+     return displayedProviderModels(card,card.races[record.race]);
+    },r);
+    assert.deepEqual(r.field,comparison.field,'Frozen active field differs from current model source');
+    assert.deepEqual(r.models,comparison.models,'Frozen model rankings differ from provider model outputs');
+   }
+   await page.locator('[data-tab="raceday"]').click();
+   await page.locator('summary').filter({hasText:'Research verification & export'}).click();
+   await page.locator('#researchExport').click();assert.match(await page.locator('#researchFreezeStatus').innerText(),/SHA-256/);
+   const digest=await page.evaluate(async()=>{const {sealResearchSnapshots}=await import('./pre-race-provider-freeze.js');return (await sealResearchSnapshots(JSON.parse(localStorage.getItem('nyraResearchProviderFreezesV3')))).digestSha256;});
+   const issueUrl='https://github.com/kirkmarshall5-ux/nyra-handicapper-in-GitHub/issues/987654';
+   let receipt={html_url:issueUrl,created_at:new Date().toISOString(),updated_at:new Date().toISOString(),body:'SHA-256: '+digest};
+   await page.route('https://api.github.com/repos/kirkmarshall5-ux/nyra-handicapper-in-GitHub/issues/987654',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(receipt)}));
+   try{
+    await page.locator('#researchReceiptUrl').fill(issueUrl);
+    await page.locator('#researchVerifyReceipt').click();
+    await page.getByText('Independent GitHub timestamp verified:',{exact:false}).waitFor({timeout:10000});
+    receipt={...receipt,body:'SHA-256: '+'0'.repeat(64)};
+    await page.locator('#researchVerifyReceipt').click();
+    await page.waitForFunction(()=>/Receipt NOT verified:.*digest/i.test(document.querySelector('#researchFreezeStatus')?.textContent||''),{timeout:10000});
+    receipt={...receipt,body:'SHA-256: '+digest,updated_at:new Date(Date.now()+86400000*3).toISOString()};
+    await page.locator('#researchVerifyReceipt').click();
+    await page.waitForFunction(()=>/Receipt NOT verified:/i.test(document.querySelector('#researchFreezeStatus')?.textContent||''),{timeout:10000});
+   }finally{await page.unroute('https://api.github.com/repos/kirkmarshall5-ux/nyra-handicapper-in-GitHub/issues/987654');}
+
+  }finally{
+   await page.evaluate(async(base)=>{const {readProviderCards,writeProviderCard}=await import('./dual-pp-cards.js');const cards=await readProviderCards();for(const provider of ['BRISNET','DRF']){if(cards[provider]?.id?.startsWith('qa-freeze-')){ /* QA cards remain in test-only browser context */ }}if(base.active===null)localStorage.removeItem('nyraV44cReleaseActiveCard');else localStorage.setItem('nyraV44cReleaseActiveCard',base.active);if(base.saved===null)localStorage.removeItem('nyraResearchProviderFreezesV3');else localStorage.setItem('nyraResearchProviderFreezesV3',base.saved);},base);
+   await page.reload({waitUntil:'domcontentloaded'});
+  }
+ });
  await check('D14-viewport-and-controls',async()=>{
   await page.locator('[data-tab="raceday"]').click();
   assert.equal(await page.locator('#raceTitle').isVisible(),true);
-  for(const id of ['bets','researchFreeze','mix1Candidates','v44PaceCandidates','raceSelector','updateOddsSnapshot','manualOddsPanel'])assert.equal(await page.locator('#'+id).count(),0);
+  assert.equal(await page.locator('#researchFreeze').count(),1);
+  for(const id of ['bets','mix1Candidates','v44PaceCandidates','raceSelector','updateOddsSnapshot','manualOddsPanel'])assert.equal(await page.locator('#'+id).count(),0);
   await page.locator('[data-tab="pace"]').click();
   assert.equal(await page.locator('#paceMap').isVisible(),true);
   assert.equal(errors.length,0,'Uncaught page errors: '+errors.join(' | '));

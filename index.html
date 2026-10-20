@@ -61,7 +61,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <div><div class="kicker" id="cardKicker">Active race card</div><h2 id="raceTitle">Belmont Park · Race 1</h2>
 <div class="badges" id="raceBadges"><span class="badge gold">1 1/16M Dirt</span><span class="badge">Maiden Special Weight · $100,000</span><span class="badge">12:05 PM</span><span class="badge green">Public NYRA card</span></div></div>
 <div><div class="muted small" style="margin-bottom:5px">Race</div><div class="racebar" id="racebar"></div></div>
-</div><div id="declaredScratches" class="small muted" role="status"></div><div class="flex" style="margin-top:12px;flex-wrap:wrap"><button class="primary" id="updateOddsScratches">Update Odds &amp; Scratches</button><span class="small muted" id="nyraUpdateStatus" role="status" aria-live="polite">Fetch NYRA updates for the selected race.</span></div></div>
+</div><div class="flex" style="margin-top:8px;align-items:center;flex-wrap:wrap;gap:10px"><button class="secondary" id="researchFreeze" type="button" style="font-size:13px;padding:7px 12px">Freeze Predictions</button><span id="researchFreezeStatus" class="tiny muted" role="status" aria-live="polite">Research only · verification required</span><details style="width:100%;max-width:650px"><summary class="tiny muted">Research verification &amp; export</summary><div class="small muted" style="margin-top:8px">Verify the official race field, surface and scheduled post time before recording. This is a local research snapshot, not an independently timestamped result.</div><div class="controls" style="margin-top:8px"><div><label for="freezePostTime">Official scheduled post (with UTC offset)</label><input id="freezePostTime" type="text" placeholder="2026-10-19T12:05:00-04:00" style="width:100%"></div><div><label for="freezeSourceUrl">Official race schedule URL</label><input id="freezeSourceUrl" type="url" placeholder="https://www.nyra.com/..." style="width:100%"></div></div><label class="small" style="display:block;margin-top:8px"><input type="checkbox" id="freezeVerifyOfficial"> I verified the race, official post time, field, scratches and surface against the linked official source.</label><div class="flex" style="margin-top:8px;gap:8px"><button class="secondary" type="button" id="researchExport">Export research JSON + SHA-256</button><button type="button" id="researchAnchor">Open GitHub receipt</button><input id="researchReceiptUrl" placeholder="GitHub issue URL"><button type="button" id="researchVerifyReceipt">Verify receipt</button></div></details></div><div id="declaredScratches" class="small muted" role="status"></div><div class="flex" style="margin-top:12px;flex-wrap:wrap"><button class="primary" id="updateOddsScratches">Update Odds &amp; Scratches</button><span class="small muted" id="nyraUpdateStatus" role="status" aria-live="polite">Fetch NYRA updates for the selected race.</span></div></div>
 
 <div class="card span12"><div class="kicker">Keep both PP sources loaded</div><div class="flex" style="flex-wrap:wrap;margin-top:8px"><button class="primary" id="uploadBrisnet">1. Upload Brisnet PP</button><input id="brisnetFile" type="file" accept=".pdf" hidden><button class="primary" id="uploadDrf">2. Upload DRF PP</button><input id="drfFile" type="file" accept=".pdf" hidden><label for="ppSourceView" class="small">Horse grid / Pace source</label><select id="ppSourceView" style="width:auto"><option value="BRISNET">Brisnet</option><option value="DRF">DRF</option></select></div><div class="small muted" id="providerCardsStatus" role="status" style="margin-top:10px"></div><div class="small" id="providerUploadStatus" role="status" style="margin-top:6px"></div><div class="progress" style="margin-top:10px"><i id="ppProg"></i></div><div id="ppStatus" class="muted small" role="status" style="margin-top:8px">Upload each PP once using its matching button. Processing and saved cards stay in this browser.</div><details id="manageSavedCards" class="small" style="margin-top:12px"><summary>Manage saved cards</summary><div class="flex" style="flex-wrap:wrap;margin-top:10px"><button class="secondary" id="clearPP">Clear selected PP evidence</button><button class="secondary" id="resetSample">Reset DRF sample card</button></div><p class="muted">Clear affects the source selected in Horse grid / Pace source. Reset loads the demonstration into the DRF slot. The other PP source is retained.</p></details></div>
 <div class="card span12"><div class="kicker">Morning lines · both PP sources</div><div id="topMl" class="stack small"></div></div>
@@ -160,6 +160,10 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 </main>
 
 <script type="module">
+import {verifyPostTimeEvidence} from "./pre-race-post-time.js?v=20261019-freeze1";
+import {displayedProviderModels} from "./pre-race-provider-adapter.js?v=20261019-freeze1";
+import {freezeResearchSnapshot,sealResearchSnapshots,FREEZE_STORAGE_KEY,snapshotKey} from "./pre-race-provider-freeze.js?v=20261019-freeze1";
+import {verifySealedGitHubTimestampReceipt} from "./pre-race-github-timestamp.js?v=2";
 import {fetchNyraRaceUpdate,nyraRaceUpdateSource,applyNyraSnapshotToRace} from "./nyra-race-update.js?v=20261018-dual1";
 import {initKnowledgeBase} from "./knowledge-base.js?v=20261008-kb1";
 import {connectionRows,LEADER_SCOPE,LEADER_SOURCE} from "./connection-research.js?v=20261008-jt1";
@@ -266,6 +270,75 @@ function renderModelRow(race,ids){
 
 }
 function providerRace(provider){if(provider===cardProvider(activeCard))return {race,reason:null};return pairedRace(providerCards,provider,race);}
+
+// Pre-race evidence UI: explicit official verification, no wagering or automatic certification.
+const freezeStatus=document.getElementById('researchFreezeStatus');
+function readResearchFreezes(){
+ const stored=JSON.parse(localStorage.getItem(FREEZE_STORAGE_KEY)||'[]');
+ if(!Array.isArray(stored))throw Error('Saved research records are invalid.');
+ return stored;
+}
+function updateResearchFreezeStatus(){
+ try{
+  const saved=readResearchFreezes();
+  const p=cardProvider(activeCard);
+  const matching=saved.filter(x=>x.provider===p&&x.cardId===activeCard.id&&String(x.race)===String(race.race));
+  freezeStatus.textContent=matching.length?'Saved locally · unverified external timestamp':'Research only · verification required';
+ }catch(e){freezeStatus.textContent='Research storage error: '+e.message;}
+}
+document.getElementById('researchFreeze').addEventListener('click',()=>{
+ try{
+  const scheduledPost=document.getElementById('freezePostTime').value.trim();
+  const sourceUrl=document.getElementById('freezeSourceUrl').value.trim();
+  const verifiedByUser=document.getElementById('freezeVerifyOfficial').checked;
+  const now=Date.now(),source=providerRace(cardProvider(activeCard));
+  if(!source.race)throw Error(source.reason||'Selected PP source is unavailable.');
+  if(activeCard.id===sampleCard.id||!activeCard.parser_version||!(activeCard.sourceName||activeCard.source_name))throw Error('Upload a verified source PP; sample or unidentified cards cannot be frozen.');
+  const post=verifyPostTimeEvidence({scheduledPost,sourceType:'MANUAL_OFFICIAL_REFERENCE',sourceUrl,verifiedByUser,observedAt:new Date(now).toISOString()},{now,raceDate:activeCard.date,track:activeCard.track,raceNumber:source.race.race});
+  if(!post.verified)throw Error(post.errors.join(' '));
+  const output=displayedProviderModels(activeCard,source.race);
+  const snapshot={provider:output.provider,cardId:activeCard.id,track:activeCard.track,date:activeCard.date,race:Number(source.race.race),parserVersion:activeCard.parser_version,sourceName:(activeCard.sourceName||activeCard.source_name),scheduledPost,postTimeEvidence:post.postTimeEvidence,fieldVerified:verifiedByUser,surfaceVerified:verifiedByUser,surface:source.race.surface,field:output.field,models:output.models,scratches:(source.race.horses||[]).filter(h=>h.odds==='SCR').map(h=>({program:String(h.n),horse:h.name}))};
+  const saved=readResearchFreezes();
+  const result=freezeResearchSnapshot({snapshot,existing:saved,now});
+  if(result.errors.length)throw Error(result.errors.join(' '));
+  localStorage.setItem(FREEZE_STORAGE_KEY,JSON.stringify([...saved,result.record]));
+  freezeStatus.textContent='Frozen locally · '+output.provider+' · '+new Date(now).toLocaleTimeString()+' · independent anchor pending';
+ }catch(e){freezeStatus.textContent='Not frozen: '+e.message;}
+});
+document.getElementById('researchAnchor').addEventListener('click',async()=>{
+ try{
+  const records=readResearchFreezes();if(!records.length)throw Error('Freeze predictions first.');
+  const payload=await sealResearchSnapshots(records);
+  const title='Pre-race research SHA-256 '+payload.digestSha256.slice(0,16);
+  const body='SHA-256: '+payload.digestSha256+' | Research-only; submit before post.';
+  const url='https://github.com/kirkmarshall5-ux/nyra-handicapper-in-GitHub/issues/new?title='+encodeURIComponent(title)+'&body='+encodeURIComponent(body);
+  window.open(url,'_blank','noopener');
+  freezeStatus.textContent='Issue draft opened; NOT anchored until submitted on GitHub.';
+ }catch(e){freezeStatus.textContent='Receipt error: '+e.message;}
+});
+document.getElementById('researchVerifyReceipt').addEventListener('click',async()=>{
+ try{
+  const url=document.getElementById('researchReceiptUrl').value.trim();
+  const prefix='https://github.com/kirkmarshall5-ux/nyra-handicapper-in-GitHub/issues/';
+  const id=url.startsWith(prefix)?url.slice(prefix.length):'';
+  if(!/^[1-9][0-9]*$/.test(id))throw Error('Invalid repository issue URL.');
+  const response=await fetch('https://api.github.com/repos/kirkmarshall5-ux/nyra-handicapper-in-GitHub/issues/'+id,{cache:'no-store'});
+  if(!response.ok)throw Error('GitHub receipt fetch failed: '+response.status);
+  const payload=await sealResearchSnapshots(readResearchFreezes());
+  const check=await verifySealedGitHubTimestampReceipt(payload,await response.json());
+  if(!check.verified)throw Error(check.errors.join(' '));
+  freezeStatus.textContent='Independent GitHub timestamp verified: '+url;
+ }catch(e){freezeStatus.textContent='Receipt NOT verified: '+e.message;}
+});
+document.getElementById('researchExport').addEventListener('click',async()=>{
+ try{
+  const payload=await sealResearchSnapshots(readResearchFreezes());
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='NYRA_RESEARCH_FREEZES_V3.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  freezeStatus.textContent='Exported locally · SHA-256 '+payload.digestSha256.slice(0,16)+'… · independent anchor pending';
+ }catch(e){freezeStatus.textContent='Export failed: '+e.message;}
+});
+
 function renderRaceInsights(){
  const ids={BRISNET:['brisTopContenders','brisFinisherCandidates','brisContenderCandidates'],DRF:['topContenders','finisherCandidates','contenderCandidates']};
  for(const provider of ['BRISNET','DRF']){const source=providerRace(provider);if(source.race)renderModelRow(source.race,ids[provider]);else for(const id of ids[provider])document.getElementById(id).innerHTML='<div class="note small">'+escapeText(source.reason)+'</div>';}
@@ -309,7 +382,7 @@ document.querySelectorAll(".sortbtn").forEach(b=>b.onclick=()=>{
  renderHorses();updateSortButtons();
 });
 function syncRaceNotes(){raceNotes.value=state.cards?.[activeCard.id]?.notes?.[race.race]||""}
-function renderAll(){syncRaceNotes();renderPaceCardStatus();document.getElementById("releaseStatus").textContent=`Rankings: ${currentRating().model_id} · PP formats: DRF / Brisnet Ultimate / Premium Plus · Saved card: ${activeCard.parser_version||"sample / legacy evidence"}. V4.4c, Finisher and Contender. Morning line is reference only. Verify scratches and surface against official entries.`;renderBrisnetEvidence();renderProjectedRaceSetup();renderReleaseContext();renderJ1Comparison();renderHeader();renderHorses();updateSortButtons();renderPace();renderEdit();renderEvidence();renderConnections();renderLeaderboards();renderWeights();renderThings();renderRaceInsights();renderNyraUpdateControls();updateUrl()}
+function renderAll(){syncRaceNotes();renderPaceCardStatus();document.getElementById("releaseStatus").textContent=`Rankings: ${currentRating().model_id} · PP formats: DRF / Brisnet Ultimate / Premium Plus · Saved card: ${activeCard.parser_version||"sample / legacy evidence"}. V4.4c, Finisher and Contender. Morning line is reference only. Verify scratches and surface against official entries.`;renderBrisnetEvidence();renderProjectedRaceSetup();renderReleaseContext();renderJ1Comparison();renderHeader();renderHorses();updateSortButtons();renderPace();renderEdit();renderEvidence();renderConnections();renderLeaderboards();renderWeights();renderThings();renderRaceInsights();updateResearchFreezeStatus();renderNyraUpdateControls();updateUrl()}
 function renderThings(){
  const el=document.getElementById("thingsToConsider"); if(!el)return;
  let rows=[];
@@ -346,7 +419,7 @@ function preferBrisnetPaceCard(){
 }
 function renderPaceCardStatus(){
  const provider=cardProvider(activeCard),source=provider==='BRISNET'?null:pairedRace(providerCards,'BRISNET',race);
- document.getElementById('paceCardStatus').textContent='Showing '+(provider==='BRISNET'?'Brisnet':'DRF')+' · '+(race.track||activeCard.track)+' · '+race.date+' · Race '+race.race+' · '+(activeCard.sourceName||'saved card')+'.'+(source?.reason?' Brisnet unavailable for this race: '+source.reason+' Showing the selected DRF card as fallback.':'');
+ document.getElementById('paceCardStatus').textContent='Showing '+(provider==='BRISNET'?'Brisnet':'DRF')+' · '+(race.track||activeCard.track)+' · '+race.date+' · Race '+race.race+' · '+((activeCard.sourceName||activeCard.source_name)||'saved card')+'.'+(source?.reason?' Brisnet unavailable for this race: '+source.reason+' Showing the selected DRF card as fallback.':'');
 }
 document.getElementById('ppSourceView').onchange=()=>{const provider=document.getElementById('ppSourceView').value,card=providerCards[provider];if(!card){document.getElementById('providerUploadStatus').textContent='Upload a '+provider+' card first.';document.getElementById('ppSourceView').value=cardProvider(activeCard);return;}save();activeCard=structuredClone(card);const n=activeCard.races[race.race]?race.race:+Object.keys(activeCard.races).sort((a,b)=>+a-+b)[0];race=structuredClone(activeCard.races[n]);restoreRunnerEdits();save();renderAll();};
 function selectRace(n){if(!activeCard.races[n])return;race=structuredClone(activeCard.races[n]);restoreRunnerEdits();renderAll();window.scrollTo({top:0,behavior:"smooth"})}
