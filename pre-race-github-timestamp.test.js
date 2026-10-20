@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {verifyGitHubTimestampReceipt} from './pre-race-github-timestamp.js';
 const digest='a'.repeat(64);
-const exported={digestSha256:digest,records:[{recordedAt:'2026-10-19T13:00:00Z',scheduledPost:'2026-10-19T15:00:00Z'}]};
+const exported={schemaVersion:3,mode:'RESEARCH_ONLY',anchorStatus:'UNVERIFIED_LOCAL_EXPORT',digestSha256:digest,records:[{recordedAt:'2026-10-19T13:00:00Z',scheduledPost:'2026-10-19T15:00:00Z'}]};
 const issue=()=>({html_url:'https://github.com/kirkmarshall5-ux/nyra-handicapper-in-GitHub/issues/123',created_at:'2026-10-19T13:10:00Z',updated_at:'2026-10-19T13:10:00Z',body:'Research digest SHA-256: '+digest});
 const now=Date.parse('2026-10-19T14:00:00Z');
 test('independent GitHub timestamp receipt passes with matching pre-post digest',()=>{
@@ -19,4 +19,11 @@ test('receipt must follow freeze and represent all races before their scheduled 
  const early=issue();early.created_at='2026-10-19T12:59:00Z';early.updated_at=early.created_at;assert.equal(verifyGitHubTimestampReceipt(exported,early,{now}).verified,false);
  const multi={...exported,records:[...exported.records,{recordedAt:'2026-10-19T13:00:00Z',scheduledPost:'2026-10-19T13:05:00Z'}]};
  assert.equal(verifyGitHubTimestampReceipt(multi,issue(),{now}).verified,false);
+});
+
+test('receipt cannot certify an unsealed or non-research export',()=>{
+ const fake={...exported,mode:'BETTING'};
+ assert.match(verifyGitHubTimestampReceipt(fake,issue(),{now}).errors.join(' '),/metadata invalid/);
+ const missing={...exported};delete missing.anchorStatus;
+ assert.equal(verifyGitHubTimestampReceipt(missing,issue(),{now}).verified,false);
 });
