@@ -22,7 +22,6 @@ async function extractExact(path,expectedDigest,expectedPages){
  }
  return {pages,digest};
 }
-const digest=createHash('sha256').update(bytes).digest('hex');
 const {pages,digest}=await extractExact(brisnetPath,'1c9e3bedecd761d2a825c4513642c4aeb31d477cfde56695df725a9ecc43637a',18);
 const {parsePremiumCard}=await import(pathToFileURL(resolve('brisnet-premium-parser.js')).href);
 const card=parsePremiumCard(pages,{sourceName:'flx1021p.pdf'});
