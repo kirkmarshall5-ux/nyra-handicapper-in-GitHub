@@ -61,6 +61,8 @@ export async function verifyResearchExport(exported){
  if(sealed.digestSha256!==exported.digestSha256)errors.push('Research export digest mismatch: content may have changed.');
  const keys=new Set();
  for(const record of exported.records){
+  const freezeErrors=validateSnapshot(record,Date.parse(record?.recordedAt||''));
+  if(freezeErrors.length)errors.push(...freezeErrors.map(e=>'Invalid frozen snapshot: '+e));
   if(record?.schemaVersion!==FREEZE_SCHEMA||record?.mode!=='RESEARCH_ONLY'||record?.anchorStatus!=='UNVERIFIED_LOCAL'||record?.bettingDecision!=='PASS')errors.push('Invalid research-only record metadata.');
   const key=snapshotKey(record);
   if(keys.has(key))errors.push('Duplicate frozen race in export.');
