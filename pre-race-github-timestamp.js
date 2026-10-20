@@ -1,3 +1,4 @@
+import {verifyResearchExport} from './pre-race-provider-freeze.js';
 // GitHub issue receipt verification: server-issued created_at is independent of the browser clock.
 // A receipt is valid only when its original creation AND latest update precede scheduled post.
 // The issue body must contain the exact SHA-256 export digest. Editing after post invalidates it.
@@ -19,4 +20,13 @@ export function verifyGitHubTimestampReceipt(exported,issue,{now=Date.now()}={})
   if(!Number.isFinite(Date.parse(r?.recordedAt||''))||Date.parse(r.recordedAt)>created)errors.push('Local freeze time follows independent receipt creation.');
  }
  return {verified:errors.length===0,errors:[...new Set(errors)],receiptUrl:errors.length?null:url,independentlyTimestamped:errors.length===0};
+}
+
+// Never certify a server timestamp against an export whose payload hash fails.
+// Keep the synchronous receipt checker available for deterministic unit tests;
+// UI callers must use this complete async gate.
+export async function verifySealedGitHubTimestampReceipt(exported,issue,options={}){
+ const seal=await verifyResearchExport(exported);
+ if(!seal.valid)return {verified:false,independentlyTimestamped:false,receiptUrl:null,errors:seal.errors};
+ return verifyGitHubTimestampReceipt(exported,issue,options);
 }
