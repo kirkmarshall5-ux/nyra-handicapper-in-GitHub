@@ -163,7 +163,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 import {verifyPostTimeEvidence} from "./pre-race-post-time.js?v=20261019-freeze1";
 import {displayedProviderModels} from "./pre-race-provider-adapter.js?v=20261019-freeze1";
 import {freezeResearchSnapshot,sealResearchSnapshots,FREEZE_STORAGE_KEY,snapshotKey} from "./pre-race-provider-freeze.js?v=20261019-freeze1";
-import {verifyGitHubTimestampReceipt} from "./pre-race-github-timestamp.js?v=1";
+import {verifySealedGitHubTimestampReceipt} from "./pre-race-github-timestamp.js?v=2";
 import {fetchNyraRaceUpdate,nyraRaceUpdateSource,applyNyraSnapshotToRace} from "./nyra-race-update.js?v=20261018-dual1";
 import {initKnowledgeBase} from "./knowledge-base.js?v=20261008-kb1";
 import {connectionRows,LEADER_SCOPE,LEADER_SOURCE} from "./connection-research.js?v=20261008-jt1";
@@ -325,7 +325,7 @@ document.getElementById('researchVerifyReceipt').addEventListener('click',async(
   const response=await fetch('https://api.github.com/repos/kirkmarshall5-ux/nyra-handicapper-in-GitHub/issues/'+id,{cache:'no-store'});
   if(!response.ok)throw Error('GitHub receipt fetch failed: '+response.status);
   const payload=await sealResearchSnapshots(readResearchFreezes());
-  const check=verifyGitHubTimestampReceipt(payload,await response.json());
+  const check=await verifySealedGitHubTimestampReceipt(payload,await response.json());
   if(!check.verified)throw Error(check.errors.join(' '));
   freezeStatus.textContent='Independent GitHub timestamp verified: '+url;
  }catch(e){freezeStatus.textContent='Receipt NOT verified: '+e.message;}
