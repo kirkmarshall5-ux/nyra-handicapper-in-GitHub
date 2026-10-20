@@ -96,3 +96,20 @@ test('resealing incomplete rateable model is rejected even with a correct digest
  assert.equal(result.valid,false);
  assert.match(result.errors.join(' '),/complete active field/);
 });
+
+
+test('verified field rejects duplicate horse names even with different program numbers',()=>{
+ const snap=fixture();
+ snap.field[1].horse=' a ';
+ assert.match(freezeResearchSnapshot({snapshot:snap,now}).errors.join(' '),/duplicate active runner/);
+});
+
+test('export validation rejects rehashed duplicate horse identities',async()=>{
+ const record=freezeResearchSnapshot({snapshot:fixture(),now}).record;
+ const altered=structuredClone(record);
+ altered.field[1].horse=' A ';
+ const sealed=await sealResearchSnapshots([altered]);
+ const result=await verifyResearchExport(sealed);
+ assert.equal(result.valid,false);
+ assert.match(result.errors.join(' '),/duplicate active runner/);
+});
