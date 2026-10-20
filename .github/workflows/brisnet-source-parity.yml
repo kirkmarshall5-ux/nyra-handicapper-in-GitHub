@@ -64,6 +64,18 @@ jobs:
             echo 'PDFJS_IMPORT_COMPLETED: independent field parity still required' >> audit-results/status.txt
           fi
           exit 0
+      - name: Enforce source-PDF acceptance gate
+        if: always()
+        run: |
+          if ! ls audit-results/*.json >/dev/null 2>&1; then
+            echo 'BLOCKED: No production PDF.js audit JSON generated from original Brisnet PDFs.' >&2
+            exit 1
+          fi
+          if grep -q 'AUDIT_FLAGGED\|NO_PDF_INPUTS\|SOURCE_PDFS_UNAVAILABLE' audit-results/status.txt; then
+            echo 'BLOCKED: Source PDFs unavailable or audit flags present.' >&2
+            exit 1
+          fi
+          echo 'PDF.js extraction executed; independent field parity is a separate gate.'
       - name: Upload research-only audit outputs
         if: always()
         uses: actions/upload-artifact@v4
