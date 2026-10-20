@@ -18,3 +18,6 @@ Both sources identify Finger Lakes on Wednesday 2026-10-21 and races 1–8. Race
 
 ## Current status
 Source identity and PDF readability: VERIFIED. Production PDF.js parsing: NOT EXECUTED in this environment (pdfjs-dist unavailable). Official scratches: NOT VERIFIED. Six-panel real-card parity: NOT VERIFIED. Timestamp: NOT VERIFIED. Physical iPad: NOT VERIFIED. PR #116 and PR #115 remain unmerged.
+
+## Cross-provider source index reconciliation (2026-10-20)
+Both PDF indexes independently contain exactly 52 horses: races 1–8 have [6,6,6,6,8,7,6,7]. The 52 horse-name sets match exactly, race by race. Brisnet final page is an index/scratch-watch appendix, not race 9. These checks use PyMuPDF source text, **not** the production PDF.js parser. The scratch-watch list is historical and cannot certify current scratches. Production importer gate remains OPEN.
