@@ -471,7 +471,7 @@ let ppUploadBusy=false;
 function ppImportDiagnostic(provider,stage,error){
  const detail=String(error?.message||error||'Unknown failure').replace(/[<>]/g,'').slice(0,300);
  if(/Unique program numbers and horse names are required/i.test(detail))return 'Runner identity validation failed: a duplicate or missing program number/horse name was detected. Check the source PDF; no runners were discarded.';
- if(/Premium Plus primary distance unverified/i.test(detail))return 'Brisnet race distance could not be verified from the printed race heading. No distance was guessed.';
+ if(/Premium Plus primary distance unverified/i.test(detail))return 'Brisnet race distance could not be verified from the printed race heading. No distance was guessed. '+detail;
  return detail;
 }
 async function loadProviderFile(provider,file){
