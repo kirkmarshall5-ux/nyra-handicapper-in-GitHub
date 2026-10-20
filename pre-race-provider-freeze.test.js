@@ -53,3 +53,25 @@ test('official post-time reference must be present and HTTPS',()=>{
  const valid=fixture();
  assert.deepEqual(freezeResearchSnapshot({snapshot:valid,now}).errors,[]);
 });
+
+
+test('PASS and HOLD records remain research-only and never become betting instructions',()=>{
+ for(const provider of ['BRISNET','DRF'])for(const decision of ['PASS','HOLD']){
+  const snap=fixture(provider);
+  snap.models=snap.models.map(m=>({...m,decision,fullFieldRanked:false}));
+  const result=freezeResearchSnapshot({snapshot:snap,now});
+  assert.deepEqual(result.errors,[]);
+  assert.equal(result.record.mode,'RESEARCH_ONLY');
+  assert.equal(result.record.bettingDecision,'PASS');
+  assert.equal(result.record.anchorStatus,'UNVERIFIED_LOCAL');
+  assert.ok(result.record.models.every(m=>m.decision===decision));
+ }
+});
+
+test('scratch excluded from verified field cannot enter any frozen ranking',()=>{
+ const snap=fixture();snap.field=[{program:'1',horse:'A'}];
+ snap.models=snap.models.map(m=>({...m,rankings:[{program:'1',horse:'A',score:75}]}));
+ assert.deepEqual(freezeResearchSnapshot({snapshot:snap,now}).errors,[]);
+ snap.models[1].rankings.push({program:'2',horse:'B',score:70});
+ assert.match(freezeResearchSnapshot({snapshot:snap,now}).errors.join(' '),/ineligible/);
+});
