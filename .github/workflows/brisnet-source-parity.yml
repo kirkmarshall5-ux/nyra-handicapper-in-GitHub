@@ -1,0 +1,73 @@
+name: Brisnet PDF.js source parity (research only)
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'brisnet-premium-parser.js'
+      - 'scripts/audit-premium-history.mjs'
+      - 'scripts/compare-source-importer.mjs'
+      - '.github/workflows/brisnet-source-parity.yml'
+      - 'package.json'
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install PDF.js
+        run: npm install --no-audit --no-fund --ignore-scripts
+      - name: Verify audit modules
+        run: |
+          node --check scripts/audit-premium-history.mjs
+          node --check scripts/compare-source-importer.mjs
+          node --test research-source-importer-reconcile.test.js
+      - name: Restore private test cards if configured
+        env:
+          PRIVATE_PDF_BUNDLE_BASE64: ${{ secrets.BRISNET_AUDIT_PDFS_BASE64 }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/brisnet-cards" audit-results
+          if [ -z "$PRIVATE_PDF_BUNDLE_BASE64" ]; then
+            echo 'SOURCE_PDFS_UNAVAILABLE: research audit remains HOLD' | tee audit-results/status.txt
+            exit 0
+          fi
+          printf '%s' "$PRIVATE_PDF_BUNDLE_BASE64" | base64 -d | tar -xz -C "$RUNNER_TEMP/brisnet-cards"
+          echo 'Private PDFs restored into temporary runner directory' > audit-results/status.txt
+      - name: Run production PDF.js importer audit
+        env:
+          CARD_DIR: ${{ runner.temp }}/brisnet-cards
+        run: |
+          set +e
+          found=0
+          failed=0
+          for pdf in "$CARD_DIR"/*.pdf; do
+            [ -f "$pdf" ] || continue
+            found=1
+            filename="$(basename "$pdf" .pdf)"
+            safe="$(printf '%s' "$filename" | tr -c 'A-Za-z0-9_-' '_')"
+            node scripts/audit-premium-history.mjs "$pdf" "audit-results/${safe}.json"
+            code=$?
+            if [ "$code" -ne 0 ]; then
+              echo "AUDIT_FLAGGED ${safe} exit=${code}" >> audit-results/status.txt
+              failed=1
+            fi
+          done
+          if [ "$found" -eq 0 ]; then
+            echo 'NO_PDF_INPUTS: production parity remains HOLD' >> audit-results/status.txt
+          elif [ "$failed" -eq 1 ]; then
+            echo 'AUDIT_FLAGS_PRESENT: inspect artifacts; no acceptance' >> audit-results/status.txt
+          else
+            echo 'PDFJS_IMPORT_COMPLETED: independent field parity still required' >> audit-results/status.txt
+          fi
+          exit 0
+      - name: Upload research-only audit outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: brisnet-pdfjs-research-audit
+          path: audit-results/
+          retention-days: 7
