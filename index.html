@@ -468,7 +468,42 @@ async function extractPdf(file){
 }
 
 let ppUploadBusy=false;
-async function loadProviderFile(provider,file){if(!file||ppUploadBusy)return;ppUploadBusy=true;for(const id of ['uploadBrisnet','uploadDrf'])document.getElementById(id).disabled=true;const status=document.getElementById('providerUploadStatus');try{status.textContent='Reading '+provider+' PP: '+file.name+'…';const pages=await extractPdf(file),candidate=parsePPCard(pages,{sourceName:file.name});putProviderCard({},candidate,provider);candidate.source_sha256=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',await file.arrayBuffer()))).map(x=>x.toString(16).padStart(2,'0')).join('');candidate.imported_at=new Date().toISOString();await writeProviderCard(provider,candidate);activateCandidate(candidate);status.textContent=provider+' card saved. The other PP source is retained.';}catch(e){status.textContent='Upload failed; both saved sources are preserved: '+(e.message||e);ppProg.style.width='0';}finally{ppUploadBusy=false;for(const id of ['uploadBrisnet','uploadDrf'])document.getElementById(id).disabled=false;}}
+function ppImportDiagnostic(provider,stage,error){
+ const detail=String(error?.message||error||'Unknown failure').replace(/[<>]/g,'').slice(0,300);
+ if(/Unique program numbers and horse names are required/i.test(detail))return 'Runner identity validation failed: a duplicate or missing program number/horse name was detected. Check the source PDF; no runners were discarded.';
+ if(/Premium Plus primary distance unverified/i.test(detail))return 'Brisnet race distance could not be verified from the printed race heading. No distance was guessed.';
+ return detail;
+}
+async function loadProviderFile(provider,file){
+ if(!file||ppUploadBusy)return;
+ ppUploadBusy=true;
+ for(const id of ['uploadBrisnet','uploadDrf'])document.getElementById(id).disabled=true;
+ const status=document.getElementById('providerUploadStatus');
+ let stage='PDF reading';
+ try{
+  status.textContent='Reading '+provider+' PP: '+file.name+'…';
+  const pages=await extractPdf(file);
+  stage='race and runner parsing';
+  status.textContent='Checking '+provider+' race and runner identities…';
+  const candidate=parsePPCard(pages,{sourceName:file.name});
+  stage='provider verification';
+  putProviderCard({},candidate,provider);
+  stage='file fingerprint';
+  candidate.source_sha256=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',await file.arrayBuffer()))).map(x=>x.toString(16).padStart(2,'0')).join('');
+  candidate.imported_at=new Date().toISOString();
+  stage='browser storage';
+  await writeProviderCard(provider,candidate);
+  stage='card activation';
+  activateCandidate(candidate);
+  status.textContent=provider+' card saved. The other PP source is retained.';
+ }catch(e){
+  status.textContent=provider+' upload failed during '+stage+' ('+file.name+'). '+ppImportDiagnostic(provider,stage,e)+' Previous saved cards were not overwritten by this import.';
+  ppProg.style.width='0';
+ }finally{
+  ppUploadBusy=false;
+  for(const id of ['uploadBrisnet','uploadDrf'])document.getElementById(id).disabled=false;
+ }
+}
 document.getElementById('uploadBrisnet').onclick=()=>document.getElementById('brisnetFile').click();
 document.getElementById('uploadDrf').onclick=()=>document.getElementById('drfFile').click();
 for(const [id,provider]of [['brisnetFile','BRISNET'],['drfFile','DRF']])document.getElementById(id).onchange=e=>{loadProviderFile(provider,e.target.files[0]);e.target.value='';};
