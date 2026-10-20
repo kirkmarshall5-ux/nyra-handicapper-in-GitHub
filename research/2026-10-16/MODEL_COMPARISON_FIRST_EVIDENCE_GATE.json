@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "purpose": "First real-source model comparison acceptance review; no retrospective grading",
+  "provider_family": "BRISNET",
+  "source_records": [
+    "research/2026-10-16/R1_R2_SCREENSHOT_RESULTS.json",
+    "research/2026-10-16/R3_SCREENSHOT_RESULT.json"
+  ],
+  "races_reviewed": [
+    {"race_key":"Belmont Park|2026-10-16|1","status":"HOLD","observed_finishers":7,"missing":["INDEPENDENTLY_VERIFIED_PRE_OFF_FORECAST","OFFICIAL_OFF_TIME","OFFICIAL_RESULT_VERIFICATION","FINAL_FIELD_VERIFICATION"],"certified_model_metrics":null},
+    {"race_key":"Belmont Park|2026-10-16|2","status":"HOLD","observed_finishers":7,"missing":["INDEPENDENTLY_VERIFIED_PRE_OFF_FORECAST","OFFICIAL_OFF_TIME","OFFICIAL_RESULT_VERIFICATION","FINAL_FIELD_VERIFICATION"],"certified_model_metrics":null},
+    {"race_key":"Belmont Park|2026-10-16|3","status":"HOLD","observed_finishers":4,"missing":["FULL_OFFICIAL_FINISH_ORDER","INDEPENDENTLY_VERIFIED_PRE_OFF_FORECAST","OFFICIAL_OFF_TIME","OFFICIAL_RESULT_VERIFICATION","FINAL_FIELD_VERIFICATION","SURFACE_CONFLICT_RESOLUTION"],"certified_model_metrics":null}
+  ],
+  "verified_full_field_races":0,
+  "certified_first_choice_wins":null,
+  "certified_top_four_coverage":null,
+  "certified_rank_error":null,
+  "betting_returns":null,
+  "next_acceptance_inputs":["Original independently anchored pre-off full-field snapshots for same provider and race","Official chart with actual off time and final starter/finish order","Independent field and surface reconciliation"],
+  "models_changed":false,
+  "production_deployed":false
+}
