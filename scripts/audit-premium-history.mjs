@@ -29,7 +29,10 @@ for(const race of Object.values(card.races)){
   if(Number.isInteger(starts)&&lines.length>starts)problems.push('MORE_LINES_THAN_CAREER_STARTS');
   const unknown=lines.filter(l=>!Number.isFinite(l.speed)).length;
   const incompletePace=lines.filter(l=>!Number.isFinite(l.e1)||!Number.isFinite(l.e2)||!Number.isFinite(l.late)).length;
-  const result={race:race.race,program:String(horse.n),horse:horse.name,sourcePage:horse.source_evidence?.page??null,careerStarts:starts,importedLines:lines.length,importedHistory:lines.map(l=>({date:l.date??null,track:l.track??null,surface:l.surface??null,furlongs:l.furlongs??null,speed:l.speed??null,e1:l.e1??null,e2:l.e2??null,late:l.late??null,sourcePage:l.source?.page??null,sourceText:l.source?.text??null})),missingSpeedLines:unknown,incompletePaceLines:incompletePace,problems};
+  const incompleteRatings=lines.filter(l=>!Number.isFinite(l.e1)||!Number.isFinite(l.e2)||!Number.isFinite(l.late)||!Number.isFinite(l.speed)).length;
+  const falseComplete=lines.filter(l=>l.status==='PACE_AND_SPEED_SOURCE_VERIFIED'&&(!Number.isFinite(l.e1)||!Number.isFinite(l.e2)||!Number.isFinite(l.late)||!Number.isFinite(l.speed))).length;
+  if(falseComplete)problems.push('FALSE_COMPLETE_RATING_STATUS');
+  const result={race:race.race,program:String(horse.n),horse:horse.name,sourcePage:horse.source_evidence?.page??null,careerStarts:starts,importedLines:lines.length,importedHistory:lines.map(l=>({date:l.date??null,track:l.track??null,surface:l.surface??null,furlongs:l.furlongs??null,speed:l.speed??null,e1:l.e1??null,e2:l.e2??null,late:l.late??null,sourcePage:l.source?.page??null,sourceText:l.source?.text??null})),missingSpeedLines:unknown,incompletePaceLines:incompletePace,incompleteRatingLines:incompleteRatings,problems};
   rows.push(result);
   if(problems.length)failures.push(result);
  }
