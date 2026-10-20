@@ -52,7 +52,7 @@ function parsePace(row,heading,today){
  // Selecting by item start-x discarded those complete, readable condition tokens.
  const conditions=premiumHistoryConditions(row.text);
  const pp=row.items.find(i=>i.x>ends[5]&&i.x<ends[5]+gap&&/^\d+$/.test(i.str));
- return {...d,...values,...conditions,turn_time:values.e1!==null&&values.e2!==null?values.e2-values.e1:null,race_rating:null,class_rating:null,past_post:pp?+pp.str:null,status:values.e2!==null&&values.late!==null?'PACE_SOURCE_SEQUENCE_VERIFIED':'RATING_COLUMNS_UNRESOLVED',source:{provider:'BRISNET',page:row.pageNumber,y:row.y,text:row.text,cells}};
+ return {...d,...values,...conditions,turn_time:values.e1!==null&&values.e2!==null?values.e2-values.e1:null,race_rating:null,class_rating:null,past_post:pp?+pp.str:null,status:values.e1!==null&&values.e2!==null&&values.late!==null&&values.speed!==null?'PACE_AND_SPEED_SOURCE_VERIFIED':'RATING_COLUMNS_UNRESOLVED',source:{provider:'BRISNET',page:row.pageNumber,y:row.y,text:row.text,cells}};
 }
 export function parsePremiumCard(input,{sourceName='Brisnet Premium Plus PDF'}={}){
  const pages=input.map(p=>{const r=reconstructPage(p.items,p.pageNumber,.65);const widths=new Map(p.items.map(q=>[clean(q.str)+'|'+q.transform[4].toFixed(2)+'|'+q.transform[5].toFixed(2),q.width]));for(const row of r.lines)for(const i of row.items)i.width=widths.get(i.str+'|'+i.x.toFixed(2)+'|'+i.y.toFixed(2))||0;return r;});
