@@ -12,6 +12,7 @@ export function verifyGitHubTimestampReceipt(exported,issue,{now=Date.now()}={})
  if(!Number.isFinite(created)||!Number.isFinite(updated)||created>now||updated>now||updated<created)errors.push('Invalid GitHub server timestamps.');
  if(!new RegExp('(?:^|[^0-9a-f])'+digest+'(?:$|[^0-9a-f])','i').test(issue?.body||''))errors.push('GitHub issue body does not contain exact export digest.');
  if(!Array.isArray(exported?.records)||!exported.records.length)errors.push('At least one frozen prediction required.');
+ if(exported?.anchorStatus!=='UNVERIFIED_LOCAL_EXPORT'||exported?.mode!=='RESEARCH_ONLY'||exported?.schemaVersion!==3)errors.push('Research export metadata invalid; verify sealed export first.');
  for(const r of exported?.records||[]){
   const post=Date.parse(r?.scheduledPost||'');
   if(!Number.isFinite(post)||!(created<post&&updated<post))errors.push('GitHub receipt was created or modified at or after scheduled post.');
