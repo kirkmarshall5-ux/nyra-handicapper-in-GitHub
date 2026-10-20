@@ -87,13 +87,14 @@ export function parsePremiumCard(input,{sourceName='Brisnet Premium Plus PDF'}={
    const headings=lines.filter(l=>/DATE TRK/.test(l.text)&&/E1\s+E2\/\s+LP/.test(l.text)&&/\bSPD\b/.test(l.text));
    const historical=lines.filter(l=>/^\d{2}[A-Za-z]{3}\d{2}[A-Za-z]+/.test(l.text));if(historical.length&&headings.length!==1)throw Error('Premium Plus running-line column heading unverified');
    const history=historical.map(l=>parsePace(l,headings[0],date));
+   if(history.some(h=>!h))throw Error('Premium Plus recognized historical line produced null record for '+nm[1]);
    // Evidence coverage gate: printed historical dates must survive parsing exactly.
    // Never equate absent recognized history with a first-time starter.
    const printedDates=historical.map(l=>pastDate(l.text,date)?.date);
    if(printedDates.some(d=>!d)||history.some((h,i)=>h?.date!==printedDates[i]))throw Error('Premium Plus historical date/source parity failed for '+nm[1]);
    if(+life[1]>0&&history.length===0)issues.push('#'+program+' '+nm[1]+': SOURCE_HISTORY_UNVERIFIED_NOT_FTS');
    if(+life[1]===0&&history.length)throw Error('Premium Plus FTS/running-line contradiction');
-   if(+life[1]>0&&!history.length)issues.push('#'+program+' '+nm[1]+': experienced runner without extracted running lines');
+
    const unresolved=history.filter(l=>l.status==='RATING_COLUMNS_UNRESOLVED');if(unresolved.length)issues.push('#'+program+' '+nm[1]+': '+unresolved.length+' rows have missing pace; Unknown retained');
    const unknownConditions=history.filter(l=>l.condition_evidence.status==='UNRESOLVED');if(unknownConditions.length)issues.push('#'+program+' '+nm[1]+': '+unknownConditions.length+' historical conditions unresolved; excluded from matching');
    const jockey=connection(block,'jockey'),trainer=connection(block,'trainer'),sire=block.match(/Sire\s*:\s*(.+)/),dam=block.match(/Dam:\s*(.+)/),power=block.match(/Prime Power:\s*(\d+\.\d+)/);
