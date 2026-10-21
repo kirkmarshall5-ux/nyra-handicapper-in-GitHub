@@ -186,7 +186,7 @@ import {applyMorningLines} from "./morning-line-overlay.js?v=20261008-odds2";
 import {runnerContext} from "./release-context.js?v=20261008-qa1";
 import {PARSER_ID,restoredPage, parseRestoredCard} from "./release-card-parser.js?v=20261014-appendices1";
 
-import {parsePPCard,SUPPORTED_PARSERS} from "./pp-format-router.js?v=20261021-negative-speed";
+import {parsePPCard,SUPPORTED_PARSERS} from "./pp-format-router.js?v=20261021-source3";
 import {brisnetPaceDisplay,brisnetPaceMapHtml,brisnetCallRanksHtml,brisnetEvidenceHtml,brisnetContextHtml} from "./brisnet-pace-display.js?v=20261016-pace1";
 import {BRISNET_METHODS} from "./brisnet-models.js?v=20261021-input2";
 
@@ -506,17 +506,17 @@ document.getElementById('exportBrisnetSourceAudit').onclick=()=>{
    const rr=card.races[key];
    for(const h of rr.horses||[]){
     const history=h.ratings?.lines||[];
-    runners.push({race:rr.race,program:h.n,name:h.name,life_starts:h.life_starts??h.lifeStarts??null,parsed_history_lines:history.length,entry_status:h.entry_status??null,source_evidence:h.source_evidence??null});
+    runners.push({race:rr.race,program:h.n,name:h.name,life_starts:h.life_starts??h.lifeStarts??null,parsed_history_lines:history.length,entry_status:h.entry_status??null,source_evidence:h.source_evidence??null,workout_status:h.source_context?.workout_status??null,workouts:h.source_context?.workouts??[],workout_unresolved:h.source_context?.workout_unresolved??[]});
     for(let i=0;i<history.length;i++){
      const l=history[i],src=l.source||{};
      rows.push({race:rr.race,program:h.n,name:h.name,history_index:i+1,date:l.date??null,source_page:src.page??null,source_y:src.y??null,source_text:src.text??null,
       e1:l.e1??null,e2:l.e2??null,late:l.late??null,shape1:l.shape1??null,shape2:l.shape2??null,speed:l.speed??null,
-      status:l.status??null,condition_evidence:l.condition_evidence??null,
+      status:l.status??null,rating_gaps:l.rating_gaps??null,condition_evidence:l.condition_evidence??null,
       source_cells:src.cells??null});
     }
    }
   }
-  const record={schema:'nyra-brisnet-source-audit-v1',exported_at_utc:new Date().toISOString(),clock_source:'browser-device-unverified',track:card.track,date:card.date,card_id:card.id,source_name:card.sourceName??null,source_sha256:card.source_sha256??null,parser_version:card.parser_version??null,source_format:card.source_format,
+  const record={schema:'nyra-brisnet-source-audit-v2',exported_at_utc:new Date().toISOString(),clock_source:'browser-device-unverified',track:card.track,date:card.date,card_id:card.id,source_name:card.sourceName??null,source_sha256:card.source_sha256??null,parser_version:card.parser_version??null,source_format:card.source_format,
    races:Object.keys(card.races).length,runner_count:runners.length,history_line_count:rows.length,validation_issues:card.validation_issues??[],runners,lines:rows,
    warning:'Read-only parser evidence export. Values and cell positions are from the saved browser card, not independently verified against the original PDF. Missing values are null. No scratch or wager authorization.'};
   const blob=new Blob([JSON.stringify(record,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),link=document.createElement('a');
