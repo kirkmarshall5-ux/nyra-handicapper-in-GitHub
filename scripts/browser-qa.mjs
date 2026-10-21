@@ -70,7 +70,7 @@ for(const profile of profiles){
     const date='2026-10-16',track='Belmont Park';
     const horses=[1,2,3].map(n=>({n:String(n),name:'QA Brisnet Runner '+n,ml:'4/1',odds:'—',entry_status:'REGULAR',included_in_frozen_field:true,life_starts:n===3?0:1,lifeStarts:n===3?0:1,style:'UNKNOWN',beyer_figures:[],figs:[],last:null,best:null,timeform_early:null,timeform_late:null,parser_blockers:['BRISNET_SPEED_NOT_BEYER'],angles:[],source_context:{workout_text:'',pedigree_text:''},ratings:{provider:'BRISNET',run_style:n===3?'NA':'E/P',quirin_points:n===3?null:5,lines:n===3?[]:[{date:'2026-09-20',track:'Bel',surface:'Dirt',furlongs:8,e1:85+n,e2:90+n,late:80+n,speed:75+n,source:{provider:'BRISNET',page:1,text:'Synthetic QA source line'}}]}}));
     const race={race:1,date,track,surface:'Dirt',dist:'1 Mile',header:'1 Mile',distance_furlongs:8,cls:'QA maiden',post:'1:10 ET',horses,ratings_provider:'BRISNET',source_format:'BRISNET_PREMIUM_PLUS',parser_blockers:['BRISNET_SOURCE_MODEL_VALIDATION_PENDING']};
-    localStorage.setItem('nyraV44cReleaseActiveCard',JSON.stringify({id:'qa-native-brisnet',schemaVersion:2,track,date,races:{1:race},parser_version:'BRISNET-PREMIUM-PLUS-positioned-v2',source_format:'BRISNET_PREMIUM_PLUS',warnings:[]}));
+    localStorage.setItem('nyraV44cReleaseActiveCard',JSON.stringify({id:'qa-native-brisnet',schemaVersion:2,track,date,races:{1:race},parser_version:'BRISNET-PREMIUM-PLUS-positioned-v3',source_format:'BRISNET_PREMIUM_PLUS',warnings:[]}));
    });
    await page.reload({waitUntil:'domcontentloaded'});
    await page.locator('#brisTopContenders').getByText('V4.4c-Brisnet base · experimental',{exact:false}).waitFor({timeout:20000});
@@ -206,7 +206,7 @@ for(const profile of profiles){
    await page.evaluate(()=>{
     const date='2026-10-18',track='Belmont Park',horses=[1,2,3].map(n=>({n:String(n),name:'QA Update Runner '+n,ml:'4/1',odds:'—',entry_status:'REGULAR',included_in_frozen_field:true,life_starts:1,lifeStarts:1,beyer_figures:[],figs:[],angles:[],source_context:{},parser_blockers:['BRISNET_SPEED_NOT_BEYER'],ratings:{provider:'BRISNET',run_style:'P',lines:[{date:'2026-09-20',surface:'Dirt',furlongs:8,speed:75+n,e1:85+n,e2:90+n,late:80+n,source:{provider:'BRISNET',text:'Synthetic QA row'}}]}}));
     const race={race:1,date,track,surface:'Dirt',dist:'1 Mile',distance_furlongs:8,header:'1 Mile',cls:'QA allowance',horses,parser_blockers:['BRISNET_SOURCE_MODEL_VALIDATION_PENDING']};
-    localStorage.setItem('nyraV44cReleaseActiveCard',JSON.stringify({id:'qa-direct-update',schemaVersion:2,track,date,races:{1:race,2:{...structuredClone(race),race:2}},parser_version:'BRISNET-PREMIUM-PLUS-positioned-v2',source_format:'BRISNET_PREMIUM_PLUS',warnings:[]}));
+    localStorage.setItem('nyraV44cReleaseActiveCard',JSON.stringify({id:'qa-direct-update',schemaVersion:2,track,date,races:{1:race,2:{...structuredClone(race),race:2}},parser_version:'BRISNET-PREMIUM-PLUS-positioned-v3',source_format:'BRISNET_PREMIUM_PLUS',warnings:[]}));
    });
    await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
    assert.equal(await page.locator('#updateOddsScratches').isVisible(),true);await page.locator('#updateOddsScratches').click();

@@ -2,7 +2,8 @@
 import {reconstructPage,fingerprintPages} from './card-loader.js';
 import {brisnetDistance} from './brisnet-card-parser.js?v=20261019-compact-m70';
 import {premiumHistoryConditions} from './brisnet-premium-conditions.js';
-export const PREMIUM_PARSER_ID='BRISNET-PREMIUM-PLUS-positioned-v2';
+import {parseBrisnetWorkouts} from './brisnet-workouts.js';
+export const PREMIUM_PARSER_ID='BRISNET-PREMIUM-PLUS-positioned-v3';
 const clean=x=>String(x??'').replace(/\s+/g,' ').trim();
 const months={January:1,February:2,March:3,April:4,May:5,June:6,July:7,August:8,September:9,October:10,November:11,December:12};
 const short={Jan:1,Feb:2,Mar:3,Apr:4,May:5,Jun:6,Jul:7,Jly:7,Aug:8,Sep:9,Oct:10,Nov:11,Dec:12};
@@ -55,13 +56,15 @@ function parsePace(row,heading,today){
   // Do not reject all of a horse's other verified running lines.
   const invalidSpeed=rawValue!==null&&n===5&&rawValue<0;
   const value=invalidPace||invalidSpeed?null:rawValue;
-  values[keys[n]]=value;cells[keys[n]]={text,x:items[0]?.x??null,status:invalidPace?'NEGATIVE_PACE_TOKEN_REJECTED':invalidSpeed?'NEGATIVE_SPEED_SOURCE_TOKEN_RETAINED_UNRATED':value===null?'MISSING_OR_AMBIGUOUS':'POSITIONED_NUMBER_VERIFIED'};
+  values[keys[n]]=value;cells[keys[n]]={text,x:items[0]?.x??null,status:invalidPace?'NEGATIVE_PACE_TOKEN_REJECTED':invalidSpeed?'NEGATIVE_SPEED_SOURCE_TOKEN_RETAINED_UNRATED':value===null?(items.length===0||text==='/'?'SOURCE_BLANK':'MISSING_OR_AMBIGUOUS'):'POSITIONED_NUMBER_VERIFIED'};
  }
  // Some PDF text items begin in the date column and also contain distance/going.
  // Selecting by item start-x discarded those complete, readable condition tokens.
  const conditions=premiumHistoryConditions(row.text);
+ const rating_gaps=Object.entries(cells).filter(([k])=>values[k]===null).map(([field,c])=>({field,reason:c.status,source_text:c.text}));
+ const ratingStatus=Object.values(cells).some(c=>c.status==='MISSING_OR_AMBIGUOUS')?'RATING_COLUMNS_UNRESOLVED':rating_gaps.length?'PARTIAL_RATINGS_SOURCE_VERIFIED':'PACE_AND_SPEED_SOURCE_VERIFIED';
  const pp=row.items.find(i=>i.x>ends[5]&&i.x<ends[5]+gap&&/^\d+$/.test(i.str));
- return {...d,...values,...conditions,turn_time:values.e1!==null&&values.e2!==null?values.e2-values.e1:null,race_rating:null,class_rating:null,past_post:pp?+pp.str:null,status:values.e1!==null&&values.e2!==null&&values.late!==null&&values.speed!==null?'PACE_AND_SPEED_SOURCE_VERIFIED':'RATING_COLUMNS_UNRESOLVED',source:{provider:'BRISNET',page:row.pageNumber,y:row.y,text:row.text,cells}};
+ return {...d,...values,...conditions,turn_time:values.e1!==null&&values.e2!==null?values.e2-values.e1:null,race_rating:null,class_rating:null,past_post:pp?+pp.str:null,status:ratingStatus,rating_gaps,source:{provider:'BRISNET',page:row.pageNumber,y:row.y,text:row.text,cells}};
 }
 export function parsePremiumCard(input,{sourceName='Brisnet Premium Plus PDF'}={}){
  const pages=input.map(p=>{const r=reconstructPage(p.items,p.pageNumber,.65);const widths=new Map(p.items.map(q=>[clean(q.str)+'|'+q.transform[4].toFixed(2)+'|'+q.transform[5].toFixed(2),q.width]));for(const row of r.lines)for(const i of row.items)i.width=widths.get(i.str+'|'+i.x.toFixed(2)+'|'+i.y.toFixed(2))||0;return r;});
@@ -109,11 +112,12 @@ export function parsePremiumCard(input,{sourceName='Brisnet Premium Plus PDF'}={
    const jockey=connection(block,'jockey'),trainer=connection(block,'trainer'),sire=block.match(/Sire\s*:\s*(.+)/),dam=block.match(/Dam:\s*(.+)/),power=block.match(/Prime Power:\s*(\d+\.\d+)/);
    // Conditional entry markers must be in the runner heading region, never historical notes.
    const headerRegion=lines.filter(l=>l.y>y-40).map(l=>l.text).join(' '),conditional=headerRegion.match(/\b(?:Also[- ]Eligible|AE|Main Track Only|MTO)\b/i),entry=conditional?/MTO|Main Track Only/i.test(conditional[0])?'MTO':'AE':'REGULAR';
-   const works=lines.filter(l=>/^(?:×)?\d{2}[A-Za-z]{3}\s/.test(l.text)).map(l=>l.text).join('\n');
-   r.horses.push({n:program,name:nm[1],ml:ml[0].str,odds:'—',entry_status:entry,included_in_frozen_field:entry==='REGULAR',life_starts:+life[1],lifeStarts:+life[1],j:jockey?.name||'',t:trainer?.name||'',style:'UNKNOWN',beyer_figures:[],figs:[],last:null,best:null,timeform_early:null,timeform_late:null,tfEarly:null,tfLate:null,jockey_win:jockey?.win??null,trainer_win:trainer?.win??null,trainer_context_score:null,parser_blockers:['BRISNET_SPEED_NOT_BEYER'],angles:[],source_context:{version:1,jockey,trainer,sire:sire?.[1]||'',dam:dam?.[1]||'',pedigree_text:[sire?.[1],dam?.[1]].filter(Boolean).join(' / '),workout_text:'',unverified_workout_page_text:works,workout_status:'EXTRACTION_PENDING',source_page:page.pageNumber},ratings:{provider:'BRISNET',run_style:+life[1]===0?'NA':nm[2],quirin_points:+life[1]===0?null:+nm[3],prime_power:power?+power[1]:null,lines:history},source_evidence:{page:page.pageNumber,header_text:clean(start.str),life_text:life[0],program_x:programs[0].x,name_y:y}});
+   const workRows=lines.filter(l=>/^(?:×)?\d{2}[A-Za-z]{3}(?:['’]\d{2})?\s/.test(l.text)),works=workRows.map(l=>l.text).join('\n'),workoutEvidence=parseBrisnetWorkouts(workRows,date);
+   if(workoutEvidence.unresolved.length)issues.push('#'+program+' '+nm[1]+': '+workoutEvidence.unresolved.length+' workout records unresolved; retained for review');
+   r.horses.push({n:program,name:nm[1],ml:ml[0].str,odds:'—',entry_status:entry,included_in_frozen_field:entry==='REGULAR',life_starts:+life[1],lifeStarts:+life[1],j:jockey?.name||'',t:trainer?.name||'',style:'UNKNOWN',beyer_figures:[],figs:[],last:null,best:null,timeform_early:null,timeform_late:null,tfEarly:null,tfLate:null,jockey_win:jockey?.win??null,trainer_win:trainer?.win??null,trainer_context_score:null,parser_blockers:['BRISNET_SPEED_NOT_BEYER'],angles:[],source_context:{version:1,jockey,trainer,sire:sire?.[1]||'',dam:dam?.[1]||'',pedigree_text:[sire?.[1],dam?.[1]].filter(Boolean).join(' / '),workout_text:'',unverified_workout_page_text:works,workout_status:workoutEvidence.workout_status,workouts:workoutEvidence.workouts,workout_unresolved:workoutEvidence.unresolved,workout_scoring_enabled:false,source_page:page.pageNumber},ratings:{provider:'BRISNET',run_style:+life[1]===0?'NA':nm[2],quirin_points:+life[1]===0?null:+nm[3],prime_power:power?+power[1]:null,lines:history},source_evidence:{page:page.pageNumber,header_text:clean(start.str),life_text:life[0],program_x:programs[0].x,name_y:y}});
   }
  }
  if(!Object.keys(races).length)throw Error('No Premium Plus races found');
  for(const r of Object.values(races))r.horses.sort((a,b)=>parseInt(a.n)-parseInt(b.n)||a.n.localeCompare(b.n));
- return {id:PREMIUM_PARSER_ID+':'+track+':'+date+':'+fingerprintPages(pages),schemaVersion:2,track,date,races,sourceName,parser_version:PREMIUM_PARSER_ID,source_format:'BRISNET_PREMIUM_PLUS',odds_source:'MORNING_LINE_ONLY',excluded_appendix_pages:excluded,validation_issues:issues,warnings:['Brisnet Premium Plus figures are source evidence; not Beyers or Timeform. Original models remain PASS until provider-specific scoring is validated.','Verify today\'s scratches separately; historical Scratch Watch never scratches a runner.','Workouts and trainer angles remain unscored source text; their structured extraction is not certified.',...(issues.length?[issues.length+' missing-evidence notes; review pace coverage.']:[])]};
+ return {id:PREMIUM_PARSER_ID+':'+track+':'+date+':'+fingerprintPages(pages),schemaVersion:2,track,date,races,sourceName,parser_version:PREMIUM_PARSER_ID,source_format:'BRISNET_PREMIUM_PLUS',odds_source:'MORNING_LINE_ONLY',excluded_appendix_pages:excluded,validation_issues:issues,warnings:['Brisnet Premium Plus figures are source evidence; not Beyers or Timeform. Original models remain PASS until provider-specific scoring is validated.','Verify today\'s scratches separately; historical Scratch Watch never scratches a runner.','Workouts are structured source evidence with explicit unresolved records and inferred-year labels; workouts and trainer angles remain unscored.',...(issues.length?[issues.length+' missing-evidence notes; review pace coverage.']:[])]};
 }

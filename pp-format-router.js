@@ -1,8 +1,10 @@
 import {parseRestoredCard,PARSER_ID} from './release-card-parser.js';
 import {parseBrisnetCard,BRISNET_PARSER_ID} from './brisnet-card-parser.js?v=20261018-distance4';
-import {parsePremiumCard,PREMIUM_PARSER_ID} from './brisnet-premium-parser.js?v=20261021-negative-speed';
+import {parsePremiumCard,PREMIUM_PARSER_ID} from './brisnet-premium-parser.js?v=20261021-source3';
 export const FORMAT_ROUTER_ID='PP-FORMAT-ROUTER-v2';
-export const SUPPORTED_PARSERS=Object.freeze([PARSER_ID,BRISNET_PARSER_ID,PREMIUM_PARSER_ID]);
+// v2 cards remain usable as previously verified evidence. New structured
+// workouts and the added distance glyph require an explicit source re-upload.
+export const SUPPORTED_PARSERS=Object.freeze([PARSER_ID,BRISNET_PARSER_ID,PREMIUM_PARSER_ID,'BRISNET-PREMIUM-PLUS-positioned-v2']);
 export function detectPPFormat(pages){
  const text=pages.map(p=>p.items?p.items.map(i=>i.str||'').join(' '):(p.lines||[]).map(l=>l.text||'').join('\n')).join('\n');
  const bris=/Ultimate PP'?s/i.test(text)&&/BRISNET|Bloodstock Research|brisnet\.com/i.test(text);
