@@ -1,10 +1,10 @@
 // Native Brisnet research adapters. These do not modify or impersonate the
 // locked Beyer/Timeform engines and never authorize probabilities or bets.
 import {MODEL} from './contender-model.js';
-export const BRISNET_MODEL_VERSION='20261016-v1';
+export const BRISNET_MODEL_VERSION='20261021-input-v2';
 export const BRISNET_MODEL_IDS=Object.freeze({v44c:'V44C-BRISNET-BASE-'+BRISNET_MODEL_VERSION,contender:'CONTENDER-BRISNET-'+BRISNET_MODEL_VERSION,mix1:'MIX1-BRISNET-'+BRISNET_MODEL_VERSION});
 export const BRISNET_METHODS=Object.freeze({
- v44c:'V4.4c-Brisnet base · experimental: latest Brisnet Speed 40 weight points, best Speed among the latest three starts 22, verified local jockey rate 7 and trainer rate 8. Connection percentages ×3, capped at 100. Missing components reweighted. Original Beyer-context adjustments and trainer angles are not applied.',
+ v44c:'V4.4c-Brisnet base · experimental: latest Brisnet Speed 40 weight points, best Speed among the latest three starts 22, verified jockey rate 7 and trainer rate 8. Local records require 25 starts; otherwise verified annual records require 25 starts. Connection percentages ×3, capped at 100. Missing components reweighted. Original Beyer-context adjustments and trainer angles are not applied.',
  contender:'Contender-Brisnet · experimental: retained Contender coefficients on field-relative native Speed, recent-five Speed, surface/distance Speed, matched Brisnet early/late pace, reliable connection records and layoff. Matched Speed trend uses at least three comparable starts. Unavailable career splits, pressure fit, workouts, trips and opposition are neutral; this is not the validated DRF model.',
  mix1:'MIX1-Brisnet · experimental: latest-two Brisnet Speed average 37%, best Speed from starts 3–5 12%, jockey 7%, trainer 17%, matched early pace 17%, matched surface/distance Speed 10%. Each input uses within-field percentiles; missing inputs reweighted. Original Beyer-context multiplier is not applied.',
  pace:'Pace: latest available E1 for sprints or E2 for routes, and LP separately, from the latest five actual starts within 365 days, same surface, same sprint/route category and within 0.5 furlong. No unmatched fallback. First-time starters remain unrated.'
@@ -18,7 +18,15 @@ export function isBrisnetRace(r){return r?.ratings_provider==='BRISNET'||/^BRISN
 function validDate(d){return typeof d==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(d)&&Number.isFinite(Date.parse(d))&&new Date(d).toISOString().slice(0,10)===d;}
 function percent(v,a){if(!finite(v))return null;if(a.length<=1||new Set(a).size===1)return 50;return 100*(a.filter(x=>x<v).length+.5*(a.filter(x=>x===v).length-1))/(a.length-1);}
 function centered(v,a){const p=percent(v,a);return p===null?0:p/50-1;}
+export function brisnetConnectionRecord(h,kind){
+ const c=h.source_context?.[kind];
+ for(const [scope,r] of [['local',c],['annual',c?.annual]]){
+  if(r?.status==='SOURCE_COUNTS_VERIFIED'&&Number.isInteger(r.starts)&&Number.isInteger(r.wins)&&r.starts>=25&&r.wins>=0&&r.wins<=r.starts)return {scope,starts:r.starts,wins:r.wins,year:r.year??null,value:Math.min(100,300*r.wins/r.starts)};
+ }
+ return {scope:null,starts:null,wins:null,value:null,reason:'No verified local or annual record with at least 25 starts'};
+}
 function connection(h,kind,reliable=false){
+ if(!reliable)return brisnetConnectionRecord(h,kind).value;
  const c=h.source_context?.[kind];
  for(const r of reliable?[c?.annual,c]:[c]){
   if(r?.status!=='SOURCE_COUNTS_VERIFIED'||!Number.isInteger(r.starts)||!Number.isInteger(r.wins)||r.starts<1||r.wins<0||r.wins>r.starts||reliable&&r.starts<25)continue;
@@ -58,7 +66,7 @@ function features(h,r){
  let slope=null;if(comparable.length>=3){const y=comparable.map(l=>l.speed).reverse(),xm=(y.length-1)/2,ym=avg(y);slope=y.reduce((s,v,i)=>s+(i-xm)*(v-ym),0)/y.reduce((s,_,i)=>s+(i-xm)**2,0);}
  const jockey=connection(h,'jockey'),trainer=connection(h,'trainer');
  const raw=[latest,weighted(rows,[.50,.25,.15,.07,.03]),maximum(figs.slice(0,3).filter(finite)),decayed(surface.filter(l=>finite(l.speed))),decayed(speedMatched),maximum(surface.filter(l=>l.age<=90&&finite(l.speed)).map(l=>l.speed)),early,late,null,null,null,null,connection(h,'jockey',true),connection(h,'trainer',true),Math.min(365,rows[0].age),null,null,null,null];
- return {h,raw,slope,base:{latest,best3:maximum(figs.slice(0,3).filter(finite)),jockey,trainer},mix:{recent:avg(recent),older:maximum(older),jockey,trainer,early,surfaceDistance:speedMatched.length>=2?avg(speedMatched.slice(0,3).map(l=>l.speed)):null},evidence:{provider:'BRISNET',latest_speed:latest,latest_date:rows[0].date,pace_call:paceKey.toUpperCase(),early,late,early_date:earlyLine?.date??null,late_date:lateLine?.date??null,comparable_starts:comparable.length,speed_history:figs,source_pages:[...new Set(rows.map(l=>l.source.page))]}};
+ return {h,raw,slope,base:{latest,best3:maximum(figs.slice(0,3).filter(finite)),jockey,trainer},mix:{recent:avg(recent),older:maximum(older),jockey,trainer,early,surfaceDistance:speedMatched.length>=2?avg(speedMatched.slice(0,3).map(l=>l.speed)):null},evidence:{provider:'BRISNET',connections:{jockey:brisnetConnectionRecord(h,'jockey'),trainer:brisnetConnectionRecord(h,'trainer')},latest_speed:latest,latest_date:rows[0].date,pace_call:paceKey.toUpperCase(),early,late,early_date:earlyLine?.date??null,late_date:lateLine?.date??null,comparable_starts:comparable.length,speed_history:figs,source_pages:[...new Set(rows.map(l=>l.source.page))]}};
 }
 function weightedParts(raw,weights,scaled=false,observed={}){
  const values=Object.fromEntries(Object.entries(raw).filter(([,v])=>finite(v)).map(([k,v])=>[k,scaled?percent(v,observed[k]):v]));
