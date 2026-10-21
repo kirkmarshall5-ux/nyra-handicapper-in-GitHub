@@ -63,6 +63,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <div><div class="muted small" style="margin-bottom:5px">Race</div><div class="racebar" id="racebar"></div></div>
 </div><div id="declaredScratches" class="small muted" role="status"></div><div class="flex" style="margin-top:12px;flex-wrap:wrap"><button class="primary" id="updateOddsScratches">Update Odds &amp; Scratches</button><span class="small muted" id="nyraUpdateStatus" role="status" aria-live="polite">Fetch NYRA updates for the selected race.</span></div></div>
 
+<div class="card span12"><div class="kicker">Prospective research snapshot</div><div class="flex" style="align-items:center;gap:12px;flex-wrap:wrap"><button class="primary" id="freezeAllModels">Freeze All Models</button><span class="small muted" id="freezeAllStatus" role="status">Local timestamped research export; no wager authorization. Verify before post time.</span></div></div>
 <div class="card span12"><div class="kicker">Keep both PP sources loaded</div><div class="flex" style="flex-wrap:wrap;margin-top:8px"><button class="primary" id="uploadBrisnet">1. Upload Brisnet PP</button><input id="brisnetFile" type="file" accept=".pdf" hidden><button class="primary" id="uploadDrf">2. Upload DRF PP</button><input id="drfFile" type="file" accept=".pdf" hidden><label for="ppSourceView" class="small">Horse grid / Pace source</label><select id="ppSourceView" style="width:auto"><option value="BRISNET">Brisnet</option><option value="DRF">DRF</option></select></div><div class="small muted" id="providerCardsStatus" role="status" style="margin-top:10px"></div><div class="small" id="providerUploadStatus" role="status" style="margin-top:6px"></div><div class="progress" style="margin-top:10px"><i id="ppProg"></i></div><div id="ppStatus" class="muted small" role="status" style="margin-top:8px">Upload each PP once using its matching button. Processing and saved cards stay in this browser.</div><details id="manageSavedCards" class="small" style="margin-top:12px"><summary>Manage saved cards</summary><div class="flex" style="flex-wrap:wrap;margin-top:10px"><button class="secondary" id="clearPP">Clear selected PP evidence</button><button class="secondary" id="resetSample">Reset DRF sample card</button></div><p class="muted">Clear affects the source selected in Horse grid / Pace source. Reset loads the demonstration into the DRF slot. The other PP source is retained.</p></details></div>
 <div class="card span12"><div class="kicker">Morning lines · both PP sources</div><div id="topMl" class="stack small"></div></div>
 <div class="span12 kicker">Brisnet models</div>
@@ -265,6 +266,26 @@ function renderModelRow(race,ids){
  contenderTarget.innerHTML=modelEvidenceHtml(race,contender,{model:'contender'})+contenderTarget.innerHTML+winLineNote(contenderLine);
 
 }
+// Research-only local freeze. Captures the current rendered model evidence without changing ratings.
+document.getElementById('freezeAllModels').onclick=()=>{
+ const status=document.getElementById('freezeAllStatus');
+ if(activeCard.id===sampleCard.id||!activeCard.date||!Object.keys(activeCard.races||{}).length){status.textContent='Freeze refused: load a verified, dated PP card first.';return;}
+ const now=new Date(),original=structuredClone(race),rows=[];
+ const ids=['brisTopContenders','brisFinisherCandidates','brisContenderCandidates','topContenders','finisherCandidates','contenderCandidates'];
+ const saved=ids.map(id=>[id,document.getElementById(id).innerHTML]);
+ try{
+  for(const key of Object.keys(activeCard.races).sort((a,b)=>+a-+b)){
+   race=structuredClone(activeCard.races[key]);
+   renderRaceInsights();
+   rows.push({race:race.race,date:race.date,track:race.track,starters:race.horses.map(h=>({number:h.n,name:h.name})),models:Object.fromEntries(ids.map(id=>[id,document.getElementById(id).innerText]))});
+  }
+  const record={schema:'nyra-local-research-freeze-v1',captured_at_utc:now.toISOString(),clock_source:'browser-device-unverified',card_id:activeCard.id,card_date:activeCard.date,track:activeCard.track,source:cardProvider(activeCard),parser_version:activeCard.parser_version||null,warning:'Browser time is not independently authenticated. Experimental/PASS rankings are not betting recommendations. Check each race post time and scratches.',races:rows};
+  const json=JSON.stringify(record,null,2),blob=new Blob([json],{type:'application/json'}),url=URL.createObjectURL(blob),link=document.createElement('a');
+  link.href=url;link.download='NYRA_FREEZE_'+activeCard.date+'_'+now.toISOString().replace(/[:.]/g,'-')+'.json';document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  status.textContent='Research snapshot exported: '+rows.length+' races at '+now.toLocaleTimeString()+'. Save the downloaded JSON. Browser clock is not independently verified.';
+ }catch(e){status.textContent='Freeze failed: '+e.message+'; no completed snapshot.';}
+ finally{race=original;for(const [id,html]of saved)document.getElementById(id).innerHTML=html;}
+};
 function providerRace(provider){if(provider===cardProvider(activeCard))return {race,reason:null};return pairedRace(providerCards,provider,race);}
 function renderRaceInsights(){
  const ids={BRISNET:['brisTopContenders','brisFinisherCandidates','brisContenderCandidates'],DRF:['topContenders','finisherCandidates','contenderCandidates']};
