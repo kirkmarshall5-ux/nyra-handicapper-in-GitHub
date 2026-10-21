@@ -1,6 +1,6 @@
 import {parseRestoredCard,PARSER_ID} from './release-card-parser.js';
 import {parseBrisnetCard,BRISNET_PARSER_ID} from './brisnet-card-parser.js?v=20261018-distance4';
-import {parsePremiumCard,PREMIUM_PARSER_ID} from './brisnet-premium-parser.js?v=20261021-negative-pace';
+import {parsePremiumCard,PREMIUM_PARSER_ID} from './brisnet-premium-parser.js?v=20261021-negative-speed';
 export const FORMAT_ROUTER_ID='PP-FORMAT-ROUTER-v2';
 export const SUPPORTED_PARSERS=Object.freeze([PARSER_ID,BRISNET_PARSER_ID,PREMIUM_PARSER_ID]);
 export function detectPPFormat(pages){
