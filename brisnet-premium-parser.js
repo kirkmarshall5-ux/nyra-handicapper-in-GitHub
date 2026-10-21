@@ -44,9 +44,14 @@ function parsePace(row,heading,today){
  }
  for(let n=0;n<keys.length;n++){
   const items=buckets[n],text=items.map(i=>i.str).join(' ');
-  const value=items.length===1?numeric(text):null;
-  if(value!==null&&n<3&&value<0)throw Error('Premium Plus negative pace figure');
-  values[keys[n]]=value;cells[keys[n]]={text,x:items[0]?.x??null,status:value===null?'MISSING_OR_AMBIGUOUS':'POSITIONED_NUMBER_VERIFIED'};
+  const rawValue=items.length===1?numeric(text):null;
+  // E1/E2/LP are nonnegative Brisnet ratings. A negative token here is
+  // likely a mispositioned signed 1c/2c pace-shape value, never a usable rating.
+  // Preserve uncertainty as null rather than contaminating handicapping inputs
+  // or discarding the entire card. Signed shape columns remain valid.
+  const invalidPace=rawValue!==null&&n<3&&rawValue<0;
+  const value=invalidPace?null:rawValue;
+  values[keys[n]]=value;cells[keys[n]]={text,x:items[0]?.x??null,status:invalidPace?'NEGATIVE_PACE_TOKEN_REJECTED':value===null?'MISSING_OR_AMBIGUOUS':'POSITIONED_NUMBER_VERIFIED'};
  }
  // Some PDF text items begin in the date column and also contain distance/going.
  // Selecting by item start-x discarded those complete, readable condition tokens.
