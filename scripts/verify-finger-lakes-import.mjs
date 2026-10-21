@@ -1,4 +1,3 @@
-import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
@@ -47,10 +46,13 @@ let morningLineParity='NOT_CERTIFIED_NO_INDEPENDENT_FIXTURE';
 if(fixturePath){
  const fixture=JSON.parse(await readFile(fixturePath,'utf8'));
  assert.equal(fixture.records?.length,56,'Expected 56 independently extracted source rows');
+ assert.equal(fixture.source_sha256??digest,digest,'Independent fixture source fingerprint mismatch');
  const normalize=x=>String(x).toLowerCase().replace(/[^a-z0-9]/g,'');
  const source=new Map();
  for(const row of fixture.records){
   const key=row.race+':'+row.program;
+  assert.ok(/^\d+$/.test(String(row.program)),'Invalid fixture program '+key);
+  assert.ok(/^\d+\/\d+$/.test(String(row.ml)),'Invalid independent source morning line '+key);
   assert.ok(!source.has(key),'Duplicate independent fixture key '+key);
   source.set(key,row);
  }
@@ -63,6 +65,7 @@ if(fixturePath){
   matched++;
  }
  assert.equal(matched,56);
+ assert.equal(source.size,matched,'Unexpected extra fixture identity');
  morningLineParity='PASS_56_OF_56_INDEPENDENT_SOURCE_MATCH';
 }
 console.log(JSON.stringify({status:'PASS',source_fixture:knownSources.get(digest),source_sha256:digest,races:8,pp_entries:56,counts,race7_furlongs:card.races[7].distance_furlongs,excluded_appendix_pages:card.excluded_appendix_pages,validation_issues:card.validation_issues?.length??0,morning_line_parity:morningLineParity,scratch_reconciliation:'OFFICIAL_RESULTS_VERIFIED_SEPARATELY'},null,2));
