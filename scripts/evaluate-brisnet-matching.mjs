@@ -47,7 +47,7 @@ export async function runMatchingExperiment(manifest){
      for(const model of ['v44c','finisher','contender','mix1']){
       const m=model==='finisher'?result.finisher:result.native[model];assert.equal(m.bettingEnabled,false);assert.equal(m.probabilityCalibrated,false);
       const coverage={rated:m.rankings.length,speed:m.rankings.filter(h=>model==='finisher'?finite(h.components.matched_speed.raw):model==='mix1'?finite(h.raw_features.surfaceDistance):model==='contender'?finite(h.raw_features[4]):false).length,late:m.rankings.filter(h=>model==='finisher'?finite(h.components.late_pace.raw):finite(h.evidence?.late)).length};
-      rows.push({date:r.date,race:r.race,cohort,field_size:m.eligible_count,variant:v.id,model,candidate_id:'MATCHING-RESEARCH-'+v.id+'-'+model,parent_model_id:m.model_id,coverage,observed_top4:actual,rankings:m.rankings.map(h=>({program:String(h.n),rank:h.rank,score:h.score})),grade:actual?gradeOrder(m.rankings,actual):null,notes:info?.notes??[]});
+      rows.push({date:r.date,race:r.race,surface:r.surface,distance_furlongs:r.distance_furlongs,cohort,field_size:m.eligible_count,variant:v.id,model,candidate_id:'MATCHING-RESEARCH-'+v.id+'-'+model,parent_model_id:m.model_id,coverage,observed_top4:actual,rankings:m.rankings.map(h=>({program:String(h.n),rank:h.rank,score:h.score})),grade:actual?gradeOrder(m.rankings,actual):null,notes:info?.notes??[]});
      }
     }
     assert.equal(JSON.stringify(r),before,'Source mutation');
