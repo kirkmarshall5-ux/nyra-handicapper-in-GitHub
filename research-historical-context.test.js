@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {compareHistoricalLine,summarizeHistoricalContext} from './research-historical-context.js';
+const historical={surface:'Dirt',furlongs:6,speed:88,e1:90,e2:91,late:84,condition_evidence:{status:'SOURCE_TOKEN_VERIFIED',approximate:false}};
+test('same-surface sprint with close distance is descriptive only',()=>{const r=compareHistoricalLine(historical,{surface:'Dirt',furlongs:6.5});assert.equal(r.status,'CONDITIONS_COMPARABLE');assert.equal(r.interpretation,'DESCRIPTIVE_ONLY_NOT_PREDICTIVE');});
+test('surface mismatch is not a positive match',()=>{const r=compareHistoricalLine(historical,{surface:'Turf',furlongs:6});assert.equal(r.status,'CONDITIONS_DIFFER');assert.ok(r.reasons.includes('DIFFERENT_SURFACE'));});
+test('route versus sprint is explicitly identified',()=>{const r=compareHistoricalLine(historical,{surface:'Dirt',furlongs:8});assert.ok(r.reasons.includes('SPRINT_ROUTE_CHANGE'));});
+test('missing speed or LP stays null, not zero or verified',()=>{const r=compareHistoricalLine({...historical,speed:null,late:null},{surface:'Dirt',furlongs:6});assert.equal(r.figures.speed,null);assert.equal(r.figures.late,null);assert.deepEqual(r.missingFigures,['speed','late']);});
+test('unverified historical surface/distance is HOLD',()=>{const r=compareHistoricalLine({...historical,condition_evidence:{status:'UNRESOLVED'}},{surface:'Dirt',furlongs:6});assert.equal(r.status,'HOLD');});
+test('mixed evidence reports partial coverage',()=>{const r=summarizeHistoricalContext([historical,{...historical,condition_evidence:{status:'UNRESOLVED'}}],{surface:'Dirt',furlongs:6});assert.equal(r.status,'PARTIAL_EVIDENCE');assert.equal(r.comparableLines,1);});

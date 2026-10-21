@@ -1,0 +1,29 @@
+{
+  "status": "SOURCE_HEADING_VERIFIED_PRODUCTION_PDFJS_NOT_YET_EXECUTED",
+  "card": "Finger Lakes 2026-10-21",
+  "source_pdf": "flx1021p.pdf",
+  "sha256": "1c9e3bedecd761d2a825c4513642c4aeb31d477cfde56695df725a9ecc43637a",
+  "pages": 18,
+  "races": 8,
+  "source_heading_distances": {
+    "1": "6 Furlongs",
+    "2": "5½ Furlongs",
+    "3": "1 Mile",
+    "4": "1 Mile",
+    "5": "5½ Furlongs",
+    "6": "5½ Furlongs",
+    "7": "5½ Furlongs",
+    "8": "1m70yds"
+  },
+  "source_observation": "Race 8 heading occurs on PDF pages 16 and 17. Page 18 is INDEX OF HORSES. Every race heading contains Premium Plus PP's, Finger Lakes, date and race number.",
+  "branch_fix": "brisnet-card-parser.js branch adds compact 1m70yds support; main lacks it",
+  "verified_with": "Original PDF extracted text independently, not browser PDF.js",
+  "remaining": [
+    "Execute production PDF.js parser on original bytes",
+    "Assert all 8 races, 52 runners and program numbers",
+    "Verify all three Brisnet model panels",
+    "Review and deploy only after acceptance"
+  ],
+  "licensed_pdf_committed": false,
+  "model_changed": false
+}

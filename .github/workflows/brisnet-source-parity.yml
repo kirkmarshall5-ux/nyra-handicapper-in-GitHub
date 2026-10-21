@@ -1,0 +1,100 @@
+name: Brisnet PDF.js source parity (research only)
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'brisnet-premium-parser.js'
+      - 'scripts/audit-premium-history.mjs'
+      - 'scripts/compare-source-importer.mjs'
+      - '.github/workflows/brisnet-source-parity.yml'
+      - 'package.json'
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install PDF.js
+        run: npm install --no-audit --no-fund --ignore-scripts
+      - name: Verify audit modules
+        run: |
+          node --check scripts/audit-premium-history.mjs
+          node --check scripts/compare-source-importer.mjs
+          node --test research-source-importer-reconcile.test.js
+      - name: Restore private test cards if configured
+        env:
+          PRIVATE_PDF_BUNDLE_BASE64: ${{ secrets.BRISNET_AUDIT_PDFS_BASE64 }}
+          PRIVATE_PDF_BUNDLE_URL: ${{ secrets.BRISNET_AUDIT_BUNDLE_URL }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/brisnet-cards" audit-results
+          set -euo pipefail
+          if [ -n "$PRIVATE_PDF_BUNDLE_URL" ]; then
+            case "$PRIVATE_PDF_BUNDLE_URL" in https://*) ;; *) echo 'Only HTTPS signed URLs accepted' >&2; exit 1;; esac
+            curl --fail --location --silent --show-error --retry 2 --max-time 120 "$PRIVATE_PDF_BUNDLE_URL" -o "$RUNNER_TEMP/brisnet-input.tar.gz"
+          elif [ -n "$PRIVATE_PDF_BUNDLE_BASE64" ]; then
+            printf '%s' "$PRIVATE_PDF_BUNDLE_BASE64" | base64 -d > "$RUNNER_TEMP/brisnet-input.tar.gz"
+          else
+            echo 'SOURCE_PDFS_UNAVAILABLE: set BRISNET_AUDIT_BUNDLE_URL or BRISNET_AUDIT_PDFS_BASE64' | tee audit-results/status.txt
+            exit 0
+          fi
+          tar -tzf "$RUNNER_TEMP/brisnet-input.tar.gz" | while IFS= read -r entry; do
+            case "$entry" in /*|../*|*/../*|*'/..') echo 'Unsafe archive entry' >&2; exit 1;; esac
+          done
+          tar -xzf "$RUNNER_TEMP/brisnet-input.tar.gz" --no-same-owner --no-same-permissions -C "$RUNNER_TEMP/brisnet-cards"
+          count=$(find "$RUNNER_TEMP/brisnet-cards" -maxdepth 1 -type f -name '*.pdf' | wc -l)
+          if [ "$count" -lt 3 ]; then
+            echo "EXPECTED_AT_LEAST_THREE_PDFS: got $count" | tee audit-results/status.txt
+            exit 1
+          fi
+          echo "Private PDFs restored ($count files) into temporary runner directory" > audit-results/status.txt
+      - name: Run production PDF.js importer audit
+        env:
+          CARD_DIR: ${{ runner.temp }}/brisnet-cards
+        run: |
+          set +e
+          found=0
+          failed=0
+          for pdf in "$CARD_DIR"/*.pdf; do
+            [ -f "$pdf" ] || continue
+            found=1
+            filename="$(basename "$pdf" .pdf)"
+            safe="$(printf '%s' "$filename" | tr -c 'A-Za-z0-9_-' '_')"
+            node scripts/audit-premium-history.mjs "$pdf" "audit-results/${safe}.json"
+            code=$?
+            if [ "$code" -ne 0 ]; then
+              echo "AUDIT_FLAGGED ${safe} exit=${code}" >> audit-results/status.txt
+              failed=1
+            fi
+          done
+          if [ "$found" -eq 0 ]; then
+            echo 'NO_PDF_INPUTS: production parity remains HOLD' >> audit-results/status.txt
+          elif [ "$failed" -eq 1 ]; then
+            echo 'AUDIT_FLAGS_PRESENT: inspect artifacts; no acceptance' >> audit-results/status.txt
+          else
+            echo 'PDFJS_IMPORT_COMPLETED: independent field parity still required' >> audit-results/status.txt
+          fi
+          exit 0
+      - name: Enforce source-PDF execution gate
+        if: always()
+        run: |
+          if ! ls audit-results/*.json >/dev/null 2>&1; then
+            echo 'BLOCKED: No production PDF.js audit JSON generated from original Brisnet PDFs.' >&2
+            exit 1
+          fi
+          if grep -q 'AUDIT_FLAGGED\|NO_PDF_INPUTS\|SOURCE_PDFS_UNAVAILABLE' audit-results/status.txt; then
+            echo 'BLOCKED: Source PDFs unavailable or audit flags present.' >&2
+            exit 1
+          fi
+          echo 'PDF.js extraction executed; independent source field parity remains a separate gate.'
+      - name: Upload research-only audit outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: brisnet-pdfjs-research-audit
+          path: audit-results/
+          retention-days: 7

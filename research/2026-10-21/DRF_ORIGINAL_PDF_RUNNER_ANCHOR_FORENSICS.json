@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-21",
+  "track": "Finger Lakes",
+  "source": "Original user-provided DRF PDF, 17 pages; local PyMuPDF text extraction forensic check (NOT production PDF.js)",
+  "sha256": "c5a1d507b388bb1df9116da1a6596f6b2d3c2c6cc11b0edcf62dbf49e5ac6a5e",
+  "race_owner_anchor_counts": {
+    "1": 6,
+    "2": 6,
+    "3": 6,
+    "4": 6,
+    "5": 8,
+    "6": 7,
+    "7": 6,
+    "8": 7
+  },
+  "total_owner_anchors": 52,
+  "program_number_immediately_preceding_owner_anchor": 0,
+  "method": "For each Own: line, inspect up to four preceding text rows before the immediately preceding horse-name row for an isolated program number matching ^[0-9]{1,2}[ABX]?$; zero of 52 anchors satisfied this signature in PyMuPDF extraction.",
+  "implication": "Current data-corrected-parser.js obtains program number only from this preceding-row signature. The extracted layout may yield empty n for all 52, producing downstream identity rejection. This is a likely root cause but requires production PDF.js reproduction before confirming.",
+  "safety": "No program number inferred from name, index order or other PP source. No source PDF bytes committed. No change to model formulas.",
+  "next_gate": "Run original PDF via browser PDF.js; inspect individual text items and font/position geometry for authoritative printed program labels, then test against all 52 independently verified entries."
+}

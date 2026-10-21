@@ -1,0 +1,81 @@
+{
+  "card": "Finger Lakes 2026-10-21",
+  "source": "original licensed Brisnet flx1021p.pdf",
+  "sha256": "1c9e3bedecd761d2a825c4513642c4aeb31d477cfde56695df725a9ecc43637a",
+  "method": "Independently extracted original PDF text using PyMuPDF, then executed the branch's brisnetDistance regular-expression logic with Node.js against every race heading. This is not a production PDF.js run.",
+  "total_pdf_pages": 18,
+  "race_data_pages": 17,
+  "heading_matches": 17,
+  "recognized": 17,
+  "unrecognized": 0,
+  "by_race": {
+    "1": {
+      "pages": [
+        1,
+        2
+      ],
+      "distance": "6 Furlongs"
+    },
+    "2": {
+      "pages": [
+        3,
+        4
+      ],
+      "distance": "5½ Furlongs"
+    },
+    "3": {
+      "pages": [
+        5,
+        6
+      ],
+      "distance": "1 Mile"
+    },
+    "4": {
+      "pages": [
+        7,
+        8
+      ],
+      "distance": "1 Mile"
+    },
+    "5": {
+      "pages": [
+        9,
+        10,
+        11
+      ],
+      "distance": "5½ Furlongs"
+    },
+    "6": {
+      "pages": [
+        12,
+        13
+      ],
+      "distance": "5½ Furlongs"
+    },
+    "7": {
+      "pages": [
+        14,
+        15
+      ],
+      "distance": "5½ Furlongs"
+    },
+    "8": {
+      "pages": [
+        16,
+        17
+      ],
+      "distance": "1m70yds",
+      "converted_furlongs": 8.318181818181818
+    }
+  },
+  "index_page": 18,
+  "certification": "HEADING_DISTANCE_GATE_PASS_ONLY",
+  "remaining": [
+    "Original-binary production PDF.js import end-to-end",
+    "Verify all eight races and 52 runner identities, numbers and rankings",
+    "iPad live upload after reviewed deployment",
+    "Official scratches and pre-off freeze"
+  ],
+  "deployment": "NOT_PERFORMED",
+  "locked_model_changes": false
+}

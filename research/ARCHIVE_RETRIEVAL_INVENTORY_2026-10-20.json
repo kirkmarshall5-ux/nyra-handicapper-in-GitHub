@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "purpose": "Archived research package retrieval inventory and acceptance gates",
+  "retrieved_sources": [
+    {
+      "name": "PRELIMINARY_CARD.json",
+      "source": "ChatGPT Library",
+      "date": "2026-10-10",
+      "snapshot_created_at_utc": "2026-10-09T23:34:19.153Z",
+      "rule_id": "PROSPECTIVE-PAPER-20261009-V1",
+      "source_pdf_sha256": "251f8372a75fc3833a856a18327c6dcb1f4f60a02b21eac840f66fe62c8f3519",
+      "results_accessed": false,
+      "final_fields_verified": false,
+      "status": "PRELIMINARY_PP_ONLY_NOT_FINAL_FIELD_FREEZE",
+      "grading": "HOLD"
+    },
+    {
+      "name": "V44C_RESEARCH_QUOTES_2026-10-09.json",
+      "source": "ChatGPT Library",
+      "record_count": 0,
+      "grading": "NO_PROSPECTIVE_QUOTES"
+    },
+    {
+      "name": "V44C_RESEARCH_QUOTES_2026-10-09(1).json",
+      "source": "ChatGPT Library",
+      "record_count": 0,
+      "grading": "NO_PROSPECTIVE_QUOTES"
+    },
+    {
+      "name": "AQU_2025-03-01_Gate4_replay_output.json",
+      "source": "ChatGPT Library",
+      "kind": "RETROSPECTIVE_REPLAY_NOT_PROSPECTIVE",
+      "grading": "EXCLUDE_FROM_PROSPECTIVE_PERFORMANCE"
+    }
+  ],
+  "belmont_2026_10_16": {
+    "source_records": [
+      "research/2026-10-16/R1_R2_SCREENSHOT_RESULTS.json",
+      "research/2026-10-16/R3_SCREENSHOT_RESULT.json"
+    ],
+    "independently_verified_pre_off_snapshot_found": false,
+    "official_off_time_verified": false,
+    "certified_races": 0,
+    "status": "HOLD"
+  },
+  "next_steps": [
+    "Retrieve independent October 16 frozen snapshot package with timestamped full-field rankings and provider provenance",
+    "Verify official off time, final starters and official finish order per race",
+    "Run research-model-race-grader.js only after all comparison gates pass"
+  ],
+  "no_scoring_changes": true,
+  "no_live_deployment": true
+}
