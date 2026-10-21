@@ -1,5 +1,7 @@
 # Matching tolerance development experiment — October 21, 2026
 
+**Current active-model report:** [V4.4c, Finisher and Contender only](active-three/README.md). The earlier four-model experiment below is retained as historical evidence.
+
 **Decision: retain the live matching rule.** Wider matching improves evidence
 coverage substantially but provides too little ordering improvement to promote.
 This is retrospective development analysis, not a blind validation or a replay
