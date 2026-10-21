@@ -80,10 +80,10 @@ export function parsePremiumCard(input,{sourceName='Brisnet Premium Plus PDF'}={
    const nm=clean(start.str).match(/^(.*?)\s*\((E\/P|E|P|S|NA)\s+([0-8])\)$/);
    if(!nm[1]||nm[1].length>80||! /^[\p{L}\p{N}’' .()&-]+$/u.test(nm[1]))throw Error('Premium Plus unsafe horse identity');
    const programs=items.filter(i=>i.x<start.transform[4]-15&&Math.abs(i.y-(y-5))<1.2&&/^\d+[A-Z]?$/.test(i.str));
-   if(programs.length!==1)throw Error('Premium Plus program number ambiguous for '+nm[1]);const program=programs[0].str;
-   if(r.horses.some(h=>h.n===program||h.name===nm[1]))throw Error('Duplicate Premium Plus runner');
+   if(programs.length!==1)throw Error('Premium Plus program number unverified: race '+rn+', PDF page '+page.pageNumber+', horse '+JSON.stringify(nm[1])+', positioned candidates '+programs.length+'. Original card preserved.');const program=programs[0].str;
+   if(r.horses.some(h=>h.n===program||h.name===nm[1]))throw Error('Duplicate Premium Plus runner: race '+rn+', PDF page '+page.pageNumber+', program '+program+', horse '+JSON.stringify(nm[1])+'. Original card preserved.');
    const life=block.match(/Life:\s*(\d+)\s+(\d+)\s*-\s*(\d+)\s*-\s*(\d+)/);if(!life||+life[2]+ +life[3]+ +life[4]>+life[1])throw Error('Premium Plus career record unverified');
-   const ml=items.filter(i=>i.x<start.transform[4]-15&&i.y<y-9&&i.y>y-18&&/^\d+(?:\/\d+|\.\d+)?$/.test(i.str));if(ml.length!==1)throw Error('Premium Plus morning line unverified');
+   const ml=items.filter(i=>i.x<start.transform[4]-15&&i.y<y-9&&i.y>y-18&&/^\d+(?:\/\d+|\.\d+)?$/.test(i.str));if(ml.length!==1)throw Error('Premium Plus morning line unverified: race '+rn+', PDF page '+page.pageNumber+', program '+program+', horse '+JSON.stringify(nm[1])+', positioned candidates '+ml.length+'. Original card preserved.');
    const headings=lines.filter(l=>/DATE TRK/.test(l.text)&&/E1\s+E2\/\s+LP/.test(l.text)&&/\bSPD\b/.test(l.text));
    const historical=lines.filter(l=>/^\d{2}[A-Za-z]{3}\d{2}[A-Za-z]+/.test(l.text));if(historical.length&&headings.length!==1)throw Error('Premium Plus running-line column heading unverified');
    const history=historical.map(l=>parsePace(l,headings[0],date));
