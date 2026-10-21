@@ -20,7 +20,7 @@ export function inspectRunnerIdentities(card){
   const seenNumbers=new Set(),seenNames=new Set();
   for(const [index,horse] of (race?.horses||[]).entries()){
    const number=String(horse?.n??'').trim().toUpperCase();
-   const name=String(horse?.name??'').trim().toLowerCase().replace(/\\s+/g,' ');
+   const name=String(horse?.name??'').trim().toLowerCase().replace(/\s+/g,' ');
    if(!number||!name)issues.push({race:key,index:index+1,reason:'MISSING_RUNNER_IDENTITY',number,name});
    if(number&&seenNumbers.has(number))issues.push({race:key,index:index+1,reason:'DUPLICATE_PROGRAM',number,name});
    if(name&&seenNames.has(name))issues.push({race:key,index:index+1,reason:'DUPLICATE_HORSE_NAME',number,name});
