@@ -43,8 +43,10 @@ for(let n=1;n<=8;n++){
   assert.equal(current.horses.length,wanted.length,provider+' race '+n+' entrant count');
   const actual=current.horses.map(h=>norm(h.name)).sort();
   assert.deepEqual(actual,wanted,provider+' race '+n+' horse identity mismatch');
-  const programs=current.horses.map(h=>String(h.n));
+  const programs=current.horses.map(h=>String(h.n||'').trim());
+  assert.ok(programs.every(Boolean),provider+' race '+n+' missing program number');
   assert.equal(new Set(programs).size,programs.length,provider+' race '+n+' duplicate program numbers');
+  assert.ok(current.horses.every(h=>String(h.ml||'').trim()&&String(h.ml).trim()!=='—'),provider+' race '+n+' missing morning line');
  }
 }
 assert.ok(Math.abs(card.races[8].distance_furlongs-(8+70/220))<1e-9,'Race 8 distance incorrect');
