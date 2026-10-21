@@ -1,6 +1,6 @@
 // Separate modern Premium Plus adapter. Brisnet figures never become Beyer/Timeform.
 import {reconstructPage,fingerprintPages} from './card-loader.js';
-import {brisnetDistance} from './brisnet-card-parser.js?v=20261018-distance4';
+import {brisnetDistance} from './brisnet-card-parser.js?v=20261019-compact-m70';
 import {premiumHistoryConditions} from './brisnet-premium-conditions.js';
 export const PREMIUM_PARSER_ID='BRISNET-PREMIUM-PLUS-positioned-v2';
 const clean=x=>String(x??'').replace(/\s+/g,' ').trim();
@@ -52,7 +52,7 @@ function parsePace(row,heading,today){
  // Selecting by item start-x discarded those complete, readable condition tokens.
  const conditions=premiumHistoryConditions(row.text);
  const pp=row.items.find(i=>i.x>ends[5]&&i.x<ends[5]+gap&&/^\d+$/.test(i.str));
- return {...d,...values,...conditions,turn_time:values.e1!==null&&values.e2!==null?values.e2-values.e1:null,race_rating:null,class_rating:null,past_post:pp?+pp.str:null,status:values.e2!==null&&values.late!==null?'PACE_SOURCE_SEQUENCE_VERIFIED':'RATING_COLUMNS_UNRESOLVED',source:{provider:'BRISNET',page:row.pageNumber,y:row.y,text:row.text,cells}};
+ return {...d,...values,...conditions,turn_time:values.e1!==null&&values.e2!==null?values.e2-values.e1:null,race_rating:null,class_rating:null,past_post:pp?+pp.str:null,status:values.e1!==null&&values.e2!==null&&values.late!==null&&values.speed!==null?'PACE_AND_SPEED_SOURCE_VERIFIED':'RATING_COLUMNS_UNRESOLVED',source:{provider:'BRISNET',page:row.pageNumber,y:row.y,text:row.text,cells}};
 }
 export function parsePremiumCard(input,{sourceName='Brisnet Premium Plus PDF'}={}){
  const pages=input.map(p=>{const r=reconstructPage(p.items,p.pageNumber,.65);const widths=new Map(p.items.map(q=>[clean(q.str)+'|'+q.transform[4].toFixed(2)+'|'+q.transform[5].toFixed(2),q.width]));for(const row of r.lines)for(const i of row.items)i.width=widths.get(i.str+'|'+i.x.toFixed(2)+'|'+i.y.toFixed(2))||0;return r;});
@@ -64,7 +64,7 @@ export function parsePremiumCard(input,{sourceName='Brisnet Premium Plus PDF'}={
   const ti=head.items.findIndex(i=>/Premium Plus PP'?s/i.test(i.str)),name=clean(head.items[ti+1]?.str),day=dateHeading(head.text),rn=+head.text.match(/\bRace\s+(\d+)/)[1];
   if(!/^[A-Za-z][A-Za-z .'-]+$/.test(name))throw Error('Premium Plus track heading unverified');
   if(track&&(name!==track||day!==date))throw Error('Mixed Premium Plus track/date');track=name;date=day;
-  const distance=brisnetDistance(head.text);if(!distance)throw Error('Premium Plus primary distance unverified');
+  const distance=brisnetDistance(head.text);if(!distance)throw Error('Premium Plus primary distance unverified: race '+rn+', PDF page '+page.pageNumber+', heading '+JSON.stringify(clean(head.text).slice(0,240)));
   const surface=/\([Tt]\)|\bTurf\b/.test(head.text)?'Turf':/All Weather|Synthetic|Tapeta/i.test(head.text)?'Synth':'Dirt';
   const r=races[rn]??={race:rn,track,date,header:head.text,dist:distance.display,distance_furlongs:distance.furlongs,surface,cls:head.items.slice(ti+2).map(i=>i.str).join(' '),conditions:{surface,primaryDistanceLine:distance.display,unsupported:false},post:'Unverified',oddsMode:'Morning line (pre-race)',horses:[],parser_blockers:['BRISNET_SOURCE_MODEL_VALIDATION_PENDING'],source_format:'BRISNET_PREMIUM_PLUS',ratings_provider:'BRISNET',source_pages:[],brisnet_pars:null};
   if(r.distance_furlongs!==distance.furlongs||r.surface!==surface)throw Error('Conflicting Premium Plus race conditions');r.source_pages.push(page.pageNumber);
@@ -80,15 +80,21 @@ export function parsePremiumCard(input,{sourceName='Brisnet Premium Plus PDF'}={
    const nm=clean(start.str).match(/^(.*?)\s*\((E\/P|E|P|S|NA)\s+([0-8])\)$/);
    if(!nm[1]||nm[1].length>80||! /^[\p{L}\p{N}’' .()&-]+$/u.test(nm[1]))throw Error('Premium Plus unsafe horse identity');
    const programs=items.filter(i=>i.x<start.transform[4]-15&&Math.abs(i.y-(y-5))<1.2&&/^\d+[A-Z]?$/.test(i.str));
-   if(programs.length!==1)throw Error('Premium Plus program number ambiguous for '+nm[1]);const program=programs[0].str;
-   if(r.horses.some(h=>h.n===program||h.name===nm[1]))throw Error('Duplicate Premium Plus runner');
+   if(programs.length!==1)throw Error('Premium Plus program number unverified: race '+rn+', PDF page '+page.pageNumber+', horse '+JSON.stringify(nm[1])+', positioned candidates '+programs.length+'. Original card preserved.');const program=programs[0].str;
+   if(r.horses.some(h=>h.n===program||h.name===nm[1]))throw Error('Duplicate Premium Plus runner: race '+rn+', PDF page '+page.pageNumber+', program '+program+', horse '+JSON.stringify(nm[1])+'. Original card preserved.');
    const life=block.match(/Life:\s*(\d+)\s+(\d+)\s*-\s*(\d+)\s*-\s*(\d+)/);if(!life||+life[2]+ +life[3]+ +life[4]>+life[1])throw Error('Premium Plus career record unverified');
-   const ml=items.filter(i=>i.x<start.transform[4]-15&&i.y<y-9&&i.y>y-18&&/^\d+(?:\/\d+|\.\d+)?$/.test(i.str));if(ml.length!==1)throw Error('Premium Plus morning line unverified');
+   const ml=items.filter(i=>i.x<start.transform[4]-15&&i.y<y-9&&i.y>y-18&&/^\d+(?:\/\d+|\.\d+)?$/.test(i.str));if(ml.length!==1)throw Error('Premium Plus morning line unverified: race '+rn+', PDF page '+page.pageNumber+', program '+program+', horse '+JSON.stringify(nm[1])+', positioned candidates '+ml.length+'. Original card preserved.');
    const headings=lines.filter(l=>/DATE TRK/.test(l.text)&&/E1\s+E2\/\s+LP/.test(l.text)&&/\bSPD\b/.test(l.text));
    const historical=lines.filter(l=>/^\d{2}[A-Za-z]{3}\d{2}[A-Za-z]+/.test(l.text));if(historical.length&&headings.length!==1)throw Error('Premium Plus running-line column heading unverified');
    const history=historical.map(l=>parsePace(l,headings[0],date));
+   if(history.some(h=>!h))throw Error('Premium Plus recognized historical line produced null record for '+nm[1]);
+   // Evidence coverage gate: printed historical dates must survive parsing exactly.
+   // Never equate absent recognized history with a first-time starter.
+   const printedDates=historical.map(l=>pastDate(l.text,date)?.date);
+   if(printedDates.some(d=>!d)||history.some((h,i)=>h?.date!==printedDates[i]))throw Error('Premium Plus historical date/source parity failed for '+nm[1]);
+   if(+life[1]>0&&history.length===0)issues.push('#'+program+' '+nm[1]+': SOURCE_HISTORY_UNVERIFIED_NOT_FTS');
    if(+life[1]===0&&history.length)throw Error('Premium Plus FTS/running-line contradiction');
-   if(+life[1]>0&&!history.length)issues.push('#'+program+' '+nm[1]+': experienced runner without extracted running lines');
+
    const unresolved=history.filter(l=>l.status==='RATING_COLUMNS_UNRESOLVED');if(unresolved.length)issues.push('#'+program+' '+nm[1]+': '+unresolved.length+' rows have missing pace; Unknown retained');
    const unknownConditions=history.filter(l=>l.condition_evidence.status==='UNRESOLVED');if(unknownConditions.length)issues.push('#'+program+' '+nm[1]+': '+unknownConditions.length+' historical conditions unresolved; excluded from matching');
    const jockey=connection(block,'jockey'),trainer=connection(block,'trainer'),sire=block.match(/Sire\s*:\s*(.+)/),dam=block.match(/Dam:\s*(.+)/),power=block.match(/Prime Power:\s*(\d+\.\d+)/);
