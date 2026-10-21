@@ -5,7 +5,7 @@ const root=path.resolve(import.meta.dirname,'..'),models=['v44c','finisher','con
 const policies=[.5,1,1.5].flatMap(speed=>[.5,1,1.5].map(pace=>({id:'S'+speed+'_P'+pace,speed,pace})));
 function replaceOne(s,a,b){assert.equal(s.split(a).length-1,1,'Source contract changed: '+a);return s.replace(a,b);}
 function absoluteImports(s){return s.replace(/from (['"])(\.\/[^'"]+)\1/g,(_,q,p)=>'from '+q+new URL(p,pathToFileURL(root+'/')).href+q);}
-async function adapter(p,dir){
+export async function adapter(p,dir){
  let n=fs.readFileSync(path.join(root,'brisnet-models.js'),'utf8'),f=fs.readFileSync(path.join(root,'finisher-inputs.js'),'utf8');
  const nativeLine=n.match(/^ const matched=surface\.filter.*$/m)?.[0];assert.ok(nativeLine);
  const speedLine=nativeLine.replace('<=.5','<='+p.speed),paceLine=nativeLine.replace('const matched=','const paceMatched=').replace('<=.5','<='+p.pace);
@@ -15,6 +15,11 @@ async function adapter(p,dir){
  const finLine=f.match(/^   const matched=rows\.filter.*$/m)?.[0];assert.ok(finLine);
  f=replaceOne(f,finLine,finLine.replace('<=FINISHER_SPEC.distance_tolerance_furlongs','<='+p.speed)+'\n'+finLine.replace('const matched=','const paceMatched=').replace('<=FINISHER_SPEC.distance_tolerance_furlongs','<='+p.pace));
  f=replaceOne(f,'late_pace:matched.find','late_pace:paceMatched.find');
+ if(p.lateMode==='mean3'){
+  const helper="import {meanLate} from "+JSON.stringify(pathToFileURL(path.join(root,'scripts/late-pace-research.mjs')).href)+";\n";
+  n=helper+replaceOne(n,'late=lateLine?.late??null','late=meanLate(paceMatched)');
+  f=helper+replaceOne(f,'late_pace:paceMatched.find(l=>finite(l.late))?.late??null','late_pace:meanLate(paceMatched)');
+ }
  const np=path.join(dir,p.id+'-native.mjs'),fp=path.join(dir,p.id+'-finisher.mjs');fs.writeFileSync(np,absoluteImports(n));fs.writeFileSync(fp,absoluteImports(f));
  const [nm,fm]=await Promise.all([import(pathToFileURL(np)),import(pathToFileURL(fp))]);
  return r=>{const native=nm.rankBrisnetModels(r);return {v44c:native.v44c,finisher:fm.rankFinishers(r),contender:native.contender};};
@@ -24,7 +29,7 @@ export function positionMetrics(rankings,actual,fieldSize){
  for(let i=1;i<4;i++)for(let j=i+1;j<4;j++)if(ranks.has(actual[i])&&ranks.has(actual[j])){comparable++;correct+=+(ranks.get(actual[i])<ranks.get(actual[j]));}
  return {...gradeOrder(rankings,actual),slot_hits:actual.map((n,i)=>n===pred[i]),underneath_correct:correct,underneath_comparable:comparable,underneath_possible:3,top4_position_error:actual.reduce((s,n,i)=>s+Math.abs((ranks.get(n)??fieldSize+1)-(i+1)),0)/4};
 }
-function summarize(rows){
+export function summarize(rows){
  const groups={};for(const r of rows){if(!r.grade)continue;const k=r.cohort+'|'+r.model+'|'+r.policy;
   const s=groups[k]??={cohort:r.cohort,model:r.model,policy:r.policy,races:0,wins:0,exactas:0,trifectas:0,superfectas:0,slot_hits:[0,0,0,0],underneath_correct:0,underneath_comparable:0,underneath_possible:0,position_error_sum:0,rated:0,matched_speed:r.model==='v44c'?null:0,matched_late:r.model==='v44c'?null:0};s.races++;s.wins+=+r.grade.win;s.exactas+=+r.grade.exacta;s.trifectas+=+r.grade.trifecta;s.superfectas+=+r.grade.superfecta;
   for(let i=0;i<4;i++)s.slot_hits[i]+=+r.grade.slot_hits[i];for(const f of ['underneath_correct','underneath_comparable','underneath_possible'])s[f]+=r.grade[f];s.position_error_sum+=r.grade.top4_position_error;s.rated+=r.rated;if(r.model!=='v44c'){s.matched_speed+=r.matched_speed??0;s.matched_late+=r.matched_late??0;}

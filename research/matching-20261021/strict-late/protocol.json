@@ -1,0 +1,60 @@
+{
+  "classification": "POSTHOC_EXPLORATORY_SAME_DEVELOPMENT_RACES",
+  "active_models": [
+    "v44c",
+    "finisher",
+    "contender"
+  ],
+  "holdout_files_used": 0,
+  "live_rule_changed": false,
+  "policies": [
+    {
+      "id": "S0.5_P0.5_latest",
+      "speed": 0.5,
+      "pace": 0.5,
+      "lateMode": "latest"
+    },
+    {
+      "id": "S0.5_P0.5_mean3",
+      "speed": 0.5,
+      "pace": 0.5,
+      "lateMode": "mean3"
+    },
+    {
+      "id": "S1_P0.5_latest",
+      "speed": 1,
+      "pace": 0.5,
+      "lateMode": "latest"
+    },
+    {
+      "id": "S1_P0.5_mean3",
+      "speed": 1,
+      "pace": 0.5,
+      "lateMode": "mean3"
+    },
+    {
+      "id": "S1.5_P0.5_latest",
+      "speed": 1.5,
+      "pace": 0.5,
+      "lateMode": "latest"
+    },
+    {
+      "id": "S1.5_P0.5_mean3",
+      "speed": 1.5,
+      "pace": 0.5,
+      "lateMode": "mean3"
+    }
+  ],
+  "protocol": {
+    "pace": "same surface, same sprint/route category, within 0.5f, latest five starts, within 365 days",
+    "speed": "0.5/1/1.5f; same category/surface/history limits",
+    "late": "latest qualifying versus arithmetic mean of up to three most recent qualifying LP values",
+    "weights": "unchanged",
+    "limitations": [
+      "No sectional positions or complete finish charts: late-pace leaders are not confirmed closers",
+      "Same previously analyzed cards; no independent validation",
+      "October 21 R2 separate; R8 ungraded",
+      "Retrospective surface and field information; no pre-race timing claim"
+    ]
+  }
+}
