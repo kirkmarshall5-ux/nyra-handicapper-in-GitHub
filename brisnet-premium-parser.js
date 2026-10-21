@@ -50,8 +50,12 @@ function parsePace(row,heading,today){
   // Preserve uncertainty as null rather than contaminating handicapping inputs
   // or discarding the entire card. Signed shape columns remain valid.
   const invalidPace=rawValue!==null&&n<3&&rawValue<0;
-  const value=invalidPace?null:rawValue;
-  values[keys[n]]=value;cells[keys[n]]={text,x:items[0]?.x??null,status:invalidPace?'NEGATIVE_PACE_TOKEN_REJECTED':value===null?'MISSING_OR_AMBIGUOUS':'POSITIONED_NUMBER_VERIFIED'};
+  // A negative printed SPD is not a usable nonnegative speed rating. Retain
+  // the source token and its position in cells, but keep the model input null.
+  // Do not reject all of a horse's other verified running lines.
+  const invalidSpeed=rawValue!==null&&n===5&&rawValue<0;
+  const value=invalidPace||invalidSpeed?null:rawValue;
+  values[keys[n]]=value;cells[keys[n]]={text,x:items[0]?.x??null,status:invalidPace?'NEGATIVE_PACE_TOKEN_REJECTED':invalidSpeed?'NEGATIVE_SPEED_SOURCE_TOKEN_RETAINED_UNRATED':value===null?'MISSING_OR_AMBIGUOUS':'POSITIONED_NUMBER_VERIFIED'};
  }
  // Some PDF text items begin in the date column and also contain distance/going.
  // Selecting by item start-x discarded those complete, readable condition tokens.
