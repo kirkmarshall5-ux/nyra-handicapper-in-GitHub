@@ -64,7 +64,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 </div><div id="declaredScratches" class="small muted" role="status"></div><div class="flex" style="margin-top:12px;flex-wrap:wrap"><button class="primary" id="updateOddsScratches">Update Odds &amp; Scratches</button><span class="small muted" id="nyraUpdateStatus" role="status" aria-live="polite">Fetch NYRA updates for the selected race.</span></div></div>
 
 <div class="card span12"><div class="kicker">Prospective research snapshot</div><div class="flex" style="align-items:center;gap:12px;flex-wrap:wrap"><button class="primary" id="freezeAllModels">Freeze All Models</button><span class="small muted" id="freezeAllStatus" role="status">Local timestamped research export; no wager authorization. Verify before post time.</span></div></div>
-<div class="card span12"><div class="kicker">Keep both PP sources loaded</div><div class="flex" style="flex-wrap:wrap;margin-top:8px"><button class="primary" id="uploadBrisnet">1. Upload Brisnet PP</button><input id="brisnetFile" type="file" accept=".pdf" hidden><button class="primary" id="uploadDrf">2. Upload DRF PP</button><button class="secondary" id="exportBrisnetSourceAudit" type="button">Export Brisnet Source Audit</button><input id="drfFile" type="file" accept=".pdf" hidden><label for="ppSourceView" class="small">Horse grid / Pace source</label><select id="ppSourceView" style="width:auto"><option value="BRISNET">Brisnet</option><option value="DRF">DRF</option></select></div><div class="small muted" id="providerCardsStatus" role="status" style="margin-top:10px"></div><div class="small" id="providerUploadStatus" role="status" style="margin-top:6px"></div><div class="progress" style="margin-top:10px"><i id="ppProg"></i></div><div id="ppStatus" class="muted small" role="status" style="margin-top:8px">Upload each PP once using its matching button. Processing and saved cards stay in this browser.</div><details id="manageSavedCards" class="small" style="margin-top:12px"><summary>Manage saved cards</summary><div class="flex" style="flex-wrap:wrap;margin-top:10px"><button class="secondary" id="clearPP">Clear selected PP evidence</button><button class="secondary" id="resetSample">Reset DRF sample card</button></div><p class="muted">Clear affects the source selected in Horse grid / Pace source. Reset loads the demonstration into the DRF slot. The other PP source is retained.</p></details></div>
+<div class="card span12"><div class="kicker">Keep both PP sources loaded</div><div class="flex" style="flex-wrap:wrap;margin-top:8px"><button class="primary" id="uploadBrisnet">1. Upload Brisnet PP</button><input id="brisnetFile" type="file" accept=".pdf" hidden><button class="primary" id="uploadDrf">2. Upload DRF PP</button><button class="secondary" id="exportBrisnetSourceAudit" type="button">Export Brisnet Source Audit</button><button class="secondary" id="exportBrisnetModelAudit" type="button">Export Brisnet Model Input Audit</button><input id="drfFile" type="file" accept=".pdf" hidden><label for="ppSourceView" class="small">Horse grid / Pace source</label><select id="ppSourceView" style="width:auto"><option value="BRISNET">Brisnet</option><option value="DRF">DRF</option></select></div><div class="small muted" id="providerCardsStatus" role="status" style="margin-top:10px"></div><div class="small" id="providerUploadStatus" role="status" style="margin-top:6px"></div><div class="progress" style="margin-top:10px"><i id="ppProg"></i></div><div id="ppStatus" class="muted small" role="status" style="margin-top:8px">Upload each PP once using its matching button. Processing and saved cards stay in this browser.</div><details id="manageSavedCards" class="small" style="margin-top:12px"><summary>Manage saved cards</summary><div class="flex" style="flex-wrap:wrap;margin-top:10px"><button class="secondary" id="clearPP">Clear selected PP evidence</button><button class="secondary" id="resetSample">Reset DRF sample card</button></div><p class="muted">Clear affects the source selected in Horse grid / Pace source. Reset loads the demonstration into the DRF slot. The other PP source is retained.</p></details></div>
 <div class="card span12"><div class="kicker">Morning lines · both PP sources</div><div id="topMl" class="stack small"></div></div>
 <div class="span12 kicker">Brisnet models</div>
 <div class="card span4"><div class="kicker">Brisnet · V4.4c</div><div id="brisTopContenders" class="stack small"></div><details class="tiny muted" style="margin-top:10px"><summary>How V4.4c ranks</summary><p>Latest Beyer 40 weight points · best Beyer from the latest three starts 22 · jockey 7 · trainer 8. Jockey and trainer win percentages are multiplied by three, capped at 100. Horses with one or two starts can also use a verified trainer-context score at 12 weight points. Missing inputs redistribute the available weights; verified zero counts. Field strength, pace fit, rebound protection and lightly raced upside can adjust the base rating by up to ±6 points. PASS races show provisional rated runners only.</p></details></div>
@@ -522,6 +522,38 @@ document.getElementById('exportBrisnetSourceAudit').onclick=()=>{
   link.href=url;link.download='BRISNET_SOURCE_AUDIT_'+String(card.date||'undated').replace(/[^0-9-]/g,'')+'.json';document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
   status.textContent='Brisnet source audit exported: '+runners.length+' runners, '+rows.length+' historical lines. Keep the JSON for source reconciliation.';
  }catch(e){status.textContent='Brisnet source audit export failed: '+(e.message||e);}
+};
+
+
+// Read-only downstream model-consumption audit, computed from the saved card
+// with the same rankBrisnetModels function used by the Race Day screen.
+document.getElementById('exportBrisnetModelAudit').onclick=()=>{
+ const status=document.getElementById('providerUploadStatus'),card=providerCards.BRISNET;
+ if(!card||card.source_format!=='BRISNET_PREMIUM_PLUS'||!card.races){
+  status.textContent='Model audit unavailable: upload a Brisnet Premium Plus card first.';return;
+ }
+ try{
+  const races=[];
+  for(const key of Object.keys(card.races).sort((a,b)=>+a-+b)){
+   const r=card.races[key],models=rankBrisnetModels(r);
+   if(!models)throw Error('Brisnet model adapter unavailable for race '+key);
+   races.push({race:r.race,date:r.date,surface:r.surface,distance_furlongs:r.distance_furlongs,conditions:r.conditions??null,parser_blockers:r.parser_blockers??[],
+    runners:(r.horses||[]).map(h=>({program:h.n,name:h.name,odds:h.odds??null,entry_status:h.entry_status??null,included_in_frozen_field:h.included_in_frozen_field??null,
+     life_starts:h.life_starts??null,parser_blockers:h.parser_blockers??[],source_context:h.source_context??null,
+     history:(h.ratings?.lines||[]).map(l=>({date:l.date,surface:l.surface,furlongs:l.furlongs,speed:l.speed,e1:l.e1,e2:l.e2,late:l.late,source_page:l.source?.page??null,source_text:l.source?.text??null}))})),
+    models:Object.fromEntries(['v44c','mix1','contender'].map(id=>{const m=models[id];return [id,{model_id:m.model_id,decision:m.decision,bettingEnabled:m.bettingEnabled,probabilityCalibrated:m.probabilityCalibrated,
+     eligible_count:m.eligible_count,rated_count:m.rated_count,unrated:m.unrated,
+     rankings:m.rankings.map(h=>({program:h.n,name:h.name,rank:h.rank,score:h.score,raw_features:h.raw_features??null,
+      component_scores:h.component_scores??null,effective_weights:h.effective_weights??null,available_weight:h.available_weight??null,
+      feature_contributions:h.feature_contributions??null,trend_adjustment:h.trend_adjustment??null,evidence:h.evidence??null}))}]}))});
+  }
+  const audit={schema:'nyra-brisnet-model-consumption-audit-v1',exported_at_utc:new Date().toISOString(),clock_source:'browser-device-unverified',
+   card_id:card.id,date:card.date,track:card.track,source_sha256:card.source_sha256??null,parser_version:card.parser_version??null,
+   warning:'Research-only read-only recomputation. Not a pre-race freeze, not independently timestamped, not a betting authorization. Current saved runner edits and scratch flags may differ from historical pre-race state.',races};
+  const blob=new Blob([JSON.stringify(audit,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download='BRISNET_MODEL_INPUT_AUDIT_'+String(card.date||'undated').replace(/[^0-9-]/g,'')+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  status.textContent='Brisnet model-input audit exported: '+races.length+' races, V4.4c / Finisher / Contender traces.';
+ }catch(e){status.textContent='Brisnet model audit failed: '+(e.message||e);}
 };
 
 document.getElementById('uploadBrisnet').onclick=()=>document.getElementById('brisnetFile').click();
