@@ -64,7 +64,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 </div><div id="declaredScratches" class="small muted" role="status"></div><div class="flex" style="margin-top:12px;flex-wrap:wrap"><button class="primary" id="updateOddsScratches">Update Odds &amp; Scratches</button><span class="small muted" id="nyraUpdateStatus" role="status" aria-live="polite">Fetch NYRA updates for the selected race.</span></div></div>
 
 <div class="card span12"><div class="kicker">Prospective research snapshot</div><div class="flex" style="align-items:center;gap:12px;flex-wrap:wrap"><button class="primary" id="freezeAllModels">Freeze All Models</button><span class="small muted" id="freezeAllStatus" role="status">Local timestamped research export; no wager authorization. Verify before post time.</span></div></div>
-<div class="card span12"><div class="kicker">Keep both PP sources loaded</div><div class="flex" style="flex-wrap:wrap;margin-top:8px"><button class="primary" id="uploadBrisnet">1. Upload Brisnet PP</button><input id="brisnetFile" type="file" accept=".pdf" hidden><button class="primary" id="uploadDrf">2. Upload DRF PP</button><input id="drfFile" type="file" accept=".pdf" hidden><label for="ppSourceView" class="small">Horse grid / Pace source</label><select id="ppSourceView" style="width:auto"><option value="BRISNET">Brisnet</option><option value="DRF">DRF</option></select></div><div class="small muted" id="providerCardsStatus" role="status" style="margin-top:10px"></div><div class="small" id="providerUploadStatus" role="status" style="margin-top:6px"></div><div class="progress" style="margin-top:10px"><i id="ppProg"></i></div><div id="ppStatus" class="muted small" role="status" style="margin-top:8px">Upload each PP once using its matching button. Processing and saved cards stay in this browser.</div><details id="manageSavedCards" class="small" style="margin-top:12px"><summary>Manage saved cards</summary><div class="flex" style="flex-wrap:wrap;margin-top:10px"><button class="secondary" id="clearPP">Clear selected PP evidence</button><button class="secondary" id="resetSample">Reset DRF sample card</button></div><p class="muted">Clear affects the source selected in Horse grid / Pace source. Reset loads the demonstration into the DRF slot. The other PP source is retained.</p></details></div>
+<div class="card span12"><div class="kicker">Keep both PP sources loaded</div><div class="flex" style="flex-wrap:wrap;margin-top:8px"><button class="primary" id="uploadBrisnet">1. Upload Brisnet PP</button><input id="brisnetFile" type="file" accept=".pdf" hidden><button class="primary" id="uploadDrf">2. Upload DRF PP</button><button class="secondary" id="exportBrisnetSourceAudit" type="button">Export Brisnet Source Audit</button><input id="drfFile" type="file" accept=".pdf" hidden><label for="ppSourceView" class="small">Horse grid / Pace source</label><select id="ppSourceView" style="width:auto"><option value="BRISNET">Brisnet</option><option value="DRF">DRF</option></select></div><div class="small muted" id="providerCardsStatus" role="status" style="margin-top:10px"></div><div class="small" id="providerUploadStatus" role="status" style="margin-top:6px"></div><div class="progress" style="margin-top:10px"><i id="ppProg"></i></div><div id="ppStatus" class="muted small" role="status" style="margin-top:8px">Upload each PP once using its matching button. Processing and saved cards stay in this browser.</div><details id="manageSavedCards" class="small" style="margin-top:12px"><summary>Manage saved cards</summary><div class="flex" style="flex-wrap:wrap;margin-top:10px"><button class="secondary" id="clearPP">Clear selected PP evidence</button><button class="secondary" id="resetSample">Reset DRF sample card</button></div><p class="muted">Clear affects the source selected in Horse grid / Pace source. Reset loads the demonstration into the DRF slot. The other PP source is retained.</p></details></div>
 <div class="card span12"><div class="kicker">Morning lines · both PP sources</div><div id="topMl" class="stack small"></div></div>
 <div class="span12 kicker">Brisnet models</div>
 <div class="card span4"><div class="kicker">Brisnet · V4.4c</div><div id="brisTopContenders" class="stack small"></div><details class="tiny muted" style="margin-top:10px"><summary>How V4.4c ranks</summary><p>Latest Beyer 40 weight points · best Beyer from the latest three starts 22 · jockey 7 · trainer 8. Jockey and trainer win percentages are multiplied by three, capped at 100. Horses with one or two starts can also use a verified trainer-context score at 12 weight points. Missing inputs redistribute the available weights; verified zero counts. Field strength, pace fit, rebound protection and lightly raced upside can adjust the base rating by up to ±6 points. PASS races show provisional rated runners only.</p></details></div>
@@ -490,6 +490,40 @@ async function extractPdf(file){
 
 let ppUploadBusy=false;
 async function loadProviderFile(provider,file){if(!file||ppUploadBusy)return;ppUploadBusy=true;for(const id of ['uploadBrisnet','uploadDrf'])document.getElementById(id).disabled=true;const status=document.getElementById('providerUploadStatus');try{status.textContent='Reading '+provider+' PP: '+file.name+'…';const pages=await extractPdf(file),candidate=parsePPCard(pages,{sourceName:file.name});putProviderCard({},candidate,provider);candidate.source_sha256=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',await file.arrayBuffer()))).map(x=>x.toString(16).padStart(2,'0')).join('');candidate.imported_at=new Date().toISOString();await writeProviderCard(provider,candidate);activateCandidate(candidate);status.textContent=provider+' card saved. The other PP source is retained.';}catch(e){status.textContent='Upload failed; both saved sources are preserved: '+(e.message||e);ppProg.style.width='0';}finally{ppUploadBusy=false;for(const id of ['uploadBrisnet','uploadDrf'])document.getElementById(id).disabled=false;}}
+
+// Read-only source audit: export exactly what the browser saved from the Brisnet PDF.
+// Never infer missing ratings, overwrite evidence, change model rankings, or mark scratches.
+document.getElementById('exportBrisnetSourceAudit').onclick=()=>{
+ const status=document.getElementById('providerUploadStatus');
+ const card=providerCards.BRISNET;
+ if(!card||card.source_format!=='BRISNET_PREMIUM_PLUS'||!card.races||!Object.keys(card.races).length){
+  status.textContent='Source audit unavailable: upload a Brisnet Premium Plus card first.';return;
+ }
+ try{
+  const rows=[],runners=[];
+  for(const key of Object.keys(card.races).sort((a,b)=>+a-+b)){
+   const rr=card.races[key];
+   for(const h of rr.horses||[]){
+    const history=h.ratings?.lines||[];
+    runners.push({race:rr.race,program:h.n,name:h.name,life_starts:h.life_starts??h.lifeStarts??null,parsed_history_lines:history.length,entry_status:h.entry_status??null,source_evidence:h.source_evidence??null});
+    for(let i=0;i<history.length;i++){
+     const l=history[i],src=l.source||{};
+     rows.push({race:rr.race,program:h.n,name:h.name,history_index:i+1,date:l.date??null,source_page:src.page??null,source_y:src.y??null,source_text:src.text??null,
+      e1:l.e1??null,e2:l.e2??null,late:l.late??null,shape1:l.shape1??null,shape2:l.shape2??null,speed:l.speed??null,
+      status:l.status??null,condition_evidence:l.condition_evidence??null,
+      source_cells:src.cells??null});
+    }
+   }
+  }
+  const record={schema:'nyra-brisnet-source-audit-v1',exported_at_utc:new Date().toISOString(),clock_source:'browser-device-unverified',track:card.track,date:card.date,card_id:card.id,source_name:card.sourceName??null,source_sha256:card.source_sha256??null,parser_version:card.parser_version??null,source_format:card.source_format,
+   races:Object.keys(card.races).length,runner_count:runners.length,history_line_count:rows.length,validation_issues:card.validation_issues??[],runners,lines:rows,
+   warning:'Read-only parser evidence export. Values and cell positions are from the saved browser card, not independently verified against the original PDF. Missing values are null. No scratch or wager authorization.'};
+  const blob=new Blob([JSON.stringify(record,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),link=document.createElement('a');
+  link.href=url;link.download='BRISNET_SOURCE_AUDIT_'+String(card.date||'undated').replace(/[^0-9-]/g,'')+'.json';document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  status.textContent='Brisnet source audit exported: '+runners.length+' runners, '+rows.length+' historical lines. Keep the JSON for source reconciliation.';
+ }catch(e){status.textContent='Brisnet source audit export failed: '+(e.message||e);}
+};
+
 document.getElementById('uploadBrisnet').onclick=()=>document.getElementById('brisnetFile').click();
 document.getElementById('uploadDrf').onclick=()=>document.getElementById('drfFile').click();
 for(const [id,provider]of [['brisnetFile','BRISNET'],['drfFile','DRF']])document.getElementById(id).onchange=e=>{loadProviderFile(provider,e.target.files[0]);e.target.value='';};
