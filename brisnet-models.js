@@ -35,7 +35,14 @@ function features(h,r){
  if(h.life_starts===0)return {reason:'First-time starter: no measured Speed or pace history'};
  const source=h.ratings.lines||[];
  if(source.length>h.life_starts)return {reason:'Running lines exceed verified career starts'};
- if(source.some((l,i)=>!validDate(l.date)||l.date>=r.date||i>0&&l.date>=source[i-1].date||l.source?.provider!=='BRISNET'||!l.source?.text||['speed','e1','e2','late'].some(k=>l[k]!=null&&(!finite(l[k])||l[k]<0))))return {reason:'Historical source sequence or numeric evidence requires review'};
+ // Identify the exact rejected running line without relaxing source-validation gates.
+ for(let i=0;i<source.length;i++){
+  const l=source[i],tag='Historical line '+(i+1)+' ('+(l.date||'date unknown')+')';
+  if(!validDate(l.date)||l.date>=r.date)return {reason:tag+': date invalid or not before card date'};
+  if(i>0&&l.date>=source[i-1].date)return {reason:tag+': running lines not in descending date order'};
+  if(l.source?.provider!=='BRISNET'||!l.source?.text)return {reason:tag+': Brisnet provenance missing'};
+  for(const k of ['speed','e1','e2','late'])if(l[k]!=null&&(!finite(l[k])||l[k]<0))return {reason:tag+': invalid '+k+' rating ('+String(l[k])+'); inspect PDF column mapping'};
+ }
  const rows=source.slice(0,5).map(l=>({...l,age:(Date.parse(r.date)-Date.parse(l.date))/86400000}));
  // Keep actual-start positions: missing Speed never shifts the recent/older windows.
  const figs=rows.map(l=>l.speed),latest=finite(figs[0])?figs[0]:null;
