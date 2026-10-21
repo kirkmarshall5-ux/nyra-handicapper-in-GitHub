@@ -1,0 +1,10 @@
+{
+  "date": "2026-10-21",
+  "source": "FL--10-21-2026.pdf",
+  "method": "PyMuPDF visual rendering and positional text inspection; independent from production PDF.js",
+  "inspection": "Race 1 first horse Muazarah, PDF page 1, visible heading at x30,y272; name, Own:, silks, jockey, TimeformUS pace, claiming price, and other PP details render. No isolated program number or morning-line odds visibly printed immediately above or adjacent to that horse heading in the rendered source.",
+  "caveat": "Only first heading visually inspected here. User reports seeing numbers above morning line in their PP view; this may be another page or a different rendering. Do not conclude entire card lacks these fields.",
+  "decision": "Do not infer numbers by runner order, use Brisnet numbering as a substitute, or loosen source verification. Locate authoritative printed race-entry/ML information or obtain a separate official program; original PDF.js acceptance remains blocked until all 52 identities match.",
+  "previous_inference_correction": "A coordinate-based extractor cannot recover a field that is not visibly present in the inspected region; prior suggestion of coordinate extraction as a definite fix was premature.",
+  "model_policy": "No model scoring or betting changes; no merge/deployment."
+}
