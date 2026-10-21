@@ -1,6 +1,8 @@
 # Matching tolerance development experiment — October 21, 2026
 
-**Latest continuation:** [Wider Speed, strict pace and late-pace averaging](strict-late/README.md).
+**Separate DRF comparison:** [Late pace and pace-context removal on 124 previously analyzed races](../drf-pace-comparison-20261021/README.md).
+
+**Latest Brisnet continuation:** [Wider Speed, strict pace and late-pace averaging](strict-late/README.md).
 
 **Preceding active-model report:** [V4.4c, Finisher and Contender only](active-three/README.md). The earlier four-model experiment below is retained as historical evidence.
 

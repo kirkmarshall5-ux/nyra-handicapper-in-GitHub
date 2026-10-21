@@ -1,0 +1,104 @@
+[
+  {
+    "key": "BAQ_2026-06-21_R1",
+    "cohort": "DRF58",
+    "included": false,
+    "reason": "ARCHIVED_PROGRAM_IDENTITIES_MISSING_OR_DUPLICATE"
+  },
+  {
+    "key": "BAQ_2026-06-21_R2",
+    "cohort": "DRF58",
+    "included": false,
+    "reason": "ARCHIVED_PROGRAM_IDENTITIES_MISSING_OR_DUPLICATE"
+  },
+  {
+    "key": "BAQ_2026-06-21_R3",
+    "cohort": "DRF58",
+    "included": false,
+    "reason": "ARCHIVED_PROGRAM_IDENTITIES_MISSING_OR_DUPLICATE"
+  },
+  {
+    "key": "BAQ_2026-06-21_R4",
+    "cohort": "DRF58",
+    "included": false,
+    "reason": "ARCHIVED_PROGRAM_IDENTITIES_MISSING_OR_DUPLICATE"
+  },
+  {
+    "key": "BAQ_2026-06-21_R6",
+    "cohort": "DRF58",
+    "included": false,
+    "reason": "ARCHIVED_PROGRAM_IDENTITIES_MISSING_OR_DUPLICATE"
+  },
+  {
+    "key": "BAQ_2026-06-21_R7",
+    "cohort": "DRF58",
+    "included": false,
+    "reason": "ARCHIVED_PROGRAM_IDENTITIES_MISSING_OR_DUPLICATE"
+  },
+  {
+    "key": "BAQ_2026-06-21_R8",
+    "cohort": "DRF58",
+    "included": false,
+    "reason": "ARCHIVED_PROGRAM_IDENTITIES_MISSING_OR_DUPLICATE"
+  },
+  {
+    "key": "BAQ_2026-06-26_R2",
+    "cohort": "DRF58",
+    "included": false,
+    "reason": "ARCHIVED_PROGRAM_IDENTITIES_MISSING_OR_DUPLICATE"
+  },
+  {
+    "key": "BAQ_2026-06-26_R3",
+    "cohort": "DRF58",
+    "included": false,
+    "reason": "ARCHIVED_PROGRAM_IDENTITIES_MISSING_OR_DUPLICATE"
+  },
+  {
+    "key": "BAQ_2026-06-26_R5",
+    "cohort": "DRF58",
+    "included": false,
+    "reason": "ARCHIVED_PROGRAM_IDENTITIES_MISSING_OR_DUPLICATE"
+  },
+  {
+    "key": "BAQ_2026-06-26_R6",
+    "cohort": "DRF58",
+    "included": false,
+    "reason": "ARCHIVED_PROGRAM_IDENTITIES_MISSING_OR_DUPLICATE"
+  },
+  {
+    "key": "BAQ_2026-06-26_R7",
+    "cohort": "DRF58",
+    "included": false,
+    "reason": "ARCHIVED_PROGRAM_IDENTITIES_MISSING_OR_DUPLICATE"
+  },
+  {
+    "key": "SAR_2026-06-07_R1",
+    "cohort": "SAR47",
+    "included": false,
+    "reason": "ARCHIVED_PROGRAM_IDENTITIES_MISSING_OR_DUPLICATE"
+  },
+  {
+    "key": "SAR_2026-06-07_R3",
+    "cohort": "SAR47",
+    "included": false,
+    "reason": "ARCHIVED_PROGRAM_IDENTITIES_MISSING_OR_DUPLICATE"
+  },
+  {
+    "key": "SAR_2026-06-07_R4",
+    "cohort": "SAR47",
+    "included": false,
+    "reason": "ARCHIVED_PROGRAM_IDENTITIES_MISSING_OR_DUPLICATE"
+  },
+  {
+    "key": "SAR_2026-06-07_R9",
+    "cohort": "SAR47",
+    "included": false,
+    "reason": "ARCHIVED_PROGRAM_IDENTITIES_MISSING_OR_DUPLICATE"
+  },
+  {
+    "key": "SAR_2026-06-07_R10",
+    "cohort": "SAR47",
+    "included": false,
+    "reason": "ARCHIVED_PROGRAM_IDENTITIES_MISSING_OR_DUPLICATE"
+  }
+]

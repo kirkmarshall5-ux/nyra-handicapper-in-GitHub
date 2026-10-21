@@ -1,0 +1,39 @@
+{
+  "classification": "POSTHOC_REUSED_DRF_DEVELOPMENT_ONLY",
+  "active_models": [
+    "v44c",
+    "finisher",
+    "contender"
+  ],
+  "holdout_files_used": 0,
+  "live_rule_changed": false,
+  "arms": [
+    "current",
+    "no_direct_late",
+    "no_context",
+    "no_late_or_context",
+    "no_pace"
+  ],
+  "selection": "141 prior graded zero-FTS races attempted; 17 blank program identity exclusions; 124 current-gate passing full-field races on 22 cards",
+  "source_code_sha256": {
+    "scripts/evaluate-drf-pace.mjs": "7f281a70166563f9a8933993e0f1a935f60273bca04ecb821824282dd49e1ca5",
+    "rankings-release.js": "6622d4fb14230111b23e12bf1d7da710fe8790747ae1c2f68c97462925842401",
+    "data-corrected-research.js": "b3b943cd3d1b0998d9f7e8d900a96ed87d8279ff7a04476f54198c01f01f03ca",
+    "scoring-engine.js": "c5a45fb15f8fbaba33b3bb3016d08fab395f546a8c6f16fad5e9bb984792208c",
+    "contender-model.js": "043a346c9e6570a6c4c9cdd1b12b814340d4700ccf0bcce7fcf378fed9773449",
+    "contender-rankings.js": "4e8b64c9db1730436a80260f74a18e077449ca44e9d03d18a3660099701acc7c",
+    "finisher-inputs.js": "aa9b13fe259ed130fb1b4a5d794c5fd263045cf5c08df80785fae703c9a31b08",
+    "finisher-model.js": "d4c4aaa0696f4ce64d08e3c7fdabaae91c1621b0ca09a269e5d3b9b4bfd6ae39",
+    "finisher-drf-distance.js": "d752f54d8cfb9475b0e6c6340151e684ce77157426d1b2e65974ddb83869c4ec"
+  },
+  "frozen_record_sha256": {
+    "results.json.gz": "cffd69c4f0427e53cdadfe07c1ee37c4042e113f4156667270ce829cfecd620b",
+    "feature-freeze.json.gz": "cebad325ea7bf29dad440d2c051230013bc0a0251eb60e8f6999600b4ae6f801"
+  },
+  "scope_limitations": [
+    "Previously analyzed selected development races, not full archive or independent validation",
+    "Final fields/conditions reconstructed retrospectively",
+    "No future/holdout PDFs accessed",
+    "No ROI or calibrated probability estimates"
+  ]
+}
