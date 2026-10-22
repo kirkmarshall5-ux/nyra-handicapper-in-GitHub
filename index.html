@@ -42,6 +42,8 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 @media(max-width:700px){.span3,.span4,.span5,.span6,.span7,.span8{grid-column:span 12}.ticketgrid,.controls{grid-template-columns:1fr 1fr}.wrap,main{padding-left:10px;padding-right:10px}}
 .comparison-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:stretch}.comparison-row>.card{grid-column:auto;min-width:0}.comparison-row .candidate-table th:nth-child(3){white-space:normal}.morning-line-table th:last-child,.morning-line-table td:last-child{white-space:normal;overflow-wrap:anywhere}
 @media(max-width:759px){.comparison-row{grid-template-columns:minmax(0,1fr)}}
+.contender-rankings .candidate-table th:nth-child(n+3),.contender-rankings .candidate-table td:nth-child(n+3){display:none}
+.contender-rankings .candidate-table th:first-child{width:78%}.contender-rankings .candidate-table th:nth-child(2){width:22%}
 </style>
 </head>
 <body>
@@ -67,8 +69,8 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 
 <div class="span12 comparison-row">
 <div class="card span4"><div class="kicker">Morning Line</div><div id="topMl" class="stack small"></div></div>
-<div class="card span4"><div class="kicker">DRF · Contender</div><div id="contenderCandidates" class="stack small"></div><details class="tiny muted" style="margin-top:10px"><summary>How Contender ranks</summary><p>Contender V2 combines relative field scores using frozen coefficients for recent Beyers, surface and distance form, Timeform Early and Late pace, race pressure, career records, jockey and trainer records, layoffs, workouts, verified trip comments and prior opposition. It also uses a surface/distance matched Beyer trend when at least three comparable starts are verified. Missing features are neutral. This model was trained for top-three contention; its win chances remain experimental. PASS races show provisional rated runners only.</p></details></div>
-<div class="card span4"><div class="kicker">Brisnet · Contender</div><div id="brisContenderCandidates" class="stack small"></div><details class="tiny muted" style="margin-top:10px"><summary>How Contender ranks</summary><p>Contender V2 combines relative field scores using frozen coefficients for recent Beyers, surface and distance form, Timeform Early and Late pace, race pressure, career records, jockey and trainer records, layoffs, workouts, verified trip comments and prior opposition. It also uses a surface/distance matched Beyer trend when at least three comparable starts are verified. Missing features are neutral. This model was trained for top-three contention; its win chances remain experimental. PASS races show provisional rated runners only.</p></details></div>
+<div class="card span4"><div class="kicker">DRF · Contender</div><div id="contenderCandidates" class="stack small contender-rankings"></div><details class="tiny muted" style="margin-top:10px"><summary>How Contender ranks</summary><p>Contender V2 combines relative field scores using frozen coefficients for recent Beyers, surface and distance form, Timeform Early and Late pace, race pressure, career records, jockey and trainer records, layoffs, workouts, verified trip comments and prior opposition. It also uses a surface/distance matched Beyer trend when at least three comparable starts are verified. Missing features are neutral. This model was trained for top-three contention; its win chances remain experimental. PASS races show provisional rated runners only.</p></details></div>
+<div class="card span4"><div class="kicker">Brisnet · Contender</div><div id="brisContenderCandidates" class="stack small contender-rankings"></div><details class="tiny muted" style="margin-top:10px"><summary>How Contender ranks</summary><p>Contender V2 combines relative field scores using frozen coefficients for recent Beyers, surface and distance form, Timeform Early and Late pace, race pressure, career records, jockey and trainer records, layoffs, workouts, verified trip comments and prior opposition. It also uses a surface/distance matched Beyer trend when at least three comparable starts are verified. Missing features are neutral. This model was trained for top-three contention; its win chances remain experimental. PASS races show provisional rated runners only.</p></details></div>
 </div>
 <!-- Preserved model panels: hidden from Race Day; ranking and snapshot logic retained. -->
 <div id="preservedModelPanels" hidden aria-hidden="true" style="display:none">
@@ -184,7 +186,7 @@ import {finisherRankingHtml} from "./finisher-ranking-display.js?v=20261018-evid
 import {rankContenders} from "./contender-rankings.js?v=20261011-passdisplay1";
 import {rankBrisnetModels} from "./brisnet-models.js?v=20261021-input2";
 import {brisnetRaceModelAudit} from "./brisnet-model-audit.js?v=20261021-input2";
-import {brisnetRankingHtml,updateBrisnetMethods} from "./brisnet-ranking-display.js?v=20261022-layout2";
+import {brisnetRankingHtml,updateBrisnetMethods} from "./brisnet-ranking-display.js?v=20261022-layout3";
 import {cardProvider,matchingCard,pairedRace,putProviderCard,readProviderCards,writeProviderCard} from "./dual-pp-cards.js?v=20261018-dual1";
 import {modelEvidenceHtml} from "./model-evidence-display.js?v=20261018-evidence1";
 import {passRaceDisplay} from "./pass-race-display.js?v=20261013-releaseqa1";
@@ -277,7 +279,7 @@ function renderModelRow(race,ids){
   contenderTarget.innerHTML='<b>Pass-No wager</b><div class="tiny muted" style="margin:5px 0">Provisional ranking of rated runners only; unrated horses may be competitive. Not an official full-field Contender ranking.</div>'+(contenderList||`<div class="tiny muted">${escapeText(contender.reason||'No horses have enough verified evidence for a numerical rating.')}</div>`)+other;
  }else contenderTarget.innerHTML=contender.decision==='RATEABLE'?contenderList:`<b>Contender: ${escapeText(contender.decision)}</b><div class="tiny muted">${escapeText(contender.reason)}</div>`;
 
- contenderTarget.innerHTML=contenderTarget.innerHTML+remainingContenders+modelEvidenceHtml(race,contender,{model:'contender'})+winLineNote(contenderLine);
+ contenderTarget.innerHTML=contenderTarget.innerHTML+remainingContenders+modelEvidenceHtml(race,contender,{model:'contender'})+'<div class="hidden" aria-hidden="true">'+winLineNote(contenderLine)+'</div>';
 
 }
 // Research-only local freeze. Captures the current rendered model evidence without changing ratings.
