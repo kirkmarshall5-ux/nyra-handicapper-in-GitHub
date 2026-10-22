@@ -106,7 +106,7 @@ for(const profile of profiles){
     const target=page.locator('#'+id);assert.equal(await target.locator('tbody tr').count(),2,id+' must rank the two experienced runners');
     assert.match(await target.innerText(),/Ranked 2\/3/);
     assert.match(await target.innerText(),/First-time starter/);
-    assert.match(await target.innerText(),/probability conversion has not been validated/);
+    assert.match(await target.textContent(),/probability conversion has not been validated/);
    }
    assert.match(await page.locator('#brisFinisherCandidates').innerText(),/Ranked 2\/3/);
    assert.match(await page.locator('#brisFinisherCandidates').innerText(),/Finisher: PASS/);
