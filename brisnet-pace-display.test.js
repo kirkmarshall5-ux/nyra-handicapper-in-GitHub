@@ -12,7 +12,7 @@ test('unmatched sprint figures remain visible as context without route pace rank
  assert.match(brisnetEvidenceHtml(m),/87<\/td><td>85<\/td><td>79/);
  assert.match(brisnetEvidenceHtml(m),/Unmatched - context only/);
  assert.match(brisnetPaceMapHtml(m),/Brisnet E\/P/);
- assert.match(brisnetCallRanksHtml(m),/Unknown/);
+ assert.match(brisnetCallRanksHtml(m),/No qualifying pace line/);
 });
 test('latest available metric uses its own date; turn index stays on a single line',()=>{
  const r=race([horse(1,[line({e1:null}),line({date:'2026-08-20',e1:80,e2:83,late:90})])]);
@@ -66,4 +66,17 @@ test('source-only evidence retains unmatched latest start and preserves original
  const m=brisnetPaceDisplay(race([horse(1,[line({furlongs:6})])])),compact=brisnetEvidenceHtml(m,{sourceOnly:true});
  assert.equal((compact.match(/<table/g)||[]).length,1);assert.match(compact,/Unmatched - context only/);assert.match(compact,/87<\/td><td>85<\/td><td>79/);assert.doesNotMatch(compact,/Early model input/);
  assert.match(brisnetEvidenceHtml(m),/Early model input/);assert.match(brisnetCallRanksHtml(m),/Turn rank \/ index/);
+});
+
+test('nonqualifying historical pace has a distinct label from absent figures and first-time starters',()=>{
+ const r=race([horse(1,[line({furlongs:6})]),horse(2,[line({furlongs:6,e1:null,e2:null,late:null})]),horse(3,[line({furlongs:6})],{life_starts:0})]);
+ const before=JSON.stringify(r),native=rankBrisnetModels(r),m=brisnetPaceDisplay(r);
+ for(const render of [brisnetComparisonHtml,brisnetCallRanksHtml]){
+  const html=render(m),rows=html.split('<tbody>')[1].split('</tr>');
+  assert.equal((rows[0].match(/<td>No qualifying pace line<\/td>/g)||[]).length,4);
+  assert.equal((rows[1].match(/<td>Unknown<\/td>/g)||[]).length,4);
+  assert.match(rows[2],/(<td>Unknown<\/td>){4}$/);
+ }
+ assert.equal(m.rows[0].early,null);assert.equal(m.rows[0].late,null);
+ assert.equal(JSON.stringify(r),before);assert.deepEqual(rankBrisnetModels(r),native);
 });
