@@ -13,7 +13,7 @@ for c in compact['cards']:
    match=(c['card'],h['name'],l['page'],l['y']) in keys
    if match:reviewed+=1;reviewed_h+=1
    calls=l.pop('calls');l['call_tokens']=[str(v['position'])+(v['margin_token'] or '') for v in calls.values()] if calls else None
-   if calls:assert parse_call_tokens(l['call_tokens'],l['field_size'])==calls
+   if calls:assert list(parse_call_tokens(l['call_tokens'],l['field_size']).values())==list(calls.values())
    l['positions_reviewed_against_original']=match;l.pop('raw');l.pop('reviewed_against_original',None)
   h['verified_running_style']=None;h['style_usable_for_pressure']=False
   source['position_candidate_count']=candidate_count;source['positions_reviewed_count']=reviewed_h

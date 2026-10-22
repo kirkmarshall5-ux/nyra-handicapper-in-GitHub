@@ -4,8 +4,8 @@ from audit_drf_sources import parse_call_tokens,history_date,norm,decode_margin
 class SourceAuditTests(unittest.TestCase):
  def test_lead_margin_is_not_beaten_margin(self):
   x=parse_call_tokens(['2','1¦','1ô','2§','3ö'],8)
-  self.assertEqual(x['first_call']['position'],1)
-  self.assertEqual(x['first_call']['margin_kind'],'LEAD_MARGIN')
+  self.assertEqual(x['raw_slot_2']['position'],1)
+  self.assertEqual(x['raw_slot_2']['margin_kind'],'LEAD_MARGIN')
   self.assertEqual(x['finish']['margin_kind'],'BEATEN_MARGIN')
   self.assertEqual(x['finish']['numeric_margin'],.75)
  def test_nonstandard_rows_abstain(self):

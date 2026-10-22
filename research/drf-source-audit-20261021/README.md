@@ -1,5 +1,7 @@
 # Step 1 — DRF source and running-style audit
 
+**Step 2 correction:** early printed-slot names are not universal physical calls across distances. The research decoder now returns raw_slot_1/2/3 plus stretch/finish. Historical review exports retain legacy keys; their numeric positions were reviewed, not a universal distance interpretation. [Step 2](../drf-setup-diagnostic-20261021/README.md) validates explicit chart columns instead. No production score used these new research labels.
+
 Completed source inventory and verification audit for the selected prior development population. This is not a new handicapper test or a declaration that all extracted call positions are ready for scoring.
 
 ## Scope and result

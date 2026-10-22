@@ -34,7 +34,7 @@ def parse_call_tokens(words,field_size):
   m=re.fullmatch(r'(\d{1,2})([¥¦§¨©ª«¬¤®õôöÇÉó]*)',word)
   if not m or not 1<=int(m[1])<=field_size:return None
   pos=int(m[1]);token=m[2] or None;result.append({'position':pos,'margin_token':token,'margin_kind':'LEAD_MARGIN' if pos==1 else 'BEATEN_MARGIN',**decode_margin(token)})
- return dict(zip(['start','first_call','second_call','stretch','finish'],result))
+ return dict(zip(['raw_slot_1','raw_slot_2','raw_slot_3','stretch','finish'],result))
 
 def pdf_headers(doc,names):
  out=[]
