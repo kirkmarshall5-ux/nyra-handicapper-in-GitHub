@@ -155,7 +155,7 @@ for(const profile of profiles){
    await page.locator('[data-tab="pace"]').click();
    assert.match(await page.locator('#paceMap').innerText(),/0\/3 eligible runners/);
    await page.locator('[data-tab="pace"]').click();await page.locator('#paceSourceEvidence > summary').click();assert.match(await page.locator('#brisnetEvidence').innerText(),/Unmatched - context only/);assert.match(await page.locator('#brisnetEvidence').innerText(),/91/);await page.locator('#paceSourceEvidence > summary').click();
-   assert.match(await page.locator('#projectedRaceSetup').innerText(),/Unknown/);
+   assert.match(await page.locator('#projectedRaceSetup').innerText(),/No qualifying pace line/);
    assert.equal(errors.length,0,'Unmatched Brisnet pace errors: '+errors.join(' | '));
    await page.evaluate(()=>{const c=JSON.parse(localStorage.getItem('nyraV44cReleaseActiveCard'));c.parser_version='BRISNET-PREMIUM-PLUS-positioned-v1';localStorage.setItem('nyraV44cReleaseActiveCard',JSON.stringify(c));});
    await page.reload({waitUntil:'domcontentloaded'});
