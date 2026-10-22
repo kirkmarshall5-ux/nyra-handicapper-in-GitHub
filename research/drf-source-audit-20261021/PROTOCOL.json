@@ -1,0 +1,16 @@
+{
+  "classification": "READ_ONLY_PREVIOUSLY_ANALYZED_DRF_SOURCE_AUDIT",
+  "parent_comparison_commit": "67ec8ff027d2761a7a09908b523e8977fc9078cb",
+  "production_source_commit": "91f9bc0460ca07521b5eedb6c42905f42242ac3e",
+  "scope": "141 selected prior development races across 25 explicitly allowlisted cards; not the full DRF archive",
+  "holdouts_used": 0,
+  "weights_changed": false,
+  "models_run": 0,
+  "validation": "All 1036 source headers matched; 1034 Early/Late pairs independently re-extracted; 25 source rows visually reviewed; 8 boundary/decoder/frozen-evidence tests",
+  "hashes": {
+    "audit_drf_sources.py": "7b8464700261128ee1005ce1ff54265a1cae847575b55f97d9fe36d6c999657b",
+    "test_drf_source_audit.py": "d26699386066df1999cca3d8c77882fb18a27aed5b2cb39389845c51540a1d08",
+    "source-evidence.json.gz": "48028d565044fc24e22e8574a56d6805ce3cad26b323770194ff5350e66b316c",
+    "review-sample.json": "dad7fde9936c55f1c018875e710aee3c1ee80967478f43b4c37e615f1d534db6"
+  }
+}
