@@ -110,10 +110,10 @@ for(const profile of profiles){
    }
    assert.match(await page.locator('#brisFinisherCandidates').innerText(),/Ranked 2\/3/);
    assert.match(await page.locator('#brisFinisherCandidates').innerText(),/Finisher: PASS/);
-   assert.equal(await page.locator('#brisFinisherCandidates tbody tr').count(),2);
+   assert.equal(await page.locator('#brisFinisherCandidates tbody tr').count(),2);assert.equal(await page.locator('#horseTable tr[data-program="3"] .grid-contender-rank').innerText(),'Unranked');assert.equal(await page.locator('#horseTable tr[data-program="3"] .score').innerText(),'N/A');
    assert.match(await page.locator('#releaseStatus').innerText(),/V44C-BRISNET-BASE/);
-   assert.match(await page.locator('#horseTable tbody tr').first().innerText(),/76/);
-   assert.match(await page.locator('#horseTable tbody tr').first().innerText(),/E\/P/);
+   assert.match(await page.locator('#horseTable tbody tr[data-program="1"]').innerText(),/76/);
+   assert.match(await page.locator('#horseTable tbody tr[data-program="1"]').innerText(),/E\/P/);
    await page.locator('[data-tab="pace"]').click();
    assert.match(await page.locator('#paceMap').innerText(),/Brisnet E\/P/);
    assert.match(await page.locator('#paceMap').innerText(),/E1/);
@@ -278,15 +278,22 @@ for(const profile of profiles){
    });
    await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});await page.locator('[data-tab="raceday"]').click();
    for(const id of ['brisTopContenders','brisFinisherCandidates','brisContenderCandidates','topContenders','finisherCandidates','contenderCandidates']){assert.match(await page.locator('#'+id).innerText(),/ranked 2\/3 starters/);assert.match(await page.locator('#'+id).innerText(),/Morning-line favorite — UNRANKED/);}
+   const checkContenderGrid=async provider=>{
+    const panel=page.locator(provider==='BRISNET'?'#brisContenderCandidates':'#contenderCandidates'),first=panel.locator('tbody tr').first(),gridFirst=page.locator('#horseTable tbody tr').first();
+    assert.equal(await gridFirst.locator('.grid-contender-rank').innerText(),'1');assert.equal(await gridFirst.locator('.score').innerText(),await first.locator('td').nth(1).innerText());
+    assert.ok((await first.locator('td').first().innerText()).includes(await gridFirst.locator('.horse').innerText()));
+    assert.match(await page.locator('#gridModelStatus').innerText(),new RegExp(provider==='BRISNET'?'Brisnet Contender':'DRF Contender'));
+   };
+   await checkContenderGrid('DRF');
    for(const id of ['contenderCandidates','brisContenderCandidates']){const panel=page.locator('#'+id);assert.equal(await panel.locator('table').first().locator('th:visible').count(),2);assert.equal(await panel.locator('tbody td:nth-child(3)').first().isVisible(),false);assert.equal(await panel.locator('tbody td:nth-child(4)').first().isVisible(),false);}
    const brBox=await page.locator('#brisContenderCandidates').boundingBox(),drBox=await page.locator('#contenderCandidates').boundingBox(),mlBox=await page.locator('#topMl').boundingBox();assert.ok(mlBox.x<drBox.x&&drBox.x<brBox.x);assert.equal(await page.locator('#topMl table.candidate-table tbody tr').count(),3);assert.match(await page.locator('#topMl').innerText(),/M.L Odds/);assert.equal(await page.locator('#topMl tbody tr').first().locator('td').last().innerText(),'DRF');
    await page.evaluate(async()=>{const m=await import('./dual-pp-cards.js'),cards=await m.readProviderCards();cards.BRISNET.imported_at='2026-10-22T12:00:00Z';cards.DRF.imported_at='2026-10-22T13:00:00Z';for(const p of ['DRF','BRISNET'])await m.writeProviderCard(p,cards[p]);localStorage.setItem('nyraV44cReleaseActiveCard',JSON.stringify(cards.DRF));});
    await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
-   await page.locator('#raceNotes').fill('Paired DRF note');await page.locator('[data-tab="public"]').click();await page.locator('#ppSourceView').selectOption('BRISNET');await page.locator('[data-tab="raceday"]').click();assert.match(await page.locator('#horseTable tbody tr').first().innerText(),/71/);await page.locator('#raceNotes').fill('Paired Brisnet note');assert.equal(await page.locator('#topMl tbody tr').first().locator('td').last().innerText(),'DRF');
-   await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});assert.equal(await page.locator('#raceNotes').inputValue(),'Paired Brisnet note');await page.locator('[data-tab="public"]').click();await page.locator('#ppSourceView').selectOption('DRF');await page.locator('[data-tab="raceday"]').click();assert.equal(await page.locator('#raceNotes').inputValue(),'Paired DRF note');assert.match(await page.locator('#horseTable tbody tr').first().innerText(),/91/);
+   await page.locator('#raceNotes').fill('Paired DRF note');await page.locator('[data-tab="public"]').click();await page.locator('#ppSourceView').selectOption('BRISNET');await page.locator('[data-tab="raceday"]').click();assert.match(await page.locator('#horseTable tbody tr[data-program="1"]').innerText(),/71/);await page.locator('#raceNotes').fill('Paired Brisnet note');await checkContenderGrid('BRISNET');assert.equal(await page.locator('#topMl tbody tr').first().locator('td').last().innerText(),'DRF');
+   await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});assert.equal(await page.locator('#raceNotes').inputValue(),'Paired Brisnet note');await page.locator('[data-tab="public"]').click();await page.locator('#ppSourceView').selectOption('DRF');await page.locator('[data-tab="raceday"]').click();assert.equal(await page.locator('#raceNotes').inputValue(),'Paired DRF note');assert.match(await page.locator('#horseTable tbody tr[data-program="1"]').innerText(),/91/);
    await page.locator('#racebar button').nth(1).click();for(const id of ['brisFinisherCandidates','finisherCandidates'])assert.match(await page.locator('#'+id).innerText(),/QA Paired R2/);
    await page.locator('[data-tab="pace"]').click();assert.equal(await page.locator('#ppSourceView').inputValue(),'BRISNET');assert.match(await page.locator('#paceCardStatus').innerText(),/Showing Brisnet.*2026-10-18.*Race 2/);assert.match(await page.locator('#paceSourceLabel').innerText(),/Brisnet native/i);assert.match(await page.locator('#weights').innerText(),/Brisnet/);
-   await page.locator('[data-tab="raceday"]').click();assert.match(await page.locator('#horseTable tbody tr').first().innerText(),/71/);await page.locator('[data-tab="public"]').click();await page.locator('#ppSourceView').selectOption('DRF');await page.locator('[data-tab="raceday"]').click();
+   await page.locator('[data-tab="raceday"]').click();assert.match(await page.locator('#horseTable tbody tr[data-program="1"]').innerText(),/71/);await page.locator('[data-tab="public"]').click();await page.locator('#ppSourceView').selectOption('DRF');await page.locator('[data-tab="raceday"]').click();
    await page.screenshot({path:`${out}/${profile.name}-paired-PPs.png`,fullPage:true});
    await page.evaluate(async()=>{const m=await import('./dual-pp-cards.js'),cards=await m.readProviderCards(),b=cards.BRISNET;b.date='2026-10-17';Object.values(b.races).forEach(r=>r.date=b.date);await m.writeProviderCard('BRISNET',b);});
    await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});assert.match(await page.locator('#brisTopContenders').innerText(),/does not match/);assert.equal(await page.locator('#brisTopContenders tbody tr').count(),0);assert.match(await page.locator('#topContenders').innerText(),/QA Paired/);
