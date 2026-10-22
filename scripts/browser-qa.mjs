@@ -125,9 +125,9 @@ for(const profile of profiles){
    assert.equal(await page.locator('#evidenceSummary').isVisible(),false);
    await page.locator('#paceSourceEvidence > summary').click();
    assert.equal(await page.locator('#evidenceSummary').isVisible(),true);assert.equal(await page.locator('#brisnetEvidence table').count(),1);assert.match(await page.locator('#brisnetEvidence').innerText(),/91/);assert.match(await page.locator('#evidenceSummary').innerText(),/Brisnet Speed/);
-   await page.screenshot({path:`${out}/${profile.name}-pace-source-evidence.png`,fullPage:true});
+   await page.evaluate(()=>window.scrollTo(0,0));await page.screenshot({path:`${out}/${profile.name}-pace-source-evidence.png`,fullPage:true});
    await page.locator('#paceSourceEvidence > summary').click();
-   await page.screenshot({path:`${out}/${profile.name}-pace-cleanup.png`,fullPage:true});
+   await page.evaluate(()=>window.scrollTo(0,0));await page.screenshot({path:`${out}/${profile.name}-pace-cleanup.png`,fullPage:true});
 
    assert.match(await page.locator('#weights').innerText(),/Pace has no weight/);
    assert.equal(await page.locator('#callRanksTitle').innerText(),'Horse pace comparison');
