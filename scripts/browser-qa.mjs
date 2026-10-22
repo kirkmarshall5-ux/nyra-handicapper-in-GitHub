@@ -119,10 +119,18 @@ for(const profile of profiles){
    assert.match(await page.locator('#paceMap').innerText(),/E1/);
    assert.match(await page.locator('#paceMap').innerText(),/LP/);
    assert.match(await page.locator('#projectedRaceSetup').innerText(),/E2 rank \/ figure/i);
-   assert.match(await page.locator('#brisnetEvidence').innerText(),/91/);
+   assert.equal(await page.locator('#paceMap table').count(),0);
+   assert.equal(await page.locator('#projectedRaceSetup table').count(),1);
+   assert.equal(await page.locator('#paceSourceEvidence').getAttribute('open'),null);
+   assert.equal(await page.locator('#evidenceSummary').isVisible(),false);
+   await page.locator('#paceSourceEvidence > summary').click();
+   assert.equal(await page.locator('#evidenceSummary').isVisible(),true);assert.equal(await page.locator('#brisnetEvidence table').count(),1);assert.match(await page.locator('#brisnetEvidence').innerText(),/91/);assert.match(await page.locator('#evidenceSummary').innerText(),/Brisnet Speed/);
+   await page.evaluate(()=>window.scrollTo(0,0));await page.screenshot({path:`${out}/${profile.name}-pace-source-evidence.png`,fullPage:true});
+   await page.locator('#paceSourceEvidence > summary').click();
+   await page.evaluate(()=>window.scrollTo(0,0));await page.screenshot({path:`${out}/${profile.name}-pace-cleanup.png`,fullPage:true});
+
    assert.match(await page.locator('#weights').innerText(),/Pace has no weight/);
-   assert.match(await page.locator('#evidenceSummary').innerText(),/Brisnet Speed/);
-   assert.equal(await page.locator('#callRanksTitle').innerText(),'Brisnet historical pace ranks');
+   assert.equal(await page.locator('#callRanksTitle').innerText(),'Horse pace comparison');
 
 
    assert.match(await page.locator('#contenderRules').innerText(),/Contender consumes early pace and LP/);
@@ -146,8 +154,7 @@ for(const profile of profiles){
    await page.locator('#brisTopContenders').getByText('V4.4c-Brisnet base · experimental',{exact:false}).waitFor({state:'attached',timeout:20000});
    await page.locator('[data-tab="pace"]').click();
    assert.match(await page.locator('#paceMap').innerText(),/0\/3 eligible runners/);
-   assert.match(await page.locator('#brisnetEvidence').innerText(),/Unmatched - context only/);
-   assert.match(await page.locator('#brisnetEvidence').innerText(),/91/);
+   await page.locator('[data-tab="pace"]').click();await page.locator('#paceSourceEvidence > summary').click();assert.match(await page.locator('#brisnetEvidence').innerText(),/Unmatched - context only/);assert.match(await page.locator('#brisnetEvidence').innerText(),/91/);await page.locator('#paceSourceEvidence > summary').click();
    assert.match(await page.locator('#projectedRaceSetup').innerText(),/Unknown/);
    assert.equal(errors.length,0,'Unmatched Brisnet pace errors: '+errors.join(' | '));
    await page.evaluate(()=>{const c=JSON.parse(localStorage.getItem('nyraV44cReleaseActiveCard'));c.parser_version='BRISNET-PREMIUM-PLUS-positioned-v1';localStorage.setItem('nyraV44cReleaseActiveCard',JSON.stringify(c));});

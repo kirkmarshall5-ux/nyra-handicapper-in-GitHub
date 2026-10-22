@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {brisnetPaceDisplay,brisnetPaceMapHtml,brisnetCallRanksHtml,brisnetEvidenceHtml} from './brisnet-pace-display.js';
+import {brisnetPaceDisplay,brisnetPaceMapHtml,brisnetCallRanksHtml,brisnetComparisonHtml,brisnetEvidenceHtml} from './brisnet-pace-display.js';
 import {rankBrisnetModels} from './brisnet-models.js';
 import {displayPaceStyle} from './runner-display.js';
 const line=(over={})=>({date:'2026-09-20',surface:'Dirt',furlongs:8,e1:87,e2:85,late:79,speed:73,source:{provider:'BRISNET',page:1,text:'Verified test source'},...over});
@@ -53,4 +53,17 @@ test('sprint early is E1, route early is E2; model use labels distinguish all th
  const native=rankBrisnetModels(r);assert.equal(native.mix1.rankings[0].raw_features.early,87);
  assert.match(brisnetEvidenceHtml(m),/V4.4c-Brisnet base: no pace weight/);
  assert.match(brisnetEvidenceHtml(m),/MIX1: E1 only/);
+});
+
+test('clean pace layout keeps comparable dates, styles, ranks and Unknown without changing model results',()=>{
+ const r=race([horse(1,[line({e1:null}),line({date:'2026-08-20',e1:80,e2:83})]),horse(2,[line({furlongs:6})]),horse(3,[],{life_starts:0})]);
+ const before=structuredClone(r),rankings=rankBrisnetModels(r),m=brisnetPaceDisplay(r),comparison=brisnetComparisonHtml(m),overview=brisnetPaceMapHtml(m,{compact:true});
+ assert.doesNotMatch(overview,/<table/);assert.match(overview,/Comparable pace leaders/);assert.match(overview,/Unknown style/);
+ assert.equal((comparison.match(/<table/g)||[]).length,1);assert.match(comparison,/E\/P/);assert.match(comparison,/Early points/);assert.match(comparison,/2026-08-20/);assert.match(comparison,/2026-09-20/);assert.match(comparison,/Unknown/);
+ assert.deepEqual(r,before);assert.deepEqual(rankBrisnetModels(r),rankings);
+});
+test('source-only evidence retains unmatched latest start and preserves original detailed renderer',()=>{
+ const m=brisnetPaceDisplay(race([horse(1,[line({furlongs:6})])])),compact=brisnetEvidenceHtml(m,{sourceOnly:true});
+ assert.equal((compact.match(/<table/g)||[]).length,1);assert.match(compact,/Unmatched - context only/);assert.match(compact,/87<\/td><td>85<\/td><td>79/);assert.doesNotMatch(compact,/Early model input/);
+ assert.match(brisnetEvidenceHtml(m),/Early model input/);assert.match(brisnetCallRanksHtml(m),/Turn rank \/ index/);
 });
