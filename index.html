@@ -184,7 +184,7 @@ import {finisherRankingHtml} from "./finisher-ranking-display.js?v=20261018-evid
 import {rankContenders} from "./contender-rankings.js?v=20261011-passdisplay1";
 import {rankBrisnetModels} from "./brisnet-models.js?v=20261021-input2";
 import {brisnetRaceModelAudit} from "./brisnet-model-audit.js?v=20261021-input2";
-import {brisnetRankingHtml,updateBrisnetMethods} from "./brisnet-ranking-display.js?v=20261018-evidence1";
+import {brisnetRankingHtml,updateBrisnetMethods} from "./brisnet-ranking-display.js?v=20261022-layout2";
 import {cardProvider,matchingCard,pairedRace,putProviderCard,readProviderCards,writeProviderCard} from "./dual-pp-cards.js?v=20261018-dual1";
 import {modelEvidenceHtml} from "./model-evidence-display.js?v=20261018-evidence1";
 import {passRaceDisplay} from "./pass-race-display.js?v=20261013-releaseqa1";
@@ -268,14 +268,16 @@ function renderModelRow(race,ids){
  topContenders.innerHTML=modelEvidenceHtml(race,r,{model:'v44c'})+topContenders.innerHTML+winLineNote(v44cLine);
  const contender=rankContenders(race,r,{displayPass:r.decision==='PASS'});
  const contenderLine=estimatedWinLine(race,contender,'contender');
- const contenderList=contender.rankings.length?candidateTable(contender.rankings.slice(0,4).map((h,i)=>`<tr><td><b>${i+1}. #${escapeText(h.n||'—')} ${escapeText(h.name)}</b></td><td>${h.score.toFixed(3)}</td>${winLineFields(contenderLine,h)}</tr>`).join('')):'';
+ const contenderRows=(rows,offset=0)=>rows.map((h,i)=>`<tr><td><b>${offset+i+1}. #${escapeText(h.n||'—')} ${escapeText(h.name)}</b></td><td>${h.score.toFixed(3)}</td>${winLineFields(contenderLine,h)}</tr>`).join('');
+ const contenderList=contender.rankings.length?candidateTable(contenderRows(contender.rankings.slice(0,4))):'';
+ const remainingContenders=contender.rankings.length>4?`<details class="tiny muted remaining-ranked" style="margin-top:8px"><summary>Remaining Ranked Horses</summary>${candidateTable(contenderRows(contender.rankings.slice(4),4))}</details>`:'';
 
  if(r.decision==='PASS'){
   const p=passRaceDisplay(r),other=p.general.length?`<div class="tiny muted">Other pass reasons: ${p.general.map(escapeText).join('; ')}</div>`:'';
   contenderTarget.innerHTML='<b>Pass-No wager</b><div class="tiny muted" style="margin:5px 0">Provisional ranking of rated runners only; unrated horses may be competitive. Not an official full-field Contender ranking.</div>'+(contenderList||`<div class="tiny muted">${escapeText(contender.reason||'No horses have enough verified evidence for a numerical rating.')}</div>`)+other;
  }else contenderTarget.innerHTML=contender.decision==='RATEABLE'?contenderList:`<b>Contender: ${escapeText(contender.decision)}</b><div class="tiny muted">${escapeText(contender.reason)}</div>`;
 
- contenderTarget.innerHTML=modelEvidenceHtml(race,contender,{model:'contender'})+contenderTarget.innerHTML+winLineNote(contenderLine);
+ contenderTarget.innerHTML=contenderTarget.innerHTML+remainingContenders+modelEvidenceHtml(race,contender,{model:'contender'})+winLineNote(contenderLine);
 
 }
 // Research-only local freeze. Captures the current rendered model evidence without changing ratings.
@@ -299,6 +301,12 @@ document.getElementById('freezeAllModels').onclick=()=>{
  finally{race=original;for(const [id,html]of saved)document.getElementById(id).innerHTML=html;}
 };
 function providerRace(provider){if(provider===cardProvider(activeCard))return {race,reason:null};return pairedRace(providerCards,provider,race);}
+function morningLineProvider(){
+ const active=cardProvider(activeCard),stamp=card=>Date.parse(card?.imported_at)||0;
+ const candidates=['DRF','BRISNET'].filter(provider=>providerRace(provider).race);
+ candidates.sort((a,b)=>stamp(providerCards[b])-stamp(providerCards[a])||(a===active?-1:b===active?1:0));
+ return candidates[0]||active;
+}
 function renderRaceInsights(){
  const ids={BRISNET:['brisTopContenders','brisFinisherCandidates','brisContenderCandidates'],DRF:['topContenders','finisherCandidates','contenderCandidates']};
  for(const provider of ['BRISNET','DRF']){const source=providerRace(provider);if(source.race)renderModelRow(source.race,ids[provider]);else for(const id of ids[provider])document.getElementById(id).innerHTML='<div class="note small">'+escapeText(source.reason)+'</div>';}
@@ -359,7 +367,8 @@ function renderHeader(){
  raceTitle.textContent=`${race.track} · Race ${race.race}`;
  raceBadges.innerHTML=`<span class="badge gold">${escapeText(displayDistance(race.dist)||"—")} ${race.surface||""}</span><span class="badge">${escapeText(displayDistance(race.cls)||"Race")}</span><span class="badge">${race.post||"—"}</span><span class="badge green">Active card</span>`;
  let active=race.horses.filter(h=>h.odds!=="SCR");
- topMl.innerHTML='<div class="tiny muted" style="margin:5px 0">Three shortest morning lines per PP source · reference odds only.</div><table class="candidate-table morning-line-table"><thead><tr><th scope="col">Horse</th><th scope="col">Rank</th><th scope="col">M/L Odds</th><th scope="col">Source</th></tr></thead><tbody>'+['DRF','BRISNET'].map(provider=>{const source=providerRace(provider);if(!source.race)return '<tr><td colspan="4"><b>'+provider+'</b> · '+escapeText(source.reason)+'</td></tr>';const ml=source.race.horses.filter(h=>h.odds!=='SCR'&&h.included_in_frozen_field!==false&&(!h.entry_status||h.entry_status==='REGULAR')&&Number.isFinite(oddsNumber(h.ml))).sort((a,b)=>oddsNumber(a.ml)-oddsNumber(b.ml)).slice(0,3);return ml.length?ml.map((h,i)=>'<tr><td><b>#'+escapeText(h.n)+' '+escapeText(h.name)+'</b></td><td>'+(i+1)+'</td><td>'+escapeText(h.ml)+'</td><td>'+provider+'</td></tr>').join(''):'<tr><td colspan="4"><b>'+provider+'</b> · Verified morning line unavailable</td></tr>';}).join('')+'</tbody></table>';
+ const mlProvider=morningLineProvider(),mlSource=providerRace(mlProvider),ml=(mlSource.race?.horses||[]).filter(h=>h.odds!=='SCR'&&h.included_in_frozen_field!==false&&(!h.entry_status||h.entry_status==='REGULAR')&&Number.isFinite(oddsNumber(h.ml))).sort((a,b)=>oddsNumber(a.ml)-oddsNumber(b.ml)).slice(0,4);
+ topMl.innerHTML='<div class="tiny muted" style="margin:5px 0">Four shortest morning lines · '+escapeText(mlProvider)+' · reference odds only.</div><table class="candidate-table morning-line-table"><thead><tr><th scope="col">Horse</th><th scope="col">Rank</th><th scope="col">M/L Odds</th><th scope="col">Source</th></tr></thead><tbody>'+(ml.length?ml.map((h,i)=>'<tr><td><b>#'+escapeText(h.n)+' '+escapeText(h.name)+'</b></td><td>'+(i+1)+'</td><td>'+escapeText(h.ml)+'</td><td>'+escapeText(mlProvider)+'</td></tr>').join(''):'<tr><td colspan="4">'+escapeText(mlSource.reason||'Verified morning line unavailable')+'</td></tr>')+'</tbody></table>';
  const panel=kind=>{const rows=fieldConnections(active,kind).slice(0,3);return rows.length?rows.map((x,i)=>`<div><b>${i+1}. ${escapeText(x.name)}</b> <span class="pill">${x.win==null?'No starts':x.win.toFixed(1)+'%'}</span><div class="tiny muted">${x.wins}/${x.starts} · uploaded PP local record</div></div>`).join(""):"<span class=\"muted\">Source record unavailable; upload the PP again.</span>"};
  topJockeys.innerHTML=panel('jockey');topTrainers.innerHTML=panel('trainer');
  const pairs=connectionRows(race).filter(x=>x.topPair);
@@ -567,6 +576,16 @@ clearPP.onclick=()=>{for(const r of Object.values(activeCard.races))for(const h 
 
 
 initKnowledgeBase(()=>({card:activeCard,race,rating:currentRating()}));
+// Keep the original method descriptions available in Knowledge Base, away from Race Day.
+const modelMethodsPanel=document.createElement('div');modelMethodsPanel.id='contenderModelDetails';modelMethodsPanel.className='card span12';
+modelMethodsPanel.innerHTML='<div class="kicker">Model documentation</div><h3 class="sectiontitle">Contender model details</h3>';
+for(const [id,label]of [['contenderCandidates','DRF Contender'],['brisContenderCandidates','Brisnet Contender']]){
+ const details=document.getElementById(id).closest('.card').querySelector(':scope > details');
+ if(details){details.dataset.modelMethod=id;details.open=true;const heading=document.createElement('h4');heading.textContent=label;modelMethodsPanel.append(heading,details);}
+}
+const knowledgeGrid=document.querySelector('#knowledge > .grid');if(knowledgeGrid)knowledgeGrid.insertBefore(modelMethodsPanel,knowledgeGrid.children[1]||null);
+updateBrisnetMethods(document.getElementById('brisContenderCandidates'),'contender',true);
+
 renderAll();
 </script>
 </body></html>
