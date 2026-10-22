@@ -63,8 +63,6 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <div><div class="muted small" style="margin-bottom:5px">Race</div><div class="racebar" id="racebar"></div></div>
 </div><div id="declaredScratches" class="small muted" role="status"></div><div class="flex" style="margin-top:12px;flex-wrap:wrap"><button class="primary" id="uploadBrisnet">1. Upload Brisnet PP</button><input id="brisnetFile" type="file" accept=".pdf" hidden><button class="primary" id="uploadDrf">2. Upload DRF PP</button><input id="drfFile" type="file" accept=".pdf" hidden><button class="primary" id="updateOddsScratches">Update Odds &amp; Scratches</button><span class="small muted" id="nyraUpdateStatus" role="status" aria-live="polite">Fetch NYRA updates for the selected race.</span></div></div>
 
-<div class="card span12"><div class="kicker">Prospective research snapshot</div><div class="flex" style="align-items:center;gap:12px;flex-wrap:wrap"><button class="primary" id="freezeAllModels">Freeze All Models</button><span class="small muted" id="freezeAllStatus" role="status">Local timestamped research export; no wager authorization. Verify before post time.</span></div></div>
-<div class="card span12"><div class="kicker">Keep both PP sources loaded</div><div class="flex" style="flex-wrap:wrap;margin-top:8px"><button class="secondary" id="exportBrisnetSourceAudit" type="button">Export Brisnet Source Audit</button><button class="secondary" id="exportBrisnetModelAudit" type="button">Export Brisnet Model Input Audit</button><label for="ppSourceView" class="small">Horse grid / Pace source</label><select id="ppSourceView" style="width:auto"><option value="BRISNET">Brisnet</option><option value="DRF">DRF</option></select></div><div class="small muted" id="providerCardsStatus" role="status" style="margin-top:10px"></div><div class="small" id="providerUploadStatus" role="status" style="margin-top:6px"></div><div class="progress" style="margin-top:10px"><i id="ppProg"></i></div><div id="ppStatus" class="muted small" role="status" style="margin-top:8px">Upload each PP once using its matching button. Processing and saved cards stay in this browser.</div><details id="manageSavedCards" class="small" style="margin-top:12px"><summary>Manage saved cards</summary><div class="flex" style="flex-wrap:wrap;margin-top:10px"><button class="secondary" id="clearPP">Clear selected PP evidence</button><button class="secondary" id="resetSample">Reset DRF sample card</button></div><p class="muted">Clear affects the source selected in Horse grid / Pace source. Reset loads the demonstration into the DRF slot. The other PP source is retained.</p></details></div>
 <div class="card span12"><div class="kicker">Morning lines · both PP sources</div><div id="topMl" class="stack small"></div></div>
 <div class="span12 kicker">Brisnet models</div>
 <div class="card span4"><div class="kicker">Brisnet · V4.4c</div><div id="brisTopContenders" class="stack small"></div><details class="tiny muted" style="margin-top:10px"><summary>How V4.4c ranks</summary><p>Latest Beyer 40 weight points · best Beyer from the latest three starts 22 · jockey 7 · trainer 8. Jockey and trainer win percentages are multiplied by three, capped at 100. Horses with one or two starts can also use a verified trainer-context score at 12 weight points. Missing inputs redistribute the available weights; verified zero counts. Field strength, pace fit, rebound protection and lightly raced upside can adjust the base rating by up to ±6 points. PASS races show provisional rated runners only.</p></details></div>
@@ -139,21 +137,29 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 </div></section>
 
 <section id="public" class="hidden"><div class="grid">
-<div class="card span7"><div class="kicker">Public NYRA loader</div><h3 class="sectiontitle">Update entries and scratches from NYRA</h3>
+<div class="card span12"><div class="kicker">Public NYRA loader</div><h3 class="sectiontitle">Open NYRA race page</h3>
 <div class="controls">
 <div><label>Track</label><select id="track"><option value="belmont">Belmont Park</option><option value="aqueduct">Aqueduct</option><option value="saratoga">Saratoga</option></select></div>
 <div><label>Date</label><input id="raceDate" type="date" value="2026-10-03"></div>
 <div><label>Race</label><input id="raceNo" type="number" min="1" max="20" value="1"></div>
 <div style="grid-column:span 3"><label>NYRA URL</label><input id="raceUrl" readonly></div>
 </div>
-<div class="flex" style="margin-top:12px"><button class="primary" id="tryLoad">Try direct load</button><a id="openRace" target="_blank"><button class="secondary">Open NYRA page</button></a></div>
-<div id="loadStatus" class="muted small" style="margin-top:10px">Direct loading depends on NYRA browser permissions. If blocked, use the paste method below.</div>
+<div class="flex" style="margin-top:12px"><a id="openRace" target="_blank"><button class="secondary">Open NYRA page</button></a></div>
 </div>
+
+<div class="card span12"><div class="kicker">Keep both PP sources loaded</div><div class="flex" style="flex-wrap:wrap;margin-top:8px"><button class="secondary" id="exportBrisnetSourceAudit" type="button">Export Brisnet Source Audit</button><button class="secondary" id="exportBrisnetModelAudit" type="button">Export Brisnet Model Input Audit</button><label for="ppSourceView" class="small">Horse grid / Pace source</label><select id="ppSourceView" style="width:auto"><option value="BRISNET">Brisnet</option><option value="DRF">DRF</option></select></div><div class="small muted" id="providerCardsStatus" role="status" style="margin-top:10px"></div><div class="small" id="providerUploadStatus" role="status" style="margin-top:6px"></div><div class="progress" style="margin-top:10px"><i id="ppProg"></i></div><div id="ppStatus" class="muted small" role="status" style="margin-top:8px">Upload each PP once using its matching button. Processing and saved cards stay in this browser.</div><details id="manageSavedCards" class="small" style="margin-top:12px"><summary>Manage saved cards</summary><div class="flex" style="flex-wrap:wrap;margin-top:10px"><button class="secondary" id="clearPP">Clear selected PP evidence</button><button class="secondary" id="resetSample">Reset DRF sample card</button></div><p class="muted">Clear affects the source selected in Horse grid / Pace source. Reset loads the demonstration into the DRF slot. The other PP source is retained.</p></details></div>
+<div class="card span12"><div class="kicker">Prospective research snapshot</div><div class="flex" style="align-items:center;gap:12px;flex-wrap:wrap"><button class="primary" id="freezeAllModels">Freeze All Models</button><span class="small muted" id="freezeAllStatus" role="status">Local timestamped research export; no wager authorization. Verify before post time.</span></div></div>
+</div></section>
+
+<!-- Retired NYRA loading controls: preserved for future restoration; existing handlers remain intact. -->
+<div id="retiredNyraControls" hidden aria-hidden="true" style="display:none">
+<button class="primary" id="tryLoad">Try direct load</button>
+<div id="loadStatus" class="muted small" style="margin-top:10px">Direct loading depends on NYRA browser permissions. If blocked, use the paste method below.</div>
 <div class="card span5"><h3 class="sectiontitle">Why a fallback?</h3><div class="note small">Browsers can block one website from reading another website directly (CORS). This is a browser security rule, not a data problem. V2 therefore includes a no-server fallback: open the NYRA race page, select/copy the race text, paste it here, and parse it locally.</div></div>
 <div class="card span12"><h3 class="sectiontitle">Paste NYRA entry text</h3><textarea id="nyraPaste" rows="9" placeholder="Paste the visible race section from NYRA here…"></textarea>
 <div class="flex" style="margin-top:10px"><button class="primary" id="parsePaste">Update Entries & Scratches</button><button class="secondary" id="loadSample">Restore Oct. 3 full card</button></div>
 <div id="parseStatus" class="small muted" style="margin-top:8px"></div></div>
-</div></section>
+</div>
 
 <section id="knowledge" class="hidden"></section>
 

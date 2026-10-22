@@ -36,6 +36,19 @@ for(const profile of profiles){
   assert.equal(await page.getByText('Potentially overlooked angles',{exact:false}).isVisible(),false);
   assert.equal(await page.locator('[data-tab="pp"]').count(),0);assert.equal(await page.locator('#ppFile').count(),0);assert.equal(await page.locator('#manageSavedCards').count(),1);assert.equal(await page.locator('#uploadBrisnet').count(),1);assert.equal(await page.locator('#uploadDrf').count(),1);
  });
+ await check('D04-clean-Load-NYRA-layout',async()=>{
+  await page.locator('[data-tab="public"]').click();
+  for(const id of ['openRace','freezeAllModels','ppSourceView','exportBrisnetSourceAudit','exportBrisnetModelAudit'])assert.equal(await page.locator('#public #'+id).isVisible(),true);
+  for(const id of ['tryLoad','nyraPaste','parsePaste','loadSample','loadStatus'])assert.equal(await page.locator('#'+id).isVisible(),false);
+  assert.equal(await page.getByText('Why a fallback?',{exact:true}).isVisible(),false);
+  const link=await page.locator('#openRace').boundingBox(),source=await page.locator('#ppSourceView').boundingBox(),freeze=await page.locator('#freezeAllModels').boundingBox();
+  assert.ok(link.y<source.y&&source.y<freeze.y);
+  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+  await page.screenshot({path:`${out}/${profile.name}-load-nyra-cleanup.png`,fullPage:true});
+  await page.locator('[data-tab="raceday"]').click();
+  for(const id of ['uploadBrisnet','uploadDrf'])assert.equal(await page.locator('#raceday #'+id).isVisible(),true);
+  for(const id of ['freezeAllModels','ppSourceView'])assert.equal(await page.locator('#raceday #'+id).count(),0);
+ });
  await check('D05-notes-follow-race-and-reload',async()=>{
   await page.locator('[data-tab="raceday"]').click();
   const buttons=page.locator('#racebar button');
@@ -235,11 +248,11 @@ for(const profile of profiles){
    await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});await page.locator('[data-tab="raceday"]').click();
    for(const id of ['brisTopContenders','brisFinisherCandidates','brisContenderCandidates','topContenders','finisherCandidates','contenderCandidates']){assert.match(await page.locator('#'+id).innerText(),/ranked 2\/3 starters/);assert.match(await page.locator('#'+id).innerText(),/Morning-line favorite — UNRANKED/);}
    const brBox=await page.locator('#brisTopContenders').boundingBox(),drBox=await page.locator('#topContenders').boundingBox(),mlBox=await page.locator('#topMl').boundingBox();assert.ok(brBox.y<drBox.y);assert.ok(mlBox.y<brBox.y);
-   await page.locator('#raceNotes').fill('Paired DRF note');await page.locator('#ppSourceView').selectOption('BRISNET');assert.match(await page.locator('#horseTable tbody tr').first().innerText(),/71/);await page.locator('#raceNotes').fill('Paired Brisnet note');
-   await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});assert.equal(await page.locator('#raceNotes').inputValue(),'Paired Brisnet note');await page.locator('#ppSourceView').selectOption('DRF');assert.equal(await page.locator('#raceNotes').inputValue(),'Paired DRF note');assert.match(await page.locator('#horseTable tbody tr').first().innerText(),/91/);
+   await page.locator('#raceNotes').fill('Paired DRF note');await page.locator('[data-tab="public"]').click();await page.locator('#ppSourceView').selectOption('BRISNET');await page.locator('[data-tab="raceday"]').click();assert.match(await page.locator('#horseTable tbody tr').first().innerText(),/71/);await page.locator('#raceNotes').fill('Paired Brisnet note');
+   await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});assert.equal(await page.locator('#raceNotes').inputValue(),'Paired Brisnet note');await page.locator('[data-tab="public"]').click();await page.locator('#ppSourceView').selectOption('DRF');await page.locator('[data-tab="raceday"]').click();assert.equal(await page.locator('#raceNotes').inputValue(),'Paired DRF note');assert.match(await page.locator('#horseTable tbody tr').first().innerText(),/91/);
    await page.locator('#racebar button').nth(1).click();for(const id of ['brisFinisherCandidates','finisherCandidates'])assert.match(await page.locator('#'+id).innerText(),/QA Paired R2/);
    await page.locator('[data-tab="pace"]').click();assert.equal(await page.locator('#ppSourceView').inputValue(),'BRISNET');assert.match(await page.locator('#paceCardStatus').innerText(),/Showing Brisnet.*2026-10-18.*Race 2/);assert.match(await page.locator('#paceSourceLabel').innerText(),/Brisnet native/i);assert.match(await page.locator('#weights').innerText(),/Brisnet/);
-   await page.locator('[data-tab="raceday"]').click();assert.match(await page.locator('#horseTable tbody tr').first().innerText(),/71/);await page.locator('#ppSourceView').selectOption('DRF');
+   await page.locator('[data-tab="raceday"]').click();assert.match(await page.locator('#horseTable tbody tr').first().innerText(),/71/);await page.locator('[data-tab="public"]').click();await page.locator('#ppSourceView').selectOption('DRF');await page.locator('[data-tab="raceday"]').click();
    await page.screenshot({path:`${out}/${profile.name}-paired-PPs.png`,fullPage:true});
    await page.evaluate(async()=>{const m=await import('./dual-pp-cards.js'),cards=await m.readProviderCards(),b=cards.BRISNET;b.date='2026-10-17';Object.values(b.races).forEach(r=>r.date=b.date);await m.writeProviderCard('BRISNET',b);});
    await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});assert.match(await page.locator('#brisTopContenders').innerText(),/does not match/);assert.equal(await page.locator('#brisTopContenders tbody tr').count(),0);assert.match(await page.locator('#topContenders').innerText(),/QA Paired/);
@@ -249,12 +262,12 @@ for(const profile of profiles){
    await page.route(pdfRoute,async route=>{await route.fulfill({contentType:'application/javascript',body:`export const GlobalWorkerOptions={};export function getDocument(){const item=(str,x,y)=>({str,transform:[1,0,0,1,x,y],width:str.length*3.16});const items=[item("Premium Plus PP's",10,760),item('Belmont Park',120,760),item('Mdn 100k 6 Furlongs Sunday, October 18, 2026 Race 1',200,760),item('brisnet.com Bloodstock Research',10,20),item('QA Upload FTS (NA 0)',45,650),item('1',17,645),item('Life: 0 0 - 0 - 0',390,650),item('8/1',17,636)];return {promise:Promise.resolve({numPages:1,getPage:async()=>({getOperatorList:async()=>{},getTextContent:async()=>({items,styles:{}}),commonObjs:{get:()=>null}})})};}`});});
    try{
     const drfBefore=await page.evaluate(async()=>{const m=await import('./dual-pp-cards.js');return JSON.stringify((await m.readProviderCards()).DRF);});
-    await page.locator('#drfFile').setInputFiles({name:'qa-wrong-provider.pdf',mimeType:'application/pdf',buffer:Buffer.from('synthetic QA bytes')});await page.locator('#providerUploadStatus').getByText('Upload failed',{exact:false}).waitFor({timeout:20000});
+    await page.locator('#drfFile').setInputFiles({name:'qa-wrong-provider.pdf',mimeType:'application/pdf',buffer:Buffer.from('synthetic QA bytes')});await page.locator('#providerUploadStatus').getByText('Upload failed',{exact:false}).waitFor({state:'attached',timeout:20000});
     assert.equal(await page.evaluate(async()=>{const m=await import('./dual-pp-cards.js');return JSON.stringify((await m.readProviderCards()).DRF);}),drfBefore);
-    await page.locator('#brisnetFile').setInputFiles({name:'qa-correct-brisnet.pdf',mimeType:'application/pdf',buffer:Buffer.from('synthetic QA bytes')});await page.locator('#providerUploadStatus').getByText('card saved',{exact:false}).waitFor({timeout:20000});
+    await page.locator('#brisnetFile').setInputFiles({name:'qa-correct-brisnet.pdf',mimeType:'application/pdf',buffer:Buffer.from('synthetic QA bytes')});await page.locator('#providerUploadStatus').getByText('card saved',{exact:false}).waitFor({state:'attached',timeout:20000});
     assert.match(await page.locator('#brisFinisherCandidates').innerText(),/QA Upload FTS/);assert.match(await page.locator('#finisherCandidates').innerText(),/QA Paired/);assert.equal(await page.evaluate(async()=>{const m=await import('./dual-pp-cards.js');return JSON.stringify((await m.readProviderCards()).DRF);}),drfBefore);
    }finally{await page.unroute(pdfRoute);}
-   await page.locator('#manageSavedCards summary').click();await page.locator('#clearPP').click();assert.match(await page.locator('#ppStatus').innerText(),/other source is retained/);assert.match(await page.locator('#finisherCandidates').innerText(),/QA Paired/);await page.locator('#resetSample').click();assert.match(await page.locator('#cardKicker').innerText(),/2026-10-03/);assert.match(await page.locator('#providerCardsStatus').innerText(),/BRISNET: Belmont Park.*2026-10-18/);
+   await page.locator('[data-tab="public"]').click();await page.locator('#manageSavedCards summary').click();await page.locator('#clearPP').click();assert.match(await page.locator('#ppStatus').innerText(),/other source is retained/);assert.match(await page.locator('#finisherCandidates').innerText(),/QA Paired/);await page.locator('#resetSample').click();assert.match(await page.locator('#cardKicker').innerText(),/2026-10-03/);assert.match(await page.locator('#providerCardsStatus').innerText(),/BRISNET: Belmont Park.*2026-10-18/);
 
    assert.equal(errors.length,0,'Dual-provider page errors: '+errors.join(' | '));
   }finally{
