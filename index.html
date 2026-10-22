@@ -86,8 +86,8 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <div style="display:none" aria-hidden="true" class="card span12"><div class="kicker">Top Jockey/Trainer This Race</div><div id="topPairings" class="stack small"></div></div>
 <div class="card span12" style="display:none" aria-hidden="true"><h3 class="sectiontitle">J1 research comparison</h3><div class="small muted">Compare source-card annual jockey rates with the baseline. Historical improvement is unvalidated; these rankings do not authorize bets.</div><div id="j1Comparison" class="small" style="margin-top:10px"></div></div>
 <div class="card span12">
-<div class="spread"><h3 class="sectiontitle">Race handicapping grid</h3><div class="small muted">Verified PP evidence · V4.4c scoring is locked</div></div><div class="sortbar" style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 12px"><span class="small muted" style="align-self:center">Sort:</span><button class="secondary sortbtn" data-sort="number">Horse # ↕</button><button class="secondary sortbtn" data-sort="ml">ML ↕</button></div>
-<div style="overflow:auto;max-height:540px"><table id="horseTable"><thead><tr><th>Horse</th><th>ML</th><th>Style</th><th>Jockey</th><th>Trainer</th><th>PP J Win%</th><th>PP T Win%</th><th>PP Fig</th><th>Handicap Rating</th><th>Fair Odds*</th></tr></thead><tbody></tbody></table></div>
+<div class="spread"><h3 class="sectiontitle">Race handicapping grid</h3><div class="small muted" id="gridModelStatus" role="status">Contender ratings · verified PP evidence</div></div><div class="sortbar" style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 12px"><span class="small muted" style="align-self:center">Sort:</span><button class="secondary sortbtn" data-sort="contender">Contender Rank ↑</button><button class="secondary sortbtn" data-sort="number">Horse # ↕</button><button class="secondary sortbtn" data-sort="ml">ML ↕</button></div>
+<div style="overflow:auto;max-height:540px"><table id="horseTable"><thead><tr><th>Horse</th><th>ML</th><th>Style</th><th>Jockey</th><th>Trainer</th><th>PP J Win%</th><th>PP T Win%</th><th>PP Fig</th><th>Contender Rank</th><th>Contender Rating</th><th>Fair Odds*</th></tr></thead><tbody></tbody></table></div>
 </div>
 
 <div style="display:none" aria-hidden="true" class="card span12"><div class="spread"><div><div class="kicker">Potentially overlooked angles</div><h3 class="sectiontitle">Things to Consider — Auto Analysis</h3></div><span class="badge gold">PP-driven</span></div>
@@ -245,6 +245,11 @@ function trainerContextScore(h){
 function workScore(h){return h.workRating!==""&&h.workRating!=null&&Number.isFinite(+h.workRating)?+h.workRating:null}
 function pedigreeScore(h){return h.pedigreeRating!==""&&h.pedigreeRating!=null&&Number.isFinite(+h.pedigreeRating)?+h.pedigreeRating:null}
 function currentRating(){return rankBrisnetModels(race)?.v44c||websiteRace(race)}
+function contenderGridRating(){
+ const native=rankBrisnetModels(race);if(native)return native.contender;
+ const baseline=websiteRace(race);return rankContenders(race,baseline,{displayPass:baseline.decision==='PASS'});
+}
+const gridRunnerKey=h=>JSON.stringify([String(h.n??''),String(h.name??'')]);
 function score(h){const r=currentRating();return r.rankings.find(x=>x.name===h.name)?.v44c_display_score??"N/A"}
 function confidenceBadge(h){if(h.ratings?.provider==="BRISNET"){const ranked=currentRating().rankings.some(x=>x.name===h.name);return `<span class="conf low">${ranked?"Brisnet research":"Unrated"}</span>`;}let x=evidenceProfile({...h,jockeyRating:h.jockey_win,trainerRating:h.trainer_win}).confidence;return `<span class="conf ${x.toLowerCase()}">${x} core coverage</span>`}
 function displayVal(v){return (v===""||v==null)?'<span class="na">N/A</span>':v}
@@ -329,13 +334,14 @@ function renderJ1Comparison(){
  const list=r=>r.decision==="PASS"?"PASS — "+r.pass_reasons.map(x=>escapeText(x.reason)).join("; "):r.rankings.slice(0,4).map((h,i)=>`${i+1}. ${escapeText(h.name)} (${h.v44c_display_score})`).join("<br>");
  panel.innerHTML=`<div class="grid"><div class="span6"><b>V4.4c · default</b><div>${list(base)}</div></div><div class="span6"><b>J1 · research only</b><div>${list(j1)}</div></div></div><div class="muted" style="margin-top:8px">Verified annual jockey inputs: ${j1.annual_coverage}/${j1.eligible_count}. ${j1.fallbacks.length?"Baseline input retained for: "+j1.fallbacks.map(escapeText).join(", ")+". Upload the source PP again to extract annual counts from older saved cards.":"All eligible runners have source-card annual counts."} Baseline race grid and betting PASS remain in force.</div>`;
 }
-let gridSort={key:"number",dir:1};
+let gridSort={key:"contender",dir:1};
 function oddsNumber(o){if(!o||o==="SCR")return Infinity;if(/^\d+(\.\d+)?$/.test(String(o)))return +o;if(String(o).includes("/")){let [a,b]=String(o).split("/").map(Number);return b?a/b:Infinity}return Infinity}
-function sortedGridHorses(){
- const hs=[...race.horses];
+function sortedGridHorses(result=contenderGridRating()){
+ const hs=[...race.horses],ranks=new Map((result.rankings||[]).map((h,i)=>[gridRunnerKey(h),i+1]));
  hs.sort((a,b)=>{
    let av,bv;
-   if(gridSort.key==="ml"){av=oddsNumber(a.ml);bv=oddsNumber(b.ml)}
+   if(gridSort.key==="contender"){av=ranks.get(gridRunnerKey(a));bv=ranks.get(gridRunnerKey(b));if(av==null||bv==null){if(av==null&&bv==null)return String(a.n).localeCompare(String(b.n),undefined,{numeric:true});return av==null?1:-1;}}
+   else if(gridSort.key==="ml"){av=oddsNumber(a.ml);bv=oddsNumber(b.ml)}
    else if(gridSort.key==="prerace"){av=oddsNumber(a.odds);bv=oddsNumber(b.odds)}
    else {av=+a.n;bv=+b.n}
    if(av===bv)return (+a.n)-(+b.n);
@@ -346,14 +352,14 @@ function sortedGridHorses(){
 function updateSortButtons(){
  document.querySelectorAll(".sortbtn").forEach(b=>{
    const active=b.dataset.sort===gridSort.key;
-   const labels={number:"Horse #",ml:"ML",prerace:"Pre-Race"};
+   const labels={contender:"Contender Rank",number:"Horse #",ml:"ML",prerace:"Pre-Race"};
    b.textContent=labels[b.dataset.sort]+(active?(gridSort.dir===1?" ↑":" ↓"):" ↕");
  });
 }
 document.querySelectorAll(".sortbtn").forEach(b=>b.onclick=()=>{
  const key=b.dataset.sort;
  if(gridSort.key===key)gridSort.dir*=-1;
- else {gridSort.key=key;gridSort.dir=key==="number"?1:-1}
+ else {gridSort.key=key;gridSort.dir=["number","contender"].includes(key)?1:-1}
  renderHorses();updateSortButtons();
 });
 function syncRaceNotes(){raceNotes.value=state.cards?.[activeCard.id]?.notes?.[race.race]||""}
@@ -400,10 +406,12 @@ function renderPaceCardStatus(){
 document.getElementById('ppSourceView').onchange=()=>{const provider=document.getElementById('ppSourceView').value,card=providerCards[provider];if(!card){document.getElementById('providerUploadStatus').textContent='Upload a '+provider+' card first.';document.getElementById('ppSourceView').value=cardProvider(activeCard);return;}save();activeCard=structuredClone(card);const n=activeCard.races[race.race]?race.race:+Object.keys(activeCard.races).sort((a,b)=>+a-+b)[0];race=structuredClone(activeCard.races[n]);restoreRunnerEdits();save();renderAll();};
 function selectRace(n){if(!activeCard.races[n])return;race=structuredClone(activeCard.races[n]);restoreRunnerEdits();renderAll();window.scrollTo({top:0,behavior:"smooth"})}
 function renderHorses(){
- horseTable.querySelector("tbody").innerHTML=sortedGridHorses().map(h=>{let js=h.jockey_win!=null?{win:h.jockey_win}:null,ts=h.trainer_win!=null?{win:h.trainer_win}:null;return `<tr style="${h.odds==="SCR"?"opacity:.48":""}">
+ const grid=contenderGridRating(),entries=new Map((grid.rankings||[]).map((h,i)=>[gridRunnerKey(h),{...h,gridRank:i+1}])),provisional=grid.provisional||grid.decision!=='RATEABLE';
+ document.getElementById('gridModelStatus').textContent=(cardProvider(activeCard)==='BRISNET'?'Brisnet':'DRF')+' Contender · '+entries.size+'/'+race.horses.filter(paceEligible).length+' starters ranked'+(provisional?' · provisional / '+grid.decision:'')+(grid.reason?' · '+grid.reason:'');
+ horseTable.querySelector("tbody").innerHTML=sortedGridHorses(grid).map(h=>{const entry=entries.get(gridRunnerKey(h)),label=h.odds==='SCR'?'Scratched':!paceEligible(h)?'Excluded':'Unranked';let js=h.jockey_win!=null?{win:h.jockey_win}:null,ts=h.trainer_win!=null?{win:h.trainer_win}:null;return `<tr data-program="${escapeText(h.n)}" style="${h.odds==="SCR"?"opacity:.48":""}">
 <td><span class="num">${h.n}</span><span class="horse">${escapeText(h.name)}${h.entry_status&&h.entry_status!=="REGULAR"?` <span class="pill">${h.entry_status} excluded</span>`:""}</span></td><td>${h.ml||"—"}</td>
 <td><span class="pacechip ${escapeText(displayPaceStyle(h))}">${escapeText(displayPaceStyle(h))}</span></td><td>${escapeText(h.source_context?.jockey?.name||h.jockey_annual?.jockey||h.j||"—")}</td><td>${escapeText(h.source_context?.trainer?.name||h.t||"—")}</td>
-<td>${js?js.win.toFixed(1)+"%":"—"}</td><td>${ts?ts.win.toFixed(1)+"%":"—"}</td><td>${displayVal(h.ratings?.provider==="BRISNET"?h.ratings.lines?.[0]?.speed:h.last)}</td><td><span class="score">${score(h)}</span><div style="margin-top:4px">${confidenceBadge(h)}</div></td><td><b>${fairOddsMap()[h.n]||"—"}</b></td></tr>`}).join("");
+<td>${js?js.win.toFixed(1)+"%":"—"}</td><td>${ts?ts.win.toFixed(1)+"%":"—"}</td><td>${displayVal(h.ratings?.provider==="BRISNET"?h.ratings.lines?.[0]?.speed:h.last)}</td><td class="grid-contender-rank">${entry?entry.gridRank:label}</td><td><span class="score">${entry&&Number.isFinite(entry.score)?entry.score.toFixed(3):"N/A"}</span><div class="tiny muted" style="margin-top:4px">${entry?(provisional?"Provisional Contender rating":"Contender rating"):label}</div></td><td><b>${fairOddsMap()[h.n]||"—"}</b></td></tr>`}).join("");
 }
 function renderBrisnetEvidence(){
  const target=document.getElementById("brisnetEvidence");if(!target)return;
