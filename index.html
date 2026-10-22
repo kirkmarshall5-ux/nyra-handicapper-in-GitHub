@@ -101,8 +101,8 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 
 <section id="pace" class="hidden"><div class="grid">
 <div class="card span12"><div class="kicker">Pace &amp; Ratings source · Brisnet preferred</div><div id="paceCardStatus" class="small" role="status"></div><div class="tiny muted">Opening this tab selects the matching Brisnet card when available. This also updates the Horse grid / Pace source on Race Day. Upload Brisnet PPs there to use their E1, E2 and LP figures.</div></div>
-<div class="card span8"><div class="kicker" id="paceSourceLabel">Pace-label proxy · not a validated scenario</div><h3 class="sectiontitle">Pace map</h3><div class="small muted" id="paceDescription">These lanes are Early/Late-derived display hints, not verified running styles. Source-call proxies are in the PP context panel.</div><div id="paceMap" class="stack"></div></div>
-<div class="card span4"><div class="kicker">Transparent comparison</div><h3 class="sectiontitle" id="paceRulesTitle">Locked V4.4c rules</h3>
+<div class="card span12"><div class="kicker" id="paceSourceLabel">Pace-label proxy · not a validated scenario</div><h3 class="sectiontitle">Pace map</h3><div class="small muted" id="paceDescription">These lanes are Early/Late-derived display hints, not verified running styles. Source-call proxies are in the PP context panel.</div><div id="paceMap" class="stack"></div></div>
+<div class="card span4" id="transparentRatingRules"><div class="kicker">Transparent comparison</div><h3 class="sectiontitle" id="paceRulesTitle">Locked V4.4c rules</h3>
 <div class="small muted">The Handicap Rating is not a win probability. It compares the entered PP information and public context. “Things to Consider” stays separate so an angle does not secretly inflate the rating.</div>
 <div id="weights" style="margin-top:12px"></div><button id="resetWeights" class="secondary" style="width:100%;margin-top:8px">Reset weights</button></div>
 
@@ -587,6 +587,9 @@ for(const [id,label]of [['contenderCandidates','DRF Contender'],['brisContenderC
 }
 const knowledgeGrid=document.querySelector('#knowledge > .grid');if(knowledgeGrid)knowledgeGrid.insertBefore(modelMethodsPanel,knowledgeGrid.children[1]||null);
 updateBrisnetMethods(document.getElementById('brisContenderCandidates'),'contender',true);
+// Relocate the existing comparison cards, keeping IDs and source-aware renderers intact.
+if(knowledgeGrid){const before=modelMethodsPanel.nextSibling;for(const id of ['transparentRatingRules','contenderRules']){const panel=document.getElementById(id);panel.classList.remove('span4');panel.classList.add('span12');knowledgeGrid.insertBefore(panel,before);}}
+
 
 renderAll();
 </script>
