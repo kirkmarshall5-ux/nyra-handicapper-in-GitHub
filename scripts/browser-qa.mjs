@@ -28,11 +28,11 @@ for(const profile of profiles){
  });
  await check('D02-three-model-panels-and-hidden-panels',async()=>{
   for(const id of ['topContenders','finisherCandidates','contenderCandidates'])assert.equal(await page.locator('#'+id).count(),1);
-  const boxes=await Promise.all(['topContenders','finisherCandidates','contenderCandidates'].map(id=>page.locator('#'+id).boundingBox()));
+  const boxes=await Promise.all(['topMl','contenderCandidates','brisContenderCandidates'].map(id=>page.locator('#'+id).boundingBox()));
   assert.ok(boxes.every(Boolean));
-  if(profile.viewport.width>1100){assert.ok(boxes[0].x<boxes[1].x&&boxes[1].x<boxes[2].x,'Finisher must be between the other models');}
-  else{assert.ok(boxes[0].y<boxes[1].y&&boxes[1].y<boxes[2].y,'Mobile panels must retain model order');}
-  for(const id of ['topJockeys','topTrainers','topPairings'])assert.equal(await page.locator('#'+id).isVisible(),false,id+' must remain hidden');
+  if(profile.viewport.width>=760){assert.ok(boxes[0].x<boxes[1].x&&boxes[1].x<boxes[2].x,'Morning Line, DRF Contender, Brisnet Contender must run left to right');}
+  else{assert.ok(boxes[0].y<boxes[1].y&&boxes[1].y<boxes[2].y,'Mobile panels must retain comparison order');}
+  for(const id of ['topJockeys','topTrainers','topPairings','topContenders','finisherCandidates','brisTopContenders','brisFinisherCandidates'])assert.equal(await page.locator('#'+id).isVisible(),false,id+' must remain hidden');
   assert.equal(await page.getByText('Potentially overlooked angles',{exact:false}).isVisible(),false);
   assert.equal(await page.locator('[data-tab="pp"]').count(),0);assert.equal(await page.locator('#ppFile').count(),0);assert.equal(await page.locator('#manageSavedCards').count(),1);assert.equal(await page.locator('#uploadBrisnet').count(),1);assert.equal(await page.locator('#uploadDrf').count(),1);
  });
@@ -86,7 +86,7 @@ for(const profile of profiles){
     localStorage.setItem('nyraV44cReleaseActiveCard',JSON.stringify({id:'qa-native-brisnet',schemaVersion:2,track,date,races:{1:race},parser_version:'BRISNET-PREMIUM-PLUS-positioned-v3',source_format:'BRISNET_PREMIUM_PLUS',warnings:[]}));
    });
    await page.reload({waitUntil:'domcontentloaded'});
-   await page.locator('#brisTopContenders').getByText('V4.4c-Brisnet base · experimental',{exact:false}).waitFor({timeout:20000});
+   await page.locator('#brisTopContenders').getByText('V4.4c-Brisnet base · experimental',{exact:false}).waitFor({state:'attached',timeout:20000});
    for(const id of ['brisTopContenders','brisContenderCandidates']){
     const target=page.locator('#'+id);assert.equal(await target.locator('tbody tr').count(),2,id+' must rank the two experienced runners');
     assert.match(await target.innerText(),/Ranked 2\/3/);
@@ -128,7 +128,7 @@ for(const profile of profiles){
     localStorage.setItem('nyraV44cReleaseActiveCard',JSON.stringify(c));
    });
    await page.reload({waitUntil:'domcontentloaded'});
-   await page.locator('#brisTopContenders').getByText('V4.4c-Brisnet base · experimental',{exact:false}).waitFor({timeout:20000});
+   await page.locator('#brisTopContenders').getByText('V4.4c-Brisnet base · experimental',{exact:false}).waitFor({state:'attached',timeout:20000});
    await page.locator('[data-tab="pace"]').click();
    assert.match(await page.locator('#paceMap').innerText(),/0\/3 eligible runners/);
    assert.match(await page.locator('#brisnetEvidence').innerText(),/Unmatched - context only/);
@@ -247,7 +247,7 @@ for(const profile of profiles){
    });
    await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});await page.locator('[data-tab="raceday"]').click();
    for(const id of ['brisTopContenders','brisFinisherCandidates','brisContenderCandidates','topContenders','finisherCandidates','contenderCandidates']){assert.match(await page.locator('#'+id).innerText(),/ranked 2\/3 starters/);assert.match(await page.locator('#'+id).innerText(),/Morning-line favorite — UNRANKED/);}
-   const brBox=await page.locator('#brisTopContenders').boundingBox(),drBox=await page.locator('#topContenders').boundingBox(),mlBox=await page.locator('#topMl').boundingBox();assert.ok(brBox.y<drBox.y);assert.ok(mlBox.y<brBox.y);
+   const brBox=await page.locator('#brisContenderCandidates').boundingBox(),drBox=await page.locator('#contenderCandidates').boundingBox(),mlBox=await page.locator('#topMl').boundingBox();assert.ok(mlBox.x<drBox.x&&drBox.x<brBox.x);assert.equal(await page.locator('#topMl table.candidate-table tbody tr').count(),6);assert.match(await page.locator('#topMl').innerText(),/M.L Odds/);assert.equal(await page.locator('#topMl tbody tr').first().locator('td').last().innerText(),'DRF');
    await page.locator('#raceNotes').fill('Paired DRF note');await page.locator('[data-tab="public"]').click();await page.locator('#ppSourceView').selectOption('BRISNET');await page.locator('[data-tab="raceday"]').click();assert.match(await page.locator('#horseTable tbody tr').first().innerText(),/71/);await page.locator('#raceNotes').fill('Paired Brisnet note');
    await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});assert.equal(await page.locator('#raceNotes').inputValue(),'Paired Brisnet note');await page.locator('[data-tab="public"]').click();await page.locator('#ppSourceView').selectOption('DRF');await page.locator('[data-tab="raceday"]').click();assert.equal(await page.locator('#raceNotes').inputValue(),'Paired DRF note');assert.match(await page.locator('#horseTable tbody tr').first().innerText(),/91/);
    await page.locator('#racebar button').nth(1).click();for(const id of ['brisFinisherCandidates','finisherCandidates'])assert.match(await page.locator('#'+id).innerText(),/QA Paired R2/);
