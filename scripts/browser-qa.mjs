@@ -83,6 +83,11 @@ for(const profile of profiles){
   for(const id of ['bets','researchFreeze','mix1Candidates','v44PaceCandidates','raceSelector','updateOddsSnapshot','manualOddsPanel'])assert.equal(await page.locator('#'+id).count(),0);
   await page.locator('[data-tab="pace"]').click();
   assert.equal(await page.locator('#paceMap').isVisible(),true);
+  assert.equal(await page.locator('#pace #transparentRatingRules, #pace #contenderRules').count(),0);
+  await page.locator('[data-tab="knowledge"]').click();
+  for(const id of ['transparentRatingRules','contenderRules','weights'])assert.equal(await page.locator('#knowledge #'+id).isVisible(),true);
+  await page.locator('[data-tab="pace"]').click();
+
   assert.equal(errors.length,0,'Uncaught page errors: '+errors.join(' | '));
  });
 
@@ -101,7 +106,7 @@ for(const profile of profiles){
     const target=page.locator('#'+id);assert.equal(await target.locator('tbody tr').count(),2,id+' must rank the two experienced runners');
     assert.match(await target.innerText(),/Ranked 2\/3/);
     assert.match(await target.innerText(),/First-time starter/);
-    assert.match(await target.innerText(),/probability conversion has not been validated/);
+    assert.match(await target.textContent(),/probability conversion has not been validated/);
    }
    assert.match(await page.locator('#brisFinisherCandidates').innerText(),/Ranked 2\/3/);
    assert.match(await page.locator('#brisFinisherCandidates').innerText(),/Finisher: PASS/);
