@@ -1,0 +1,606 @@
+{
+  "reviewer": "Codex visual source review",
+  "reviewed_on": "2026-10-21",
+  "source_pdf_sha256": "70408ec3467385109fc7ac5f6ae3d0d62e111ff0dced89ebe9e94aa7aee8edaa",
+  "scope": "All 11 PP-preview tables and all 76 selected first-call positions/margins visually compared with rendered originals; ordinary chart gap-to-next-horse table not used.",
+  "expected": {
+    "1": {
+      "page": 1,
+      "first_call": "1/4",
+      "entries": [
+        {
+          "program": "6",
+          "first_call_position": 6,
+          "beaten_lengths": 5.0,
+          "margin_label": null,
+          "margin_text": "5"
+        },
+        {
+          "program": "2",
+          "first_call_position": 4,
+          "beaten_lengths": 1.5,
+          "margin_label": null,
+          "margin_text": "1 1/2"
+        },
+        {
+          "program": "4",
+          "first_call_position": 3,
+          "beaten_lengths": 1.5,
+          "margin_label": null,
+          "margin_text": "1 1/2"
+        },
+        {
+          "program": "5",
+          "first_call_position": 5,
+          "beaten_lengths": 3.0,
+          "margin_label": null,
+          "margin_text": "3"
+        },
+        {
+          "program": "1",
+          "first_call_position": 1,
+          "beaten_lengths": 0,
+          "margin_label": null,
+          "margin_text": "1/2"
+        },
+        {
+          "program": "3",
+          "first_call_position": 2,
+          "beaten_lengths": 0.5,
+          "margin_label": null,
+          "margin_text": "1/2"
+        }
+      ]
+    },
+    "2": {
+      "page": 2,
+      "first_call": "1/4",
+      "entries": [
+        {
+          "program": "3",
+          "first_call_position": 1,
+          "beaten_lengths": 0,
+          "margin_label": null,
+          "margin_text": "2"
+        },
+        {
+          "program": "4",
+          "first_call_position": 4,
+          "beaten_lengths": 3.0,
+          "margin_label": null,
+          "margin_text": "3"
+        },
+        {
+          "program": "1",
+          "first_call_position": 3,
+          "beaten_lengths": 2.0,
+          "margin_label": null,
+          "margin_text": "2"
+        },
+        {
+          "program": "2",
+          "first_call_position": 6,
+          "beaten_lengths": 5.25,
+          "margin_label": null,
+          "margin_text": "5 1/4"
+        },
+        {
+          "program": "5",
+          "first_call_position": 2,
+          "beaten_lengths": 2.0,
+          "margin_label": null,
+          "margin_text": "2"
+        },
+        {
+          "program": "6",
+          "first_call_position": 5,
+          "beaten_lengths": 5.0,
+          "margin_label": null,
+          "margin_text": "5"
+        }
+      ]
+    },
+    "3": {
+      "page": 3,
+      "first_call": "1/2",
+      "entries": [
+        {
+          "program": "1",
+          "first_call_position": 4,
+          "beaten_lengths": 3.5,
+          "margin_label": null,
+          "margin_text": "3 1/2"
+        },
+        {
+          "program": "5",
+          "first_call_position": 1,
+          "beaten_lengths": 0,
+          "margin_label": null,
+          "margin_text": "3"
+        },
+        {
+          "program": "4",
+          "first_call_position": 5,
+          "beaten_lengths": 3.75,
+          "margin_label": null,
+          "margin_text": "3 3/4"
+        },
+        {
+          "program": "2",
+          "first_call_position": 6,
+          "beaten_lengths": 7.75,
+          "margin_label": null,
+          "margin_text": "7 3/4"
+        },
+        {
+          "program": "6",
+          "first_call_position": 3,
+          "beaten_lengths": 3.0,
+          "margin_label": null,
+          "margin_text": "3"
+        },
+        {
+          "program": "3",
+          "first_call_position": 2,
+          "beaten_lengths": 3.0,
+          "margin_label": null,
+          "margin_text": "3"
+        }
+      ]
+    },
+    "4": {
+      "page": 4,
+      "first_call": "1/2",
+      "entries": [
+        {
+          "program": "6",
+          "first_call_position": 5,
+          "beaten_lengths": 2.5,
+          "margin_label": null,
+          "margin_text": "2 1/2"
+        },
+        {
+          "program": "4",
+          "first_call_position": 6,
+          "beaten_lengths": 3.5,
+          "margin_label": null,
+          "margin_text": "3 1/2"
+        },
+        {
+          "program": "8",
+          "first_call_position": 3,
+          "beaten_lengths": 2.0,
+          "margin_label": null,
+          "margin_text": "2"
+        },
+        {
+          "program": "5",
+          "first_call_position": 4,
+          "beaten_lengths": 2.0,
+          "margin_label": null,
+          "margin_text": "2"
+        },
+        {
+          "program": "7",
+          "first_call_position": 7,
+          "beaten_lengths": 7.5,
+          "margin_label": null,
+          "margin_text": "7 1/2"
+        },
+        {
+          "program": "1",
+          "first_call_position": 1,
+          "beaten_lengths": 0,
+          "margin_label": null,
+          "margin_text": "1"
+        },
+        {
+          "program": "2",
+          "first_call_position": 2,
+          "beaten_lengths": 1.0,
+          "margin_label": null,
+          "margin_text": "1"
+        }
+      ]
+    },
+    "5": {
+      "page": 5,
+      "first_call": "1/4",
+      "entries": [
+        {
+          "program": "5",
+          "first_call_position": 6,
+          "beaten_lengths": 9.0,
+          "margin_label": null,
+          "margin_text": "9"
+        },
+        {
+          "program": "3",
+          "first_call_position": 1,
+          "beaten_lengths": 0,
+          "margin_label": null,
+          "margin_text": "3"
+        },
+        {
+          "program": "4",
+          "first_call_position": 2,
+          "beaten_lengths": 3.0,
+          "margin_label": null,
+          "margin_text": "3"
+        },
+        {
+          "program": "1",
+          "first_call_position": 3,
+          "beaten_lengths": 5.0,
+          "margin_label": null,
+          "margin_text": "5"
+        },
+        {
+          "program": "8",
+          "first_call_position": 4,
+          "beaten_lengths": 7.5,
+          "margin_label": null,
+          "margin_text": "7 1/2"
+        },
+        {
+          "program": "6",
+          "first_call_position": 5,
+          "beaten_lengths": 8.0,
+          "margin_label": null,
+          "margin_text": "8"
+        }
+      ]
+    },
+    "6": {
+      "page": 6,
+      "first_call": "1/4",
+      "entries": [
+        {
+          "program": "1",
+          "first_call_position": 3,
+          "beaten_lengths": 1.5,
+          "margin_label": null,
+          "margin_text": "1 1/2"
+        },
+        {
+          "program": "5",
+          "first_call_position": 5,
+          "beaten_lengths": 3.0,
+          "margin_label": null,
+          "margin_text": "3"
+        },
+        {
+          "program": "6",
+          "first_call_position": 1,
+          "beaten_lengths": 0,
+          "margin_label": null,
+          "margin_text": "1/2"
+        },
+        {
+          "program": "8",
+          "first_call_position": 2,
+          "beaten_lengths": 0.5,
+          "margin_label": null,
+          "margin_text": "1/2"
+        },
+        {
+          "program": "7",
+          "first_call_position": 4,
+          "beaten_lengths": 1.5,
+          "margin_label": null,
+          "margin_text": "1 1/2"
+        },
+        {
+          "program": "4",
+          "first_call_position": 6,
+          "beaten_lengths": 3.25,
+          "margin_label": null,
+          "margin_text": "3 1/4"
+        },
+        {
+          "program": "3",
+          "first_call_position": 7,
+          "beaten_lengths": 5.75,
+          "margin_label": null,
+          "margin_text": "5 3/4"
+        },
+        {
+          "program": "2",
+          "first_call_position": 8,
+          "beaten_lengths": 5.75,
+          "margin_label": null,
+          "margin_text": "5 3/4"
+        }
+      ]
+    },
+    "7": {
+      "page": 7,
+      "first_call": "1/2",
+      "entries": [
+        {
+          "program": "1",
+          "first_call_position": 1,
+          "beaten_lengths": 0,
+          "margin_label": "Head",
+          "margin_text": "Head"
+        },
+        {
+          "program": "6",
+          "first_call_position": 6,
+          "beaten_lengths": 4.5,
+          "margin_label": null,
+          "margin_text": "4 1/2"
+        },
+        {
+          "program": "4",
+          "first_call_position": 5,
+          "beaten_lengths": 2.5,
+          "margin_label": null,
+          "margin_text": "2 1/2"
+        },
+        {
+          "program": "3",
+          "first_call_position": 4,
+          "beaten_lengths": 1.5,
+          "margin_label": null,
+          "margin_text": "1 1/2"
+        },
+        {
+          "program": "7",
+          "first_call_position": 3,
+          "beaten_lengths": 1.0,
+          "margin_label": null,
+          "margin_text": "1"
+        },
+        {
+          "program": "5",
+          "first_call_position": 2,
+          "beaten_lengths": null,
+          "margin_label": "Head",
+          "margin_text": "Head"
+        }
+      ]
+    },
+    "8": {
+      "page": 8,
+      "first_call": "1/2",
+      "entries": [
+        {
+          "program": "1",
+          "first_call_position": 6,
+          "beaten_lengths": 4.0,
+          "margin_label": null,
+          "margin_text": "4"
+        },
+        {
+          "program": "4",
+          "first_call_position": 4,
+          "beaten_lengths": 2.0,
+          "margin_label": null,
+          "margin_text": "2"
+        },
+        {
+          "program": "7",
+          "first_call_position": 1,
+          "beaten_lengths": 0,
+          "margin_label": null,
+          "margin_text": "1/2"
+        },
+        {
+          "program": "5",
+          "first_call_position": 3,
+          "beaten_lengths": 2.0,
+          "margin_label": null,
+          "margin_text": "2"
+        },
+        {
+          "program": "2",
+          "first_call_position": 7,
+          "beaten_lengths": 5.0,
+          "margin_label": null,
+          "margin_text": "5"
+        },
+        {
+          "program": "3",
+          "first_call_position": 5,
+          "beaten_lengths": 3.5,
+          "margin_label": null,
+          "margin_text": "3 1/2"
+        },
+        {
+          "program": "8",
+          "first_call_position": 2,
+          "beaten_lengths": 0.5,
+          "margin_label": null,
+          "margin_text": "1/2"
+        },
+        {
+          "program": "6",
+          "first_call_position": 8,
+          "beaten_lengths": 8.0,
+          "margin_label": null,
+          "margin_text": "8"
+        },
+        {
+          "program": "9",
+          "first_call_position": 9,
+          "beaten_lengths": 9.5,
+          "margin_label": null,
+          "margin_text": "9 1/2"
+        }
+      ]
+    },
+    "9": {
+      "page": 9,
+      "first_call": "1/2",
+      "entries": [
+        {
+          "program": "1",
+          "first_call_position": 1,
+          "beaten_lengths": 0,
+          "margin_label": null,
+          "margin_text": "1"
+        },
+        {
+          "program": "6",
+          "first_call_position": 7,
+          "beaten_lengths": 3.75,
+          "margin_label": null,
+          "margin_text": "3 3/4"
+        },
+        {
+          "program": "3",
+          "first_call_position": 6,
+          "beaten_lengths": 3.75,
+          "margin_label": null,
+          "margin_text": "3 3/4"
+        },
+        {
+          "program": "5",
+          "first_call_position": 3,
+          "beaten_lengths": 2.5,
+          "margin_label": null,
+          "margin_text": "2 1/2"
+        },
+        {
+          "program": "7",
+          "first_call_position": 5,
+          "beaten_lengths": 3.5,
+          "margin_label": null,
+          "margin_text": "3 1/2"
+        },
+        {
+          "program": "2",
+          "first_call_position": 4,
+          "beaten_lengths": 2.5,
+          "margin_label": null,
+          "margin_text": "2 1/2"
+        },
+        {
+          "program": "4",
+          "first_call_position": 2,
+          "beaten_lengths": 1.0,
+          "margin_label": null,
+          "margin_text": "1"
+        }
+      ]
+    },
+    "10": {
+      "page": 10,
+      "first_call": "1/2",
+      "entries": [
+        {
+          "program": "7",
+          "first_call_position": 4,
+          "beaten_lengths": 2.5,
+          "margin_label": null,
+          "margin_text": "2 1/2"
+        },
+        {
+          "program": "4",
+          "first_call_position": 7,
+          "beaten_lengths": 4.0,
+          "margin_label": null,
+          "margin_text": "4"
+        },
+        {
+          "program": "1",
+          "first_call_position": 3,
+          "beaten_lengths": 2.0,
+          "margin_label": null,
+          "margin_text": "2"
+        },
+        {
+          "program": "6",
+          "first_call_position": 5,
+          "beaten_lengths": 3.0,
+          "margin_label": null,
+          "margin_text": "3"
+        },
+        {
+          "program": "8",
+          "first_call_position": 2,
+          "beaten_lengths": 1.5,
+          "margin_label": null,
+          "margin_text": "1 1/2"
+        },
+        {
+          "program": "2",
+          "first_call_position": 6,
+          "beaten_lengths": 3.5,
+          "margin_label": null,
+          "margin_text": "3 1/2"
+        },
+        {
+          "program": "3",
+          "first_call_position": 1,
+          "beaten_lengths": 0,
+          "margin_label": null,
+          "margin_text": "1 1/2"
+        }
+      ]
+    },
+    "11": {
+      "page": 11,
+      "first_call": "1/4",
+      "entries": [
+        {
+          "program": "9",
+          "first_call_position": 1,
+          "beaten_lengths": 0,
+          "margin_label": null,
+          "margin_text": "1"
+        },
+        {
+          "program": "10",
+          "first_call_position": 2,
+          "beaten_lengths": 1.0,
+          "margin_label": null,
+          "margin_text": "1"
+        },
+        {
+          "program": "2",
+          "first_call_position": 3,
+          "beaten_lengths": 1.0,
+          "margin_label": null,
+          "margin_text": "1"
+        },
+        {
+          "program": "4",
+          "first_call_position": 4,
+          "beaten_lengths": 2.0,
+          "margin_label": null,
+          "margin_text": "2"
+        },
+        {
+          "program": "5",
+          "first_call_position": 8,
+          "beaten_lengths": 4.75,
+          "margin_label": null,
+          "margin_text": "4 3/4"
+        },
+        {
+          "program": "1",
+          "first_call_position": 7,
+          "beaten_lengths": 2.75,
+          "margin_label": null,
+          "margin_text": "2 3/4"
+        },
+        {
+          "program": "3",
+          "first_call_position": 6,
+          "beaten_lengths": 2.25,
+          "margin_label": null,
+          "margin_text": "2 1/4"
+        },
+        {
+          "program": "7",
+          "first_call_position": 5,
+          "beaten_lengths": 2.25,
+          "margin_label": null,
+          "margin_text": "2 1/4"
+        }
+      ]
+    }
+  }
+}

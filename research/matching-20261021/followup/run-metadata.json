@@ -1,0 +1,14 @@
+{
+  "classification": "RETROSPECTIVE_SENSITIVITY_SAME_RACES_NOT_NEW_VALIDATION",
+  "holdout_files_used": 0,
+  "live_rule_changed": false,
+  "unique_graded_races": 15,
+  "unique_dates": [
+    "2026-10-16",
+    "2026-10-21"
+  ],
+  "input_sha256": [
+    "57b816bd6ac8ac33d35ace88e64465a49d24d6a5ca9e82e8bc0f33fd916b5f9e",
+    "47119f0ca71e9a02e265a0c020a19717b8cb4d8fab74da3588af79a6334c8ad2"
+  ]
+}

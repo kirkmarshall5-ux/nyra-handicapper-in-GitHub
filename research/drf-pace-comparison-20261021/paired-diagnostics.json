@@ -1,0 +1,175 @@
+{
+  "seed": 20261021,
+  "replicates": 5000,
+  "warning": "Descriptive whole-card resampling on selected, reused development races; not an independent validation interval.",
+  "comparisons": [
+    {
+      "model": "v44c",
+      "arm": "no_direct_late",
+      "cards": 22,
+      "races": 124,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "winner_rate_difference": 0.0,
+      "descriptive_card_bootstrap_95_interval": [
+        0.0,
+        0.0
+      ],
+      "changed_orders": 0
+    },
+    {
+      "model": "v44c",
+      "arm": "no_context",
+      "cards": 22,
+      "races": 124,
+      "wins_gained": 1,
+      "wins_lost": 1,
+      "winner_rate_difference": 0.0,
+      "descriptive_card_bootstrap_95_interval": [
+        -0.023809523809523808,
+        0.023076923076923078
+      ],
+      "changed_orders": 45
+    },
+    {
+      "model": "v44c",
+      "arm": "no_late_or_context",
+      "cards": 22,
+      "races": 124,
+      "wins_gained": 1,
+      "wins_lost": 1,
+      "winner_rate_difference": 0.0,
+      "descriptive_card_bootstrap_95_interval": [
+        -0.023622047244094488,
+        0.024193548387096774
+      ],
+      "changed_orders": 45
+    },
+    {
+      "model": "v44c",
+      "arm": "no_pace",
+      "cards": 22,
+      "races": 124,
+      "wins_gained": 1,
+      "wins_lost": 1,
+      "winner_rate_difference": 0.0,
+      "descriptive_card_bootstrap_95_interval": [
+        -0.023809523809523808,
+        0.024390243902439025
+      ],
+      "changed_orders": 45
+    },
+    {
+      "model": "finisher",
+      "arm": "no_direct_late",
+      "cards": 22,
+      "races": 124,
+      "wins_gained": 2,
+      "wins_lost": 5,
+      "winner_rate_difference": -0.024193548387096774,
+      "descriptive_card_bootstrap_95_interval": [
+        -0.0625,
+        0.017241379310344827
+      ],
+      "changed_orders": 76
+    },
+    {
+      "model": "finisher",
+      "arm": "no_context",
+      "cards": 22,
+      "races": 124,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "winner_rate_difference": 0.0,
+      "descriptive_card_bootstrap_95_interval": [
+        0.0,
+        0.0
+      ],
+      "changed_orders": 0
+    },
+    {
+      "model": "finisher",
+      "arm": "no_late_or_context",
+      "cards": 22,
+      "races": 124,
+      "wins_gained": 2,
+      "wins_lost": 5,
+      "winner_rate_difference": -0.024193548387096774,
+      "descriptive_card_bootstrap_95_interval": [
+        -0.06306306306306306,
+        0.017241379310344827
+      ],
+      "changed_orders": 76
+    },
+    {
+      "model": "finisher",
+      "arm": "no_pace",
+      "cards": 22,
+      "races": 124,
+      "wins_gained": 2,
+      "wins_lost": 5,
+      "winner_rate_difference": -0.024193548387096774,
+      "descriptive_card_bootstrap_95_interval": [
+        -0.06293706293706294,
+        0.017391304347826087
+      ],
+      "changed_orders": 76
+    },
+    {
+      "model": "contender",
+      "arm": "no_direct_late",
+      "cards": 22,
+      "races": 124,
+      "wins_gained": 7,
+      "wins_lost": 3,
+      "winner_rate_difference": 0.03225806451612903,
+      "descriptive_card_bootstrap_95_interval": [
+        -0.02830188679245283,
+        0.0948905109489051
+      ],
+      "changed_orders": 83
+    },
+    {
+      "model": "contender",
+      "arm": "no_context",
+      "cards": 22,
+      "races": 124,
+      "wins_gained": 3,
+      "wins_lost": 0,
+      "winner_rate_difference": 0.024193548387096774,
+      "descriptive_card_bootstrap_95_interval": [
+        0.0,
+        0.05263157894736842
+      ],
+      "changed_orders": 16
+    },
+    {
+      "model": "contender",
+      "arm": "no_late_or_context",
+      "cards": 22,
+      "races": 124,
+      "wins_gained": 6,
+      "wins_lost": 3,
+      "winner_rate_difference": 0.024193548387096774,
+      "descriptive_card_bootstrap_95_interval": [
+        -0.034482758620689655,
+        0.08823529411764706
+      ],
+      "changed_orders": 80
+    },
+    {
+      "model": "contender",
+      "arm": "no_pace",
+      "cards": 22,
+      "races": 124,
+      "wins_gained": 6,
+      "wins_lost": 0,
+      "winner_rate_difference": 0.04838709677419355,
+      "descriptive_card_bootstrap_95_interval": [
+        0.017094017094017096,
+        0.08130081300813008
+      ],
+      "changed_orders": 81
+    }
+  ]
+}

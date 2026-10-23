@@ -1,0 +1,1242 @@
+{
+  "BAQ_2026-05-22_R2": {
+    "date": "2026-05-22",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "1\u00b0 MILES",
+    "distance_furlongs": 9.0,
+    "source_pdf_sha256": "e73c718a2d815e7ccb340da9de7afb24587d8eccc2c71305b0053e5fe84de247",
+    "pdf_matches_archived_sha256": true
+  },
+  "BAQ_2026-05-22_R3": {
+    "date": "2026-05-22",
+    "surface": "Turf",
+    "frozen_parent_surface": "Turf",
+    "target_surface_consistent": true,
+    "distance_text": "1 MILE",
+    "distance_furlongs": 8,
+    "source_pdf_sha256": "e73c718a2d815e7ccb340da9de7afb24587d8eccc2c71305b0053e5fe84de247",
+    "pdf_matches_archived_sha256": true
+  },
+  "BAQ_2026-05-22_R4": {
+    "date": "2026-05-22",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "7 Furlongs",
+    "distance_furlongs": 7.0,
+    "source_pdf_sha256": "e73c718a2d815e7ccb340da9de7afb24587d8eccc2c71305b0053e5fe84de247",
+    "pdf_matches_archived_sha256": true
+  },
+  "BAQ_2026-05-22_R5": {
+    "date": "2026-05-22",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "6 Furlongs",
+    "distance_furlongs": 6.0,
+    "source_pdf_sha256": "e73c718a2d815e7ccb340da9de7afb24587d8eccc2c71305b0053e5fe84de247",
+    "pdf_matches_archived_sha256": true
+  },
+  "BAQ_2026-05-22_R6": {
+    "date": "2026-05-22",
+    "surface": "Turf",
+    "frozen_parent_surface": "Turf",
+    "target_surface_consistent": true,
+    "distance_text": "1\u00c2 MILES",
+    "distance_furlongs": 8.5,
+    "source_pdf_sha256": "e73c718a2d815e7ccb340da9de7afb24587d8eccc2c71305b0053e5fe84de247",
+    "pdf_matches_archived_sha256": true
+  },
+  "BAQ_2026-05-22_R7": {
+    "date": "2026-05-22",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "6\u00f4 Furlongs",
+    "distance_furlongs": 6.5,
+    "source_pdf_sha256": "e73c718a2d815e7ccb340da9de7afb24587d8eccc2c71305b0053e5fe84de247",
+    "pdf_matches_archived_sha256": true
+  },
+  "BAQ_2026-05-22_R8": {
+    "date": "2026-05-22",
+    "surface": "Turf",
+    "frozen_parent_surface": "Turf",
+    "target_surface_consistent": true,
+    "distance_text": "6 Furlongs",
+    "distance_furlongs": 6.0,
+    "source_pdf_sha256": "e73c718a2d815e7ccb340da9de7afb24587d8eccc2c71305b0053e5fe84de247",
+    "pdf_matches_archived_sha256": true
+  },
+  "BAQ_2026-05-23_R1": {
+    "date": "2026-05-23",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "6 Furlongs",
+    "distance_furlongs": 6.0,
+    "source_pdf_sha256": "614767346217703688eae3e4cf1413883f7097082fa62923120ac081b05b8da4",
+    "pdf_matches_archived_sha256": true
+  },
+  "BAQ_2026-05-23_R3": {
+    "date": "2026-05-23",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "1 MILE",
+    "distance_furlongs": 8,
+    "source_pdf_sha256": "614767346217703688eae3e4cf1413883f7097082fa62923120ac081b05b8da4",
+    "pdf_matches_archived_sha256": true
+  },
+  "BAQ_2026-05-23_R5": {
+    "date": "2026-05-23",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "7 Furlongs",
+    "distance_furlongs": 7.0,
+    "source_pdf_sha256": "614767346217703688eae3e4cf1413883f7097082fa62923120ac081b05b8da4",
+    "pdf_matches_archived_sha256": true
+  },
+  "BAQ_2026-05-23_R6": {
+    "date": "2026-05-23",
+    "surface": "Turf",
+    "frozen_parent_surface": "Turf",
+    "target_surface_consistent": true,
+    "distance_text": "1\u00b4 MILES",
+    "distance_furlongs": null,
+    "source_pdf_sha256": "614767346217703688eae3e4cf1413883f7097082fa62923120ac081b05b8da4",
+    "pdf_matches_archived_sha256": true
+  },
+  "BAQ_2026-05-23_R7": {
+    "date": "2026-05-23",
+    "surface": "Turf",
+    "frozen_parent_surface": "Turf",
+    "target_surface_consistent": true,
+    "distance_text": "6 Furlongs",
+    "distance_furlongs": 6.0,
+    "source_pdf_sha256": "614767346217703688eae3e4cf1413883f7097082fa62923120ac081b05b8da4",
+    "pdf_matches_archived_sha256": true
+  },
+  "BAQ_2026-05-23_R8": {
+    "date": "2026-05-23",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "1\u00b0 MILES",
+    "distance_furlongs": 9.0,
+    "source_pdf_sha256": "614767346217703688eae3e4cf1413883f7097082fa62923120ac081b05b8da4",
+    "pdf_matches_archived_sha256": true
+  },
+  "BAQ_2026-05-23_R9": {
+    "date": "2026-05-23",
+    "surface": "Turf",
+    "frozen_parent_surface": "Turf",
+    "target_surface_consistent": true,
+    "distance_text": "1\u00c2 MILES",
+    "distance_furlongs": 8.5,
+    "source_pdf_sha256": "614767346217703688eae3e4cf1413883f7097082fa62923120ac081b05b8da4",
+    "pdf_matches_archived_sha256": true
+  },
+  "BAQ_2026-06-18_R1": {
+    "date": "2026-06-18",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "1 MILE",
+    "distance_furlongs": 8,
+    "source_pdf_sha256": "777d0b375e9cd7f1342ffb89cecbe268ca1ac6547458a26d3bd1c783b40f1150",
+    "pdf_matches_archived_sha256": true
+  },
+  "BAQ_2026-06-18_R3": {
+    "date": "2026-06-18",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "1 MILE",
+    "distance_furlongs": 8,
+    "source_pdf_sha256": "777d0b375e9cd7f1342ffb89cecbe268ca1ac6547458a26d3bd1c783b40f1150",
+    "pdf_matches_archived_sha256": true
+  },
+  "BAQ_2026-06-18_R5": {
+    "date": "2026-06-18",
+    "surface": "Turf",
+    "frozen_parent_surface": "Turf",
+    "target_surface_consistent": true,
+    "distance_text": "1\u00b4 MILES",
+    "distance_furlongs": null,
+    "source_pdf_sha256": "777d0b375e9cd7f1342ffb89cecbe268ca1ac6547458a26d3bd1c783b40f1150",
+    "pdf_matches_archived_sha256": true
+  },
+  "BAQ_2026-06-18_R7": {
+    "date": "2026-06-18",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "7 Furlongs",
+    "distance_furlongs": 7.0,
+    "source_pdf_sha256": "777d0b375e9cd7f1342ffb89cecbe268ca1ac6547458a26d3bd1c783b40f1150",
+    "pdf_matches_archived_sha256": true
+  },
+  "BAQ_2026-06-18_R8": {
+    "date": "2026-06-18",
+    "surface": "Turf",
+    "frozen_parent_surface": "Turf",
+    "target_surface_consistent": true,
+    "distance_text": "1 MILE",
+    "distance_furlongs": 8,
+    "source_pdf_sha256": "777d0b375e9cd7f1342ffb89cecbe268ca1ac6547458a26d3bd1c783b40f1150",
+    "pdf_matches_archived_sha256": true
+  },
+  "BAQ_2026-06-19_R3": {
+    "date": "2026-06-19",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "7 Furlongs",
+    "distance_furlongs": 7.0,
+    "source_pdf_sha256": "32d344bd0162c0df21321efde8abeee75e59389b8dadb8e2f19246416281c5ed",
+    "pdf_matches_archived_sha256": true
+  },
+  "BAQ_2026-06-19_R6": {
+    "date": "2026-06-19",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "1\u00b0 MILES",
+    "distance_furlongs": 9.0,
+    "source_pdf_sha256": "32d344bd0162c0df21321efde8abeee75e59389b8dadb8e2f19246416281c5ed",
+    "pdf_matches_archived_sha256": true
+  },
+  "BAQ_2026-06-19_R8": {
+    "date": "2026-06-19",
+    "surface": "Turf",
+    "frozen_parent_surface": "Turf",
+    "target_surface_consistent": true,
+    "distance_text": "1\u00c2 MILES",
+    "distance_furlongs": 8.5,
+    "source_pdf_sha256": "32d344bd0162c0df21321efde8abeee75e59389b8dadb8e2f19246416281c5ed",
+    "pdf_matches_archived_sha256": true
+  },
+  "BAQ_2026-06-20_R1": {
+    "date": "2026-06-20",
+    "surface": "Turf",
+    "frozen_parent_surface": "Turf",
+    "target_surface_consistent": true,
+    "distance_text": "6 Furlongs",
+    "distance_furlongs": 6.0,
+    "source_pdf_sha256": "438a3619db72bdaa70e533560a486a0ab247448e8909848efb2ed82f41a705de",
+    "pdf_matches_archived_sha256": true
+  },
+  "BAQ_2026-06-20_R2": {
+    "date": "2026-06-20",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "6 Furlongs",
+    "distance_furlongs": 6.0,
+    "source_pdf_sha256": "438a3619db72bdaa70e533560a486a0ab247448e8909848efb2ed82f41a705de",
+    "pdf_matches_archived_sha256": true
+  },
+  "BAQ_2026-06-20_R5": {
+    "date": "2026-06-20",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "7 Furlongs",
+    "distance_furlongs": 7.0,
+    "source_pdf_sha256": "438a3619db72bdaa70e533560a486a0ab247448e8909848efb2ed82f41a705de",
+    "pdf_matches_archived_sha256": true
+  },
+  "BAQ_2026-06-20_R6": {
+    "date": "2026-06-20",
+    "surface": "Turf",
+    "frozen_parent_surface": "Turf",
+    "target_surface_consistent": true,
+    "distance_text": "1\u00c2 MILES",
+    "distance_furlongs": 8.5,
+    "source_pdf_sha256": "438a3619db72bdaa70e533560a486a0ab247448e8909848efb2ed82f41a705de",
+    "pdf_matches_archived_sha256": true
+  },
+  "BAQ_2026-06-20_R7": {
+    "date": "2026-06-20",
+    "surface": "Turf",
+    "frozen_parent_surface": "Turf",
+    "target_surface_consistent": true,
+    "distance_text": "6 Furlongs",
+    "distance_furlongs": 6.0,
+    "source_pdf_sha256": "438a3619db72bdaa70e533560a486a0ab247448e8909848efb2ed82f41a705de",
+    "pdf_matches_archived_sha256": true
+  },
+  "BAQ_2026-06-20_R9": {
+    "date": "2026-06-20",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "7 Furlongs",
+    "distance_furlongs": 7.0,
+    "source_pdf_sha256": "438a3619db72bdaa70e533560a486a0ab247448e8909848efb2ed82f41a705de",
+    "pdf_matches_archived_sha256": true
+  },
+  "BAQ_2026-06-25_R2": {
+    "date": "2026-06-25",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "1 MILE",
+    "distance_furlongs": 8,
+    "source_pdf_sha256": "4b3a59f38d244e335bcd6586a6f8d4f882991d6d43e1a4b98142aeff20b96bb4",
+    "pdf_matches_archived_sha256": true
+  },
+  "BAQ_2026-06-25_R4": {
+    "date": "2026-06-25",
+    "surface": "Turf",
+    "frozen_parent_surface": "Turf",
+    "target_surface_consistent": true,
+    "distance_text": "6 Furlongs",
+    "distance_furlongs": 6.0,
+    "source_pdf_sha256": "4b3a59f38d244e335bcd6586a6f8d4f882991d6d43e1a4b98142aeff20b96bb4",
+    "pdf_matches_archived_sha256": true
+  },
+  "BAQ_2026-06-25_R6": {
+    "date": "2026-06-25",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "1 MILE",
+    "distance_furlongs": 8,
+    "source_pdf_sha256": "4b3a59f38d244e335bcd6586a6f8d4f882991d6d43e1a4b98142aeff20b96bb4",
+    "pdf_matches_archived_sha256": true
+  },
+  "BAQ_2026-06-25_R7": {
+    "date": "2026-06-25",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "6 Furlongs",
+    "distance_furlongs": 6.0,
+    "source_pdf_sha256": "4b3a59f38d244e335bcd6586a6f8d4f882991d6d43e1a4b98142aeff20b96bb4",
+    "pdf_matches_archived_sha256": true
+  },
+  "BAQ_2026-06-25_R8": {
+    "date": "2026-06-25",
+    "surface": "Turf",
+    "frozen_parent_surface": "Turf",
+    "target_surface_consistent": true,
+    "distance_text": "6 Furlongs",
+    "distance_furlongs": 6.0,
+    "source_pdf_sha256": "4b3a59f38d244e335bcd6586a6f8d4f882991d6d43e1a4b98142aeff20b96bb4",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-06-04_R2": {
+    "date": "2026-06-04",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "6 Furlongs",
+    "distance_furlongs": 6.0,
+    "source_pdf_sha256": "54e9d1349978feed6719f637316718c651b4a2c34e1fa61d388f71e78d283cff",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-06-04_R3": {
+    "date": "2026-06-04",
+    "surface": "Turf",
+    "frozen_parent_surface": "Turf",
+    "target_surface_consistent": true,
+    "distance_text": "1\u00c2 MILES",
+    "distance_furlongs": 8.5,
+    "source_pdf_sha256": "54e9d1349978feed6719f637316718c651b4a2c34e1fa61d388f71e78d283cff",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-06-04_R4": {
+    "date": "2026-06-04",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "1\u00b0 MILES",
+    "distance_furlongs": 9.0,
+    "source_pdf_sha256": "54e9d1349978feed6719f637316718c651b4a2c34e1fa61d388f71e78d283cff",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-06-04_R7": {
+    "date": "2026-06-04",
+    "surface": "Turf",
+    "frozen_parent_surface": "Turf",
+    "target_surface_consistent": true,
+    "distance_text": "1\u00b4 MILES",
+    "distance_furlongs": null,
+    "source_pdf_sha256": "54e9d1349978feed6719f637316718c651b4a2c34e1fa61d388f71e78d283cff",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-06-04_R8": {
+    "date": "2026-06-04",
+    "surface": "Turf",
+    "frozen_parent_surface": "Turf",
+    "target_surface_consistent": true,
+    "distance_text": "5\u00f4 Furlongs",
+    "distance_furlongs": 5.5,
+    "source_pdf_sha256": "54e9d1349978feed6719f637316718c651b4a2c34e1fa61d388f71e78d283cff",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-06-04_R9": {
+    "date": "2026-06-04",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "1 MILE",
+    "distance_furlongs": 8,
+    "source_pdf_sha256": "54e9d1349978feed6719f637316718c651b4a2c34e1fa61d388f71e78d283cff",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-06-04_R10": {
+    "date": "2026-06-04",
+    "surface": "Turf",
+    "frozen_parent_surface": "Turf",
+    "target_surface_consistent": true,
+    "distance_text": "2 MILES",
+    "distance_furlongs": 16,
+    "source_pdf_sha256": "54e9d1349978feed6719f637316718c651b4a2c34e1fa61d388f71e78d283cff",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-06-04_R11": {
+    "date": "2026-06-04",
+    "surface": "Turf",
+    "frozen_parent_surface": "Turf",
+    "target_surface_consistent": true,
+    "distance_text": "1\u00c2 MILES",
+    "distance_furlongs": 8.5,
+    "source_pdf_sha256": "54e9d1349978feed6719f637316718c651b4a2c34e1fa61d388f71e78d283cff",
+    "pdf_matches_archived_sha256": true
+  },
+  "CD_2026-04-30_R1": {
+    "date": "2026-04-30",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "6 Furlongs",
+    "distance_furlongs": 6.0,
+    "source_pdf_sha256": "d3162a5ee9b505c732fb2b08dc8d6e93459a1470b87cb314b2d688aa08df52a2",
+    "pdf_matches_archived_sha256": true
+  },
+  "CD_2026-04-30_R3": {
+    "date": "2026-04-30",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "1 MILE",
+    "distance_furlongs": 8,
+    "source_pdf_sha256": "d3162a5ee9b505c732fb2b08dc8d6e93459a1470b87cb314b2d688aa08df52a2",
+    "pdf_matches_archived_sha256": true
+  },
+  "CD_2026-04-30_R9": {
+    "date": "2026-04-30",
+    "surface": "Turf",
+    "frozen_parent_surface": "Turf",
+    "target_surface_consistent": true,
+    "distance_text": "1 MILE",
+    "distance_furlongs": 8,
+    "source_pdf_sha256": "d3162a5ee9b505c732fb2b08dc8d6e93459a1470b87cb314b2d688aa08df52a2",
+    "pdf_matches_archived_sha256": true
+  },
+  "CD_2026-04-30_R10": {
+    "date": "2026-04-30",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "6 Furlongs",
+    "distance_furlongs": 6.0,
+    "source_pdf_sha256": "d3162a5ee9b505c732fb2b08dc8d6e93459a1470b87cb314b2d688aa08df52a2",
+    "pdf_matches_archived_sha256": true
+  },
+  "CD_2026-04-30_R11": {
+    "date": "2026-04-30",
+    "surface": "Turf",
+    "frozen_parent_surface": "Turf",
+    "target_surface_consistent": true,
+    "distance_text": "5\u00f4 Furlongs",
+    "distance_furlongs": 5.5,
+    "source_pdf_sha256": "d3162a5ee9b505c732fb2b08dc8d6e93459a1470b87cb314b2d688aa08df52a2",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-06-05_R2": {
+    "date": "2026-06-05",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "6 Furlongs",
+    "distance_furlongs": 6.0,
+    "source_pdf_sha256": "4f08301fa175e608415a0f991a32981fcb32c853d1a3d3d06df5e3544e298ec8",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-06-05_R4": {
+    "date": "2026-06-05",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "7 Furlongs",
+    "distance_furlongs": 7.0,
+    "source_pdf_sha256": "4f08301fa175e608415a0f991a32981fcb32c853d1a3d3d06df5e3544e298ec8",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-06-05_R5": {
+    "date": "2026-06-05",
+    "surface": "Turf",
+    "frozen_parent_surface": "Turf",
+    "target_surface_consistent": true,
+    "distance_text": "5\u00f4 Furlongs",
+    "distance_furlongs": 5.5,
+    "source_pdf_sha256": "4f08301fa175e608415a0f991a32981fcb32c853d1a3d3d06df5e3544e298ec8",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-06-05_R7": {
+    "date": "2026-06-05",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "1\u00b0 MILES",
+    "distance_furlongs": 9.0,
+    "source_pdf_sha256": "4f08301fa175e608415a0f991a32981fcb32c853d1a3d3d06df5e3544e298ec8",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-06-05_R8": {
+    "date": "2026-06-05",
+    "surface": "Turf",
+    "frozen_parent_surface": "Turf",
+    "target_surface_consistent": true,
+    "distance_text": "5\u00f4 Furlongs",
+    "distance_furlongs": 5.5,
+    "source_pdf_sha256": "4f08301fa175e608415a0f991a32981fcb32c853d1a3d3d06df5e3544e298ec8",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-06-05_R9": {
+    "date": "2026-06-05",
+    "surface": "Turf",
+    "frozen_parent_surface": "Turf",
+    "target_surface_consistent": true,
+    "distance_text": "1\u00c2 MILES",
+    "distance_furlongs": 8.5,
+    "source_pdf_sha256": "4f08301fa175e608415a0f991a32981fcb32c853d1a3d3d06df5e3544e298ec8",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-06-05_R10": {
+    "date": "2026-06-05",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "1\u00b0 MILES",
+    "distance_furlongs": 9.0,
+    "source_pdf_sha256": "4f08301fa175e608415a0f991a32981fcb32c853d1a3d3d06df5e3544e298ec8",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-06-05_R13": {
+    "date": "2026-06-05",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "7 Furlongs",
+    "distance_furlongs": 7.0,
+    "source_pdf_sha256": "4f08301fa175e608415a0f991a32981fcb32c853d1a3d3d06df5e3544e298ec8",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-07-03_R1": {
+    "date": "2026-07-03",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "1\u00b0 MILES",
+    "distance_furlongs": 9.0,
+    "source_pdf_sha256": "752693a25efdb490dca5e68bc371f4e0ffafeaf7129bb42739b29747bb1f7bd4",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-07-03_R3": {
+    "date": "2026-07-03",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "6 Furlongs",
+    "distance_furlongs": 6.0,
+    "source_pdf_sha256": "752693a25efdb490dca5e68bc371f4e0ffafeaf7129bb42739b29747bb1f7bd4",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-07-03_R5": {
+    "date": "2026-07-03",
+    "surface": "Turf",
+    "frozen_parent_surface": "Turf",
+    "target_surface_consistent": true,
+    "distance_text": "5\u00f4 Furlongs",
+    "distance_furlongs": 5.5,
+    "source_pdf_sha256": "752693a25efdb490dca5e68bc371f4e0ffafeaf7129bb42739b29747bb1f7bd4",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-07-03_R6": {
+    "date": "2026-07-03",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "1\u00b0 MILES",
+    "distance_furlongs": 9.0,
+    "source_pdf_sha256": "752693a25efdb490dca5e68bc371f4e0ffafeaf7129bb42739b29747bb1f7bd4",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-07-03_R7": {
+    "date": "2026-07-03",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "7 Furlongs",
+    "distance_furlongs": 7.0,
+    "source_pdf_sha256": "752693a25efdb490dca5e68bc371f4e0ffafeaf7129bb42739b29747bb1f7bd4",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-07-03_R8": {
+    "date": "2026-07-03",
+    "surface": "Turf",
+    "frozen_parent_surface": "Turf",
+    "target_surface_consistent": true,
+    "distance_text": "1 MILE",
+    "distance_furlongs": 8,
+    "source_pdf_sha256": "752693a25efdb490dca5e68bc371f4e0ffafeaf7129bb42739b29747bb1f7bd4",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-07-03_R10": {
+    "date": "2026-07-03",
+    "surface": "Turf",
+    "frozen_parent_surface": "Turf",
+    "target_surface_consistent": true,
+    "distance_text": "1\u00c2 MILES",
+    "distance_furlongs": 8.5,
+    "source_pdf_sha256": "752693a25efdb490dca5e68bc371f4e0ffafeaf7129bb42739b29747bb1f7bd4",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-07-03_R11": {
+    "date": "2026-07-03",
+    "surface": "Turf",
+    "frozen_parent_surface": "Turf",
+    "target_surface_consistent": true,
+    "distance_text": "1\u00c2 MILES",
+    "distance_furlongs": 8.5,
+    "source_pdf_sha256": "752693a25efdb490dca5e68bc371f4e0ffafeaf7129bb42739b29747bb1f7bd4",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-07-04_R1": {
+    "date": "2026-07-04",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "6\u00f4 Furlongs",
+    "distance_furlongs": 6.5,
+    "source_pdf_sha256": "aaa04ab935f824c44d223c9aa1e20b4f13c4da9c295d9b45d2878a1244e389c8",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-07-04_R4": {
+    "date": "2026-07-04",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "6\u00f4 Furlongs",
+    "distance_furlongs": 6.5,
+    "source_pdf_sha256": "aaa04ab935f824c44d223c9aa1e20b4f13c4da9c295d9b45d2878a1244e389c8",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-07-04_R10": {
+    "date": "2026-07-04",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "1 MILE",
+    "distance_furlongs": 8,
+    "source_pdf_sha256": "aaa04ab935f824c44d223c9aa1e20b4f13c4da9c295d9b45d2878a1244e389c8",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-07-05_R3": {
+    "date": "2026-07-05",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "1 MILE",
+    "distance_furlongs": 8,
+    "source_pdf_sha256": "d71ae094ab14569cbaace37eb407ccdb76b5d0d408f77bc837aa89979861bee0",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-07-09_R4": {
+    "date": "2026-07-09",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "1 MILE",
+    "distance_furlongs": 8,
+    "source_pdf_sha256": "73e36c552941cbbd253a7554df0036da0d5d8fe6a534bfa7d0bf56f47a0f1726",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-07-09_R5": {
+    "date": "2026-07-09",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "1 MILE",
+    "distance_furlongs": 8,
+    "source_pdf_sha256": "73e36c552941cbbd253a7554df0036da0d5d8fe6a534bfa7d0bf56f47a0f1726",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-07-09_R7": {
+    "date": "2026-07-09",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "6 Furlongs",
+    "distance_furlongs": 6.0,
+    "source_pdf_sha256": "73e36c552941cbbd253a7554df0036da0d5d8fe6a534bfa7d0bf56f47a0f1726",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-07-09_R8": {
+    "date": "2026-07-09",
+    "surface": "Turf",
+    "frozen_parent_surface": "Turf",
+    "target_surface_consistent": true,
+    "distance_text": "5\u00f4 Furlongs",
+    "distance_furlongs": 5.5,
+    "source_pdf_sha256": "73e36c552941cbbd253a7554df0036da0d5d8fe6a534bfa7d0bf56f47a0f1726",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-07-10_R1": {
+    "date": "2026-07-10",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "1\u00b0 MILES",
+    "distance_furlongs": 9.0,
+    "source_pdf_sha256": "02c746b6a9f9363d201d1ae9c2599f5874c718a0b27fe4520d639be29202d314",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-07-10_R3": {
+    "date": "2026-07-10",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "6\u00f4 Furlongs",
+    "distance_furlongs": 6.5,
+    "source_pdf_sha256": "02c746b6a9f9363d201d1ae9c2599f5874c718a0b27fe4520d639be29202d314",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-07-10_R4": {
+    "date": "2026-07-10",
+    "surface": "Turf",
+    "frozen_parent_surface": "Turf",
+    "target_surface_consistent": true,
+    "distance_text": "1\u00c2 MILES",
+    "distance_furlongs": 8.5,
+    "source_pdf_sha256": "02c746b6a9f9363d201d1ae9c2599f5874c718a0b27fe4520d639be29202d314",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-07-10_R5": {
+    "date": "2026-07-10",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "6\u00f4 Furlongs",
+    "distance_furlongs": 6.5,
+    "source_pdf_sha256": "02c746b6a9f9363d201d1ae9c2599f5874c718a0b27fe4520d639be29202d314",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-07-10_R6": {
+    "date": "2026-07-10",
+    "surface": "Turf",
+    "frozen_parent_surface": "Turf",
+    "target_surface_consistent": true,
+    "distance_text": "1\u00c2 MILES",
+    "distance_furlongs": 8.5,
+    "source_pdf_sha256": "02c746b6a9f9363d201d1ae9c2599f5874c718a0b27fe4520d639be29202d314",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-07-10_R7": {
+    "date": "2026-07-10",
+    "surface": "Turf",
+    "frozen_parent_surface": "Turf",
+    "target_surface_consistent": true,
+    "distance_text": "5\u00f4 Furlongs",
+    "distance_furlongs": 5.5,
+    "source_pdf_sha256": "02c746b6a9f9363d201d1ae9c2599f5874c718a0b27fe4520d639be29202d314",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-07-10_R8": {
+    "date": "2026-07-10",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "7 Furlongs",
+    "distance_furlongs": 7.0,
+    "source_pdf_sha256": "02c746b6a9f9363d201d1ae9c2599f5874c718a0b27fe4520d639be29202d314",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-07-10_R9": {
+    "date": "2026-07-10",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "6\u00f4 Furlongs",
+    "distance_furlongs": 6.5,
+    "source_pdf_sha256": "02c746b6a9f9363d201d1ae9c2599f5874c718a0b27fe4520d639be29202d314",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-07-11_R3": {
+    "date": "2026-07-11",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "6 Furlongs",
+    "distance_furlongs": 6.0,
+    "source_pdf_sha256": "3b86f953693896c194c2eeaf0569c8bfa372068833313ee2cf1c77801ce6987a",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-07-11_R4": {
+    "date": "2026-07-11",
+    "surface": "Turf",
+    "frozen_parent_surface": "Turf",
+    "target_surface_consistent": true,
+    "distance_text": "1 MILE",
+    "distance_furlongs": 8,
+    "source_pdf_sha256": "3b86f953693896c194c2eeaf0569c8bfa372068833313ee2cf1c77801ce6987a",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-07-11_R5": {
+    "date": "2026-07-11",
+    "surface": "Turf",
+    "frozen_parent_surface": "Turf",
+    "target_surface_consistent": true,
+    "distance_text": "5\u00f4 Furlongs",
+    "distance_furlongs": 5.5,
+    "source_pdf_sha256": "3b86f953693896c194c2eeaf0569c8bfa372068833313ee2cf1c77801ce6987a",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-07-11_R7": {
+    "date": "2026-07-11",
+    "surface": "Turf",
+    "frozen_parent_surface": "Turf",
+    "target_surface_consistent": true,
+    "distance_text": "1 MILE",
+    "distance_furlongs": 8,
+    "source_pdf_sha256": "3b86f953693896c194c2eeaf0569c8bfa372068833313ee2cf1c77801ce6987a",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-07-11_R8": {
+    "date": "2026-07-11",
+    "surface": "Turf",
+    "frozen_parent_surface": "Turf",
+    "target_surface_consistent": true,
+    "distance_text": "5\u00f4 Furlongs",
+    "distance_furlongs": 5.5,
+    "source_pdf_sha256": "3b86f953693896c194c2eeaf0569c8bfa372068833313ee2cf1c77801ce6987a",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-07-11_R9": {
+    "date": "2026-07-11",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "1 MILE",
+    "distance_furlongs": 8,
+    "source_pdf_sha256": "3b86f953693896c194c2eeaf0569c8bfa372068833313ee2cf1c77801ce6987a",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-07-12_R2": {
+    "date": "2026-07-12",
+    "surface": "Turf",
+    "frozen_parent_surface": "Turf",
+    "target_surface_consistent": true,
+    "distance_text": "1 \u00b6 MILES",
+    "distance_furlongs": null,
+    "source_pdf_sha256": "ad6ba7759eb8f72637b25e43e1f00830e06dbc7b60b4ae1cb65390f95181672f",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-07-12_R3": {
+    "date": "2026-07-12",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "7 Furlongs",
+    "distance_furlongs": 7.0,
+    "source_pdf_sha256": "ad6ba7759eb8f72637b25e43e1f00830e06dbc7b60b4ae1cb65390f95181672f",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-07-12_R6": {
+    "date": "2026-07-12",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "6\u00f4 Furlongs",
+    "distance_furlongs": 6.5,
+    "source_pdf_sha256": "ad6ba7759eb8f72637b25e43e1f00830e06dbc7b60b4ae1cb65390f95181672f",
+    "pdf_matches_archived_sha256": true
+  },
+  "SAR_2026-07-12_R8": {
+    "date": "2026-07-12",
+    "surface": "Turf",
+    "frozen_parent_surface": "Turf",
+    "target_surface_consistent": true,
+    "distance_text": "1 MILE",
+    "distance_furlongs": 8,
+    "source_pdf_sha256": "ad6ba7759eb8f72637b25e43e1f00830e06dbc7b60b4ae1cb65390f95181672f",
+    "pdf_matches_archived_sha256": true
+  },
+  "KEE_2026-10-09_R1": {
+    "date": "2026-10-09",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "6 Furlongs",
+    "distance_furlongs": 6.0,
+    "source_pdf_sha256": "1ce36d439d1052663a4606d06aa299ec6948591fcebf38e95d0cebc710277c08",
+    "pdf_matches_archived_sha256": null
+  },
+  "KEE_2026-10-09_R3": {
+    "date": "2026-10-09",
+    "surface": "Turf",
+    "frozen_parent_surface": "Turf",
+    "target_surface_consistent": true,
+    "distance_text": "1\u00c2 MILES",
+    "distance_furlongs": 8.5,
+    "source_pdf_sha256": "1ce36d439d1052663a4606d06aa299ec6948591fcebf38e95d0cebc710277c08",
+    "pdf_matches_archived_sha256": null
+  },
+  "KEE_2026-10-09_R4": {
+    "date": "2026-10-09",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "1\u00c2 MILES",
+    "distance_furlongs": 8.5,
+    "source_pdf_sha256": "1ce36d439d1052663a4606d06aa299ec6948591fcebf38e95d0cebc710277c08",
+    "pdf_matches_archived_sha256": null
+  },
+  "KEE_2026-10-09_R8": {
+    "date": "2026-10-09",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "6 Furlongs",
+    "distance_furlongs": 6.0,
+    "source_pdf_sha256": "1ce36d439d1052663a4606d06aa299ec6948591fcebf38e95d0cebc710277c08",
+    "pdf_matches_archived_sha256": null
+  },
+  "KEE_2026-10-09_R9": {
+    "date": "2026-10-09",
+    "surface": "Turf",
+    "frozen_parent_surface": "Turf",
+    "target_surface_consistent": true,
+    "distance_text": "1 \u00b6 MILES",
+    "distance_furlongs": null,
+    "source_pdf_sha256": "1ce36d439d1052663a4606d06aa299ec6948591fcebf38e95d0cebc710277c08",
+    "pdf_matches_archived_sha256": null
+  },
+  "KEE_2026-10-10_R1": {
+    "date": "2026-10-10",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "1\u00c2 MILES",
+    "distance_furlongs": 8.5,
+    "source_pdf_sha256": "1ed95429a4e1a7428f5bc027874a7bcfb7a7a29d3238d50ff53350dc37815fdc",
+    "pdf_matches_archived_sha256": null
+  },
+  "KEE_2026-10-10_R2": {
+    "date": "2026-10-10",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "About 7 Furlongs",
+    "distance_furlongs": null,
+    "source_pdf_sha256": "1ed95429a4e1a7428f5bc027874a7bcfb7a7a29d3238d50ff53350dc37815fdc",
+    "pdf_matches_archived_sha256": null
+  },
+  "KEE_2026-10-10_R3": {
+    "date": "2026-10-10",
+    "surface": "Turf",
+    "frozen_parent_surface": "Turf",
+    "target_surface_consistent": true,
+    "distance_text": "1\u00c2 MILES",
+    "distance_furlongs": 8.5,
+    "source_pdf_sha256": "1ed95429a4e1a7428f5bc027874a7bcfb7a7a29d3238d50ff53350dc37815fdc",
+    "pdf_matches_archived_sha256": null
+  },
+  "KEE_2026-10-10_R4": {
+    "date": "2026-10-10",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "1\u00c2 MILES",
+    "distance_furlongs": 8.5,
+    "source_pdf_sha256": "1ed95429a4e1a7428f5bc027874a7bcfb7a7a29d3238d50ff53350dc37815fdc",
+    "pdf_matches_archived_sha256": null
+  },
+  "KEE_2026-10-10_R8": {
+    "date": "2026-10-10",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "About 7 Furlongs",
+    "distance_furlongs": null,
+    "source_pdf_sha256": "1ed95429a4e1a7428f5bc027874a7bcfb7a7a29d3238d50ff53350dc37815fdc",
+    "pdf_matches_archived_sha256": null
+  },
+  "KEE_2026-10-11_R1": {
+    "date": "2026-10-11",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "1\u00c2 MILES",
+    "distance_furlongs": 8.5,
+    "source_pdf_sha256": "fdc820c22afc81dc31f13f6729a900fd40f34869ba6bf9482d1af41b13050e4e",
+    "pdf_matches_archived_sha256": null
+  },
+  "KEE_2026-10-11_R2": {
+    "date": "2026-10-11",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "1\u00c2 MILES",
+    "distance_furlongs": 8.5,
+    "source_pdf_sha256": "fdc820c22afc81dc31f13f6729a900fd40f34869ba6bf9482d1af41b13050e4e",
+    "pdf_matches_archived_sha256": null
+  },
+  "KEE_2026-10-11_R3": {
+    "date": "2026-10-11",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "1 MILE",
+    "distance_furlongs": 8,
+    "source_pdf_sha256": "fdc820c22afc81dc31f13f6729a900fd40f34869ba6bf9482d1af41b13050e4e",
+    "pdf_matches_archived_sha256": null
+  },
+  "KEE_2026-10-11_R4": {
+    "date": "2026-10-11",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "1\u00c2 MILES",
+    "distance_furlongs": 8.5,
+    "source_pdf_sha256": "fdc820c22afc81dc31f13f6729a900fd40f34869ba6bf9482d1af41b13050e4e",
+    "pdf_matches_archived_sha256": null
+  },
+  "KEE_2026-10-11_R7": {
+    "date": "2026-10-11",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "About 7 Furlongs",
+    "distance_furlongs": null,
+    "source_pdf_sha256": "fdc820c22afc81dc31f13f6729a900fd40f34869ba6bf9482d1af41b13050e4e",
+    "pdf_matches_archived_sha256": null
+  },
+  "KEE_2026-10-11_R8": {
+    "date": "2026-10-11",
+    "surface": "Turf",
+    "frozen_parent_surface": "Turf",
+    "target_surface_consistent": true,
+    "distance_text": "5\u00f4 Furlongs",
+    "distance_furlongs": 5.5,
+    "source_pdf_sha256": "fdc820c22afc81dc31f13f6729a900fd40f34869ba6bf9482d1af41b13050e4e",
+    "pdf_matches_archived_sha256": null
+  },
+  "KEE_2026-10-14_R1": {
+    "date": "2026-10-14",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "1\u00c2 MILES",
+    "distance_furlongs": 8.5,
+    "source_pdf_sha256": "217159278a03aab49503263b228968839bd95c529d8cecf7672252f5096d3f42",
+    "pdf_matches_archived_sha256": null
+  },
+  "KEE_2026-10-14_R3": {
+    "date": "2026-10-14",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "6 Furlongs",
+    "distance_furlongs": 6.0,
+    "source_pdf_sha256": "217159278a03aab49503263b228968839bd95c529d8cecf7672252f5096d3f42",
+    "pdf_matches_archived_sha256": null
+  },
+  "KEE_2026-10-14_R4": {
+    "date": "2026-10-14",
+    "surface": "Turf",
+    "frozen_parent_surface": "Turf",
+    "target_surface_consistent": true,
+    "distance_text": "1 MILE",
+    "distance_furlongs": 8,
+    "source_pdf_sha256": "217159278a03aab49503263b228968839bd95c529d8cecf7672252f5096d3f42",
+    "pdf_matches_archived_sha256": null
+  },
+  "KEE_2026-10-14_R6": {
+    "date": "2026-10-14",
+    "surface": "Turf",
+    "frozen_parent_surface": "Turf",
+    "target_surface_consistent": true,
+    "distance_text": "1\u00c2 MILES",
+    "distance_furlongs": 8.5,
+    "source_pdf_sha256": "217159278a03aab49503263b228968839bd95c529d8cecf7672252f5096d3f42",
+    "pdf_matches_archived_sha256": null
+  },
+  "KEE_2026-10-14_R7": {
+    "date": "2026-10-14",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "1\u00c2 MILES",
+    "distance_furlongs": 8.5,
+    "source_pdf_sha256": "217159278a03aab49503263b228968839bd95c529d8cecf7672252f5096d3f42",
+    "pdf_matches_archived_sha256": null
+  },
+  "KEE_2026-10-15_R1": {
+    "date": "2026-10-15",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "1\u00c2 MILES",
+    "distance_furlongs": 8.5,
+    "source_pdf_sha256": "f87a2c71966152882894def25e0a7dfbbfe8291e9abbdef5cf3f179127a86969",
+    "pdf_matches_archived_sha256": null
+  },
+  "KEE_2026-10-15_R3": {
+    "date": "2026-10-15",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "6 Furlongs",
+    "distance_furlongs": 6.0,
+    "source_pdf_sha256": "f87a2c71966152882894def25e0a7dfbbfe8291e9abbdef5cf3f179127a86969",
+    "pdf_matches_archived_sha256": null
+  },
+  "KEE_2026-10-15_R6": {
+    "date": "2026-10-15",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "1\u00c2 MILES",
+    "distance_furlongs": 8.5,
+    "source_pdf_sha256": "f87a2c71966152882894def25e0a7dfbbfe8291e9abbdef5cf3f179127a86969",
+    "pdf_matches_archived_sha256": null
+  },
+  "KEE_2026-10-15_R8": {
+    "date": "2026-10-15",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "1\u00c2 MILES",
+    "distance_furlongs": 8.5,
+    "source_pdf_sha256": "f87a2c71966152882894def25e0a7dfbbfe8291e9abbdef5cf3f179127a86969",
+    "pdf_matches_archived_sha256": null
+  },
+  "BEL_2026-10-17_R1": {
+    "date": "2026-10-17",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "6 Furlongs",
+    "distance_furlongs": 6.0,
+    "source_pdf_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+    "pdf_matches_archived_sha256": null
+  },
+  "BEL_2026-10-17_R2": {
+    "date": "2026-10-17",
+    "surface": "Turf",
+    "frozen_parent_surface": "Synth",
+    "target_surface_consistent": false,
+    "distance_text": "6 Furlongs",
+    "distance_furlongs": 6.0,
+    "source_pdf_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+    "pdf_matches_archived_sha256": null
+  },
+  "BEL_2026-10-17_R3": {
+    "date": "2026-10-17",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "1\u00b2 MILES",
+    "distance_furlongs": null,
+    "source_pdf_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+    "pdf_matches_archived_sha256": null
+  },
+  "BEL_2026-10-17_R4": {
+    "date": "2026-10-17",
+    "surface": "Turf",
+    "frozen_parent_surface": "Synth",
+    "target_surface_consistent": false,
+    "distance_text": "1\u00c2 MILES",
+    "distance_furlongs": 8.5,
+    "source_pdf_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+    "pdf_matches_archived_sha256": null
+  },
+  "BEL_2026-10-17_R5": {
+    "date": "2026-10-17",
+    "surface": "Turf",
+    "frozen_parent_surface": "Turf",
+    "target_surface_consistent": true,
+    "distance_text": "6 Furlongs",
+    "distance_furlongs": 6.0,
+    "source_pdf_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+    "pdf_matches_archived_sha256": null
+  },
+  "BEL_2026-10-17_R6": {
+    "date": "2026-10-17",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "6\u00f4 Furlongs",
+    "distance_furlongs": 6.5,
+    "source_pdf_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+    "pdf_matches_archived_sha256": null
+  },
+  "BEL_2026-10-17_R7": {
+    "date": "2026-10-17",
+    "surface": "Turf",
+    "frozen_parent_surface": "Synth",
+    "target_surface_consistent": false,
+    "distance_text": "1 \u00b6 MILES",
+    "distance_furlongs": null,
+    "source_pdf_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+    "pdf_matches_archived_sha256": null
+  },
+  "BEL_2026-10-17_R8": {
+    "date": "2026-10-17",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "1 MILE",
+    "distance_furlongs": 8,
+    "source_pdf_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+    "pdf_matches_archived_sha256": null
+  },
+  "BEL_2026-10-17_R9": {
+    "date": "2026-10-17",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "1 MILE",
+    "distance_furlongs": 8,
+    "source_pdf_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+    "pdf_matches_archived_sha256": null
+  },
+  "BEL_2026-10-17_R10": {
+    "date": "2026-10-17",
+    "surface": "Turf",
+    "frozen_parent_surface": "Turf",
+    "target_surface_consistent": true,
+    "distance_text": "1\u00c2 MILES",
+    "distance_furlongs": 8.5,
+    "source_pdf_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+    "pdf_matches_archived_sha256": null
+  },
+  "BEL_2026-10-17_R11": {
+    "date": "2026-10-17",
+    "surface": "Dirt",
+    "frozen_parent_surface": "Dirt",
+    "target_surface_consistent": true,
+    "distance_text": "7 Furlongs",
+    "distance_furlongs": 7.0,
+    "source_pdf_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+    "pdf_matches_archived_sha256": null
+  }
+}
