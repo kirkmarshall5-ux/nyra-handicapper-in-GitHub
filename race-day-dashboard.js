@@ -4,6 +4,7 @@ import {releaseRace} from './rankings-release.js?v=20261008-qa1';
 import {rankContenders} from './contender-rankings.js?v=20261011-passdisplay1';
 import {rankBrisnetModels} from './brisnet-models.js?v=20261023-distance1';
 import {rankFinishers} from './finisher-inputs.js';
+import {decodeTodayDistance} from './finisher-drf-distance.js?v=20261018-5316';
 
 const active=h=>h.odds!=='SCR'&&h.included_in_frozen_field!==false&&(!h.entry_status||h.entry_status==='REGULAR');
 const program=h=>String(h.n??'').trim().toUpperCase();
@@ -11,6 +12,7 @@ const program=h=>String(h.n??'').trim().toUpperCase();
 const name=h=>String(h.name??'').replace(/\s*\([A-Za-z]{2,3}\)\s*$/,'').toLowerCase().replace(/[^a-z0-9]/g,'');
 const key=h=>JSON.stringify([program(h),name(h)]);
 const field=r=>(r?.horses||[]).filter(active);
+const distance=r=>Number.isFinite(r?.distance_furlongs)?r.distance_furlongs:decodeTodayDistance(r?.conditions?.primaryDistanceLine||r?.header||r?.dist).furlongs;
 const compare=(a,b)=>program(a).localeCompare(program(b),undefined,{numeric:true});
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const labels={brisContender:'Brisnet Contender',drfContender:'DRF Contender',drfFinisher:'DRF Finisher',morningLine:'Morning Line'};
@@ -30,7 +32,8 @@ function sourceIssue(anchor,source){
  const r=source.race;
  if(!matchingCard(anchor,r)||Number(anchor.race)!==Number(r.race))return 'Race identity differs; excluded';
  if(identityIssue(anchor)||identityIssue(r))return 'Runner identities need verification; excluded';
- if(anchor.surface!==r.surface||Number.isFinite(anchor.distance_furlongs)&&Number.isFinite(r.distance_furlongs)&&anchor.distance_furlongs!==r.distance_furlongs)return 'Race conditions differ; excluded';
+ const aDistance=distance(anchor),bDistance=distance(r);
+ if(anchor.surface!==r.surface||aDistance!=null&&bDistance!=null&&aDistance!==bDistance)return 'Race conditions differ; excluded';
  const a=field(anchor).map(key).sort(),b=field(r).map(key).sort();
  if(JSON.stringify(a)!==JSON.stringify(b))return 'Entrants or scratches differ; excluded';
  return null;

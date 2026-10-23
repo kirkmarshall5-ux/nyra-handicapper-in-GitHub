@@ -42,6 +42,15 @@ test('country suffix and punctuation match; program/name mismatch and duplicate 
  assert.equal(buildRaceDashboard(i,(_,r)=>ranked(r)).models[0].available,false);
 });
 
+test('DRF header distances are checked when numeric distance is absent',()=>{
+ const i=input();delete i.anchor.distance_furlongs;i.anchor.header='6 Furlongs';
+ delete i.sources.BRISNET.race.distance_furlongs;i.sources.BRISNET.race.header='1 Mile';
+ const d=buildRaceDashboard(i,(_,r)=>ranked(r));
+ assert.equal(d.models[0].available,false);
+ assert.equal(d.models[1].available,true);
+ assert.match(d.models[0].reason,/conditions differ/);
+});
+
 test('partial and unloaded models retain unknown ranks and do not fabricate tickets',()=>{
  const i=input();i.sources.BRISNET={race:null,reason:'Upload Brisnet'};
  const d=buildRaceDashboard(i,(_,r)=>ranked(r,[1]));
