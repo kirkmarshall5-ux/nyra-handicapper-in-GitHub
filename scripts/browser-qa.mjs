@@ -26,12 +26,12 @@ for(const profile of profiles){
   await page.locator('#raceTitle').waitFor();
   assert.equal(errors.length,0,'Uncaught page errors: '+errors.join(' | '));
  });
- await check('D02-three-model-panels-and-hidden-panels',async()=>{
+ await check('D02-four-comparison-panels-and-hidden-panels',async()=>{
   for(const id of ['topContenders','finisherCandidates','contenderCandidates'])assert.equal(await page.locator('#'+id).count(),1);
-  const boxes=await Promise.all(['topMl','contenderCandidates','brisContenderCandidates'].map(id=>page.locator('#'+id).boundingBox()));
+  const boxes=await Promise.all(['topMl','brisContenderCandidates','contenderCandidates','finisherCandidates'].map(id=>page.locator('#'+id).boundingBox()));
   assert.ok(boxes.every(Boolean));
-  if(profile.viewport.width>=760){assert.ok(boxes[0].x<boxes[1].x&&boxes[1].x<boxes[2].x,'Morning Line, DRF Contender, Brisnet Contender must run left to right');}
-  else{assert.ok(boxes[0].y<boxes[1].y&&boxes[1].y<boxes[2].y,'Mobile panels must retain comparison order');}
+  if(profile.viewport.width>=760){assert.ok(boxes[0].x<boxes[1].x&&boxes[2].x<boxes[3].x,'Both rows must run left to right');assert.ok(Math.abs(boxes[0].y-boxes[1].y)<2&&Math.abs(boxes[2].y-boxes[3].y)<2,'Each pair must share a row');assert.ok(boxes[2].y>boxes[0].y&&Math.abs(boxes[0].x-boxes[2].x)<2,'DRF Contender must sit below Morning Line');}
+  else{assert.ok(boxes[0].y<boxes[1].y&&boxes[1].y<boxes[2].y&&boxes[2].y<boxes[3].y,'Mobile panels must retain comparison order');}
   for(const id of ['contenderCandidates','brisContenderCandidates']){
    const panel=page.locator('#'+id);
    for(const table of await panel.locator('table.candidate-table').all()){
@@ -42,7 +42,7 @@ for(const profile of profiles){
    assert.equal(await panel.getByText('True Chance is an estimate',{exact:false}).isVisible(),false);
    assert.equal(await panel.getByText('Fair Odds / True Chance unavailable:',{exact:false}).isVisible(),false);
   }
-  for(const id of ['topJockeys','topTrainers','topPairings','topContenders','finisherCandidates','brisTopContenders','brisFinisherCandidates'])assert.equal(await page.locator('#'+id).isVisible(),false,id+' must remain hidden');
+  for(const id of ['topJockeys','topTrainers','topPairings','topContenders','brisTopContenders','brisFinisherCandidates'])assert.equal(await page.locator('#'+id).isVisible(),false,id+' must remain hidden');
   assert.equal(await page.getByText('Potentially overlooked angles',{exact:false}).isVisible(),false);
   assert.equal(await page.locator('[data-tab="pp"]').count(),0);assert.equal(await page.locator('#ppFile').count(),0);assert.equal(await page.locator('#manageSavedCards').count(),1);assert.equal(await page.locator('#uploadBrisnet').count(),1);assert.equal(await page.locator('#uploadDrf').count(),1);
  });
@@ -187,7 +187,7 @@ for(const profile of profiles){
    });
    await page.reload({waitUntil:'domcontentloaded'});
    await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
-   const target=page.locator('#finisherCandidates');
+   const target=page.locator('#finisherCandidates');assert.equal(await target.isVisible(),true);
    assert.equal(await target.locator('tbody tr').count(),4);
    assert.match(await target.innerText(),/Ranked 5\/6/);assert.match(await target.innerText(),/PASS/);
    assert.match(await target.innerText(),/QA Finisher Runner 7/);assert.doesNotMatch(await target.innerText(),/QA Finisher Runner 5/);
@@ -199,7 +199,7 @@ for(const profile of profiles){
    assert.ok(await drfPanel.evaluate(el=>!!(el.querySelector('.remaining-ranked').compareDocumentPosition(el.querySelector('.model-evidence-note'))&Node.DOCUMENT_POSITION_FOLLOWING)));
    assert.equal(await page.locator('#topMl tbody tr').count(),4);
    assert.equal(await page.locator('.comparison-row > .card > details').count(),0);
-   await page.locator('[data-tab="knowledge"]').click();assert.equal(await page.locator('#contenderModelDetails').isVisible(),true);assert.equal(await page.locator('#contenderModelDetails details').count(),2);assert.match(await page.locator('#contenderModelDetails').innerText(),/How Contender ranks/);await page.locator('[data-tab="raceday"]').click();
+   await page.locator('[data-tab="knowledge"]').click();assert.equal(await page.locator('#contenderModelDetails').isVisible(),true);assert.equal(await page.locator('#contenderModelDetails details').count(),3);assert.match(await page.locator('#contenderModelDetails').innerText(),/How Contender ranks/);await page.locator('[data-tab="raceday"]').click();
 
    for(const id of ['topContenders','finisherCandidates','contenderCandidates']){const notice=page.locator('#'+id+' .model-evidence-note');assert.match(await notice.innerText(),/ranked 5\/6 starters/);assert.match(await notice.innerText(),/16\.7%/);assert.match(await notice.innerText(),/Morning-line favorite — UNRANKED/);assert.match(await notice.innerText(),/at or below 20% does not clear missing evidence/);assert.match(await notice.innerText(),/ML 6\/5/);}
    await page.screenshot({path:`${out}/${profile.name}-missing-favorite.png`,fullPage:true});
