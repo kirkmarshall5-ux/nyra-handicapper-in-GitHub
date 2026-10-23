@@ -183,7 +183,8 @@ for(const profile of profiles){
     const {PARSER_ID}=await import('./release-card-parser.js'),date='2026-10-18',track='Belmont Park';
     const horses=[1,2,3,4,5,6,7].map(n=>({n:String(n),name:'QA Finisher Runner '+n,ml:n===7?'6/5':'4/1',odds:n===5?'SCR':'—',entry_status:'REGULAR',included_in_frozen_field:true,life_starts:n===7?0:1,lifeStarts:n===7?0:1,beyer_figures:n===7?[]:[90-n],figs:n===7?[]:[90-n],timeform_early:n===7?null:85,timeform_late:n===7?null:90,parser_blockers:[],angles:[],source_context:{workout_text:'',pedigree_text:''},contender_evidence:{beyer_evidence:[],switch_evidence:{running_lines:[]}}}));
     const race={race:1,date,track,surface:'Dirt',header:'6 Furlongs',dist:'6 Furlongs',cls:'QA maiden',post:'1:10 ET',horses,parser_blockers:[]};
-    localStorage.setItem('nyraV44cReleaseActiveCard',JSON.stringify({id:'qa-finisher-drf',schemaVersion:3,track,date,races:{1:race},parser_version:PARSER_ID,warnings:[]}));
+    const second=structuredClone(race);second.race=2;second.horses.forEach(h=>{h.name='QA Second Race Runner '+h.n;});
+    localStorage.setItem('nyraV44cReleaseActiveCard',JSON.stringify({id:'qa-finisher-drf',schemaVersion:3,track,date,races:{1:race,2:second},parser_version:PARSER_ID,warnings:[]}));
    });
    await page.reload({waitUntil:'domcontentloaded'});
    await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
@@ -203,6 +204,9 @@ for(const profile of profiles){
    const dashboardBefore=await dashboard.locator('.dashboard-table').first().innerText();
    const downloading=page.waitForEvent('download');await page.locator('#dashboardFreeze').click();
    const download=await downloading,record=JSON.parse(readFileSync(await download.path(),'utf8'));
+   assert.equal(record.races.length,2);
+   assert.equal(record.races[1].dashboard.race.number,2);
+   assert.match(record.races[1].dashboard.field[0].name,/Second Race/);
    assert.equal(record.races[0].dashboard.schema,'nyra-race-dashboard-v1');
    assert.equal(record.races[0].dashboard.models.find(m=>m.id==='drfContender').rankings.length,5);
    assert.equal(record.races[0].dashboard.morning_line.rankings[0].n,'7');
@@ -210,11 +214,13 @@ for(const profile of profiles){
    assert.equal(record.races[0].dashboard.source_cards.DRF.card_id,'qa-finisher-drf');
    assert.equal(record.races[0].dashboard.betting_enabled,false);
    assert.equal(await dashboard.locator('.dashboard-table').first().innerText(),dashboardBefore,'Freeze must restore the selected race dashboard');
-   assert.match(await page.locator('#dashboardSnapshotStatus').innerText(),/exported: 1 races/);
-   await dashboard.screenshot({path:`${out}/${profile.name}-race-dashboard.png`});
+   assert.match(await page.locator('#dashboardSnapshotStatus').innerText(),/exported: 2 races/);
+   await page.evaluate(()=>window.scrollTo(0,0));
+   await page.screenshot({path:`${out}/${profile.name}-race-dashboard.png`,fullPage:true});
    await page.setViewportSize({width:390,height:844});
    assert.ok(await dashboard.evaluate(el=>el.getBoundingClientRect().width<=innerWidth));
-   await dashboard.screenshot({path:`${out}/${profile.name}-race-dashboard-narrow.png`});
+   await page.evaluate(()=>window.scrollTo(0,0));
+   await page.screenshot({path:`${out}/${profile.name}-race-dashboard-narrow.png`,fullPage:true});
    await page.setViewportSize(profile.viewport);
 
    assert.match(await target.innerText(),/Fair odds and win percentages are unavailable/);
