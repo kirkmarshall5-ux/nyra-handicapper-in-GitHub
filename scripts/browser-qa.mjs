@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {mkdirSync,writeFileSync} from 'node:fs';
+import {mkdirSync,writeFileSync,readFileSync} from 'node:fs';
 import {chromium} from 'playwright';
 
 // Automated Chromium checks only. The iPad profile emulates viewport/touch;
@@ -191,6 +191,32 @@ for(const profile of profiles){
    assert.equal(await target.locator('tbody tr').count(),4);
    assert.match(await target.innerText(),/Ranked 5\/6/);assert.match(await target.innerText(),/PASS/);
    assert.match(await target.innerText(),/QA Finisher Runner 7/);assert.doesNotMatch(await target.innerText(),/QA Finisher Runner 5/);
+   const dashboard=page.locator('#raceDayDashboard');
+   assert.match(await dashboard.innerText(),/5\/6 ranked · incomplete field · PASS/);
+   assert.equal(await dashboard.locator('.dashboard-paper').getAttribute('open'),null);
+   await dashboard.locator('.dashboard-paper > summary').click();
+   await page.locator('#dashboardPaperSource').selectOption('drfFinisher');
+   assert.equal(await dashboard.locator('.dashboard-paper').getAttribute('open'),'');
+   assert.match(await dashboard.locator('.dashboard-tickets').innerText(),/All available tests\s+\$14/);
+   await page.locator('#dashboardPaperSource').selectOption('morningLine');
+   assert.match(await dashboard.locator('.dashboard-plan-controls').first().innerText(),/#7 → #1 → #2/);
+   const dashboardBefore=await dashboard.locator('.dashboard-table').first().innerText();
+   const downloading=page.waitForEvent('download');await page.locator('#dashboardFreeze').click();
+   const download=await downloading,record=JSON.parse(readFileSync(await download.path(),'utf8'));
+   assert.equal(record.races[0].dashboard.schema,'nyra-race-dashboard-v1');
+   assert.equal(record.races[0].dashboard.models.find(m=>m.id==='drfContender').rankings.length,5);
+   assert.equal(record.races[0].dashboard.morning_line.rankings[0].n,'7');
+   assert.ok(record.races[0].dashboard.field.every(h=>h.n!=='5'));
+   assert.equal(record.races[0].dashboard.source_cards.DRF.card_id,'qa-finisher-drf');
+   assert.equal(record.races[0].dashboard.betting_enabled,false);
+   assert.equal(await dashboard.locator('.dashboard-table').first().innerText(),dashboardBefore,'Freeze must restore the selected race dashboard');
+   assert.match(await page.locator('#dashboardSnapshotStatus').innerText(),/exported: 1 races/);
+   await dashboard.screenshot({path:`${out}/${profile.name}-race-dashboard.png`});
+   await page.setViewportSize({width:390,height:844});
+   assert.ok(await dashboard.evaluate(el=>el.getBoundingClientRect().width<=innerWidth));
+   await dashboard.screenshot({path:`${out}/${profile.name}-race-dashboard-narrow.png`});
+   await page.setViewportSize(profile.viewport);
+
    assert.match(await target.innerText(),/Fair odds and win percentages are unavailable/);
    const drfPanel=page.locator('#contenderCandidates');
    assert.equal(await drfPanel.locator('details.remaining-ranked summary').innerText(),'Remaining Ranked Horses');

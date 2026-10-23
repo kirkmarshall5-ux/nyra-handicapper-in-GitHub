@@ -46,6 +46,13 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 .contender-rankings .candidate-table th:first-child{width:78%}.contender-rankings .candidate-table th:nth-child(2){width:22%}
 #pace > .grid > .card,#paceSourceEvidence{min-width:0}.pace-comparison-table{min-width:760px}.pace-comparison-table th{position:static}.pace-comparison-table td:first-child{min-width:180px;white-space:normal}.pace-comparison-table td{font-variant-numeric:tabular-nums}.pace-comparison-table th:first-child,.pace-comparison-table td:first-child{position:sticky;left:0;background:var(--panel);z-index:1}.pace-scroll-hint{display:none}@media(max-width:900px){.pace-scroll-hint{display:block;margin-bottom:8px}}
 #paceSourceEvidence>summary{cursor:pointer;font-size:18px;font-weight:800}#paceSourceEvidence .card{background:#0d1728}#paceMap .runner{white-space:normal;min-width:140px}
+/* Dashboard styles stay scoped so existing model panels retain their layout. */
+#raceDayDashboard{min-width:0;border-top:3px solid var(--gold)}
+.dashboard-heading{display:flex;justify-content:space-between;gap:12px;align-items:center}.dashboard-heading .sectiontitle{margin:5px 0 14px}
+.dashboard-readiness{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.dashboard-readiness>div{border-left:2px solid var(--line);padding-left:10px;font-size:12px}.dashboard-readiness span{display:block;color:var(--muted);margin-top:5px;line-height:1.5}
+.dashboard-scroll{overflow-x:auto}.dashboard-table{min-width:590px;table-layout:fixed}.dashboard-table th{position:static;background:transparent;text-transform:none;letter-spacing:0;white-space:normal}.dashboard-table th:first-child{width:36%}.dashboard-table th:not(:first-child),.dashboard-table td{text-align:center;font-variant-numeric:tabular-nums}.dashboard-table tbody th{font-size:13px;color:var(--text);overflow-wrap:anywhere}
+.dashboard-more,.dashboard-paper{margin-top:14px;font-size:12px}.dashboard-more summary,.dashboard-paper summary{cursor:pointer;padding:5px 0}.dashboard-paper{border-top:1px solid var(--line);padding-top:10px}.dashboard-plan-controls{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:12px 0}.dashboard-plan-controls select{width:auto;max-width:100%}.dashboard-tickets{max-width:520px}.dashboard-tickets>div{display:flex;justify-content:space-between;gap:16px;padding:8px 0;border-bottom:1px solid var(--line)}.dashboard-footer{margin-bottom:0;line-height:1.6}
+@media(max-width:600px){.dashboard-readiness{grid-template-columns:1fr}.dashboard-heading{align-items:flex-start}.dashboard-heading .badge{white-space:nowrap}.dashboard-heading .sectiontitle{font-size:17px}.dashboard-table th:first-child{width:32%}}
 </style>
 </head>
 <body>
@@ -68,6 +75,8 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <div class="badges" id="raceBadges"><span class="badge gold">1 1/16M Dirt</span><span class="badge">Maiden Special Weight · $100,000</span><span class="badge">12:05 PM</span><span class="badge green">Public NYRA card</span></div></div>
 <div><div class="muted small" style="margin-bottom:5px">Race</div><div class="racebar" id="racebar"></div></div>
 </div><div id="declaredScratches" class="small muted" role="status"></div><div class="flex" style="margin-top:12px;flex-wrap:wrap"><button class="primary" id="uploadBrisnet">1. Upload Brisnet PP</button><input id="brisnetFile" type="file" accept=".pdf" hidden><button class="primary" id="uploadDrf">2. Upload DRF PP</button><input id="drfFile" type="file" accept=".pdf" hidden><button class="primary" id="updateOddsScratches">Update Odds &amp; Scratches</button><span class="small muted" id="nyraUpdateStatus" role="status" aria-live="polite">Fetch NYRA updates for the selected race.</span></div></div>
+
+<section id="raceDayDashboard" class="card span12" aria-label="Race day dashboard"></section>
 
 <div class="span12 comparison-row">
 <div class="card span4"><div class="kicker">Morning Line</div><div id="topMl" class="stack small"></div></div>
@@ -188,6 +197,7 @@ import {researchRace} from "./jockey-research.js?v=20261008-qa1";
 import {evidenceProfile} from "./scoring-engine.js?v=20261008-qa1";
 import {estimatedWinLine,winLineFields,winLineNote} from "./fair-odds.js?v=20261015-mix1-line1";
 import {finisherRankingHtml} from "./finisher-ranking-display.js?v=20261018-evidence1";
+import {buildRaceDashboard,dashboardHtml} from "./race-day-dashboard.js?v=20261023-dashboard1";
 import {rankContenders} from "./contender-rankings.js?v=20261011-passdisplay1";
 import {rankBrisnetModels} from "./brisnet-models.js?v=20261023-distance1";
 import {brisnetRaceModelAudit} from "./brisnet-model-audit.js?v=20261023-distance1";
@@ -292,6 +302,20 @@ function renderModelRow(race,ids){
  contenderTarget.innerHTML=contenderTarget.innerHTML+remainingContenders+modelEvidenceHtml(race,contender,{model:'contender'})+'<div class="hidden" aria-hidden="true">'+winLineNote(contenderLine)+'</div>';
 
 }
+let dashboardPaperSource='drfContender';
+function currentDashboard(){
+ const dashboard=buildRaceDashboard({anchor:race,sources:{BRISNET:providerRace('BRISNET'),DRF:providerRace('DRF')},morningLineProvider:morningLineProvider()});
+ dashboard.demonstration=activeCard.id===sampleCard.id;
+ dashboard.source_cards=Object.fromEntries(['BRISNET','DRF'].map(p=>{const c=providerCards[p];return [p,c?{card_id:c.id,track:c.track,date:c.date,source_name:c.sourceName||null,parser_version:c.parser_version||null,imported_at:c.imported_at||null}:null];}));
+ return dashboard;
+}
+function renderDashboard(){
+ const target=document.getElementById('raceDayDashboard'),openDetails=[...target.querySelectorAll('details[open]')].map(el=>el.className);
+ target.innerHTML=dashboardHtml(currentDashboard(),dashboardPaperSource);
+ for(const el of target.querySelectorAll('details'))el.open=openDetails.includes(el.className);
+ document.getElementById('dashboardPaperSource').onchange=e=>{dashboardPaperSource=e.target.value;renderDashboard();document.getElementById('dashboardPaperSource').focus();};
+ document.getElementById('dashboardFreeze').onclick=()=>{document.getElementById('freezeAllModels').click();document.getElementById('dashboardSnapshotStatus').textContent=document.getElementById('freezeAllStatus').textContent;};
+}
 // Research-only local freeze. Captures the current rendered model evidence without changing ratings.
 document.getElementById('freezeAllModels').onclick=()=>{
  const status=document.getElementById('freezeAllStatus');
@@ -303,14 +327,14 @@ document.getElementById('freezeAllModels').onclick=()=>{
   for(const key of Object.keys(activeCard.races).sort((a,b)=>+a-+b)){
    race=structuredClone(activeCard.races[key]);
    renderRaceInsights();
-   rows.push({race:race.race,date:race.date,track:race.track,starters:race.horses.map(h=>({number:h.n,name:h.name})),models:Object.fromEntries(ids.map(id=>[id,document.getElementById(id).innerText]))});
+   rows.push({race:race.race,date:race.date,track:race.track,starters:race.horses.map(h=>({number:h.n,name:h.name})),dashboard:currentDashboard(),notes:state.cards?.[activeCard.id]?.notes?.[race.race]||"",models:Object.fromEntries(ids.map(id=>[id,document.getElementById(id).innerText]))});
   }
   const record={schema:'nyra-local-research-freeze-v1',captured_at_utc:now.toISOString(),clock_source:'browser-device-unverified',card_id:activeCard.id,card_date:activeCard.date,track:activeCard.track,source:cardProvider(activeCard),parser_version:activeCard.parser_version||null,warning:'Browser time is not independently authenticated. Experimental/PASS rankings are not betting recommendations. Check each race post time and scratches.',races:rows};
   const json=JSON.stringify(record,null,2),blob=new Blob([json],{type:'application/json'}),url=URL.createObjectURL(blob),link=document.createElement('a');
   link.href=url;link.download='NYRA_FREEZE_'+activeCard.date+'_'+now.toISOString().replace(/[:.]/g,'-')+'.json';document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
   status.textContent='Research snapshot exported: '+rows.length+' races at '+now.toLocaleTimeString()+'. Save the downloaded JSON. Browser clock is not independently verified.';
  }catch(e){status.textContent='Freeze failed: '+e.message+'; no completed snapshot.';}
- finally{race=original;for(const [id,html]of saved)document.getElementById(id).innerHTML=html;}
+ finally{race=original;for(const [id,html]of saved)document.getElementById(id).innerHTML=html;renderDashboard();}
 };
 function providerRace(provider){if(provider===cardProvider(activeCard))return {race,reason:null};return pairedRace(providerCards,provider,race);}
 function morningLineProvider(){
@@ -320,6 +344,7 @@ function morningLineProvider(){
  return candidates[0]||active;
 }
 function renderRaceInsights(){
+ renderDashboard();
  const ids={BRISNET:['brisTopContenders','brisFinisherCandidates','brisContenderCandidates'],DRF:['topContenders','finisherCandidates','contenderCandidates']};
  for(const provider of ['BRISNET','DRF']){const source=providerRace(provider);if(source.race)renderModelRow(source.race,ids[provider]);else for(const id of ids[provider])document.getElementById(id).innerHTML='<div class="note small">'+escapeText(source.reason)+'</div>';}
  document.getElementById('ppSourceView').value=cardProvider(activeCard);
