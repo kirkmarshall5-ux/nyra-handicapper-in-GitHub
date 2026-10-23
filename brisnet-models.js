@@ -7,7 +7,7 @@ export const BRISNET_METHODS=Object.freeze({
  v44c:'V4.4c-Brisnet base · experimental: latest Brisnet Speed 40 weight points, best Speed among the latest three starts 22, verified jockey rate 7 and trainer rate 8. Local records require 25 starts; otherwise verified annual records require 25 starts. Connection percentages ×3, capped at 100. Missing components reweighted. Original Beyer-context adjustments and trainer angles are not applied.',
  contender:'Contender-Brisnet · experimental: retained Contender coefficients on field-relative native Speed, recent-five Speed, surface/distance Speed, matched Brisnet early/late pace, reliable connection records and layoff. Matched Speed trend uses at least three comparable starts. Unavailable career splits, pressure fit, workouts, trips and opposition are neutral; this is not the validated DRF model.',
  mix1:'MIX1-Brisnet · experimental: latest-two Brisnet Speed average 37%, best Speed from starts 3–5 12%, jockey 7%, trainer 17%, matched early pace 17%, matched surface/distance Speed 10%. Each input uses within-field percentiles; missing inputs reweighted. Original Beyer-context multiplier is not applied.',
- pace:'Pace: latest available E1 for sprints or E2 for routes, and LP separately, from the latest five actual starts within 365 days, same surface, same sprint/route category and within 0.5 furlong. No unmatched fallback. First-time starters remain unrated.'
+ pace:'Pace: latest available E1 for sprints or E2 for routes, and LP separately, from the latest five actual starts within 365 days, same surface, same sprint/route category and within 1 furlong. No unmatched fallback. First-time starters remain unrated.'
 });
 const finite=v=>typeof v==='number'&&Number.isFinite(v);
 const avg=a=>a.length?a.reduce((s,v)=>s+v,0)/a.length:null;
@@ -56,13 +56,13 @@ function features(h,r){
  const figs=rows.map(l=>l.speed),latest=finite(figs[0])?figs[0]:null;
  if(latest===null)return {reason:'Latest start has no verified Brisnet Speed'};
  const surface=rows.filter(l=>l.age<=365&&l.surface===r.surface);
- const matched=surface.filter(l=>category(l.furlongs)===category(r.distance_furlongs)&&category(l.furlongs)!==null&&finite(r.distance_furlongs)&&Math.abs(l.furlongs-r.distance_furlongs)<=.5);
+ const matched=surface.filter(l=>category(l.furlongs)===category(r.distance_furlongs)&&category(l.furlongs)!==null&&finite(r.distance_furlongs)&&Math.abs(l.furlongs-r.distance_furlongs)<=1);
  const speedMatched=matched.filter(l=>finite(l.speed));
  const paceKey=category(r.distance_furlongs)==='route'?'e2':'e1';
  const earlyLine=matched.find(l=>finite(l[paceKey])),lateLine=matched.find(l=>finite(l.late));
  const early=earlyLine?.[paceKey]??null,late=lateLine?.late??null;
  const recent=figs.slice(0,2).filter(finite),older=figs.slice(2,5).filter(finite);
- const comparable=rows.filter(l=>category(l.furlongs)===category(r.distance_furlongs)&&l.surface===r.surface&&l.age<=365&&finite(l.furlongs)&&finite(r.distance_furlongs)&&Math.abs(l.furlongs-r.distance_furlongs)<=.5&&finite(l.speed));
+ const comparable=rows.filter(l=>category(l.furlongs)===category(r.distance_furlongs)&&l.surface===r.surface&&l.age<=365&&finite(l.furlongs)&&finite(r.distance_furlongs)&&Math.abs(l.furlongs-r.distance_furlongs)<=1&&finite(l.speed));
  let slope=null;if(comparable.length>=3){const y=comparable.map(l=>l.speed).reverse(),xm=(y.length-1)/2,ym=avg(y);slope=y.reduce((s,v,i)=>s+(i-xm)*(v-ym),0)/y.reduce((s,_,i)=>s+(i-xm)**2,0);}
  const jockey=connection(h,'jockey'),trainer=connection(h,'trainer');
  const raw=[latest,weighted(rows,[.50,.25,.15,.07,.03]),maximum(figs.slice(0,3).filter(finite)),decayed(surface.filter(l=>finite(l.speed))),decayed(speedMatched),maximum(surface.filter(l=>l.age<=90&&finite(l.speed)).map(l=>l.speed)),early,late,null,null,null,null,connection(h,'jockey',true),connection(h,'trainer',true),Math.min(365,rows[0].age),null,null,null,null];

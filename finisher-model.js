@@ -1,5 +1,5 @@
 // Finisher v1: three fixed, auditable inputs. Research only; V4.4c is unchanged.
-export const FINISHER_SPEC=Object.freeze({id:'FINISHER-3F-v1-20261018',weights:Object.freeze({recent_speed:.60,matched_speed:.25,late_pace:.15}),missing_percentile:50,recent_window:5,recent_weights:Object.freeze([.50,.25,.15,.07,.03]),history_days:365,distance_tolerance_furlongs:.5,matched_decay_half_life_days:90});
+export const FINISHER_SPEC=Object.freeze({id:'FINISHER-3F-v1-20261018',weights:Object.freeze({recent_speed:.60,matched_speed:.25,late_pace:.15}),missing_percentile:50,recent_window:5,recent_weights:Object.freeze([.50,.25,.15,.07,.03]),history_days:365,distance_tolerance_furlongs:1,matched_decay_half_life_days:90});
 const finite=x=>typeof x==='number'&&Number.isFinite(x);
 function percentile(value,observed){if(!finite(value)||observed.length<2||new Set(observed).size===1)return 50;return 100*(observed.filter(x=>x<value).length+.5*(observed.filter(x=>x===value).length-1))/(observed.length-1);}
 export function rankFinisherFeatures(entries){

@@ -25,7 +25,7 @@ export function decodeHistoryDistance(proof,today){
 }
 export function correctedMatchedSpeed({header,surface,date,proofs,verifiedDistance=null}){
  const decoded=decodeTodayDistance(header),distance=verifiedDistance??decoded.furlongs;
- const rows=proofs.slice(0,5).map(p=>decodeHistoryDistance(p,date)),matched=rows.filter(p=>p&&p.age<=365&&p.surface===surface&&distance!==null&&p.furlongs!==null&&Math.abs(p.furlongs-distance)<=.5);
+ const rows=proofs.slice(0,5).map(p=>decodeHistoryDistance(p,date)),matched=rows.filter(p=>p&&p.age<=365&&p.surface===surface&&distance!==null&&p.furlongs!==null&&Math.abs(p.furlongs-distance)<=1);
  const weight=p=>2**(-p.age/90),value=matched.length?matched.reduce((s,p)=>s+p.figure*weight(p),0)/matched.reduce((s,p)=>s+weight(p),0):null;
  return {input_version:DISTANCE_INPUT_ID,decoded_today:decoded,used_distance:distance,verified_distance_override:verifiedDistance!==null,rows,matched,value};
 }

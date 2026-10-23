@@ -31,8 +31,8 @@ test('audit contains the displayed Finisher output and inputs, separate from res
 });
 test('matching trace explains exclusions and the different one/two-start thresholds',()=>{
  const r=race(),h=r.horses[0];h.ratings.lines.push({...line('2026-09-01'),surface:'Dirt'},line('2026-08-01',8),line('2026-07-01',7),line('2025-01-01'),line('2024-12-01'));
- const a=brisnetMatchTrace(h,r);assert.equal(a.matched_speed_lines,1);assert.equal(a.gaps.finisher_matched_speed,null);assert.match(a.gaps.mix1_surfaceDistance,/two/);
- for(const [i,reason] of [[1,'SURFACE_MISMATCH_OR_UNKNOWN'],[2,'SPRINT_ROUTE_MISMATCH_OR_UNKNOWN'],[3,'DISTANCE_OUTSIDE_HALF_FURLONG_OR_UNKNOWN'],[4,'OLDER_THAN_365_DAYS'],[5,'OUTSIDE_LATEST_FIVE']])assert.ok(a.history[i].reasons.includes(reason));
+ const a=brisnetMatchTrace(h,r);assert.equal(a.matched_speed_lines,2);assert.equal(a.gaps.finisher_matched_speed,null);assert.equal(a.gaps.mix1_surfaceDistance,null);assert.equal(a.history[3].matched,true);
+ for(const [i,reason] of [[1,'SURFACE_MISMATCH_OR_UNKNOWN'],[2,'SPRINT_ROUTE_MISMATCH_OR_UNKNOWN'],[4,'OLDER_THAN_365_DAYS'],[5,'OUTSIDE_LATEST_FIVE']])assert.ok(a.history[i].reasons.includes(reason));
 });
 test('Finisher rejects nonfinite scoring figures instead of treating them as verified',()=>{
  const r=race();r.horses[0].ratings.lines[0].speed=NaN;

@@ -13,7 +13,7 @@ export function brisnetMatchTrace(h,r){
   if(age>FINISHER_SPEC.history_days)reasons.push('OLDER_THAN_365_DAYS');
   if(!['Dirt','Turf','Synth'].includes(l.surface)||l.surface!==r.surface)reasons.push('SURFACE_MISMATCH_OR_UNKNOWN');
   if(category(l.furlongs)===null||category(r.distance_furlongs)===null||category(l.furlongs)!==category(r.distance_furlongs))reasons.push('SPRINT_ROUTE_MISMATCH_OR_UNKNOWN');
-  if(!finite(l.furlongs)||!finite(r.distance_furlongs)||Math.abs(l.furlongs-r.distance_furlongs)>FINISHER_SPEC.distance_tolerance_furlongs)reasons.push('DISTANCE_OUTSIDE_HALF_FURLONG_OR_UNKNOWN');
+  if(!finite(l.furlongs)||!finite(r.distance_furlongs)||Math.abs(l.furlongs-r.distance_furlongs)>FINISHER_SPEC.distance_tolerance_furlongs)reasons.push('DISTANCE_OUTSIDE_ONE_FURLONG_OR_UNKNOWN');
   return {history_index:i+1,date:l.date,surface:l.surface,furlongs:l.furlongs,source_page:l.source?.page??null,matched:reasons.length===0,reasons,speed_available:finite(l.speed),early_available:finite(l[call]),late_available:finite(l.late)};
  });
  const matched=history.filter(l=>l.matched),speeds=matched.filter(l=>l.speed_available).length;

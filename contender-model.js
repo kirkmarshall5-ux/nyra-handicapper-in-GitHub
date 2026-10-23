@@ -51,7 +51,7 @@ export const MODEL = {
     "min_comparable_starts": 3,
     "actual_start_window": 5,
     "surface": "exact current surface",
-    "distance_tolerance_furlongs": 0.5,
+    "distance_tolerance_furlongs": 1,
     "max_age_days": 365,
     "unknown": "neutral zero",
     "scaling": "within-race midrank percentile [-1,1]",
