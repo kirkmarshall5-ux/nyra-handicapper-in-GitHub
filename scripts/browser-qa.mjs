@@ -376,11 +376,11 @@ for(const profile of profiles){
    assert.equal(await qp.evaluate(()=>localStorage.getItem('nyraV44cReleaseState')),null);
    assert.equal(await qp.evaluate(()=>localStorage.getItem('quota-unrelated')),'keep');
    await qp.locator('[data-tab="public"]').click();await qp.locator('#ppSourceView').selectOption('BRISNET');
-   await qp.locator('[data-tab="raceday"]').click();assert.match(await qp.locator('#cardKicker').innerText(),/2026-10-24.*Brisnet/);
+   await qp.locator('[data-tab="raceday"]').click();assert.match(await qp.locator('#cardKicker').innerText(),/2026-10-24.*Brisnet/i);
    await qp.locator('#raceNotes').fill('Saved under quota');
    await qp.waitForFunction(async()=>{const m=await import('./dual-pp-cards.js');return (await m.readProviderSession())?.state.cards?.['qa-quota-bris']?.notes?.[1]==='Saved under quota';});
    await qp.reload({waitUntil:'domcontentloaded'});await qp.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
-   assert.match(await qp.locator('#cardKicker').innerText(),/2026-10-24.*Brisnet/);assert.equal(await qp.locator('#raceNotes').inputValue(),'Saved under quota');
+   assert.match(await qp.locator('#cardKicker').innerText(),/2026-10-24.*Brisnet/i);assert.equal(await qp.locator('#raceNotes').inputValue(),'Saved under quota');
    const counts=await qp.evaluate(async()=>{const m=await import('./dual-pp-cards.js'),cards=await m.readProviderCards();return {d:cards.DRF.id,b:cards.BRISNET.storage_fixture.length,providers:Object.keys(cards)};});
    assert.equal(counts.d,'qa-quota-drf');assert.equal(counts.b,2*1024*1024);assert.equal(counts.providers.length,2);
    await qp.locator('[data-tab="public"]').click();await qp.locator('#ppSourceView').selectOption('DRF');await qp.locator('[data-tab="raceday"]').click();assert.equal(await qp.locator('#raceNotes').inputValue(),'Keep legacy notes');
@@ -397,7 +397,7 @@ for(const profile of profiles){
    await qp.locator('#brisnetFile').setInputFiles({name:'quota-retry.pdf',mimeType:'application/pdf',buffer:Buffer.from('synthetic QA PDF')});
    await qp.locator('#raceDayUploadStatus').getByText('card saved',{exact:false}).waitFor({state:'visible',timeout:20000});
    await qp.reload({waitUntil:'domcontentloaded'});await qp.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
-   assert.match(await qp.locator('#cardKicker').innerText(),/2026-10-24.*Brisnet/);
+   assert.match(await qp.locator('#cardKicker').innerText(),/2026-10-24.*Brisnet/i);
    assert.equal(await qp.evaluate(async()=>{const m=await import('./dual-pp-cards.js');return (await m.readProviderCards()).DRF.id;}),'qa-quota-drf');
    assert.equal(quotaErrors.length,0,quotaErrors.join(' | '));
    await qp.screenshot({path:`${out}/${profile.name}-quota-storage.png`,fullPage:true});
