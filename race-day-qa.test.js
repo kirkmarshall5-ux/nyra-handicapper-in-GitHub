@@ -27,7 +27,7 @@ test('Race Day notes follow active card and race, including card replacement',()
 });
 
 test('candidate win lines are visibly experimental and not betting approval',()=>{
-  assert.match(html,/function candidateTable\(rows\).*Experimental, uncalibrated estimates — no betting authorization/);
+  assert.match(html,/function candidateTable\(rows,.*Experimental, uncalibrated estimates — no betting authorization/);
   assert.match(html,/Est\. Fair Odds<\/th>/);
   assert.match(html,/Est\. Win %<\/th>/);
   assert.doesNotMatch(html,/True Chance<\/th>/);
