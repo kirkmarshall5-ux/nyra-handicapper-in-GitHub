@@ -1,0 +1,98 @@
+{
+  "classification": "POSTHOC_EXPLORATORY_FACTOR_ISOLATION_SAME_DEVELOPMENT_RACES",
+  "active_models": [
+    "v44c",
+    "finisher",
+    "contender"
+  ],
+  "holdout_files_used": 0,
+  "live_rule_changed": false,
+  "policies": [
+    {
+      "id": "S0.5_P0.5",
+      "speed": 0.5,
+      "pace": 0.5
+    },
+    {
+      "id": "S0.5_P1",
+      "speed": 0.5,
+      "pace": 1
+    },
+    {
+      "id": "S0.5_P1.5",
+      "speed": 0.5,
+      "pace": 1.5
+    },
+    {
+      "id": "S1_P0.5",
+      "speed": 1,
+      "pace": 0.5
+    },
+    {
+      "id": "S1_P1",
+      "speed": 1,
+      "pace": 1
+    },
+    {
+      "id": "S1_P1.5",
+      "speed": 1,
+      "pace": 1.5
+    },
+    {
+      "id": "S1.5_P0.5",
+      "speed": 1.5,
+      "pace": 0.5
+    },
+    {
+      "id": "S1.5_P1",
+      "speed": 1.5,
+      "pace": 1
+    },
+    {
+      "id": "S1.5_P1.5",
+      "speed": 1.5,
+      "pace": 1.5
+    }
+  ],
+  "protocol": {
+    "objective": "Ordering improvement from matching changes only",
+    "variants_locked_before_scoring": true,
+    "coefficients": "unchanged",
+    "surface_rule": "same surface only; October 16 off-turf races separately diagnosed using scheduled surface, excluded from main comparison",
+    "metrics": [
+      "winner ranked first",
+      "exacta order",
+      "trifecta order",
+      "superfecta order",
+      "six relative-order pairs among observed top four; report coverage"
+    ],
+    "limitations": [
+      "Previously analyzed cards; retrospective and exploratory",
+      "Incomplete official final-field verification",
+      "Only first four results; no full-field order inferred",
+      "October 21 race 2 saved field contains Santagata absent from result list; separate cohort",
+      "No ROI or probability claims"
+    ],
+    "experiment": "Speed tolerance \u00d7 pace tolerance, each 0.5/1/1.5f, latest five starts fixed; active models only",
+    "primary_secondary_metrics": [
+      "first-choice/exacta/trifecta unchanged definitions",
+      "three relative-order pairs among actual places 2-4",
+      "exact predicted position hits for places 2-4",
+      "mean absolute predicted-rank error for actual top four; unranked penalty=eligible field size+1"
+    ],
+    "status": "Posthoc exploratory continuation on same development races; not independent validation"
+  },
+  "sources": [
+    {
+      "date": "2026-10-16",
+      "sha256": "212fe0282b82ad716e46870ac6545a8188351b27496a28ee4763b7780bd13de7"
+    },
+    {
+      "date": "2026-10-21",
+      "sha256": "024d620718ccb20c78c30ca381d75760e3110b6a2ec4c824be675ebde4bb24b5"
+    }
+  ],
+  "graded_main_races": 15,
+  "same_development_cards_as_previous_round": true,
+  "position_error_definition": "Mean absolute model-rank minus actual position for the observed top four. Unranked assigned eligible-field-size + 1 solely for metric penalty."
+}

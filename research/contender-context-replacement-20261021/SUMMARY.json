@@ -1,0 +1,415 @@
+{
+  "classification": "POSTHOC_EXPLORATORY_REUSED_DEVELOPMENT",
+  "holdout_files_used": 0,
+  "live_rule_changed": false,
+  "summary": [
+    {
+      "cohort": "ALL",
+      "arm": "CURRENT_CONTENDER",
+      "races": 124,
+      "win": 26,
+      "winner4": 95,
+      "top4_coverage": 329,
+      "exacta": 7,
+      "trifecta": 3,
+      "superfecta": 2,
+      "top4_pairs_correct": 435,
+      "underneath_pairs_correct": 218,
+      "slot_hits": [
+        26,
+        24,
+        21,
+        12
+      ],
+      "top4_pairs_possible": 744,
+      "underneath_pairs_possible": 372,
+      "mean_top4_rank_error": 1.9536290322580645
+    },
+    {
+      "cohort": "ALL",
+      "arm": "NO_CONTEXT",
+      "races": 124,
+      "win": 29,
+      "winner4": 93,
+      "top4_coverage": 327,
+      "exacta": 8,
+      "trifecta": 3,
+      "superfecta": 2,
+      "top4_pairs_correct": 438,
+      "underneath_pairs_correct": 218,
+      "slot_hits": [
+        29,
+        24,
+        22,
+        12
+      ],
+      "top4_pairs_possible": 744,
+      "underneath_pairs_possible": 372,
+      "mean_top4_rank_error": 1.9415322580645162
+    },
+    {
+      "cohort": "ALL",
+      "arm": "BOUNDED_REPLACEMENT",
+      "races": 124,
+      "win": 28,
+      "winner4": 94,
+      "top4_coverage": 328,
+      "exacta": 7,
+      "trifecta": 3,
+      "superfecta": 2,
+      "top4_pairs_correct": 436,
+      "underneath_pairs_correct": 217,
+      "slot_hits": [
+        28,
+        23,
+        22,
+        12
+      ],
+      "top4_pairs_possible": 744,
+      "underneath_pairs_possible": 372,
+      "mean_top4_rank_error": 1.9455645161290323
+    },
+    {
+      "cohort": "DRF58",
+      "arm": "CURRENT_CONTENDER",
+      "races": 46,
+      "win": 11,
+      "winner4": 35,
+      "top4_coverage": 128,
+      "exacta": 4,
+      "trifecta": 2,
+      "superfecta": 1,
+      "top4_pairs_correct": 162,
+      "underneath_pairs_correct": 78,
+      "slot_hits": [
+        11,
+        10,
+        9,
+        4
+      ],
+      "top4_pairs_possible": 276,
+      "underneath_pairs_possible": 138,
+      "mean_top4_rank_error": 1.826086956521739
+    },
+    {
+      "cohort": "DRF58",
+      "arm": "NO_CONTEXT",
+      "races": 46,
+      "win": 12,
+      "winner4": 35,
+      "top4_coverage": 128,
+      "exacta": 4,
+      "trifecta": 2,
+      "superfecta": 1,
+      "top4_pairs_correct": 163,
+      "underneath_pairs_correct": 78,
+      "slot_hits": [
+        12,
+        10,
+        9,
+        4
+      ],
+      "top4_pairs_possible": 276,
+      "underneath_pairs_possible": 138,
+      "mean_top4_rank_error": 1.815217391304348
+    },
+    {
+      "cohort": "DRF58",
+      "arm": "BOUNDED_REPLACEMENT",
+      "races": 46,
+      "win": 12,
+      "winner4": 35,
+      "top4_coverage": 127,
+      "exacta": 4,
+      "trifecta": 2,
+      "superfecta": 1,
+      "top4_pairs_correct": 162,
+      "underneath_pairs_correct": 78,
+      "slot_hits": [
+        12,
+        10,
+        9,
+        4
+      ],
+      "top4_pairs_possible": 276,
+      "underneath_pairs_possible": 138,
+      "mean_top4_rank_error": 1.8315217391304348
+    },
+    {
+      "cohort": "KEE25",
+      "arm": "CURRENT_CONTENDER",
+      "races": 25,
+      "win": 7,
+      "winner4": 19,
+      "top4_coverage": 65,
+      "exacta": 0,
+      "trifecta": 0,
+      "superfecta": 0,
+      "top4_pairs_correct": 91,
+      "underneath_pairs_correct": 41,
+      "slot_hits": [
+        7,
+        4,
+        3,
+        3
+      ],
+      "top4_pairs_possible": 150,
+      "underneath_pairs_possible": 75,
+      "mean_top4_rank_error": 2.14
+    },
+    {
+      "cohort": "KEE25",
+      "arm": "NO_CONTEXT",
+      "races": 25,
+      "win": 7,
+      "winner4": 19,
+      "top4_coverage": 65,
+      "exacta": 0,
+      "trifecta": 0,
+      "superfecta": 0,
+      "top4_pairs_correct": 92,
+      "underneath_pairs_correct": 41,
+      "slot_hits": [
+        7,
+        3,
+        3,
+        3
+      ],
+      "top4_pairs_possible": 150,
+      "underneath_pairs_possible": 75,
+      "mean_top4_rank_error": 2.13
+    },
+    {
+      "cohort": "KEE25",
+      "arm": "BOUNDED_REPLACEMENT",
+      "races": 25,
+      "win": 7,
+      "winner4": 20,
+      "top4_coverage": 66,
+      "exacta": 0,
+      "trifecta": 0,
+      "superfecta": 0,
+      "top4_pairs_correct": 92,
+      "underneath_pairs_correct": 41,
+      "slot_hits": [
+        7,
+        3,
+        3,
+        3
+      ],
+      "top4_pairs_possible": 150,
+      "underneath_pairs_possible": 75,
+      "mean_top4_rank_error": 2.12
+    },
+    {
+      "cohort": "OCT17_BEL_DRF",
+      "arm": "CURRENT_CONTENDER",
+      "races": 11,
+      "win": 3,
+      "winner4": 10,
+      "top4_coverage": 31,
+      "exacta": 1,
+      "trifecta": 0,
+      "superfecta": 0,
+      "top4_pairs_correct": 42,
+      "underneath_pairs_correct": 22,
+      "slot_hits": [
+        3,
+        3,
+        1,
+        1
+      ],
+      "top4_pairs_possible": 66,
+      "underneath_pairs_possible": 33,
+      "mean_top4_rank_error": 1.5909090909090908
+    },
+    {
+      "cohort": "OCT17_BEL_DRF",
+      "arm": "NO_CONTEXT",
+      "races": 11,
+      "win": 3,
+      "winner4": 9,
+      "top4_coverage": 29,
+      "exacta": 1,
+      "trifecta": 0,
+      "superfecta": 0,
+      "top4_pairs_correct": 42,
+      "underneath_pairs_correct": 22,
+      "slot_hits": [
+        3,
+        3,
+        1,
+        1
+      ],
+      "top4_pairs_possible": 66,
+      "underneath_pairs_possible": 33,
+      "mean_top4_rank_error": 1.6136363636363635
+    },
+    {
+      "cohort": "OCT17_BEL_DRF",
+      "arm": "BOUNDED_REPLACEMENT",
+      "races": 11,
+      "win": 3,
+      "winner4": 9,
+      "top4_coverage": 30,
+      "exacta": 1,
+      "trifecta": 0,
+      "superfecta": 0,
+      "top4_pairs_correct": 41,
+      "underneath_pairs_correct": 21,
+      "slot_hits": [
+        3,
+        3,
+        1,
+        1
+      ],
+      "top4_pairs_possible": 66,
+      "underneath_pairs_possible": 33,
+      "mean_top4_rank_error": 1.5909090909090908
+    },
+    {
+      "cohort": "SAR47",
+      "arm": "CURRENT_CONTENDER",
+      "races": 42,
+      "win": 5,
+      "winner4": 31,
+      "top4_coverage": 105,
+      "exacta": 2,
+      "trifecta": 1,
+      "superfecta": 1,
+      "top4_pairs_correct": 140,
+      "underneath_pairs_correct": 77,
+      "slot_hits": [
+        5,
+        7,
+        8,
+        4
+      ],
+      "top4_pairs_possible": 252,
+      "underneath_pairs_possible": 126,
+      "mean_top4_rank_error": 2.0773809523809526
+    },
+    {
+      "cohort": "SAR47",
+      "arm": "NO_CONTEXT",
+      "races": 42,
+      "win": 7,
+      "winner4": 30,
+      "top4_coverage": 105,
+      "exacta": 3,
+      "trifecta": 1,
+      "superfecta": 1,
+      "top4_pairs_correct": 141,
+      "underneath_pairs_correct": 77,
+      "slot_hits": [
+        7,
+        8,
+        9,
+        4
+      ],
+      "top4_pairs_possible": 252,
+      "underneath_pairs_possible": 126,
+      "mean_top4_rank_error": 2.0535714285714284
+    },
+    {
+      "cohort": "SAR47",
+      "arm": "BOUNDED_REPLACEMENT",
+      "races": 42,
+      "win": 6,
+      "winner4": 30,
+      "top4_coverage": 105,
+      "exacta": 2,
+      "trifecta": 1,
+      "superfecta": 1,
+      "top4_pairs_correct": 141,
+      "underneath_pairs_correct": 77,
+      "slot_hits": [
+        6,
+        7,
+        9,
+        4
+      ],
+      "top4_pairs_possible": 252,
+      "underneath_pairs_possible": 126,
+      "mean_top4_rank_error": 2.0595238095238093
+    }
+  ],
+  "paired_comparisons": [
+    {
+      "arm": "NO_CONTEXT",
+      "control": "CURRENT_CONTENDER",
+      "races": 124,
+      "cards": 22,
+      "changed_orders": 16,
+      "wins_gained": 3,
+      "wins_lost": 0,
+      "better_top4_pair_order": 5,
+      "worse_top4_pair_order": 2,
+      "descriptive_card_bootstrap_95": {
+        "pair_accuracy": [
+          -0.001488095238095238,
+          0.00980392156862745
+        ],
+        "winner_rate": [
+          0.0,
+          0.05217391304347826
+        ]
+      },
+      "replicates": 5000,
+      "seed": 20261021
+    },
+    {
+      "arm": "BOUNDED_REPLACEMENT",
+      "control": "CURRENT_CONTENDER",
+      "races": 124,
+      "cards": 22,
+      "changed_orders": 19,
+      "wins_gained": 2,
+      "wins_lost": 0,
+      "better_top4_pair_order": 4,
+      "worse_top4_pair_order": 3,
+      "descriptive_card_bootstrap_95": {
+        "pair_accuracy": [
+          -0.005698005698005698,
+          0.008403361344537815
+        ],
+        "winner_rate": [
+          0.0,
+          0.04132231404958678
+        ]
+      },
+      "replicates": 5000,
+      "seed": 20261021
+    },
+    {
+      "arm": "BOUNDED_REPLACEMENT",
+      "control": "NO_CONTEXT",
+      "races": 124,
+      "cards": 22,
+      "changed_orders": 10,
+      "wins_gained": 0,
+      "wins_lost": 1,
+      "better_top4_pair_order": 1,
+      "worse_top4_pair_order": 3,
+      "descriptive_card_bootstrap_95": {
+        "pair_accuracy": [
+          -0.007633587786259542,
+          0.0026455026455026454
+        ],
+        "winner_rate": [
+          -0.025423728813559324,
+          0.0
+        ]
+      },
+      "replicates": 5000,
+      "seed": 20261021
+    }
+  ],
+  "trigger_counts": {
+    "NO_CONTEXT_TRIGGER": 23,
+    "PRESSURE_PROXY": 49,
+    "EARLY_ADVANTAGE_PROXY": 50,
+    "WITHHELD_MISSING_EARLY_OR_FTS": 2
+  },
+  "races_with_nonzero_replacement": 99
+}
