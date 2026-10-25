@@ -96,7 +96,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <div class="card span12" style="display:none" aria-hidden="true"><h3 class="sectiontitle">J1 research comparison</h3><div class="small muted">Compare source-card annual jockey rates with the baseline. Historical improvement is unvalidated; these rankings do not authorize bets.</div><div id="j1Comparison" class="small" style="margin-top:10px"></div></div>
 <div class="card span12">
 <div class="spread"><h3 class="sectiontitle">Race handicapping grid</h3><div class="small muted" id="gridModelStatus" role="status">Contender ratings · verified PP evidence</div></div><div class="sortbar" style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 12px"><span class="small muted" style="align-self:center">Sort:</span><button class="secondary sortbtn" data-sort="contender">Contender Rank ↑</button><button class="secondary sortbtn" data-sort="number">Horse # ↕</button><button class="secondary sortbtn" data-sort="ml">ML ↕</button></div>
-<div style="overflow:auto;max-height:540px"><table id="horseTable"><thead><tr><th>Horse</th><th>ML</th><th>Style</th><th>Jockey</th><th>Trainer</th><th>PP J Win%</th><th>PP T Win%</th><th>PP Fig</th><th>Contender Rank</th><th>Contender Rating</th><th>Fair Odds*</th></tr></thead><tbody></tbody></table></div>
+<div id="gridFieldStatus" class="small" role="status" aria-live="polite"></div><div style="overflow:auto;max-height:540px"><table id="horseTable"><thead><tr><th>Horse</th><th>Field status</th><th>ML</th><th>Style</th><th>Jockey</th><th>Trainer</th><th>PP J Win%</th><th>PP T Win%</th><th>PP Fig</th><th>Contender Rank</th><th>Contender Rating</th><th>Fair Odds*</th></tr></thead><tbody></tbody></table></div>
 </div>
 
 <div style="display:none" aria-hidden="true" class="card span12"><div class="spread"><div><div class="kicker">Potentially overlooked angles</div><h3 class="sectiontitle">Things to Consider — Auto Analysis</h3></div><span class="badge gold">PP-driven</span></div>
@@ -189,6 +189,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 </main>
 
 <script type="module">
+import {correctRaceField} from "./race-field-corrections.js";
 import {fetchOtherTrackCombinedUpdate,otherTrackSource,OTHER_TRACK_FEEDS_READY} from "./other-track-updates.js?v=20261025-staged1";
 import {prepareCombinedOtherTrackUpdate} from "./other-track-update-plan.js?v=20261025-staged1";
 import {fetchNyraRaceUpdate,nyraRaceUpdateSource,applyNyraSnapshotToRace} from "./nyra-race-update.js?v=20261018-dual1";
@@ -447,11 +448,22 @@ function selectRace(n){if(!activeCard.races[n])return;race=structuredClone(activ
 function renderHorses(){
  const grid=contenderGridRating(),entries=new Map((grid.rankings||[]).map((h,i)=>[gridRunnerKey(h),{...h,gridRank:i+1}])),provisional=grid.provisional||grid.decision!=='RATEABLE';
  document.getElementById('gridModelStatus').textContent=(cardProvider(activeCard)==='BRISNET'?'Brisnet':'DRF')+' Contender · '+entries.size+'/'+race.horses.filter(paceEligible).length+' starters ranked'+(provisional?' · provisional / '+grid.decision:'')+(grid.reason?' · '+grid.reason:'');
+ document.getElementById('gridFieldStatus').textContent='Scratched: '+(race.horses.filter(h=>h.odds==='SCR').map(h=>'#'+h.n+' '+h.name).join(', ')||'none')+'. Also eligible: '+(race.horses.filter(h=>h.entry_status==='AE'&&h.odds!=='SCR').map(h=>'#'+h.n+' '+h.name).join(', ')||'none')+'.';
  horseTable.querySelector("tbody").innerHTML=sortedGridHorses(grid).map(h=>{const entry=entries.get(gridRunnerKey(h)),label=h.odds==='SCR'?'Scratched':!paceEligible(h)?'Excluded':'Unranked';let js=h.jockey_win!=null?{win:h.jockey_win}:null,ts=h.trainer_win!=null?{win:h.trainer_win}:null;return `<tr data-program="${escapeText(h.n)}" style="${h.odds==="SCR"?"opacity:.48":""}">
-<td><span class="num">${h.n}</span><span class="horse">${escapeText(h.name)}${h.entry_status&&h.entry_status!=="REGULAR"?` <span class="pill">${h.entry_status} excluded</span>`:""}</span></td><td>${h.ml||"—"}</td>
+<td><span class="num">${h.n}</span><span class="horse">${escapeText(h.name)}${h.entry_status&&h.entry_status!=="REGULAR"?` <span class="pill">${h.entry_status} excluded</span>`:""}</span></td><td>${h.odds==='SCR'?'<b>SCR — Scratched</b>':h.entry_status==='AE'?`<button type="button" data-field-action="running" data-program="${escapeText(h.n)}">Confirm running</button>`:`${h.field_status_evidence?.action==='running'?'AE drawn in':'Active'} <button type="button" data-field-action="scratch" data-program="${escapeText(h.n)}">Scratch</button>`}${h.entry_status==='AE'&&h.odds!=='SCR'?` <button type="button" data-field-action="scratch" data-program="${escapeText(h.n)}">Scratch</button>`:''}</td><td>${h.ml||"—"}</td>
 <td><span class="pacechip ${escapeText(displayPaceStyle(h))}">${escapeText(displayPaceStyle(h))}</span></td><td>${escapeText(h.source_context?.jockey?.name||h.jockey_annual?.jockey||h.j||"—")}</td><td>${escapeText(h.source_context?.trainer?.name||h.t||"—")}</td>
 <td>${js?js.win.toFixed(1)+"%":"—"}</td><td>${ts?ts.win.toFixed(1)+"%":"—"}</td><td>${displayVal(h.ratings?.provider==="BRISNET"?h.ratings.lines?.[0]?.speed:h.last)}</td><td class="grid-contender-rank">${entry?entry.gridRank:label}</td><td><span class="score">${entry&&Number.isFinite(entry.score)?entry.score.toFixed(3):"N/A"}</span><div class="tiny muted" style="margin-top:4px">${entry?(provisional?"Provisional Contender rating":"Contender rating"):label}</div></td><td><b>${fairOddsMap()[h.n]||"—"}</b></td></tr>`}).join("");
 }
+horseTable.addEventListener('click',async event=>{
+ const button=event.target.closest('button[data-field-action]');if(!button)return;
+ button.disabled=true;
+ try{
+  const selected=cardProvider(activeCard),cards=putProviderCard(providerCards,{...activeCard,races:{...activeCard.races,[race.race]:structuredClone(race)}});
+  const updated=correctRaceField(cards,selected,race.race,button.dataset.program,button.dataset.fieldAction);
+  await writeProviderCardsSession(updated,state,selected);
+  providerCards=updated;activeCard=structuredClone(updated[selected]);race=structuredClone(activeCard.races[race.race]);renderAll();
+ }catch(error){document.getElementById('gridFieldStatus').textContent='Field correction failed: '+error.message;button.disabled=false;}
+});
 function renderBrisnetEvidence(){
  const target=document.getElementById("brisnetEvidence");if(!target)return;
  const model=brisnetPaceDisplay(race);target.innerHTML=model.available?brisnetEvidenceHtml(model,{sourceOnly:true}):"";document.getElementById("brisnetLatestEvidence").hidden=!model.available;
