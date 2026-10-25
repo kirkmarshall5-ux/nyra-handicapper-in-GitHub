@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {applyOtherTrackSnapshot,fetchOtherTrackUpdate,otherTrackSource} from './other-track-updates.js';
-import {prepareOtherTrackUpdate} from './other-track-update-plan.js';
+import {applyOtherTrackSnapshot,fetchOtherTrackUpdate,fetchOtherTrackCombinedUpdate,otherTrackSource} from './other-track-updates.js';
+import {prepareOtherTrackUpdate,prepareCombinedOtherTrackUpdate} from './other-track-update-plan.js';
 const now=Date.parse('2026-10-25T15:00:00Z');
 const race=(track='Keeneland')=>({track,date:'2026-10-25',race:1,surface:'Turf',horses:[{n:1,name:'One (IRE)',odds:'5/1',ml:'8/1',ratings:{speed:90}},{n:2,name:'Two',odds:'3/1',ml:'6/1',ratings:{speed:80}}]});
 function snapshot(kind='odds',track='keeneland'){
@@ -58,4 +58,25 @@ test('both matching PP sources prepare independently and mismatch aborts the ent
  const cards={DRF:drf,BRISNET:br},before=structuredClone(cards),s=snapshot('odds','gulfstream');
  const plan=prepareOtherTrackUpdate(drf,cards,r,s,'odds',now);assert.equal(plan.cards.DRF.races[1].horses[0].odds,'2/1');assert.equal(plan.cards.BRISNET.races[1].horses[0].odds,'2/1');assert.deepEqual(cards,before);
  br.races[1].horses[0].name='Different';assert.throws(()=>prepareOtherTrackUpdate(drf,cards,r,s,'odds',now),/mismatch/);assert.equal(drf.races[1].horses[0].odds,'5/1');
+});
+test('one action combines new scratches and current odds for both PP sources',async()=>{
+ const r=race(),before=structuredClone(r),calls=[];
+ const fetcher=async url=>{
+  const kind=url.searchParams.get('kind');calls.push(kind);const s=snapshot(kind);s.runners[1].scratched=true;s.runners[1].odds='SCR';
+  return new Response(JSON.stringify(s),{headers:{'content-type':'application/json'}});
+ };
+ const result=await fetchOtherTrackCombinedUpdate(r,{fetcher,now:()=>now});
+ assert.deepEqual(calls,['scratches','odds']);assert.equal(result.race.horses[0].odds,'2/1');assert.equal(result.race.horses[1].odds,'SCR');assert.deepEqual(r,before);
+ const drf={id:'drf',track:r.track,date:r.date,source_format:'DRF',races:{1:r}},bris={...structuredClone(drf),id:'bris',source_format:'BRISNET'};
+ const plan=prepareCombinedOtherTrackUpdate(drf,{DRF:drf,BRISNET:bris},r,result,now);
+ for(const c of Object.values(plan.cards)){assert.equal(c.races[1].horses[0].odds,'2/1');assert.equal(c.races[1].horses[1].odds,'SCR');assert.ok(c.races[1].scratch_snapshot);assert.ok(c.races[1].odds_snapshot);}
+ assert.deepEqual(drf.races[1],before);
+});
+test('combined action retains all original data when the odds leg fails',async()=>{
+ const r=race(),before=structuredClone(r);
+ await assert.rejects(fetchOtherTrackCombinedUpdate(r,{now:()=>now,fetcher:async url=>{
+  if(url.searchParams.get('kind')==='odds')throw Error('tote feed failed');
+  const s=snapshot('scratches');s.runners[1].scratched=true;
+  return new Response(JSON.stringify(s),{headers:{'content-type':'application/json'}});
+ }}),/tote feed failed/);assert.deepEqual(r,before);
 });

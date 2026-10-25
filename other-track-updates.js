@@ -60,3 +60,9 @@ export async function fetchOtherTrackUpdate(race,kind,{fetcher=globalThis.fetch,
  if(!(response.headers.get('content-type')||'').includes('application/json'))throw Error('Track service did not return verified race data');
  const snapshot=await response.json();return {race:applyOtherTrackSnapshot(frozen,snapshot,kind,now()),snapshot};
 }
+// A single user action prepares both updates; nothing is persisted on partial failure.
+export async function fetchOtherTrackCombinedUpdate(race,options={}){
+ const scratches=await fetchOtherTrackUpdate(race,'scratches',options);
+ const odds=await fetchOtherTrackUpdate(scratches.race,'odds',options);
+ return {race:odds.race,scratches:scratches.snapshot,odds:odds.snapshot};
+}

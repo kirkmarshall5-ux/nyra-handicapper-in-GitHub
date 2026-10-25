@@ -74,7 +74,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <div><div class="kicker" id="cardKicker">Active race card</div><h2 id="raceTitle">Belmont Park · Race 1</h2>
 <div class="badges" id="raceBadges"><span class="badge gold">1 1/16M Dirt</span><span class="badge">Maiden Special Weight · $100,000</span><span class="badge">12:05 PM</span><span class="badge green">Public NYRA card</span></div></div>
 <div><div class="muted small" style="margin-bottom:5px">Race</div><div class="racebar" id="racebar"></div></div>
-</div><div id="declaredScratches" class="small muted" role="status"></div><div class="flex" style="margin-top:12px;flex-wrap:wrap"><button class="primary" id="uploadBrisnet">1. Upload Brisnet PP</button><input id="brisnetFile" type="file" accept=".pdf" hidden><button class="primary" id="uploadDrf">2. Upload DRF PP</button><input id="drfFile" type="file" accept=".pdf" hidden><button class="primary" id="updateOddsScratches">Update Odds &amp; Scratches</button><span class="small muted" id="nyraUpdateStatus" role="status" aria-live="polite">Fetch NYRA updates for the selected race.</span></div><div id="raceDayUploadStatus" class="small" role="status" aria-live="polite" style="margin-top:8px;overflow-wrap:anywhere"></div></div>
+</div><div id="declaredScratches" class="small muted" role="status"></div><div class="flex" style="margin-top:12px;flex-wrap:wrap"><button class="primary" id="uploadBrisnet">1. Upload Brisnet PP</button><input id="brisnetFile" type="file" accept=".pdf" hidden><button class="primary" id="uploadDrf">2. Upload DRF PP</button><input id="drfFile" type="file" accept=".pdf" hidden></div><div id="raceDayUploadStatus" class="small" role="status" aria-live="polite" style="margin-top:8px;overflow-wrap:anywhere"></div></div>
 
 <section id="raceDayDashboard" class="card span12" aria-label="Race day dashboard"></section>
 
@@ -168,7 +168,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <div class="flex" style="margin-top:12px"><a id="openRace" target="_blank"><button class="secondary">Open NYRA page</button></a></div>
 </div>
 
-<div class="card span12"><div class="kicker">Keeneland · Churchill Downs · Gulfstream Park</div><div class="small muted" id="otherTrackIdentity"></div><div class="flex" style="margin-top:10px;flex-wrap:wrap"><button class="primary" id="updateOtherOdds" type="button">Update Odds</button><button class="secondary" id="updateOtherScratches" type="button">Update Scratches</button></div><p id="otherTrackUpdateStatus" class="small muted" role="status" aria-live="polite">Select a supported PP card. Updates apply to its selected race.</p></div>
+<div class="card span12"><div class="kicker">Race updates · NYRA · Keeneland · Churchill Downs · Gulfstream Park</div><div class="small muted" id="trackUpdateIdentity"></div><div class="flex" style="margin-top:10px;flex-wrap:wrap"><button class="primary" id="updateOddsScratches" type="button">Update Odds &amp; Scratches</button></div><p id="nyraUpdateStatus" class="small muted" role="status" aria-live="polite">Updates use the loaded PP card and selected race.</p></div>
 <div class="card span12"><div class="kicker">Keep both PP sources loaded</div><div class="flex" style="flex-wrap:wrap;margin-top:8px"><button class="secondary" id="exportBrisnetSourceAudit" type="button">Export Brisnet Source Audit</button><button class="secondary" id="exportBrisnetModelAudit" type="button">Export Brisnet Model Input Audit</button><label for="ppSourceView" class="small">Horse grid / Pace source</label><select id="ppSourceView" style="width:auto"><option value="BRISNET">Brisnet</option><option value="DRF">DRF</option></select></div><div class="small muted" id="providerCardsStatus" role="status" style="margin-top:10px"></div><div class="small" id="providerUploadStatus" role="status" style="margin-top:6px"></div><div class="progress" style="margin-top:10px"><i id="ppProg"></i></div><div id="ppStatus" class="muted small" role="status" style="margin-top:8px">Upload each PP once using its matching button. Processing and saved cards stay in this browser.</div><details id="manageSavedCards" class="small" style="margin-top:12px"><summary>Manage saved cards</summary><div class="flex" style="flex-wrap:wrap;margin-top:10px"><button class="secondary" id="clearPP">Clear selected PP evidence</button><button class="secondary" id="resetSample">Reset DRF sample card</button></div><p class="muted">Clear affects the source selected in Horse grid / Pace source. Reset loads the demonstration into the DRF slot. The other PP source is retained.</p></details></div>
 <div class="card span12"><div class="kicker">Prospective research snapshot</div><div class="flex" style="align-items:center;gap:12px;flex-wrap:wrap"><button class="primary" id="freezeAllModels">Freeze All Models</button><span class="small muted" id="freezeAllStatus" role="status">Local timestamped research export; no wager authorization. Verify before post time.</span></div></div>
 </div></section>
@@ -189,8 +189,8 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 </main>
 
 <script type="module">
-import {fetchOtherTrackUpdate,otherTrackSource} from "./other-track-updates.js?v=20261025-staged1";
-import {prepareOtherTrackUpdate} from "./other-track-update-plan.js?v=20261025-staged1";
+import {fetchOtherTrackCombinedUpdate,otherTrackSource} from "./other-track-updates.js?v=20261025-staged1";
+import {prepareCombinedOtherTrackUpdate} from "./other-track-update-plan.js?v=20261025-staged1";
 import {fetchNyraRaceUpdate,nyraRaceUpdateSource,applyNyraSnapshotToRace} from "./nyra-race-update.js?v=20261018-dual1";
 import {initKnowledgeBase} from "./knowledge-base.js?v=20261008-kb1";
 import {connectionRows,LEADER_SCOPE,LEADER_SOURCE} from "./connection-research.js?v=20261008-jt1";
@@ -402,7 +402,7 @@ document.querySelectorAll(".sortbtn").forEach(b=>b.onclick=()=>{
  renderHorses();updateSortButtons();
 });
 function syncRaceNotes(){raceNotes.value=state.cards?.[activeCard.id]?.notes?.[race.race]||""}
-function renderAll(){syncRaceNotes();renderPaceCardStatus();document.getElementById("releaseStatus").textContent=`Rankings: ${currentRating().model_id} · PP formats: DRF / Brisnet Ultimate / Premium Plus · Saved card: ${activeCard.parser_version||"sample / legacy evidence"}. V4.4c, Finisher and Contender. Morning line is reference only. Verify scratches and surface against official entries.`;renderBrisnetEvidence();renderProjectedRaceSetup();renderReleaseContext();renderJ1Comparison();renderHeader();renderHorses();updateSortButtons();renderPace();renderEdit();renderEvidence();renderConnections();renderLeaderboards();renderWeights();renderThings();renderRaceInsights();renderNyraUpdateControls();renderOtherTrackUpdateControls();updateUrl()}
+function renderAll(){syncRaceNotes();renderPaceCardStatus();document.getElementById("releaseStatus").textContent=`Rankings: ${currentRating().model_id} · PP formats: DRF / Brisnet Ultimate / Premium Plus · Saved card: ${activeCard.parser_version||"sample / legacy evidence"}. V4.4c, Finisher and Contender. Morning line is reference only. Verify scratches and surface against official entries.`;renderBrisnetEvidence();renderProjectedRaceSetup();renderReleaseContext();renderJ1Comparison();renderHeader();renderHorses();updateSortButtons();renderPace();renderEdit();renderEvidence();renderConnections();renderLeaderboards();renderWeights();renderThings();renderRaceInsights();renderNyraUpdateControls();updateUrl()}
 function renderThings(){
  const el=document.getElementById("thingsToConsider"); if(!el)return;
  let rows=[];
@@ -522,13 +522,17 @@ raceNotes.oninput=e=>{const cs=state.cards[activeCard.id]||(state.cards[activeCa
 
 let nyraUpdatePending=false;
 function renderNyraUpdateControls(){
- const button=document.getElementById('updateOddsScratches'),status=document.getElementById('nyraUpdateStatus'),source=nyraRaceUpdateSource(race);
- button.disabled=nyraUpdatePending||source.mode!=='automatic';
- if(source.mode!=='automatic'){status.textContent='Automatic NYRA updates are unavailable for '+source.label+'.';return;}
+ const button=document.getElementById('updateOddsScratches'),status=document.getElementById('nyraUpdateStatus'),source=nyraRaceUpdateSource(race),other=otherTrackSource(race.track);
+ button.disabled=nyraUpdatePending||otherTrackPending||(source.mode!=='automatic'&&!other.supported);
+ document.getElementById('trackUpdateIdentity').textContent=(race.track||'Unknown track')+' · '+race.date+' · Race '+race.race;
+ if(nyraUpdatePending||otherTrackPending){status.textContent='Fetching odds and scratches for '+race.track+' Race '+race.race+'…';return;}
+ if(source.mode!=='automatic'){
+  status.textContent=other.supported?'Update odds and scratches together for the loaded race. Unavailable or unverified data leaves both PP sources unchanged.':'Automatic updates are unavailable for '+(race.track||'this track')+'.';return;
+ }
  const last=race.odds_snapshot?.fetchedAt,scratches=race.horses.filter(h=>h.odds==='SCR').map(h=>'#'+h.n).join(', ');
- status.textContent=nyraUpdatePending?'Fetching NYRA odds and scratches…':last?'Last NYRA update '+new Date(last).toLocaleTimeString()+'. Scratches: '+(scratches||'none')+'. Prices may be delayed.':'Fetch NYRA odds and scratches for Race '+race.race+' without pasting. Prices may be delayed.';
+ status.textContent=last?'Last NYRA update '+new Date(last).toLocaleTimeString()+'. Scratches: '+(scratches||'none')+'. Prices may be delayed.':'Fetch NYRA odds and scratches for Race '+race.race+' without pasting. Prices may be delayed.';
 }
-document.getElementById('updateOddsScratches').onclick=async()=>{
+async function updateNyraTrack(){
  if(nyraUpdatePending)return;
  const initial={card:activeCard.id,race:race.race,date:race.date,track:race.track},unchanged=()=>activeCard.id===initial.card&&race.race===initial.race&&race.date===initial.date&&race.track===initial.track;
  const before=JSON.stringify(race),status=document.getElementById('nyraUpdateStatus');nyraUpdatePending=true;renderNyraUpdateControls();
@@ -544,34 +548,27 @@ document.getElementById('updateOddsScratches').onclick=async()=>{
   status.textContent='Updated '+result.snapshot.runners.length+' runners at '+new Date(result.snapshot.fetchedAt).toLocaleTimeString()+'. Scratches: '+(scratches||'none')+'. Selected-source models refreshed.'+pairedUpdate+' Prices may be delayed.';
  }catch(e){if(unchanged())status.textContent='Update failed: '+e.message+'. Previous odds and scratches retained.';}
  finally{nyraUpdatePending=false;document.getElementById('updateOddsScratches').disabled=nyraRaceUpdateSource(race).mode!=='automatic';if(!unchanged())renderNyraUpdateControls();}
-};
-let otherTrackPending=false;
-function renderOtherTrackUpdateControls(){
- const source=otherTrackSource(race.track);
- for(const id of ['updateOtherOdds','updateOtherScratches'])document.getElementById(id).disabled=otherTrackPending||!source.supported;
- document.getElementById('otherTrackIdentity').textContent=(race.track||'Unknown track')+' · '+race.date+' · Race '+race.race;
- document.getElementById('otherTrackUpdateStatus').textContent=otherTrackPending?'Fetching verified track update…':source.supported?'Update the selected race. Matching DRF and Brisnet cards refresh together. Source verification is required; unavailable data leaves the cards unchanged.':'Select a Keeneland, Churchill Downs or Gulfstream Park PP card to use these buttons.';
 }
-async function updateOtherTrack(kind){
+let otherTrackPending=false;
+async function updateOtherTrack(){
  if(otherTrackPending||!otherTrackSource(race.track).supported)return;
- const status=document.getElementById('otherTrackUpdateStatus'),before={card:activeCard.id,race:JSON.stringify(race),cards:JSON.stringify(providerCards)};
+ const status=document.getElementById('nyraUpdateStatus'),before={card:activeCard.id,race:JSON.stringify(race),cards:JSON.stringify(providerCards)};
  const unchanged=()=>activeCard.id===before.card&&JSON.stringify(race)===before.race&&JSON.stringify(providerCards)===before.cards;
- otherTrackPending=true;renderOtherTrackUpdateControls();
+ otherTrackPending=true;renderNyraUpdateControls();
  try{
-  const result=await fetchOtherTrackUpdate(race,kind);
+  const result=await fetchOtherTrackCombinedUpdate(race);
   if(!unchanged())throw Error('Selected card, race or source changed; update again');
-  const plan=prepareOtherTrackUpdate(activeCard,providerCards,race,result.snapshot,kind);
+  const plan=prepareCombinedOtherTrackUpdate(activeCard,providerCards,race,result);
   await writeProviderCardsSession(plan.cards,state,plan.selected);
   // A later user navigation/save takes precedence; never replace its displayed race.
   if(!unchanged()){status.textContent='Update saved for the original race; current selection retained. Refresh before using it.';return;}
   for(const [p,c] of Object.entries(plan.cards))providerCards[p]=c;
   activeCard=providerCards[plan.selected];race=structuredClone(plan.race);otherTrackPending=false;renderAll();
-  status.textContent=(kind==='odds'?'Odds':'Scratches')+' updated for '+race.track+' Race '+race.race+' at '+new Date(result.snapshot.fetchedAt).toLocaleTimeString()+'. '+plan.pairedStatus+' Verify before post time.';
+  status.textContent='Odds and scratches updated for '+race.track+' Race '+race.race+' at '+new Date(result.odds.fetchedAt).toLocaleTimeString()+'. '+plan.pairedStatus+' Verify before post time.';
  }catch(e){status.textContent='Update unavailable: '+e.message+'. Previous odds and scratches retained.';}
- finally{otherTrackPending=false;for(const id of ['updateOtherOdds','updateOtherScratches'])document.getElementById(id).disabled=!otherTrackSource(race.track).supported;}
+ finally{otherTrackPending=false;document.getElementById('updateOddsScratches').disabled=nyraRaceUpdateSource(race).mode!=='automatic'&&!otherTrackSource(race.track).supported;}
 }
-document.getElementById('updateOtherOdds').onclick=()=>updateOtherTrack('odds');
-document.getElementById('updateOtherScratches').onclick=()=>updateOtherTrack('scratches');
+document.getElementById('updateOddsScratches').onclick=()=>nyraRaceUpdateSource(race).mode==='automatic'?updateNyraTrack():updateOtherTrack();
 function updateUrl(){const venue=["belmont","aqueduct","saratoga"].includes(track.value)?track.value:"belmont";const url=`https://www.nyra.com/${venue}/racing/entries/?day=${race.date}&limit=entries&race=${race.race}`;raceUrl.value=url;openRace.href=url;nyraRaceLink.href=url}
 [track,raceDate,raceNo].forEach(el=>el.onchange=updateUrl);updateUrl();
 

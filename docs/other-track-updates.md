@@ -1,17 +1,23 @@
-# Keeneland, Churchill Downs and Gulfstream Park updates — STAGED / NOT READY TO DEPLOY
+# Unified odds and scratches button — STAGED / NOT READY TO DEPLOY
 
-User request: two new buttons on Load NYRA, with scratch and odds updates for
-these three venues. The two actions are **Update Odds** and **Update Scratches**;
-the loaded PP card supplies track, date and selected race. Existing NYRA behavior
-and all model coefficients remain unchanged. Do not merge or publish this work
-until the acquisition and live browser gates below pass and the user authorizes
-deployment.
+Updated requirement: one **Update Odds & Scratches** button on Load NYRA serves
+NYRA tracks, Keeneland, Churchill Downs and Gulfstream Park. It automatically
+uses the loaded PP card and selected race. No separate venue/action buttons.
+The former Race Day button is moved to this single Load NYRA control.
+
+NYRA uses its existing updater. Other tracks prepare scratches first and current
+odds second; both legs and both matching PP fields must validate before anything
+is persisted. A failure in either leg retains the original data. No partial
+scratch-only success is presented as a combined update.
+
+The non-NYRA feeds remain unconnected and deployment remains blocked. See the
+source evidence and acceptance gates below. Nothing is published.
 
 ## Implemented
 
 - Separate source routing for KEE/Keeneland, CD/Churchill Downs and
   GP/Gulfstream Park. NYRA and unsupported venues cannot invoke this adapter.
-- Both buttons on Load NYRA, with loaded-race identity and status. The NYRA
+- One combined button on Load NYRA, with loaded-race identity and status. The NYRA
   track/date controls above them still describe the separate NYRA page link;
   these new actions always use the loaded PP race, never that link's selection.
 - Independent odds-only and scratch-only application. Odds never substitute
@@ -32,11 +38,11 @@ deployment.
 
 ## Verification completed locally, October 25, 2026
 
-- Node regression: 457 tests passed, including 33 new track validation tests
+- Node regression: 459 tests passed, including 35 new track validation tests
   and 3 new service-contract tests. No failures.
 - Chromium preview: new controls visible on Load NYRA; disabled for Belmont;
   enabled with a synthetic Gulfstream card; odds request failure displays
-  “Previous odds and scratches retained” and re-enables both controls.
+  “Previous odds and scratches retained” and re-enables the control.
 - Synthetic fixture is `scripts/fixtures/other-track-preview.html`; it uses
   invented two-runner fields and must only be opened on a disposable preview
   origin. No new/held-out PP cards were analyzed.

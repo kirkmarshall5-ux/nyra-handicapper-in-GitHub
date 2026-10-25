@@ -15,3 +15,8 @@ export function prepareOtherTrackUpdate(activeCard,providerCards,race,snapshot,k
  }
  return {cards,selected,race:updated,pairedStatus};
 }
+export function prepareCombinedOtherTrackUpdate(activeCard,providerCards,race,result,now=Date.now()){
+ const scratchPlan=prepareOtherTrackUpdate(activeCard,providerCards,race,result.scratches,'scratches',now);
+ const stagedCards={...providerCards,...scratchPlan.cards};
+ return prepareOtherTrackUpdate(scratchPlan.cards[scratchPlan.selected],stagedCards,scratchPlan.race,result.odds,'odds',now);
+}
