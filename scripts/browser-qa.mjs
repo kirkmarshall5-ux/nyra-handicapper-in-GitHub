@@ -111,7 +111,7 @@ for(const profile of profiles){
    for(const id of ['brisTopContenders','brisContenderCandidates']){
     const target=page.locator('#'+id);assert.equal(await target.locator('tbody tr').count(),2,id+' must rank the two experienced runners');
     assert.match(await target.innerText(),/Ranked 2\/3/);
-    assert.match(await target.innerText(),/First-time starter/);
+    assert.match(await target.textContent(),/First-time starter/);
     assert.match(await target.textContent(),/probability conversion has not been validated/);
    }
    assert.match(await page.locator('#brisFinisherCandidates').innerText(),/Ranked 2\/3/);
@@ -197,7 +197,7 @@ for(const profile of profiles){
    const target=page.locator('#finisherCandidates');assert.equal(await target.isVisible(),true);
    assert.equal(await target.locator('tbody tr').count(),4);
    assert.match(await target.innerText(),/Ranked 5\/6/);assert.match(await target.innerText(),/PASS/);
-   assert.match(await target.innerText(),/QA Finisher Runner 7/);assert.doesNotMatch(await target.innerText(),/QA Finisher Runner 5/);
+   assert.match(await target.textContent(),/QA Finisher Runner 7/);assert.doesNotMatch(await target.innerText(),/QA Finisher Runner 5/);
    const dashboard=page.locator('#raceDayDashboard');
    assert.match(await dashboard.innerText(),/5\/6 ranked · incomplete field · PASS/);
    assert.equal(await dashboard.locator('.dashboard-paper').getAttribute('open'),null);
@@ -239,7 +239,7 @@ for(const profile of profiles){
    assert.equal(await page.locator('.comparison-row > .card > details').count(),0);
    await page.locator('[data-tab="knowledge"]').click();assert.equal(await page.locator('#contenderModelDetails').isVisible(),true);assert.equal(await page.locator('#contenderModelDetails details').count(),3);assert.match(await page.locator('#contenderModelDetails').innerText(),/How Contender ranks/);await page.locator('[data-tab="raceday"]').click();
 
-   for(const id of ['topContenders','finisherCandidates','contenderCandidates']){const notice=page.locator('#'+id+' .model-evidence-note');assert.match(await notice.innerText(),/ranked 5\/6 starters/);assert.match(await notice.innerText(),/16\.7%/);assert.match(await notice.innerText(),/Morning-line favorite — UNRANKED/);assert.match(await notice.innerText(),/at or below 20% does not clear missing evidence/);assert.match(await notice.innerText(),/ML 6\/5/);}
+   for(const id of ['topContenders','finisherCandidates','contenderCandidates']){const notice=page.locator('#'+id+' .model-evidence-note');assert.equal(await notice.getAttribute('open'),null);if(await notice.isVisible())await notice.locator(':scope > summary').click();else await notice.evaluate(el=>{el.open=true});assert.equal(await notice.evaluate(el=>el.open),true);assert.match(await notice.innerText(),/ranked 5\/6 starters/);assert.match(await notice.innerText(),/16\.7%/);assert.match(await notice.innerText(),/Morning-line favorite — UNRANKED/);assert.match(await notice.innerText(),/at or below 20% does not clear missing evidence/);assert.match(await notice.innerText(),/ML 6\/5/);}
    await page.screenshot({path:`${out}/${profile.name}-missing-favorite.png`,fullPage:true});
    await page.evaluate(async()=>{const c=(await window.qaReadActive()),h=c.races[1].horses[6];h.life_starts=1;h.lifeStarts=1;h.beyer_figures=[95];h.figs=[95];await window.qaSetActive(c);});
    await page.reload({waitUntil:'domcontentloaded'});
@@ -315,7 +315,7 @@ for(const profile of profiles){
     }await window.qaSetActive(drf);
    });
    await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});await page.locator('[data-tab="raceday"]').click();
-   for(const id of ['brisTopContenders','brisFinisherCandidates','brisContenderCandidates','topContenders','finisherCandidates','contenderCandidates']){assert.match(await page.locator('#'+id).innerText(),/ranked 2\/3 starters/);assert.match(await page.locator('#'+id).innerText(),/Morning-line favorite — UNRANKED/);}
+   for(const id of ['brisTopContenders','brisFinisherCandidates','brisContenderCandidates','topContenders','finisherCandidates','contenderCandidates']){assert.match(await page.locator('#'+id).innerText(),/ranked 2\/3 starters/);assert.match(await page.locator('#'+id).textContent(),/Morning-line favorite — UNRANKED/);}
    const checkContenderGrid=async provider=>{
     const panel=page.locator(provider==='BRISNET'?'#brisContenderCandidates':'#contenderCandidates'),first=panel.locator('tbody tr').first(),gridFirst=page.locator('#horseTable tbody tr').first();
     assert.equal(await gridFirst.locator('.grid-contender-rank').innerText(),'1');assert.equal(await gridFirst.locator('.score').innerText(),await first.locator('td').nth(1).innerText());

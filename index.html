@@ -282,7 +282,7 @@ function fairOddsMap(){return {}}
 function confidenceRank(h){const ep=evidenceProfile({...h,jockeyRating:h.jockey_win,trainerRating:h.trainer_win});return ({High:3,Medium:2,Low:1})[ep.confidence]||1}
 function valueRows(){return []}
 const escapeText=s=>String(s??"").replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function candidateTable(rows){return `<div class="tiny muted" style="margin:5px 0">Experimental, uncalibrated estimates — no betting authorization.</div><table class="candidate-table"><thead><tr><th aria-label="Horse"></th><th scope="col">Rating</th><th scope="col">Est. Fair Odds</th><th scope="col">Est. Win %</th></tr></thead><tbody>${rows}</tbody></table>`}
+function candidateTable(rows,{showEstimateNote=true}={}){return `${showEstimateNote?'<div class="tiny muted" style="margin:5px 0">Experimental, uncalibrated estimates — no betting authorization.</div>':''}<table class="candidate-table"><thead><tr><th aria-label="Horse"></th><th scope="col">Rating</th><th scope="col">Est. Fair Odds</th><th scope="col">Est. Win %</th></tr></thead><tbody>${rows}</tbody></table>`}
 function renderModelRow(race,ids){
  const topContenders=document.getElementById(ids[0]),contenderTarget=document.getElementById(ids[2]);
  const currentRating=()=>rankBrisnetModels(race)?.v44c||websiteRace(race);
@@ -305,8 +305,8 @@ function renderModelRow(race,ids){
  const contender=rankContenders(race,r,{displayPass:r.decision==='PASS'});
  const contenderLine=estimatedWinLine(race,contender,'contender');
  const contenderRows=(rows,offset=0)=>rows.map((h,i)=>`<tr><td><b>${offset+i+1}. #${escapeText(h.n||'—')} ${escapeText(h.name)}</b></td><td>${h.score.toFixed(3)}</td>${winLineFields(contenderLine,h)}</tr>`).join('');
- const contenderList=contender.rankings.length?candidateTable(contenderRows(contender.rankings.slice(0,4))):'';
- const remainingContenders=contender.rankings.length>4?`<details class="tiny muted remaining-ranked" style="margin-top:8px"><summary>Remaining Ranked Horses</summary>${candidateTable(contenderRows(contender.rankings.slice(4),4))}</details>`:'';
+ const contenderList=contender.rankings.length?candidateTable(contenderRows(contender.rankings.slice(0,4)),{showEstimateNote:false}):'';
+ const remainingContenders=contender.rankings.length>4?`<details class="tiny muted remaining-ranked" style="margin-top:8px"><summary>Remaining Ranked Horses</summary>${candidateTable(contenderRows(contender.rankings.slice(4),4),{showEstimateNote:false})}</details>`:'';
 
  if(r.decision==='PASS'){
   const p=passRaceDisplay(r),other=p.general.length?`<div class="tiny muted">Other pass reasons: ${p.general.map(escapeText).join('; ')}</div>`:'';
