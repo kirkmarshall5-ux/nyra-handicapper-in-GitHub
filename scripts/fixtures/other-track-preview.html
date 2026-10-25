@@ -1,0 +1,13 @@
+<!doctype html><meta charset="utf-8"><title>Non-production track QA fixture</title>
+<h1>Synthetic track update QA</h1><p>Preview-only fixture. Seeds synthetic runners into this preview origin, then opens the staged app. No real PP card or live result is used.</p>
+<button data-track="Keeneland">Load synthetic Keeneland</button><button data-track="Churchill Downs">Load synthetic Churchill Downs</button><button data-track="Gulfstream Park">Load synthetic Gulfstream Park</button>
+<p role="status" id="status"></p>
+<script type="module">
+import {writeProviderCardsSession} from '../../dual-pp-cards.js';
+for(const b of document.querySelectorAll('button'))b.onclick=async()=>{
+ const track=b.dataset.track,date=new Intl.DateTimeFormat('en-CA',{timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+ const r={track,date,race:1,dist:'6F',surface:'Dirt',horses:[{n:1,name:'Synthetic One',odds:'5/1',ml:'8/1'},{n:2,name:'Synthetic Two',odds:'3/1',ml:'6/1'}]};
+ const cards={};for(const p of ['DRF','BRISNET'])cards[p]={id:'synthetic-'+p+'-'+track,date,track,source_format:p,races:{1:{...structuredClone(r),ratings_provider:p}}};
+ await writeProviderCardsSession(cards,{},'DRF');location.href='../../index.html';
+};
+</script>
