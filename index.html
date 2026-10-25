@@ -189,7 +189,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 </main>
 
 <script type="module">
-import {fetchOtherTrackCombinedUpdate,otherTrackSource} from "./other-track-updates.js?v=20261025-staged1";
+import {fetchOtherTrackCombinedUpdate,otherTrackSource,OTHER_TRACK_FEEDS_READY} from "./other-track-updates.js?v=20261025-staged1";
 import {prepareCombinedOtherTrackUpdate} from "./other-track-update-plan.js?v=20261025-staged1";
 import {fetchNyraRaceUpdate,nyraRaceUpdateSource,applyNyraSnapshotToRace} from "./nyra-race-update.js?v=20261018-dual1";
 import {initKnowledgeBase} from "./knowledge-base.js?v=20261008-kb1";
@@ -523,11 +523,11 @@ raceNotes.oninput=e=>{const cs=state.cards[activeCard.id]||(state.cards[activeCa
 let nyraUpdatePending=false;
 function renderNyraUpdateControls(){
  const button=document.getElementById('updateOddsScratches'),status=document.getElementById('nyraUpdateStatus'),source=nyraRaceUpdateSource(race),other=otherTrackSource(race.track);
- button.disabled=nyraUpdatePending||otherTrackPending||(source.mode!=='automatic'&&!other.supported);
+ button.disabled=nyraUpdatePending||otherTrackPending||(source.mode!=='automatic'&&(!other.supported||!OTHER_TRACK_FEEDS_READY));
  document.getElementById('trackUpdateIdentity').textContent=(race.track||'Unknown track')+' · '+race.date+' · Race '+race.race;
  if(nyraUpdatePending||otherTrackPending){status.textContent='Fetching odds and scratches for '+race.track+' Race '+race.race+'…';return;}
  if(source.mode!=='automatic'){
-  status.textContent=other.supported?'Update odds and scratches together for the loaded race. Unavailable or unverified data leaves both PP sources unchanged.':'Automatic updates are unavailable for '+(race.track||'this track')+'.';return;
+  status.textContent=other.supported&&!OTHER_TRACK_FEEDS_READY?'Automatic updates for '+other.label+' are not connected yet. Existing odds and scratches are retained.':other.supported?'Update odds and scratches together for the loaded race. Unavailable or unverified data leaves both PP sources unchanged.':'Automatic updates are unavailable for '+(race.track||'this track')+'.';return;
  }
  const last=race.odds_snapshot?.fetchedAt,scratches=race.horses.filter(h=>h.odds==='SCR').map(h=>'#'+h.n).join(', ');
  status.textContent=last?'Last NYRA update '+new Date(last).toLocaleTimeString()+'. Scratches: '+(scratches||'none')+'. Prices may be delayed.':'Fetch NYRA odds and scratches for Race '+race.race+' without pasting. Prices may be delayed.';
@@ -551,7 +551,7 @@ async function updateNyraTrack(){
 }
 let otherTrackPending=false;
 async function updateOtherTrack(){
- if(otherTrackPending||!otherTrackSource(race.track).supported)return;
+ if(otherTrackPending||!OTHER_TRACK_FEEDS_READY||!otherTrackSource(race.track).supported)return;
  const status=document.getElementById('nyraUpdateStatus'),before={card:activeCard.id,race:JSON.stringify(race),cards:JSON.stringify(providerCards)};
  const unchanged=()=>activeCard.id===before.card&&JSON.stringify(race)===before.race&&JSON.stringify(providerCards)===before.cards;
  otherTrackPending=true;renderNyraUpdateControls();
@@ -566,7 +566,7 @@ async function updateOtherTrack(){
   activeCard=providerCards[plan.selected];race=structuredClone(plan.race);otherTrackPending=false;renderAll();
   status.textContent='Odds and scratches updated for '+race.track+' Race '+race.race+' at '+new Date(result.odds.fetchedAt).toLocaleTimeString()+'. '+plan.pairedStatus+' Verify before post time.';
  }catch(e){status.textContent='Update unavailable: '+e.message+'. Previous odds and scratches retained.';}
- finally{otherTrackPending=false;document.getElementById('updateOddsScratches').disabled=nyraRaceUpdateSource(race).mode!=='automatic'&&!otherTrackSource(race.track).supported;}
+ finally{otherTrackPending=false;document.getElementById('updateOddsScratches').disabled=nyraRaceUpdateSource(race).mode!=='automatic'&&(!otherTrackSource(race.track).supported||!OTHER_TRACK_FEEDS_READY);}
 }
 document.getElementById('updateOddsScratches').onclick=()=>nyraRaceUpdateSource(race).mode==='automatic'?updateNyraTrack():updateOtherTrack();
 function updateUrl(){const venue=["belmont","aqueduct","saratoga"].includes(track.value)?track.value:"belmont";const url=`https://www.nyra.com/${venue}/racing/entries/?day=${race.date}&limit=entries&race=${race.race}`;raceUrl.value=url;openRace.href=url;nyraRaceLink.href=url}

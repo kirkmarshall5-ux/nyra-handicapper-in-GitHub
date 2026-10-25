@@ -1,4 +1,6 @@
 // Separate adapter: does not extend or change the existing NYRA source/model paths.
+// Release gate: no certified non-NYRA connectors are deployed yet.
+export const OTHER_TRACK_FEEDS_READY=false;
 export const OTHER_TRACK_SERVICE='https://nyra-odds-snapshot.beigebeech4.chatgpt.site/track-update';
 const tracks={keeneland:{id:'keeneland',label:'Keeneland'},churchill:{id:'churchill',label:'Churchill Downs'},gulfstream:{id:'gulfstream',label:'Gulfstream Park'}};
 export function otherTrackSource(track){
