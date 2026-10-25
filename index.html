@@ -168,6 +168,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <div class="flex" style="margin-top:12px"><a id="openRace" target="_blank"><button class="secondary">Open NYRA page</button></a></div>
 </div>
 
+<div class="card span12"><div class="kicker">Keeneland · Churchill Downs · Gulfstream Park</div><div class="small muted" id="otherTrackIdentity"></div><div class="flex" style="margin-top:10px;flex-wrap:wrap"><button class="primary" id="updateOtherOdds" type="button">Update Odds</button><button class="secondary" id="updateOtherScratches" type="button">Update Scratches</button></div><p id="otherTrackUpdateStatus" class="small muted" role="status" aria-live="polite">Select a supported PP card. Updates apply to its selected race.</p></div>
 <div class="card span12"><div class="kicker">Keep both PP sources loaded</div><div class="flex" style="flex-wrap:wrap;margin-top:8px"><button class="secondary" id="exportBrisnetSourceAudit" type="button">Export Brisnet Source Audit</button><button class="secondary" id="exportBrisnetModelAudit" type="button">Export Brisnet Model Input Audit</button><label for="ppSourceView" class="small">Horse grid / Pace source</label><select id="ppSourceView" style="width:auto"><option value="BRISNET">Brisnet</option><option value="DRF">DRF</option></select></div><div class="small muted" id="providerCardsStatus" role="status" style="margin-top:10px"></div><div class="small" id="providerUploadStatus" role="status" style="margin-top:6px"></div><div class="progress" style="margin-top:10px"><i id="ppProg"></i></div><div id="ppStatus" class="muted small" role="status" style="margin-top:8px">Upload each PP once using its matching button. Processing and saved cards stay in this browser.</div><details id="manageSavedCards" class="small" style="margin-top:12px"><summary>Manage saved cards</summary><div class="flex" style="flex-wrap:wrap;margin-top:10px"><button class="secondary" id="clearPP">Clear selected PP evidence</button><button class="secondary" id="resetSample">Reset DRF sample card</button></div><p class="muted">Clear affects the source selected in Horse grid / Pace source. Reset loads the demonstration into the DRF slot. The other PP source is retained.</p></details></div>
 <div class="card span12"><div class="kicker">Prospective research snapshot</div><div class="flex" style="align-items:center;gap:12px;flex-wrap:wrap"><button class="primary" id="freezeAllModels">Freeze All Models</button><span class="small muted" id="freezeAllStatus" role="status">Local timestamped research export; no wager authorization. Verify before post time.</span></div></div>
 </div></section>
@@ -188,6 +189,8 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 </main>
 
 <script type="module">
+import {fetchOtherTrackUpdate,otherTrackSource} from "./other-track-updates.js?v=20261025-staged1";
+import {prepareOtherTrackUpdate} from "./other-track-update-plan.js?v=20261025-staged1";
 import {fetchNyraRaceUpdate,nyraRaceUpdateSource,applyNyraSnapshotToRace} from "./nyra-race-update.js?v=20261018-dual1";
 import {initKnowledgeBase} from "./knowledge-base.js?v=20261008-kb1";
 import {connectionRows,LEADER_SCOPE,LEADER_SOURCE} from "./connection-research.js?v=20261008-jt1";
@@ -202,7 +205,7 @@ import {rankContenders} from "./contender-rankings.js?v=20261011-passdisplay1";
 import {rankBrisnetModels} from "./brisnet-models.js?v=20261023-distance1";
 import {brisnetRaceModelAudit} from "./brisnet-model-audit.js?v=20261023-distance1";
 import {brisnetRankingHtml,updateBrisnetMethods} from "./brisnet-ranking-display.js?v=20261022-layout3";
-import {cardProvider,matchingCard,pairedRace,putProviderCard,readProviderCards,writeProviderCard,readProviderSession,writeProviderSession} from "./dual-pp-cards.js?v=20261024-quota1";
+import {cardProvider,matchingCard,pairedRace,putProviderCard,readProviderCards,writeProviderCard,readProviderSession,writeProviderSession,writeProviderCardsSession} from "./dual-pp-cards.js?v=20261025-staged1";
 import {modelEvidenceHtml} from "./model-evidence-display.js?v=20261018-evidence1";
 import {passRaceDisplay} from "./pass-race-display.js?v=20261013-releaseqa1";
 import {releaseRace as websiteRace,RELEASE_ID} from "./rankings-release.js?v=20261008-qa1";
@@ -399,7 +402,7 @@ document.querySelectorAll(".sortbtn").forEach(b=>b.onclick=()=>{
  renderHorses();updateSortButtons();
 });
 function syncRaceNotes(){raceNotes.value=state.cards?.[activeCard.id]?.notes?.[race.race]||""}
-function renderAll(){syncRaceNotes();renderPaceCardStatus();document.getElementById("releaseStatus").textContent=`Rankings: ${currentRating().model_id} · PP formats: DRF / Brisnet Ultimate / Premium Plus · Saved card: ${activeCard.parser_version||"sample / legacy evidence"}. V4.4c, Finisher and Contender. Morning line is reference only. Verify scratches and surface against official entries.`;renderBrisnetEvidence();renderProjectedRaceSetup();renderReleaseContext();renderJ1Comparison();renderHeader();renderHorses();updateSortButtons();renderPace();renderEdit();renderEvidence();renderConnections();renderLeaderboards();renderWeights();renderThings();renderRaceInsights();renderNyraUpdateControls();updateUrl()}
+function renderAll(){syncRaceNotes();renderPaceCardStatus();document.getElementById("releaseStatus").textContent=`Rankings: ${currentRating().model_id} · PP formats: DRF / Brisnet Ultimate / Premium Plus · Saved card: ${activeCard.parser_version||"sample / legacy evidence"}. V4.4c, Finisher and Contender. Morning line is reference only. Verify scratches and surface against official entries.`;renderBrisnetEvidence();renderProjectedRaceSetup();renderReleaseContext();renderJ1Comparison();renderHeader();renderHorses();updateSortButtons();renderPace();renderEdit();renderEvidence();renderConnections();renderLeaderboards();renderWeights();renderThings();renderRaceInsights();renderNyraUpdateControls();renderOtherTrackUpdateControls();updateUrl()}
 function renderThings(){
  const el=document.getElementById("thingsToConsider"); if(!el)return;
  let rows=[];
@@ -542,6 +545,33 @@ document.getElementById('updateOddsScratches').onclick=async()=>{
  }catch(e){if(unchanged())status.textContent='Update failed: '+e.message+'. Previous odds and scratches retained.';}
  finally{nyraUpdatePending=false;document.getElementById('updateOddsScratches').disabled=nyraRaceUpdateSource(race).mode!=='automatic';if(!unchanged())renderNyraUpdateControls();}
 };
+let otherTrackPending=false;
+function renderOtherTrackUpdateControls(){
+ const source=otherTrackSource(race.track);
+ for(const id of ['updateOtherOdds','updateOtherScratches'])document.getElementById(id).disabled=otherTrackPending||!source.supported;
+ document.getElementById('otherTrackIdentity').textContent=(race.track||'Unknown track')+' · '+race.date+' · Race '+race.race;
+ document.getElementById('otherTrackUpdateStatus').textContent=otherTrackPending?'Fetching verified track update…':source.supported?'Update the selected race. Matching DRF and Brisnet cards refresh together. Source verification is required; unavailable data leaves the cards unchanged.':'Select a Keeneland, Churchill Downs or Gulfstream Park PP card to use these buttons.';
+}
+async function updateOtherTrack(kind){
+ if(otherTrackPending||!otherTrackSource(race.track).supported)return;
+ const status=document.getElementById('otherTrackUpdateStatus'),before={card:activeCard.id,race:JSON.stringify(race),cards:JSON.stringify(providerCards)};
+ const unchanged=()=>activeCard.id===before.card&&JSON.stringify(race)===before.race&&JSON.stringify(providerCards)===before.cards;
+ otherTrackPending=true;renderOtherTrackUpdateControls();
+ try{
+  const result=await fetchOtherTrackUpdate(race,kind);
+  if(!unchanged())throw Error('Selected card, race or source changed; update again');
+  const plan=prepareOtherTrackUpdate(activeCard,providerCards,race,result.snapshot,kind);
+  await writeProviderCardsSession(plan.cards,state,plan.selected);
+  // A later user navigation/save takes precedence; never replace its displayed race.
+  if(!unchanged()){status.textContent='Update saved for the original race; current selection retained. Refresh before using it.';return;}
+  for(const [p,c] of Object.entries(plan.cards))providerCards[p]=c;
+  activeCard=providerCards[plan.selected];race=structuredClone(plan.race);otherTrackPending=false;renderAll();
+  status.textContent=(kind==='odds'?'Odds':'Scratches')+' updated for '+race.track+' Race '+race.race+' at '+new Date(result.snapshot.fetchedAt).toLocaleTimeString()+'. '+plan.pairedStatus+' Verify before post time.';
+ }catch(e){status.textContent='Update unavailable: '+e.message+'. Previous odds and scratches retained.';}
+ finally{otherTrackPending=false;for(const id of ['updateOtherOdds','updateOtherScratches'])document.getElementById(id).disabled=!otherTrackSource(race.track).supported;}
+}
+document.getElementById('updateOtherOdds').onclick=()=>updateOtherTrack('odds');
+document.getElementById('updateOtherScratches').onclick=()=>updateOtherTrack('scratches');
 function updateUrl(){const venue=["belmont","aqueduct","saratoga"].includes(track.value)?track.value:"belmont";const url=`https://www.nyra.com/${venue}/racing/entries/?day=${race.date}&limit=entries&race=${race.race}`;raceUrl.value=url;openRace.href=url;nyraRaceLink.href=url}
 [track,raceDate,raceNo].forEach(el=>el.onchange=updateUrl);updateUrl();
 

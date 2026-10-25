@@ -1,7 +1,7 @@
 // Separate source slots; PP numbers and model inputs never cross providers.
 export const PROVIDERS=['BRISNET','DRF'];
 export function cardProvider(card){return /^BRISNET/.test(card?.source_format||'')||Object.values(card?.races||{}).some(r=>r.ratings_provider==='BRISNET'||r.horses?.some(h=>h.ratings?.provider==='BRISNET'))?'BRISNET':'DRF';}
-const aliases={bel:'belmontpark',baq:'belmontatthebiga',aqu:'aqueduct',sar:'saratoga',kee:'keeneland',cd:'churchilldowns',dmr:'delmar',fl:'fingerlakes'};
+const aliases={bel:'belmontpark',baq:'belmontatthebiga',aqu:'aqueduct',sar:'saratoga',kee:'keeneland',cd:'churchilldowns',gp:'gulfstreampark',dmr:'delmar',fl:'fingerlakes'};
 const track=s=>{const n=String(s||'').toLowerCase().replace(/[^a-z0-9]/g,'');return aliases[n]||n;};
 export function matchingCard(a,b){return !!a?.date&&a.date===b?.date&&!!track(a.track)&&track(a.track)===track(b.track);}
 export function pairedRace(cards,provider,anchor){
@@ -34,5 +34,17 @@ export function writeProviderSession(card,state,legacyBackup=null){
    store.put(snapshot.card,provider);store.put({state:snapshot.state,selectedProvider:provider,saved_at:new Date().toISOString()},'__session__');
    if(snapshot.legacyBackup)store.put(snapshot.legacyBackup,'__legacy_local_storage_backup__');
   }catch(e){tx.abort();reject(e);}
+ });}finally{db.close();}});
+}
+// Update the selected source and its matching PP together, or retain both on failure.
+export function writeProviderCardsSession(cards,state,selectedProvider){
+ if(!PROVIDERS.includes(selectedProvider)||!cards[selectedProvider])throw Error('Selected provider is missing');
+ for(const [p,c] of Object.entries(cards))putProviderCard({},c,p);
+ const snapshot=structuredClone({cards,state});
+ return orderedWrite(async()=>{const db=await openDB();try{await new Promise((resolve,reject)=>{
+  const tx=db.transaction('cards','readwrite'),store=tx.objectStore('cards');
+  tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error);
+  try{for(const [p,c] of Object.entries(snapshot.cards))store.put(c,p);store.put({state:snapshot.state,selectedProvider,saved_at:new Date().toISOString()},'__session__');}
+  catch(e){tx.abort();reject(e);}
  });}finally{db.close();}});
 }
