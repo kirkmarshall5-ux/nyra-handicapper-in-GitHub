@@ -195,7 +195,8 @@ for(const profile of profiles){
    await page.reload({waitUntil:'domcontentloaded'});
    await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
    const target=page.locator('#finisherCandidates');assert.equal(await target.isVisible(),true);
-   assert.equal(await target.locator('tbody tr').count(),4);
+   assert.equal(await target.locator(':scope > table tbody tr').count(),4);
+   const remaining=target.locator('details.remaining-ranked');assert.equal(await remaining.getAttribute('open'),null);await remaining.locator('summary').click();assert.equal(await remaining.locator('tbody tr').count(),1);assert.match(await remaining.innerText(),/5\. #6 QA Finisher Runner 6/);await remaining.locator('summary').click();
    assert.match(await target.innerText(),/Ranked 5\/6/);assert.match(await target.innerText(),/PASS/);
    assert.match(await target.textContent(),/QA Finisher Runner 7/);assert.doesNotMatch(await target.innerText(),/QA Finisher Runner 5/);
    const dashboard=page.locator('#raceDayDashboard');
