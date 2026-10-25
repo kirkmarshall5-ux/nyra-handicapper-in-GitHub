@@ -152,8 +152,8 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 </div></section>
 
 <section id="connections" class="hidden"><div class="grid">
-<div class="card span6"><div class="kicker">Uploaded PP local records</div><h3 class="sectiontitle">Current-field jockey records</h3><div style="overflow:auto"><table id="jockeyTable"><thead><tr><th>Rank</th><th>Jockey</th><th>Starts</th><th>Wins</th><th>Win %</th><th>Top 3 %</th></tr></thead><tbody></tbody></table></div></div>
-<div class="card span6"><div class="kicker">Uploaded PP local records</div><h3 class="sectiontitle">Current-field trainer records</h3><div style="overflow:auto"><table id="trainerTable"><thead><tr><th>Rank</th><th>Trainer</th><th>Starts</th><th>Wins</th><th>Win %</th><th>Top 3 %</th></tr></thead><tbody></tbody></table></div></div>
+<div class="card span6"><div class="kicker">Uploaded PP local records</div><h3 class="sectiontitle">Current-field jockey records</h3><div style="overflow:auto"><table id="jockeyTable"><thead><tr><th>Rank</th><th>Jockey</th><th>Starts</th><th>Wins</th><th>Win %</th></tr></thead><tbody></tbody></table></div></div>
+<div class="card span6"><div class="kicker">Uploaded PP local records</div><h3 class="sectiontitle">Current-field trainer records</h3><div style="overflow:auto"><table id="trainerTable"><thead><tr><th>Rank</th><th>Trainer</th><th>Starts</th><th>Wins</th><th>Win %</th></tr></thead><tbody></tbody></table></div></div>
 <div class="card span12"><h3 class="sectiontitle">Current-race connections</h3><div id="connectionCards" class="grid"></div></div>
 </div></section>
 
@@ -508,7 +508,7 @@ function renderEdit(){editTable.querySelector("tbody").innerHTML=race.horses.map
  editTable.querySelectorAll("input,select").forEach(el=>el.onchange=()=>{let h=race.horses.find(x=>(x.n||x.name)==el.dataset.n);h[el.dataset.k]=el.value;save();renderHorses();renderPace();renderProjectedRaceSetup();renderEvidence()});
 }
 function renderLeaderboards(){
- const table=kind=>{const rows=fieldConnections(race.horses,kind);return rows.length?rows.map((x,i)=>`<tr><td>${i+1}</td><td><b>${escapeText(x.name)}</b></td><td>${x.starts}</td><td>${x.wins}</td><td>${x.win==null?'—':x.win.toFixed(1)+'%'}</td><td>${x.top==null?'—':x.top.toFixed(1)+'%'}</td></tr>`).join(""):'<tr><td colspan="6">Source records unavailable. Upload the PP again. Conflicting records are excluded.</td></tr>'};
+ const table=kind=>{const rows=fieldConnections(race.horses,kind);return rows.length?rows.map((x,i)=>`<tr><td>${i+1}</td><td><b>${escapeText(x.name)}</b></td><td>${x.starts}</td><td>${x.wins}</td><td>${x.win==null?'—':x.win.toFixed(1)+'%'}</td></tr>`).join(""):'<tr><td colspan="5">Source records unavailable. Upload the PP again. Conflicting records are excluded.</td></tr>'};
  jockeyTable.querySelector('tbody').innerHTML=table('jockey');trainerTable.querySelector('tbody').innerHTML=table('trainer');
 }
 function renderConnections(){
