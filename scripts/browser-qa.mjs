@@ -51,7 +51,7 @@ for(const profile of profiles){
   assert.equal(await page.locator('[data-tab="pp"]').count(),0);assert.equal(await page.locator('#ppFile').count(),0);assert.equal(await page.locator('#manageSavedCards').count(),1);assert.equal(await page.locator('#uploadBrisnet').count(),1);assert.equal(await page.locator('#uploadDrf').count(),1);assert.equal(await page.locator('#raceDayUploadStatus').count(),1);assert.equal(await page.locator('#raceDayUploadStatus').getAttribute('aria-live'),'polite');
  });
  await check('D04-clean-Load-NYRA-layout',async()=>{
-  assert.equal(await page.locator('#updateOddsScratches').count(),1);assert.equal(await page.locator('#public #updateOddsScratches').count(),1);assert.equal(await page.locator('#updateOtherOdds, #updateOtherScratches').count(),0);
+  assert.equal(await page.locator('#updateOddsScratches').count(),1);assert.equal(await page.locator('#raceday #updateOddsScratches').count(),1);assert.equal(await page.locator('#updateOtherOdds, #updateOtherScratches').count(),0);
   await page.locator('[data-tab="public"]').click();
   for(const id of ['openRace','freezeAllModels','ppSourceView','exportBrisnetSourceAudit','exportBrisnetModelAudit'])assert.equal(await page.locator('#public #'+id).isVisible(),true);
   for(const id of ['tryLoad','nyraPaste','parsePaste','loadSample','loadStatus'])assert.equal(await page.locator('#'+id).isVisible(),false);
@@ -61,8 +61,9 @@ for(const profile of profiles){
   assert.ok(await page.evaluate(async()=>document.documentElement.scrollWidth<=innerWidth));
   await page.screenshot({path:`${out}/${profile.name}-load-nyra-cleanup.png`,fullPage:true});
   await page.locator('[data-tab="raceday"]').click();
-  for(const id of ['uploadBrisnet','uploadDrf'])assert.equal(await page.locator('#raceday #'+id).isVisible(),true);
+  for(const id of ['uploadBrisnet','uploadDrf','updateOddsScratches'])assert.equal(await page.locator('#raceday #'+id).isVisible(),true);
   for(const id of ['freezeAllModels','ppSourceView'])assert.equal(await page.locator('#raceday #'+id).count(),0);
+  const upload=await page.locator('#uploadDrf').boundingBox(),update=await page.locator('#updateOddsScratches').boundingBox();assert.ok(update.x>upload.x&&Math.abs(update.y-upload.y)<2,'Update button must sit to the right of Upload DRF PP');
  });
  await check('D05-notes-follow-race-and-reload',async()=>{
   await page.locator('[data-tab="raceday"]').click();
@@ -290,12 +291,12 @@ for(const profile of profiles){
     await window.qaSetActive({id:'qa-direct-update',schemaVersion:2,track,date,races:{1:race,2:{...structuredClone(race),race:2}},parser_version:'BRISNET-PREMIUM-PLUS-positioned-v3',source_format:'BRISNET_PREMIUM_PLUS',warnings:[]});
    });
    await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
-   await page.locator('[data-tab="public"]').click();assert.equal(await page.locator('#updateOddsScratches').isVisible(),true);await page.locator('#updateOddsScratches').click();
+   await page.locator('[data-tab="raceday"]').click();assert.equal(await page.locator('#updateOddsScratches').isVisible(),true);await page.locator('#updateOddsScratches').click();
    await page.locator('#nyraUpdateStatus').getByText('Selected-source models refreshed.',{exact:false}).waitFor({timeout:10000});
    assert.match(await page.locator('#nyraUpdateStatus').innerText(),/#3 QA Update Runner 3/);
    for(const id of ['brisTopContenders','brisFinisherCandidates','brisContenderCandidates']){assert.equal(await page.locator('#'+id+' tbody tr').count(),2);assert.doesNotMatch(await page.locator('#'+id+' tbody').innerText(),/QA Update Runner 3/);}
    const saved=await page.evaluate(async()=>(await window.qaReadActive()).races[1]);assert.equal(saved.horses[2].odds,'SCR');assert.equal(saved.horses[2].ratings.lines[0].speed,78);assert.equal(saved.horses[0].ml,'4/1');
-   await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});await page.locator('[data-tab="public"]').click();assert.match(await page.locator('#nyraUpdateStatus').innerText(),/Last NYRA update/);assert.equal(await page.locator('#brisFinisherCandidates tbody tr').count(),2);
+   await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});await page.locator('[data-tab="raceday"]').click();assert.match(await page.locator('#nyraUpdateStatus').innerText(),/Last NYRA update/);assert.equal(await page.locator('#brisFinisherCandidates tbody tr').count(),2);
    fail=true;await page.locator('#updateOddsScratches').click();await page.locator('#nyraUpdateStatus').getByText('Update failed:',{exact:false}).waitFor({timeout:10000});assert.equal(await page.evaluate(async()=>(await window.qaReadActive()).races[1].horses[2].odds),'SCR');assert.equal(await page.locator('#updateOddsScratches').isEnabled(),true);
    fail=false;pause=true;const pending=page.waitForRequest(service);await page.locator('#updateOddsScratches').click();await pending;await page.locator('[data-tab="raceday"]').click();await page.locator('#racebar button').nth(1).click();await new Promise(r=>setTimeout(r,20));assert.ok(release);release();await page.waitForFunction(()=>!document.getElementById('updateOddsScratches').disabled);assert.doesNotMatch(await page.locator('#nyraUpdateStatus').innerText(),/Fetching/);assert.equal(await page.locator('#brisFinisherCandidates tbody tr').count(),3,'Late Race 1 response must not scratch Race 2');
    assert.equal(errors.length,0,'NYRA update page errors: '+errors.join(' | '));
