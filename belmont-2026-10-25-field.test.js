@@ -21,3 +21,17 @@ test('BEL R9 remains ungradeable without original PP identity and frozen predict
  assert.equal(audit.official_chart_finish_verified,false);
  assert.equal(audit.prospective_gradeable,false);
 });
+
+test('Archived October 25 freeze flags drawn-in AE #13 missing from historical model field',()=>{
+ const freeze=audit.archived_freeze_evidence;
+ assert.equal(freeze.clock_source,'browser-device-unverified');
+ assert.equal(freeze.roster_programs.length,14);
+ assert.equal(freeze.dashboard_field_programs.length,11);
+ const actual=audit.entries.filter(h=>h.status==='STARTER').map(h=>h.program);
+ const missing=actual.filter(n=>!freeze.dashboard_field_programs.includes(n));
+ assert.deepEqual(missing,['13']);
+ assert.deepEqual(freeze.missing_official_starter_programs,missing);
+ for(const n of Object.values(freeze.model_ranked_counts))assert.equal(n,11);
+ assert.equal(audit.model_input_parity_verified,false);
+ assert.equal(audit.prospective_gradeable,false);
+});
