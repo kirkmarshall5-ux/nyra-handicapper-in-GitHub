@@ -32,9 +32,10 @@ test('Brisnet remaining ranks preserve order and evidence follows the dropdown',
 
 const gridFn=html.match(/function contenderGridRating\(\)\{[\s\S]*?\n\}/)[0];
 const gridKey=html.match(/const gridRunnerKey=[^\n]+/)[0];
+const scratchedGridFn=html.match(/function scratchedGridRows\(\)\{[\s\S]*?\n\}/)[0];
 const gridSortFn=html.match(/function sortedGridHorses\([^\n]*\)\{[\s\S]*?\n\}/)[0];
 const drfGridRace=()=>({date:'2026-10-11',surface:'Dirt',conditions:{surface:'Dirt'},header:'6 Furlongs',parser_blockers:[],horses:[60,70,80].map((figure,i)=>({n:String(i+1),name:'Grid runner '+(i+1),life_starts:1,beyer_figures:[figure],timeform_early:80+10*i,timeform_late:80,entry_status:'REGULAR',parser_blockers:[],switch_evidence:{running_lines:[{running_date_track:'1æ26=1Bel'}],boxes:{}},beyer_evidence:[{figure,running_date_track:'1æ26=1Bel',source_line:'1æ26=1Bel fst 6f '+figure+' 1/5'}],source_context:{}}))});
-function gridContext(race){const context={race,rankBrisnetModels,rankContenders,websiteRace:releaseRace,gridSort:{key:'contender',dir:1}};vm.runInNewContext(gridFn+'\n'+gridKey+'\n'+gridSortFn,context);return context;}
+function gridContext(race){const context={race,rankBrisnetModels,rankContenders,websiteRace:releaseRace,gridSort:{key:'contender',dir:1}};vm.runInNewContext(gridFn+'\n'+gridKey+'\n'+scratchedGridFn+'\n'+gridSortFn,context);return context;}
 test('handicapping grid uses DRF Contender scores and rank order without modifying either engine',()=>{
  const race=drfGridRace(),before=structuredClone(race),baseline=releaseRace(race),expected=rankContenders(race,baseline),context=gridContext(race),actual=context.contenderGridRating();
  assert.deepEqual(actual,expected);assert.deepEqual(Array.from(context.sortedGridHorses(),h=>h.n),expected.rankings.map(h=>h.n));assert.deepEqual(race,before);assert.deepEqual(releaseRace(race),baseline);
