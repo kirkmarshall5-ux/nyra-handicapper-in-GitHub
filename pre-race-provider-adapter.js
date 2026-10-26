@@ -5,9 +5,9 @@ import {rankContenders} from './contender-rankings.js';
 import {rankFinishers} from './finisher-inputs.js';
 import {cardProvider} from './dual-pp-cards.js';
 const eligible=h=>h.n&&h.odds!=='SCR'&&h.included_in_frozen_field!==false&&(!h.entry_status||h.entry_status==='REGULAR');
-export function convertDisplayedModel(family,result,field,provider){
+export function convertDisplayedModel(family,result,field,provider,{baselineDecision=null}={}){
  if(!result?.model_id||!Array.isArray(result.rankings))throw Error(family+' model unavailable');
- const status=family==='FINISHER'?(result.status==='HOLD'?'HOLD':provider==='BRISNET'||result.status!=='COMPLETE_FIELD'?'PASS':'RATEABLE'):result.decision;
+ const status=family==='FINISHER'?(result.status==='HOLD'?'HOLD':provider==='BRISNET'||baselineDecision==='PASS'||result.status!=='COMPLETE_FIELD'?'PASS':'RATEABLE'):result.decision;
  if(!['RATEABLE','PASS','HOLD'].includes(status))throw Error(family+' decision unavailable');
  const rankings=result.rankings.map(h=>({program:String(h.n),horse:h.name,score:family==='V44C'?(h.v44c_unrounded_score??h.base_rating??h.score):h.score}));
  const eligible=new Map(field.map(h=>[String(h.program),h.horse]));
@@ -28,10 +28,10 @@ export function displayedProviderModels(card,race){
   const native=rankBrisnetModels(race);
   if(!native?.v44c||!native?.contender)throw Error('Native Brisnet models unavailable');
   const finisher=rankFinishers(race);
-  return {provider,field,models:[convertDisplayedModel('V44C',native.v44c,field,provider),convertDisplayedModel('FINISHER',finisher,field,provider),convertDisplayedModel('CONTENDER',native.contender,field,provider)]};
+  return {provider,field,models:[convertDisplayedModel('V44C',native.v44c,field,provider),convertDisplayedModel('FINISHER',finisher,field,provider,{baselineDecision:native.v44c.decision}),convertDisplayedModel('CONTENDER',native.contender,field,provider)]};
  }
  const v44c=releaseRace(race);
  const contender=rankContenders(race,v44c,{displayPass:v44c.decision==='PASS'});
  const finisher=rankFinishers(race);
- return {provider,field,models:[convertDisplayedModel('V44C',v44c,field,provider),convertDisplayedModel('FINISHER',finisher,field,provider),convertDisplayedModel('CONTENDER',contender,field,provider)]};
+ return {provider,field,models:[convertDisplayedModel('V44C',v44c,field,provider),convertDisplayedModel('FINISHER',finisher,field,provider,{baselineDecision:v44c.decision}),convertDisplayedModel('CONTENDER',contender,field,provider)]};
 }
