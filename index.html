@@ -417,8 +417,12 @@ function renderJ1Comparison(){
 }
 let gridSort={key:"contender",dir:1};
 function oddsNumber(o){if(!o||o==="SCR")return Infinity;if(/^\d+(\.\d+)?$/.test(String(o)))return +o;if(String(o).includes("/")){let [a,b]=String(o).split("/").map(Number);return b?a/b:Infinity}return Infinity}
+function scratchedGridRows(){
+ const existing=new Set(race.horses.map(h=>String(h.n)));
+ return (race.predeclared_scratches||[]).filter(h=>h.program!=null&&!existing.has(String(h.program))).map(h=>({n:String(h.program),name:h.name||'Unknown scratched runner',odds:'SCR',ml:'—',entry_status:'REGULAR',predeclared_scratch:true}));
+}
 function sortedGridHorses(result=contenderGridRating()){
- const hs=[...race.horses],ranks=new Map((result.rankings||[]).map((h,i)=>[gridRunnerKey(h),i+1]));
+ const hs=[...race.horses,...scratchedGridRows()],ranks=new Map((result.rankings||[]).map((h,i)=>[gridRunnerKey(h),i+1]));
  hs.sort((a,b)=>{
    let av,bv;
    if(gridSort.key==="contender"){av=ranks.get(gridRunnerKey(a));bv=ranks.get(gridRunnerKey(b));if(av==null||bv==null){if(av==null&&bv==null)return String(a.n).localeCompare(String(b.n),undefined,{numeric:true});return av==null?1:-1;}}
@@ -489,7 +493,7 @@ function selectRace(n){if(!activeCard.races[n])return;race=structuredClone(activ
 function renderHorses(){
  const grid=contenderGridRating(),entries=new Map((grid.rankings||[]).map((h,i)=>[gridRunnerKey(h),{...h,gridRank:i+1}])),provisional=grid.provisional||grid.decision!=='RATEABLE';
  document.getElementById('gridModelStatus').textContent=(cardProvider(activeCard)==='BRISNET'?'Brisnet':'DRF')+' Contender · '+entries.size+'/'+race.horses.filter(paceEligible).length+' starters ranked'+(provisional?' · provisional / '+grid.decision:'')+(grid.reason?' · '+grid.reason:'');
- document.getElementById('gridFieldStatus').textContent='Scratched: '+(race.horses.filter(h=>h.odds==='SCR').map(h=>'#'+h.n+' '+h.name).join(', ')||'none')+'. Also eligible (not drawn in): '+(race.horses.filter(h=>['AE','ALSO_ELIGIBLE'].includes(h.entry_status)&&h.included_in_frozen_field!==true&&h.odds!=='SCR').map(h=>'#'+h.n+' '+h.name).join(', ')||'none')+'.';
+ document.getElementById('gridFieldStatus').textContent='Scratched: '+([...race.horses,...scratchedGridRows()].filter(h=>h.odds==='SCR').map(h=>'#'+h.n+' '+h.name).join(', ')||'none')+'. Also eligible (not drawn in): '+(race.horses.filter(h=>['AE','ALSO_ELIGIBLE'].includes(h.entry_status)&&h.included_in_frozen_field!==true&&h.odds!=='SCR').map(h=>'#'+h.n+' '+h.name).join(', ')||'none')+'.';
  horseTable.querySelector("tbody").innerHTML=sortedGridHorses(grid).map(h=>{const entry=entries.get(gridRunnerKey(h)),label=h.odds==='SCR'?'Scratched':!paceEligible(h)?'Excluded':'Unranked';let js=h.jockey_win!=null?{win:h.jockey_win}:null,ts=h.trainer_win!=null?{win:h.trainer_win}:null;return `<tr data-program="${escapeText(h.n)}" style="${h.odds==="SCR"?"opacity:.48":""}">
 <td><span class="num">${h.n}</span><span class="horse">${escapeText(h.name)}${h.entry_status&&h.entry_status!=="REGULAR"?` <span class="pill">${escapeText(h.entry_status)} ${h.included_in_frozen_field===true&&h.odds!=='SCR'?'drawn in':'excluded'}</span>`:""}</span></td><td>${h.odds==='SCR'?'<b>SCR — Scratched</b>':['AE','ALSO_ELIGIBLE'].includes(h.entry_status)&&h.included_in_frozen_field!==true?`<button type="button" data-field-action="running" data-program="${escapeText(h.n)}">Confirm running</button>`:`${h.field_status_evidence?.action==='running'?'AE drawn in':'Active'} <button type="button" data-field-action="scratch" data-program="${escapeText(h.n)}">Scratch</button>`}${['AE','ALSO_ELIGIBLE'].includes(h.entry_status)&&h.included_in_frozen_field!==true&&h.odds!=='SCR'?` <button type="button" data-field-action="scratch" data-program="${escapeText(h.n)}">Scratch</button>`:''}</td><td>${h.ml||"—"}</td>
 <td><span class="pacechip ${escapeText(displayPaceStyle(h))}">${escapeText(displayPaceStyle(h))}</span></td><td>${escapeText(h.source_context?.jockey?.name||h.jockey_annual?.jockey||h.j||"—")}</td><td>${escapeText(h.source_context?.trainer?.name||h.t||"—")}</td>
