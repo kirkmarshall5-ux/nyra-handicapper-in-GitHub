@@ -120,3 +120,14 @@ test('recorder refuses provider contamination when rankings come from other card
  const brisnetResult={model_id:'brisnet-v44c',decision:'PASS',rankings:[{n:'3',name:'Different Runner',score:80}]};
  assert.throws(()=>convertDisplayedModel('V44C',brisnetResult,drfField,'DRF'),/differs from displayed eligible field/);
 });
+
+test('DRF PASS provisional ranking retains rated runners without changing PASS decision',()=>{
+ const provisional={model_id:'V44C-data-integrity-rankings-20261007-v2',decision:'PASS',rankings:[
+  {n:'4',name:'Rated Runner',score:81.375}
+ ]};
+ const field=[{program:'4',horse:'Rated Runner'},{program:'5',horse:'First Time Starter'}];
+ const recorded=convertDisplayedModel('V44C',provisional,field,'DRF');
+ assert.equal(recorded.decision,'PASS');
+ assert.equal(recorded.fullFieldRanked,false);
+ assert.deepEqual(recorded.rankings,[{program:'4',horse:'Rated Runner',score:81.375}]);
+});
