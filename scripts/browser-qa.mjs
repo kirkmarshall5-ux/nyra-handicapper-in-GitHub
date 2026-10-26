@@ -497,6 +497,18 @@ for(const profile of profiles){
    await qp.screenshot({path:`${out}/${profile.name}-quota-storage.png`,fullPage:true});
   }finally{await qc.close();}
  });
+ await check('D-grid-predeclared-scratches-remain-visible',async()=>{
+  const saved=await page.evaluate(async()=>{const m=await import('./dual-pp-cards.js');return {cards:await m.readProviderCards(),session:await m.readProviderSession()};});
+  try{
+   await page.evaluate(async()=>{const m=await import('./dual-pp-cards.js');const cards=await m.readProviderCards();const selected=(await m.readProviderSession()).selectedProvider;const card=cards[selected];const raceNo=+Object.keys(card.races)[0];const rr=card.races[raceNo];rr.predeclared_scratches=[...(rr.predeclared_scratches||[]),{program:'99',name:'QA Scratched Runner'}];await m.writeProviderCardsSession(cards,{},selected);});
+   await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
+   assert.equal(await page.locator('#horseTable tr[data-program="99"]').count(),1);
+   assert.match(await page.locator('#horseTable tr[data-program="99"]').innerText(),/QA Scratched Runner/);
+   assert.match(await page.locator('#horseTable tr[data-program="99"]').innerText(),/SCR.*Scratched/);
+   assert.match(await page.locator('#gridFieldStatus').innerText(),/#99 QA Scratched Runner/);
+   assert.equal(await page.locator('#horseTable tr[data-program="99"] .grid-contender-rank').innerText(),'Scratched');
+  }finally{await page.evaluate(async saved=>{const m=await import('./dual-pp-cards.js');await m.writeProviderCardsSession(saved.cards,saved.session?.state||{},saved.session?.selectedProvider);},saved);await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});}
+ });
  await page.screenshot({path:`${out}/${profile.name}-final.png`,fullPage:true});
  await context.close();
 }
