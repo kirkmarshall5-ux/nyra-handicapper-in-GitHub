@@ -26,7 +26,7 @@ try{
  for(const [provider,path] of Object.entries(paths)){
   const input=provider==='DRF'?'#drfFile':'#brisnetFile';
   await page.locator(input).setInputFiles(path);
-  await page.locator('#raceDayUploadStatus').getByText(provider+' card saved.',{exact:false}).waitFor({timeout:180000});
+  await page.waitForFunction(p=>{const text=document.getElementById('raceDayUploadStatus')?.textContent||'';if(text.includes('Upload failed'))throw Error(text);return text.includes(p+' card saved.');},provider,{timeout:180000});
   const result=await page.evaluate(async p=>{
    const {readProviderCards}=await import('./dual-pp-cards.js');
    const {displayedProviderModels}=await import('./pre-race-provider-adapter.js');
