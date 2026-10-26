@@ -1,0 +1,128 @@
+{
+  "source": "Original Oct 17 2026 Belmont PDFs, independent DRF index extraction; Brisnet text presence cross-check only. Not verified official scratches or final starters.",
+  "track": "Belmont Park",
+  "date": "2026-10-17",
+  "expectedEntries": 85,
+  "expectedRaces": 11,
+  "sourcePdfs": {
+    "DRF": {
+      "filename": "BEL--10-17-2026.pdf",
+      "sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+      "bytes": 1420727
+    },
+    "BRISNET": {
+      "filename": "Bel-10-17-2026 Premium Plus.pdf",
+      "sha256": "ecd4f4f313d3cf959d23ffb27b3d13206aeb9611362fa55b70ee241305bb0573",
+      "bytes": 2058195
+    }
+  },
+  "raceNames": {
+    "1": [
+      "Commuted",
+      "Conniving",
+      "Cool Andy",
+      "Kunshan Bridge",
+      "Run Classic",
+      "Breslau"
+    ],
+    "2": [
+      "Lil' Regard",
+      "Gift of Gab",
+      "So Sophia",
+      "River Seine",
+      "Delightful Flame",
+      "My First Dinah"
+    ],
+    "3": [
+      "Ambition",
+      "Frizzante",
+      "Sharp Spark",
+      "Missouri River",
+      "Systemic Change",
+      "Le Gris"
+    ],
+    "4": [
+      "Notable Exchange",
+      "Save Us Melania",
+      "Seat At the Table",
+      "Baby Sassicaia",
+      "Planet Clare",
+      "Greyjoy",
+      "Bow Draw",
+      "Lady Firefoot"
+    ],
+    "5": [
+      "Calvin's Ride",
+      "Shape Note",
+      "Vacation Dance",
+      "John Jay",
+      "Billionaires Row",
+      "Mission Improbable",
+      "Bite and Strike",
+      "Global Prosperity"
+    ],
+    "6": [
+      "Looks First",
+      "City Blocks",
+      "Mascara",
+      "Meg's Foxy Grey",
+      "Probable Angle",
+      "Will Not Be Swayed",
+      "Proud Foot",
+      "Edistrudis"
+    ],
+    "7": [
+      "Emergence",
+      "High Beta",
+      "Carc Brothers",
+      "Interceptor",
+      "Write Off Jerry",
+      "Mutaawid",
+      "Sardis"
+    ],
+    "8": [
+      "Lika Rolling Stone",
+      "Bam's Bliss Kiss",
+      "Furry Fox",
+      "Beira",
+      "Snide",
+      "Mursal",
+      "Bourbon Serengeti",
+      "Despo's Dream",
+      "Brunch With Amy"
+    ],
+    "9": [
+      "Fateful Lightning",
+      "Inexorable",
+      "Magnanimous Max",
+      "Barb",
+      "Sharp Swinger",
+      "Georgia Magic",
+      "Kinetic",
+      "Gulfy"
+    ],
+    "10": [
+      "Unit Economics",
+      "Emirates Road",
+      "Highlands Way",
+      "Urgency",
+      "Paros",
+      "Ciao Chuck",
+      "What Say Thee",
+      "Blown Cover",
+      "Hammerhead"
+    ],
+    "11": [
+      "Secured Landing",
+      "Pineapple Man",
+      "Princip",
+      "Concorde Spirit",
+      "Shoot the Nickel",
+      "Tapwrits Temper",
+      "Sara's Shaman",
+      "Two's a Crowd",
+      "Life and Light",
+      "Normandy Coast"
+    ]
+  }
+}

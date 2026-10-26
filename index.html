@@ -190,6 +190,9 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 
 <script type="module">
 import {correctRaceField} from "./race-field-corrections.js";
+import {prepareRaceDayResearchFreeze} from "./pre-race-raceday-integration.js";
+import {sealResearchSnapshots} from "./pre-race-provider-freeze.js";
+import {readResearchFreezes,writeResearchFreezes} from "./pre-race-recorder-storage.js";
 import {fetchOtherTrackCombinedUpdate,otherTrackSource,OTHER_TRACK_FEEDS_READY} from "./other-track-updates.js?v=20261025-staged1";
 import {prepareCombinedOtherTrackUpdate} from "./other-track-update-plan.js?v=20261025-staged1";
 import {fetchNyraRaceUpdate,nyraRaceUpdateSource,applyNyraSnapshotToRace} from "./nyra-race-update.js?v=20261018-dual1";
@@ -351,6 +354,44 @@ document.getElementById('freezeAllModels').onclick=()=>{
  }catch(e){status.textContent='Freeze failed: '+e.message+'; no completed snapshot.';}
  finally{race=original;for(const [id,html]of saved)document.getElementById(id).innerHTML=html;renderDashboard();}
 };
+// Strict structured recorder is separate from the legacy browser-clock research export.
+// It never claims independent timestamp certification or betting authorization.
+const structuredRecorder=document.createElement('div');
+structuredRecorder.id='structuredRecorder';
+structuredRecorder.className='note small span12';
+structuredRecorder.style.marginTop='12px';
+structuredRecorder.innerHTML='<b>Verified race recorder (research only)</b><p class="muted">Select the current race, confirm official field/scratches and surface, and enter an official post-time reference. The original PDF SHA-256 must be present. The resulting file is local-only until independently anchored.</p><div class="grid"><label class="span6">Official post time (with timezone, e.g. 2026-10-26T16:00:00-04:00)<input id="recorderPost" type="text" placeholder="YYYY-MM-DDTHH:MM:SS-04:00"></label><label class="span6">Official post-time HTTPS reference<input id="recorderPostUrl" type="url" placeholder="https://..."></label><label class="span6"><input id="recorderFieldVerified" type="checkbox" style="width:auto"> I verified runners and scratches against official entries</label><label class="span6"><input id="recorderSurfaceVerified" type="checkbox" style="width:auto"> I verified the race surface</label></div><button class="secondary" id="recorderFreezeRace" type="button">Freeze current race (structured research)</button><div id="recorderFreezeStatus" role="status" class="small muted" style="margin-top:8px">Not frozen. Independent server timestamp not established.</div>';
+document.getElementById('raceDayDashboard').insertAdjacentElement('afterend',structuredRecorder);
+document.getElementById('recorderFreezeRace').onclick=async()=>{
+ const status=document.getElementById('recorderFreezeStatus'),button=document.getElementById('recorderFreezeRace');
+ button.disabled=true;
+ try{
+  const provider=cardProvider(activeCard);
+  const card=providerCards[provider]||activeCard;
+  if(activeCard.id===sampleCard.id)throw Error('Demonstration card cannot be frozen.');
+  const source=providerRace(provider).race;
+  if(!source)throw Error('Matching provider race unavailable.');
+  const now=Date.now();
+  const existing=readResearchFreezes();
+  if(!Array.isArray(existing))throw Error('Invalid stored recorder history.');
+  const scheduledPost=document.getElementById('recorderPost').value.trim();
+  const sourceUrl=document.getElementById('recorderPostUrl').value.trim();
+  const result=prepareRaceDayResearchFreeze({
+   card,race:source,existing,now,
+   fieldVerified:document.getElementById('recorderFieldVerified').checked,
+   surfaceVerified:document.getElementById('recorderSurfaceVerified').checked,
+   postTimeEvidence:{scheduledPost,sourceUrl,sourceType:'NYRA_OFFICIAL',verifiedByUser:true,observedAt:new Date(now).toISOString()}
+  });
+  if(result.errors.length)throw Error(result.errors.join(' | '));
+  const records=[...existing,result.record];
+  const exported=await sealResearchSnapshots(records);
+  writeResearchFreezes(records);
+  const blob=new Blob([JSON.stringify(exported,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),link=document.createElement('a');
+  link.href=url;link.download='NYRA_STRUCTURED_RESEARCH_'+provider+'_'+source.date+'_R'+source.race+'.json';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  status.textContent='Saved research-only freeze for '+provider+' race '+source.race+'. JSON export downloaded. NOT independently timestamped; do not use as betting authorization.';
+ }catch(e){status.textContent='Structured freeze refused: '+e.message;}
+ finally{button.disabled=false;}
+};
 function providerRace(provider){if(provider===cardProvider(activeCard))return {race,reason:null};return pairedRace(providerCards,provider,race);}
 function morningLineProvider(){
  const active=cardProvider(activeCard),stamp=card=>Date.parse(card?.imported_at)||0;
@@ -448,9 +489,9 @@ function selectRace(n){if(!activeCard.races[n])return;race=structuredClone(activ
 function renderHorses(){
  const grid=contenderGridRating(),entries=new Map((grid.rankings||[]).map((h,i)=>[gridRunnerKey(h),{...h,gridRank:i+1}])),provisional=grid.provisional||grid.decision!=='RATEABLE';
  document.getElementById('gridModelStatus').textContent=(cardProvider(activeCard)==='BRISNET'?'Brisnet':'DRF')+' Contender · '+entries.size+'/'+race.horses.filter(paceEligible).length+' starters ranked'+(provisional?' · provisional / '+grid.decision:'')+(grid.reason?' · '+grid.reason:'');
- document.getElementById('gridFieldStatus').textContent='Scratched: '+(race.horses.filter(h=>h.odds==='SCR').map(h=>'#'+h.n+' '+h.name).join(', ')||'none')+'. Also eligible: '+(race.horses.filter(h=>h.entry_status==='AE'&&h.odds!=='SCR').map(h=>'#'+h.n+' '+h.name).join(', ')||'none')+'.';
+ document.getElementById('gridFieldStatus').textContent='Scratched: '+(race.horses.filter(h=>h.odds==='SCR').map(h=>'#'+h.n+' '+h.name).join(', ')||'none')+'. Also eligible (not drawn in): '+(race.horses.filter(h=>['AE','ALSO_ELIGIBLE'].includes(h.entry_status)&&h.included_in_frozen_field!==true&&h.odds!=='SCR').map(h=>'#'+h.n+' '+h.name).join(', ')||'none')+'.';
  horseTable.querySelector("tbody").innerHTML=sortedGridHorses(grid).map(h=>{const entry=entries.get(gridRunnerKey(h)),label=h.odds==='SCR'?'Scratched':!paceEligible(h)?'Excluded':'Unranked';let js=h.jockey_win!=null?{win:h.jockey_win}:null,ts=h.trainer_win!=null?{win:h.trainer_win}:null;return `<tr data-program="${escapeText(h.n)}" style="${h.odds==="SCR"?"opacity:.48":""}">
-<td><span class="num">${h.n}</span><span class="horse">${escapeText(h.name)}${h.entry_status&&h.entry_status!=="REGULAR"?` <span class="pill">${h.entry_status} excluded</span>`:""}</span></td><td>${h.odds==='SCR'?'<b>SCR — Scratched</b>':h.entry_status==='AE'?`<button type="button" data-field-action="running" data-program="${escapeText(h.n)}">Confirm running</button>`:`${h.field_status_evidence?.action==='running'?'AE drawn in':'Active'} <button type="button" data-field-action="scratch" data-program="${escapeText(h.n)}">Scratch</button>`}${h.entry_status==='AE'&&h.odds!=='SCR'?` <button type="button" data-field-action="scratch" data-program="${escapeText(h.n)}">Scratch</button>`:''}</td><td>${h.ml||"—"}</td>
+<td><span class="num">${h.n}</span><span class="horse">${escapeText(h.name)}${h.entry_status&&h.entry_status!=="REGULAR"?` <span class="pill">${escapeText(h.entry_status)} ${h.included_in_frozen_field===true&&h.odds!=='SCR'?'drawn in':'excluded'}</span>`:""}</span></td><td>${h.odds==='SCR'?'<b>SCR — Scratched</b>':['AE','ALSO_ELIGIBLE'].includes(h.entry_status)&&h.included_in_frozen_field!==true?`<button type="button" data-field-action="running" data-program="${escapeText(h.n)}">Confirm running</button>`:`${h.field_status_evidence?.action==='running'?'AE drawn in':'Active'} <button type="button" data-field-action="scratch" data-program="${escapeText(h.n)}">Scratch</button>`}${['AE','ALSO_ELIGIBLE'].includes(h.entry_status)&&h.included_in_frozen_field!==true&&h.odds!=='SCR'?` <button type="button" data-field-action="scratch" data-program="${escapeText(h.n)}">Scratch</button>`:''}</td><td>${h.ml||"—"}</td>
 <td><span class="pacechip ${escapeText(displayPaceStyle(h))}">${escapeText(displayPaceStyle(h))}</span></td><td>${escapeText(h.source_context?.jockey?.name||h.jockey_annual?.jockey||h.j||"—")}</td><td>${escapeText(h.source_context?.trainer?.name||h.t||"—")}</td>
 <td>${js?js.win.toFixed(1)+"%":"—"}</td><td>${ts?ts.win.toFixed(1)+"%":"—"}</td><td>${displayVal(h.ratings?.provider==="BRISNET"?h.ratings.lines?.[0]?.speed:h.last)}</td><td class="grid-contender-rank">${entry?entry.gridRank:label}</td><td><span class="score">${entry&&Number.isFinite(entry.score)?entry.score.toFixed(3):"N/A"}</span><div class="tiny muted" style="margin-top:4px">${entry?(provisional?"Provisional Contender rating":"Contender rating"):label}</div></td><td><b>${fairOddsMap()[h.n]||"—"}</b></td></tr>`}).join("");
 }
