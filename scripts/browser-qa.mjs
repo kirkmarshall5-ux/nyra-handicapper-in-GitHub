@@ -323,6 +323,45 @@ for(const profile of profiles){
   assert.match(await status.innerText(),/reference|post-time|Demonstration card/i);
   assert.equal(await page.evaluate(()=>localStorage.getItem('nyraResearchProviderFreezesV3')),before,'Failed recorder must not persist a freeze');
  });
+ await check('D19-structured-recorder-success-export-and-duplicate-rejection',async()=>{
+  // Synthetic positive path: browser UI -> displayed DRF model adapter -> SHA-256
+  // research export -> digest verification. NOT a real PDF or independent anchor.
+  const original=await page.evaluate(async()=>{const m=await import('./dual-pp-cards.js');return {cards:await m.readProviderCards(),session:await m.readProviderSession()};});
+  try{
+   await page.evaluate(async()=>{
+    const m=await import('./dual-pp-cards.js');
+    const {PARSER_ID}=await import('./release-card-parser.js');
+    const date='2099-10-26',track='Belmont Park';
+    const horses=[1,2,3].map(n=>({n:String(n),name:'Recorder QA Runner '+n,ml:n===3?'6/5':'4/1',odds:'—',entry_status:'REGULAR',included_in_frozen_field:true,life_starts:n===3?0:1,lifeStarts:n===3?0:1,beyer_figures:n===3?[]:[90+n],figs:n===3?[]:[90+n],last:n===3?null:90+n,best:n===3?null:90+n,timeform_early:n===3?null:85,timeform_late:n===3?null:90,style:'UNKNOWN',parser_blockers:[],angles:[],source_context:{workout_text:'',pedigree_text:''},contender_evidence:{beyer_evidence:[],switch_evidence:{running_lines:[]}}}));
+    const race={race:1,date,track,header:'6 Furlongs',dist:'6 Furlongs',surface:'Dirt',conditions:{surface:'Dirt'},cls:'QA maiden',distance_furlongs:6,post:'4:00 ET',horses};
+    const card={id:'qa-structured-freeze-positive',schemaVersion:3,track,date,races:{1:race},source_format:'DRF',parser_version:PARSER_ID,sourceName:'synthetic-recorder-qa.pdf',source_sha256:'a'.repeat(64),warnings:[]};
+    await m.writeProviderCard('DRF',card);await window.qaSetActive(card);
+   });
+   await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
+   await page.locator('[data-tab="raceday"]').click();
+   await page.locator('#recorderPost').fill('2099-10-26T16:00:00-04:00');
+   await page.locator('#recorderPostUrl').fill('https://www.nyra.com/');
+   await page.locator('#recorderFieldVerified').check();
+   await page.locator('#recorderSurfaceVerified').check();
+   const [download]=await Promise.all([page.waitForEvent('download',{timeout:15000}),page.locator('#recorderFreezeRace').click()]);
+   assert.match(download.suggestedFilename(),/NYRA_STRUCTURED_RESEARCH_DRF/);
+   const exported=JSON.parse(readFileSync(await download.path(),'utf8'));
+   const verified=await page.evaluate(async payload=>{const m=await import('./pre-race-provider-freeze.js');return m.verifyResearchExport(payload);},exported);
+   assert.equal(verified.valid,true,'Export must verify: '+verified.errors.join('; '));
+   assert.equal(verified.independentlyTimestamped,false);
+   assert.equal(exported.records.length,1);
+   assert.equal(exported.records[0].models.length,3);
+   assert.equal(exported.records[0].sourceSha256,'a'.repeat(64));
+   assert.equal(exported.records[0].anchorStatus,'UNVERIFIED_LOCAL');
+   await page.locator('#recorderFreezeRace').click();
+   assert.match(await page.locator('#recorderFreezeStatus').innerText(),/already frozen|no overwrite/i);
+   const after=await page.evaluate(()=>JSON.parse(localStorage.getItem('nyraResearchProviderFreezesV3')||'[]'));
+   assert.equal(after.length,1,'Duplicate attempt cannot append another record');
+  }finally{
+   await page.evaluate(async saved=>{const m=await import('./dual-pp-cards.js');if(saved.cards?.DRF)await m.writeProviderCard('DRF',saved.cards.DRF);if(saved.cards?.BRISNET)await m.writeProviderCard('BRISNET',saved.cards.BRISNET);if(saved.session?.selectedProvider&&saved.cards?.[saved.session.selectedProvider])await window.qaSetActive(saved.cards[saved.session.selectedProvider]);localStorage.removeItem('nyraResearchProviderFreezesV3');},original);
+   await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
+  }
+ });
  await check('D19-two-provider-retention-matching-and-source-isolation',async()=>{
   const original=await page.evaluate(async()=>{const m=await import('./dual-pp-cards.js');return {cards:await m.readProviderCards(),active:JSON.stringify(await window.qaReadActive())};});
   try{
