@@ -113,3 +113,26 @@ test('export validation rejects rehashed duplicate horse identities',async()=>{
  assert.equal(result.valid,false);
  assert.match(result.errors.join(' '),/duplicate active runner/);
 });
+
+test('unrated first-time starter evidence survives freeze, SHA seal and verification',async()=>{
+ const snap=fixture('DRF');
+ snap.models=snap.models.map(m=>m.family==='V44C'?{...m,decision:'PASS',fullFieldRanked:false,rankings:[{program:'1',horse:'A',score:75}]}:m);
+ snap.unratedRunners=[{program:'2',horse:'B',reasons:['First-time starter; no prior race performance'],firstTimeStarter:true,classification:'SOURCE_EVIDENCE'}];
+ const frozen=freezeResearchSnapshot({snapshot:snap,now});
+ assert.deepEqual(frozen.errors,[]);
+ assert.equal(frozen.record.unratedRunners[0].program,'2');
+ const sealed=await sealResearchSnapshots([frozen.record]);
+ const checked=await verifyResearchExport(sealed);
+ assert.equal(checked.valid,true,checked.errors.join(' | '));
+ assert.deepEqual(sealed.records[0].unratedRunners,snap.unratedRunners);
+ const changed=structuredClone(sealed);
+ changed.records[0].unratedRunners[0].reasons[0]='No reason recorded';
+ const tampered=await verifyResearchExport(changed);
+ assert.equal(tampered.valid,false);
+ assert.match(tampered.errors.join(' '),/digest mismatch/);
+});
+test('unrated evidence rejects a horse that was already ranked',()=>{
+ const snap=fixture('DRF');
+ snap.unratedRunners=[{program:'1',horse:'A',reasons:['Missing figures'],firstTimeStarter:false}];
+ assert.match(freezeResearchSnapshot({snapshot:snap,now}).errors.join(' '),/Unrated evidence conflicts/);
+});
