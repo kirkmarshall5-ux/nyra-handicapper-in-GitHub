@@ -108,6 +108,57 @@
   "limitations": [
     "Official entries and NYRA scratches confirm 14 entries and 2 scratches; third-party result supplies finish order, not an independently archived NYRA official chart.",
     "Original DRF and Brisnet 2026-10-25 cards and original pre-race freeze have not been matched to this manifest.",
-    "No performance, ROI, or model-gradeability conclusion may be drawn from this manifest."
-  ]
+    "No performance, ROI, or model-gradeability conclusion may be drawn from this manifest.",
+    "Archived original pre-race freeze has all 14 names in roster but omits official starter #13 Cocoa Mills from dashboard field and ranked model inputs (11 of 12 starters).",
+    "Freeze time is browser-device-unverified, not an independently authenticated anchor."
+  ],
+  "archived_freeze_evidence": {
+    "filename": "NYRA_FREEZE_2026-10-25_2026-10-25T19-04-47-198Z.json",
+    "captured_at_utc": "2026-10-25T19:04:47.198Z",
+    "clock_source": "browser-device-unverified",
+    "card_date": "2026-10-25",
+    "race": 9,
+    "roster_programs": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11",
+      "12",
+      "13",
+      "14"
+    ],
+    "dashboard_field_programs": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11",
+      "12"
+    ],
+    "missing_official_starter_programs": [
+      "13"
+    ],
+    "model_ranked_counts": {
+      "brisContender": 11,
+      "drfContender": 11,
+      "drfFinisher": 11
+    },
+    "source_cards": {
+      "DRF": "BEL--10-25-2026.pdf",
+      "BRISNET": "bel1025p.pdf"
+    },
+    "immutable_historical_snapshot": true
+  }
 }
