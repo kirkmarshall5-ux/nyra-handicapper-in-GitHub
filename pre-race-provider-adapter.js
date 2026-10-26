@@ -21,23 +21,38 @@ export function convertDisplayedModel(family,result,field,provider,{baselineDeci
  const fullFieldRanked=status==='RATEABLE'&&rankings.length===field.length;
  return {family,modelId:result.model_id,decision:status,fullFieldRanked,rankings,reason:result.reason||null,provider};
 }
-// Preserve source evidence without guessing why a horse lacks a rating.
+// Separate rated-but-not-displayed runners from genuinely unrated runners.
+// DRF PASS displays only the top four provisional rows even when more have scores.
 const reasonText=value=>typeof value==='string'?value:value?.reason||value?.message||'Unspecified missing evidence';
-export function unratedRunnerEvidence(race,field,models,provider,{baseline=null,native=null}={}){
+const evidenceList=value=>Array.isArray(value)?value:value==null?[]:[value];
+export function runnerRatingCoverage(race,field,models,provider,{baseline=null,native=null}={}){
  const byProgram=new Map((race.horses||[]).map(h=>[String(h.n),h]));
  const v44c=models.find(m=>m.family==='V44C');
- const rated=new Set(v44c?.rankings.map(h=>h.program)||[]);
- const missing=(provider==='DRF'?(baseline?.runners||[]):[]);
- const byName=new Map(missing.map(h=>[String(h.n),h]));
+ const displayed=new Set(v44c?.rankings.map(h=>h.program)||[]);
+ const sourceRunners=new Map((provider==='DRF'?(baseline?.runners||[]):[]).map(h=>[String(h.n),h]));
  const nativeUnrated=new Map((native?.v44c?.unrated||[]).map(h=>[String(h.n),h]));
- return field.filter(h=>!rated.has(h.program)).map(h=>{
-  const original=byProgram.get(h.program)||{},source=byName.get(h.program)||nativeUnrated.get(h.program)||{};
-  const reasons=[...(source.unrated_reason?[source.unrated_reason]:[]),...(source.parser_blockers||[]),...(source.reasons||[]),...(original.parser_blockers||[])].map(reasonText).filter(Boolean);
+ const ratedNotDisplayed=[],unratedRunners=[];
+ for(const h of field){
+  if(displayed.has(h.program))continue;
+  const original=byProgram.get(h.program)||{};
+  const source=sourceRunners.get(h.program)||{};
+  const hasVerifiedRating=provider==='DRF'&&typeof source.base_rating==='number'&&Number.isFinite(source.base_rating)&&!evidenceList(source.parser_blockers).length;
+  if(hasVerifiedRating){
+   ratedNotDisplayed.push({program:h.program,horse:h.horse,reason:'Rated runner omitted from top-four provisional display'});
+   continue;
+  }
+  const nativeMissing=nativeUnrated.get(h.program)||{};
+  const evidence=Object.keys(source).length?source:nativeMissing;
+  const reasons=[...evidenceList(evidence.unrated_reason),...evidenceList(evidence.parser_blockers),...evidenceList(evidence.reasons),...evidenceList(original.parser_blockers)].map(reasonText).filter(Boolean);
   const starts=original.life_starts??original.lifeStarts??null;
   if(!reasons.length&&starts===0)reasons.push('First-time starter; no prior race performance');
   if(!reasons.length)reasons.push('No verified numerical rating; inspect source PP');
-  return {program:h.program,horse:h.horse,reasons:[...new Set(reasons)],firstTimeStarter:starts===0,classification:reasons.length===1&&reasons[0]==='No verified numerical rating; inspect source PP'?'UNDETERMINED':'SOURCE_EVIDENCE'};
- });
+  unratedRunners.push({program:h.program,horse:h.horse,reasons:[...new Set(reasons)],firstTimeStarter:starts===0,classification:reasons.length===1&&reasons[0]==='No verified numerical rating; inspect source PP'?'UNDETERMINED':'SOURCE_EVIDENCE'});
+ }
+ return {ratedNotDisplayed,unratedRunners};
+}
+export function unratedRunnerEvidence(race,field,models,provider,context={}){
+ return runnerRatingCoverage(race,field,models,provider,context).unratedRunners;
 }
 export function displayedProviderModels(card,race){
  const provider=cardProvider(card);
@@ -48,7 +63,7 @@ export function displayedProviderModels(card,race){
   if(!native?.v44c||!native?.contender)throw Error('Native Brisnet models unavailable');
   const finisher=rankFinishers(race);
   const models=[convertDisplayedModel('V44C',native.v44c,field,provider),convertDisplayedModel('FINISHER',finisher,field,provider,{baselineDecision:native.v44c.decision}),convertDisplayedModel('CONTENDER',native.contender,field,provider)];
-  return {provider,field,models,unratedRunners:unratedRunnerEvidence(race,field,models,provider,{native})};
+  return {provider,field,models,...runnerRatingCoverage(race,field,models,provider,{native})};
  }
  const v44c=releaseRace(race);
  // Race Day intentionally displays provisional rated runners for DRF PASS races.
@@ -57,5 +72,5 @@ export function displayedProviderModels(card,race){
  const contender=rankContenders(race,v44c,{displayPass:v44c.decision==='PASS'});
  const finisher=rankFinishers(race);
  const models=[convertDisplayedModel('V44C',displayedV44c,field,provider),convertDisplayedModel('FINISHER',finisher,field,provider,{baselineDecision:v44c.decision}),convertDisplayedModel('CONTENDER',contender,field,provider)];
- return {provider,field,models,unratedRunners:unratedRunnerEvidence(race,field,models,provider,{baseline:v44c})};
+ return {provider,field,models,...runnerRatingCoverage(race,field,models,provider,{baseline:v44c})};
 }
