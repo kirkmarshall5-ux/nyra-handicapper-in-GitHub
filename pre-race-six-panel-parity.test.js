@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {convertDisplayedModel} from './pre-race-provider-adapter.js';
+import {convertDisplayedModel,unratedRunnerEvidence} from './pre-race-provider-adapter.js';
 import {freezeResearchSnapshot,sealResearchSnapshots,verifyResearchExport} from './pre-race-provider-freeze.js';
 
 const field=[{program:'1',horse:'Alpha'},{program:'2',horse:'Beta'}];
@@ -130,4 +130,20 @@ test('DRF PASS provisional ranking retains rated runners without changing PASS d
  assert.equal(recorded.decision,'PASS');
  assert.equal(recorded.fullFieldRanked,false);
  assert.deepEqual(recorded.rankings,[{program:'4',horse:'Rated Runner',score:81.375}]);
+});
+
+test('unrated horse evidence retains verified FTS and does not guess other causes',()=>{
+ const runners={horses:[
+  {n:'4',name:'Rated Runner',life_starts:3},
+  {n:'5',name:'Debut Horse',life_starts:0},
+  {n:'6',name:'Unknown Horse'}
+ ]};
+ const models=[{family:'V44C',rankings:[{program:'4',horse:'Rated Runner',score:81}]}];
+ const all=[{program:'4',horse:'Rated Runner'},{program:'5',horse:'Debut Horse'},{program:'6',horse:'Unknown Horse'}];
+ const unrated=unratedRunnerEvidence(runners,all,models,'DRF');
+ assert.deepEqual(unrated.map(h=>h.program),['5','6']);
+ assert.equal(unrated[0].firstTimeStarter,true);
+ assert.match(unrated[0].reasons.join(' '),/First-time starter/);
+ assert.equal(unrated[1].classification,'UNDETERMINED');
+ assert.match(unrated[1].reasons.join(' '),/inspect source PP/);
 });
