@@ -309,6 +309,8 @@ for(const profile of profiles){
   await page.locator('[data-tab="raceday"]').click();
   const control=page.locator('#recorderFreezeRace'),status=page.locator('#recorderFreezeStatus');
   assert.equal(await control.count(),1);
+  const recorderBounds=await page.locator('#structuredRecorder').boundingBox();
+  assert.ok(recorderBounds&&recorderBounds.width>Math.min(profile.viewport.width*0.65,650),'Recorder must occupy usable Race Day width');
   await control.click();
   await status.getByText('Structured freeze refused:',{exact:false}).waitFor();
   assert.match(await status.innerText(),/scheduled post|post-time|Demonstration card/i);
