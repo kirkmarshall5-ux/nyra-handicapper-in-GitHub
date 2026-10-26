@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "card": "BEL 2026-10-25",
+  "race": 9,
+  "source": {
+    "filename": "bel1025p.pdf",
+    "sha256": "13930fbc15ee9263777a1a20d16051f8cd6196f8ece396bca38b62fde409705a",
+    "pages": 24,
+    "provider": "Brisnet Premium Plus",
+    "source": "user-uploaded original PDF 2026-10-26",
+    "race9_pages_1_indexed": [
+      21,
+      22,
+      23,
+      24
+    ],
+    "race_type": "Clm 40000n2L",
+    "surface": "Inner Turf",
+    "distance_furlongs": 6
+  },
+  "entries": [
+    {
+      "program": "1",
+      "name": "Bouquetry",
+      "source_ae": false
+    },
+    {
+      "program": "2",
+      "name": "Best Not Miss",
+      "source_ae": false
+    },
+    {
+      "program": "3",
+      "name": "Sinead",
+      "source_ae": false
+    },
+    {
+      "program": "4",
+      "name": "Golden Beach",
+      "source_ae": false
+    },
+    {
+      "program": "5",
+      "name": "Meadowlark Drive",
+      "source_ae": false
+    },
+    {
+      "program": "6",
+      "name": "Scorch",
+      "source_ae": false
+    },
+    {
+      "program": "7",
+      "name": "Juliet On Approach",
+      "source_ae": false
+    },
+    {
+      "program": "8",
+      "name": "Leslie's Star",
+      "source_ae": false
+    },
+    {
+      "program": "9",
+      "name": "Clap Back",
+      "source_ae": false
+    },
+    {
+      "program": "10",
+      "name": "Heaven's Bolt",
+      "source_ae": false
+    },
+    {
+      "program": "11",
+      "name": "Five Dozen Roses",
+      "source_ae": false
+    },
+    {
+      "program": "12",
+      "name": "On a Summer Day",
+      "source_ae": false
+    },
+    {
+      "program": "13",
+      "name": "Cocoa Mills",
+      "source_ae": true
+    },
+    {
+      "program": "14",
+      "name": "It's Nancytime Now",
+      "source_ae": true
+    }
+  ],
+  "reconciliation": {
+    "source_entries": 14,
+    "official_entries": 14,
+    "identity_matches": 14,
+    "official_starters": 12,
+    "official_scratches": [
+      "1",
+      "14"
+    ],
+    "drawn_in_ae": [
+      "13"
+    ],
+    "not_drawn_in_ae": [
+      "14"
+    ],
+    "archived_ranked_starters": 11,
+    "missing_archived_starter": [
+      "13"
+    ],
+    "current_ipad_coverage": "12/12 each of Brisnet Contender, DRF Contender, DRF Finisher"
+  },
+  "limitations": [
+    "Source PDF AE labels reflect pre-race eligibility, not official starter confirmation.",
+    "Official field based on separately recorded NYRA entries/scratches; official finish chart not independently archived.",
+    "No deterministic original-PDF Brisnet parser-to-model replay was performed.",
+    "Historical pre-race freeze lacks independently anchored timestamp; no ROI claims."
+  ]
+}
