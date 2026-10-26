@@ -20,7 +20,7 @@ export function prepareRaceDayResearchFreeze({card,race,postTimeEvidence,existin
     scheduledPost:postTimeEvidence.scheduledPost,
     postTimeEvidence:{...postTimeEvidence,verification:'USER_CONFIRMED_OFFICIAL_REFERENCE_NOT_INDEPENDENTLY_ANCHORED'},
     fieldVerified:true,surfaceVerified:true,surface:race.surface,
-    field:adapted.field,models:adapted.models,unratedRunners:adapted.unratedRunners,
+    field:adapted.field,models:adapted.models,unratedRunners:adapted.unratedRunners,ratedNotDisplayed:adapted.ratedNotDisplayed,
     fieldSnapshot:race.horses.map(h=>({program:String(h.n??''),horse:h.name,odds:h.odds??null,entryStatus:h.entry_status??'REGULAR',fieldStatusEvidence:h.field_status_evidence??null}))
   };
   return freezeResearchSnapshot({snapshot,existing,now});
