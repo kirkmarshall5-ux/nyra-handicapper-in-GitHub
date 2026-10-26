@@ -358,7 +358,7 @@ document.getElementById('freezeAllModels').onclick=()=>{
 // It never claims independent timestamp certification or betting authorization.
 const structuredRecorder=document.createElement('div');
 structuredRecorder.id='structuredRecorder';
-structuredRecorder.className='note small';
+structuredRecorder.className='note small span12';
 structuredRecorder.style.marginTop='12px';
 structuredRecorder.innerHTML='<b>Verified race recorder (research only)</b><p class="muted">Select the current race, confirm official field/scratches and surface, and enter an official post-time reference. The original PDF SHA-256 must be present. The resulting file is local-only until independently anchored.</p><div class="grid"><label class="span6">Official post time (with timezone, e.g. 2026-10-26T16:00:00-04:00)<input id="recorderPost" type="text" placeholder="YYYY-MM-DDTHH:MM:SS-04:00"></label><label class="span6">Official post-time HTTPS reference<input id="recorderPostUrl" type="url" placeholder="https://..."></label><label class="span6"><input id="recorderFieldVerified" type="checkbox" style="width:auto"> I verified runners and scratches against official entries</label><label class="span6"><input id="recorderSurfaceVerified" type="checkbox" style="width:auto"> I verified the race surface</label></div><button class="secondary" id="recorderFreezeRace" type="button">Freeze current race (structured research)</button><div id="recorderFreezeStatus" role="status" class="small muted" style="margin-top:8px">Not frozen. Independent server timestamp not established.</div>';
 document.getElementById('raceDayDashboard').insertAdjacentElement('afterend',structuredRecorder);
