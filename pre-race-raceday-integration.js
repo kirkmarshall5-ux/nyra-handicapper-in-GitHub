@@ -8,6 +8,7 @@ export function prepareRaceDayResearchFreeze({card,race,postTimeEvidence,existin
   if(!card||!race||!Array.isArray(race.horses))return {record:null,errors:['Loaded provider card and race required.']};
   const check=verifyPostTimeEvidence(postTimeEvidence,{now,raceDate:race.date,track:race.track,raceNumber:race.race});
   if(check.errors?.length)return {record:null,errors:check.errors};
+  if(!/^[0-9a-f]{64}$/i.test(card.source_sha256||''))return {record:null,errors:['Original provider PDF SHA-256 required; do not freeze an unverified source.']};
   if(!fieldVerified||!surfaceVerified)return {record:null,errors:['Official field, scratches and surface must be verified.']};
   let adapted;
   try {adapted=displayedProviderModels(card,race);}
