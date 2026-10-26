@@ -1,6 +1,7 @@
 // Adapts exactly the current Race Day models; no scoring formula is changed.
 import {rankBrisnetModels} from './brisnet-models.js';
 import {releaseRace} from './rankings-release.js';
+import {passRaceDisplay} from './pass-race-display.js';
 import {rankContenders} from './contender-rankings.js';
 import {rankFinishers} from './finisher-inputs.js';
 import {cardProvider} from './dual-pp-cards.js';
@@ -31,7 +32,10 @@ export function displayedProviderModels(card,race){
   return {provider,field,models:[convertDisplayedModel('V44C',native.v44c,field,provider),convertDisplayedModel('FINISHER',finisher,field,provider,{baselineDecision:native.v44c.decision}),convertDisplayedModel('CONTENDER',native.contender,field,provider)]};
  }
  const v44c=releaseRace(race);
+ // Race Day intentionally displays provisional rated runners for DRF PASS races.
+ // Preserve exactly those scored rows, without upgrading PASS to RATEABLE.
+ const displayedV44c=v44c.decision==='PASS'?{...v44c,rankings:passRaceDisplay(v44c).ranked.map(h=>({...h,score:h.score}))}:v44c;
  const contender=rankContenders(race,v44c,{displayPass:v44c.decision==='PASS'});
  const finisher=rankFinishers(race);
- return {provider,field,models:[convertDisplayedModel('V44C',v44c,field,provider),convertDisplayedModel('FINISHER',finisher,field,provider,{baselineDecision:v44c.decision}),convertDisplayedModel('CONTENDER',contender,field,provider)]};
+ return {provider,field,models:[convertDisplayedModel('V44C',displayedV44c,field,provider),convertDisplayedModel('FINISHER',finisher,field,provider,{baselineDecision:v44c.decision}),convertDisplayedModel('CONTENDER',contender,field,provider)]};
 }
