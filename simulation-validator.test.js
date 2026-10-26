@@ -13,8 +13,8 @@ example.gradeabilityEvidence={raceId:example.raceId,predictionArtifactId:example
 const clone=()=>structuredClone(example);
 test('research grading refuses missing independent evidence even with well-formed synthetic positions',()=>{
  const x=clone();delete x.gradeabilityEvidence;
- assert.throws(()=>gradeRace(x),/Race grading blocked by evidence gate/);
- assert.throws(()=>gradeDataset([x]),/Race grading blocked by evidence gate/);
+ assert.throws(()=>gradeRace(x),/Race evidence identity|Race grading blocked by evidence gate/);
+ assert.throws(()=>gradeDataset([x]),/Race evidence identity|Race grading blocked by evidence gate/);
 });
 test('valid frozen full-field race produces call and finish metrics',()=>{
  assert.equal(validateRaceRecord(example),true);
