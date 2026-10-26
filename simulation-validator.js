@@ -1,5 +1,6 @@
 // Research-only race-flow validation. Never modifies V4.4c rankings, PASS or wagers.
 // Each record must be a frozen pre-race prediction paired with an independent official chart.
+import {assessRaceGradeability} from './race-gradeability-evidence.js';
 const isISO=x=>typeof x==='string'&&Number.isFinite(Date.parse(x))&&/^\d{4}-\d\d-\d\dT/.test(x);
 const uniq=a=>new Set(a).size===a.length;
 const integer=x=>Number.isInteger(x)&&x>0;
@@ -35,6 +36,8 @@ export function validateRaceRecord(r){
 const round=x=>Math.round(x*10000)/10000;
 export function gradeRace(r){
  validateRaceRecord(r);
+ const gate=assessRaceGradeability(r.gradeabilityEvidence);
+ if(!gate.gradeable)fail('Race grading blocked by evidence gate: '+gate.reasons.join(','));
  const n=r.runners.length,perCall={};
  for(const call of r.calls){
   const errors=r.runners.map(x=>Math.abs(x.predicted[call]-x.actual[call]));
@@ -56,6 +59,8 @@ export function gradeDataset(records,{split='holdout'}={}){
  const ids=new Set(),artifacts=new Set(),graded=[];
  for(const r of records){
   validateRaceRecord(r);
+  const gate=assessRaceGradeability(r.gradeabilityEvidence);
+  if(!gate.gradeable)fail('Race grading blocked by evidence gate: '+gate.reasons.join(','));
   if(ids.has(r.raceId))fail('Duplicate raceId '+r.raceId);
   ids.add(r.raceId);
   if(artifacts.has(r.predictionArtifactId))fail('Prediction artifact reused '+r.predictionArtifactId);
