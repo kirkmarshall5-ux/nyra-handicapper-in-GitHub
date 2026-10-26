@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "source_file": "bel1025p.pdf",
+  "source_sha256": "13930fbc15ee9263777a1a20d16051f8cd6196f8ece396bca38b62fde409705a",
+  "source_pages": 24,
+  "extraction_method": "PyMuPDF get_text() direct original-PDF inspection, not production pdfjs-dist parser",
+  "race": 9,
+  "source_page": 23,
+  "confirmed_ae": [
+    {
+      "program": "13",
+      "name": "Cocoa Mills",
+      "ae_marker": true
+    },
+    {
+      "program": "14",
+      "name": "It's Nancytime Now",
+      "ae_marker": true
+    }
+  ],
+  "scope": "Directly confirms AE text markers and source identities in the actual original PDF. Does not verify production importer output, figures, or pre-race field.",
+  "production_importer_executed": false,
+  "limitations": [
+    "Cannot equate a source AE entry with actual starter without official field evidence",
+    "No authenticated historical freeze or ROI claims",
+    "No source PP pages committed; only non-copyrighted metadata and verification assertions"
+  ]
+}
