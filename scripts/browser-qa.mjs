@@ -305,6 +305,24 @@ for(const profile of profiles){
    await page.unroute(service);await page.evaluate(async value=>{if(value!==null)await window.qaSetActive(JSON.parse(value));},original);await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
   }
  });
+ await check('D19-structured-recorder-interface-acceptance',async()=>{
+  await page.locator('[data-tab="raceday"]').click();
+  const control=page.locator('#recorderFreezeRace'),status=page.locator('#recorderFreezeStatus');
+  assert.equal(await control.count(),1);
+  await control.click();
+  await status.getByText('Structured freeze refused:',{exact:false}).waitFor();
+  assert.match(await status.innerText(),/scheduled post|post-time|Demonstration card/i);
+  // This synthetic imported-card fixture has a fingerprint and verified field,
+  // but an intentionally missing post-time URL must fail before any record is saved.
+  const before=await page.evaluate(()=>localStorage.getItem('nyraResearchProviderFreezesV3'));
+  await page.locator('#recorderPost').fill('2099-10-26T16:00:00-04:00');
+  await page.locator('#recorderFieldVerified').check();
+  await page.locator('#recorderSurfaceVerified').check();
+  await control.click();
+  await status.getByText('Structured freeze refused:',{exact:false}).waitFor();
+  assert.match(await status.innerText(),/reference|post-time|Demonstration card/i);
+  assert.equal(await page.evaluate(()=>localStorage.getItem('nyraResearchProviderFreezesV3')),before,'Failed recorder must not persist a freeze');
+ });
  await check('D19-two-provider-retention-matching-and-source-isolation',async()=>{
   const original=await page.evaluate(async()=>{const m=await import('./dual-pp-cards.js');return {cards:await m.readProviderCards(),active:JSON.stringify(await window.qaReadActive())};});
   try{
