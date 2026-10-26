@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {convertDisplayedModel,unratedRunnerEvidence} from './pre-race-provider-adapter.js';
+import {convertDisplayedModel,unratedRunnerEvidence,runnerRatingCoverage} from './pre-race-provider-adapter.js';
 import {freezeResearchSnapshot,sealResearchSnapshots,verifyResearchExport} from './pre-race-provider-freeze.js';
 
 const field=[{program:'1',horse:'Alpha'},{program:'2',horse:'Beta'}];
@@ -146,4 +146,28 @@ test('unrated horse evidence retains verified FTS and does not guess other cause
  assert.match(unrated[0].reasons.join(' '),/First-time starter/);
  assert.equal(unrated[1].classification,'UNDETERMINED');
  assert.match(unrated[1].reasons.join(' '),/inspect source PP/);
+});
+
+test('five rated runners with only four shown are not misclassified as unrated',async()=>{
+ const field=Array.from({length:6},(_,i)=>({program:String(i+1),horse:'Source Runner '+(i+1)}));
+ const race={horses:field.map((h,i)=>({n:h.program,name:h.horse,life_starts:i===5?0:3}))};
+ const displayed=field.slice(0,4).map((h,i)=>({program:h.program,horse:h.horse,score:90-i}));
+ const baseline={runners:race.horses.map((h,i)=>({...h,base_rating:i===5?null:90-i,parser_blockers:[]}))};
+ const models=['V44C','CONTENDER','FINISHER'].map(family=>({family,modelId:'source-'+family,decision:'PASS',provider:'DRF',fullFieldRanked:false,rankings:displayed}));
+ const coverage=runnerRatingCoverage(race,field,models,'DRF',{baseline});
+ assert.deepEqual(coverage.ratedNotDisplayed.map(h=>h.program),['5']);
+ assert.deepEqual(coverage.unratedRunners.map(h=>h.program),['6']);
+ assert.equal(coverage.unratedRunners[0].firstTimeStarter,true);
+ const now=Date.parse('2026-10-19T15:00:00Z');
+ const snapshot={provider:'DRF',cardId:'real-source-shaped-coverage',track:'Belmont Park',date:'2026-10-19',race:1,parserVersion:'test',sourceName:'source.pdf',scheduledPost:'2026-10-19T16:00:00Z',postTimeEvidence:{scheduledPost:'2026-10-19T16:00:00Z',verification:'USER_CONFIRMED_OFFICIAL_REFERENCE_NOT_INDEPENDENTLY_ANCHORED',sourceUrl:'https://www.nyra.com/'},fieldVerified:true,surfaceVerified:true,surface:'Dirt',field,models,...coverage};
+ const frozen=freezeResearchSnapshot({snapshot,now});
+ assert.deepEqual(frozen.errors,[]);
+ const exported=await sealResearchSnapshots([frozen.record]);
+ assert.equal((await verifyResearchExport(exported)).valid,true);
+ const corrupted=structuredClone(exported);
+ corrupted.records[0].ratedNotDisplayed[0].horse='Different';
+ assert.equal((await verifyResearchExport(corrupted)).valid,false);
+ const mislabeled=structuredClone(snapshot);
+ mislabeled.unratedRunners.push({program:'5',horse:'Source Runner 5',reasons:['incorrectly labeled']});
+ assert.match(freezeResearchSnapshot({snapshot:mislabeled,now}).errors.join(' '),/conflicts/);
 });
