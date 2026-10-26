@@ -191,7 +191,8 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <script type="module">
 import {correctRaceField} from "./race-field-corrections.js";
 import {prepareRaceDayResearchFreeze} from "./pre-race-raceday-integration.js";
-import {sealResearchSnapshots,FREEZE_STORAGE_KEY} from "./pre-race-provider-freeze.js";
+import {sealResearchSnapshots} from "./pre-race-provider-freeze.js";
+import {readResearchFreezes,writeResearchFreezes} from "./pre-race-recorder-storage.js";
 import {fetchOtherTrackCombinedUpdate,otherTrackSource,OTHER_TRACK_FEEDS_READY} from "./other-track-updates.js?v=20261025-staged1";
 import {prepareCombinedOtherTrackUpdate} from "./other-track-update-plan.js?v=20261025-staged1";
 import {fetchNyraRaceUpdate,nyraRaceUpdateSource,applyNyraSnapshotToRace} from "./nyra-race-update.js?v=20261018-dual1";
@@ -371,7 +372,7 @@ document.getElementById('recorderFreezeRace').onclick=async()=>{
   const source=providerRace(provider).race;
   if(!source)throw Error('Matching provider race unavailable.');
   const now=Date.now();
-  const existing=JSON.parse(localStorage.getItem(FREEZE_STORAGE_KEY)||'[]');
+  const existing=readResearchFreezes();
   if(!Array.isArray(existing))throw Error('Invalid stored recorder history.');
   const scheduledPost=document.getElementById('recorderPost').value.trim();
   const sourceUrl=document.getElementById('recorderPostUrl').value.trim();
@@ -384,7 +385,7 @@ document.getElementById('recorderFreezeRace').onclick=async()=>{
   if(result.errors.length)throw Error(result.errors.join(' | '));
   const records=[...existing,result.record];
   const exported=await sealResearchSnapshots(records);
-  localStorage.setItem(FREEZE_STORAGE_KEY,JSON.stringify(records));
+  writeResearchFreezes(records);
   const blob=new Blob([JSON.stringify(exported,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),link=document.createElement('a');
   link.href=url;link.download='NYRA_STRUCTURED_RESEARCH_'+provider+'_'+source.date+'_R'+source.race+'.json';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
   status.textContent='Saved research-only freeze for '+provider+' race '+source.race+'. JSON export downloaded. NOT independently timestamped; do not use as betting authorization.';
