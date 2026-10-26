@@ -20,3 +20,18 @@ test('Cocoa Mills field correction feeds identical eligibility to both model pro
   assert.equal(horses[2].field_status_evidence.action,'scratch');
  }
 });
+
+test('ALSO_ELIGIBLE alias can be drawn in across both provider cards without altering figures',()=>{
+ const cards={DRF:card(),BRISNET:card()};
+ for(const source of ['DRF','BRISNET'])cards[source].races[9].horses[1].entry_status='ALSO_ELIGIBLE';
+ const updated=correctRaceField(cards,'DRF',9,'13','running','2026-10-25T18:00:00.000Z');
+ for(const source of ['DRF','BRISNET']){
+  const h=updated[source].races[9].horses[1];
+  assert.equal(h.entry_status,'REGULAR');
+  assert.equal(h.original_entry_status,'ALSO_ELIGIBLE');
+  assert.equal(h.included_in_frozen_field,true);
+  assert.deepEqual(h.figs,[80]);
+  assert.deepEqual(updated[source].races[9].horses.filter(eligible).map(h=>h.n),['1','13']);
+ }
+ assert.equal(cards.DRF.races[9].horses[1].entry_status,'ALSO_ELIGIBLE');
+});
