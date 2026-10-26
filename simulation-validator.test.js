@@ -9,7 +9,7 @@ const example={
  {program:'3',name:'C',predicted:{quarter:3,half:3,stretch:3,finish:3},actual:{quarter:3,half:3,stretch:3,finish:2},winProbability:0.2}
  ]};
 // Explicit synthetic verification fixture: tests code paths, never certifies real race evidence.
-example.gradeabilityEvidence={field:{entries:example.runners.map(x=>({program:x.program,status:'STARTER'}))},rankedPrograms:example.runners.map(x=>x.program),originalPdfReplayVerified:true,officialChartFinishVerified:true,independentFreezeTimeVerified:true};
+example.gradeabilityEvidence={raceId:example.raceId,predictionArtifactId:example.predictionArtifactId,field:{entries:example.runners.map(x=>({program:x.program,status:'STARTER'}))},rankedPrograms:example.runners.map(x=>x.program),originalPdfReplayVerified:true,officialChartFinishVerified:true,independentFreezeTimeVerified:true};
 const clone=()=>structuredClone(example);
 test('research grading refuses missing independent evidence even with well-formed synthetic positions',()=>{
  const x=clone();delete x.gradeabilityEvidence;
@@ -39,11 +39,11 @@ test('reject incomplete positions, duplicate horses, and probabilities not summi
  const probs=clone();probs.runners[0].winProbability=.4;assert.throws(()=>gradeRace(probs));
 });
 test('holdout evaluation excludes development and prevents duplicate race IDs or artifacts',()=>{
- const dev=clone();dev.raceId='DEV-R1';dev.predictionArtifactId='sha256:dev';dev.datasetSplit='development';
+ const dev=clone();dev.raceId='DEV-R1';dev.predictionArtifactId='sha256:dev';dev.datasetSplit='development';dev.gradeabilityEvidence.raceId=dev.raceId;dev.gradeabilityEvidence.predictionArtifactId=dev.predictionArtifactId;
  assert.equal(gradeDataset([example,dev]).races,1);
  assert.equal(gradeDataset([dev]).status,'NO_VALIDATION_DATA');
  assert.throws(()=>gradeDataset([example,example]));
- const duplicateArtifact=clone();duplicateArtifact.raceId='NEW';assert.throws(()=>gradeDataset([example,duplicateArtifact]));
+ const duplicateArtifact=clone();duplicateArtifact.raceId='NEW';duplicateArtifact.gradeabilityEvidence.raceId='NEW';assert.throws(()=>gradeDataset([example,duplicateArtifact]));
 });
 test('no probabilities returns null probability metrics',()=>{
  const r=clone();r.runners.forEach(x=>delete x.winProbability);
@@ -73,4 +73,10 @@ test('Stage 2: reject chart publication at or before prediction freeze',()=>{
  for(const chartPublishedAt of [example.predictionFrozenAt,'2026-10-10T14:59:59Z']){
   assert.throws(()=>validateRaceRecord({...clone(),chartPublishedAt}),/Prediction must be frozen before chart publication/);
  }
+});
+
+test('audit: reject detached evidence from a different race, artifact, or runner field',()=>{
+ const a=clone();a.gradeabilityEvidence.raceId='OTHER-RACE';assert.throws(()=>gradeRace(a),/evidence identity/);
+ const b=clone();b.gradeabilityEvidence.predictionArtifactId='sha256:other';assert.throws(()=>gradeRace(b),/evidence identity/);
+ const c=clone();c.gradeabilityEvidence.rankedPrograms=['1','2','4'];assert.throws(()=>gradeRace(c),/evidence field/);
 });
