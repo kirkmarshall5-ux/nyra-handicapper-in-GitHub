@@ -1,0 +1,164 @@
+{
+  "schema_version": 1,
+  "track": "Belmont Park",
+  "date": "2026-10-25",
+  "race": 9,
+  "surface": "Inner Turf",
+  "distance_furlongs": 6,
+  "source_evidence": {
+    "official_entries": "https://www.nyra.com/belmont/racing/entries/?day=2026-10-25&limit=entries&race=9",
+    "official_scratches": "https://tr-cdn.nyra.com/direct/scratches/BELscratch.html",
+    "third_party_result": "https://www.sportinglife.com/racing/results/2026-10-25/belmont-park/946059/race-9-claiming"
+  },
+  "official_scratches_note": "NYRA: #1 Bouquetry early stewards; #14 It's Nancytime Now early also eligible",
+  "audit_status": "OFFICIAL_FIELD_RECONCILED_PP_NOT_YET_REPLAYED",
+  "official_chart_finish_verified": false,
+  "original_pp_identity_verified": false,
+  "model_input_parity_verified": false,
+  "genuine_pre_race_freeze_verified": false,
+  "prospective_gradeable": false,
+  "runner_count": 12,
+  "scratch_count": 2,
+  "entries": [
+    {
+      "program": "1",
+      "name": "Bouquetry",
+      "status": "SCRATCHED",
+      "finish_position": null
+    },
+    {
+      "program": "2",
+      "name": "Best Not Miss",
+      "status": "STARTER",
+      "finish_position": 10
+    },
+    {
+      "program": "3",
+      "name": "Sinead",
+      "status": "STARTER",
+      "finish_position": 11
+    },
+    {
+      "program": "4",
+      "name": "Golden Beach",
+      "status": "STARTER",
+      "finish_position": 3
+    },
+    {
+      "program": "5",
+      "name": "Meadowlark Drive",
+      "status": "STARTER",
+      "finish_position": 6
+    },
+    {
+      "program": "6",
+      "name": "Scorch",
+      "status": "STARTER",
+      "finish_position": 12
+    },
+    {
+      "program": "7",
+      "name": "Juliet On Approach",
+      "status": "STARTER",
+      "finish_position": 1
+    },
+    {
+      "program": "8",
+      "name": "Leslie's Star",
+      "status": "STARTER",
+      "finish_position": 4
+    },
+    {
+      "program": "9",
+      "name": "Clap Back",
+      "status": "STARTER",
+      "finish_position": 2
+    },
+    {
+      "program": "10",
+      "name": "Heaven's Bolt",
+      "status": "STARTER",
+      "finish_position": 7
+    },
+    {
+      "program": "11",
+      "name": "Five Dozen Roses",
+      "status": "STARTER",
+      "finish_position": 5
+    },
+    {
+      "program": "12",
+      "name": "On a Summer Day",
+      "status": "STARTER",
+      "finish_position": 8
+    },
+    {
+      "program": "13",
+      "name": "Cocoa Mills",
+      "status": "STARTER",
+      "finish_position": 9
+    },
+    {
+      "program": "14",
+      "name": "It's Nancytime Now",
+      "status": "SCRATCHED",
+      "finish_position": null
+    }
+  ],
+  "limitations": [
+    "Official entries and NYRA scratches confirm 14 entries and 2 scratches; third-party result supplies finish order, not an independently archived NYRA official chart.",
+    "Original DRF and Brisnet 2026-10-25 cards and original pre-race freeze have not been matched to this manifest.",
+    "No performance, ROI, or model-gradeability conclusion may be drawn from this manifest.",
+    "Archived original pre-race freeze has all 14 names in roster but omits official starter #13 Cocoa Mills from dashboard field and ranked model inputs (11 of 12 starters).",
+    "Freeze time is browser-device-unverified, not an independently authenticated anchor."
+  ],
+  "archived_freeze_evidence": {
+    "filename": "NYRA_FREEZE_2026-10-25_2026-10-25T19-04-47-198Z.json",
+    "captured_at_utc": "2026-10-25T19:04:47.198Z",
+    "clock_source": "browser-device-unverified",
+    "card_date": "2026-10-25",
+    "race": 9,
+    "roster_programs": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11",
+      "12",
+      "13",
+      "14"
+    ],
+    "dashboard_field_programs": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11",
+      "12"
+    ],
+    "missing_official_starter_programs": [
+      "13"
+    ],
+    "model_ranked_counts": {
+      "brisContender": 11,
+      "drfContender": 11,
+      "drfFinisher": 11
+    },
+    "source_cards": {
+      "DRF": "BEL--10-25-2026.pdf",
+      "BRISNET": "bel1025p.pdf"
+    },
+    "immutable_historical_snapshot": true
+  }
+}
