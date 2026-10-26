@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "card": "BEL 2026-10-25",
+  "race": 9,
+  "category": "RANKING_INPUT_INTEGRITY",
+  "historical": {
+    "archived_ranked_programs": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11",
+      "12"
+    ],
+    "official_starter_programs": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11",
+      "12",
+      "13"
+    ],
+    "missing_ranked_starter_programs": [
+      "13"
+    ],
+    "model_ranked_counts": {
+      "brisnet_contender": 11,
+      "drf_contender": 11,
+      "drf_finisher": 11
+    },
+    "integrity_status": "INCOMPLETE_FIELD",
+    "gradeable": false
+  },
+  "corrected_visual_qa": {
+    "date": "2026-10-26",
+    "status": "POST_RACE_DISPLAY_ONLY",
+    "eligible_starters": 12,
+    "program13_drf_contender_rank": 4,
+    "program13_drf_finisher_rank": 1,
+    "program13_brisnet_rank": null
+  },
+  "impact": {
+    "confirmed": "A genuine starter was missing from all three archived model fields; original rankings cannot represent the full actual race field.",
+    "not_proven": "The magnitude of historical top-four ranking changes, model-score changes, and return-on-investment changes cannot be inferred from a later rerun.",
+    "reason": "Post-race 12/12 rankings are not the immutable original 11/12 pre-race rankings; cannot substitute for a genuine pre-race comparison."
+  },
+  "next_evidence": [
+    "Execute original Brisnet PDF through production pdfjs importer and archive output hash",
+    "Verify DRF importer source fields and field eligibility parity on same 14 identities",
+    "Inventory archived frozen ranked runner IDs across pilot cards and compare with independently verified final starter identities",
+    "Obtain independent timestamp and official charts before performance grading"
+  ]
+}
