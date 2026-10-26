@@ -36,17 +36,24 @@ export function validateSnapshot(s, now=Date.now()) {
     if(m.decision==='RATEABLE'&&seen.size!==identities.size)errors.push('RATEABLE model must cover complete active field.');
     if(m.fullFieldRanked!== (m.decision==='RATEABLE'&&seen.size===identities.size))errors.push('Full-field flag does not match evidence.');
   }
-  if(s?.unratedRunners!==undefined){
-    if(!Array.isArray(s.unratedRunners))errors.push('Unrated runner evidence must be an array.');
+  if(s?.unratedRunners!==undefined||s?.ratedNotDisplayed!==undefined){
+    if(!Array.isArray(s.unratedRunners)||!Array.isArray(s.ratedNotDisplayed??[]))errors.push('Runner rating coverage must be arrays.');
     else {
-      const rated=new Set((s.models||[]).find(m=>m.family==='V44C')?.rankings?.map(h=>String(h.program))||[]),seenUnrated=new Set();
+      const displayed=new Set((s.models||[]).find(m=>m.family==='V44C')?.rankings?.map(h=>String(h.program))||[]);
+      const seen=new Set(displayed);
+      for(const h of s.ratedNotDisplayed||[]){
+        const program=String(h?.program??'');
+        if(!identities.has(program)||seen.has(program)||s.field.find(f=>String(f.program)===program)?.horse!==h.horse)errors.push('Rated-not-displayed evidence conflicts with active or displayed runners.');
+        if(typeof h?.reason!=='string'||!h.reason.trim())errors.push('Rated-not-displayed runner must include an explanation.');
+        seen.add(program);
+      }
       for(const h of s.unratedRunners){
         const program=String(h?.program??'');
-        if(!identities.has(program)||rated.has(program)||seenUnrated.has(program)||s.field.find(f=>String(f.program)===program)?.horse!==h.horse)errors.push('Unrated evidence conflicts with active or rated runners.');
+        if(!identities.has(program)||seen.has(program)||s.field.find(f=>String(f.program)===program)?.horse!==h.horse)errors.push('Unrated evidence conflicts with active, rated or displayed runners.');
         if(!Array.isArray(h?.reasons)||!h.reasons.length||h.reasons.some(reason=>typeof reason!=='string'||!reason.trim()))errors.push('Unrated horse must include a readable evidence reason.');
-        seenUnrated.add(program);
+        seen.add(program);
       }
-      if(seenUnrated.size+rated.size!==identities.size)errors.push('Every active runner must be rated or explicitly unrated.');
+      if(seen.size!==identities.size)errors.push('Every active runner must be displayed, rated-not-displayed, or unrated.');
     }
   }
   if(new Set((s?.models||[]).map(m=>m.family)).size!==(s?.models||[]).length)errors.push('Duplicate model family.');
