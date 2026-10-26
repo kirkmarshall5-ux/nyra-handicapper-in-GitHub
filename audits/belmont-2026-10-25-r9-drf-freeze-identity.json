@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "card": "BEL 2026-10-25",
+  "race": 9,
+  "original_drf_pdf": {
+    "filename": "BEL--10-25-2026.pdf",
+    "sha256": "374bb3e663f12707304f2086c2cc69010ab2159851cf83033cc77947a0b25b4b",
+    "source": "user-supplied Library PDF",
+    "inspection": "DRF horse index and Race 9 pages; #13 Cocoa Mills and #14 It's Nancytime Now explicitly labeled Also Eligible",
+    "race9_program_name_pairs": [
+      {
+        "program": "1",
+        "name": "Bouquetry"
+      },
+      {
+        "program": "2",
+        "name": "Best Not Miss"
+      },
+      {
+        "program": "3",
+        "name": "Sinead"
+      },
+      {
+        "program": "4",
+        "name": "Golden Beach"
+      },
+      {
+        "program": "5",
+        "name": "Meadowlark Drive"
+      },
+      {
+        "program": "6",
+        "name": "Scorch"
+      },
+      {
+        "program": "7",
+        "name": "Juliet On Approach"
+      },
+      {
+        "program": "8",
+        "name": "Leslie's Star"
+      },
+      {
+        "program": "9",
+        "name": "Clap Back"
+      },
+      {
+        "program": "10",
+        "name": "Heaven's Bolt"
+      },
+      {
+        "program": "11",
+        "name": "Five Dozen Roses"
+      },
+      {
+        "program": "12",
+        "name": "On a Summer Day"
+      },
+      {
+        "program": "13",
+        "name": "Cocoa Mills"
+      },
+      {
+        "program": "14",
+        "name": "It's Nancytime Now"
+      }
+    ]
+  },
+  "archived_freeze": {
+    "filename": "NYRA_FREEZE_2026-10-25_2026-10-25T19-04-47-198Z.json",
+    "sha256": "2c4aa2c183a44377ee1b6895541a184fde8da5169e6a3a32cb582d8baddffbf6",
+    "captured_at_utc": "2026-10-25T19:04:47.198Z",
+    "clock_source": "browser-device-unverified",
+    "roster_programs": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11",
+      "12",
+      "13",
+      "14"
+    ],
+    "dashboard_field_programs": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11",
+      "12"
+    ]
+  },
+  "reconciliation": {
+    "drf_to_freeze_roster": "14/14 program/name pairs",
+    "drf_to_official_entries": "14/14 program/name pairs",
+    "official_starters": 12,
+    "archived_model_field": 11,
+    "missing_official_starter_in_archived_field": [
+      "13"
+    ],
+    "physical_ipad_2026_10_26": {
+      "brisnet_contender": "12/12 eligible runners",
+      "drf_contender": "12/12 eligible runners",
+      "drf_finisher": "12/12 eligible runners",
+      "program13_drf_contender_rank": 4,
+      "program13_drf_finisher_rank": 1,
+      "program13_brisnet_rank": "not visible",
+      "scratch_programs": [
+        "1",
+        "14"
+      ],
+      "evidence": "user screenshots 2:49 and 2:50 PM October 26; not independently archived in GitHub"
+    }
+  },
+  "limitations": [
+    "The original DRF PDF confirms program/name and AE status, not which runners actually started; official sources establish scratches and starters.",
+    "Original Brisnet PDF bytes have not been independently audited.",
+    "Current 12/12 coverage is based on user iPad screenshots, not an automated original-PDF replay.",
+    "Historical freeze device clock is not independently authenticated; model ROI grading remains blocked."
+  ]
+}
