@@ -177,6 +177,8 @@ test('five rated runners with only four shown are not misclassified as unrated',
 test('AE draw-in requires explicit inclusion; scratches always win across both provider filters',()=>{
  const cases=[
   [{n:'13',name:'Cocoa Mills',entry_status:'ALSO_ELIGIBLE',included_in_frozen_field:true},true],
+  [{n:'13',name:'Cocoa Mills',entry_status:'AE',included_in_frozen_field:true},true],
+  [{n:'13',name:'Cocoa Mills',entry_status:'AE'},false],
   [{n:'13',name:'Cocoa Mills',entry_status:'ALSO_ELIGIBLE'},false],
   [{n:'14',name:'Inactive AE',entry_status:'ALSO_ELIGIBLE',included_in_frozen_field:false},false],
   [{n:'1',name:'Scratched',entry_status:'REGULAR',odds:'SCR',included_in_frozen_field:true},false],
