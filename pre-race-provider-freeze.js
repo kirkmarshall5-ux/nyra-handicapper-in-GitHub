@@ -36,6 +36,19 @@ export function validateSnapshot(s, now=Date.now()) {
     if(m.decision==='RATEABLE'&&seen.size!==identities.size)errors.push('RATEABLE model must cover complete active field.');
     if(m.fullFieldRanked!== (m.decision==='RATEABLE'&&seen.size===identities.size))errors.push('Full-field flag does not match evidence.');
   }
+  if(s?.unratedRunners!==undefined){
+    if(!Array.isArray(s.unratedRunners))errors.push('Unrated runner evidence must be an array.');
+    else {
+      const rated=new Set((s.models||[]).find(m=>m.family==='V44C')?.rankings?.map(h=>String(h.program))||[]),seenUnrated=new Set();
+      for(const h of s.unratedRunners){
+        const program=String(h?.program??'');
+        if(!identities.has(program)||rated.has(program)||seenUnrated.has(program)||s.field.find(f=>String(f.program)===program)?.horse!==h.horse)errors.push('Unrated evidence conflicts with active or rated runners.');
+        if(!Array.isArray(h?.reasons)||!h.reasons.length||h.reasons.some(reason=>typeof reason!=='string'||!reason.trim()))errors.push('Unrated horse must include a readable evidence reason.');
+        seenUnrated.add(program);
+      }
+      if(seenUnrated.size+rated.size!==identities.size)errors.push('Every active runner must be rated or explicitly unrated.');
+    }
+  }
   if(new Set((s?.models||[]).map(m=>m.family)).size!==(s?.models||[]).length)errors.push('Duplicate model family.');
   return [...new Set(errors)];
 }
