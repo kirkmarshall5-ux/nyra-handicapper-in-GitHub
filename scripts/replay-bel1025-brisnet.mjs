@@ -4,6 +4,8 @@ import assert from 'node:assert/strict';
 import {getDocument} from 'pdfjs-dist/legacy/build/pdf.mjs';
 import {parsePPCard,detectPPFormat} from '../pp-format-router.js';
 import {correctRaceField} from '../race-field-corrections.js';
+import {eligible} from '../pre-race-provider-adapter.js';
+import {active as brisnetActive} from '../brisnet-models.js';
 const pdf=process.argv[2];
 if(!pdf){console.error('Usage: node scripts/replay-bel1025-brisnet.mjs /path/to/bel1025p.pdf');process.exit(2)}
 const raw=fs.readFileSync(pdf),sha=crypto.createHash('sha256').update(raw).digest('hex');
@@ -16,12 +18,27 @@ assert.equal(doc.numPages,expected.source.pages);
 assert.equal(detectPPFormat(pages),'BRISNET_PREMIUM_PLUS');
 const card=parsePPCard(pages,{sourceName:'bel1025p.pdf'});
 const race=card.races?.[9];assert.ok(race,'Race 9 not imported');
+const official=JSON.parse(fs.readFileSync(new URL('../audits/belmont-2026-10-25-r9-field.json',import.meta.url)));
 const identities=race.horses.map(h=>({program:String(h.n),name:h.name,entry_status:h.entry_status}));
 const pairs=identities.map(h=>[h.program,h.name]);
 assert.deepEqual(pairs,expected.entries.map(h=>[h.program,h.name]),'Imported horse identities differ from original source manifest');
 assert.deepEqual(identities.filter(h=>h.entry_status==='AE').map(h=>h.program),['13','14']);
 const initialEligible=race.horses.filter(h=>h.included_in_frozen_field!==false);
 assert.equal(initialEligible.length,12,'Expected 12 regular pre-correction entries');
-const report={source_sha256:sha,format:'BRISNET_PREMIUM_PLUS',pages:doc.numPages,initial_entries:identities,initial_eligible_programs:initialEligible.map(h=>String(h.n)),status:'SOURCE_IMPORT_VERIFIED_ONLY',note:'Actual final-field correction is verified by separate race-field-corrections regression; no predictions or ROI certified.'};
+// Apply only independently confirmed field actions, not inferred from a post-race result.
+const original=structuredClone(card);
+let cards={BRISNET:card};
+for(const [program,action] of [['13','running'],['1','scratch'],['14','scratch']]){
+ cards=correctRaceField(cards,'BRISNET',9,program,action,'2026-10-25T18:00:00.000Z');
+}
+const final=cards.BRISNET.races[9].horses;
+const starters=official.entries.filter(x=>x.status==='STARTER').map(x=>x.program);
+const scratches=official.entries.filter(x=>x.status==='SCRATCHED').map(x=>x.program);
+assert.deepEqual(final.filter(eligible).map(h=>String(h.n)),starters,'Final adapter field mismatch');
+assert.deepEqual(final.filter(brisnetActive).map(h=>String(h.n)),starters,'Final Brisnet model field mismatch');
+assert.deepEqual(final.filter(h=>h.odds==='SCR').map(h=>String(h.n)),scratches,'Official scratch mismatch');
+assert.deepEqual(final.map(h=>h.ratings),race.horses.map(h=>h.ratings),'Ratings changed during field correction');
+assert.deepEqual(card,original,'Source card mutated during field correction');
+const report={source_sha256:sha,format:'BRISNET_PREMIUM_PLUS',pages:doc.numPages,initial_entries:identities,initial_eligible_programs:initialEligible.map(h=>String(h.n)),final_starter_programs:starters,final_scratch_programs:scratches,source_horse_count:race.horses.length,final_eligible_count:starters.length,status:'ORIGINAL_PDF_IMPORT_AND_FIELD_CORRECTION_VERIFIED',note:'Only when this command is executed successfully on the original PDF. Historical freeze remains non-prospective; no predictions or ROI certified.'};
 console.log(JSON.stringify(report,null,2));
 await doc.destroy();
