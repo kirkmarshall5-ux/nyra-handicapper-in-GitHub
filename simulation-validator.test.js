@@ -8,7 +8,14 @@ const example={
  {program:'2',name:'B',predicted:{quarter:2,half:2,stretch:1,finish:1},actual:{quarter:2,half:1,stretch:1,finish:1},winProbability:0.6},
  {program:'3',name:'C',predicted:{quarter:3,half:3,stretch:3,finish:3},actual:{quarter:3,half:3,stretch:3,finish:2},winProbability:0.2}
  ]};
+// Explicit synthetic verification fixture: tests code paths, never certifies real race evidence.
+example.gradeabilityEvidence={field:{entries:example.runners.map(x=>({program:x.program,status:'STARTER'}))},rankedPrograms:example.runners.map(x=>x.program),originalPdfReplayVerified:true,officialChartFinishVerified:true,independentFreezeTimeVerified:true};
 const clone=()=>structuredClone(example);
+test('research grading refuses missing independent evidence even with well-formed synthetic positions',()=>{
+ const x=clone();delete x.gradeabilityEvidence;
+ assert.throws(()=>gradeRace(x),/Race grading blocked by evidence gate/);
+ assert.throws(()=>gradeDataset([x]),/Race grading blocked by evidence gate/);
+});
 test('valid frozen full-field race produces call and finish metrics',()=>{
  assert.equal(validateRaceRecord(example),true);
  const x=gradeRace(example);
