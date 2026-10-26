@@ -190,6 +190,8 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 
 <script type="module">
 import {correctRaceField} from "./race-field-corrections.js";
+import {prepareRaceDayResearchFreeze} from "./pre-race-raceday-integration.js";
+import {sealResearchSnapshots,FREEZE_STORAGE_KEY} from "./pre-race-provider-freeze.js";
 import {fetchOtherTrackCombinedUpdate,otherTrackSource,OTHER_TRACK_FEEDS_READY} from "./other-track-updates.js?v=20261025-staged1";
 import {prepareCombinedOtherTrackUpdate} from "./other-track-update-plan.js?v=20261025-staged1";
 import {fetchNyraRaceUpdate,nyraRaceUpdateSource,applyNyraSnapshotToRace} from "./nyra-race-update.js?v=20261018-dual1";
@@ -350,6 +352,44 @@ document.getElementById('freezeAllModels').onclick=()=>{
   status.textContent='Research snapshot exported: '+rows.length+' races at '+now.toLocaleTimeString()+'. Save the downloaded JSON. Browser clock is not independently verified.';
  }catch(e){status.textContent='Freeze failed: '+e.message+'; no completed snapshot.';}
  finally{race=original;for(const [id,html]of saved)document.getElementById(id).innerHTML=html;renderDashboard();}
+};
+// Strict structured recorder is separate from the legacy browser-clock research export.
+// It never claims independent timestamp certification or betting authorization.
+const structuredRecorder=document.createElement('div');
+structuredRecorder.id='structuredRecorder';
+structuredRecorder.className='note small';
+structuredRecorder.style.marginTop='12px';
+structuredRecorder.innerHTML='<b>Verified race recorder (research only)</b><p class="muted">Select the current race, confirm official field/scratches and surface, and enter an official post-time reference. The original PDF SHA-256 must be present. The resulting file is local-only until independently anchored.</p><div class="grid"><label class="span6">Official post time (with timezone, e.g. 2026-10-26T16:00:00-04:00)<input id="recorderPost" type="text" placeholder="YYYY-MM-DDTHH:MM:SS-04:00"></label><label class="span6">Official post-time HTTPS reference<input id="recorderPostUrl" type="url" placeholder="https://..."></label><label class="span6"><input id="recorderFieldVerified" type="checkbox" style="width:auto"> I verified runners and scratches against official entries</label><label class="span6"><input id="recorderSurfaceVerified" type="checkbox" style="width:auto"> I verified the race surface</label></div><button class="secondary" id="recorderFreezeRace" type="button">Freeze current race (structured research)</button><div id="recorderFreezeStatus" role="status" class="small muted" style="margin-top:8px">Not frozen. Independent server timestamp not established.</div>';
+document.getElementById('freezeAllModels').closest('.card').append(structuredRecorder);
+document.getElementById('recorderFreezeRace').onclick=async()=>{
+ const status=document.getElementById('recorderFreezeStatus'),button=document.getElementById('recorderFreezeRace');
+ button.disabled=true;
+ try{
+  const provider=cardProvider(activeCard);
+  const card=providerCards[provider]||activeCard;
+  if(activeCard.id===sampleCard.id)throw Error('Demonstration card cannot be frozen.');
+  const source=providerRace(provider).race;
+  if(!source)throw Error('Matching provider race unavailable.');
+  const now=Date.now();
+  const existing=JSON.parse(localStorage.getItem(FREEZE_STORAGE_KEY)||'[]');
+  if(!Array.isArray(existing))throw Error('Invalid stored recorder history.');
+  const scheduledPost=document.getElementById('recorderPost').value.trim();
+  const sourceUrl=document.getElementById('recorderPostUrl').value.trim();
+  const result=prepareRaceDayResearchFreeze({
+   card,race:source,existing,now,
+   fieldVerified:document.getElementById('recorderFieldVerified').checked,
+   surfaceVerified:document.getElementById('recorderSurfaceVerified').checked,
+   postTimeEvidence:{scheduledPost,sourceUrl,sourceType:'NYRA_OFFICIAL',verifiedByUser:true,observedAt:new Date(now).toISOString()}
+  });
+  if(result.errors.length)throw Error(result.errors.join(' | '));
+  const records=[...existing,result.record];
+  const exported=await sealResearchSnapshots(records);
+  localStorage.setItem(FREEZE_STORAGE_KEY,JSON.stringify(records));
+  const blob=new Blob([JSON.stringify(exported,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),link=document.createElement('a');
+  link.href=url;link.download='NYRA_STRUCTURED_RESEARCH_'+provider+'_'+source.date+'_R'+source.race+'.json';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  status.textContent='Saved research-only freeze for '+provider+' race '+source.race+'. JSON export downloaded. NOT independently timestamped; do not use as betting authorization.';
+ }catch(e){status.textContent='Structured freeze refused: '+e.message;}
+ finally{button.disabled=false;}
 };
 function providerRace(provider){if(provider===cardProvider(activeCard))return {race,reason:null};return pairedRace(providerCards,provider,race);}
 function morningLineProvider(){
