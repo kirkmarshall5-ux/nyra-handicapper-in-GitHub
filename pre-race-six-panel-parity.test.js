@@ -100,3 +100,23 @@ test('Finisher recorder matches actual Race Day PASS when baseline V4.4c passes'
  const normal=convertDisplayedModel('FINISHER',complete,field,'DRF',{baselineDecision:'RATEABLE'});
  assert.equal(normal.decision,'RATEABLE');
 });
+
+test('recorder excludes scratched and inactive also-eligible runners while preserving active identities',()=>{
+ const activeField=[{program:'1',horse:'Runner One'},{program:'13',horse:'Drawn In'}];
+ const result={model_id:'native-v44c',decision:'PASS',rankings:[
+  {n:'13',name:'Drawn In',score:72.125},
+  {n:'1',name:'Runner One',score:70.5}
+ ]};
+ const frozen=convertDisplayedModel('V44C',result,activeField,'BRISNET');
+ assert.deepEqual(frozen.rankings.map(h=>h.program),['13','1']);
+ assert.equal(frozen.decision,'PASS');
+ for(const invalid of [
+  {...result,rankings:[...result.rankings,{n:'14',name:'Inactive AE',score:65}]},
+  {...result,rankings:[...result.rankings,{n:'2',name:'Scratched',score:65}]}
+ ])assert.throws(()=>convertDisplayedModel('V44C',invalid,activeField,'BRISNET'),/differs from displayed eligible field/);
+});
+test('recorder refuses provider contamination when rankings come from other card',()=>{
+ const drfField=[{program:'3',horse:'DRF Runner'}];
+ const brisnetResult={model_id:'brisnet-v44c',decision:'PASS',rankings:[{n:'3',name:'Different Runner',score:80}]};
+ assert.throws(()=>convertDisplayedModel('V44C',brisnetResult,drfField,'DRF'),/differs from displayed eligible field/);
+});
