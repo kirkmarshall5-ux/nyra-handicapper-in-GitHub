@@ -13,7 +13,7 @@ const finite=v=>typeof v==='number'&&Number.isFinite(v);
 const avg=a=>a.length?a.reduce((s,v)=>s+v,0)/a.length:null;
 const maximum=a=>a.length?Math.max(...a):null;
 const category=d=>finite(d)?d>=8?'route':'sprint':null;
-const active=h=>h.odds!=='SCR'&&h.included_in_frozen_field!==false&&(!h.entry_status||h.entry_status==='REGULAR');
+export const active=h=>h.odds!=='SCR'&&((!h.entry_status||h.entry_status==='REGULAR')?h.included_in_frozen_field!==false:h.entry_status==='ALSO_ELIGIBLE'&&h.included_in_frozen_field===true);
 export function isBrisnetRace(r){return r?.ratings_provider==='BRISNET'||/^BRISNET_/.test(r?.source_format||'')||!!r?.horses?.length&&r.horses.every(h=>h.ratings?.provider==='BRISNET');}
 function validDate(d){return typeof d==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(d)&&Number.isFinite(Date.parse(d))&&new Date(d).toISOString().slice(0,10)===d;}
 function percent(v,a){if(!finite(v))return null;if(a.length<=1||new Set(a).size===1)return 50;return 100*(a.filter(x=>x<v).length+.5*(a.filter(x=>x===v).length-1))/(a.length-1);}
