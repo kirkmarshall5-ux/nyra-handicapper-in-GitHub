@@ -5,7 +5,7 @@ import {passRaceDisplay} from './pass-race-display.js';
 import {rankContenders} from './contender-rankings.js';
 import {rankFinishers} from './finisher-inputs.js';
 import {cardProvider} from './dual-pp-cards.js';
-const eligible=h=>h.n&&h.odds!=='SCR'&&h.included_in_frozen_field!==false&&(!h.entry_status||h.entry_status==='REGULAR');
+export const eligible=h=>Boolean(h.n)&&h.odds!=='SCR'&&((!h.entry_status||h.entry_status==='REGULAR')?h.included_in_frozen_field!==false:h.entry_status==='ALSO_ELIGIBLE'&&h.included_in_frozen_field===true);
 export function convertDisplayedModel(family,result,field,provider,{baselineDecision=null}={}){
  if(!result?.model_id||!Array.isArray(result.rankings))throw Error(family+' model unavailable');
  const status=family==='FINISHER'?(result.status==='HOLD'?'HOLD':provider==='BRISNET'||baselineDecision==='PASS'||result.status!=='COMPLETE_FIELD'?'PASS':'RATEABLE'):result.decision;
