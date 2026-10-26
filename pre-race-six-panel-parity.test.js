@@ -90,3 +90,13 @@ test('six panels survive freeze, seal and export verification without ranking or
  assert.equal(checked.independentlyTimestamped,false);
  assert.deepEqual(exported.records,records);
 });
+
+test('Finisher recorder matches actual Race Day PASS when baseline V4.4c passes',()=>{
+ const complete={model_id:'finisher',status:'COMPLETE_FIELD',rankings:structuredClone(rows)};
+ const frozen=convertDisplayedModel('FINISHER',complete,field,'DRF',{baselineDecision:'PASS'});
+ assert.equal(frozen.decision,'PASS');
+ assert.equal(frozen.fullFieldRanked,false);
+ assert.deepEqual(frozen.rankings,[{program:'2',horse:'Beta',score:87},{program:'1',horse:'Alpha',score:80}]);
+ const normal=convertDisplayedModel('FINISHER',complete,field,'DRF',{baselineDecision:'RATEABLE'});
+ assert.equal(normal.decision,'RATEABLE');
+});
