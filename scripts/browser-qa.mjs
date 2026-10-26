@@ -323,6 +323,29 @@ for(const profile of profiles){
     assert.ok((await first.locator('td').first().innerText()).includes(await gridFirst.locator('.horse').innerText()));
     assert.match(await page.locator('#gridModelStatus').innerText(),new RegExp(provider==='BRISNET'?'Brisnet Contender':'DRF Contender'));
    };
+   // Compare structured recorder output against the actual rendered six-panel rows.
+   // This is an end-to-end browser fixture gate, NOT certification on original PDF bytes.
+   const panelParity=await page.evaluate(async()=>{
+    const {readProviderCards}=await import('./dual-pp-cards.js');
+    const {displayedProviderModels}=await import('./pre-race-provider-adapter.js');
+    const cards=await readProviderCards(),errors=[];
+    const ids={BRISNET:['brisTopContenders','brisFinisherCandidates','brisContenderCandidates'],DRF:['topContenders','finisherCandidates','contenderCandidates']};
+    for(const provider of ['BRISNET','DRF']){
+     const card=cards[provider],race=card.races[1],adapted=displayedProviderModels(card,race);
+     for(let i=0;i<3;i++){
+      const panel=document.getElementById(ids[provider][i]);
+      const visibleRows=[...panel.querySelectorAll('tbody tr')].filter(row=>!row.closest('details')||row.closest('details').open);
+      const expected=adapted.models[i].rankings.slice(0,visibleRows.length);
+      if(visibleRows.length!==Math.min(4,adapted.models[i].rankings.length))errors.push(provider+' '+ids[provider][i]+' row count mismatch');
+      for(let j=0;j<expected.length;j++){
+       const cell=visibleRows[j]?.querySelector('td');
+       if(!cell?.textContent.includes('#'+expected[j].program+' '+expected[j].horse))errors.push(provider+' '+ids[provider][i]+' rank '+(j+1)+' horse mismatch');
+      }
+     }
+    }
+    return errors;
+   });
+   assert.deepEqual(panelParity,[],'Recorder rankings must match rendered panel order and horse identities');
    await checkContenderGrid('DRF');
    for(const id of ['contenderCandidates','brisContenderCandidates']){const panel=page.locator('#'+id);assert.equal(await panel.locator('table').first().locator('th:visible').count(),2);assert.equal(await panel.locator('tbody td:nth-child(3)').first().isVisible(),false);assert.equal(await panel.locator('tbody td:nth-child(4)').first().isVisible(),false);}
    const brBox=await page.locator('#brisContenderCandidates').boundingBox(),drBox=await page.locator('#contenderCandidates').boundingBox(),mlBox=await page.locator('#topMl').boundingBox();assert.ok(mlBox.x<brBox.x&&Math.abs(mlBox.y-brBox.y)<2&&drBox.y>mlBox.y,'Two-row layout: Morning Line / Brisnet above DRF Contender / Finisher');assert.equal(await page.locator('#topMl table.candidate-table tbody tr').count(),3);assert.match(await page.locator('#topMl').innerText(),/M.L Odds/);assert.equal(await page.locator('#topMl tbody tr').first().locator('td').last().innerText(),'DRF');
