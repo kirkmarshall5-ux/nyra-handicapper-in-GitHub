@@ -336,7 +336,7 @@ for(const profile of profiles){
       const panel=document.getElementById(ids[provider][i]);
       const visibleRows=[...panel.querySelectorAll('tbody tr')].filter(row=>!row.closest('details')||row.closest('details').open);
       const expected=adapted.models[i].rankings.slice(0,visibleRows.length);
-      if(visibleRows.length!==Math.min(4,adapted.models[i].rankings.length))errors.push(provider+' '+ids[provider][i]+' row count mismatch');
+      if(visibleRows.length!==Math.min(4,adapted.models[i].rankings.length))errors.push(provider+' '+ids[provider][i]+' row count mismatch (rendered '+visibleRows.length+', recorder '+adapted.models[i].rankings.length+', decision '+adapted.models[i].decision+')');
       for(let j=0;j<expected.length;j++){
        const cell=visibleRows[j]?.querySelector('td');
        if(!cell?.textContent.includes('#'+expected[j].program+' '+expected[j].horse))errors.push(provider+' '+ids[provider][i]+' rank '+(j+1)+' horse mismatch');
