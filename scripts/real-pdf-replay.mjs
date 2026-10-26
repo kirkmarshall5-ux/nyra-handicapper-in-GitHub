@@ -16,7 +16,7 @@ for(const [provider,file] of Object.entries(paths)){
  assert.equal(createHash('sha256').update(bytes).digest('hex'),expected.sha256,provider+' original PDF SHA-256 mismatch');
 }
 const browser=await chromium.launch({headless:true});
-const report={manifest:'belmont-2026-10-17-real-pdf-manifest.json',date:manifest.date,verifiedOriginalBytes:true,providerResults:{},errors:[],certified:false};
+const report={manifest:'belmont-2026-10-17-real-pdf-manifest.json',date:manifest.date,verifiedOriginalBytes:true,providerResults:{},errors:[],parserReplayPassed:false,officialFieldVerified:false,certified:false};
 try{
  const page=await browser.newPage({viewport:{width:1365,height:850}});
  const url=process.env.QA_URL||'http://127.0.0.1:8765/';
@@ -66,14 +66,37 @@ try{
    }
   }
   assert.equal(entries,manifest.expectedEntries,provider+' total entry count');
+  // Compare actual Race Day boxes to the research recorder adapter.
+  await page.locator('[data-tab="raceday"]').click();
+  const parity=await page.evaluate(async p=>{
+   const {readProviderCards}=await import('./dual-pp-cards.js');
+   const {displayedProviderModels}=await import('./pre-race-provider-adapter.js');
+   const card=(await readProviderCards())[p],race=card.races[1],adapted=displayedProviderModels(card,race);
+   const ids=p==='DRF'?['topContenders','finisherCandidates','contenderCandidates']:['brisTopContenders','brisFinisherCandidates','brisContenderCandidates'];
+   const errors=[];
+   for(let i=0;i<ids.length;i++){
+    const panel=document.getElementById(ids[i]);
+    const rows=[...panel.querySelectorAll('tbody tr')].filter(row=>!row.closest('details')||row.closest('details').open);
+    const expected=adapted.models[i].rankings.slice(0,4);
+    if(rows.length!==expected.length)errors.push(ids[i]+' displayed '+rows.length+' expected '+expected.length);
+    for(let j=0;j<expected.length;j++){
+     const cell=rows[j]?.querySelector('td');
+     if(!cell?.textContent.includes('#'+expected[j].program+' '+expected[j].horse))errors.push(ids[i]+' row '+(j+1)+' mismatch');
+    }
+   }
+   return errors;
+  },provider);
+  assert.deepEqual(parity,[],provider+' actual Race Day panel mismatch');
   report.providerResults[provider]={...result,entryCount:entries};
   console.log('PASS',provider,'original PDF upload, SHA-256, 11 races, 85 entries, model/coverage validation');
  }
- report.certified=true;
+ report.parserReplayPassed=true;
+ // Archival PDF upload cannot establish official scratches, drawn-in AEs or post time.
+ report.certified=false;
 }catch(e){report.errors.push(String(e));console.error('REAL PDF REPLAY FAILED:',String(e));}
 finally{
  await browser.close();
  mkdirSync('real-pdf-replay-artifacts',{recursive:true});
  writeFileSync('real-pdf-replay-artifacts/belmont-2026-10-17-replay.json',JSON.stringify(report,null,2));
 }
-if(!report.certified)process.exitCode=1;
+if(!report.parserReplayPassed)process.exitCode=1;
