@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {convertDisplayedModel,unratedRunnerEvidence,runnerRatingCoverage} from './pre-race-provider-adapter.js';
+import {convertDisplayedModel,unratedRunnerEvidence,runnerRatingCoverage,eligible} from './pre-race-provider-adapter.js';
+import {active as brisnetActive} from './brisnet-models.js';
 import {freezeResearchSnapshot,sealResearchSnapshots,verifyResearchExport} from './pre-race-provider-freeze.js';
 
 const field=[{program:'1',horse:'Alpha'},{program:'2',horse:'Beta'}];
@@ -170,4 +171,20 @@ test('five rated runners with only four shown are not misclassified as unrated',
  const mislabeled=structuredClone(snapshot);
  mislabeled.unratedRunners.push({program:'5',horse:'Source Runner 5',reasons:['incorrectly labeled']});
  assert.match(freezeResearchSnapshot({snapshot:mislabeled,now}).errors.join(' '),/conflicts/);
+});
+
+
+test('AE draw-in requires explicit inclusion; scratches always win across both provider filters',()=>{
+ const cases=[
+  [{n:'13',name:'Cocoa Mills',entry_status:'ALSO_ELIGIBLE',included_in_frozen_field:true},true],
+  [{n:'13',name:'Cocoa Mills',entry_status:'ALSO_ELIGIBLE'},false],
+  [{n:'14',name:'Inactive AE',entry_status:'ALSO_ELIGIBLE',included_in_frozen_field:false},false],
+  [{n:'1',name:'Scratched',entry_status:'REGULAR',odds:'SCR',included_in_frozen_field:true},false],
+  [{n:'13',name:'Scratched AE',entry_status:'ALSO_ELIGIBLE',odds:'SCR',included_in_frozen_field:true},false],
+  [{n:'2',name:'Regular',entry_status:'REGULAR'},true]
+ ];
+ for(const [horse,expected] of cases){
+  assert.equal(eligible(horse),expected,horse.name+' recorder');
+  assert.equal(brisnetActive(horse),expected,horse.name+' Brisnet model');
+ }
 });
