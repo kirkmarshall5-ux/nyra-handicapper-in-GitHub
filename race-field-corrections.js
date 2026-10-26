@@ -12,7 +12,7 @@ export function correctRaceField(cards,selected,raceNumber,program,action,now=ne
   if(!horse)throw Error('Matching PP runner identity differs; no field changes saved');
   if(action==='running'){
    if(horse.odds==='SCR')throw Error('Previously scratched runner needs separate verification; no field changes saved');
-   if(!['AE','REGULAR'].includes(horse.entry_status||'REGULAR'))throw Error('Only an also-eligible can be confirmed running');
+   if(!['AE','ALSO_ELIGIBLE','REGULAR'].includes(horse.entry_status||'REGULAR'))throw Error('Only an also-eligible can be confirmed running');
    horse.original_entry_status??=horse.entry_status||'REGULAR';horse.entry_status='REGULAR';horse.included_in_frozen_field=true;
   }else{horse.odds='SCR';horse.scratch_evidence={status:'USER_CONFIRMED_SCRATCH',observedAt:now};}
   horse.field_status_evidence={status:'USER_CONFIRMED',action,observedAt:now,program:String(program),name:horse.name};
