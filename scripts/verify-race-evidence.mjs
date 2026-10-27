@@ -12,7 +12,7 @@ else if(!process.env.NYRA_TRUST_STORE){fail('TRUST_STORE_NOT_CONFIGURED','An ind
 else {
  try{
   const storePath=resolve(process.env.NYRA_TRUST_STORE);
-  if(paths.map(resolve).includes(storePath))throw Error('Trust store cannot be one of the evidence artifacts');
+  if(paths.map(p=>resolve(p)).includes(storePath))throw Error('Trust store cannot be one of the evidence artifacts');
   const readJson=p=>JSON.parse(readFileSync(p,'utf8'));
   const [record,evidence]=paths.slice(0,2).map(readJson);
   const artifacts={originalPdfReplay:readFileSync(paths[2]),officialChart:readFileSync(paths[3]),independentFreeze:readFileSync(paths[4])};
