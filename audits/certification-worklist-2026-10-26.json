@@ -1,0 +1,52 @@
+{
+  "schema": "nyra-certification-worklist-v1",
+  "review_date": "2026-10-26",
+  "status": "NOT_CERTIFIED",
+  "model_scoring_changes": false,
+  "completed_engineering": [
+    "PR 170: grade evidence bound to race, prediction artifact and runner field",
+    "PR 171: caller boolean verification no longer sufficient for real race grading",
+    "PR 172: Ed25519 artifact signatures and SHA-256 verification with independently configured trust roots",
+    "PR 173: offline operator verifier and pre-scheduled-post freeze check",
+    "PR 174: development and holdout evidence gating (pending merge at report creation)",
+    "Certification readiness fail-closed audit and tests (this PR)"
+  ],
+  "belmont_oct_25_r9": {
+    "original_pdf_sha256": "13930fbc15ee9263777a1a20d16051f8cd6196f8ece396bca38b62fde409705a",
+    "pdf_pages": 24,
+    "original_pdf_text_page_23_ae_entries": [
+      "13 Cocoa Mills",
+      "14 It's Nancytime Now"
+    ],
+    "production_pdfjs_replay_executed": false,
+    "archived_pre_race_ranked_starters": 11,
+    "official_starters": 12,
+    "missing_pre_race_starter": "13 Cocoa Mills",
+    "official_nyra_chart_independently_archived": false,
+    "independent_pre_post_time_freeze_anchor": false,
+    "prospectively_gradeable": false
+  },
+  "remaining_external_requirements": [
+    {
+      "id": "E1",
+      "item": "Independently controlled, vetted PDF replay issuer signing genuine production importer output",
+      "state": "BLOCKED_NO_ISSUER_OR_SIGNED_ARTIFACT"
+    },
+    {
+      "id": "E2",
+      "item": "Official NYRA chart fetched, archived, independently reconciled and attested",
+      "state": "BLOCKED_NO_AUTHENTICATED_CHART_ATTESTATION"
+    },
+    {
+      "id": "E3",
+      "item": "Third-party timestamp authority anchoring complete immutable freeze before scheduled post",
+      "state": "BLOCKED_NO_HISTORICAL_ANCHOR"
+    },
+    {
+      "id": "E4",
+      "item": "Prospective complete-field pre-race freeze for new races with matching chart and source replay",
+      "state": "BLOCKED_HISTORICAL_R9_INCOMPLETE"
+    }
+  ],
+  "noncertification": "A signature verifier cannot invent independently issued signatures or retroactively create a pre-race anchor. Historical R9 may be used for parser diagnostics only, not prospective win-rate/ROI certification."
+}
