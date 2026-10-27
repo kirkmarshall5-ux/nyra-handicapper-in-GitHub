@@ -35,7 +35,7 @@ export function validateRaceRecord(r){
  return true;
 }
 const round=x=>Math.round(x*10000)/10000;
-export function gradeRace(r){
+export function gradeRace(r,{verificationContext}={}){
  validateRaceRecord(r);
  const evidence=r.gradeabilityEvidence;
  if(evidence?.raceId!==r.raceId||evidence?.predictionArtifactId!==r.predictionArtifactId)fail('Race evidence identity does not match frozen prediction artifact');
@@ -44,7 +44,7 @@ export function gradeRace(r){
  if(actualPrograms.length!==evidencePrograms.length||actualPrograms.some(x=>!evidencePrograms.includes(x)))fail('Race evidence field does not match graded runners');
  const gate=assessRaceGradeability(evidence);
  if(!gate.gradeable)fail('Race grading blocked by evidence gate: '+gate.reasons.join(','));
- const provenance=inspectEvidenceProvenance(evidence,r);
+ const provenance=inspectEvidenceProvenance(evidence,r,verificationContext);
  if(!provenance.verified&&evidence?.testOnlySynthetic!==true)fail('Race grading blocked by unverified provenance: '+provenance.reasons.join(','));
  const n=r.runners.length,perCall={};
  for(const call of r.calls){
@@ -62,7 +62,7 @@ export function gradeRace(r){
  const logLoss=hasProb?-Math.log(Math.max(winner.winProbability,1e-12)):null;
  return {raceId:r.raceId,datasetSplit:r.datasetSplit,fieldSize:n,modelVersion:r.modelVersion,perCall,finishTop3Hits:top3Hits,finishTop3Count:actualTop3.length,finishWinnerCorrect:predictedWinner.program===winner.program,winBrier:hasProb?round(brier):null,winLogLoss:hasProb?round(logLoss):null};
 }
-export function gradeDataset(records,{split='holdout'}={}){
+export function gradeDataset(records,{split='holdout',verificationContexts={}}={}){
  if(!Array.isArray(records))fail('Records array required');
  const ids=new Set(),artifacts=new Set(),graded=[];
  for(const r of records){
@@ -73,7 +73,7 @@ export function gradeDataset(records,{split='holdout'}={}){
   ids.add(r.raceId);
   if(artifacts.has(r.predictionArtifactId))fail('Prediction artifact reused '+r.predictionArtifactId);
   artifacts.add(r.predictionArtifactId);
-  if(r.datasetSplit===split)graded.push(gradeRace(r));
+  if(r.datasetSplit===split)graded.push(gradeRace(r,{verificationContext:verificationContexts[r.raceId]}));
  }
  const calls=[...new Set(graded.flatMap(r=>Object.keys(r.perCall)))],perCall={};
  for(const call of calls){
