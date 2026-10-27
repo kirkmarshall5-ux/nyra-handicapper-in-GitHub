@@ -46,6 +46,7 @@ export function gradeRace(r,{verificationContext}={}){
  if(!gate.gradeable)fail('Race grading blocked by evidence gate: '+gate.reasons.join(','));
  const provenance=inspectEvidenceProvenance(evidence,r,verificationContext);
  if(!provenance.verified&&evidence?.testOnlySynthetic!==true)fail('Race grading blocked by unverified provenance: '+provenance.reasons.join(','));
+ if(evidence?.testOnlySynthetic===true&&verificationContext)fail('Synthetic research evidence cannot use a production verification context');
  const n=r.runners.length,perCall={};
  for(const call of r.calls){
   const errors=r.runners.map(x=>Math.abs(x.predicted[call]-x.actual[call]));
@@ -73,7 +74,12 @@ export function gradeDataset(records,{split='holdout',verificationContexts={}}={
   ids.add(r.raceId);
   if(artifacts.has(r.predictionArtifactId))fail('Prediction artifact reused '+r.predictionArtifactId);
   artifacts.add(r.predictionArtifactId);
-  if(r.datasetSplit===split)graded.push(gradeRace(r,{verificationContext:verificationContexts[r.raceId]}));
+  // All submitted races must meet the same evidence gate, even when not in the selected split.
+  const context=verificationContexts[r.raceId];
+  const provenance=inspectEvidenceProvenance(r.gradeabilityEvidence,r,context);
+  if(!provenance.verified&&r.gradeabilityEvidence?.testOnlySynthetic!==true)fail('Dataset race blocked by unverified provenance: '+provenance.reasons.join(','));
+  if(r.gradeabilityEvidence?.testOnlySynthetic===true&&context)fail('Synthetic research evidence cannot use a production verification context');
+  if(r.datasetSplit===split)graded.push(gradeRace(r,{verificationContext:context}));
  }
  const calls=[...new Set(graded.flatMap(r=>Object.keys(r.perCall)))],perCall={};
  for(const call of calls){
