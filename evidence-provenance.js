@@ -1,10 +1,11 @@
+import {verifyTrustedAttestations} from './trusted-evidence-verifier.js';
 // Source-evidence contract. Metadata is not authentication; caller flags never certify races.
 // Explicit test-only fixtures can exercise calculations but must never be treated as real evidence.
 const sha=x=>typeof x==='string'&&/^[a-f0-9]{64}$/i.test(x);
 const https=x=>typeof x==='string'&&/^https:\/\/[^\s/]+(?:\/[^\s]*)?$/i.test(x);
 const time=x=>typeof x==='string'&&Number.isFinite(Date.parse(x))&&/(?:Z|[+-]\d\d:\d\d)$/.test(x);
 const nonempty=x=>typeof x==='string'&&x.trim().length>0;
-export function inspectEvidenceProvenance(evidence,record){
+export function inspectEvidenceProvenance(evidence,record,verificationContext){
  const reasons=[];
  if(!evidence||typeof evidence!=='object')return {verified:false,reasons:['EVIDENCE_PROVENANCE_MISSING']};
  if(evidence.testOnlySynthetic===true)return {verified:false,reasons:['SYNTHETIC_EVIDENCE_NOT_CERTIFIABLE']};
@@ -18,6 +19,10 @@ export function inspectEvidenceProvenance(evidence,record){
  if(time(freeze?.anchoredAt)&&time(record?.chartPublishedAt)&&Date.parse(freeze.anchoredAt)>=Date.parse(record.chartPublishedAt))reasons.push('FREEZE_ANCHOR_NOT_BEFORE_CHART');
  // A valid-looking digest or HTTPS URL does not prove that a third party authenticated it.
  // Until an independent trusted verifier is integrated, refuse certification by default.
- reasons.push('TRUSTED_EXTERNAL_VERIFIER_NOT_CONFIGURED');
- return {verified:false,reasons};
+ if(!verificationContext)reasons.push('TRUSTED_EXTERNAL_VERIFIER_NOT_CONFIGURED');
+ else {
+  const att=verifyTrustedAttestations({record,evidence,...verificationContext});
+  reasons.push(...att.reasons);
+ }
+ return {verified:reasons.length===0,reasons};
 }
