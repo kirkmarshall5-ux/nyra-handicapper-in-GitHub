@@ -1,6 +1,7 @@
 // Research-only race-flow validation. Never modifies V4.4c rankings, PASS or wagers.
 // Each record must be a frozen pre-race prediction paired with an independent official chart.
 import {assessRaceGradeability} from './race-gradeability-evidence.js';
+import {inspectEvidenceProvenance} from './evidence-provenance.js';
 const isISO=x=>typeof x==='string'&&Number.isFinite(Date.parse(x))&&/^\d{4}-\d\d-\d\dT/.test(x);
 const uniq=a=>new Set(a).size===a.length;
 const integer=x=>Number.isInteger(x)&&x>0;
@@ -43,6 +44,8 @@ export function gradeRace(r){
  if(actualPrograms.length!==evidencePrograms.length||actualPrograms.some(x=>!evidencePrograms.includes(x)))fail('Race evidence field does not match graded runners');
  const gate=assessRaceGradeability(evidence);
  if(!gate.gradeable)fail('Race grading blocked by evidence gate: '+gate.reasons.join(','));
+ const provenance=inspectEvidenceProvenance(evidence,r);
+ if(!provenance.verified&&evidence?.testOnlySynthetic!==true)fail('Race grading blocked by unverified provenance: '+provenance.reasons.join(','));
  const n=r.runners.length,perCall={};
  for(const call of r.calls){
   const errors=r.runners.map(x=>Math.abs(x.predicted[call]-x.actual[call]));
