@@ -8,7 +8,8 @@ permissions:
   actions: read
 jobs:
   live-browser-smoke:
-    runs-on: ubuntu-latest
+    # Playwright 1.56.1 does not install Chromium on ubuntu26.04; keep CI on supported runner.
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
       - name: Wait for matching GitHub Pages deployment
