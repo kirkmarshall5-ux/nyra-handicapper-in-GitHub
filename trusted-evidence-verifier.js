@@ -25,7 +25,7 @@ export function verifyTrustedAttestations({record,evidence,artifacts,trustStore}
   if(att.algorithm!=='ed25519'||!utc(att.signedAt)||typeof att.signatureBase64!=='string'){reasons.push(key.toUpperCase()+'_INVALID_SIGNATURE_METADATA');continue}
   if(att.raceId!==raceId||att.kind!==kind||att.artifactSha256!==claim[hashField]||att.predictionArtifactId!==record.predictionArtifactId){reasons.push(key.toUpperCase()+'_ATTESTATION_IDENTITY_MISMATCH');continue}
   if(key==='independentFreeze'){
-   if(!utc(claim.anchoredAt)||Date.parse(claim.anchoredAt)<Date.parse(record.predictionFrozenAt)||Date.parse(claim.anchoredAt)>=Date.parse(record.chartPublishedAt)||att.signedAt!==claim.anchoredAt){reasons.push('FREEZE_ANCHOR_TIME_INVALID');continue}
+   if(!utc(record.scheduledPost)||!utc(claim.anchoredAt)||Date.parse(claim.anchoredAt)<Date.parse(record.predictionFrozenAt)||Date.parse(claim.anchoredAt)>=Date.parse(record.scheduledPost)||Date.parse(claim.anchoredAt)>=Date.parse(record.chartPublishedAt)||att.signedAt!==claim.anchoredAt){reasons.push('FREEZE_ANCHOR_TIME_INVALID');continue}
   }
   const payload={schema:'nyra-trusted-attestation-v1',keyId:att.keyId,kind:att.kind,raceId:att.raceId,predictionArtifactId:att.predictionArtifactId,artifactSha256:att.artifactSha256,signedAt:att.signedAt};
   try{
