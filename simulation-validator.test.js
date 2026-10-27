@@ -9,7 +9,7 @@ const example={
  {program:'3',name:'C',predicted:{quarter:3,half:3,stretch:3,finish:3},actual:{quarter:3,half:3,stretch:3,finish:2},winProbability:0.2}
  ]};
 // Explicit synthetic verification fixture: tests code paths, never certifies real race evidence.
-example.gradeabilityEvidence={raceId:example.raceId,predictionArtifactId:example.predictionArtifactId,field:{entries:example.runners.map(x=>({program:x.program,status:'STARTER'}))},rankedPrograms:example.runners.map(x=>x.program),originalPdfReplayVerified:true,officialChartFinishVerified:true,independentFreezeTimeVerified:true};
+example.gradeabilityEvidence={testOnlySynthetic:true,raceId:example.raceId,predictionArtifactId:example.predictionArtifactId,field:{entries:example.runners.map(x=>({program:x.program,status:'STARTER'}))},rankedPrograms:example.runners.map(x=>x.program),originalPdfReplayVerified:true,officialChartFinishVerified:true,independentFreezeTimeVerified:true};
 const clone=()=>structuredClone(example);
 test('research grading refuses missing independent evidence even with well-formed synthetic positions',()=>{
  const x=clone();delete x.gradeabilityEvidence;
@@ -79,4 +79,12 @@ test('audit: reject detached evidence from a different race, artifact, or runner
  const a=clone();a.gradeabilityEvidence.raceId='OTHER-RACE';assert.throws(()=>gradeRace(a),/evidence identity/);
  const b=clone();b.gradeabilityEvidence.predictionArtifactId='sha256:other';assert.throws(()=>gradeRace(b),/evidence identity/);
  const c=clone();c.gradeabilityEvidence.rankedPrograms=['1','2','4'];assert.throws(()=>gradeRace(c),/evidence field/);
+});
+
+test('real race grading rejects bare caller booleans and unauthenticated provenance',()=>{
+ const a=clone();delete a.gradeabilityEvidence.testOnlySynthetic;
+ assert.throws(()=>gradeRace(a),/unverified provenance/);
+ const b=clone();delete b.gradeabilityEvidence.testOnlySynthetic;
+ b.gradeabilityEvidence.provenance={originalPdfReplay:{verified:true},officialChart:{verified:true},independentFreeze:{verified:true}};
+ assert.throws(()=>gradeDataset([b]),/unverified provenance/);
 });
