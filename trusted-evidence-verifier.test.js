@@ -7,7 +7,7 @@ const payload=o=>JSON.stringify(o,Object.keys(o).sort());
 test('trusted signed artifact evidence succeeds; tampering, untrusted signers and missing artifact fail',()=>{
  const raceId='TEST-R1',predictionArtifactId='sha256:test',keys={};
  for(const kind of ['pdf-replay','official-chart','external-freeze-anchor'])keys[kind]=generateKeyPairSync('ed25519');
- const record={raceId,predictionArtifactId,predictionFrozenAt:'2026-10-25T12:00:00Z',chartPublishedAt:'2026-10-25T17:00:00Z'};
+ const record={raceId,predictionArtifactId,predictionFrozenAt:'2026-10-25T12:00:00Z',scheduledPost:'2026-10-25T16:00:00Z',chartPublishedAt:'2026-10-25T17:00:00Z'};
  const artifacts={originalPdfReplay:Buffer.from('original replay'),officialChart:Buffer.from('official chart'),independentFreeze:Buffer.from('anchored snapshot')};
  const kinds={originalPdfReplay:'pdf-replay',officialChart:'official-chart',independentFreeze:'external-freeze-anchor'};
  const hashes={originalPdfReplay:'replayArtifactSha256',officialChart:'chartArtifactSha256',independentFreeze:'snapshotSha256'};
@@ -21,6 +21,7 @@ test('trusted signed artifact evidence succeeds; tampering, untrusted signers an
  }
  const evidence={provenance,attestations};
  assert.equal(verifyTrustedAttestations({record,evidence,artifacts,trustStore}).verified,true);
+ assert.ok(verifyTrustedAttestations({record:{...record,scheduledPost:'2026-10-25T12:00:30Z'},evidence,artifacts,trustStore}).reasons.includes('FREEZE_ANCHOR_TIME_INVALID'));
  assert.ok(verifyTrustedAttestations({record,evidence,artifacts:{...artifacts,officialChart:Buffer.from('changed')},trustStore}).reasons.includes('OFFICIALCHART_ARTIFACT_HASH_MISMATCH'));
  assert.ok(verifyTrustedAttestations({record,evidence,artifacts,trustStore:{}}).reasons.includes('ORIGINALPDFREPLAY_UNTRUSTED_SIGNER'));
  const forged=structuredClone(evidence);forged.attestations.independentFreeze.signatureBase64=Buffer.alloc(64).toString('base64');
