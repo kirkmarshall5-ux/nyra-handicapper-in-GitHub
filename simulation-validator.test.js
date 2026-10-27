@@ -88,3 +88,14 @@ test('real race grading rejects bare caller booleans and unauthenticated provena
  b.gradeabilityEvidence.provenance={originalPdfReplay:{verified:true},officialChart:{verified:true},independentFreeze:{verified:true}};
  assert.throws(()=>gradeDataset([b]),/unverified provenance/);
 });
+
+test('dataset rejects unauthenticated development records even when grading holdout only',()=>{
+ const dev=clone();dev.raceId='UNVERIFIED-DEV';dev.predictionArtifactId='sha256:unverified-dev';dev.datasetSplit='development';
+ dev.gradeabilityEvidence.raceId=dev.raceId;dev.gradeabilityEvidence.predictionArtifactId=dev.predictionArtifactId;
+ delete dev.gradeabilityEvidence.testOnlySynthetic;
+ assert.throws(()=>gradeDataset([example,dev]),/unverified provenance/);
+});
+test('synthetic fixture cannot be passed off as independently verified production evidence',()=>{
+ assert.throws(()=>gradeRace(clone(),{verificationContext:{artifacts:{},trustStore:{}}}),/Synthetic research evidence cannot use a production verification context/);
+ assert.throws(()=>gradeDataset([clone()],{verificationContexts:{[example.raceId]:{artifacts:{},trustStore:{}}}}),/Synthetic research evidence cannot use a production verification context/);
+});
