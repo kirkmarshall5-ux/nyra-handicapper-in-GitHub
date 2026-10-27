@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-10-26",
+  "scope": "Reviewed current main index.html, simulation-validator.js, race-gradeability-evidence.js, pre-race-provider-freeze.js and associated tests; not a proof that every historical file or every repository module was enumerated.",
+  "findings": [
+    {
+      "path": "simulation-validator.js:gradeRace/gradeDataset",
+      "status": "ENFORCED",
+      "evidence": "PR #169 merged; both gradeRace and gradeDataset reject missing or failing assessRaceGradeability before metrics."
+    },
+    {
+      "path": "index.html:freezeAllModels",
+      "status": "RESEARCH_ONLY_NOT_CERTIFIED",
+      "evidence": "Legacy export uses browser-device-unverified clock and warns explicitly; no official chart, certified performance, or ROI calculation in inspected handler."
+    },
+    {
+      "path": "index.html:recorderFreezeRace",
+      "status": "RESEARCH_ONLY_NOT_CERTIFIED",
+      "evidence": "Structured freeze uses provider isolation and pre-post safeguards but local-only timestamps; UI explicitly says NOT independently timestamped."
+    },
+    {
+      "path": "index.html:exportBrisnetModelAudit",
+      "status": "RESEARCH_ONLY_NOT_CERTIFIED",
+      "evidence": "Read-only model input recomputation, not a historical freeze or performance report; warning explicitly notes current edits/scratches may differ."
+    },
+    {
+      "path": "index.html:trainer DRF situation ROI descriptions",
+      "status": "SOURCE_STATISTIC_NOT_MODEL_ROI",
+      "evidence": "Sample horse/trainer angle prose includes source trainer ROI figures; these are not generated model-performance ROI."
+    },
+    {
+      "path": "race-gradeability-evidence.js",
+      "status": "GAP",
+      "evidence": "Boolean evidence flags are accepted without independent source identifiers or cryptographic provenance. Callers can set all three to true; test fixtures deliberately do so. Gate is a fail-closed policy check, not itself proof of authenticity."
+    },
+    {
+      "path": "simulation-validator.js",
+      "status": "GAP",
+      "evidence": "gradeabilityEvidence.field.entries and rankedPrograms are caller-provided and are not independently cross-checked against r.runners, race identity, or freeze artifact. A valid-looking but mismatched evidence object could pass."
+    }
+  ],
+  "overall_status": "AUDIT_COMPLETED_WITH_REMAINING_HARDENING",
+  "prospective_certification": false,
+  "remaining_actions": [
+    "Bind evidence manifest to graded race ID, runner identities and prediction artifact ID; reject mismatch.",
+    "Require independently verifiable provenance records for PDF replay, official chart, and external timestamp rather than trusting booleans.",
+    "Inspect any additional or external performance report generators before declaring systemwide protection.",
+    "Execute production original-PDF replay and obtain official chart plus independent freeze evidence."
+  ],
+  "model_scoring_changed": false
+}

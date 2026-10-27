@@ -36,7 +36,12 @@ export function validateRaceRecord(r){
 const round=x=>Math.round(x*10000)/10000;
 export function gradeRace(r){
  validateRaceRecord(r);
- const gate=assessRaceGradeability(r.gradeabilityEvidence);
+ const evidence=r.gradeabilityEvidence;
+ if(evidence?.raceId!==r.raceId||evidence?.predictionArtifactId!==r.predictionArtifactId)fail('Race evidence identity does not match frozen prediction artifact');
+ const actualPrograms=r.runners.map(x=>String(x.program));
+ const evidencePrograms=(evidence?.rankedPrograms||[]).map(String);
+ if(actualPrograms.length!==evidencePrograms.length||actualPrograms.some(x=>!evidencePrograms.includes(x)))fail('Race evidence field does not match graded runners');
+ const gate=assessRaceGradeability(evidence);
  if(!gate.gradeable)fail('Race grading blocked by evidence gate: '+gate.reasons.join(','));
  const n=r.runners.length,perCall={};
  for(const call of r.calls){
