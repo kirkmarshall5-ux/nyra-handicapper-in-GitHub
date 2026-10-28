@@ -7,6 +7,15 @@ const race=(horses=Array.from({length:6},(_,i)=>horse(i+1)),extra={})=>({track:'
 const ranked=(r,order=[1,2,3,4,5,6])=>({model_id:'fixture',decision:'PASS',rankings:order.map(n=>r.horses.find(h=>+h.n===n)).filter(Boolean)});
 const input=(anchor=race())=>({anchor,sources:{DRF:{race:structuredClone(anchor)},BRISNET:{race:structuredClone(anchor)}},morningLineProvider:'DRF'});
 
+test('Brisnet-only dashboard includes ranked horses beyond the shortlist',()=>{
+ const anchor=race();const d=buildRaceDashboard({anchor,sources:{BRISNET:{race:structuredClone(anchor)}},morningLineProvider:'BRISNET'},(id,r)=>ranked(r));
+ assert.deepEqual(d.shortlist.map(h=>h.n),['1','2','3','4']);
+ assert.deepEqual(d.remaining.map(h=>h.n),['5','6']);
+ assert.equal(d.remaining[0].ranks.brisContender,5);
+ assert.equal(d.remaining[0].ranks.drfContender,null);
+ assert.match(dashboardHtml(d),/Remaining ranked horses \(2\)/);
+});
+
 test('retains full orders and separate ML; agreement never changes or blends model scores',()=>{
  const i=input(),before=structuredClone(i);
  const d=buildRaceDashboard(i,(id,r)=>ranked(r,id==='drfFinisher'?[6,5,4,3,2,1]:[1,2,3,4,5,6]));
