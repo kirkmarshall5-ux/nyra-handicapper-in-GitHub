@@ -510,6 +510,9 @@ for(const profile of profiles){
   }finally{await page.evaluate(async saved=>{const m=await import('./dual-pp-cards.js');await m.writeProviderCardsSession(saved.cards,saved.session?.state||{},saved.session?.selectedProvider);},saved);await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});}
  });
  await check('D-print-picks-pdf-current-card-and-refresh',async()=>{
+  // Earlier checks restore the demonstration card; install a distinct imported-card fixture.
+  await page.evaluate(async()=>{const c=await window.qaReadActive();c.id='qa-print-pdf';c.parser_version='DRF-positioned-v3';await window.qaSetActive(c);});
+  await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
   await page.locator('[data-tab="raceday"]').click();
   assert.equal(await page.locator('#printPicks').innerText(),'Print Picks');
   const order=await page.evaluate(()=>{const a=document.getElementById('updateOddsScratches'),b=document.getElementById('printPicks');return Boolean(a.compareDocumentPosition(b)&Node.DOCUMENT_POSITION_FOLLOWING);});assert.equal(order,true);
