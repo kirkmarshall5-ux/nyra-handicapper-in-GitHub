@@ -48,5 +48,16 @@
       "state": "BLOCKED_HISTORICAL_R9_INCOMPLETE"
     }
   ],
-  "noncertification": "A signature verifier cannot invent independently issued signatures or retroactively create a pre-race anchor. Historical R9 may be used for parser diagnostics only, not prospective win-rate/ROI certification."
+  "noncertification": "A signature verifier cannot invent independently issued signatures or retroactively create a pre-race anchor. Historical R9 may be used for parser diagnostics only, not prospective win-rate/ROI certification.",
+  "follow_up_2026_10_28": {
+    "report": "brisnet-contender-validation-2026-10-28.json",
+    "PR_174_and_175": "MERGED",
+    "oct25_r9_production_pdfjs_replay_executed": true,
+    "oct25_r9_production_pdfjs_replay_observed_at": "2026-10-28T13:07:51.803Z",
+    "source_sha256": "13930fbc15ee9263777a1a20d16051f8cd6196f8ece396bca38b62fde409705a",
+    "replay_status": "ORIGINAL_PDF_IMPORT_AND_FIELD_CORRECTION_VERIFIED",
+    "independent_signed_artifact_supplied": false,
+    "historical_freeze_unchanged": true,
+    "prospectively_gradeable": false
+  }
 }

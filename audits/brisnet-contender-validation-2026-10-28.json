@@ -1,0 +1,586 @@
+{
+  "schema": "brisnet-contender-validation-status-v1",
+  "review_date": "2026-10-28",
+  "model_id": "CONTENDER-BRISNET-20261021-input-v2",
+  "model_sha256": "186ded6d501c1137c94946e7af90b2b59d8ed96c9306b8da348e59f1547c26c2",
+  "coefficient_sha256": "7b79a7ca9b688bf5293d725745f1ee8fe3464058fe0ca85bca19b44e801fc6a1",
+  "model_changes": false,
+  "certified": false,
+  "status": "SOURCE_CHECKS_PASSED_PROSPECTIVE_VALIDATION_OPEN",
+  "source_replay_summary": {
+    "cards": 7,
+    "passed": 7,
+    "races": 65,
+    "entries": 564,
+    "history_lines": 3864,
+    "complete_races": 52
+  },
+  "independent_numeric_crosscheck": {
+    "extractor": "PyMuPDF 1.26.6",
+    "passed": true,
+    "identities": 564,
+    "career_counts": 564,
+    "connection_records": 2256,
+    "numeric_cells": 23184,
+    "mismatches": 0
+  },
+  "source_cards": [
+    {
+      "id": "bel16",
+      "date": "2026-10-16",
+      "track": "Belmont Park",
+      "sha256": "0ccc4797e4c57024e3c17c11af6bc5525e837b62ce0c4045155609b3dd204153",
+      "pages": 20,
+      "race_count": 9,
+      "status": "REPLAY_PASSED"
+    },
+    {
+      "id": "bel17",
+      "date": "2026-10-17",
+      "track": "Belmont Park",
+      "sha256": "ecd4f4f313d3cf959d23ffb27b3d13206aeb9611362fa55b70ee241305bb0573",
+      "pages": 30,
+      "race_count": 11,
+      "status": "REPLAY_PASSED"
+    },
+    {
+      "id": "bel22",
+      "date": "2026-10-22",
+      "track": "Belmont Park",
+      "sha256": "17518f42894264ef82d0ce077d4fca9d35707094baa042beae28fb50a05f7483",
+      "pages": 20,
+      "race_count": 8,
+      "status": "REPLAY_PASSED"
+    },
+    {
+      "id": "bel24",
+      "date": "2026-10-24",
+      "track": "Belmont Park",
+      "sha256": "edf3e7e0aebbe0dcfcdffbc0b05a6ceca669a56e46ac3c545e03b936bbfbdbfb",
+      "pages": 29,
+      "race_count": 11,
+      "status": "REPLAY_PASSED"
+    },
+    {
+      "id": "bel25",
+      "date": "2026-10-25",
+      "track": "Belmont Park",
+      "sha256": "13930fbc15ee9263777a1a20d16051f8cd6196f8ece396bca38b62fde409705a",
+      "pages": 24,
+      "race_count": 9,
+      "status": "REPLAY_PASSED"
+    },
+    {
+      "id": "bel28",
+      "date": "2026-10-28",
+      "track": "Belmont Park",
+      "sha256": "222996886b2b8ac3193e321c2ba4500880304559fcc65c08376d375050ff13c2",
+      "pages": 21,
+      "race_count": 8,
+      "status": "REPLAY_PASSED"
+    },
+    {
+      "id": "cd28",
+      "date": "2026-10-28",
+      "track": "Churchill Downs",
+      "sha256": "c66145cf4b55cd645b1772d9cecab22bffa47af0114f351473711c7c44c3d4af",
+      "pages": 24,
+      "race_count": 9,
+      "status": "REPLAY_PASSED"
+    }
+  ],
+  "oct25_r9_original_replay": {
+    "replay_observed_at_utc": "2026-10-28T13:07:51.803Z",
+    "field_correction_evidence": "RETROSPECTIVE_REPLAY_OF_VERIFIED_FINAL_FIELD",
+    "source_sha256": "13930fbc15ee9263777a1a20d16051f8cd6196f8ece396bca38b62fde409705a",
+    "format": "BRISNET_PREMIUM_PLUS",
+    "pages": 24,
+    "initial_entries": [
+      {
+        "program": "1",
+        "name": "Bouquetry",
+        "entry_status": "REGULAR"
+      },
+      {
+        "program": "2",
+        "name": "Best Not Miss",
+        "entry_status": "REGULAR"
+      },
+      {
+        "program": "3",
+        "name": "Sinead",
+        "entry_status": "REGULAR"
+      },
+      {
+        "program": "4",
+        "name": "Golden Beach",
+        "entry_status": "REGULAR"
+      },
+      {
+        "program": "5",
+        "name": "Meadowlark Drive",
+        "entry_status": "REGULAR"
+      },
+      {
+        "program": "6",
+        "name": "Scorch",
+        "entry_status": "REGULAR"
+      },
+      {
+        "program": "7",
+        "name": "Juliet On Approach",
+        "entry_status": "REGULAR"
+      },
+      {
+        "program": "8",
+        "name": "Leslie's Star",
+        "entry_status": "REGULAR"
+      },
+      {
+        "program": "9",
+        "name": "Clap Back",
+        "entry_status": "REGULAR"
+      },
+      {
+        "program": "10",
+        "name": "Heaven's Bolt",
+        "entry_status": "REGULAR"
+      },
+      {
+        "program": "11",
+        "name": "Five Dozen Roses",
+        "entry_status": "REGULAR"
+      },
+      {
+        "program": "12",
+        "name": "On a Summer Day",
+        "entry_status": "REGULAR"
+      },
+      {
+        "program": "13",
+        "name": "Cocoa Mills",
+        "entry_status": "AE"
+      },
+      {
+        "program": "14",
+        "name": "It's Nancytime Now",
+        "entry_status": "AE"
+      }
+    ],
+    "initial_eligible_programs": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11",
+      "12"
+    ],
+    "final_starter_programs": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11",
+      "12",
+      "13"
+    ],
+    "final_scratch_programs": [
+      "1",
+      "14"
+    ],
+    "source_horse_count": 14,
+    "final_eligible_count": 12,
+    "status": "ORIGINAL_PDF_IMPORT_AND_FIELD_CORRECTION_VERIFIED",
+    "note": "Only when this command is executed successfully on the original PDF. Historical freeze remains non-prospective; no predictions or ROI certified."
+  },
+  "saved_oct21_audit_replay": {
+    "races": 8,
+    "model_races": 32,
+    "failures": 0,
+    "pass": true
+  },
+  "historical_diagnostic": {
+    "all": {
+      "races": 37,
+      "exact_slots": [
+        16,
+        8,
+        10,
+        5
+      ],
+      "top4_contains": [
+        31,
+        27,
+        21,
+        24
+      ],
+      "all_four_selected": 3,
+      "correct_first_two_order": 6,
+      "correct_first_four_order": 0
+    },
+    "full_final_field_program_match_subset": {
+      "races": 22,
+      "exact_slots": [
+        9,
+        4,
+        6,
+        2
+      ],
+      "top4_contains": [
+        19,
+        16,
+        14,
+        16
+      ],
+      "all_four_selected": 3,
+      "correct_first_two_order": 3,
+      "correct_first_four_order": 0
+    },
+    "morning_line_benchmark": {
+      "source_sha256": "89d9bfe09d914337ef112d7aaa4a83976dd5a580c1bb4941820cd833092e1f42",
+      "scope": "Archived comparison picks: Oct22/23 reconstructed from published morning lines among final starters; Oct24/25 original saved ML picks. Historical diagnostic, not an untouched benchmark.",
+      "all": {
+        "races": 37,
+        "exact_slots": [
+          16,
+          5,
+          2,
+          5
+        ],
+        "top4_contains": [
+          31,
+          27,
+          21,
+          22
+        ],
+        "all_four_selected": 8,
+        "correct_first_two_order": 3,
+        "correct_first_four_order": 0
+      },
+      "full_field_program_match_subset": {
+        "races": 22,
+        "exact_slots": [
+          11,
+          3,
+          1,
+          3
+        ],
+        "top4_contains": [
+          20,
+          17,
+          14,
+          14
+        ],
+        "all_four_selected": 5,
+        "correct_first_two_order": 3,
+        "correct_first_four_order": 0
+      }
+    },
+    "certified_races": 0,
+    "blocker_counts": {
+      "INDEPENDENT_PRE_OFF_ANCHOR_NOT_SUPPLIED": 37,
+      "AUTHENTICATED_CHART_ATTESTATION_NOT_SUPPLIED": 37,
+      "ACTUAL_OFF_TIME_NOT_INDEPENDENTLY_VERIFIED": 37,
+      "EXACT_MODEL_VERSION_NOT_RECORDED": 17,
+      "FULL_FINAL_FIELD_NOT_RANKED": 15
+    }
+  },
+  "remaining": [
+    "Independent review of surface/distance decoding and line-selection context; numeric source parity alone does not establish semantic correctness",
+    "Predeclared untouched forward cohort with independent pre-off anchors and exact model/input hashes",
+    "Approved independent evidence issuers and signed provenance accepted by the existing verifier",
+    "Independent signed chart attestations, reviewed UTC actual off times and prospective field-change reconciliation",
+    "Paired forward ranking evaluation against morning line, with uncertainty and coverage reporting",
+    "Separate payout validation for paper wagering; probability calibration before any fair-odds or value claims"
+  ],
+  "limits": [
+    "No original PDFs, private saved cards or raw PP histories are published",
+    "Current source replay is Node PDF.js production-parser replay, not new browser upload acceptance",
+    "Same-operator extraction crosscheck uses a separate PDF engine, not an independent certifying issuer",
+    "No winning forecast is certified solely because it is correct",
+    "Existing Brisnet PASS, probabilityCalibrated=false and bettingEnabled=false remain"
+  ],
+  "official_chart_reconciliation": {
+    "summary": {
+      "charts": 37,
+      "reconciled": 37,
+      "holds": 0
+    },
+    "operator_full_field_and_first_four_matched": true,
+    "trusted_issuer_signatures_supplied": false,
+    "printed_off_times_retained": true,
+    "UTC_pre_off_certification": false,
+    "source_artifacts": [
+      {
+        "date": "2026-10-22",
+        "race": 1,
+        "url": "https://www.equibase.com/premium/eqbPDFChart.cfm?tid=BEL&dt=10/22/2026&ctry=USA&day=D&STYLE=BEL&RACE=1&BorP=B",
+        "sha256": "301662f053dfa3862c6cf3677f3e5c69f26cad1bc682c701f6e910b24cabca1b",
+        "bytes": 40222
+      },
+      {
+        "date": "2026-10-22",
+        "race": 2,
+        "url": "https://www.equibase.com/premium/eqbPDFChart.cfm?tid=BEL&dt=10/22/2026&ctry=USA&day=D&STYLE=BEL&RACE=2&BorP=B",
+        "sha256": "596df4d21ea1f9c1e1cd1e0200d05be719422cb8d85bb10ef4ad3ed6e99c2525",
+        "bytes": 15555
+      },
+      {
+        "date": "2026-10-22",
+        "race": 3,
+        "url": "https://www.equibase.com/premium/eqbPDFChart.cfm?tid=BEL&dt=10/22/2026&ctry=USA&day=D&STYLE=BEL&RACE=3&BorP=B",
+        "sha256": "e7dfd98d66d4cd2fd77a8cd3a8b7ac452d64b3911cc6d8aa346371b1a5327700",
+        "bytes": 41147
+      },
+      {
+        "date": "2026-10-22",
+        "race": 4,
+        "url": "https://www.equibase.com/premium/eqbPDFChart.cfm?tid=BEL&dt=10/22/2026&ctry=USA&day=D&STYLE=BEL&RACE=4&BorP=B",
+        "sha256": "f537732c85aca621ff8ed9588b7b578ae6794977877bcd82affd892851fdff54",
+        "bytes": 89952
+      },
+      {
+        "date": "2026-10-22",
+        "race": 5,
+        "url": "https://www.equibase.com/premium/eqbPDFChart.cfm?tid=BEL&dt=10/22/2026&ctry=USA&day=D&STYLE=BEL&RACE=5&BorP=B",
+        "sha256": "099f8b9373c9c62f12a8f5fe173c28d438deaf36e33ee468b95fd44b046eb9f1",
+        "bytes": 17983
+      },
+      {
+        "date": "2026-10-22",
+        "race": 6,
+        "url": "https://www.equibase.com/premium/eqbPDFChart.cfm?tid=BEL&dt=10/22/2026&ctry=USA&day=D&STYLE=BEL&RACE=6&BorP=B",
+        "sha256": "c9fb94de8e2babafe0cceb3ebc609a5161e6d0b8d85d4f4070d4e1d551bd361e",
+        "bytes": 18838
+      },
+      {
+        "date": "2026-10-22",
+        "race": 7,
+        "url": "https://www.equibase.com/premium/eqbPDFChart.cfm?tid=BEL&dt=10/22/2026&ctry=USA&day=D&STYLE=BEL&RACE=7&BorP=B",
+        "sha256": "082607c2f32f6e693e7d3bdc74d12e1d4156d9a42039f5dce18ad210c3697e87",
+        "bytes": 14860
+      },
+      {
+        "date": "2026-10-22",
+        "race": 8,
+        "url": "https://www.equibase.com/premium/eqbPDFChart.cfm?tid=BEL&dt=10/22/2026&ctry=USA&day=D&STYLE=BEL&RACE=8&BorP=B",
+        "sha256": "c54b860e76d23e33cb742cce482685e0efa97fbc595fe07011218f6344ff669a",
+        "bytes": 61378
+      },
+      {
+        "date": "2026-10-23",
+        "race": 1,
+        "url": "https://www.equibase.com/premium/eqbPDFChart.cfm?tid=BEL&dt=10/23/2026&ctry=USA&day=D&STYLE=BEL&RACE=1&BorP=B",
+        "sha256": "04b21e580e92a0f8edfc41b8739add877c1d32595b82a14d96e7220adb547d5c",
+        "bytes": 15113
+      },
+      {
+        "date": "2026-10-23",
+        "race": 2,
+        "url": "https://www.equibase.com/premium/eqbPDFChart.cfm?tid=BEL&dt=10/23/2026&ctry=USA&day=D&STYLE=BEL&RACE=2&BorP=B",
+        "sha256": "7739d35d49c0cc307f293647e6ca5bf1f42de0db3b285aaca08d254fdf813109",
+        "bytes": 14061
+      },
+      {
+        "date": "2026-10-23",
+        "race": 3,
+        "url": "https://www.equibase.com/premium/eqbPDFChart.cfm?tid=BEL&dt=10/23/2026&ctry=USA&day=D&STYLE=BEL&RACE=3&BorP=B",
+        "sha256": "786d54f025bd3e23471db76238c5202b71a678499bf93a13bff854a2ad23f829",
+        "bytes": 15989
+      },
+      {
+        "date": "2026-10-23",
+        "race": 4,
+        "url": "https://www.equibase.com/premium/eqbPDFChart.cfm?tid=BEL&dt=10/23/2026&ctry=USA&day=D&STYLE=BEL&RACE=4&BorP=B",
+        "sha256": "98032a2a5dc8fdcadfc1f2b4e738688924b3206465fc206fbbcce5409b014684",
+        "bytes": 22609
+      },
+      {
+        "date": "2026-10-23",
+        "race": 5,
+        "url": "https://www.equibase.com/premium/eqbPDFChart.cfm?tid=BEL&dt=10/23/2026&ctry=USA&day=D&STYLE=BEL&RACE=5&BorP=B",
+        "sha256": "955b691a9eb2ac8f1344c48b7a4f13445cfc0c8c19fdf56f187f2781afa253da",
+        "bytes": 23888
+      },
+      {
+        "date": "2026-10-23",
+        "race": 6,
+        "url": "https://www.equibase.com/premium/eqbPDFChart.cfm?tid=BEL&dt=10/23/2026&ctry=USA&day=D&STYLE=BEL&RACE=6&BorP=B",
+        "sha256": "b150283bd7199464bae3d476c02335966c2841411c7e3fd49e25f1c005ec831b",
+        "bytes": 16210
+      },
+      {
+        "date": "2026-10-23",
+        "race": 7,
+        "url": "https://www.equibase.com/premium/eqbPDFChart.cfm?tid=BEL&dt=10/23/2026&ctry=USA&day=D&STYLE=BEL&RACE=7&BorP=B",
+        "sha256": "584d2d8a1582dad492a737eb7c44f1395fdda7c8df1929e13ed7c52af9343f57",
+        "bytes": 25372
+      },
+      {
+        "date": "2026-10-23",
+        "race": 8,
+        "url": "https://www.equibase.com/premium/eqbPDFChart.cfm?tid=BEL&dt=10/23/2026&ctry=USA&day=D&STYLE=BEL&RACE=8&BorP=B",
+        "sha256": "5cb0cd12603942e25d83e2140575e824f0d48f8d12eaddcb538b2f057818f095",
+        "bytes": 17228
+      },
+      {
+        "date": "2026-10-23",
+        "race": 9,
+        "url": "https://www.equibase.com/premium/eqbPDFChart.cfm?tid=BEL&dt=10/23/2026&ctry=USA&day=D&STYLE=BEL&RACE=9&BorP=B",
+        "sha256": "27fe2d08dd35422982ae9c1940cf4a4a31a492e5e7dfe6899f6f76ab3bbc956f",
+        "bytes": 130461
+      },
+      {
+        "date": "2026-10-24",
+        "race": 1,
+        "url": "https://www.equibase.com/premium/eqbPDFChart.cfm?tid=BEL&dt=10/24/2026&ctry=USA&day=D&STYLE=BEL&RACE=1&BorP=B",
+        "sha256": "404b666457b41700b2b0011e02d9e33bd9ec15143abaad93d460f1368876392d",
+        "bytes": 18099
+      },
+      {
+        "date": "2026-10-24",
+        "race": 10,
+        "url": "https://www.equibase.com/premium/eqbPDFChart.cfm?tid=BEL&dt=10/24/2026&ctry=USA&day=D&STYLE=BEL&RACE=10&BorP=B",
+        "sha256": "2fc4e5ae47949dc841c01ab19322a095f0e6a214033fabb95ceb632b3a0b5c0e",
+        "bytes": 50871
+      },
+      {
+        "date": "2026-10-24",
+        "race": 11,
+        "url": "https://www.equibase.com/premium/eqbPDFChart.cfm?tid=BEL&dt=10/24/2026&ctry=USA&day=D&STYLE=BEL&RACE=11&BorP=B",
+        "sha256": "f78c4b57a2991a1de846f2bf952451faa3f7dca5c7290760eb96fcbf9d66af7b",
+        "bytes": 26365
+      },
+      {
+        "date": "2026-10-24",
+        "race": 2,
+        "url": "https://www.equibase.com/premium/eqbPDFChart.cfm?tid=BEL&dt=10/24/2026&ctry=USA&day=D&STYLE=BEL&RACE=2&BorP=B",
+        "sha256": "035506d9ce1da07246d479fc94758822c4c58148ceab6171383f3eb26524c4c0",
+        "bytes": 23066
+      },
+      {
+        "date": "2026-10-24",
+        "race": 3,
+        "url": "https://www.equibase.com/premium/eqbPDFChart.cfm?tid=BEL&dt=10/24/2026&ctry=USA&day=D&STYLE=BEL&RACE=3&BorP=B",
+        "sha256": "1574ef6addcf21a6c30aed4623ffb3e170a12a5f2eddb9edd1d48f8bc554de52",
+        "bytes": 22486
+      },
+      {
+        "date": "2026-10-24",
+        "race": 4,
+        "url": "https://www.equibase.com/premium/eqbPDFChart.cfm?tid=BEL&dt=10/24/2026&ctry=USA&day=D&STYLE=BEL&RACE=4&BorP=B",
+        "sha256": "6f4b84d91dd6d33d5e7151a62bae7749dede329ec13c05895a94ab4923fd41d2",
+        "bytes": 80796
+      },
+      {
+        "date": "2026-10-24",
+        "race": 5,
+        "url": "https://www.equibase.com/premium/eqbPDFChart.cfm?tid=BEL&dt=10/24/2026&ctry=USA&day=D&STYLE=BEL&RACE=5&BorP=B",
+        "sha256": "79b92fccd9a2cf27f8ca85bda86189f549f452c47011da1a969bc7e73fba9f14",
+        "bytes": 41781
+      },
+      {
+        "date": "2026-10-24",
+        "race": 6,
+        "url": "https://www.equibase.com/premium/eqbPDFChart.cfm?tid=BEL&dt=10/24/2026&ctry=USA&day=D&STYLE=BEL&RACE=6&BorP=B",
+        "sha256": "1922b4049e79bd56330fca6fc5b43c99c30b6441ce8b794c23d29c5a2f06fd61",
+        "bytes": 24966
+      },
+      {
+        "date": "2026-10-24",
+        "race": 7,
+        "url": "https://www.equibase.com/premium/eqbPDFChart.cfm?tid=BEL&dt=10/24/2026&ctry=USA&day=D&STYLE=BEL&RACE=7&BorP=B",
+        "sha256": "df30d6b4aa1080bba81d7bb6bcf296e6e4acea6fdebf68b12d51d2f7abb0c4df",
+        "bytes": 23502
+      },
+      {
+        "date": "2026-10-24",
+        "race": 8,
+        "url": "https://www.equibase.com/premium/eqbPDFChart.cfm?tid=BEL&dt=10/24/2026&ctry=USA&day=D&STYLE=BEL&RACE=8&BorP=B",
+        "sha256": "1212a8973677abd26eb092c7828348c59eda56a65b06d581b7f172b848631e57",
+        "bytes": 83123
+      },
+      {
+        "date": "2026-10-24",
+        "race": 9,
+        "url": "https://www.equibase.com/premium/eqbPDFChart.cfm?tid=BEL&dt=10/24/2026&ctry=USA&day=D&STYLE=BEL&RACE=9&BorP=B",
+        "sha256": "2355c6bad92c5dc880e7af003ca6dbe1bcae2d8a00718d8b7cfa884e4acfb012",
+        "bytes": 40438
+      },
+      {
+        "date": "2026-10-25",
+        "race": 1,
+        "url": "https://www.equibase.com/premium/eqbPDFChart.cfm?tid=BEL&dt=10/25/2026&ctry=USA&day=D&STYLE=BEL&RACE=1&BorP=B",
+        "sha256": "ee41665b4547a0e3c31a2318fee63f887054f5cb91c9394c62ba9f1309d499a6",
+        "bytes": 62015
+      },
+      {
+        "date": "2026-10-25",
+        "race": 2,
+        "url": "https://www.equibase.com/premium/eqbPDFChart.cfm?tid=BEL&dt=10/25/2026&ctry=USA&day=D&STYLE=BEL&RACE=2&BorP=B",
+        "sha256": "b141155107170569f60aee0bca256dd9f00eeb1b58c04260970c64e587575637",
+        "bytes": 24251
+      },
+      {
+        "date": "2026-10-25",
+        "race": 3,
+        "url": "https://www.equibase.com/premium/eqbPDFChart.cfm?tid=BEL&dt=10/25/2026&ctry=USA&day=D&STYLE=BEL&RACE=3&BorP=B",
+        "sha256": "333eb929891615d92c2591a9bb367615c5069b790ffdde0c3287d6ab137abb8f",
+        "bytes": 15204
+      },
+      {
+        "date": "2026-10-25",
+        "race": 4,
+        "url": "https://www.equibase.com/premium/eqbPDFChart.cfm?tid=BEL&dt=10/25/2026&ctry=USA&day=D&STYLE=BEL&RACE=4&BorP=B",
+        "sha256": "a23a4dd5ce9a6067855005d6d96fdaec004608bcf94024c8da6c4ab3123fdc43",
+        "bytes": 15911
+      },
+      {
+        "date": "2026-10-25",
+        "race": 5,
+        "url": "https://www.equibase.com/premium/eqbPDFChart.cfm?tid=BEL&dt=10/25/2026&ctry=USA&day=D&STYLE=BEL&RACE=5&BorP=B",
+        "sha256": "262f9b9b2d1037221334ca531e376cda15f21d991d50c6fc792db9c38191a00f",
+        "bytes": 25513
+      },
+      {
+        "date": "2026-10-25",
+        "race": 6,
+        "url": "https://www.equibase.com/premium/eqbPDFChart.cfm?tid=BEL&dt=10/25/2026&ctry=USA&day=D&STYLE=BEL&RACE=6&BorP=B",
+        "sha256": "264f45f37632a43938a3bbba3953ee5e2af15ffc85aced64cb109a89d990e2e5",
+        "bytes": 82541
+      },
+      {
+        "date": "2026-10-25",
+        "race": 7,
+        "url": "https://www.equibase.com/premium/eqbPDFChart.cfm?tid=BEL&dt=10/25/2026&ctry=USA&day=D&STYLE=BEL&RACE=7&BorP=B",
+        "sha256": "45ff9fe13a5bf826a4e3919480b265cdc6b7f7ff7a9b75e639a8084959752d0b",
+        "bytes": 42996
+      },
+      {
+        "date": "2026-10-25",
+        "race": 8,
+        "url": "https://www.equibase.com/premium/eqbPDFChart.cfm?tid=BEL&dt=10/25/2026&ctry=USA&day=D&STYLE=BEL&RACE=8&BorP=B",
+        "sha256": "801e3d44ea624919e99852e3f3d90b178f19b775f92a798e6fcbdb57afbb0450",
+        "bytes": 27557
+      },
+      {
+        "date": "2026-10-25",
+        "race": 9,
+        "url": "https://www.equibase.com/premium/eqbPDFChart.cfm?tid=BEL&dt=10/25/2026&ctry=USA&day=D&STYLE=BEL&RACE=9&BorP=B",
+        "sha256": "2ff5667609ed3f40ccef3a101f1920c3e9a6ce1693bac1a9f630324c7fc15ca1",
+        "bytes": 18930
+      }
+    ]
+  }
+}
