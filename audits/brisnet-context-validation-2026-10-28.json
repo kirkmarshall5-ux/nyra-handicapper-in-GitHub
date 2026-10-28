@@ -1,0 +1,84 @@
+{
+  "schema": "brisnet-second-engine-condition-check-v1",
+  "certified": false,
+  "summary": {
+    "checked": 3854,
+    "unresolved": 10,
+    "mismatches": 0
+  },
+  "pace_selection": {
+    "checked": 514,
+    "mismatches": [],
+    "early_available": 390,
+    "late_available": 392
+  },
+  "scope": "Separate PDF reader and reference decoder; glyph semantics still require external/expert confirmation. No scoring change or prospective certification.",
+  "unresolved_occurrences": [
+    {
+      "card": "bel17",
+      "race": 4,
+      "horse": "8",
+      "date": "2026-09-09"
+    },
+    {
+      "card": "bel17",
+      "race": 7,
+      "horse": "2",
+      "date": "2026-10-07"
+    },
+    {
+      "card": "bel17",
+      "race": 7,
+      "horse": "7",
+      "date": "2026-08-13"
+    },
+    {
+      "card": "bel17",
+      "race": 10,
+      "horse": "5",
+      "date": "2026-10-07"
+    },
+    {
+      "card": "bel22",
+      "race": 8,
+      "horse": "13",
+      "date": "2025-08-30"
+    },
+    {
+      "card": "bel24",
+      "race": 5,
+      "horse": "4",
+      "date": "2026-08-13"
+    },
+    {
+      "card": "bel28",
+      "race": 7,
+      "horse": "1",
+      "date": "2025-08-30"
+    },
+    {
+      "card": "cd28",
+      "race": 2,
+      "horse": "3",
+      "date": "2026-09-05"
+    },
+    {
+      "card": "cd28",
+      "race": 2,
+      "horse": "6",
+      "date": "2026-09-09"
+    },
+    {
+      "card": "cd28",
+      "race": 5,
+      "horse": "2",
+      "date": "2026-09-09"
+    }
+  ],
+  "limitations": [
+    "3854 independently decoded historical condition prefixes matched; 10 source occurrences remain unresolved in both decoders",
+    "Current race distance/surface headings and glyph semantics are not newly independently certified",
+    "Pace-selection parity checks implementation consistency, not predictive benefit",
+    "Existing positive historical paper ROI is retained, not promoted to prospective profitability"
+  ]
+}
