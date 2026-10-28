@@ -10,7 +10,7 @@ const profiles=[
  {name:'desktop-chromium',viewport:{width:1365,height:850},isMobile:false,hasTouch:false},
  {name:'ipad-chromium-emulation',viewport:{width:820,height:1180},deviceScaleFactor:2,isMobile:true,hasTouch:true}
 ];
-const browser=await chromium.launch({headless:true});
+const browser=await chromium.launch({headless:true,channel:'chromium'});
 const results=[];let failures=0;
 for(const profile of profiles){
  const context=await browser.newContext({viewport:profile.viewport,deviceScaleFactor:profile.deviceScaleFactor||1,isMobile:profile.isMobile,hasTouch:profile.hasTouch,acceptDownloads:true});
@@ -508,6 +508,30 @@ for(const profile of profiles){
    assert.match(await page.locator('#gridFieldStatus').innerText(),/#99 QA Scratched Runner/);
    assert.equal(await page.locator('#horseTable tr[data-program="99"] .grid-contender-rank').innerText(),'Scratched');
   }finally{await page.evaluate(async saved=>{const m=await import('./dual-pp-cards.js');await m.writeProviderCardsSession(saved.cards,saved.session?.state||{},saved.session?.selectedProvider);},saved);await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});}
+ });
+ await check('D-print-picks-pdf-current-card-and-refresh',async()=>{
+  // Earlier checks restore the demonstration card; install a distinct imported-card fixture.
+  await page.evaluate(async()=>{const c=await window.qaReadActive();c.id='qa-print-pdf';c.parser_version='DRF-positioned-v3';await window.qaSetActive(c);});
+  await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
+  await page.locator('[data-tab="raceday"]').click();
+  assert.equal(await page.locator('#printPicks').innerText(),'Print Picks');
+  const order=await page.evaluate(()=>{const a=document.getElementById('updateOddsScratches'),b=document.getElementById('printPicks');return Boolean(a.compareDocumentPosition(b)&Node.DOCUMENT_POSITION_FOLLOWING);});assert.equal(order,true);
+  const opened=page.waitForEvent('popup');await page.locator('#printPicks').click();const popup=await opened;
+  try{
+   await popup.waitForURL(/^blob:/,{timeout:20000,waitUntil:'commit'});
+   const firstUrl=popup.url();
+   const pdf=await page.evaluate(async url=>new TextDecoder().decode(await (await fetch(url)).arrayBuffer()),firstUrl);
+   assert.ok(pdf.startsWith('%PDF-1.4'));assert.match(pdf,/Race Day Handicapper/);assert.match(pdf,/Finish Order/);
+   // Use the application's normal field action, then observe the already-open PDF refresh.
+   const action=page.locator('#horseTable button[data-field-action="scratch"]').first();
+   if(await action.count()){
+    page.once('dialog',d=>d.accept());await action.click();
+    await popup.waitForURL(url=>url.toString().startsWith('blob:')&&url.toString()!==firstUrl,{timeout:20000,waitUntil:'commit'});
+    const changed=await page.evaluate(async url=>new TextDecoder().decode(await (await fetch(url)).arrayBuffer()),popup.url());
+    assert.notEqual(changed,pdf);assert.match(changed,/Scratched:/);
+   }
+   await page.screenshot({path:`${out}/${profile.name}-print-picks.png`,fullPage:true});
+  }finally{await popup.close();}
  });
  await page.screenshot({path:`${out}/${profile.name}-final.png`,fullPage:true});
  await context.close();
