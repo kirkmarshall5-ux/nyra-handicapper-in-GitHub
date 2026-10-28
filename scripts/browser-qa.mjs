@@ -10,7 +10,7 @@ const profiles=[
  {name:'desktop-chromium',viewport:{width:1365,height:850},isMobile:false,hasTouch:false},
  {name:'ipad-chromium-emulation',viewport:{width:820,height:1180},deviceScaleFactor:2,isMobile:true,hasTouch:true}
 ];
-const browser=await chromium.launch({headless:true});
+const browser=await chromium.launch({headless:true,channel:'chromium'});
 const results=[];let failures=0;
 for(const profile of profiles){
  const context=await browser.newContext({viewport:profile.viewport,deviceScaleFactor:profile.deviceScaleFactor||1,isMobile:profile.isMobile,hasTouch:profile.hasTouch,acceptDownloads:true});
@@ -518,7 +518,7 @@ for(const profile of profiles){
   const order=await page.evaluate(()=>{const a=document.getElementById('updateOddsScratches'),b=document.getElementById('printPicks');return Boolean(a.compareDocumentPosition(b)&Node.DOCUMENT_POSITION_FOLLOWING);});assert.equal(order,true);
   const opened=page.waitForEvent('popup');await page.locator('#printPicks').click();const popup=await opened;
   try{
-   await popup.waitForURL(/^blob:/,{timeout:20000});
+   await popup.waitForURL(/^blob:/,{timeout:20000,waitUntil:'commit'});
    const firstUrl=popup.url();
    const pdf=await page.evaluate(async url=>new TextDecoder().decode(await (await fetch(url)).arrayBuffer()),firstUrl);
    assert.ok(pdf.startsWith('%PDF-1.4'));assert.match(pdf,/Race Day Handicapper/);assert.match(pdf,/Finish Order/);
@@ -526,7 +526,7 @@ for(const profile of profiles){
    const action=page.locator('#horseTable button[data-field-action="scratch"]').first();
    if(await action.count()){
     page.once('dialog',d=>d.accept());await action.click();
-    await popup.waitForURL(url=>url.toString().startsWith('blob:')&&url.toString()!==firstUrl,{timeout:20000});
+    await popup.waitForURL(url=>url.toString().startsWith('blob:')&&url.toString()!==firstUrl,{timeout:20000,waitUntil:'commit'});
     const changed=await page.evaluate(async url=>new TextDecoder().decode(await (await fetch(url)).arrayBuffer()),popup.url());
     assert.notEqual(changed,pdf);assert.match(changed,/Scratched:/);
    }
