@@ -74,7 +74,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <div><div class="kicker" id="cardKicker">Active race card</div><h2 id="raceTitle">Belmont Park · Race 1</h2>
 <div class="badges" id="raceBadges"><span class="badge gold">1 1/16M Dirt</span><span class="badge">Maiden Special Weight · $100,000</span><span class="badge">12:05 PM</span><span class="badge green">Public NYRA card</span></div></div>
 <div><div class="muted small" style="margin-bottom:5px">Race</div><div class="racebar" id="racebar"></div></div>
-</div><div id="declaredScratches" class="small muted" role="status"></div><div class="flex" style="margin-top:12px;flex-wrap:wrap"><button class="primary" id="uploadBrisnet">1. Upload Brisnet PP</button><input id="brisnetFile" type="file" accept=".pdf" hidden><button class="primary" id="uploadDrf">2. Upload DRF PP</button><input id="drfFile" type="file" accept=".pdf" hidden><button class="primary" id="updateOddsScratches" type="button">Update Odds &amp; Scratches</button></div><div id="raceDayUploadStatus" class="small" role="status" aria-live="polite" style="margin-top:8px;overflow-wrap:anywhere"></div><div class="small muted" id="trackUpdateIdentity" style="margin-top:8px"></div><p id="nyraUpdateStatus" class="small muted" role="status" aria-live="polite">Updates use the loaded PP card and selected race.</p></div>
+</div><div id="declaredScratches" class="small muted" role="status"></div><div class="flex" style="margin-top:12px;flex-wrap:wrap"><button class="primary" id="uploadBrisnet">1. Upload Brisnet PP</button><input id="brisnetFile" type="file" accept=".pdf" hidden><button class="primary" id="uploadDrf">2. Upload DRF PP</button><input id="drfFile" type="file" accept=".pdf" hidden><button class="primary" id="updateOddsScratches" type="button">Update Odds &amp; Scratches</button><button class="primary" id="printPicks" type="button">Print Picks</button><span id="printPicksStatus" class="small muted" role="status" aria-live="polite"></span></div><div id="raceDayUploadStatus" class="small" role="status" aria-live="polite" style="margin-top:8px;overflow-wrap:anywhere"></div><div class="small muted" id="trackUpdateIdentity" style="margin-top:8px"></div><p id="nyraUpdateStatus" class="small muted" role="status" aria-live="polite">Updates use the loaded PP card and selected race.</p></div>
 
 <section id="raceDayDashboard" class="card span12" aria-label="Race day dashboard"></section>
 
@@ -189,6 +189,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 </main>
 
 <script type="module">
+import {buildPicksSheet,createPicksPreview} from "./print-picks.js?v=20261028-print1";
 import {correctRaceField} from "./race-field-corrections.js";
 import {prepareRaceDayResearchFreeze} from "./pre-race-raceday-integration.js";
 import {sealResearchSnapshots} from "./pre-race-provider-freeze.js";
@@ -320,6 +321,15 @@ function renderModelRow(race,ids){
  contenderTarget.innerHTML=contenderTarget.innerHTML+remainingContenders+modelEvidenceHtml(race,contender,{model:'contender'})+'<div class="hidden" aria-hidden="true">'+winLineNote(contenderLine)+'</div>';
 
 }
+const picksPreview=createPicksPreview({getSheet:()=>{
+ if(activeCard.id===sampleCard.id)throw Error('Load a current PP card before printing.');
+ return buildPicksSheet({cards:providerCards,card:activeCard,currentRace:race,notes:state.cards?.[activeCard.id]?.notes||{}});
+}});
+document.getElementById('printPicks').onclick=()=>{
+ const status=document.getElementById('printPicksStatus');
+ try{picksPreview.show();status.textContent='PDF opened. Use its Print or Save controls. Preview refreshes when the loaded card changes.';}
+ catch(e){status.textContent='Print Picks unavailable: '+e.message;}
+};
 let dashboardPaperSource='drfContender';
 function currentDashboard(){
  const dashboard=buildRaceDashboard({anchor:race,sources:{BRISNET:providerRace('BRISNET'),DRF:providerRace('DRF')},morningLineProvider:morningLineProvider()});
@@ -330,6 +340,7 @@ function currentDashboard(){
 function renderDashboard(){
  const target=document.getElementById('raceDayDashboard'),openDetails=[...target.querySelectorAll('details[open]')].map(el=>el.className);
  target.innerHTML=dashboardHtml(currentDashboard(),dashboardPaperSource);
+ try{picksPreview.refresh();}catch(e){document.getElementById('printPicksStatus').textContent='PDF refresh failed: '+e.message+'. Print Picks again after checking the loaded card.';}
  for(const el of target.querySelectorAll('details'))el.open=openDetails.includes(el.className);
  document.getElementById('dashboardPaperSource').onchange=e=>{dashboardPaperSource=e.target.value;renderDashboard();document.getElementById('dashboardPaperSource').focus();};
  document.getElementById('dashboardFreeze').onclick=()=>{document.getElementById('freezeAllModels').click();document.getElementById('dashboardSnapshotStatus').textContent=document.getElementById('freezeAllStatus').textContent;};
