@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "card": "BEL 2026-10-25",
+  "race": 9,
+  "source_sha256": "13930fbc15ee9263777a1a20d16051f8cd6196f8ece396bca38b62fde409705a",
+  "source_bytes": 1635111,
+  "pages": 24,
+  "source_horse_identity_matches": 14,
+  "findings": [
+    {
+      "program": "1",
+      "name": "Bouquetry",
+      "source_page": 20,
+      "source_name_found": true,
+      "source_ae_marker": false
+    },
+    {
+      "program": "2",
+      "name": "Best Not Miss",
+      "source_page": 20,
+      "source_name_found": true,
+      "source_ae_marker": false
+    },
+    {
+      "program": "3",
+      "name": "Sinead",
+      "source_page": 20,
+      "source_name_found": true,
+      "source_ae_marker": false
+    },
+    {
+      "program": "4",
+      "name": "Golden Beach",
+      "source_page": 20,
+      "source_name_found": true,
+      "source_ae_marker": false
+    },
+    {
+      "program": "5",
+      "name": "Meadowlark Drive",
+      "source_page": 21,
+      "source_name_found": true,
+      "source_ae_marker": false
+    },
+    {
+      "program": "6",
+      "name": "Scorch",
+      "source_page": 21,
+      "source_name_found": true,
+      "source_ae_marker": false
+    },
+    {
+      "program": "7",
+      "name": "Juliet On Approach",
+      "source_page": 21,
+      "source_name_found": true,
+      "source_ae_marker": false
+    },
+    {
+      "program": "8",
+      "name": "Leslie's Star",
+      "source_page": 21,
+      "source_name_found": true,
+      "source_ae_marker": false
+    },
+    {
+      "program": "9",
+      "name": "Clap Back",
+      "source_page": 22,
+      "source_name_found": true,
+      "source_ae_marker": false
+    },
+    {
+      "program": "10",
+      "name": "Heaven's Bolt",
+      "source_page": 22,
+      "source_name_found": true,
+      "source_ae_marker": false
+    },
+    {
+      "program": "11",
+      "name": "Five Dozen Roses",
+      "source_page": 22,
+      "source_name_found": true,
+      "source_ae_marker": false
+    },
+    {
+      "program": "12",
+      "name": "On a Summer Day",
+      "source_page": 22,
+      "source_name_found": true,
+      "source_ae_marker": false
+    },
+    {
+      "program": "13",
+      "name": "Cocoa Mills",
+      "source_page": 23,
+      "source_name_found": true,
+      "source_ae_marker": true
+    },
+    {
+      "program": "14",
+      "name": "It's Nancytime Now",
+      "source_page": 23,
+      "source_name_found": true,
+      "source_ae_marker": true
+    }
+  ],
+  "source_ae_verified": [
+    "13",
+    "14"
+  ],
+  "method": "PyMuPDF direct original PDF text extraction, original user-uploaded bel1025p.pdf",
+  "production_importer_executed": false,
+  "production_model_input_parity_verified": false,
+  "historical_rankings_certified": false,
+  "status": "SOURCE_IDENTITY_VERIFIED_PRODUCTION_REPLAY_PENDING",
+  "limitations": [
+    "Original proprietary Brisnet PDF is not stored in public GitHub repository.",
+    "This source audit does not execute the production pdfjs parser or prove downstream model-input parity.",
+    "Oct 25 R9 archived freeze omitted official starter #13 from ranked field and cannot be retrospectively certified."
+  ]
+}
