@@ -28,8 +28,11 @@ const {pages,digest}=await extractExact(brisnetPath,'1c9e3bedecd761d2a825c451364
 const {parsePremiumCard}=await import(pathToFileURL(resolve('brisnet-premium-parser.js')).href);
 const card=parsePremiumCard(pages,{sourceName:'flx1021p.pdf'});
 const drfExtract=await extractExact(drfPath,'c5a1d507b388bb1df9116da1a6596f6b2d3c2c6cc11b0edcf62dbf49e5ac6a5e',17);
-const {parseRestoredCard}=await import(pathToFileURL(resolve('release-card-parser.js')).href);
-const drfCard=parseRestoredCard(drfExtract.pages,{sourceName:'FL--10-21-2026.pdf'});
+const {parseRestoredCard,restoredPage}=await import(pathToFileURL(resolve('release-card-parser.js')).href);
+// Match the production DRF upload pipeline: restore PDF.js text items to
+// parser pages with `lines` before applying strict race-footer checks.
+const drfPages=drfExtract.pages.map(p=>restoredPage(p.items,p.pageNumber));
+const drfCard=parseRestoredCard(drfPages,{sourceName:'FL--10-21-2026.pdf'});
 assert.equal(drfCard.date,'2026-10-21','DRF date mismatch');
 assert.equal(Object.keys(drfCard.races).length,8,'DRF race count mismatch');
 // Early-release DRF lacks assigned program numbers: source identity acceptance
