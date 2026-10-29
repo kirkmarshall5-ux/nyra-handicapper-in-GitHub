@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 const sorted = values => [...values].map(String).sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
-export function compareImportedCardToFrozenRosters(card,reference) {
+const normalizedName = name => String(name??'').normalize('NFKD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]/g,'');
+export function compareImportedCardToFrozenRosters(card,reference,sourceIdentityManifest=null) {
   assert.ok(card && typeof card==='object' && card.races,'Parsed Brisnet card required');
   assert.equal(reference?.race_count,9,'Expected nine-race historical reference');
   assert.equal(reference?.races?.length,9,'Missing reference races');
@@ -23,6 +24,20 @@ export function compareImportedCardToFrozenRosters(card,reference) {
     if(missing.length)blockers.push('Missing original PP programs: '+missing.join(','));
     if(extra.length)blockers.push('Unexpected imported PP programs: '+extra.join(','));
     if(actual.length!==expected.length)blockers.push('Imported roster count differs');
+    if(saved.race===9 && sourceIdentityManifest){
+      if(sourceIdentityManifest.race!==9 || !Array.isArray(sourceIdentityManifest.entries) || sourceIdentityManifest.entries.length!==14)
+        blockers.push('Invalid original R9 PP horse-name identity manifest');
+      else {
+        const sourceByProgram=new Map(sourceIdentityManifest.entries.map(h=>[String(h.program),h]));
+        for(const h of parsed.horses){
+          const source=sourceByProgram.get(String(h.n));
+          if(!source || !normalizedName(source.name) || normalizedName(h.name)!==normalizedName(source.name))
+            blockers.push('R9 original PP horse-name mismatch #'+String(h.n));
+          if(source && (String(h.entry_status||'').toUpperCase()==='AE')!==Boolean(source.source_ae))
+            blockers.push('R9 original PP also-eligible flag mismatch #'+String(h.n));
+        }
+      }
+    }
     const ae=parsed.horses.filter(h=>String(h.entry_status||'').toUpperCase()==='AE').map(h=>String(h.n));
     if(saved.race===9 && (ae.length!==2||sorted(ae).join(',')!=='13,14'))
       blockers.push('R9 original also-eligible identities #13/#14 not retained');
