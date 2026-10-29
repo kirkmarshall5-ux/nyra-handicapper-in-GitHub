@@ -1,0 +1,62 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {auditIssue74} from './scripts/check-issue74-certification.mjs';
+const ledger=JSON.parse(fs.readFileSync(new URL('./audits/issue74-bel1025-certification-ledger.json',import.meta.url),'utf8'));
+test('October 25 pilot remains blocked until full official chart, pdfjs and independent timestamps',()=>{
+ const result=auditIssue74(ledger);
+ assert.equal(result.total,9);
+ assert.equal(result.certified,0);
+ assert.equal(result.blocked,9);
+ assert.equal(result.certification_status,'CERTIFICATION_BLOCKED');
+ assert.ok(result.races.every(r=>r.original_decision==='PASS'));
+ assert.ok(result.races.every(r=>r.blockers.some(b=>b.includes('before-post'))));
+});
+test('a chart index URL cannot certify an individual race',()=>{
+ const fake=structuredClone(ledger);
+ fake.chart_source.review_status='ALL_CHARTS_MANUALLY_VERIFIED';
+ fake.source_pdf.production_pdfjs_replay_executed=true;
+ fake.freeze.independent_before_post_anchor_verified=true;
+ fake.races.forEach(r=>{
+  r.official_chart_manually_reviewed=true;
+  r.official_post_time_verified=true;
+  r.official_surface_distance_verified=true;
+  r.official_scratch_ae_mto_verified=true;
+  r.official_finish_and_corrections_verified=true;
+  r.pp_to_official_starter_identity_verified=true;
+  r.pre_race_full_field_rankings_verified=true;
+  r.pre_race_anchor_verified=true;
+ });
+ const result=auditIssue74(fake);
+ assert.equal(result.certified,0);
+ assert.ok(result.races.every(r=>r.blockers.includes('Missing official_chart_url')));
+ assert.ok(result.races.every(r=>r.blockers.some(b=>b.includes('Independent timestamp evidence URL'))));
+});
+test('a timestamp after official off time must never certify a race',()=>{
+ const fake=structuredClone(ledger);
+ fake.chart_source.review_status='ALL_CHARTS_MANUALLY_VERIFIED';
+ fake.source_pdf.production_pdfjs_replay_executed=true;
+ fake.freeze.independent_before_post_anchor_verified=true;
+ fake.races.forEach(r=>{
+  r.known_discrepancies=[];
+  r.official_chart_url='https://example.org/chart';
+  r.official_chart_id='example-chart';
+  r.official_chart_manually_reviewed=true;
+  r.official_post_time_verified=true;
+  r.official_surface_distance_verified=true;
+  r.official_scratch_ae_mto_verified=true;
+  r.official_finish_and_corrections_verified=true;
+  r.pp_to_official_starter_identity_verified=true;
+  r.pre_race_full_field_rankings_verified=true;
+  r.pre_race_anchor_verified=true;
+  r.independent_anchor_evidence_uri='https://example.org/anchor';
+  r.pre_race_anchor_observed_at_utc='2026-10-25T19:04:47Z';
+  r.official_post_at_utc='2026-10-25T18:00:00Z';
+ });
+ assert.equal(auditIssue74(fake).certified,0);
+});
+test('reject duplicate or invalid race IDs',()=>{
+ const fake=structuredClone(ledger);
+ fake.races[8].race=1;
+ assert.throws(()=>auditIssue74(fake),/Duplicate or invalid/);
+});
