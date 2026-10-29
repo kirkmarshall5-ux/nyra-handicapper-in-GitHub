@@ -60,3 +60,33 @@ test('reject duplicate or invalid race IDs',()=>{
  fake.races[8].race=1;
  assert.throws(()=>auditIssue74(fake),/Duplicate or invalid/);
 });
+
+test('even fully asserted HTTPS links and manual flags are not independent certification',()=>{
+ const fake=structuredClone(ledger);
+ fake.chart_source.review_status='ALL_CHARTS_MANUALLY_VERIFIED';
+ fake.source_pdf.production_pdfjs_replay_executed=true;
+ fake.freeze.independent_before_post_anchor_verified=true;
+ fake.races.forEach(r=>{
+  r.known_discrepancies=[];
+  r.official_chart_url='https://example.org/not-an-official-chart';
+  r.official_chart_id='self-asserted';
+  r.official_chart_manually_reviewed=true;
+  r.official_post_time_verified=true;
+  r.official_surface_distance_verified=true;
+  r.official_scratch_ae_mto_verified=true;
+  r.official_finish_and_corrections_verified=true;
+  r.pp_to_official_starter_identity_verified=true;
+  r.pre_race_full_field_rankings_verified=true;
+  r.pre_race_anchor_verified=true;
+  r.independent_anchor_evidence_uri='https://example.org/not-an-anchor';
+  r.pre_race_anchor_observed_at_utc='2026-10-25T12:00:00Z';
+  r.official_post_at_utc='2026-10-25T18:00:00Z';
+  r.prospective_gradeable=false;
+ });
+ const report=auditIssue74(fake);
+ assert.equal(report.evidence_ready_count,9);
+ assert.equal(report.certified,0);
+ assert.equal(report.blocked,9);
+ assert.equal(report.certification_status,'AWAITING_INDEPENDENT_VERIFICATION');
+ assert.ok(report.races.every(r=>r.evidence_complete&&!r.certified));
+});
