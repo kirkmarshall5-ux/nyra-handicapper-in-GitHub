@@ -16,7 +16,11 @@
     "official_full_card_index_url": "https://tvg.equibase.com/static/chart/pdf/BEL102526USA.html",
     "scope": "All nine individual official charts are linked from the index",
     "review_status": "INDEX_LOCATED_CHART_CONTENT_NOT_MANUALLY_VERIFIED",
-    "copyright_note": "Do not republish copyrighted chart content or automate extraction contrary to source terms"
+    "copyright_note": "Do not republish copyrighted chart content or automate extraction contrary to source terms",
+    "official_results_index_url": "https://tvg.equibase.com/static/chart/summary/RaceCardIndexBEL102526USA-EQB.html",
+    "official_results_index_reviewed_for_published_off_minutes": true,
+    "official_off_time_precision": "minute (no seconds published in summary index)",
+    "official_chart_content_reviewed": false
   },
   "source_pdf": {
     "filename": "bel1025p.pdf",
@@ -28,7 +32,9 @@
     "filename": "NYRA_FREEZE_2026-10-25_2026-10-25T19-04-47-198Z.json",
     "sha256": "2c4aa2c183a44377ee1b6895541a184fde8da5169e6a3a32cb582d8baddffbf6",
     "clock_source": "browser-device-unverified",
-    "independent_before_post_anchor_verified": false
+    "independent_before_post_anchor_verified": false,
+    "browser_recorded_at_utc": "2026-10-25T19:04:47.198Z",
+    "browser_recorded_at_local": "2026-10-25 15:04:47.198 EDT"
   },
   "races": [
     {
@@ -45,11 +51,17 @@
       "pass_action_record_verified": true,
       "original_decision": "PASS",
       "prospective_gradeable": false,
-      "known_discrepancies": [],
+      "known_discrepancies": [
+        "Original 15:04:47 EDT freeze is after Equibase published off time; permanently ineligible for prospective grading from this snapshot."
+      ],
       "independent_anchor_evidence_uri": null,
       "pre_race_anchor_observed_at_utc": null,
       "official_post_at_utc": null,
-      "pre_race_anchor_verified": false
+      "pre_race_anchor_verified": false,
+      "equibase_published_off_time_local": "2026-10-25 13:12 EDT",
+      "equibase_published_off_time_precision": "minute",
+      "equibase_off_time_index_url": "https://tvg.equibase.com/static/chart/summary/RaceCardIndexBEL102526USA-EQB.html",
+      "freeze_time_vs_published_off_minute": "AFTER_PUBLISHED_OFF_MINUTE_NOT_PROSPECTIVE"
     },
     {
       "race": 2,
@@ -66,12 +78,17 @@
       "original_decision": "PASS",
       "prospective_gradeable": false,
       "known_discrepancies": [
-        "R2: saved Brisnet Contender missing numerical rankings for #4,#6,#7,#9"
+        "R2: saved Brisnet Contender missing numerical rankings for #4,#6,#7,#9",
+        "Original 15:04:47 EDT freeze is after Equibase published off time; permanently ineligible for prospective grading from this snapshot."
       ],
       "independent_anchor_evidence_uri": null,
       "pre_race_anchor_observed_at_utc": null,
       "official_post_at_utc": null,
-      "pre_race_anchor_verified": false
+      "pre_race_anchor_verified": false,
+      "equibase_published_off_time_local": "2026-10-25 13:45 EDT",
+      "equibase_published_off_time_precision": "minute",
+      "equibase_off_time_index_url": "https://tvg.equibase.com/static/chart/summary/RaceCardIndexBEL102526USA-EQB.html",
+      "freeze_time_vs_published_off_minute": "AFTER_PUBLISHED_OFF_MINUTE_NOT_PROSPECTIVE"
     },
     {
       "race": 3,
@@ -87,11 +104,17 @@
       "pass_action_record_verified": true,
       "original_decision": "PASS",
       "prospective_gradeable": false,
-      "known_discrepancies": [],
+      "known_discrepancies": [
+        "Original 15:04:47 EDT freeze is after Equibase published off time; permanently ineligible for prospective grading from this snapshot."
+      ],
       "independent_anchor_evidence_uri": null,
       "pre_race_anchor_observed_at_utc": null,
       "official_post_at_utc": null,
-      "pre_race_anchor_verified": false
+      "pre_race_anchor_verified": false,
+      "equibase_published_off_time_local": "2026-10-25 14:18 EDT",
+      "equibase_published_off_time_precision": "minute",
+      "equibase_off_time_index_url": "https://tvg.equibase.com/static/chart/summary/RaceCardIndexBEL102526USA-EQB.html",
+      "freeze_time_vs_published_off_minute": "AFTER_PUBLISHED_OFF_MINUTE_NOT_PROSPECTIVE"
     },
     {
       "race": 4,
@@ -108,12 +131,17 @@
       "original_decision": "PASS",
       "prospective_gradeable": false,
       "known_discrepancies": [
-        "R4: saved Brisnet Contender missing numerical ranking for #1"
+        "R4: saved Brisnet Contender missing numerical ranking for #1",
+        "Original 15:04:47 EDT freeze is after Equibase published off time; permanently ineligible for prospective grading from this snapshot."
       ],
       "independent_anchor_evidence_uri": null,
       "pre_race_anchor_observed_at_utc": null,
       "official_post_at_utc": null,
-      "pre_race_anchor_verified": false
+      "pre_race_anchor_verified": false,
+      "equibase_published_off_time_local": "2026-10-25 14:51 EDT",
+      "equibase_published_off_time_precision": "minute",
+      "equibase_off_time_index_url": "https://tvg.equibase.com/static/chart/summary/RaceCardIndexBEL102526USA-EQB.html",
+      "freeze_time_vs_published_off_minute": "AFTER_PUBLISHED_OFF_MINUTE_NOT_PROSPECTIVE"
     },
     {
       "race": 5,
@@ -133,7 +161,11 @@
       "independent_anchor_evidence_uri": null,
       "pre_race_anchor_observed_at_utc": null,
       "official_post_at_utc": null,
-      "pre_race_anchor_verified": false
+      "pre_race_anchor_verified": false,
+      "equibase_published_off_time_local": "2026-10-25 15:25 EDT",
+      "equibase_published_off_time_precision": "minute",
+      "equibase_off_time_index_url": "https://tvg.equibase.com/static/chart/summary/RaceCardIndexBEL102526USA-EQB.html",
+      "freeze_time_vs_published_off_minute": "BEFORE_PUBLISHED_OFF_MINUTE_UNAUTHENTICATED"
     },
     {
       "race": 6,
@@ -153,7 +185,11 @@
       "independent_anchor_evidence_uri": null,
       "pre_race_anchor_observed_at_utc": null,
       "official_post_at_utc": null,
-      "pre_race_anchor_verified": false
+      "pre_race_anchor_verified": false,
+      "equibase_published_off_time_local": "2026-10-25 16:00 EDT",
+      "equibase_published_off_time_precision": "minute",
+      "equibase_off_time_index_url": "https://tvg.equibase.com/static/chart/summary/RaceCardIndexBEL102526USA-EQB.html",
+      "freeze_time_vs_published_off_minute": "BEFORE_PUBLISHED_OFF_MINUTE_UNAUTHENTICATED"
     },
     {
       "race": 7,
@@ -173,7 +209,11 @@
       "independent_anchor_evidence_uri": null,
       "pre_race_anchor_observed_at_utc": null,
       "official_post_at_utc": null,
-      "pre_race_anchor_verified": false
+      "pre_race_anchor_verified": false,
+      "equibase_published_off_time_local": "2026-10-25 16:40 EDT",
+      "equibase_published_off_time_precision": "minute",
+      "equibase_off_time_index_url": "https://tvg.equibase.com/static/chart/summary/RaceCardIndexBEL102526USA-EQB.html",
+      "freeze_time_vs_published_off_minute": "BEFORE_PUBLISHED_OFF_MINUTE_UNAUTHENTICATED"
     },
     {
       "race": 8,
@@ -193,7 +233,11 @@
       "independent_anchor_evidence_uri": null,
       "pre_race_anchor_observed_at_utc": null,
       "official_post_at_utc": null,
-      "pre_race_anchor_verified": false
+      "pre_race_anchor_verified": false,
+      "equibase_published_off_time_local": "2026-10-25 17:15 EDT",
+      "equibase_published_off_time_precision": "minute",
+      "equibase_off_time_index_url": "https://tvg.equibase.com/static/chart/summary/RaceCardIndexBEL102526USA-EQB.html",
+      "freeze_time_vs_published_off_minute": "BEFORE_PUBLISHED_OFF_MINUTE_UNAUTHENTICATED"
     },
     {
       "race": 9,
@@ -215,7 +259,11 @@
       "independent_anchor_evidence_uri": null,
       "pre_race_anchor_observed_at_utc": null,
       "official_post_at_utc": null,
-      "pre_race_anchor_verified": false
+      "pre_race_anchor_verified": false,
+      "equibase_published_off_time_local": "2026-10-25 17:53 EDT",
+      "equibase_published_off_time_precision": "minute",
+      "equibase_off_time_index_url": "https://tvg.equibase.com/static/chart/summary/RaceCardIndexBEL102526USA-EQB.html",
+      "freeze_time_vs_published_off_minute": "BEFORE_PUBLISHED_OFF_MINUTE_UNAUTHENTICATED"
     }
   ],
   "constraints": [
@@ -224,6 +272,8 @@
     "PASS cohort must remain visible in accuracy reports but betting must not be inferred from PASS.",
     "Original PDF importer replay is retrospective evidence only; cannot authenticate historical predictions.",
     "No certified ROI, top-one, top-three or finish-order results may be computed from uncertified races.",
-    "A full-card freeze captured at 2026-10-25T19:04:47Z cannot establish a pre-post observation for races that already went off; assess each race against independently verified official post time."
+    "A full-card freeze captured at 2026-10-25T19:04:47Z cannot establish a pre-post observation for races that already went off; assess each race against independently verified official post time.",
+    "Races 1-4: published official off minutes precede 15:04:47 EDT browser freeze. Never certify this snapshot as pre-race for those races.",
+    "Races 5-9: freeze time precedes published off minutes, but the browser clock is not independently anchored and full-field evidence still required."
   ]
 }
