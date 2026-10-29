@@ -4,7 +4,7 @@ const sorted = values => [...values].map(String).sort((a,b)=>a.localeCompare(b,u
 const normalizedName = name => String(name??'').normalize('NFKD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]/g,'');
 export function digestImportedRaceIdentities(horses) {
   const lines=[...horses].sort((a,b)=>Number(a.n)-Number(b.n)).map(h=>String(h.n).trim()+':'+normalizedName(h.name));
-  return createHash('sha256').update(lines.join('\\n'),'utf8').digest('hex');
+  return createHash('sha256').update(lines.join(String.fromCharCode(10)),'utf8').digest('hex');
 }
 export function compareImportedCardToFrozenRosters(card,reference,sourceIdentityManifest=null,fullCardNameDigests=null) {
   assert.ok(card && typeof card==='object' && card.races,'Parsed Brisnet card required');
