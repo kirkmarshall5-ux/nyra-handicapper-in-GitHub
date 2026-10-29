@@ -63,17 +63,35 @@ for(let n=1;n<=8;n++){
  }
 }
 assert.ok(Math.abs(card.races[8].distance_furlongs-(8+70/220))<1e-9,'Race 8 distance incorrect');
-console.log(JSON.stringify({status:'SOURCE_RECONCILIATION_PASS_NOT_LIVE_UPLOAD_CERTIFIED',date:card.date,providers:['BRISNET','DRF'],races:8,entries_per_provider:52,drf_early_release:'SOURCE_IDENTITY_ONLY_NO_PROGRAM_NUMBER_CERTIFICATION',sha256:{BRISNET:digest,DRF:drfExtract.digest},scratch_reconciliation:'NOT_CERTIFIED'},null,2));
-// Production upload acceptance is stricter than source-name reconciliation.
-// Both providers must pass the actual routing/runner-identity safeguards.
+// Source reconciliation is not sufficient to certify a live upload.
+// Exercise both actual router paths and preserve independent failure evidence.
 const {parsePPCard}=await import(pathToFileURL(resolve('pp-format-router.js')).href);
-for(const [provider,sourcePages,expectedFormat] of [
- ['BRISNET',pages,'BRISNET_PREMIUM_PLUS'],
- ['DRF',drfPages,'DRF']
+const providerResults=[];
+for(const [provider,sourcePages,expectedFormat,filename] of [
+ ['BRISNET',pages,'BRISNET_PREMIUM_PLUS','flx1021p.pdf'],
+ ['DRF',drfPages,'DRF','FL--10-21-2026.pdf']
 ]){
- const routed=parsePPCard(sourcePages,{sourceName:provider==='DRF'?'FL--10-21-2026.pdf':'flx1021p.pdf'});
- assert.equal(routed.source_format,expectedFormat,provider+' wrong production parser route');
- assert.equal(Object.keys(routed.races).length,8,provider+' routed race count');
- for(let n=1;n<=8;n++)assert.equal(routed.races[n].horses.length,expected[n].length,provider+' routed race '+n+' field count');
+ try {
+  const routed=parsePPCard(sourcePages,{sourceName:filename});
+  assert.equal(routed.source_format,expectedFormat,provider+' wrong production parser route');
+  assert.equal(Object.keys(routed.races).length,8,provider+' routed race count');
+  for(let n=1;n<=8;n++){
+   assert.equal(routed.races[n].horses.length,expected[n].length,provider+' routed race '+n+' field count');
+   assert.deepEqual(routed.races[n].horses.map(h=>norm(h.name)).sort(),expected[n].map(norm).sort(),provider+' routed race '+n+' horse names');
+  }
+  providerResults.push({provider,status:'PASS',races:8,runners:52});
+ } catch(error){
+  providerResults.push({provider,status:'FAIL',error:String(error?.message||error)});
+ }
 }
-console.log('LIVE_IMPORT_ACCEPTANCE_PASS: both source PDFs passed production routing and runner identity safeguards');
+const allPassed=providerResults.every(x=>x.status==='PASS');
+console.log(JSON.stringify({
+ status:allPassed?'PRODUCTION_ROUTER_ACCEPTANCE_PASS':'PRODUCTION_ROUTER_ACCEPTANCE_BLOCKED',
+ date:card.date,source_reconciliation:{races:8,runners_per_provider:52},
+ production_importers:providerResults,
+ drf_early_release:'NO_PROGRAM_NUMBER_WAIVER',
+ sha256:{BRISNET:digest,DRF:drfExtract.digest},
+ scratch_reconciliation:'NOT_CERTIFIED',physical_ipad:'NOT_CERTIFIED',
+ deployment:'NOT_CERTIFIED'
+},null,2));
+if(!allPassed)process.exitCode=1;
