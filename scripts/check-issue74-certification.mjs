@@ -49,10 +49,14 @@ export function auditIssue74(ledger) {
     // An asserted certified flag cannot override independent evidence requirements.
     if(race.prospective_gradeable===true&&blockers.length)
       blockers.push('Contradictory prospective_gradeable claim');
-    return {race:race.race,original_decision:race.original_decision,certified:blockers.length===0,blockers};
+    return {race:race.race,original_decision:race.original_decision,evidence_complete:blockers.length===0,certified:false,blockers};
   });
-  const certified=races.filter(r=>r.certified).length;
-  return {issue:74,scope:'BEL-2026-10-25',total:9,certified,blocked:9-certified,certification_status:certified===9?'PILOT_CERTIFIED':'CERTIFICATION_BLOCKED',races};
+  const evidence_ready_count=races.filter(r=>r.evidence_complete).length;
+  // Structural booleans and URLs are user-supplied assertions, NOT verified signatures,
+  // trusted chart digests, or independently authenticated pre-post timestamp receipts.
+  // Never elevate this inventory to prospective certification without a separate verifier.
+  return {issue:74,scope:'BEL-2026-10-25',total:9,evidence_ready_count,
+    certified:0,blocked:9,certification_status:evidence_ready_count===9?'AWAITING_INDEPENDENT_VERIFICATION':'CERTIFICATION_BLOCKED',races};
 }
 const isCli=process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href;
 if(isCli){
