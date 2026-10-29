@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "track": "Belmont Park",
+  "date": "2026-10-25",
+  "race": 9,
+  "status": "PUBLIC_NYRA_RESULT_CROSSCHECKED_NOT_CERTIFIED",
+  "official_results_source": {
+    "publisher": "New York Racing Association",
+    "url": "https://prodv2.nyra.com/belmont/racing/?day=2026-10-25&race=9",
+    "source_type": "NYRA public results page (not independently archived/signed full chart)",
+    "verified_on": "2026-10-28",
+    "race_surface": "Turf",
+    "race_condition": "Firm",
+    "distance_furlongs": 6
+  },
+  "pp_source": {
+    "filename": "bel1025p.pdf",
+    "sha256": "13930fbc15ee9263777a1a20d16051f8cd6196f8ece396bca38b62fde409705a",
+    "source_entries": 14,
+    "source_identity_verified": true,
+    "production_pdfjs_replay_verified": false
+  },
+  "official_field": {
+    "scratched_programs": [
+      "1",
+      "14"
+    ],
+    "starter_programs": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11",
+      "12",
+      "13"
+    ],
+    "starter_count": 12,
+    "finish_order_programs": [
+      "7",
+      "9",
+      "4",
+      "8",
+      "11",
+      "5",
+      "10",
+      "12",
+      "13",
+      "2",
+      "3",
+      "6"
+    ],
+    "winner_program": "7",
+    "top_four_programs": [
+      "7",
+      "9",
+      "4",
+      "8"
+    ]
+  },
+  "archived_freeze": {
+    "filename": "NYRA_FREEZE_2026-10-25_2026-10-25T19-04-47-198Z.json",
+    "sha256": "2c4aa2c183a44377ee1b6895541a184fde8da5169e6a3a32cb582d8baddffbf6",
+    "clock_source": "browser-device-unverified",
+    "dashboard_ranked_programs": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11",
+      "12"
+    ],
+    "ranked_count": 11,
+    "missing_official_starter_programs": [
+      "13"
+    ]
+  },
+  "reconciliation": {
+    "source_entries": 14,
+    "official_starters": 12,
+    "official_scratches": 2,
+    "ranked_official_starters": 11,
+    "missing_official_starters": [
+      "13"
+    ],
+    "source_to_result_programs_match": true,
+    "source_to_model_field_parity": false,
+    "full_field_pre_race_ranking_verified": false,
+    "independent_pre_post_time_anchor_verified": false,
+    "independently_signed_official_chart_verified": false,
+    "prospective_gradeable": false
+  },
+  "limitations": [
+    "NYRA public result page is a stronger independent published cross-check than the previously recorded third-party result, but it is not an independently signed/archived full Equibase or NYRA chart artifact.",
+    "The original archived pre-race model rankings omit actual starter #13 Cocoa Mills and must never be retroactively modified or graded as full-field.",
+    "Browser-device freeze time is not an independently anchored before-post timestamp.",
+    "Original PDF production pdfjs importer replay is still unexecuted; this record does not close the parser/model-input parity gate.",
+    "Do not infer official chart DQs, dead heats, or chart corrections from this summary page; obtain and archive the complete official chart before full chart certification.",
+    "No historical Top-1/Top-3/ROI or betting claims authorized."
+  ]
+}
