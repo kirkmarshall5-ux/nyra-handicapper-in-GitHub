@@ -45,7 +45,11 @@
       "pass_action_record_verified": true,
       "original_decision": "PASS",
       "prospective_gradeable": false,
-      "known_discrepancies": []
+      "known_discrepancies": [],
+      "independent_anchor_evidence_uri": null,
+      "pre_race_anchor_observed_at_utc": null,
+      "official_post_at_utc": null,
+      "pre_race_anchor_verified": false
     },
     {
       "race": 2,
@@ -63,7 +67,11 @@
       "prospective_gradeable": false,
       "known_discrepancies": [
         "R2: saved Brisnet Contender missing numerical rankings for #4,#6,#7,#9"
-      ]
+      ],
+      "independent_anchor_evidence_uri": null,
+      "pre_race_anchor_observed_at_utc": null,
+      "official_post_at_utc": null,
+      "pre_race_anchor_verified": false
     },
     {
       "race": 3,
@@ -79,7 +87,11 @@
       "pass_action_record_verified": true,
       "original_decision": "PASS",
       "prospective_gradeable": false,
-      "known_discrepancies": []
+      "known_discrepancies": [],
+      "independent_anchor_evidence_uri": null,
+      "pre_race_anchor_observed_at_utc": null,
+      "official_post_at_utc": null,
+      "pre_race_anchor_verified": false
     },
     {
       "race": 4,
@@ -97,7 +109,11 @@
       "prospective_gradeable": false,
       "known_discrepancies": [
         "R4: saved Brisnet Contender missing numerical ranking for #1"
-      ]
+      ],
+      "independent_anchor_evidence_uri": null,
+      "pre_race_anchor_observed_at_utc": null,
+      "official_post_at_utc": null,
+      "pre_race_anchor_verified": false
     },
     {
       "race": 5,
@@ -113,7 +129,11 @@
       "pass_action_record_verified": true,
       "original_decision": "PASS",
       "prospective_gradeable": false,
-      "known_discrepancies": []
+      "known_discrepancies": [],
+      "independent_anchor_evidence_uri": null,
+      "pre_race_anchor_observed_at_utc": null,
+      "official_post_at_utc": null,
+      "pre_race_anchor_verified": false
     },
     {
       "race": 6,
@@ -129,7 +149,11 @@
       "pass_action_record_verified": true,
       "original_decision": "PASS",
       "prospective_gradeable": false,
-      "known_discrepancies": []
+      "known_discrepancies": [],
+      "independent_anchor_evidence_uri": null,
+      "pre_race_anchor_observed_at_utc": null,
+      "official_post_at_utc": null,
+      "pre_race_anchor_verified": false
     },
     {
       "race": 7,
@@ -145,7 +169,11 @@
       "pass_action_record_verified": true,
       "original_decision": "PASS",
       "prospective_gradeable": false,
-      "known_discrepancies": []
+      "known_discrepancies": [],
+      "independent_anchor_evidence_uri": null,
+      "pre_race_anchor_observed_at_utc": null,
+      "official_post_at_utc": null,
+      "pre_race_anchor_verified": false
     },
     {
       "race": 8,
@@ -161,7 +189,11 @@
       "pass_action_record_verified": true,
       "original_decision": "PASS",
       "prospective_gradeable": false,
-      "known_discrepancies": []
+      "known_discrepancies": [],
+      "independent_anchor_evidence_uri": null,
+      "pre_race_anchor_observed_at_utc": null,
+      "official_post_at_utc": null,
+      "pre_race_anchor_verified": false
     },
     {
       "race": 9,
@@ -179,7 +211,11 @@
       "prospective_gradeable": false,
       "known_discrepancies": [
         "R9: archived active field omitted official starter #13 Cocoa Mills"
-      ]
+      ],
+      "independent_anchor_evidence_uri": null,
+      "pre_race_anchor_observed_at_utc": null,
+      "official_post_at_utc": null,
+      "pre_race_anchor_verified": false
     }
   ],
   "constraints": [
@@ -187,6 +223,7 @@
     "Do not backfill missing runners into archived predictions.",
     "PASS cohort must remain visible in accuracy reports but betting must not be inferred from PASS.",
     "Original PDF importer replay is retrospective evidence only; cannot authenticate historical predictions.",
-    "No certified ROI, top-one, top-three or finish-order results may be computed from uncertified races."
+    "No certified ROI, top-one, top-three or finish-order results may be computed from uncertified races.",
+    "A full-card freeze captured at 2026-10-25T19:04:47Z cannot establish a pre-post observation for races that already went off; assess each race against independently verified official post time."
   ]
 }
