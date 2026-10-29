@@ -1,0 +1,56 @@
+name: Finger Lakes October 21 dual-provider production acceptance
+on:
+  pull_request:
+    paths:
+      - 'scripts/verify-finger-lakes-oct21.mjs'
+      - 'pp-format-router.js'
+      - 'release-card-parser.js'
+      - 'brisnet-premium-parser.js'
+      - '.github/workflows/finger-lakes-oct21-acceptance.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  production-import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install locked PDF.js dependency
+        run: npm install --no-audit --no-fund --ignore-scripts
+      - name: Syntax and importer regression checks
+        run: |
+          node --check scripts/verify-finger-lakes-oct21.mjs
+          npm test
+      - name: Restore original private PDFs
+        env:
+          PDF_BUNDLE_BASE64: ${{ secrets.BRISNET_AUDIT_PDFS_BASE64 }}
+          PDF_BUNDLE_URL: ${{ secrets.BRISNET_AUDIT_BUNDLE_URL }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/fl-oct21"
+          if [ -n "$PDF_BUNDLE_URL" ]; then
+            case "$PDF_BUNDLE_URL" in https://*) ;; *) echo "HTTPS bundle URL required" >&2; exit 1;; esac
+            curl --fail --location --silent --show-error --retry 2 --max-time 120 "$PDF_BUNDLE_URL" -o "$RUNNER_TEMP/cards.tar.gz"
+          elif [ -n "$PDF_BUNDLE_BASE64" ]; then
+            printf '%s' "$PDF_BUNDLE_BASE64" | base64 -d > "$RUNNER_TEMP/cards.tar.gz"
+          else
+            echo "::error::Original PDF bundle secret missing. No production acceptance possible."
+            exit 1
+          fi
+          tar -tzf "$RUNNER_TEMP/cards.tar.gz" | while IFS= read -r entry; do
+            case "$entry" in /*|../*|*/../*|*'/..') echo "Unsafe archive entry" >&2; exit 1;; esac
+          done
+          tar -xzf "$RUNNER_TEMP/cards.tar.gz" --no-same-owner --no-same-permissions -C "$RUNNER_TEMP/fl-oct21"
+          test -f "$RUNNER_TEMP/fl-oct21/flx1021p.pdf"
+          test -f "$RUNNER_TEMP/fl-oct21/FL--10-21-2026.pdf"
+      - name: Exact-source production importer acceptance
+        run: |
+          set -euo pipefail
+          node scripts/verify-finger-lakes-oct21.mjs "$RUNNER_TEMP/fl-oct21/flx1021p.pdf" "$RUNNER_TEMP/fl-oct21/FL--10-21-2026.pdf"
+      - name: Acceptance reminder
+        if: always()
+        run: echo "A green importer run alone does not certify scratches, browser/iPad QA, or GitHub Pages deployment."
