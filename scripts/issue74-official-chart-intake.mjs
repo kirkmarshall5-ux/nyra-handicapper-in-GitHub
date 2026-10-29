@@ -4,7 +4,8 @@ const canonical = value => String(value ?? '').trim().toUpperCase();
 const unique = xs => new Set(xs).size === xs.length;
 const asArray = x => Array.isArray(x) ? x : [];
 const https = s => typeof s === 'string' && /^https:\/\//.test(s);
-export function inspectOfficialChartIntake(publishedRace, intake) {
+const nameKey = s => String(s??'').normalize('NFKD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]/g,'');
+export function inspectOfficialChartIntake(publishedRace, intake, originalPPIdentities) {
   if(!publishedRace || !Number.isInteger(publishedRace.race))
     throw Error('Published race manifest required');
   const errors=[],warnings=[];
@@ -32,6 +33,22 @@ export function inspectOfficialChartIntake(publishedRace, intake) {
   if(programs.some(p=>!p)) errors.push('Blank chart program');
   if(!unique(programs)) errors.push('Duplicate chart program');
   for(const p of programs) if(!roster.includes(p)) errors.push('Chart starter/nonstarter absent from source PP roster #'+p);
+  // A program number alone is not a unique horse identity. Independently
+  // captured original PP horse names must be checked against chart starter names.
+  const sourceIdentities=asArray(originalPPIdentities);
+  const sourcePrograms=sourceIdentities.map(x=>canonical(x?.program));
+  if(!sourceIdentities.length) errors.push('Original PP horse-name identity evidence missing');
+  if(!unique(sourcePrograms)) errors.push('Duplicate original PP identity program');
+  if(sourceIdentities.some(x=>!canonical(x?.program)||!nameKey(x?.name))) errors.push('Original PP identity has missing program or name');
+  if(JSON.stringify([...sourcePrograms].sort())!==JSON.stringify([...roster].sort()))
+    errors.push('Original PP horse-name identity list does not cover complete source roster');
+  const sourceByProgram=new Map(sourceIdentities.map(x=>[canonical(x.program),nameKey(x.name)]));
+  for(const entry of entries){
+    const program=canonical(entry?.program),name=nameKey(entry?.name);
+    if(!name) errors.push('Official chart starter name missing #'+program);
+    else if(sourceByProgram.has(program)&&sourceByProgram.get(program)!==name)
+      errors.push('Original PP versus official chart horse-name mismatch #'+program);
+  }
   // Charts may omit scratches, so require a separate reviewed nonstarter list.
   const nonstarters=asArray(intake.officialNonstarterPrograms).map(canonical);
   if(!unique(nonstarters)) errors.push('Duplicate nonstarter program');
