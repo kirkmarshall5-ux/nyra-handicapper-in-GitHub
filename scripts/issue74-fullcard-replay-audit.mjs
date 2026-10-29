@@ -1,7 +1,12 @@
+import {createHash} from 'node:crypto';
 import assert from 'node:assert/strict';
 const sorted = values => [...values].map(String).sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
 const normalizedName = name => String(name??'').normalize('NFKD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]/g,'');
-export function compareImportedCardToFrozenRosters(card,reference,sourceIdentityManifest=null) {
+export function digestImportedRaceIdentities(horses) {
+  const lines=[...horses].sort((a,b)=>Number(a.n)-Number(b.n)).map(h=>String(h.n).trim()+':'+normalizedName(h.name));
+  return createHash('sha256').update(lines.join('\\n'),'utf8').digest('hex');
+}
+export function compareImportedCardToFrozenRosters(card,reference,sourceIdentityManifest=null,fullCardNameDigests=null) {
   assert.ok(card && typeof card==='object' && card.races,'Parsed Brisnet card required');
   assert.equal(reference?.race_count,9,'Expected nine-race historical reference');
   assert.equal(reference?.races?.length,9,'Missing reference races');
@@ -24,6 +29,16 @@ export function compareImportedCardToFrozenRosters(card,reference,sourceIdentity
     if(missing.length)blockers.push('Missing original PP programs: '+missing.join(','));
     if(extra.length)blockers.push('Unexpected imported PP programs: '+extra.join(','));
     if(actual.length!==expected.length)blockers.push('Imported roster count differs');
+    if(fullCardNameDigests){
+      const expectedDigest=fullCardNameDigests.races?.find(x=>x.race===saved.race);
+      if(fullCardNameDigests.source_pdf_sha256!=='13930fbc15ee9263777a1a20d16051f8cd6196f8ece396bca38b62fde409705a'
+         || fullCardNameDigests.races?.length!==9 || fullCardNameDigests.total_source_entries!==80
+         || !expectedDigest || expectedDigest.source_entries!==expected.length
+         || !/^[a-f0-9]{64}$/.test(expectedDigest.program_name_sha256))
+        blockers.push('Original PP full-card horse-name digest evidence invalid or missing');
+      else if(digestImportedRaceIdentities(parsed.horses)!==expectedDigest.program_name_sha256)
+        blockers.push('Original PP full-card horse-name identity digest mismatch: race '+saved.race);
+    }
     if(saved.race===9 && sourceIdentityManifest){
       if(sourceIdentityManifest.race!==9 || !Array.isArray(sourceIdentityManifest.entries) || sourceIdentityManifest.entries.length!==14)
         blockers.push('Invalid original R9 PP horse-name identity manifest');
