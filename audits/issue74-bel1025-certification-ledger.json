@@ -1,0 +1,192 @@
+{
+  "schema_version": 1,
+  "issue": 74,
+  "scope": {
+    "pilot": "BEL-2026-10-25",
+    "pilot_races": 9,
+    "original_inventory": {
+      "pp_cards": 10,
+      "races": 107,
+      "pp_runner_identities": 965,
+      "source": "PR #68; inventory not re-certified by this ledger"
+    }
+  },
+  "chart_source": {
+    "publisher": "Equibase",
+    "official_full_card_index_url": "https://tvg.equibase.com/static/chart/pdf/BEL102526USA.html",
+    "scope": "All nine individual official charts are linked from the index",
+    "review_status": "INDEX_LOCATED_CHART_CONTENT_NOT_MANUALLY_VERIFIED",
+    "copyright_note": "Do not republish copyrighted chart content or automate extraction contrary to source terms"
+  },
+  "source_pdf": {
+    "filename": "bel1025p.pdf",
+    "sha256": "13930fbc15ee9263777a1a20d16051f8cd6196f8ece396bca38b62fde409705a",
+    "original_pdf_source_horses_r9_verified": 14,
+    "production_pdfjs_replay_executed": false
+  },
+  "freeze": {
+    "filename": "NYRA_FREEZE_2026-10-25_2026-10-25T19-04-47-198Z.json",
+    "sha256": "2c4aa2c183a44377ee1b6895541a184fde8da5169e6a3a32cb582d8baddffbf6",
+    "clock_source": "browser-device-unverified",
+    "independent_before_post_anchor_verified": false
+  },
+  "races": [
+    {
+      "race": 1,
+      "official_chart_url": null,
+      "official_chart_id": null,
+      "official_chart_manually_reviewed": false,
+      "official_post_time_verified": false,
+      "official_surface_distance_verified": false,
+      "official_scratch_ae_mto_verified": false,
+      "official_finish_and_corrections_verified": false,
+      "pp_to_official_starter_identity_verified": false,
+      "pre_race_full_field_rankings_verified": false,
+      "pass_action_record_verified": true,
+      "original_decision": "PASS",
+      "prospective_gradeable": false,
+      "known_discrepancies": []
+    },
+    {
+      "race": 2,
+      "official_chart_url": null,
+      "official_chart_id": null,
+      "official_chart_manually_reviewed": false,
+      "official_post_time_verified": false,
+      "official_surface_distance_verified": false,
+      "official_scratch_ae_mto_verified": false,
+      "official_finish_and_corrections_verified": false,
+      "pp_to_official_starter_identity_verified": false,
+      "pre_race_full_field_rankings_verified": false,
+      "pass_action_record_verified": true,
+      "original_decision": "PASS",
+      "prospective_gradeable": false,
+      "known_discrepancies": [
+        "R2: saved Brisnet Contender missing numerical rankings for #4,#6,#7,#9"
+      ]
+    },
+    {
+      "race": 3,
+      "official_chart_url": null,
+      "official_chart_id": null,
+      "official_chart_manually_reviewed": false,
+      "official_post_time_verified": false,
+      "official_surface_distance_verified": false,
+      "official_scratch_ae_mto_verified": false,
+      "official_finish_and_corrections_verified": false,
+      "pp_to_official_starter_identity_verified": false,
+      "pre_race_full_field_rankings_verified": false,
+      "pass_action_record_verified": true,
+      "original_decision": "PASS",
+      "prospective_gradeable": false,
+      "known_discrepancies": []
+    },
+    {
+      "race": 4,
+      "official_chart_url": null,
+      "official_chart_id": null,
+      "official_chart_manually_reviewed": false,
+      "official_post_time_verified": false,
+      "official_surface_distance_verified": false,
+      "official_scratch_ae_mto_verified": false,
+      "official_finish_and_corrections_verified": false,
+      "pp_to_official_starter_identity_verified": false,
+      "pre_race_full_field_rankings_verified": false,
+      "pass_action_record_verified": true,
+      "original_decision": "PASS",
+      "prospective_gradeable": false,
+      "known_discrepancies": [
+        "R4: saved Brisnet Contender missing numerical ranking for #1"
+      ]
+    },
+    {
+      "race": 5,
+      "official_chart_url": null,
+      "official_chart_id": null,
+      "official_chart_manually_reviewed": false,
+      "official_post_time_verified": false,
+      "official_surface_distance_verified": false,
+      "official_scratch_ae_mto_verified": false,
+      "official_finish_and_corrections_verified": false,
+      "pp_to_official_starter_identity_verified": false,
+      "pre_race_full_field_rankings_verified": false,
+      "pass_action_record_verified": true,
+      "original_decision": "PASS",
+      "prospective_gradeable": false,
+      "known_discrepancies": []
+    },
+    {
+      "race": 6,
+      "official_chart_url": null,
+      "official_chart_id": null,
+      "official_chart_manually_reviewed": false,
+      "official_post_time_verified": false,
+      "official_surface_distance_verified": false,
+      "official_scratch_ae_mto_verified": false,
+      "official_finish_and_corrections_verified": false,
+      "pp_to_official_starter_identity_verified": false,
+      "pre_race_full_field_rankings_verified": false,
+      "pass_action_record_verified": true,
+      "original_decision": "PASS",
+      "prospective_gradeable": false,
+      "known_discrepancies": []
+    },
+    {
+      "race": 7,
+      "official_chart_url": null,
+      "official_chart_id": null,
+      "official_chart_manually_reviewed": false,
+      "official_post_time_verified": false,
+      "official_surface_distance_verified": false,
+      "official_scratch_ae_mto_verified": false,
+      "official_finish_and_corrections_verified": false,
+      "pp_to_official_starter_identity_verified": false,
+      "pre_race_full_field_rankings_verified": false,
+      "pass_action_record_verified": true,
+      "original_decision": "PASS",
+      "prospective_gradeable": false,
+      "known_discrepancies": []
+    },
+    {
+      "race": 8,
+      "official_chart_url": null,
+      "official_chart_id": null,
+      "official_chart_manually_reviewed": false,
+      "official_post_time_verified": false,
+      "official_surface_distance_verified": false,
+      "official_scratch_ae_mto_verified": false,
+      "official_finish_and_corrections_verified": false,
+      "pp_to_official_starter_identity_verified": false,
+      "pre_race_full_field_rankings_verified": false,
+      "pass_action_record_verified": true,
+      "original_decision": "PASS",
+      "prospective_gradeable": false,
+      "known_discrepancies": []
+    },
+    {
+      "race": 9,
+      "official_chart_url": null,
+      "official_chart_id": null,
+      "official_chart_manually_reviewed": false,
+      "official_post_time_verified": false,
+      "official_surface_distance_verified": false,
+      "official_scratch_ae_mto_verified": false,
+      "official_finish_and_corrections_verified": false,
+      "pp_to_official_starter_identity_verified": false,
+      "pre_race_full_field_rankings_verified": false,
+      "pass_action_record_verified": true,
+      "original_decision": "PASS",
+      "prospective_gradeable": false,
+      "known_discrepancies": [
+        "R9: archived active field omitted official starter #13 Cocoa Mills"
+      ]
+    }
+  ],
+  "constraints": [
+    "Do not grade any race as prospective without independent timestamp prior to official post time.",
+    "Do not backfill missing runners into archived predictions.",
+    "PASS cohort must remain visible in accuracy reports but betting must not be inferred from PASS.",
+    "Original PDF importer replay is retrospective evidence only; cannot authenticate historical predictions.",
+    "No certified ROI, top-one, top-three or finish-order results may be computed from uncertified races."
+  ]
+}
