@@ -40,7 +40,7 @@ export function auditIssue74(ledger) {
     const independentEvidence=race.independent_anchor_evidence_uri;
     if(!anchor||!post||!Number.isFinite(Date.parse(anchor))||!Number.isFinite(Date.parse(post))||Date.parse(anchor)>=Date.parse(post))
       blockers.push('Independent anchor is not proven earlier than official off time');
-    if(typeof independentEvidence!=='string'||!/^https:\\/\\//.test(independentEvidence))
+    if(typeof independentEvidence!=='string'||!independentEvidence.startsWith('https://'))
       blockers.push('Independent timestamp evidence URL missing');
     if(race.original_decision!=='PASS'&&race.original_decision!=='RATEABLE')
       blockers.push('Original PASS/ACTION decision missing');
