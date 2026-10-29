@@ -1,0 +1,224 @@
+{
+  "schema_version": 1,
+  "scope": "BEL-2026-10-25",
+  "source": {
+    "filename": "bel1025p.pdf",
+    "sha256": "13930fbc15ee9263777a1a20d16051f8cd6196f8ece396bca38b62fde409705a",
+    "bytes": 1635111,
+    "pdf_pages": 24,
+    "method": "Independent local PyMuPDF text inspection of original private PDF, NOT production pdfjs importer",
+    "original_private_pdf_committed": false
+  },
+  "status": "ORIGINAL_PDF_SOURCE_PROGRAMS_INDEPENDENTLY_CONFIRMED_NOT_PRODUCTION_REPLAY",
+  "races": [
+    {
+      "race": 1,
+      "pp_pages": [
+        1,
+        2
+      ],
+      "pp_entry_count": 6,
+      "programs": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "original_source_programs_confirmed": true,
+      "production_importer_confirmed": false,
+      "official_starters_confirmed": false
+    },
+    {
+      "race": 2,
+      "pp_pages": [
+        3,
+        4
+      ],
+      "pp_entry_count": 10,
+      "programs": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10"
+      ],
+      "original_source_programs_confirmed": true,
+      "production_importer_confirmed": false,
+      "official_starters_confirmed": false
+    },
+    {
+      "race": 3,
+      "pp_pages": [
+        5,
+        6
+      ],
+      "pp_entry_count": 6,
+      "programs": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "original_source_programs_confirmed": true,
+      "production_importer_confirmed": false,
+      "official_starters_confirmed": false
+    },
+    {
+      "race": 4,
+      "pp_pages": [
+        7,
+        8
+      ],
+      "pp_entry_count": 7,
+      "programs": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7"
+      ],
+      "original_source_programs_confirmed": true,
+      "production_importer_confirmed": false,
+      "official_starters_confirmed": false
+    },
+    {
+      "race": 5,
+      "pp_pages": [
+        9,
+        10,
+        11
+      ],
+      "pp_entry_count": 10,
+      "programs": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10"
+      ],
+      "original_source_programs_confirmed": true,
+      "production_importer_confirmed": false,
+      "official_starters_confirmed": false
+    },
+    {
+      "race": 6,
+      "pp_pages": [
+        12,
+        13,
+        14
+      ],
+      "pp_entry_count": 8,
+      "programs": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8"
+      ],
+      "original_source_programs_confirmed": true,
+      "production_importer_confirmed": false,
+      "official_starters_confirmed": false
+    },
+    {
+      "race": 7,
+      "pp_pages": [
+        15,
+        16
+      ],
+      "pp_entry_count": 8,
+      "programs": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8"
+      ],
+      "original_source_programs_confirmed": true,
+      "production_importer_confirmed": false,
+      "official_starters_confirmed": false
+    },
+    {
+      "race": 8,
+      "pp_pages": [
+        17,
+        18,
+        19
+      ],
+      "pp_entry_count": 11,
+      "programs": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11"
+      ],
+      "original_source_programs_confirmed": true,
+      "production_importer_confirmed": false,
+      "official_starters_confirmed": false
+    },
+    {
+      "race": 9,
+      "pp_pages": [
+        20,
+        21,
+        22,
+        23
+      ],
+      "pp_entry_count": 14,
+      "programs": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14"
+      ],
+      "original_source_programs_confirmed": true,
+      "production_importer_confirmed": false,
+      "official_starters_confirmed": false
+    }
+  ],
+  "total_pp_entries": 80,
+  "notes": [
+    "Horse program numbers are extracted from original private PP horse blocks, not inferred from public finishing orders.",
+    "Race 9 original PDF contains program #13 Cocoa Mills and #14 It's Nancytime Now as also-eligible entries; both were omitted from neither source PP roster nor PDF.",
+    "Source PP entrants are not official starters; scratches and official chart corrections remain separate.",
+    "Do not treat this independent text extraction as production pdfjs importer replay or as prospective prediction certification."
+  ]
+}
