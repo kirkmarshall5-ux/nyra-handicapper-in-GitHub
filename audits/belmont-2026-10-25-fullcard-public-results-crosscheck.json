@@ -1,0 +1,322 @@
+{
+  "schema_version": 1,
+  "track": "Belmont Park",
+  "date": "2026-10-25",
+  "status": "PUBLIC_RESULTS_FULL_CARD_CROSSCHECK_NOT_OFFICIAL_CHART_CERTIFIED",
+  "published_result_sources": [
+    {
+      "publisher": "Breednet",
+      "url": "https://www.breednet.com.au/race-results/united-states/belmont-park/2026-10-25",
+      "scope": "all nine finishing orders"
+    },
+    {
+      "publisher": "Racing and Sports",
+      "url": "https://lb-oci.racingandsports.com/horse-racing-results/united-states-of-america/belmont-park/2026-10-25",
+      "scope": "independent race winner and top three comparison"
+    },
+    {
+      "publisher": "NYRA",
+      "url": "https://prodv2.nyra.com/belmont/racing/?day=2026-10-25&race=9",
+      "scope": "Race 9 published results"
+    }
+  ],
+  "private_freeze": {
+    "filename": "NYRA_FREEZE_2026-10-25_2026-10-25T19-04-47-198Z.json",
+    "sha256": "2c4aa2c183a44377ee1b6895541a184fde8da5169e6a3a32cb582d8baddffbf6",
+    "clock_source": "browser-device-unverified"
+  },
+  "race_count": 9,
+  "races": [
+    {
+      "race": 1,
+      "finish_order_programs": [
+        "2",
+        "3",
+        "6",
+        "1",
+        "4",
+        "5"
+      ],
+      "saved_roster_programs": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "published_nonstarters": [],
+      "missing_published_starters_from_dashboard": [],
+      "published_starters_unranked_by_brisnet": [],
+      "saved_brisnet_decision": "PASS",
+      "prospective_gradeable": false
+    },
+    {
+      "race": 2,
+      "finish_order_programs": [
+        "1",
+        "2",
+        "10",
+        "9",
+        "7",
+        "6",
+        "3",
+        "5",
+        "4"
+      ],
+      "saved_roster_programs": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10"
+      ],
+      "published_nonstarters": [
+        "8"
+      ],
+      "missing_published_starters_from_dashboard": [],
+      "published_starters_unranked_by_brisnet": [
+        "4",
+        "6",
+        "7",
+        "9"
+      ],
+      "saved_brisnet_decision": "PASS",
+      "prospective_gradeable": false
+    },
+    {
+      "race": 3,
+      "finish_order_programs": [
+        "4",
+        "2",
+        "1",
+        "3",
+        "6"
+      ],
+      "saved_roster_programs": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "published_nonstarters": [
+        "5"
+      ],
+      "missing_published_starters_from_dashboard": [],
+      "published_starters_unranked_by_brisnet": [],
+      "saved_brisnet_decision": "PASS",
+      "prospective_gradeable": false
+    },
+    {
+      "race": 4,
+      "finish_order_programs": [
+        "1",
+        "2",
+        "3",
+        "6",
+        "5",
+        "4",
+        "7"
+      ],
+      "saved_roster_programs": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7"
+      ],
+      "published_nonstarters": [],
+      "missing_published_starters_from_dashboard": [],
+      "published_starters_unranked_by_brisnet": [
+        "1"
+      ],
+      "saved_brisnet_decision": "PASS",
+      "prospective_gradeable": false
+    },
+    {
+      "race": 5,
+      "finish_order_programs": [
+        "4",
+        "6",
+        "8",
+        "9",
+        "5",
+        "3",
+        "2",
+        "7"
+      ],
+      "saved_roster_programs": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10"
+      ],
+      "published_nonstarters": [
+        "1",
+        "10"
+      ],
+      "missing_published_starters_from_dashboard": [],
+      "published_starters_unranked_by_brisnet": [],
+      "saved_brisnet_decision": "PASS",
+      "prospective_gradeable": false
+    },
+    {
+      "race": 6,
+      "finish_order_programs": [
+        "6",
+        "3",
+        "5",
+        "1",
+        "4",
+        "2",
+        "7",
+        "8"
+      ],
+      "saved_roster_programs": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8"
+      ],
+      "published_nonstarters": [],
+      "missing_published_starters_from_dashboard": [],
+      "published_starters_unranked_by_brisnet": [],
+      "saved_brisnet_decision": "PASS",
+      "prospective_gradeable": false
+    },
+    {
+      "race": 7,
+      "finish_order_programs": [
+        "3",
+        "4",
+        "8",
+        "6",
+        "5",
+        "2",
+        "1",
+        "7"
+      ],
+      "saved_roster_programs": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8"
+      ],
+      "published_nonstarters": [],
+      "missing_published_starters_from_dashboard": [],
+      "published_starters_unranked_by_brisnet": [],
+      "saved_brisnet_decision": "PASS",
+      "prospective_gradeable": false
+    },
+    {
+      "race": 8,
+      "finish_order_programs": [
+        "5",
+        "1",
+        "8",
+        "3",
+        "4",
+        "2",
+        "9",
+        "7",
+        "6",
+        "10",
+        "11"
+      ],
+      "saved_roster_programs": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11"
+      ],
+      "published_nonstarters": [],
+      "missing_published_starters_from_dashboard": [],
+      "published_starters_unranked_by_brisnet": [],
+      "saved_brisnet_decision": "PASS",
+      "prospective_gradeable": false
+    },
+    {
+      "race": 9,
+      "finish_order_programs": [
+        "7",
+        "9",
+        "4",
+        "8",
+        "11",
+        "5",
+        "10",
+        "12",
+        "13",
+        "2",
+        "3",
+        "6"
+      ],
+      "saved_roster_programs": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14"
+      ],
+      "published_nonstarters": [
+        "1",
+        "14"
+      ],
+      "missing_published_starters_from_dashboard": [
+        "13"
+      ],
+      "published_starters_unranked_by_brisnet": [
+        "13"
+      ],
+      "saved_brisnet_decision": "PASS",
+      "prospective_gradeable": false
+    }
+  ],
+  "limitations": [
+    "Published results are not independently archived signed official charts; full chart correction/dead heat/DQ review remains open.",
+    "Saved roster entries are not assumed to be official starters; nonstarters here are inferred from published finishing list and need official scratch/AE attestation.",
+    "Original frozen browser clock has no independent pre-post-time anchor; none of these races are certified prospective observations.",
+    "All saved Brisnet decisions are PASS; no betting or certified ROI is authorized.",
+    "Race 9 actual starter #13 Cocoa Mills missing from saved dashboard; R2/R4 have unranked starters; no retrospective filling of rankings.",
+    "Production pdfjs original-PDF importer replay remains open."
+  ]
+}
