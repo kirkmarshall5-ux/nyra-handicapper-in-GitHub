@@ -84,9 +84,10 @@ test('even fully asserted HTTPS links and manual flags are not independent certi
   r.prospective_gradeable=false;
  });
  const report=auditIssue74(fake);
- assert.equal(report.evidence_ready_count,9);
+ assert.equal(report.evidence_ready_count,5);
  assert.equal(report.certified,0);
  assert.equal(report.blocked,9);
- assert.equal(report.certification_status,'AWAITING_INDEPENDENT_VERIFICATION');
- assert.ok(report.races.every(r=>r.evidence_complete&&!r.certified));
+ assert.equal(report.certification_status,'CERTIFICATION_BLOCKED');
+ assert.ok(report.races.slice(0,4).every(r=>!r.evidence_complete&&!r.certified));
+ assert.ok(report.races.slice(4).every(r=>r.evidence_complete&&!r.certified));
 });
