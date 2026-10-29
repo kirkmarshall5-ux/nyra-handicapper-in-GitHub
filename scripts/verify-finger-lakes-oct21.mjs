@@ -63,4 +63,17 @@ for(let n=1;n<=8;n++){
  }
 }
 assert.ok(Math.abs(card.races[8].distance_furlongs-(8+70/220))<1e-9,'Race 8 distance incorrect');
-console.log(JSON.stringify({status:'PASS',date:card.date,providers:['BRISNET','DRF'],races:8,entries_per_provider:52,drf_early_release:'SOURCE_IDENTITY_ONLY_NO_PROGRAM_NUMBER_CERTIFICATION',sha256:{BRISNET:digest,DRF:drfExtract.digest},scratch_reconciliation:'NOT_CERTIFIED'},null,2));
+console.log(JSON.stringify({status:'SOURCE_RECONCILIATION_PASS_NOT_LIVE_UPLOAD_CERTIFIED',date:card.date,providers:['BRISNET','DRF'],races:8,entries_per_provider:52,drf_early_release:'SOURCE_IDENTITY_ONLY_NO_PROGRAM_NUMBER_CERTIFICATION',sha256:{BRISNET:digest,DRF:drfExtract.digest},scratch_reconciliation:'NOT_CERTIFIED'},null,2));
+// Production upload acceptance is stricter than source-name reconciliation.
+// Both providers must pass the actual routing/runner-identity safeguards.
+const {parsePPCard}=await import(pathToFileURL(resolve('pp-format-router.js')).href);
+for(const [provider,sourcePages,expectedFormat] of [
+ ['BRISNET',pages,'BRISNET_PREMIUM_PLUS'],
+ ['DRF',drfPages,'DRF']
+]){
+ const routed=parsePPCard(sourcePages,{sourceName:provider==='DRF'?'FL--10-21-2026.pdf':'flx1021p.pdf'});
+ assert.equal(routed.source_format,expectedFormat,provider+' wrong production parser route');
+ assert.equal(Object.keys(routed.races).length,8,provider+' routed race count');
+ for(let n=1;n<=8;n++)assert.equal(routed.races[n].horses.length,expected[n].length,provider+' routed race '+n+' field count');
+}
+console.log('LIVE_IMPORT_ACCEPTANCE_PASS: both source PDFs passed production routing and runner identity safeguards');
