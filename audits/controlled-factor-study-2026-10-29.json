@@ -1,0 +1,396 @@
+{
+  "schema": "controlled-one-factor-research-v1",
+  "classification": "RETROSPECTIVE_FINAL_FIELD_RECOMPUTATION_NOT_FROZEN_PERFORMANCE",
+  "certified": false,
+  "production_changed": false,
+  "source_hashes": {
+    "validation-output/bel22-card.json": "ea12a3ec8c0cd59f081cbe16082bf674aceb84e6b4c2ac7ffec087058e3f4516",
+    "research-controlled/drf22.json": "807f9b4c5c7b3f8de680cbdc5cd9adab1a98224864d07c2d599238b3075dbcae",
+    "validation-output/bel25-card.json": "b39c4644ff1a24d32b1880e8a589bc7aa03d931dd9eec8f478be4edd0ee6e3aa",
+    "research-controlled/drf25.json": "43232d5945fdd637dd08524c2b871ad70f3dcccb79fd288946a1d69875d0bedf",
+    "validation-output/bel28-card.json": "05dd9bd4b6f00f6e6ecfc1bc93d6e58246cb3b6182dbb526e76ccc981f4f7261",
+    "site/drf28-output.json": "19e8e84f1c8973a26cb61810b72b25fe54ef1e2abea9615ede9406875e515864"
+  },
+  "accepted": [
+    {
+      "date": "2026-10-22",
+      "race": 1,
+      "field_size": 4,
+      "chart_sha256": "301662f053dfa3862c6cf3677f3e5c69f26cad1bc682c701f6e910b24cabca1b"
+    },
+    {
+      "date": "2026-10-22",
+      "race": 2,
+      "field_size": 6,
+      "chart_sha256": "596df4d21ea1f9c1e1cd1e0200d05be719422cb8d85bb10ef4ad3ed6e99c2525"
+    },
+    {
+      "date": "2026-10-22",
+      "race": 4,
+      "field_size": 4,
+      "chart_sha256": "f537732c85aca621ff8ed9588b7b578ae6794977877bcd82affd892851fdff54"
+    },
+    {
+      "date": "2026-10-22",
+      "race": 6,
+      "field_size": 11,
+      "chart_sha256": "c9fb94de8e2babafe0cceb3ebc609a5161e6d0b8d85d4f4070d4e1d551bd361e"
+    },
+    {
+      "date": "2026-10-22",
+      "race": 7,
+      "field_size": 5,
+      "chart_sha256": "082607c2f32f6e693e7d3bdc74d12e1d4156d9a42039f5dce18ad210c3697e87"
+    },
+    {
+      "date": "2026-10-22",
+      "race": 8,
+      "field_size": 10,
+      "chart_sha256": "c54b860e76d23e33cb742cce482685e0efa97fbc595fe07011218f6344ff669a"
+    },
+    {
+      "date": "2026-10-25",
+      "race": 1,
+      "field_size": 6,
+      "chart_sha256": "ee41665b4547a0e3c31a2318fee63f887054f5cb91c9394c62ba9f1309d499a6"
+    },
+    {
+      "date": "2026-10-25",
+      "race": 3,
+      "field_size": 5,
+      "chart_sha256": "333eb929891615d92c2591a9bb367615c5069b790ffdde0c3287d6ab137abb8f"
+    },
+    {
+      "date": "2026-10-25",
+      "race": 5,
+      "field_size": 8,
+      "chart_sha256": "262f9b9b2d1037221334ca531e376cda15f21d991d50c6fc792db9c38191a00f"
+    },
+    {
+      "date": "2026-10-25",
+      "race": 6,
+      "field_size": 8,
+      "chart_sha256": "264f45f37632a43938a3bbba3953ee5e2af15ffc85aced64cb109a89d990e2e5"
+    },
+    {
+      "date": "2026-10-25",
+      "race": 7,
+      "field_size": 8,
+      "chart_sha256": "45ff9fe13a5bf826a4e3919480b265cdc6b7f7ff7a9b75e639a8084959752d0b"
+    },
+    {
+      "date": "2026-10-25",
+      "race": 8,
+      "field_size": 11,
+      "chart_sha256": "801e3d44ea624919e99852e3f3d90b178f19b775f92a798e6fcbdb57afbb0450"
+    },
+    {
+      "date": "2026-10-25",
+      "race": 9,
+      "field_size": 12,
+      "chart_sha256": "2ff5667609ed3f40ccef3a101f1920c3e9a6ce1693bac1a9f630324c7fc15ca1"
+    },
+    {
+      "date": "2026-10-28",
+      "race": 1,
+      "field_size": 6,
+      "chart_sha256": "71db28d85f5c9c3f00efb3d58a9a8416c569c9943f24628b6d38d3e566af937c"
+    },
+    {
+      "date": "2026-10-28",
+      "race": 4,
+      "field_size": 7,
+      "chart_sha256": "126138c578c34cdcbce020b7720f797931f1663227eaafc964fa83102df34603"
+    },
+    {
+      "date": "2026-10-28",
+      "race": 5,
+      "field_size": 11,
+      "chart_sha256": "2bce287f488c8a716b72f5e8a5765c644beb0386e45acd72c267700d9eb0cdf6"
+    },
+    {
+      "date": "2026-10-28",
+      "race": 6,
+      "field_size": 8,
+      "chart_sha256": "9a8e69165b82361aad5d96b8dd1cf1eb7a72d6c915108bd64e7bec4c0bebd8b5"
+    },
+    {
+      "date": "2026-10-28",
+      "race": 7,
+      "field_size": 7,
+      "chart_sha256": "6b4b3580ef0baaf9e4a8b239cc1786e52a4bb5d9c3f234e3c00157e8fff76393"
+    },
+    {
+      "date": "2026-10-28",
+      "race": 8,
+      "field_size": 12,
+      "chart_sha256": "08f7dea938817272410470a06f1a6a7c8d6644c37bda2d401e1bb1cd6884e239"
+    }
+  ],
+  "excluded": [
+    {
+      "date": "2026-10-22",
+      "race": 3,
+      "reason": "Incomplete numerical field\n\n7 !== 8\n"
+    },
+    {
+      "date": "2026-10-22",
+      "race": 5,
+      "reason": "Incomplete numerical field\n\n7 !== 11\n"
+    },
+    {
+      "date": "2026-10-25",
+      "race": 2,
+      "reason": "Incomplete numerical field\n\n5 !== 9\n"
+    },
+    {
+      "date": "2026-10-25",
+      "race": 4,
+      "reason": "Incomplete numerical field\n\n6 !== 7\n"
+    },
+    {
+      "date": "2026-10-28",
+      "race": 2,
+      "reason": "Incomplete numerical field\n\n1 !== 6\n"
+    },
+    {
+      "date": "2026-10-28",
+      "race": 3,
+      "reason": "Incomplete numerical field\n\n6 !== 7\n"
+    }
+  ],
+  "module_hashes": {
+    "brisnet-models.js": "186ded6d501c1137c94946e7af90b2b59d8ed96c9306b8da348e59f1547c26c2",
+    "contender-rankings.js": "4e8b64c9db1730436a80260f74a18e077449ca44e9d03d18a3660099701acc7c",
+    "contender-model.js": "7b79a7ca9b688bf5293d725745f1ee8fe3464058fe0ca85bca19b44e801fc6a1",
+    "finisher-model.js": "1519952826127642b627e7d61f55c9e5c666e1e267e06ae91c7be769f48754a1",
+    "finisher-inputs.js": "aa9b13fe259ed130fb1b4a5d794c5fd263045cf5c08df80785fae703c9a31b08"
+  },
+  "variants": {
+    "bris_baseline": {
+      "family": "Brisnet",
+      "summary": {
+        "races": 19,
+        "exact": [
+          8,
+          0,
+          4,
+          2
+        ],
+        "coverage": 55,
+        "all4": 4,
+        "changed_top4": 0
+      }
+    },
+    "drf_baseline": {
+      "family": "DRF Contender",
+      "summary": {
+        "races": 19,
+        "exact": [
+          7,
+          4,
+          2,
+          1
+        ],
+        "coverage": 54,
+        "all4": 5,
+        "changed_top4": 0
+      }
+    },
+    "finisher_baseline": {
+      "family": "DRF Finisher",
+      "summary": {
+        "races": 19,
+        "exact": [
+          10,
+          5,
+          3,
+          2
+        ],
+        "coverage": 54,
+        "all4": 3,
+        "changed_top4": 0
+      }
+    },
+    "bris_no_early": {
+      "family": "Brisnet",
+      "summary": {
+        "races": 19,
+        "exact": [
+          7,
+          2,
+          0,
+          3
+        ],
+        "coverage": 54,
+        "all4": 4,
+        "changed_top4": 13
+      }
+    },
+    "bris_no_late": {
+      "family": "Brisnet",
+      "summary": {
+        "races": 19,
+        "exact": [
+          8,
+          4,
+          6,
+          4
+        ],
+        "coverage": 56,
+        "all4": 4,
+        "changed_top4": 10
+      }
+    },
+    "drf_no_placing": {
+      "family": "DRF Contender",
+      "summary": {
+        "races": 19,
+        "exact": [
+          8,
+          5,
+          3,
+          1
+        ],
+        "coverage": 55,
+        "all4": 6,
+        "changed_top4": 9
+      }
+    },
+    "drf_no_surface_record": {
+      "family": "DRF Contender",
+      "summary": {
+        "races": 19,
+        "exact": [
+          10,
+          4,
+          2,
+          0
+        ],
+        "coverage": 52,
+        "all4": 4,
+        "changed_top4": 12
+      }
+    },
+    "drf_no_distance_record": {
+      "family": "DRF Contender",
+      "summary": {
+        "races": 19,
+        "exact": [
+          7,
+          4,
+          2,
+          1
+        ],
+        "coverage": 54,
+        "all4": 5,
+        "changed_top4": 1
+      }
+    },
+    "drf_no_workout_count": {
+      "family": "DRF Contender",
+      "summary": {
+        "races": 19,
+        "exact": [
+          7,
+          5,
+          2,
+          1
+        ],
+        "coverage": 53,
+        "all4": 4,
+        "changed_top4": 11
+      }
+    },
+    "drf_no_workout_rank": {
+      "family": "DRF Contender",
+      "summary": {
+        "races": 19,
+        "exact": [
+          9,
+          4,
+          2,
+          3
+        ],
+        "coverage": 53,
+        "all4": 3,
+        "changed_top4": 10
+      }
+    },
+    "drf_no_pressure_fit": {
+      "family": "DRF Contender",
+      "summary": {
+        "races": 19,
+        "exact": [
+          7,
+          4,
+          2,
+          1
+        ],
+        "coverage": 54,
+        "all4": 5,
+        "changed_top4": 1
+      }
+    },
+    "drf_no_early": {
+      "family": "DRF Contender",
+      "summary": {
+        "races": 19,
+        "exact": [
+          9,
+          4,
+          2,
+          3
+        ],
+        "coverage": 53,
+        "all4": 4,
+        "changed_top4": 14
+      }
+    },
+    "drf_no_late": {
+      "family": "DRF Contender",
+      "summary": {
+        "races": 19,
+        "exact": [
+          7,
+          5,
+          1,
+          2
+        ],
+        "coverage": 57,
+        "all4": 6,
+        "changed_top4": 11
+      }
+    },
+    "finisher_no_late": {
+      "family": "DRF Finisher",
+      "summary": {
+        "races": 19,
+        "exact": [
+          9,
+          5,
+          4,
+          2
+        ],
+        "coverage": 53,
+        "all4": 3,
+        "changed_top4": 8
+      }
+    }
+  },
+  "source_pdf_hashes": {
+    "controlled-inputs/BEL--10-22-2026.pdf": "d89a8d574551519777ec00cb25fb5a71fcfba1f02c27bc52a0850660b9cf9762",
+    "controlled-inputs/BEL--10-25-2026.pdf": "374bb3e663f12707304f2086c2cc69010ab2159851cf83033cc77947a0b25b4b",
+    "upload/BEL--10-28-2026.pdf": "25907941da77a85bf7701168c9efce2e1389fe45ebd1cef7f8dc73c8e0d12cdf",
+    "validation-inputs/bel1022p.pdf": "17518f42894264ef82d0ce077d4fca9d35707094baa042beae28fb50a05f7483",
+    "downloads/bel1025p.pdf": "13930fbc15ee9263777a1a20d16051f8cd6196f8ece396bca38b62fde409705a",
+    "upload/bel1028p.pdf": "222996886b2b8ac3193e321c2ba4500880304559fcc65c08376d375050ff13c2"
+  },
+  "limits": [
+    "Known-outcome post-hoc exploration; no prospective accuracy or wagering certification",
+    "Only Oct22,25,28 have original paired PPs in this run; Oct23/24 excluded from sampling",
+    "Official final fields reconstructed for research including confirmed AEs; original freezes never overwritten",
+    "All variants share 19 full fields; six incomplete races excluded; only one score component neutralized at a time without refitting or reweighting",
+    "14 outputs including baselines; small cohort and multiple comparisons; no variant adopted"
+  ]
+}
