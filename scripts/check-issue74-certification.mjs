@@ -11,7 +11,8 @@ export const RACE_EVIDENCE = Object.freeze([
   'official_finish_and_corrections_verified',
   'pp_to_official_starter_identity_verified',
   'pre_race_full_field_rankings_verified',
-  'pass_action_record_verified'
+  'pass_action_record_verified',
+  'pre_race_anchor_verified'
 ]);
 export function auditIssue74(ledger) {
   if(ledger?.issue!==74 || !Array.isArray(ledger.races) || ledger.races.length!==9)
@@ -34,6 +35,13 @@ export function auditIssue74(ledger) {
       if((field==='official_chart_url'||field==='official_chart_id') ? !(typeof value==='string'&&value.trim()) : value!==true)
         blockers.push('Missing '+field);
     }
+    const anchor=race.pre_race_anchor_observed_at_utc;
+    const post=race.official_post_at_utc;
+    const independentEvidence=race.independent_anchor_evidence_uri;
+    if(!anchor||!post||!Number.isFinite(Date.parse(anchor))||!Number.isFinite(Date.parse(post))||Date.parse(anchor)>=Date.parse(post))
+      blockers.push('Independent anchor is not proven earlier than official off time');
+    if(typeof independentEvidence!=='string'||!/^https:\\/\\//.test(independentEvidence))
+      blockers.push('Independent timestamp evidence URL missing');
     if(race.original_decision!=='PASS'&&race.original_decision!=='RATEABLE')
       blockers.push('Original PASS/ACTION decision missing');
     if((race.known_discrepancies||[]).length)
