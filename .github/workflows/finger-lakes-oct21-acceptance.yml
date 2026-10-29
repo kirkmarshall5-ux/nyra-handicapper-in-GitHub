@@ -1,5 +1,14 @@
 name: Finger Lakes October 21 dual-provider production acceptance
 on:
+  push:
+    branches:
+      - 'fix/finger-lakes-premium-1m70yds-20261020'
+    paths:
+      - 'scripts/verify-finger-lakes-oct21.mjs'
+      - 'pp-format-router.js'
+      - 'release-card-parser.js'
+      - 'brisnet-premium-parser.js'
+      - '.github/workflows/finger-lakes-oct21-acceptance.yml'
   pull_request:
     paths:
       - 'scripts/verify-finger-lakes-oct21.mjs'
