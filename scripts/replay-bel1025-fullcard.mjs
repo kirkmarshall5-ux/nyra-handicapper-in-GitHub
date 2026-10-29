@@ -26,7 +26,9 @@ try {
   const reference=JSON.parse(fs.readFileSync(new URL('../audits/belmont-2026-10-25-fullcard-public-results-crosscheck.json',import.meta.url),'utf8'));
   const sourceIdentityManifest=JSON.parse(fs.readFileSync(new URL('../audits/belmont-2026-10-25-r9-brisnet-source-identity.json',import.meta.url),'utf8'));
   assert.equal(sourceIdentityManifest.source.sha256,sha,'R9 source identity manifest is for a different PDF');
-  const result=compareImportedCardToFrozenRosters(card,reference,sourceIdentityManifest);
+  const fullCardNameDigests=JSON.parse(fs.readFileSync(new URL('../audits/issue74-bel1025-original-pp-horse-name-digests.json',import.meta.url),'utf8'));
+  assert.equal(fullCardNameDigests.source_pdf_sha256,sha,'Full-card source identity digest manifest belongs to a different PDF');
+  const result=compareImportedCardToFrozenRosters(card,reference,sourceIdentityManifest,fullCardNameDigests);
   const report={...result,original_pdf_verified:true,original_pdf_sha256:sha,original_pdf_pages:doc.numPages,production_parser:'pp-format-router.js parsePPCard',replayed_at_utc:new Date().toISOString(),caveat:'Retrospective import roster parity only; official charts, independently timed freezes and model performance are NOT certified.'};
   console.log(JSON.stringify(report,null,2));
   if(result.status!=='SOURCE_PROGRAM_REPLAY_PASSED_NOT_CERTIFIED')process.exitCode=1;
