@@ -29,6 +29,7 @@ export function compareImportedCardToFrozenRosters(card,reference,sourceIdentity
     if(missing.length)blockers.push('Missing original PP programs: '+missing.join(','));
     if(extra.length)blockers.push('Unexpected imported PP programs: '+extra.join(','));
     if(actual.length!==expected.length)blockers.push('Imported roster count differs');
+    if(!fullCardNameDigests) blockers.push('Original PP full-card horse-name digest evidence required');
     if(fullCardNameDigests){
       const expectedDigest=fullCardNameDigests.races?.find(x=>x.race===saved.race);
       if(fullCardNameDigests.source_pdf_sha256!=='13930fbc15ee9263777a1a20d16051f8cd6196f8ece396bca38b62fde409705a'
@@ -39,8 +40,14 @@ export function compareImportedCardToFrozenRosters(card,reference,sourceIdentity
       else if(digestImportedRaceIdentities(parsed.horses)!==expectedDigest.program_name_sha256)
         blockers.push('Original PP full-card horse-name identity digest mismatch: race '+saved.race);
     }
+    if(saved.race===9 && !sourceIdentityManifest)
+      blockers.push('Original R9 PP horse-name and AE identity evidence required');
     if(saved.race===9 && sourceIdentityManifest){
-      if(sourceIdentityManifest.race!==9 || !Array.isArray(sourceIdentityManifest.entries) || sourceIdentityManifest.entries.length!==14)
+      if(sourceIdentityManifest.race!==9
+        || sourceIdentityManifest.source?.sha256!=='13930fbc15ee9263777a1a20d16051f8cd6196f8ece396bca38b62fde409705a'
+        || !Array.isArray(sourceIdentityManifest.entries) || sourceIdentityManifest.entries.length!==14
+        || new Set(sourceIdentityManifest.entries.map(h=>String(h.program))).size!==14
+        || sourceIdentityManifest.entries.some(h=>!String(h.program??'').trim()||!normalizedName(h.name)))
         blockers.push('Invalid original R9 PP horse-name identity manifest');
       else {
         const sourceByProgram=new Map(sourceIdentityManifest.entries.map(h=>[String(h.program),h]));
