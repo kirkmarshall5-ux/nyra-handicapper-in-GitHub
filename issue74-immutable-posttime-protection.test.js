@@ -8,17 +8,18 @@ const claimedComplete=()=>{
  l.chart_source.review_status='ALL_CHARTS_MANUALLY_VERIFIED';
  l.source_pdf.production_pdfjs_replay_executed=true;
  l.freeze.independent_before_post_anchor_verified=true;
+ const publishedOff=['2026-10-25T17:12:30Z','2026-10-25T17:45:30Z','2026-10-25T18:18:30Z','2026-10-25T18:51:30Z','2026-10-25T19:25:30Z','2026-10-25T20:00:30Z','2026-10-25T20:40:30Z','2026-10-25T21:15:30Z','2026-10-25T21:53:30Z'];
  for(const r of l.races){
   r.known_discrepancies=[];
-  r.official_chart_url='https://example.org/synthetic-not-official';
+  r.official_chart_url='https://tvg.equibase.com/static/chart/pdf/SYNTHETIC';
   r.official_chart_id='SYNTHETIC';
   for(const key of ['official_chart_manually_reviewed','official_post_time_verified',
     'official_surface_distance_verified','official_scratch_ae_mto_verified',
     'official_finish_and_corrections_verified','pp_to_official_starter_identity_verified',
     'pre_race_full_field_rankings_verified','pass_action_record_verified','pre_race_anchor_verified'])r[key]=true;
   r.independent_anchor_evidence_uri='https://example.org/synthetic-anchor';
-  r.pre_race_anchor_observed_at_utc='2026-10-25T16:00:00Z';
-  r.official_post_at_utc='2026-10-25T23:00:00Z';
+  r.pre_race_anchor_observed_at_utc='2026-10-25T19:04:48Z';
+  r.official_post_at_utc=publishedOff[r.race-1];
  }
  return l;
 };
