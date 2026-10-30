@@ -9,6 +9,8 @@ export function validateSnapshot(s, now=Date.now()) {
   if(!['BRISNET','DRF'].includes(s?.provider)) errors.push('Verified PP provider required.');
   if(!s?.cardId||!s?.track||!/^\d{4}-\d{2}-\d{2}$/.test(s?.date||'')||!Number.isInteger(Number(s?.race))||Number(s.race)<1)errors.push('Complete card and race identity required.');
   if(!s?.parserVersion||!s?.sourceName)errors.push('Parser version and source filename required.');
+  if(typeof s?.sourceSha256!=='string'||!/^[0-9a-f]{64}$/i.test(s.sourceSha256))errors.push('Original provider PDF SHA-256 required in sealed snapshot.');
+  if(!Array.isArray(s?.fieldSnapshot)||!s.fieldSnapshot.length)errors.push('Original field snapshot required.');
   if(s?.postTimeEvidence?.verification!=='USER_CONFIRMED_OFFICIAL_REFERENCE_NOT_INDEPENDENTLY_ANCHORED'||s?.postTimeEvidence?.scheduledPost!==s?.scheduledPost)errors.push('Verified official post-time evidence must match scheduled post.');
   if(typeof s?.postTimeEvidence?.sourceUrl!=='string'||!/^https:\/\/[^\s/]+(?:\/[^\s]*)?$/i.test(s.postTimeEvidence.sourceUrl))errors.push('Official post-time reference URL required.');
   const post=Date.parse(s?.scheduledPost||'');
@@ -23,6 +25,19 @@ export function validateSnapshot(s, now=Date.now()) {
     if(!program||!horse||identities.has(program)||horseNames.has(normalizedHorse))errors.push('Invalid or duplicate active runner.');
     identities.add(program);
     horseNames.add(normalizedHorse);
+  }
+  if(Array.isArray(s?.fieldSnapshot)&&Array.isArray(s?.field)){
+    const sourcePrograms=new Set();
+    for(const h of s.fieldSnapshot){
+      const program=String(h?.program??'').trim(),horse=String(h?.horse??'').trim();
+      if(!program||!horse||sourcePrograms.has(program))errors.push('Invalid or duplicate original field snapshot runner.');
+      sourcePrograms.add(program);
+    }
+    for(const h of s.field){
+      const source=s.fieldSnapshot.find(x=>String(x.program??'').trim()===String(h.program??'').trim());
+      if(!source||String(source.horse??'').trim()!==String(h.horse??'').trim())errors.push('Active runner identity differs from original field snapshot.');
+      if(source&&(String(source.odds??'').trim().toUpperCase()==='SCR'||String(source.fieldStatusEvidence??'').trim().toUpperCase()==='SCRATCHED'))errors.push('Scratched source runner cannot appear in active field.');
+    }
   }
   if(!Array.isArray(s?.models)||s.models.length!==3||new Set(s.models.map(m=>m.family)).size!==3||!['V44C','CONTENDER','FINISHER'].every(f=>s.models.some(m=>m.family===f)))errors.push('All three provider model families required.');
   for(const m of s?.models||[]){

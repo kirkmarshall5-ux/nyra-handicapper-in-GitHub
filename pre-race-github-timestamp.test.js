@@ -31,7 +31,7 @@ test('receipt cannot certify an unsealed or non-research export',()=>{
 
 test('sealed timestamp gate rejects tampered prediction payload even when GitHub receipt matches digest',async()=>{
  const {freezeResearchSnapshot,sealResearchSnapshots}=await import('./pre-race-provider-freeze.js');
- const snapshot={provider:'DRF',cardId:'drf-test',track:'Finger Lakes',date:'2026-10-19',race:1,parserVersion:'test',sourceName:'test.pdf',scheduledPost:'2026-10-19T15:00:00Z',postTimeEvidence:{verification:'USER_CONFIRMED_OFFICIAL_REFERENCE_NOT_INDEPENDENTLY_ANCHORED',scheduledPost:'2026-10-19T15:00:00Z',sourceUrl:'https://www.nyra.com/'},fieldVerified:true,surfaceVerified:true,surface:'Dirt',field:[{program:'1',horse:'A'}],models:['V44C','CONTENDER','FINISHER'].map(family=>({family,modelId:family,provider:'DRF',decision:'RATEABLE',fullFieldRanked:true,rankings:[{program:'1',horse:'A',score:75}]}))};
+ const snapshot={provider:'DRF',cardId:'drf-test',track:'Finger Lakes',date:'2026-10-19',race:1,parserVersion:'test',sourceName:'test.pdf',sourceSha256:'a'.repeat(64),fieldSnapshot:[{program:'1',horse:'A'}],scheduledPost:'2026-10-19T15:00:00Z',postTimeEvidence:{verification:'USER_CONFIRMED_OFFICIAL_REFERENCE_NOT_INDEPENDENTLY_ANCHORED',scheduledPost:'2026-10-19T15:00:00Z',sourceUrl:'https://www.nyra.com/'},fieldVerified:true,surfaceVerified:true,surface:'Dirt',field:[{program:'1',horse:'A'}],models:['V44C','CONTENDER','FINISHER'].map(family=>({family,modelId:family,provider:'DRF',decision:'RATEABLE',fullFieldRanked:true,rankings:[{program:'1',horse:'A',score:75}]}))};
  const record=freezeResearchSnapshot({snapshot,now:Date.parse('2026-10-19T13:00:00Z')}).record;
  assert.ok(record);
  const sealed=await sealResearchSnapshots([record]);

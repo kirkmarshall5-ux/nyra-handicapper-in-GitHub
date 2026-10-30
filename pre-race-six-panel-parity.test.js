@@ -75,7 +75,7 @@ test('six panels survive freeze, seal and export verification without ranking or
     :{model_id:provider+'-'+family,decision,rankings:structuredClone(rows)};
    return convertDisplayedModel(family,rawResult,field,provider);
   });
-  const snapshot={provider,cardId:provider+'-fixture',track:'Finger Lakes',date:'2026-10-19',race:1,parserVersion:'synthetic-test',sourceName:provider+'.pdf',scheduledPost:'2026-10-19T16:00:00Z',postTimeEvidence:{scheduledPost:'2026-10-19T16:00:00Z',verification:'USER_CONFIRMED_OFFICIAL_REFERENCE_NOT_INDEPENDENTLY_ANCHORED',sourceUrl:'https://example.org/post'},fieldVerified:true,surfaceVerified:true,surface:'Dirt',field:structuredClone(field),models};
+  const snapshot={provider,cardId:provider+'-fixture',track:'Finger Lakes',date:'2026-10-19',race:1,parserVersion:'synthetic-test',sourceName:provider+'.pdf',sourceSha256:'a'.repeat(64),fieldSnapshot:structuredClone(field),scheduledPost:'2026-10-19T16:00:00Z',postTimeEvidence:{scheduledPost:'2026-10-19T16:00:00Z',verification:'USER_CONFIRMED_OFFICIAL_REFERENCE_NOT_INDEPENDENTLY_ANCHORED',sourceUrl:'https://example.org/post'},fieldVerified:true,surfaceVerified:true,surface:'Dirt',field:structuredClone(field),models};
   const frozen=freezeResearchSnapshot({snapshot,existing:records,now});
   assert.deepEqual(frozen.errors,[]);
   assert.deepEqual(frozen.record.models,models);
@@ -160,7 +160,7 @@ test('five rated runners with only four shown are not misclassified as unrated',
  assert.deepEqual(coverage.unratedRunners.map(h=>h.program),['6']);
  assert.equal(coverage.unratedRunners[0].firstTimeStarter,true);
  const now=Date.parse('2026-10-19T15:00:00Z');
- const snapshot={provider:'DRF',cardId:'real-source-shaped-coverage',track:'Belmont Park',date:'2026-10-19',race:1,parserVersion:'test',sourceName:'source.pdf',scheduledPost:'2026-10-19T16:00:00Z',postTimeEvidence:{scheduledPost:'2026-10-19T16:00:00Z',verification:'USER_CONFIRMED_OFFICIAL_REFERENCE_NOT_INDEPENDENTLY_ANCHORED',sourceUrl:'https://www.nyra.com/'},fieldVerified:true,surfaceVerified:true,surface:'Dirt',field,models,...coverage};
+ const snapshot={provider:'DRF',cardId:'real-source-shaped-coverage',track:'Belmont Park',date:'2026-10-19',race:1,parserVersion:'test',sourceName:'source.pdf',sourceSha256:'a'.repeat(64),fieldSnapshot:structuredClone(field),scheduledPost:'2026-10-19T16:00:00Z',postTimeEvidence:{scheduledPost:'2026-10-19T16:00:00Z',verification:'USER_CONFIRMED_OFFICIAL_REFERENCE_NOT_INDEPENDENTLY_ANCHORED',sourceUrl:'https://www.nyra.com/'},fieldVerified:true,surfaceVerified:true,surface:'Dirt',field,models,...coverage};
  const frozen=freezeResearchSnapshot({snapshot,now});
  assert.deepEqual(frozen.errors,[]);
  const exported=await sealResearchSnapshots([frozen.record]);
