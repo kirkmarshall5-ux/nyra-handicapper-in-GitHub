@@ -3,7 +3,16 @@
 const canonical = value => String(value ?? '').trim().toUpperCase();
 const unique = xs => new Set(xs).size === xs.length;
 const asArray = x => Array.isArray(x) ? x : [];
-const https = s => typeof s === 'string' && /^https:\/\//.test(s);
+// A random HTTPS page is not an official chart source. Require the Equibase
+// publisher's actual domain boundary; do not authenticate chart contents here.
+const officialChartPublisherUrl = value => {
+  if(typeof value!=='string') return false;
+  try {
+    const url=new URL(value);
+    return url.protocol==='https:' && !url.username && !url.password &&
+      (url.hostname==='equibase.com' || url.hostname.endsWith('.equibase.com'));
+  } catch {return false;}
+};
 const nameKey = s => String(s??'').normalize('NFKD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]/g,'');
 export function inspectOfficialChartIntake(publishedRace, intake, originalPPIdentities) {
   if(!publishedRace || !Number.isInteger(publishedRace.race))
@@ -14,7 +23,7 @@ export function inspectOfficialChartIntake(publishedRace, intake, originalPPIden
   if(intake.race!==publishedRace.race) errors.push('Race number mismatch');
   if(intake.date!=='2026-10-25') errors.push('Date mismatch');
   if(canonical(intake.track)!=='BELMONT PARK') errors.push('Track mismatch');
-  if(!https(intake.officialChartUrl)) errors.push('Missing HTTPS official chart URL');
+  if(!officialChartPublisherUrl(intake.officialChartUrl)) errors.push('Official chart URL must be HTTPS on an Equibase publisher domain');
   if(typeof intake.officialChartId!=='string'||!intake.officialChartId.trim()) errors.push('Missing official chart ID');
   if(intake.manuallyReviewed!==true) errors.push('Official chart not manually reviewed');
   if(typeof intake.reviewer!=='string'||!intake.reviewer.trim()) errors.push('Reviewer not recorded');
