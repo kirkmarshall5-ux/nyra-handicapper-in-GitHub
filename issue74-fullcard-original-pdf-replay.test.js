@@ -5,7 +5,7 @@ import {compareImportedCardToFrozenRosters,digestImportedRaceIdentities} from '.
 const reference=JSON.parse(readFileSync(new URL('./audits/belmont-2026-10-25-fullcard-public-results-crosscheck.json',import.meta.url),'utf8'));
 const fixture=()=>({races:Object.fromEntries(reference.races.map(r=>[r.race,{horses:r.saved_roster_programs.map(n=>({n,name:'Synthetic #'+n,entry_status:r.race===9&&['13','14'].includes(n)?'AE':'entered'}))}]))});
 test('nine-race synthetic roster parity never certifies official charts or predictions',()=>{
- const result=compareImportedCardToFrozenRosters(fixture(),reference);
+ const result=compareTest(fixture());
  assert.equal(result.races.length,9);
  assert.equal(result.status,'SOURCE_PROGRAM_REPLAY_PASSED_NOT_CERTIFIED');
  assert.equal(result.official_chart_verified,false);
@@ -14,7 +14,7 @@ test('nine-race synthetic roster parity never certifies official charts or predi
 test('missing also-eligible #13 is detected in race 9',()=>{
  const card=fixture();
  card.races[9].horses=card.races[9].horses.filter(h=>h.n!=='13');
- const result=compareImportedCardToFrozenRosters(card,reference);
+ const result=compareTest(card);
  assert.equal(result.status,'SOURCE_PROGRAM_REPLAY_FAILED');
  assert.ok(result.races[8].missing.includes('13'));
 });
@@ -22,20 +22,20 @@ test('duplicate and unexpected programs cannot pass',()=>{
  const card=fixture();
  card.races[2].horses[0].n=card.races[2].horses[1].n;
  card.races[3].horses.push({n:'99',name:'Synthetic'});
- const result=compareImportedCardToFrozenRosters(card,reference);
+ const result=compareTest(card);
  assert.ok(result.races[1].blockers.some(x=>x.includes('Duplicate')));
  assert.ok(result.races[2].extra.includes('99'));
  assert.equal(result.status,'SOURCE_PROGRAM_REPLAY_FAILED');
 });
 test('blank horse name fails, missing race fails',()=>{
  const card=fixture();card.races[1].horses[0].name='';delete card.races[8];
- const result=compareImportedCardToFrozenRosters(card,reference);
+ const result=compareTest(card);
  assert.ok(result.races[0].blockers.some(x=>x.includes('Blank imported horse name')));
  assert.equal(result.races[7].status,'MISSING_IMPORTED_RACE');
 });
 test('also-eligible flag missing for R9 cannot pass',()=>{
  const card=fixture();card.races[9].horses.find(h=>h.n==='13').entry_status='entered';
- const result=compareImportedCardToFrozenRosters(card,reference);
+ const result=compareTest(card);
  assert.ok(result.races[8].blockers.some(x=>x.includes('also-eligible')));
 });
 
@@ -46,30 +46,32 @@ const withR9Source=()=>{
  return card;
 };
 test('R9 imported source names and AE flags match original private PDF manifest',()=>{
- const result=compareImportedCardToFrozenRosters(withR9Source(),reference,r9Source);
+ const result=compareTest(withR9Source(),r9Source);
  assert.equal(result.status,'SOURCE_PROGRAM_REPLAY_PASSED_NOT_CERTIFIED');
 });
 test('R9 wrong horse at same program fails even when all program numbers match',()=>{
  const card=withR9Source();card.races[9].horses.find(h=>h.n==='13').name='Different Horse';
- const result=compareImportedCardToFrozenRosters(card,reference,r9Source);
+ const result=compareTest(card,r9Source);
  assert.equal(result.status,'SOURCE_PROGRAM_REPLAY_FAILED');
  assert.ok(result.races[8].blockers.some(b=>b.includes('horse-name mismatch #13')));
 });
 test('R9 wrong non-AE flag fails even when both AEs remain marked',()=>{
  const card=withR9Source();card.races[9].horses.find(h=>h.n==='1').entry_status='AE';
- const result=compareImportedCardToFrozenRosters(card,reference,r9Source);
+ const result=compareTest(card,r9Source);
  assert.equal(result.status,'SOURCE_PROGRAM_REPLAY_FAILED');
  assert.ok(result.races[8].blockers.some(b=>b.includes('flag mismatch #1')));
 });
 test('R9 invalid original identity manifest fails closed',()=>{
  const manifest={...r9Source,entries:r9Source.entries.slice(1)};
- const result=compareImportedCardToFrozenRosters(withR9Source(),reference,manifest);
+ const result=compareTest(withR9Source(),manifest);
  assert.equal(result.status,'SOURCE_PROGRAM_REPLAY_FAILED');
  assert.ok(result.races[8].blockers.some(b=>b.includes('Invalid original')));
 });
 
 const independentDigests=JSON.parse(readFileSync(new URL('./audits/issue74-bel1025-original-pp-horse-name-digests.json',import.meta.url),'utf8'));
-const syntheticDigests=card=>({...independentDigests,races:independentDigests.races.map(r=>({...r,program_name_sha256:digestImportedRaceIdentities(card.races[r.race].horses)}))});
+const syntheticDigests=card=>({...independentDigests,races:independentDigests.races.map(r=>({...r,program_name_sha256:digestImportedRaceIdentities(card.races[r.race]?.horses||[])}))});
+const syntheticR9=card=>({...r9Source,entries:card.races[9].horses.map(h=>({program:h.n,name:h.name,source_ae:h.entry_status==='AE'}))});
+const compareTest=(card,r9=syntheticR9(card),digests=syntheticDigests(card))=>compareImportedCardToFrozenRosters(card,reference,r9,digests);
 test('all 80 independent original PDF source identities have nine race digests',()=>{
  assert.equal(independentDigests.races.length,9);
  assert.equal(independentDigests.races.reduce((n,r)=>n+r.source_entries,0),80);
@@ -78,7 +80,7 @@ test('all 80 independent original PDF source identities have nine race digests',
 });
 test('nine-race matching synthetic identity digest manifest passes without prospective certification',()=>{
  const card=fixture(),manifest=syntheticDigests(card);
- const result=compareImportedCardToFrozenRosters(card,reference,null,manifest);
+ const result=compareTest(card,syntheticR9(card),manifest);
  assert.equal(result.status,'SOURCE_PROGRAM_REPLAY_PASSED_NOT_CERTIFIED');
  assert.equal(result.prospective_certified,false);
 });
@@ -95,4 +97,30 @@ test('missing or altered original full-card digest evidence fails closed',()=>{
  const result=compareImportedCardToFrozenRosters(card,reference,null,manifest);
  assert.equal(result.status,'SOURCE_PROGRAM_REPLAY_FAILED');
  assert.ok(result.races[4].blockers.some(x=>x.includes('digest evidence invalid')));
+});
+
+test('missing both source evidence manifests must fail closed',()=>{
+ const result=compareImportedCardToFrozenRosters(fixture(),reference);
+ assert.equal(result.status,'SOURCE_PROGRAM_REPLAY_FAILED');
+ assert.ok(result.races.every(r=>r.blockers.some(x=>x.includes('digest evidence required'))));
+ assert.ok(result.races[8].blockers.some(x=>x.includes('R9 PP horse-name and AE identity evidence required')));
+});
+test('omitting only R9 source manifest cannot return a passing status',()=>{
+ const card=fixture();
+ const result=compareImportedCardToFrozenRosters(card,reference,null,syntheticDigests(card));
+ assert.equal(result.status,'SOURCE_PROGRAM_REPLAY_FAILED');
+ assert.ok(result.races[8].blockers.some(x=>x.includes('R9 PP horse-name')));
+});
+test('omitting only all-race name digests cannot return a passing status',()=>{
+ const card=withR9Source();
+ const result=compareImportedCardToFrozenRosters(card,reference,r9Source);
+ assert.equal(result.status,'SOURCE_PROGRAM_REPLAY_FAILED');
+ assert.ok(result.races.every(r=>r.blockers.some(x=>x.includes('digest evidence required'))));
+});
+test('wrong PDF hash or duplicate programs in R9 source evidence fail closed',()=>{
+ const card=withR9Source();
+ const badHash=structuredClone(r9Source);badHash.source.sha256='0'.repeat(64);
+ assert.ok(compareTest(card,badHash).races[8].blockers.some(x=>x.includes('Invalid original R9')));
+ const duplicate=structuredClone(r9Source);duplicate.entries[1].program=duplicate.entries[0].program;
+ assert.ok(compareTest(card,duplicate).races[8].blockers.some(x=>x.includes('Invalid original R9')));
 });
