@@ -7,7 +7,7 @@ const source=card.races[0];
 const identities=r=>r.saved_roster_programs.map(program=>({program,name:'Synthetic Horse '+program}));
 const inspect=(r,a)=>inspectOfficialChartIntake(r,a,identities(r));
 const synthetic=()=>({
- race:1,date:'2026-10-25',track:'Belmont Park',officialChartUrl:'https://example.org/manual-chart',
+ race:1,date:'2026-10-25',track:'Belmont Park',officialChartUrl:'https://tvg.equibase.com/static/chart/pdf/SYNTHETIC-NOT-A-REAL-CHART.pdf',
  officialChartId:'SYNTHETIC-NOT-A-REAL-CHART',manuallyReviewed:true,reviewer:'synthetic-test',
  reviewedAtUtc:'2026-10-29T13:00:00Z',offAtUtc:'2026-10-25T17:12:00Z',
  surface:'dirt',distance:'6 furlongs',chartCorrectionsReviewed:true,deadHeatsReviewed:true,
@@ -80,4 +80,27 @@ test('duplicate and incomplete source identities fail closed',()=>{
  const result=inspectOfficialChartIntake(source,a,ids);
  assert.ok(result.errors.some(x=>x.includes('Duplicate original PP')));
  assert.ok(result.errors.some(x=>x.includes('does not cover complete source roster')));
+});
+
+test('unrelated HTTPS domains cannot masquerade as official Equibase charts',()=>{
+ for(const url of [
+  'https://example.org/manual-chart',
+  'https://equibase.com.evil.example/chart',
+  'https://fakeequibase.com/chart',
+  'https://equibase.com@evil.example/chart',
+  'http://tvg.equibase.com/chart',
+  'https://user:password@tvg.equibase.com/chart',
+  'javascript:alert(1)'
+ ]){
+  const a=synthetic();a.officialChartUrl=url;
+  const result=inspect(source,a);
+  assert.equal(result.status,'MANUAL_REVIEW_REQUIRED',url);
+  assert.ok(result.errors.some(e=>e.includes('Equibase publisher domain')),url);
+ }
+});
+test('publisher URL only passes structural source check, never authenticates charts',()=>{
+ const a=synthetic();
+ const result=inspect(source,a);
+ assert.equal(result.status,'OFFICIAL_CHART_INTAKE_STRUCTURALLY_COMPLETE_NOT_AUTHENTICATED');
+ assert.equal(result.prospectiveGradeable,false);
 });
