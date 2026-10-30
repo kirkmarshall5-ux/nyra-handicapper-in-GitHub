@@ -23,6 +23,14 @@ const PUBLISHED_OFF_MINUTES_UTC=Object.freeze([
  '2026-10-25T18:51:00Z','2026-10-25T19:25:00Z','2026-10-25T20:00:00Z',
  '2026-10-25T20:40:00Z','2026-10-25T21:15:00Z','2026-10-25T21:53:00Z'
 ]);
+const isEquibaseChartUrl=value=>{
+  if(typeof value!=='string')return false;
+  try {
+    const u=new URL(value);
+    return u.protocol==='https:'&&!u.username&&!u.password&&
+      (u.hostname==='equibase.com'||u.hostname.endsWith('.equibase.com'));
+  }catch{return false;}
+};
 export function auditIssue74(ledger) {
   if(ledger?.issue!==74 || !Array.isArray(ledger.races) || ledger.races.length!==9)
     throw Error('Expected Issue #74 nine-race pilot ledger');
@@ -60,11 +68,17 @@ export function auditIssue74(ledger) {
       if((field==='official_chart_url'||field==='official_chart_id') ? !(typeof value==='string'&&value.trim()) : value!==true)
         blockers.push('Missing '+field);
     }
+    if(!isEquibaseChartUrl(race.official_chart_url))
+      blockers.push('Official chart source is not an Equibase publisher URL');
     const anchor=race.pre_race_anchor_observed_at_utc;
     const post=race.official_post_at_utc;
     const independentEvidence=race.independent_anchor_evidence_uri;
     if(!anchor||!post||!Number.isFinite(Date.parse(anchor))||!Number.isFinite(Date.parse(post))||Date.parse(anchor)>=Date.parse(post))
       blockers.push('Independent anchor is not proven earlier than official off time');
+    if(Number.isFinite(Date.parse(anchor||''))&&Date.parse(anchor)<Date.parse(ORIGINAL_FREEZE_UTC))
+      blockers.push('Independent anchor predates the historical freeze and cannot attest its contents');
+    if(Number.isFinite(Date.parse(post||'')) && Math.floor(Date.parse(post)/60000)!==Math.floor(publishedOffMinuteMs/60000))
+      blockers.push('Official off timestamp disagrees with published off minute; requires source adjudication');
     if(typeof independentEvidence!=='string'||!independentEvidence.startsWith('https://'))
       blockers.push('Independent timestamp evidence URL missing');
     if(race.original_decision!=='PASS'&&race.original_decision!=='RATEABLE')
