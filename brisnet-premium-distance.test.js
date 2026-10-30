@@ -14,3 +14,12 @@ test('quarter glyph is equivalent to existing supported printed quarter represen
 test('unsupported heading distance and conflicting repeated race distances still reject',()=>{assert.throws(()=>parsePPCard(card('1Z Mile')),/primary distance unverified/);const f=card('1‚ Mile'),g=card('1 Mile');g[0].pageNumber=2;assert.throws(()=>parsePPCard([...f,...g]),/Conflicting Premium Plus race conditions/);});
 
 test('October 18 Belmont five-sixteenths glyph decodes the primary turf distance exactly',()=>{const f=card('1Š Mile (T)');const c=parsePPCard(f);assert.equal(c.races[3].distance_furlongs,10.5);assert.equal(c.races[3].dist,'1 5/16M');assert.equal(c.races[3].surface,'Turf');assert.deepEqual(brisnetDistance('1Š Mile'),brisnetDistance('1 5/16 Mile'));assert.notEqual(c.races[3].distance_furlongs,9.5);});
+
+// Real October 31 Belmont R9 heading uses the per-mille fraction glyph.
+test('Belmont October 31 R9 three-sixteenths heading imports at 9.5 furlongs',()=>{
+ assert.deepEqual(brisnetDistance('KnkrbkrL175K 1‰ Mile (t)'),{furlongs:9.5,display:'1 3/16M'});
+ assert.deepEqual(brisnetDistance('1‰ Mile'),brisnetDistance('1 3/16 Mile'));
+ const c=parsePPCard(card('1‰ Mile (t)'));
+ assert.equal(c.races[3].distance_furlongs,9.5);assert.equal(c.races[3].surface,'Turf');
+ assert.equal(brisnetDistance('1Z Mile'),null);
+});
