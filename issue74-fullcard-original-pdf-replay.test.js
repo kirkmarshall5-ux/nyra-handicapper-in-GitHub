@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {compareImportedCardToFrozenRosters} from './scripts/issue74-fullcard-replay-audit.mjs';
+import {compareImportedCardToFrozenRosters,digestImportedRaceIdentities} from './scripts/issue74-fullcard-replay-audit.mjs';
 const reference=JSON.parse(readFileSync(new URL('./audits/belmont-2026-10-25-fullcard-public-results-crosscheck.json',import.meta.url),'utf8'));
 const fixture=()=>({races:Object.fromEntries(reference.races.map(r=>[r.race,{horses:r.saved_roster_programs.map(n=>({n,name:'Synthetic #'+n,entry_status:r.race===9&&['13','14'].includes(n)?'AE':'entered'}))}]))});
 test('nine-race synthetic roster parity never certifies official charts or predictions',()=>{
@@ -66,4 +66,33 @@ test('R9 invalid original identity manifest fails closed',()=>{
  const result=compareImportedCardToFrozenRosters(withR9Source(),reference,manifest);
  assert.equal(result.status,'SOURCE_PROGRAM_REPLAY_FAILED');
  assert.ok(result.races[8].blockers.some(b=>b.includes('Invalid original')));
+});
+
+const independentDigests=JSON.parse(readFileSync(new URL('./audits/issue74-bel1025-original-pp-horse-name-digests.json',import.meta.url),'utf8'));
+const syntheticDigests=card=>({...independentDigests,races:independentDigests.races.map(r=>({...r,program_name_sha256:digestImportedRaceIdentities(card.races[r.race].horses)}))});
+test('all 80 independent original PDF source identities have nine race digests',()=>{
+ assert.equal(independentDigests.races.length,9);
+ assert.equal(independentDigests.races.reduce((n,r)=>n+r.source_entries,0),80);
+ assert.ok(independentDigests.races.every(r=>/^[a-f0-9]{64}$/.test(r.program_name_sha256)));
+ assert.equal(independentDigests.races[8].program_name_sha256,digestImportedRaceIdentities(withR9Source().races[9].horses));
+});
+test('nine-race matching synthetic identity digest manifest passes without prospective certification',()=>{
+ const card=fixture(),manifest=syntheticDigests(card);
+ const result=compareImportedCardToFrozenRosters(card,reference,null,manifest);
+ assert.equal(result.status,'SOURCE_PROGRAM_REPLAY_PASSED_NOT_CERTIFIED');
+ assert.equal(result.prospective_certified,false);
+});
+test('wrong horse name at same program in race 2 fails all-card source identity digest',()=>{
+ const card=fixture(),manifest=syntheticDigests(card);
+ card.races[2].horses[4].name='Different Runner';
+ const result=compareImportedCardToFrozenRosters(card,reference,null,manifest);
+ assert.equal(result.status,'SOURCE_PROGRAM_REPLAY_FAILED');
+ assert.ok(result.races[1].blockers.some(x=>x.includes('horse-name identity digest mismatch')));
+});
+test('missing or altered original full-card digest evidence fails closed',()=>{
+ const card=fixture(),manifest=syntheticDigests(card);
+ manifest.races[4].program_name_sha256='not-a-hash';
+ const result=compareImportedCardToFrozenRosters(card,reference,null,manifest);
+ assert.equal(result.status,'SOURCE_PROGRAM_REPLAY_FAILED');
+ assert.ok(result.races[4].blockers.some(x=>x.includes('digest evidence invalid')));
 });

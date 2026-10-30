@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "scope": "BEL-2026-10-25",
+  "source_pdf_sha256": "13930fbc15ee9263777a1a20d16051f8cd6196f8ece396bca38b62fde409705a",
+  "source_pages": 24,
+  "source_method": "Independent local PyMuPDF page text and position extraction of original private PDF; program number at x<20 matched to horse-name heading at x≈36 by page y-coordinate; 80/80 entries uniquely resolved",
+  "digest_algorithm": "sha256 over ascending numeric program rows, each row program:normalized_horse_name, joined with LF, no final newline; normalized=NFKD, remove combining marks, lowercase, strip non a-z0-9",
+  "races": [
+    {
+      "race": 1,
+      "source_entries": 6,
+      "program_name_sha256": "5d9f8bd33126fa0732346077e87e73b0e33f59ad4d4ae8459944b7dbeadfbe40"
+    },
+    {
+      "race": 2,
+      "source_entries": 10,
+      "program_name_sha256": "0fc01eb410fb6ff716d0e81ba944d38b5419d6b0fb8ebcb666496451e9a9b009"
+    },
+    {
+      "race": 3,
+      "source_entries": 6,
+      "program_name_sha256": "fc92eb4be6e6543a9c45ddefc37d33805f897dab3739c0c7e91ef201603c4f2a"
+    },
+    {
+      "race": 4,
+      "source_entries": 7,
+      "program_name_sha256": "93ec49e0e53766ff56620c8d62792fbf8d8b25f5aba778c7231399775924b62f"
+    },
+    {
+      "race": 5,
+      "source_entries": 10,
+      "program_name_sha256": "408a5a084e9010a13dbaac0eb11757072ef55dff10ff62a5ccfeb154d834a81d"
+    },
+    {
+      "race": 6,
+      "source_entries": 8,
+      "program_name_sha256": "4a5cf4c0cc819690679b54364ee4f397164461aec531d39d2a9e1c4c7cc2dda4"
+    },
+    {
+      "race": 7,
+      "source_entries": 8,
+      "program_name_sha256": "cd5f39d337cdd1182f9bfb4c3b8a3810275e718ab3da3ccae922c8286e6acfce"
+    },
+    {
+      "race": 8,
+      "source_entries": 11,
+      "program_name_sha256": "4fffbdede5168a8d128f689c09dcdfea4e36171beb9377a035d5b330839c04c0"
+    },
+    {
+      "race": 9,
+      "source_entries": 14,
+      "program_name_sha256": "b32eac3eb0faaf1490e8cc979836839c5282cb49fbcf0b825d011f7af9f5656b"
+    }
+  ],
+  "total_source_entries": 80,
+  "limitations": [
+    "No private PDF or full horse-name list committed; digests prove roster equality only if independently sourced source PDF is trusted.",
+    "Digest parity is not proof of actual starter status, complete pace data, official charts, or independently anchored prospective predictions.",
+    "The production pdfjs importer replay is still required; this manifest does not claim it was executed."
+  ]
+}
