@@ -1,0 +1,224 @@
+{
+  "schema": "issue74-equibase-chart-pp-reconciliation-v1",
+  "scope": "BEL-2026-10-25",
+  "source": {
+    "official_chart_filename": "BEL102526USA.pdf",
+    "official_chart_sha256": "c8c532d3928804f4ffe8a444ceaec778d48d55533909bf55b869d04bec18922c",
+    "original_pp_filename": "bel1025p(1).pdf",
+    "original_pp_sha256": "13930fbc15ee9263777a1a20d16051f8cd6196f8ece396bca38b62fde409705a",
+    "official_index": "https://tvg.equibase.com/static/chart/pdf/BEL102526USA.html"
+  },
+  "races": [
+    {
+      "race": 1,
+      "pp_entries": 6,
+      "actual_starters": 6,
+      "scratched_programs": [],
+      "nonstarter_programs": [],
+      "finish_order_programs": [
+        2,
+        3,
+        6,
+        1,
+        4,
+        5
+      ],
+      "identity_reconciled": true
+    },
+    {
+      "race": 2,
+      "pp_entries": 10,
+      "actual_starters": 9,
+      "scratched_programs": [
+        8
+      ],
+      "nonstarter_programs": [],
+      "finish_order_programs": [
+        1,
+        2,
+        10,
+        9,
+        7,
+        6,
+        3,
+        5,
+        4
+      ],
+      "identity_reconciled": true
+    },
+    {
+      "race": 3,
+      "pp_entries": 6,
+      "actual_starters": 5,
+      "scratched_programs": [
+        5
+      ],
+      "nonstarter_programs": [],
+      "finish_order_programs": [
+        4,
+        2,
+        1,
+        3,
+        6
+      ],
+      "identity_reconciled": true
+    },
+    {
+      "race": 4,
+      "pp_entries": 7,
+      "actual_starters": 7,
+      "scratched_programs": [],
+      "nonstarter_programs": [],
+      "finish_order_programs": [
+        1,
+        2,
+        3,
+        6,
+        5,
+        4,
+        7
+      ],
+      "identity_reconciled": true
+    },
+    {
+      "race": 5,
+      "pp_entries": 10,
+      "actual_starters": 8,
+      "scratched_programs": [
+        1,
+        10
+      ],
+      "nonstarter_programs": [],
+      "finish_order_programs": [
+        4,
+        6,
+        8,
+        9,
+        5,
+        3,
+        2,
+        7
+      ],
+      "identity_reconciled": true
+    },
+    {
+      "race": 6,
+      "pp_entries": 8,
+      "actual_starters": 7,
+      "scratched_programs": [],
+      "nonstarter_programs": [
+        7
+      ],
+      "finish_order_programs": [
+        6,
+        3,
+        5,
+        1,
+        4,
+        2,
+        8
+      ],
+      "identity_reconciled": true
+    },
+    {
+      "race": 7,
+      "pp_entries": 8,
+      "actual_starters": 8,
+      "scratched_programs": [],
+      "nonstarter_programs": [],
+      "finish_order_programs": [
+        3,
+        4,
+        8,
+        6,
+        5,
+        2,
+        1,
+        7
+      ],
+      "identity_reconciled": true
+    },
+    {
+      "race": 8,
+      "pp_entries": 11,
+      "actual_starters": 11,
+      "scratched_programs": [],
+      "nonstarter_programs": [],
+      "finish_order_programs": [
+        5,
+        1,
+        8,
+        3,
+        4,
+        2,
+        9,
+        7,
+        6,
+        10,
+        11
+      ],
+      "identity_reconciled": true
+    },
+    {
+      "race": 9,
+      "pp_entries": 14,
+      "actual_starters": 12,
+      "scratched_programs": [
+        1,
+        14
+      ],
+      "nonstarter_programs": [],
+      "finish_order_programs": [
+        7,
+        9,
+        4,
+        8,
+        11,
+        5,
+        10,
+        12,
+        13,
+        2,
+        3,
+        6
+      ],
+      "identity_reconciled": true
+    }
+  ],
+  "name_normalization": {
+    "rule": "Remove only trailing country suffix (IRE) or (GB) from official-chart names",
+    "programs_by_race": {
+      "2": [
+        9
+      ],
+      "4": [
+        2,
+        3,
+        5
+      ],
+      "8": [
+        3,
+        5,
+        9
+      ]
+    }
+  },
+  "special_rulings": [
+    "R4 objection against winner #1 Supplier: no change",
+    "R6 #7 Kid Rich declared non-starter after stewards inquiry; exclude from actual starters",
+    "R9 #13 Cocoa Mills actual starter, finished ninth"
+  ],
+  "totals": {
+    "pp_entries": 80,
+    "actual_starters": 73,
+    "scratches": 6,
+    "declared_nonstarters": 1,
+    "unmatched": 0
+  },
+  "certification": {
+    "historical_freeze_independently_anchored": false,
+    "original_pdf_production_importer_replay_executed": false,
+    "prospective_roi_authorized": false,
+    "reason": "R1-R4 frozen after off; R5-R9 lack independent pre-post anchor. This is official-result reconciliation evidence, not a certification of pre-race predictions."
+  }
+}
