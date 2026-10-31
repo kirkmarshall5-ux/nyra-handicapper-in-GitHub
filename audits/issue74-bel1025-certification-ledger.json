@@ -22,7 +22,9 @@
     "official_off_time_precision": "minute (no seconds published in summary index)",
     "official_chart_content_reviewed": true,
     "local_uploaded_pdf_sha256": "c8c532d3928804f4ffe8a444ceaec778d48d55533909bf55b869d04bec18922c",
-    "reconciliation_audit_path": "audits/issue74-bel1025-equibase-official-chart-reconciliation.json"
+    "reconciliation_audit_path": "audits/issue74-bel1025-equibase-official-chart-reconciliation.json",
+    "individual_chart_urls_verified": false,
+    "individual_chart_ids_verified": false
   },
   "source_pdf": {
     "filename": "bel1025p.pdf",
@@ -41,8 +43,8 @@
   "races": [
     {
       "race": 1,
-      "official_chart_url": "https://tvg.equibase.com/static/chart/pdf/BEL102526USA.html",
-      "official_chart_id": "BEL102526USA-R1",
+      "official_chart_url": null,
+      "official_chart_id": null,
       "official_chart_manually_reviewed": true,
       "official_post_time_verified": true,
       "official_surface_distance_verified": true,
@@ -64,12 +66,15 @@
       "equibase_published_off_time_precision": "minute",
       "equibase_off_time_index_url": "https://tvg.equibase.com/static/chart/summary/RaceCardIndexBEL102526USA-EQB.html",
       "freeze_time_vs_published_off_minute": "AFTER_PUBLISHED_OFF_MINUTE_NOT_PROSPECTIVE",
-      "official_chart_audit_path": "audits/issue74-bel1025-equibase-official-chart-reconciliation.json"
+      "official_chart_audit_path": "audits/issue74-bel1025-equibase-official-chart-reconciliation.json",
+      "local_official_chart_pdf_page": 1,
+      "official_chart_pdf_sha256": "c8c532d3928804f4ffe8a444ceaec778d48d55533909bf55b869d04bec18922c",
+      "official_chart_source_note": "Reviewed user-supplied official Equibase PDF; individual Equibase chart URL and publisher chart ID not independently resolved; do not substitute the full-card index URL."
     },
     {
       "race": 2,
-      "official_chart_url": "https://tvg.equibase.com/static/chart/pdf/BEL102526USA.html",
-      "official_chart_id": "BEL102526USA-R2",
+      "official_chart_url": null,
+      "official_chart_id": null,
       "official_chart_manually_reviewed": true,
       "official_post_time_verified": true,
       "official_surface_distance_verified": true,
@@ -92,12 +97,15 @@
       "equibase_published_off_time_precision": "minute",
       "equibase_off_time_index_url": "https://tvg.equibase.com/static/chart/summary/RaceCardIndexBEL102526USA-EQB.html",
       "freeze_time_vs_published_off_minute": "AFTER_PUBLISHED_OFF_MINUTE_NOT_PROSPECTIVE",
-      "official_chart_audit_path": "audits/issue74-bel1025-equibase-official-chart-reconciliation.json"
+      "official_chart_audit_path": "audits/issue74-bel1025-equibase-official-chart-reconciliation.json",
+      "local_official_chart_pdf_page": 2,
+      "official_chart_pdf_sha256": "c8c532d3928804f4ffe8a444ceaec778d48d55533909bf55b869d04bec18922c",
+      "official_chart_source_note": "Reviewed user-supplied official Equibase PDF; individual Equibase chart URL and publisher chart ID not independently resolved; do not substitute the full-card index URL."
     },
     {
       "race": 3,
-      "official_chart_url": "https://tvg.equibase.com/static/chart/pdf/BEL102526USA.html",
-      "official_chart_id": "BEL102526USA-R3",
+      "official_chart_url": null,
+      "official_chart_id": null,
       "official_chart_manually_reviewed": true,
       "official_post_time_verified": true,
       "official_surface_distance_verified": true,
@@ -119,12 +127,15 @@
       "equibase_published_off_time_precision": "minute",
       "equibase_off_time_index_url": "https://tvg.equibase.com/static/chart/summary/RaceCardIndexBEL102526USA-EQB.html",
       "freeze_time_vs_published_off_minute": "AFTER_PUBLISHED_OFF_MINUTE_NOT_PROSPECTIVE",
-      "official_chart_audit_path": "audits/issue74-bel1025-equibase-official-chart-reconciliation.json"
+      "official_chart_audit_path": "audits/issue74-bel1025-equibase-official-chart-reconciliation.json",
+      "local_official_chart_pdf_page": 3,
+      "official_chart_pdf_sha256": "c8c532d3928804f4ffe8a444ceaec778d48d55533909bf55b869d04bec18922c",
+      "official_chart_source_note": "Reviewed user-supplied official Equibase PDF; individual Equibase chart URL and publisher chart ID not independently resolved; do not substitute the full-card index URL."
     },
     {
       "race": 4,
-      "official_chart_url": "https://tvg.equibase.com/static/chart/pdf/BEL102526USA.html",
-      "official_chart_id": "BEL102526USA-R4",
+      "official_chart_url": null,
+      "official_chart_id": null,
       "official_chart_manually_reviewed": true,
       "official_post_time_verified": true,
       "official_surface_distance_verified": true,
@@ -147,12 +158,15 @@
       "equibase_published_off_time_precision": "minute",
       "equibase_off_time_index_url": "https://tvg.equibase.com/static/chart/summary/RaceCardIndexBEL102526USA-EQB.html",
       "freeze_time_vs_published_off_minute": "AFTER_PUBLISHED_OFF_MINUTE_NOT_PROSPECTIVE",
-      "official_chart_audit_path": "audits/issue74-bel1025-equibase-official-chart-reconciliation.json"
+      "official_chart_audit_path": "audits/issue74-bel1025-equibase-official-chart-reconciliation.json",
+      "local_official_chart_pdf_page": 4,
+      "official_chart_pdf_sha256": "c8c532d3928804f4ffe8a444ceaec778d48d55533909bf55b869d04bec18922c",
+      "official_chart_source_note": "Reviewed user-supplied official Equibase PDF; individual Equibase chart URL and publisher chart ID not independently resolved; do not substitute the full-card index URL."
     },
     {
       "race": 5,
-      "official_chart_url": "https://tvg.equibase.com/static/chart/pdf/BEL102526USA.html",
-      "official_chart_id": "BEL102526USA-R5",
+      "official_chart_url": null,
+      "official_chart_id": null,
       "official_chart_manually_reviewed": true,
       "official_post_time_verified": true,
       "official_surface_distance_verified": true,
@@ -172,12 +186,15 @@
       "equibase_published_off_time_precision": "minute",
       "equibase_off_time_index_url": "https://tvg.equibase.com/static/chart/summary/RaceCardIndexBEL102526USA-EQB.html",
       "freeze_time_vs_published_off_minute": "BEFORE_PUBLISHED_OFF_MINUTE_UNAUTHENTICATED",
-      "official_chart_audit_path": "audits/issue74-bel1025-equibase-official-chart-reconciliation.json"
+      "official_chart_audit_path": "audits/issue74-bel1025-equibase-official-chart-reconciliation.json",
+      "local_official_chart_pdf_page": 5,
+      "official_chart_pdf_sha256": "c8c532d3928804f4ffe8a444ceaec778d48d55533909bf55b869d04bec18922c",
+      "official_chart_source_note": "Reviewed user-supplied official Equibase PDF; individual Equibase chart URL and publisher chart ID not independently resolved; do not substitute the full-card index URL."
     },
     {
       "race": 6,
-      "official_chart_url": "https://tvg.equibase.com/static/chart/pdf/BEL102526USA.html",
-      "official_chart_id": "BEL102526USA-R6",
+      "official_chart_url": null,
+      "official_chart_id": null,
       "official_chart_manually_reviewed": true,
       "official_post_time_verified": true,
       "official_surface_distance_verified": true,
@@ -197,12 +214,15 @@
       "equibase_published_off_time_precision": "minute",
       "equibase_off_time_index_url": "https://tvg.equibase.com/static/chart/summary/RaceCardIndexBEL102526USA-EQB.html",
       "freeze_time_vs_published_off_minute": "BEFORE_PUBLISHED_OFF_MINUTE_UNAUTHENTICATED",
-      "official_chart_audit_path": "audits/issue74-bel1025-equibase-official-chart-reconciliation.json"
+      "official_chart_audit_path": "audits/issue74-bel1025-equibase-official-chart-reconciliation.json",
+      "local_official_chart_pdf_page": 6,
+      "official_chart_pdf_sha256": "c8c532d3928804f4ffe8a444ceaec778d48d55533909bf55b869d04bec18922c",
+      "official_chart_source_note": "Reviewed user-supplied official Equibase PDF; individual Equibase chart URL and publisher chart ID not independently resolved; do not substitute the full-card index URL."
     },
     {
       "race": 7,
-      "official_chart_url": "https://tvg.equibase.com/static/chart/pdf/BEL102526USA.html",
-      "official_chart_id": "BEL102526USA-R7",
+      "official_chart_url": null,
+      "official_chart_id": null,
       "official_chart_manually_reviewed": true,
       "official_post_time_verified": true,
       "official_surface_distance_verified": true,
@@ -222,12 +242,15 @@
       "equibase_published_off_time_precision": "minute",
       "equibase_off_time_index_url": "https://tvg.equibase.com/static/chart/summary/RaceCardIndexBEL102526USA-EQB.html",
       "freeze_time_vs_published_off_minute": "BEFORE_PUBLISHED_OFF_MINUTE_UNAUTHENTICATED",
-      "official_chart_audit_path": "audits/issue74-bel1025-equibase-official-chart-reconciliation.json"
+      "official_chart_audit_path": "audits/issue74-bel1025-equibase-official-chart-reconciliation.json",
+      "local_official_chart_pdf_page": 7,
+      "official_chart_pdf_sha256": "c8c532d3928804f4ffe8a444ceaec778d48d55533909bf55b869d04bec18922c",
+      "official_chart_source_note": "Reviewed user-supplied official Equibase PDF; individual Equibase chart URL and publisher chart ID not independently resolved; do not substitute the full-card index URL."
     },
     {
       "race": 8,
-      "official_chart_url": "https://tvg.equibase.com/static/chart/pdf/BEL102526USA.html",
-      "official_chart_id": "BEL102526USA-R8",
+      "official_chart_url": null,
+      "official_chart_id": null,
       "official_chart_manually_reviewed": true,
       "official_post_time_verified": true,
       "official_surface_distance_verified": true,
@@ -247,12 +270,15 @@
       "equibase_published_off_time_precision": "minute",
       "equibase_off_time_index_url": "https://tvg.equibase.com/static/chart/summary/RaceCardIndexBEL102526USA-EQB.html",
       "freeze_time_vs_published_off_minute": "BEFORE_PUBLISHED_OFF_MINUTE_UNAUTHENTICATED",
-      "official_chart_audit_path": "audits/issue74-bel1025-equibase-official-chart-reconciliation.json"
+      "official_chart_audit_path": "audits/issue74-bel1025-equibase-official-chart-reconciliation.json",
+      "local_official_chart_pdf_page": 8,
+      "official_chart_pdf_sha256": "c8c532d3928804f4ffe8a444ceaec778d48d55533909bf55b869d04bec18922c",
+      "official_chart_source_note": "Reviewed user-supplied official Equibase PDF; individual Equibase chart URL and publisher chart ID not independently resolved; do not substitute the full-card index URL."
     },
     {
       "race": 9,
-      "official_chart_url": "https://tvg.equibase.com/static/chart/pdf/BEL102526USA.html",
-      "official_chart_id": "BEL102526USA-R9",
+      "official_chart_url": null,
+      "official_chart_id": null,
       "official_chart_manually_reviewed": true,
       "official_post_time_verified": true,
       "official_surface_distance_verified": true,
@@ -274,7 +300,10 @@
       "equibase_published_off_time_precision": "minute",
       "equibase_off_time_index_url": "https://tvg.equibase.com/static/chart/summary/RaceCardIndexBEL102526USA-EQB.html",
       "freeze_time_vs_published_off_minute": "BEFORE_PUBLISHED_OFF_MINUTE_UNAUTHENTICATED",
-      "official_chart_audit_path": "audits/issue74-bel1025-equibase-official-chart-reconciliation.json"
+      "official_chart_audit_path": "audits/issue74-bel1025-equibase-official-chart-reconciliation.json",
+      "local_official_chart_pdf_page": 9,
+      "official_chart_pdf_sha256": "c8c532d3928804f4ffe8a444ceaec778d48d55533909bf55b869d04bec18922c",
+      "official_chart_source_note": "Reviewed user-supplied official Equibase PDF; individual Equibase chart URL and publisher chart ID not independently resolved; do not substitute the full-card index URL."
     }
   ],
   "constraints": [
