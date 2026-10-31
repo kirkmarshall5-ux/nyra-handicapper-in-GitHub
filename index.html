@@ -53,6 +53,16 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 .dashboard-scroll{overflow-x:auto}.dashboard-table{min-width:590px;table-layout:fixed}.dashboard-table th{position:static;background:transparent;text-transform:none;letter-spacing:0;white-space:normal}.dashboard-table th:first-child{width:36%}.dashboard-table th:not(:first-child),.dashboard-table td{text-align:center;font-variant-numeric:tabular-nums}.dashboard-table tbody th{font-size:13px;color:var(--text);overflow-wrap:anywhere}
 .dashboard-more,.dashboard-paper{margin-top:14px;font-size:12px}.dashboard-more summary,.dashboard-paper summary{cursor:pointer;padding:5px 0}.dashboard-paper{border-top:1px solid var(--line);padding-top:10px}.dashboard-plan-controls{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:12px 0}.dashboard-plan-controls select{width:auto;max-width:100%}.dashboard-tickets{max-width:520px}.dashboard-tickets>div{display:flex;justify-content:space-between;gap:16px;padding:8px 0;border-bottom:1px solid var(--line)}.dashboard-footer{margin-bottom:0;line-height:1.6}
 @media(max-width:600px){.dashboard-readiness{grid-template-columns:1fr}.dashboard-heading{align-items:flex-start}.dashboard-heading .badge{white-space:nowrap}.dashboard-heading .sectiontitle{font-size:17px}.dashboard-table th:first-child{width:32%}}
+
+/* Keep selected race context below the existing app header while scrolling. */
+#raceContext{position:sticky;top:var(--app-header-height,130px);z-index:15;align-self:start;min-width:0;background:#111b2c;box-shadow:0 8px 18px #0005;border-top:3px solid var(--gold);padding:12px 16px}
+#raceContext .hero{align-items:center;gap:12px}
+#raceContext .hero>div{min-width:0}
+#raceContext h2{font-size:22px;margin:4px 0 7px}
+#raceContext .race-navigation{flex:0 1 56%;min-width:0}
+#raceContext .racebar{padding-bottom:3px}
+#raceContext .racebtn{flex:0 0 40px;min-width:40px}
+@media(max-width:900px){#raceContext .hero{display:grid;gap:8px}#raceContext .race-navigation{width:100%}#raceContext h2{font-size:20px}#raceContext .badge{padding:4px 7px}#raceContext{padding:10px 12px}}
 </style>
 </head>
 <body>
@@ -66,15 +76,25 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <button class="tab" data-tab="knowledge">Knowledge Base</button>
 </nav></div></header>
 
+<script>
+{
+ const appHeader=document.querySelector("body>header");
+ const updateRaceContextOffset=()=>document.documentElement.style.setProperty("--app-header-height",appHeader.getBoundingClientRect().height+"px");
+ updateRaceContextOffset();
+ new ResizeObserver(updateRaceContextOffset).observe(appHeader);
+}
+</script>
 <main>
 <section id="raceday">
 <div class="grid">
-<div class="card span12">
+<section id="raceContext" class="card span12" aria-label="Track and race navigation">
 <div class="hero">
 <div><div class="kicker" id="cardKicker">Active race card</div><h2 id="raceTitle">Belmont Park · Race 1</h2>
 <div class="badges" id="raceBadges"><span class="badge gold">1 1/16M Dirt</span><span class="badge">Maiden Special Weight · $100,000</span><span class="badge">12:05 PM</span><span class="badge green">Public NYRA card</span></div></div>
-<div><div class="muted small" style="margin-bottom:5px">Race</div><div class="racebar" id="racebar"></div></div>
-</div><div id="declaredScratches" class="small muted" role="status"></div><div class="flex" style="margin-top:12px;flex-wrap:wrap"><button class="primary" id="uploadBrisnet">1. Upload Brisnet PP</button><input id="brisnetFile" type="file" accept=".pdf" hidden><button class="primary" id="uploadDrf">2. Upload DRF PP</button><input id="drfFile" type="file" accept=".pdf" hidden><button class="primary" id="updateOddsScratches" type="button">Update Odds &amp; Scratches</button><button class="primary" id="printPicks" type="button">Print Picks</button><span id="printPicksStatus" class="small muted" role="status" aria-live="polite"></span></div><div id="raceDayUploadStatus" class="small" role="status" aria-live="polite" style="margin-top:8px;overflow-wrap:anywhere"></div><div class="small muted" id="trackUpdateIdentity" style="margin-top:8px"></div><p id="nyraUpdateStatus" class="small muted" role="status" aria-live="polite">Updates use the loaded PP card and selected race.</p></div>
+<div class="race-navigation"><div class="muted small" id="raceCount" style="margin-bottom:5px">Races on this card</div><div class="racebar" id="racebar" aria-label="Select race"></div></div>
+</div></section>
+<div class="card span12">
+<div id="raceConditions" class="small muted" style="margin-bottom:10px"></div><div id="declaredScratches" class="small muted" role="status"></div><div class="flex" style="margin-top:12px;flex-wrap:wrap"><button class="primary" id="uploadBrisnet">1. Upload Brisnet PP</button><input id="brisnetFile" type="file" accept=".pdf" hidden><button class="primary" id="uploadDrf">2. Upload DRF PP</button><input id="drfFile" type="file" accept=".pdf" hidden><button class="primary" id="updateOddsScratches" type="button">Update Odds &amp; Scratches</button><button class="primary" id="printPicks" type="button">Print Picks</button><span id="printPicksStatus" class="small muted" role="status" aria-live="polite"></span></div><div id="raceDayUploadStatus" class="small" role="status" aria-live="polite" style="margin-top:8px;overflow-wrap:anywhere"></div><div class="small muted" id="trackUpdateIdentity" style="margin-top:8px"></div><p id="nyraUpdateStatus" class="small muted" role="status" aria-live="polite">Updates use the loaded PP card and selected race.</p></div>
 
 <section id="raceDayDashboard" class="card span12" aria-label="Race day dashboard"></section>
 
@@ -474,7 +494,7 @@ function renderHeader(){
  document.getElementById("declaredScratches").textContent=(race.predeclared_scratches||[]).length?"Scratched in PPs (excluded): "+race.predeclared_scratches.map(h=>"#"+h.program+" "+h.name).join(", "):"";
  cardKicker.textContent=`${activeCard.track||race.track||"Race card"} · ${activeCard.date||race.date||"date unknown"} · active ${activeCard.source_format==="BRISNET_PREMIUM_PLUS"?"Brisnet Premium Plus":activeCard.source_format==="BRISNET_ULTIMATE"?"Brisnet Ultimate":"DRF"} card`;
  raceTitle.textContent=`${race.track} · Race ${race.race}`;
- raceBadges.innerHTML=`<span class="badge gold">${escapeText(displayDistance(race.dist)||"—")} ${race.surface||""}</span><span class="badge">${escapeText(displayDistance(race.cls)||"Race")}</span><span class="badge">${race.post||"—"}</span><span class="badge green">Active card</span>`;
+ raceBadges.innerHTML=`<span class="badge gold">${escapeText(displayDistance(race.dist)||"—")} ${race.surface||""}</span><span class="badge">${race.post||"—"}</span><span class="badge green">Active card</span>`;
  let active=race.horses.filter(h=>h.odds!=="SCR");
  const mlProvider=morningLineProvider(),mlSource=providerRace(mlProvider),ml=(mlSource.race?.horses||[]).filter(h=>h.odds!=='SCR'&&h.included_in_frozen_field!==false&&(!h.entry_status||h.entry_status==='REGULAR')&&Number.isFinite(oddsNumber(h.ml))).sort((a,b)=>oddsNumber(a.ml)-oddsNumber(b.ml)).slice(0,4);
  topMl.innerHTML='<div class="tiny muted" style="margin:5px 0">Four shortest morning lines · '+escapeText(mlProvider)+' · reference odds only.</div><table class="candidate-table morning-line-table"><thead><tr><th scope="col">Horse</th><th scope="col">Rank</th><th scope="col">M/L Odds</th><th scope="col">Source</th></tr></thead><tbody>'+(ml.length?ml.map((h,i)=>'<tr><td><b>#'+escapeText(h.n)+' '+escapeText(h.name)+'</b></td><td>'+(i+1)+'</td><td>'+escapeText(h.ml)+'</td><td>'+escapeText(mlProvider)+'</td></tr>').join(''):'<tr><td colspan="4">'+escapeText(mlSource.reason||'Verified morning line unavailable')+'</td></tr>')+'</tbody></table>';
@@ -482,6 +502,8 @@ function renderHeader(){
  topJockeys.innerHTML=panel('jockey');topTrainers.innerHTML=panel('trainer');
  const pairs=connectionRows(race).filter(x=>x.topPair);
  document.getElementById('topPairings').innerHTML=`<div class="tiny muted">${escapeText(LEADER_SCOPE)} · <a href="${LEADER_SOURCE}" target="_blank" rel="noopener">Source</a></div>`+(pairs.length?pairs.map(x=>`<div class="note"><b>#${escapeText(x.program)} ${escapeText(x.horse)}</b> · ${escapeText(x.jockey)} / ${escapeText(x.trainer)}<div>${x.records.length?x.records.map(r=>`${escapeText(r.period)} ${escapeText(r.scope)}: ${r.starts} starts · ${(r.winRate*100).toFixed(0)}% wins${r.limitedSample?' · Limited sample':''}`).join('<br>'):'Pairing data unavailable'}</div><div class="tiny muted">Joint second/third counts unavailable.${x.flags.length?' '+x.flags.map(escapeText).join(' · '):''} Research only; no rating adjustment.</div></div>`).join(''):'<div>No Top Jockey/Trainer This Race</div>');
+ document.getElementById("raceConditions").textContent=displayDistance(race.cls)||"Race conditions unavailable";
+ document.getElementById("raceCount").textContent=`Race ${race.race} · ${Object.keys(activeCard.races).length} races on this card`;
  racebar.innerHTML=Object.keys(activeCard.races).sort((a,b)=>+a-+b).map(n=>`<button class="racebtn ${+n===race.race?"active":""}" data-race="${n}">${n}</button>`).join("");
  racebar.querySelectorAll(".racebtn").forEach(b=>b.onclick=()=>selectRace(+b.dataset.race));
  raceDate.value=race.date;raceNo.value=race.race;

@@ -30,6 +30,23 @@ for(const profile of profiles){
   await page.locator('#raceTitle').waitFor();
   assert.equal(errors.length,0,'Uncaught page errors: '+errors.join(' | '));
  });
+ await check('D01b-race-context-stays-visible-on-scroll',async()=>{
+  const context=page.locator('#raceContext');
+  const title=await page.locator('#raceTitle').textContent();
+  await page.evaluate(()=>window.scrollTo(0,900));
+  await page.waitForTimeout(100);
+  const box=await context.boundingBox(),header=await page.locator('body>header').boundingBox();
+  assert.ok(Math.abs(box.y-(header.y+header.height))<2,'Race context should stick immediately below app header');
+  assert.ok(box.y+box.height<profile.viewport.height,'Sticky context must leave room for page content');
+  assert.equal(await page.locator('#raceTitle').textContent(),title);
+  assert.match(await page.locator('#raceCount').textContent(),/\d+ races on this card/);
+  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'Race buttons must scroll inside context');
+  const next=page.locator('#racebar button').nth(1);
+  if(await next.count()){await next.click();assert.match(await page.locator('#raceTitle').textContent(),/Race 2/);}
+  await page.screenshot({path:`${out}/${profile.name}-sticky-race-context.png`});
+  await page.evaluate(()=>window.scrollTo(0,0));
+  await page.locator('#racebar button').first().click();
+ });
  await check('D02-four-comparison-panels-and-hidden-panels',async()=>{
   for(const id of ['topContenders','finisherCandidates','contenderCandidates'])assert.equal(await page.locator('#'+id).count(),1);
   const boxes=await Promise.all(['topMl','brisContenderCandidates','contenderCandidates','finisherCandidates'].map(id=>page.locator('#'+id).boundingBox()));
