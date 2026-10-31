@@ -13,3 +13,16 @@ test('FTS never invents pace or run style',()=>{const f=fixture();f[0].items=f[0
 test('unsafe roster, future lines and mixed editions reject',()=>{let f=fixture();f[0].items=f[0].items.filter(x=>x.str!=='1');assert.throws(()=>parsePPCard(f),/program number/);f=fixture();f[0].items.find(x=>x.str==='09Sep26Del').str='17Oct26Del';assert.throws(()=>parsePPCard(f),/not before/);f=fixture();f[0].items.push(i("Ultimate PP's",10,10));assert.throws(()=>parsePPCard(f),/Mixed/);});
 test('date-column merged conditions recover history while all numeric columns stay fixed',()=>{const f=fixture();f[0].items=f[0].items.filter(x=>x.str!=='6f ft');f[0].items.find(x=>x.str==='09Sep26Del').str='09Sep26Del à 1ˆ fm';const l=parsePPCard(f).races[1].horses[0].ratings.lines[0];assert.equal(l.surface,'Turf');assert.equal(l.furlongs,8.5);assert.deepEqual([l.e1,l.e2,l.late,l.shape1,l.shape2,l.speed],[103,105,79,17,18,73]);assert.equal(l.condition_evidence.status,'SOURCE_TOKEN_VERIFIED');});
 test('unsupported historical conditions remain unknown and generate review notes',()=>{const f=fixture();f[0].items.find(x=>x.str==='6f ft').str='1Z ft';const c=parsePPCard(f);assert.equal(c.races[1].horses[0].ratings.lines[0].furlongs,null);assert.ok(c.validation_issues.some(s=>/historical conditions unresolved/.test(s)));});
+
+const scratchAppendix=(extra=[])=>({pageNumber:49,items:[i("Premium Plus PP's",10,760),i('Belmont',120,760),i('SCRATCH WATCH',10,740),i('Horses scratched within the past 45 days since their last race.',10,720),i('HORSE DATE / RACE CLASS REASON',10,700),i('Example Runner 09Oct26 - 1BEL Trainer',10,680),...extra]});
+test('standalone historical Scratch Watch appendix is excluded without changing current scratches',()=>{
+ const before=parsePPCard(fixture()),after=parsePPCard([...fixture(),scratchAppendix()]);
+ assert.deepEqual(after.races,before.races);
+});
+test('unrecognized pages and Scratch Watch pages with runner evidence still reject',()=>{
+ for(const appendix of [scratchAppendix([i('Life: 3 1 - 0 - 0',390,650)]),scratchAppendix([i('Lost Runner (P 3)',45,650)]),{pageNumber:49,items:[i('SCRATCH WATCH',10,740)]}]){
+  assert.throws(()=>parsePPCard([...fixture(),appendix]),/race heading missing on page 49/);
+ }
+ const wrongTrack=scratchAppendix();wrongTrack.items[1].str='Keeneland';
+ assert.throws(()=>parsePPCard([...fixture(),wrongTrack]),/race heading missing/);
+});
