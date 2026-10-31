@@ -72,7 +72,14 @@ export function parsePremiumCard(input,{sourceName='Brisnet Premium Plus PDF'}={
  for(const page of pages){
   const text=page.lines.map(l=>l.text).join('\n');
   const head=page.lines.find(l=>/Premium Plus PP'?s/i.test(l.text)&&/\bRace\s+\d+/.test(l.text));
-  if(!head){if(/INDEX OF HORSES/.test(text)&&track&&!/\bLife:/.test(text)){excluded.push({page:page.pageNumber,reason:'Index and historical Scratch Watch; not current scratches'});continue;}throw Error('Premium Plus race heading missing on page '+page.pageNumber);}
+  if(!head){
+   const appendixHeader=page.lines.find(l=>/Premium Plus PP'?s/i.test(l.text));
+   const sameTrack=appendixHeader?.items.some(i=>clean(i.str)===track);
+   const standaloneScratchWatch=sameTrack&&/\bSCRATCH WATCH\b/.test(text)&&/within the past 45 days/.test(text)&&/DATE\s*\/\s*RACE CLASS/.test(text)&&/REASON/.test(text);
+   const runnerEvidence=/\bLife:/.test(text)||page.items.some(i=>/\((?:E\/P|E|P|S|NA)\s+[0-8]\)$/.test(clean(i.str)));
+   if(track&&!runnerEvidence&&(/INDEX OF HORSES/.test(text)||standaloneScratchWatch)){excluded.push({page:page.pageNumber,reason:'Index and historical Scratch Watch; not current scratches'});continue;}
+   throw Error('Premium Plus race heading missing on page '+page.pageNumber);
+  }
   const ti=head.items.findIndex(i=>/Premium Plus PP'?s/i.test(i.str)),name=clean(head.items[ti+1]?.str),day=dateHeading(head.text),rn=+head.text.match(/\bRace\s+(\d+)/)[1];
   if(!/^[A-Za-z][A-Za-z .'-]+$/.test(name))throw Error('Premium Plus track heading unverified');
   if(track&&(name!==track||day!==date))throw Error('Mixed Premium Plus track/date');track=name;date=day;
