@@ -13,7 +13,7 @@ test('Equibase published off minutes classify 1-4 as after post and 5-9 as earli
   assert.ok(Number.isFinite(t));
   assert.equal(r.freeze_time_vs_published_off_minute,r.race<=4?'AFTER_PUBLISHED_OFF_MINUTE_NOT_PROSPECTIVE':'BEFORE_PUBLISHED_OFF_MINUTE_UNAUTHENTICATED');
   assert.equal(freeze>=t,r.race<=4);
-  assert.equal(r.official_post_time_verified,false);
+  assert.equal(r.official_post_time_verified,true); // publisher off-minute confirmed; exact seconds not attested
   assert.equal(r.official_post_at_utc,null);
   assert.equal(r.prospective_gradeable,false);
  }
