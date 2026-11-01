@@ -577,6 +577,24 @@ for(const profile of profiles){
    await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});assert.match(await page.locator('#horseTable tbody tr').filter({hasText:names[0]}).innerText(),/SCR — Scratched/);
   }finally{await page.evaluate(async saved=>{const m=await import('./dual-pp-cards.js');await m.writeProviderCardsSession(saved.cards,saved.session?.state||{},saved.session?.selectedProvider);},saved);await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});}
  });
+ await check('D-morning-line-falls-back-from-unpriced-newest-DRF',async()=>{
+  const saved=await page.evaluate(async()=>{const m=await import('./dual-pp-cards.js');return {cards:await m.readProviderCards(),session:await m.readProviderSession()};});
+  try{
+   await page.evaluate(async()=>{
+    const m=await import('./dual-pp-cards.js'),c=structuredClone(await window.qaReadActive()),r=c.races[Object.keys(c.races)[0]];
+    c.id='qa-unpriced-drf';c.source_format='DRF';c.parser_version='DRF-positioned-v3';c.imported_at='2026-11-01T14:00:00Z';
+    delete r.ratings_provider;r.source_format='DRF';r.horses.forEach(h=>{delete h.ratings;h.n='';h.ml='—';h.odds='—';h.entry_status='REGULAR';h.included_in_frozen_field=true;});
+    c.races={[r.race]:r};const b=structuredClone(c);b.id='qa-priced-bris';b.source_format='BRISNET_PREMIUM_PLUS';b.parser_version='BRISNET-PREMIUM-PLUS-positioned-v3';b.imported_at='2026-11-01T13:00:00Z';b.races[r.race].horses.forEach((h,i)=>{h.n=String(i+1);h.ml=(i+2)+'/1';});
+    await m.writeProviderCardsSession({DRF:c,BRISNET:b},{},'DRF');
+   });
+   await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
+   assert.match(await page.locator('#topMl').innerText(),/BRISNET/);assert.match(await page.locator('#topMl tbody').innerText(),/2\/1/);
+   assert.match(await page.locator('#gridMorningLineHeader').innerText(),/Brisnet/);
+   const active=await page.evaluate(()=>window.qaReadActive()),h=active.races[Object.keys(active.races)[0]].horses[0];
+   assert.equal(h.ml,'—');assert.equal(h.n,'');assert.equal(await page.locator('#horseTable tbody tr').filter({hasText:h.name}).locator('td').nth(2).innerText(),'2/1');
+   assert.match(await page.locator('#raceDayDashboard').innerText(),/Morning line: BRISNET/);
+  }finally{await page.evaluate(async saved=>{const m=await import('./dual-pp-cards.js');await m.writeProviderCardsSession(saved.cards,saved.session?.state||{},saved.session?.selectedProvider);},saved);await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});}
+ });
  await page.screenshot({path:`${out}/${profile.name}-final.png`,fullPage:true});
  await context.close();
 }

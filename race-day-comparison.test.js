@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
+import {selectMorningLineProvider,morningLineNumber} from './race-day-dashboard.js';
 import {rankBrisnetModels} from './brisnet-models.js';
 import {brisnetRankingHtml} from './brisnet-ranking-display.js';
 import {rankContenders} from './contender-rankings.js';
@@ -9,16 +10,17 @@ import {releaseRace} from './rankings-release.js';
 const html=readFileSync(new URL('./index.html',import.meta.url),'utf8');
 const providerFn=html.match(/function morningLineProvider\(\)\{[\s\S]*?\n\}/)[0];
 test('morning line follows latest matching upload independently of active source',()=>{
- const context={activeCard:{provider:'BRISNET'},cardProvider:c=>c.provider,providerCards:{DRF:{imported_at:'2026-10-22T13:00:00Z'},BRISNET:{imported_at:'2026-10-22T12:00:00Z'}},providerRace:()=>({race:{}})};
+ const race={track:'Belmont Park',date:'2026-11-01',race:1,surface:'Dirt',distance_furlongs:6,horses:[{n:'1',name:'Example',ml:'4/1'}]};
+ const context={race,selectMorningLineProvider,activeCard:{provider:'BRISNET'},cardProvider:c=>c.provider,providerCards:{DRF:{imported_at:'2026-10-22T13:00:00Z'},BRISNET:{imported_at:'2026-10-22T12:00:00Z'}},providerRace:()=>({race})};
  assert.equal(vm.runInNewContext(providerFn+';morningLineProvider()',context),'DRF');
  context.providerCards.BRISNET.imported_at='2026-10-22T14:00:00Z';assert.equal(vm.runInNewContext('morningLineProvider()',context),'BRISNET');
- context.providerRace=p=>({race:p==='DRF'?{}:null});assert.equal(vm.runInNewContext('morningLineProvider()',context),'DRF');
+ context.providerRace=p=>({race:p==='DRF'?race:null});assert.equal(vm.runInNewContext('morningLineProvider()',context),'DRF');
 });
 test('morning line renders four eligible runners from only the chosen source',()=>{
  const horses=Array.from({length:7},(_,i)=>({n:String(i+1),name:'Horse '+(i+1),ml:(i+1)+'/1',odds:i===0?'SCR':'—',entry_status:i===1?'AE':'REGULAR'}));
  const body=html.slice(html.indexOf(' const mlProvider='),html.indexOf(' const panel=kind=>'));
  const oddsFn=html.match(/function oddsNumber\(o\)\{[^\n]+/)[0];
- const context={morningLineProvider:()=> 'DRF',providerRace:p=>{assert.equal(p,'DRF');return {race:{horses}};},topMl:{innerHTML:''},escapeText:s=>String(s)};
+ const context={morningLineNumber,morningLineProvider:()=> 'DRF',providerRace:p=>{assert.equal(p,'DRF');return {race:{horses}};},topMl:{innerHTML:''},escapeText:s=>String(s)};
  vm.runInNewContext(oddsFn+'\n'+body,context);
  assert.equal((context.topMl.innerHTML.match(/<tr><td>/g)||[]).length,4);
  assert.match(context.topMl.innerHTML,/#3 Horse 3/);assert.match(context.topMl.innerHTML,/#6 Horse 6/);assert.doesNotMatch(context.topMl.innerHTML,/#7 Horse 7|BRISNET/);
