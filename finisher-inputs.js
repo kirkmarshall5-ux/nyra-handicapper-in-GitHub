@@ -43,4 +43,19 @@ export function finisherInputs(race){
   return {...base,recent_speed:e.raw[1],matched_speed:matched.value,late_pace:e.raw[7]};
  });
 }
-export function rankFinishers(race){return rankFinisherFeatures(finisherInputs(race));}
+export function runnerIdentityIssue(horses=[]){
+ const numbers=new Set(),names=new Set();
+ for(const h of horses){
+  const n=String(h.n??'').trim(),name=String(h.name??'').trim();
+  if(!n)return 'Program number missing for '+(name||'unnamed runner');
+  if(!name)return 'Horse name missing for #'+n;
+  if(numbers.has(n)||names.has(name))return 'Duplicate runner identity for #'+n+' ('+name+')';
+  numbers.add(n);names.add(name);
+ }
+ return null;
+}
+export function rankFinishers(race){
+ const field=(race.horses||[]).filter(active),issue=runnerIdentityIssue(field);
+ if(issue)return {model_id:FINISHER_SPEC.id,status:'HOLD',rankings:[],unrated:field.map(h=>({n:String(h.n??''),name:h.name,reason:issue})),eligible_count:field.length,probabilityCalibrated:false,bettingEnabled:false,research_only:true};
+ return rankFinisherFeatures(finisherInputs(race));
+}
