@@ -1,6 +1,7 @@
 import {oddsSourceForTrack} from './multitrack-odds.js';
 const normalize=s=>String(s||'').replace(/\s*\((?:GB|IRE|FR|GER|ARG|BRZ|CHI|AUS|NZ|JPN|CAN|USA|ITY|SAF)\)\s*$/i,'').toLowerCase().replace(/[^a-z0-9]/g,'');
 export function applyOddsSnapshot(race,snapshot,now=Date.now()){
+ if(race.horses.some(h=>!String(h.n??'').trim()))throw Error('Program numbers unavailable; name-only rankings remain available. Load a numbered card before updating odds and scratches.');
  const source=oddsSourceForTrack(race.track);
  if(source.mode!=='automatic')throw Error('No NYRA odds adapter for '+race.track);
  const venue=source.venue;

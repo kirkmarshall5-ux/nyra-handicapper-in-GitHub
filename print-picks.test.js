@@ -33,3 +33,9 @@ test('PDF is self contained, keeps notes escaped and paginates two races per pag
 test('blocked popup produces actionable message and refresh never opens unsolicited windows',()=>{
  let calls=0;const p=createPicksPreview({getSheet:()=>({races:[]}),open:()=>{calls++;return null}});assert.equal(p.refresh(),false);assert.equal(calls,0);assert.throws(()=>p.show(),/Allow pop-ups/);assert.equal(calls,1);
 });
+test('unnumbered DRF prints full horse names and name-based paper selections',()=>{
+ const c={...card(),source_format:'DRF'};c.races[1].horses.forEach(h=>h.n='');
+ const s=buildPicksSheet({cards:{DRF:c},card:c},ranked),col=s.races[0].columns[3];
+ assert.equal(col.nameOnly,true);assert.deepEqual(col.picks,['Horse 1','Horse 2','Horse 3','Horse 4']);
+ const pdf=new TextDecoder().decode(picksPdf(s));assert.match(pdf,/Name-only selections require verified program numbers/);assert.match(pdf,/Horse 1/);
+});

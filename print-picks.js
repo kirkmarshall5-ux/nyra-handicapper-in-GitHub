@@ -1,5 +1,5 @@
 // Paper comparison only. Reuses the displayed model functions without changing scores.
-import {buildRaceDashboard} from './race-day-dashboard.js?v=20261028-dashboard2';
+import {buildRaceDashboard} from './race-day-dashboard.js?v=20261101-namefallback';
 import {pairedRace,cardProvider} from './dual-pp-cards.js';
 import {decodeTodayDistance} from './finisher-drf-distance.js';
 
@@ -12,7 +12,7 @@ export function buildPicksSheet({cards,card,currentRace=null,notes={},now=new Da
   const paired=Object.fromEntries(['BRISNET','DRF'].map(p=>[p,pairedRace(sources,p,anchor)]));
   const available=['DRF','BRISNET'].filter(p=>paired[p].race).sort((a,b)=>(Date.parse(sources[b]?.imported_at)||0)-(Date.parse(sources[a]?.imported_at)||0)||(a===provider?-1:b===provider?1:0));
   const dashboard=buildRaceDashboard({anchor,sources:paired,morningLineProvider:available[0]||provider},ranker);
-  const columns=[dashboard.morning_line,...dashboard.models].map(m=>({label:m.label,provider:m.provider|| (m.id==='brisContender'?'BRISNET':'DRF'),modelId:m.model_id||null,available:m.available,decision:m.decision||'REFERENCE',ranked:m.ranked,eligible:m.eligible,picks:m.rankings.slice(0,4).map(h=>String(h.n)),reason:m.available?null:m.reason}));
+  const columns=[dashboard.morning_line,...dashboard.models].map(m=>({label:m.label,provider:m.provider|| (m.id==='brisContender'?'BRISNET':'DRF'),modelId:m.model_id||null,available:m.available,decision:m.decision||'REFERENCE',ranked:m.ranked,eligible:m.eligible,nameOnly:m.rankings.some(h=>!h.n),picks:m.rankings.slice(0,4).map(h=>String(h.n||h.name)),reason:m.available?null:m.reason}));
   const scratches=[...new Set([...(anchor.horses||[]).filter(h=>h.odds==='SCR').map(h=>String(h.n)),...(anchor.predeclared_scratches||[]).map(h=>String(h.program))])];
   const conditional=(anchor.horses||[]).filter(h=>h.odds!=='SCR'&&['AE','ALSO_ELIGIBLE','MTO'].includes(h.entry_status)&&h.included_in_frozen_field!==true).map(h=>String(h.n));
   const dist=Number.isFinite(anchor.distance_furlongs)?anchor.distance_furlongs:decodeTodayDistance(anchor.conditions?.primaryDistanceLine||anchor.header||anchor.dist).furlongs;
@@ -30,8 +30,8 @@ function wrap(s,max){const out=[];for(let line of ascii(s).split('\n')){while(li
 
 // Small vector PDF: no CDN, server upload, or PDF-generation dependency.
 export function picksPdf(sheet){
- const pages=[];
- for(let start=0;start<sheet.races.length;start+=2){
+ const pages=[],perPage=sheet.races.some(r=>r.columns.some(c=>c.nameOnly))?1:2;
+ for(let start=0;start<sheet.races.length;start+=perPage){
   const commands=[];
   const text=(x,y,s,size=10,bold=false)=>commands.push(`BT /${bold?'F2':'F1'} ${size} Tf 1 0 0 1 ${x} ${y} Tm (${escape(s)}) Tj ET`);
   const line=(x,y,x2,y2)=>commands.push(`0.65 G 0.4 w ${x} ${y} m ${x2} ${y2} l S 0 G`);
@@ -39,14 +39,24 @@ export function picksPdf(sheet){
   text(36,727,sheet.track,13,true);text(425,727,sheet.date,12,true);
   const stamp=new Date(sheet.generatedAt).toLocaleString('en-US',{timeZone:'America/New_York',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',second:'2-digit'});
   text(36,709,'Updated '+stamp+' ET - verify official scratches and surface',8);
-  sheet.races.slice(start,start+2).forEach((r,index)=>{
+  sheet.races.slice(start,start+perPage).forEach((r,index)=>{
    const y=680-index*303,xs=[36,132,243,354,465],labels=['Race #','Morning Line','Brisnet Contender','DRF Contender','DRF Finisher'];
    labels.forEach((v,i)=>text(xs[i],y,v,i===0?11:9,true));line(36,y-7,576,y-7);
    text(36,y-28,String(r.race),14,true);
-   r.columns.forEach((c,i)=>{const x=xs[i+1],w=paperWagers(c.picks);text(x,y-28,c.available?(c.picks.join('-')||'Unrated'):'Unavailable',13,true);text(x,y-44,c.available?`${c.ranked}/${c.eligible} ranked - ${c.decision}`:'Check PP / field status',7);
+   r.columns.forEach((c,i)=>{const x=xs[i+1],w=paperWagers(c.picks);
+    if(perPage===1){
+     wrap(c.picks.map((p,j)=>`${j+1}. ${p}`).join(' / ')||'Unavailable',19).forEach((v,j)=>text(x,y-28-j*11,v,8,true));
+     text(x,y-155,`${c.ranked}/${c.eligible} ranked - ${c.decision}`,7);
+     wrap(w.win,19).forEach((v,j)=>text(x,y-190-j*11,v,8));
+     wrap(w.exacta,19).forEach((v,j)=>text(x,y-255-j*11,v,8));
+     if(c.nameOnly)text(x,y-400,'Name-only paper selections',7);
+     return;
+    }
+    text(x,y-28,c.available?(c.picks.join('-')||'Unrated'):'Unavailable',13,true);text(x,y-44,c.available?`${c.ranked}/${c.eligible} ranked - ${c.decision}`:'Check PP / field status',7);
     text(x,y-86,w.win,10);wrap(w.exacta,20).slice(0,2).forEach((v,j)=>text(x,y-111-j*11,v,9));text(x,y-146,w.trifecta,9);
    });
    text(36,y-62,[r.distance,r.surface].filter(Boolean).join(' - '),8);
+   if(perPage===1){text(36,y-190,'$4 Win',10);text(36,y-255,'$2 each way',9);text(36,y-440,'Name-only selections require verified program numbers before wagering.',8);return;}
    text(36,y-86,'$4 Win',10);text(36,y-111,'$2 Exacta box',9);text(36,y-146,'$0.50 Tri box',9);
    text(36,y-170,'Exacta: $2 each way ($4). Trifecta: 6 x $0.50 ($3). Paper tests; verify wager availability.',7);
    text(36,y-187,'Scratched: '+(r.scratches.join(', ')||'none marked')+'   Conditional / not confirmed: '+(r.conditional.join(', ')||'none'),8);
@@ -55,7 +65,7 @@ export function picksPdf(sheet){
   });
   text(36,44,'Paper comparison only. PASS / incomplete fields are not betting recommendations.',8);
   text(36,31,'Reprint after changes. A downloaded or printed PDF is a static snapshot, not a verified freeze.',7);
-  text(531,31,`${Math.floor(start/2)+1} / ${Math.ceil(sheet.races.length/2)}`,8);
+  text(531,31,`${Math.floor(start/perPage)+1} / ${Math.ceil(sheet.races.length/perPage)}`,8);
   pages.push(commands.join('\n'));
  }
  const objects=[null,'<< /Type /Catalog /Pages 2 0 R >>',null,'<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>','<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>'];
