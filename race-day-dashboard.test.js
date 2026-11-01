@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {buildRaceDashboard,dashboardHtml,paperPlan,morningLineNumber} from './race-day-dashboard.js';
+import {buildRaceDashboard,dashboardHtml,paperPlan,morningLineNumber,selectMorningLineProvider,morningLineForRunner} from './race-day-dashboard.js';
 
 const horse=(n,extra={})=>({n:String(n),name:'Horse '+n,ml:n+'/1',odds:'—',...extra});
 const race=(horses=Array.from({length:6},(_,i)=>horse(i+1)),extra={})=>({track:'Belmont Park',date:'2026-10-23',race:1,surface:'Dirt',distance_furlongs:6,dist:'6F',horses,...extra});
@@ -132,4 +132,16 @@ test('unique names connect unnumbered DRF to numbered source without manufacturi
  const names=input();names.anchor.horses.forEach(h=>h.n='');names.sources.DRF.race=structuredClone(names.anchor);
  const html=dashboardHtml(buildRaceDashboard(names,(id,r)=>({rankings:r.horses})));
  assert.match(html,/Horse 1/);assert.doesNotMatch(html,/# Horse/);
+});
+
+test('unpriced recent DRF falls back to matching priced Brisnet without modifying sources',()=>{
+ const i=input();i.sources.DRF.race.horses.forEach(h=>{h.n='';h.ml='—';});const before=structuredClone(i);
+ const selected=selectMorningLineProvider({...i,preferredProvider:'DRF',importedAt:{DRF:'2026-11-01T12:00:00Z',BRISNET:'2026-11-01T11:00:00Z'}});
+ assert.equal(selected,'BRISNET');const d=buildRaceDashboard(i,(id,r)=>({rankings:r.horses}));assert.equal(d.morning_line.provider,'BRISNET');assert.equal(d.morning_line.ranked,6);
+ assert.equal(morningLineForRunner(i.sources.BRISNET.race,i.sources.DRF.race.horses[0]),'1/1');assert.deepEqual(i,before);
+ i.sources.BRISNET.race.date='2026-10-24';assert.equal(selectMorningLineProvider({...i,preferredProvider:'DRF'}),'DRF');assert.equal(buildRaceDashboard(i,(id,r)=>({rankings:r.horses})).morning_line.ranked,0);
+});
+test('fallback cannot substitute a different horse with the same program',()=>{
+ assert.equal(morningLineForRunner(race(),{n:'1',name:'Other'}),null);
+ assert.equal(morningLineForRunner(race(),{n:'2',name:'Horse 1'}),null);
 });

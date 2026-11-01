@@ -116,7 +116,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <div class="card span12" style="display:none" aria-hidden="true"><h3 class="sectiontitle">J1 research comparison</h3><div class="small muted">Compare source-card annual jockey rates with the baseline. Historical improvement is unvalidated; these rankings do not authorize bets.</div><div id="j1Comparison" class="small" style="margin-top:10px"></div></div>
 <div class="card span12">
 <div class="spread"><h3 class="sectiontitle">Race handicapping grid</h3><div class="small muted" id="gridModelStatus" role="status">Contender ratings · verified PP evidence</div></div><div class="sortbar" style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 12px"><span class="small muted" style="align-self:center">Sort:</span><button class="secondary sortbtn" data-sort="contender">Contender Rank ↑</button><button class="secondary sortbtn" data-sort="number">Horse # ↕</button><button class="secondary sortbtn" data-sort="ml">ML ↕</button></div>
-<div id="gridFieldStatus" class="small" role="status" aria-live="polite"></div><div style="overflow:auto;max-height:540px"><table id="horseTable"><thead><tr><th>Horse</th><th>Field status</th><th>ML</th><th>Style</th><th>Jockey</th><th>Trainer</th><th>PP J Win%</th><th>PP T Win%</th><th>PP Fig</th><th>Contender Rank</th><th>Contender Rating</th><th>Fair Odds*</th></tr></thead><tbody></tbody></table></div>
+<div id="gridFieldStatus" class="small" role="status" aria-live="polite"></div><div style="overflow:auto;max-height:540px"><table id="horseTable"><thead><tr><th>Horse</th><th>Field status</th><th id="gridMorningLineHeader">ML</th><th>Style</th><th>Jockey</th><th>Trainer</th><th>PP J Win%</th><th>PP T Win%</th><th>PP Fig</th><th>Contender Rank</th><th>Contender Rating</th><th>Fair Odds*</th></tr></thead><tbody></tbody></table></div>
 </div>
 
 <div style="display:none" aria-hidden="true" class="card span12"><div class="spread"><div><div class="kicker">Potentially overlooked angles</div><h3 class="sectiontitle">Things to Consider — Auto Analysis</h3></div><span class="badge gold">PP-driven</span></div>
@@ -209,7 +209,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 </main>
 
 <script type="module">
-import {buildPicksSheet,createPicksPreview} from "./print-picks.js?v=20261101-namefallback";
+import {buildPicksSheet,createPicksPreview} from "./print-picks.js?v=20261101-mlfallback";
 import {correctRaceField} from "./race-field-corrections.js?v=20261101-fieldnames";
 import {prepareRaceDayResearchFreeze} from "./pre-race-raceday-integration.js";
 import {sealResearchSnapshots} from "./pre-race-provider-freeze.js";
@@ -225,7 +225,7 @@ import {researchRace} from "./jockey-research.js?v=20261008-qa1";
 import {evidenceProfile} from "./scoring-engine.js?v=20261008-qa1";
 import {estimatedWinLine,winLineFields,winLineNote} from "./fair-odds.js?v=20261015-mix1-line1";
 import {finisherRankingHtml} from "./finisher-ranking-display.js?v=20261101-namefallback";
-import {buildRaceDashboard,dashboardHtml} from "./race-day-dashboard.js?v=20261101-namefallback";
+import {buildRaceDashboard,dashboardHtml,selectMorningLineProvider,morningLineForRunner,morningLineNumber} from "./race-day-dashboard.js?v=20261101-mlfallback";
 import {rankContenders} from "./contender-rankings.js?v=20261011-passdisplay1";
 import {rankBrisnetModels} from "./brisnet-models.js?v=20261023-distance1";
 import {brisnetRaceModelAudit} from "./brisnet-model-audit.js?v=20261023-distance1";
@@ -426,10 +426,7 @@ document.getElementById('recorderFreezeRace').onclick=async()=>{
 };
 function providerRace(provider){if(provider===cardProvider(activeCard))return {race,reason:null};return pairedRace(providerCards,provider,race);}
 function morningLineProvider(){
- const active=cardProvider(activeCard),stamp=card=>Date.parse(card?.imported_at)||0;
- const candidates=['DRF','BRISNET'].filter(provider=>providerRace(provider).race);
- candidates.sort((a,b)=>stamp(providerCards[b])-stamp(providerCards[a])||(a===active?-1:b===active?1:0));
- return candidates[0]||active;
+ return selectMorningLineProvider({anchor:race,sources:{DRF:providerRace('DRF'),BRISNET:providerRace('BRISNET')},preferredProvider:cardProvider(activeCard),importedAt:Object.fromEntries(Object.entries(providerCards).map(([p,c])=>[p,c.imported_at]))});
 }
 function renderRaceInsights(){
  renderDashboard();
@@ -497,8 +494,8 @@ function renderHeader(){
  raceTitle.textContent=`${race.track} · Race ${race.race}`;
  raceBadges.innerHTML=`<span class="badge gold">${escapeText(displayDistance(race.dist)||"—")} ${race.surface||""}</span><span class="badge">${race.post||"—"}</span><span class="badge green">Active card</span>`;
  let active=race.horses.filter(h=>h.odds!=="SCR");
- const mlProvider=morningLineProvider(),mlSource=providerRace(mlProvider),ml=(mlSource.race?.horses||[]).filter(h=>h.odds!=='SCR'&&h.included_in_frozen_field!==false&&(!h.entry_status||h.entry_status==='REGULAR')&&Number.isFinite(oddsNumber(h.ml))).sort((a,b)=>oddsNumber(a.ml)-oddsNumber(b.ml)).slice(0,4);
- topMl.innerHTML='<div class="tiny muted" style="margin:5px 0">Four shortest morning lines · '+escapeText(mlProvider)+' · reference odds only.</div><table class="candidate-table morning-line-table"><thead><tr><th scope="col">Horse</th><th scope="col">Rank</th><th scope="col">M/L Odds</th><th scope="col">Source</th></tr></thead><tbody>'+(ml.length?ml.map((h,i)=>'<tr><td><b>#'+escapeText(h.n)+' '+escapeText(h.name)+'</b></td><td>'+(i+1)+'</td><td>'+escapeText(h.ml)+'</td><td>'+escapeText(mlProvider)+'</td></tr>').join(''):'<tr><td colspan="4">'+escapeText(mlSource.reason||'Verified morning line unavailable')+'</td></tr>')+'</tbody></table>';
+ const mlProvider=morningLineProvider(),mlSource=providerRace(mlProvider),ml=(mlSource.race?.horses||[]).filter(h=>h.odds!=='SCR'&&h.included_in_frozen_field!==false&&(!h.entry_status||h.entry_status==='REGULAR')&&Number.isFinite(morningLineNumber(h.ml))).sort((a,b)=>morningLineNumber(a.ml)-morningLineNumber(b.ml)).slice(0,4);
+ topMl.innerHTML='<div class="tiny muted" style="margin:5px 0">Four shortest morning lines · '+escapeText(mlProvider)+' · reference odds only.</div><table class="candidate-table morning-line-table"><thead><tr><th scope="col">Horse</th><th scope="col">Rank</th><th scope="col">M/L Odds</th><th scope="col">Source</th></tr></thead><tbody>'+(ml.length?ml.map((h,i)=>'<tr><td><b>'+(h.n?'#'+escapeText(h.n)+' ':'')+escapeText(h.name)+'</b></td><td>'+(i+1)+'</td><td>'+escapeText(h.ml)+'</td><td>'+escapeText(mlProvider)+'</td></tr>').join(''):'<tr><td colspan="4">'+escapeText(mlSource.reason||'Verified morning line unavailable')+'</td></tr>')+'</tbody></table>';
  const panel=kind=>{const rows=fieldConnections(active,kind).slice(0,3);return rows.length?rows.map((x,i)=>`<div><b>${i+1}. ${escapeText(x.name)}</b> <span class="pill">${x.win==null?'No starts':x.win.toFixed(1)+'%'}</span><div class="tiny muted">${x.wins}/${x.starts} · uploaded PP local record</div></div>`).join(""):"<span class=\"muted\">Source record unavailable; upload the PP again.</span>"};
  topJockeys.innerHTML=panel('jockey');topTrainers.innerHTML=panel('trainer');
  const pairs=connectionRows(race).filter(x=>x.topPair);
@@ -525,11 +522,13 @@ function renderPaceCardStatus(){
 document.getElementById('ppSourceView').onchange=()=>{const provider=document.getElementById('ppSourceView').value,card=providerCards[provider];if(!card){document.getElementById('providerUploadStatus').textContent='Upload a '+provider+' card first.';document.getElementById('ppSourceView').value=cardProvider(activeCard);return;}save();activeCard=structuredClone(card);const n=activeCard.races[race.race]?race.race:+Object.keys(activeCard.races).sort((a,b)=>+a-+b)[0];race=structuredClone(activeCard.races[n]);restoreRunnerEdits();save();renderAll();};
 function selectRace(n){if(!activeCard.races[n])return;race=structuredClone(activeCard.races[n]);restoreRunnerEdits();renderAll();window.scrollTo({top:0,behavior:"smooth"})}
 function renderHorses(){
+ const mlProvider=morningLineProvider(),mlRace=providerRace(mlProvider).race;
+ document.getElementById('gridMorningLineHeader').textContent='ML ('+(mlProvider==='BRISNET'?'Brisnet':'DRF')+')';
  const grid=contenderGridRating(),entries=new Map((grid.rankings||[]).map((h,i)=>[gridRunnerKey(h),{...h,gridRank:i+1}])),provisional=grid.provisional||grid.decision!=='RATEABLE';
  document.getElementById('gridModelStatus').textContent=(cardProvider(activeCard)==='BRISNET'?'Brisnet':'DRF')+' Contender · '+entries.size+'/'+race.horses.filter(paceEligible).length+' starters ranked'+(provisional?' · provisional / '+grid.decision:'')+(grid.reason?' · '+grid.reason:'');
  document.getElementById('gridFieldStatus').textContent='Scratched: '+([...race.horses,...scratchedGridRows()].filter(h=>h.odds==='SCR').map(h=>(h.n?'#'+h.n+' ':'')+h.name).join(', ')||'none')+'. Also eligible (not drawn in): '+(race.horses.filter(h=>['AE','ALSO_ELIGIBLE'].includes(h.entry_status)&&h.included_in_frozen_field!==true&&h.odds!=='SCR').map(h=>(h.n?'#'+h.n+' ':'')+h.name).join(', ')||'none')+'.';
  horseTable.querySelector("tbody").innerHTML=sortedGridHorses(grid).map(h=>{const entry=entries.get(gridRunnerKey(h)),label=h.odds==='SCR'?'Scratched':!paceEligible(h)?'Excluded':'Unranked';let js=h.jockey_win!=null?{win:h.jockey_win}:null,ts=h.trainer_win!=null?{win:h.trainer_win}:null;return `<tr data-program="${escapeText(h.n)}" style="${h.odds==="SCR"?"opacity:.48":""}">
-<td><span class="num">${h.n}</span><span class="horse">${escapeText(h.name)}${h.entry_status&&h.entry_status!=="REGULAR"?` <span class="pill">${escapeText(h.entry_status)} ${h.included_in_frozen_field===true&&h.odds!=='SCR'?'drawn in':'excluded'}</span>`:""}</span></td><td>${h.odds==='SCR'?`<b>SCR — Scratched</b> <button type="button" data-field-action="running" data-name="${escapeText(h.name)}" data-program="${escapeText(h.n)}" data-restore="true">Confirm running</button>`:['AE','ALSO_ELIGIBLE'].includes(h.entry_status)&&h.included_in_frozen_field!==true?`<button type="button" data-field-action="running" data-name="${escapeText(h.name)}" data-program="${escapeText(h.n)}">Confirm running</button>`:`${h.field_status_evidence?.action==='running'?'AE drawn in':'Active'} <button type="button" data-field-action="scratch" data-name="${escapeText(h.name)}" data-program="${escapeText(h.n)}">Scratch</button>`}${['AE','ALSO_ELIGIBLE'].includes(h.entry_status)&&h.included_in_frozen_field!==true&&h.odds!=='SCR'?` <button type="button" data-field-action="scratch" data-name="${escapeText(h.name)}" data-program="${escapeText(h.n)}">Scratch</button>`:''}</td><td>${h.ml||"—"}</td>
+<td><span class="num">${h.n}</span><span class="horse">${escapeText(h.name)}${h.entry_status&&h.entry_status!=="REGULAR"?` <span class="pill">${escapeText(h.entry_status)} ${h.included_in_frozen_field===true&&h.odds!=='SCR'?'drawn in':'excluded'}</span>`:""}</span></td><td>${h.odds==='SCR'?`<b>SCR — Scratched</b> <button type="button" data-field-action="running" data-name="${escapeText(h.name)}" data-program="${escapeText(h.n)}" data-restore="true">Confirm running</button>`:['AE','ALSO_ELIGIBLE'].includes(h.entry_status)&&h.included_in_frozen_field!==true?`<button type="button" data-field-action="running" data-name="${escapeText(h.name)}" data-program="${escapeText(h.n)}">Confirm running</button>`:`${h.field_status_evidence?.action==='running'?'AE drawn in':'Active'} <button type="button" data-field-action="scratch" data-name="${escapeText(h.name)}" data-program="${escapeText(h.n)}">Scratch</button>`}${['AE','ALSO_ELIGIBLE'].includes(h.entry_status)&&h.included_in_frozen_field!==true&&h.odds!=='SCR'?` <button type="button" data-field-action="scratch" data-name="${escapeText(h.name)}" data-program="${escapeText(h.n)}">Scratch</button>`:''}</td><td>${escapeText(morningLineForRunner(mlRace,h)||"—")}</td>
 <td><span class="pacechip ${escapeText(displayPaceStyle(h))}">${escapeText(displayPaceStyle(h))}</span></td><td>${escapeText(h.source_context?.jockey?.name||h.jockey_annual?.jockey||h.j||"—")}</td><td>${escapeText(h.source_context?.trainer?.name||h.t||"—")}</td>
 <td>${js?js.win.toFixed(1)+"%":"—"}</td><td>${ts?ts.win.toFixed(1)+"%":"—"}</td><td>${displayVal(h.ratings?.provider==="BRISNET"?h.ratings.lines?.[0]?.speed:h.last)}</td><td class="grid-contender-rank">${entry?entry.gridRank:label}</td><td><span class="score">${entry&&Number.isFinite(entry.score)?entry.score.toFixed(3):"N/A"}</span><div class="tiny muted" style="margin-top:4px">${entry?(provisional?"Provisional Contender rating":"Contender rating"):label}</div></td><td><b>${fairOddsMap()[h.n]||"—"}</b></td></tr>`}).join("");
 }

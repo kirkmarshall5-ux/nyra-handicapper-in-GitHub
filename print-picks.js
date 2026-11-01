@@ -1,5 +1,5 @@
 // Paper comparison only. Reuses the displayed model functions without changing scores.
-import {buildRaceDashboard} from './race-day-dashboard.js?v=20261101-namefallback';
+import {buildRaceDashboard,selectMorningLineProvider} from './race-day-dashboard.js?v=20261101-mlfallback';
 import {pairedRace,cardProvider} from './dual-pp-cards.js';
 import {decodeTodayDistance} from './finisher-drf-distance.js';
 
@@ -10,8 +10,8 @@ export function buildPicksSheet({cards,card,currentRace=null,notes={},now=new Da
  const races=Object.keys(card.races).sort((a,b)=>Number(a)-Number(b)).map(key=>{
   const anchor=sources[provider].races[key];
   const paired=Object.fromEntries(['BRISNET','DRF'].map(p=>[p,pairedRace(sources,p,anchor)]));
-  const available=['DRF','BRISNET'].filter(p=>paired[p].race).sort((a,b)=>(Date.parse(sources[b]?.imported_at)||0)-(Date.parse(sources[a]?.imported_at)||0)||(a===provider?-1:b===provider?1:0));
-  const dashboard=buildRaceDashboard({anchor,sources:paired,morningLineProvider:available[0]||provider},ranker);
+  const morningLineProvider=selectMorningLineProvider({anchor,sources:paired,preferredProvider:provider,importedAt:Object.fromEntries(Object.entries(sources).map(([p,c])=>[p,c.imported_at]))});
+  const dashboard=buildRaceDashboard({anchor,sources:paired,morningLineProvider},ranker);
   const columns=[dashboard.morning_line,...dashboard.models].map(m=>({label:m.label,provider:m.provider|| (m.id==='brisContender'?'BRISNET':'DRF'),modelId:m.model_id||null,available:m.available,decision:m.decision||'REFERENCE',ranked:m.ranked,eligible:m.eligible,nameOnly:m.rankings.some(h=>!h.n),picks:m.rankings.slice(0,4).map(h=>String(h.n||h.name)),reason:m.available?null:m.reason}));
   const scratches=[...new Set([...(anchor.horses||[]).filter(h=>h.odds==='SCR').map(h=>String(h.n)),...(anchor.predeclared_scratches||[]).map(h=>String(h.program))])];
   const conditional=(anchor.horses||[]).filter(h=>h.odds!=='SCR'&&['AE','ALSO_ELIGIBLE','MTO'].includes(h.entry_status)&&h.included_in_frozen_field!==true).map(h=>String(h.n));

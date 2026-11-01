@@ -39,3 +39,10 @@ test('unnumbered DRF prints full horse names and name-based paper selections',()
  assert.equal(col.nameOnly,true);assert.deepEqual(col.picks,['Horse 1','Horse 2','Horse 3','Horse 4']);
  const pdf=new TextDecoder().decode(picksPdf(s));assert.match(pdf,/Name-only selections require verified program numbers/);assert.match(pdf,/Horse 1/);
 });
+
+test('print uses priced matching Brisnet when newest DRF has no morning lines',()=>{
+ const bris=card();bris.imported_at='2026-11-01T11:00:00Z';
+ const drf={...structuredClone(bris),id:'early-drf',source_format:'DRF',imported_at:'2026-11-01T12:00:00Z'};drf.races[1].horses.forEach(h=>{h.n='';h.ml='—';});
+ const before=structuredClone(drf),s=buildPicksSheet({cards:{BRISNET:bris,DRF:drf},card:drf},ranked);
+ assert.equal(s.races[0].columns[0].provider,'BRISNET');assert.deepEqual(s.races[0].columns[0].picks,['1','2','3','4']);assert.deepEqual(drf,before);
+});

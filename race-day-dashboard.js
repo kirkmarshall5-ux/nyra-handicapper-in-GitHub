@@ -39,6 +39,21 @@ function sourceIssue(anchor,source){
  if(field(anchor).some(h=>{const other=field(r).find(x=>key(x)===key(h));return program(h)&&program(other)&&program(h)!==program(other);}))return 'Entrants or scratches differ; excluded';
  return null;
 }
+// Choose a single matching PP that actually contains morning-line quotes.
+// Newer unpriced early editions must not hide a priced matching card.
+export function selectMorningLineProvider({anchor,sources,preferredProvider='DRF',importedAt={}}){
+ const candidates=['DRF','BRISNET'].filter(p=>!sourceIssue(anchor,sources[p])&&field(sources[p].race).some(h=>Number.isFinite(morningLineNumber(h.ml))));
+ const stamp=p=>Date.parse(importedAt[p])||0;
+ candidates.sort((a,b)=>stamp(b)-stamp(a)||(a===preferredProvider?-1:b===preferredProvider?1:0));
+ return candidates[0]||preferredProvider;
+}
+export function morningLineForRunner(source,h){
+ const matches=(source?.horses||[]).filter(x=>key(x)===key(h));
+ if(matches.length!==1)return null;
+ const found=matches[0];
+ if(program(found)&&program(h)&&program(found)!==program(h))return null;
+ return Number.isFinite(morningLineNumber(found.ml))?found.ml:null;
+}
 function forecast(id,r){
  if(id==='brisContender')return rankBrisnetModels(r)?.contender||{rankings:[],decision:'HOLD',reason:'Brisnet source unavailable'};
  if(id==='drfFinisher'){
@@ -68,6 +83,7 @@ export function paperPlan(rankings,eligible=rankings){
  return {available:!!h.length,reason:h.length<3?'Fewer than three ranked runners; unavailable tickets omitted':null,tickets,total_cost:tickets.reduce((s,t)=>s+t.cost,0)};
 }
 export function buildRaceDashboard({anchor,sources,morningLineProvider='DRF'},ranker=forecast){
+ morningLineProvider=selectMorningLineProvider({anchor,sources,preferredProvider:morningLineProvider});
  const checks=Object.fromEntries(['BRISNET','DRF'].map(p=>[p,sourceIssue(anchor,sources[p])]));
  const models=modelIds.map(id=>{const p=id==='brisContender'?'BRISNET':'DRF',r=sources[p]?.race;
   return summarize(id,r,checks[p]?null:ranker(id,r),checks[p]);
