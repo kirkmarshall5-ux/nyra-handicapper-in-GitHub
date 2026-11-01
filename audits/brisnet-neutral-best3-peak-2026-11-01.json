@@ -1,0 +1,1677 @@
+{
+  "candidate": "BRIS-CONTENDER-NEUTRAL-BEST3-PEAK-v1-20261101",
+  "classification": "RETROSPECTIVE_KNOWN_OUTCOMES_NOT_HOLDOUT",
+  "production_changed": false,
+  "weights_redistributed": false,
+  "field_policy": "frozen eligible fields; no scratch promotion; refunds for affected combinations",
+  "sources": {
+    "Belmont": {
+      "pdf_sha256": "713e5b223c7bf2c1251a6882dbeb4501fcb0d699ade3d577853a044cb258a7b7",
+      "freeze_sha256": "238ecd90f54d920595691be5b333df532ea94e7dfa00805b20a0bd073cc61882",
+      "freeze_time": "2026-10-31T15:07:31.818Z",
+      "result_source": "BEL103126USA.pdf official chart"
+    },
+    "Keeneland": {
+      "pdf_sha256": "c9feb53382c412f45b6d8d4511aa603dac7806ba24cf9e358f70e5be878637d4",
+      "freeze_sha256": "4ab360a0f0c68b37903bbc5758e01ce73588d495fe9733e841ae9e947d11fdc3",
+      "freeze_time": "2026-10-31T15:14:29.229Z",
+      "result_source": "uploaded IMG_0193.jpeg through IMG_0198.jpeg screenshots, R1-R6 only"
+    }
+  },
+  "rows": [
+    {
+      "track": "Belmont",
+      "date": "2026-10-31",
+      "race": 1,
+      "complete": true,
+      "ranked": 9,
+      "eligible": 9,
+      "actual": [
+        7,
+        1,
+        3,
+        6
+      ],
+      "baseline": {
+        "picks": [
+          6,
+          7,
+          4,
+          2
+        ],
+        "winner": false,
+        "exact": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "coverage": [
+          true,
+          false,
+          false,
+          true
+        ],
+        "all4": false,
+        "risk": 11,
+        "returned": 0,
+        "refund": 0,
+        "hits": [],
+        "byType": {
+          "win": {
+            "risk": 4,
+            "returned": 0
+          },
+          "exacta": {
+            "risk": 4,
+            "returned": 0
+          },
+          "trifecta": {
+            "risk": 3,
+            "returned": 0
+          }
+        }
+      },
+      "candidate": {
+        "picks": [
+          6,
+          2,
+          4,
+          7
+        ],
+        "winner": false,
+        "exact": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "coverage": [
+          true,
+          false,
+          false,
+          true
+        ],
+        "all4": false,
+        "risk": 11,
+        "returned": 0,
+        "refund": 0,
+        "hits": [],
+        "byType": {
+          "win": {
+            "risk": 4,
+            "returned": 0
+          },
+          "exacta": {
+            "risk": 4,
+            "returned": 0
+          },
+          "trifecta": {
+            "risk": 3,
+            "returned": 0
+          }
+        }
+      }
+    },
+    {
+      "track": "Belmont",
+      "date": "2026-10-31",
+      "race": 2,
+      "complete": false,
+      "ranked": 2,
+      "eligible": 8,
+      "actual": [
+        1,
+        4,
+        8,
+        5
+      ],
+      "baseline": {
+        "picks": [
+          1,
+          2
+        ],
+        "winner": true,
+        "exact": [
+          true,
+          false,
+          false,
+          false
+        ],
+        "coverage": [
+          true,
+          false,
+          false,
+          false
+        ],
+        "all4": false,
+        "risk": 8,
+        "returned": 20.16,
+        "refund": 0,
+        "hits": [
+          {
+            "type": "win",
+            "pay": 20.16
+          }
+        ],
+        "byType": {
+          "win": {
+            "risk": 4,
+            "returned": 20.16
+          },
+          "exacta": {
+            "risk": 4,
+            "returned": 0
+          },
+          "trifecta": {
+            "risk": 0,
+            "returned": 0
+          }
+        }
+      },
+      "candidate": {
+        "picks": [
+          1,
+          2
+        ],
+        "winner": true,
+        "exact": [
+          true,
+          false,
+          false,
+          false
+        ],
+        "coverage": [
+          true,
+          false,
+          false,
+          false
+        ],
+        "all4": false,
+        "risk": 8,
+        "returned": 20.16,
+        "refund": 0,
+        "hits": [
+          {
+            "type": "win",
+            "pay": 20.16
+          }
+        ],
+        "byType": {
+          "win": {
+            "risk": 4,
+            "returned": 20.16
+          },
+          "exacta": {
+            "risk": 4,
+            "returned": 0
+          },
+          "trifecta": {
+            "risk": 0,
+            "returned": 0
+          }
+        }
+      }
+    },
+    {
+      "track": "Belmont",
+      "date": "2026-10-31",
+      "race": 3,
+      "complete": true,
+      "ranked": 8,
+      "eligible": 8,
+      "actual": [
+        4,
+        2,
+        8,
+        1
+      ],
+      "baseline": {
+        "picks": [
+          4,
+          8,
+          5,
+          3
+        ],
+        "winner": true,
+        "exact": [
+          true,
+          false,
+          false,
+          false
+        ],
+        "coverage": [
+          true,
+          false,
+          true,
+          false
+        ],
+        "all4": false,
+        "risk": 11,
+        "returned": 17.72,
+        "refund": 0,
+        "hits": [
+          {
+            "type": "win",
+            "pay": 17.72
+          }
+        ],
+        "byType": {
+          "win": {
+            "risk": 4,
+            "returned": 17.72
+          },
+          "exacta": {
+            "risk": 4,
+            "returned": 0
+          },
+          "trifecta": {
+            "risk": 3,
+            "returned": 0
+          }
+        }
+      },
+      "candidate": {
+        "picks": [
+          4,
+          8,
+          5,
+          1
+        ],
+        "winner": true,
+        "exact": [
+          true,
+          false,
+          false,
+          true
+        ],
+        "coverage": [
+          true,
+          false,
+          true,
+          true
+        ],
+        "all4": false,
+        "risk": 11,
+        "returned": 17.72,
+        "refund": 0,
+        "hits": [
+          {
+            "type": "win",
+            "pay": 17.72
+          }
+        ],
+        "byType": {
+          "win": {
+            "risk": 4,
+            "returned": 17.72
+          },
+          "exacta": {
+            "risk": 4,
+            "returned": 0
+          },
+          "trifecta": {
+            "risk": 3,
+            "returned": 0
+          }
+        }
+      }
+    },
+    {
+      "track": "Belmont",
+      "date": "2026-10-31",
+      "race": 4,
+      "complete": true,
+      "ranked": 9,
+      "eligible": 9,
+      "actual": [
+        3,
+        8,
+        4,
+        5
+      ],
+      "baseline": {
+        "picks": [
+          1,
+          3,
+          2,
+          4
+        ],
+        "winner": false,
+        "exact": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "coverage": [
+          true,
+          false,
+          true,
+          false
+        ],
+        "all4": false,
+        "risk": 11,
+        "returned": 0,
+        "refund": 0,
+        "hits": [],
+        "byType": {
+          "win": {
+            "risk": 4,
+            "returned": 0
+          },
+          "exacta": {
+            "risk": 4,
+            "returned": 0
+          },
+          "trifecta": {
+            "risk": 3,
+            "returned": 0
+          }
+        }
+      },
+      "candidate": {
+        "picks": [
+          1,
+          3,
+          6,
+          4
+        ],
+        "winner": false,
+        "exact": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "coverage": [
+          true,
+          false,
+          true,
+          false
+        ],
+        "all4": false,
+        "risk": 11,
+        "returned": 0,
+        "refund": 0,
+        "hits": [],
+        "byType": {
+          "win": {
+            "risk": 4,
+            "returned": 0
+          },
+          "exacta": {
+            "risk": 4,
+            "returned": 0
+          },
+          "trifecta": {
+            "risk": 3,
+            "returned": 0
+          }
+        }
+      }
+    },
+    {
+      "track": "Belmont",
+      "date": "2026-10-31",
+      "race": 5,
+      "complete": true,
+      "ranked": 8,
+      "eligible": 8,
+      "actual": [
+        8,
+        1,
+        3,
+        6
+      ],
+      "baseline": {
+        "picks": [
+          8,
+          4,
+          3,
+          5
+        ],
+        "winner": true,
+        "exact": [
+          true,
+          false,
+          true,
+          false
+        ],
+        "coverage": [
+          true,
+          false,
+          true,
+          false
+        ],
+        "all4": false,
+        "risk": 11,
+        "returned": 10.92,
+        "refund": 0,
+        "hits": [
+          {
+            "type": "win",
+            "pay": 10.92
+          }
+        ],
+        "byType": {
+          "win": {
+            "risk": 4,
+            "returned": 10.92
+          },
+          "exacta": {
+            "risk": 4,
+            "returned": 0
+          },
+          "trifecta": {
+            "risk": 3,
+            "returned": 0
+          }
+        }
+      },
+      "candidate": {
+        "picks": [
+          8,
+          4,
+          5,
+          3
+        ],
+        "winner": true,
+        "exact": [
+          true,
+          false,
+          false,
+          false
+        ],
+        "coverage": [
+          true,
+          false,
+          true,
+          false
+        ],
+        "all4": false,
+        "risk": 11,
+        "returned": 10.92,
+        "refund": 0,
+        "hits": [
+          {
+            "type": "win",
+            "pay": 10.92
+          }
+        ],
+        "byType": {
+          "win": {
+            "risk": 4,
+            "returned": 10.92
+          },
+          "exacta": {
+            "risk": 4,
+            "returned": 0
+          },
+          "trifecta": {
+            "risk": 3,
+            "returned": 0
+          }
+        }
+      }
+    },
+    {
+      "track": "Belmont",
+      "date": "2026-10-31",
+      "race": 6,
+      "complete": false,
+      "ranked": 6,
+      "eligible": 11,
+      "actual": [
+        4,
+        7,
+        1,
+        9
+      ],
+      "baseline": {
+        "picks": [
+          3,
+          11,
+          1,
+          4
+        ],
+        "winner": false,
+        "exact": [
+          false,
+          false,
+          true,
+          false
+        ],
+        "coverage": [
+          true,
+          false,
+          true,
+          false
+        ],
+        "all4": false,
+        "risk": 11,
+        "returned": 0,
+        "refund": 0,
+        "hits": [],
+        "byType": {
+          "win": {
+            "risk": 4,
+            "returned": 0
+          },
+          "exacta": {
+            "risk": 4,
+            "returned": 0
+          },
+          "trifecta": {
+            "risk": 3,
+            "returned": 0
+          }
+        }
+      },
+      "candidate": {
+        "picks": [
+          3,
+          11,
+          1,
+          4
+        ],
+        "winner": false,
+        "exact": [
+          false,
+          false,
+          true,
+          false
+        ],
+        "coverage": [
+          true,
+          false,
+          true,
+          false
+        ],
+        "all4": false,
+        "risk": 11,
+        "returned": 0,
+        "refund": 0,
+        "hits": [],
+        "byType": {
+          "win": {
+            "risk": 4,
+            "returned": 0
+          },
+          "exacta": {
+            "risk": 4,
+            "returned": 0
+          },
+          "trifecta": {
+            "risk": 3,
+            "returned": 0
+          }
+        }
+      }
+    },
+    {
+      "track": "Belmont",
+      "date": "2026-10-31",
+      "race": 7,
+      "complete": false,
+      "ranked": 8,
+      "eligible": 9,
+      "actual": [
+        2,
+        4,
+        9,
+        10
+      ],
+      "baseline": {
+        "picks": [
+          10,
+          5,
+          7,
+          1
+        ],
+        "winner": false,
+        "exact": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "coverage": [
+          false,
+          false,
+          false,
+          true
+        ],
+        "all4": false,
+        "risk": 11,
+        "returned": 0,
+        "refund": 0,
+        "hits": [],
+        "byType": {
+          "win": {
+            "risk": 4,
+            "returned": 0
+          },
+          "exacta": {
+            "risk": 4,
+            "returned": 0
+          },
+          "trifecta": {
+            "risk": 3,
+            "returned": 0
+          }
+        }
+      },
+      "candidate": {
+        "picks": [
+          10,
+          5,
+          2,
+          4
+        ],
+        "winner": false,
+        "exact": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "coverage": [
+          true,
+          true,
+          false,
+          true
+        ],
+        "all4": false,
+        "risk": 11,
+        "returned": 0,
+        "refund": 0,
+        "hits": [],
+        "byType": {
+          "win": {
+            "risk": 4,
+            "returned": 0
+          },
+          "exacta": {
+            "risk": 4,
+            "returned": 0
+          },
+          "trifecta": {
+            "risk": 3,
+            "returned": 0
+          }
+        }
+      }
+    },
+    {
+      "track": "Belmont",
+      "date": "2026-10-31",
+      "race": 8,
+      "complete": true,
+      "ranked": 6,
+      "eligible": 6,
+      "actual": [
+        3,
+        10,
+        5,
+        7
+      ],
+      "baseline": {
+        "picks": [
+          7,
+          3,
+          8,
+          2
+        ],
+        "winner": false,
+        "exact": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "coverage": [
+          true,
+          false,
+          false,
+          true
+        ],
+        "all4": false,
+        "risk": 11,
+        "returned": 0,
+        "refund": 0,
+        "hits": [],
+        "byType": {
+          "win": {
+            "risk": 4,
+            "returned": 0
+          },
+          "exacta": {
+            "risk": 4,
+            "returned": 0
+          },
+          "trifecta": {
+            "risk": 3,
+            "returned": 0
+          }
+        }
+      },
+      "candidate": {
+        "picks": [
+          7,
+          3,
+          8,
+          10
+        ],
+        "winner": false,
+        "exact": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "coverage": [
+          true,
+          true,
+          false,
+          true
+        ],
+        "all4": false,
+        "risk": 11,
+        "returned": 0,
+        "refund": 0,
+        "hits": [],
+        "byType": {
+          "win": {
+            "risk": 4,
+            "returned": 0
+          },
+          "exacta": {
+            "risk": 4,
+            "returned": 0
+          },
+          "trifecta": {
+            "risk": 3,
+            "returned": 0
+          }
+        }
+      }
+    },
+    {
+      "track": "Belmont",
+      "date": "2026-10-31",
+      "race": 9,
+      "complete": true,
+      "ranked": 7,
+      "eligible": 7,
+      "actual": [
+        1,
+        4,
+        7,
+        5
+      ],
+      "baseline": {
+        "picks": [
+          1,
+          2,
+          3,
+          5
+        ],
+        "winner": true,
+        "exact": [
+          true,
+          false,
+          false,
+          true
+        ],
+        "coverage": [
+          true,
+          false,
+          false,
+          true
+        ],
+        "all4": false,
+        "risk": 11,
+        "returned": 7.4,
+        "refund": 0,
+        "hits": [
+          {
+            "type": "win",
+            "pay": 7.4
+          }
+        ],
+        "byType": {
+          "win": {
+            "risk": 4,
+            "returned": 7.4
+          },
+          "exacta": {
+            "risk": 4,
+            "returned": 0
+          },
+          "trifecta": {
+            "risk": 3,
+            "returned": 0
+          }
+        }
+      },
+      "candidate": {
+        "picks": [
+          1,
+          5,
+          3,
+          2
+        ],
+        "winner": true,
+        "exact": [
+          true,
+          false,
+          false,
+          false
+        ],
+        "coverage": [
+          true,
+          false,
+          false,
+          true
+        ],
+        "all4": false,
+        "risk": 11,
+        "returned": 7.4,
+        "refund": 0,
+        "hits": [
+          {
+            "type": "win",
+            "pay": 7.4
+          }
+        ],
+        "byType": {
+          "win": {
+            "risk": 4,
+            "returned": 7.4
+          },
+          "exacta": {
+            "risk": 4,
+            "returned": 0
+          },
+          "trifecta": {
+            "risk": 3,
+            "returned": 0
+          }
+        }
+      }
+    },
+    {
+      "track": "Belmont",
+      "date": "2026-10-31",
+      "race": 10,
+      "complete": true,
+      "ranked": 9,
+      "eligible": 9,
+      "actual": [
+        3,
+        2,
+        1,
+        4
+      ],
+      "baseline": {
+        "picks": [
+          2,
+          10,
+          3,
+          1
+        ],
+        "winner": false,
+        "exact": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "coverage": [
+          true,
+          true,
+          true,
+          false
+        ],
+        "all4": false,
+        "risk": 11,
+        "returned": 0,
+        "refund": 0,
+        "hits": [],
+        "byType": {
+          "win": {
+            "risk": 4,
+            "returned": 0
+          },
+          "exacta": {
+            "risk": 4,
+            "returned": 0
+          },
+          "trifecta": {
+            "risk": 3,
+            "returned": 0
+          }
+        }
+      },
+      "candidate": {
+        "picks": [
+          2,
+          10,
+          3,
+          6
+        ],
+        "winner": false,
+        "exact": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "coverage": [
+          true,
+          true,
+          false,
+          false
+        ],
+        "all4": false,
+        "risk": 11,
+        "returned": 0,
+        "refund": 0,
+        "hits": [],
+        "byType": {
+          "win": {
+            "risk": 4,
+            "returned": 0
+          },
+          "exacta": {
+            "risk": 4,
+            "returned": 0
+          },
+          "trifecta": {
+            "risk": 3,
+            "returned": 0
+          }
+        }
+      }
+    },
+    {
+      "track": "Belmont",
+      "date": "2026-10-31",
+      "race": 11,
+      "complete": false,
+      "ranked": 10,
+      "eligible": 11,
+      "actual": [
+        11,
+        9,
+        7,
+        5
+      ],
+      "baseline": {
+        "picks": [
+          11,
+          1,
+          7,
+          5
+        ],
+        "winner": true,
+        "exact": [
+          true,
+          false,
+          true,
+          true
+        ],
+        "coverage": [
+          true,
+          false,
+          true,
+          true
+        ],
+        "all4": false,
+        "risk": 11,
+        "returned": 21.08,
+        "refund": 0,
+        "hits": [
+          {
+            "type": "win",
+            "pay": 21.08
+          }
+        ],
+        "byType": {
+          "win": {
+            "risk": 4,
+            "returned": 21.08
+          },
+          "exacta": {
+            "risk": 4,
+            "returned": 0
+          },
+          "trifecta": {
+            "risk": 3,
+            "returned": 0
+          }
+        }
+      },
+      "candidate": {
+        "picks": [
+          11,
+          1,
+          5,
+          7
+        ],
+        "winner": true,
+        "exact": [
+          true,
+          false,
+          false,
+          false
+        ],
+        "coverage": [
+          true,
+          false,
+          true,
+          true
+        ],
+        "all4": false,
+        "risk": 11,
+        "returned": 21.08,
+        "refund": 0,
+        "hits": [
+          {
+            "type": "win",
+            "pay": 21.08
+          }
+        ],
+        "byType": {
+          "win": {
+            "risk": 4,
+            "returned": 21.08
+          },
+          "exacta": {
+            "risk": 4,
+            "returned": 0
+          },
+          "trifecta": {
+            "risk": 3,
+            "returned": 0
+          }
+        }
+      }
+    },
+    {
+      "track": "Keeneland",
+      "date": "2026-10-31",
+      "race": 1,
+      "complete": false,
+      "ranked": 8,
+      "eligible": 12,
+      "actual": [
+        5,
+        2,
+        4,
+        7
+      ],
+      "baseline": {
+        "picks": [
+          11,
+          4,
+          9,
+          5
+        ],
+        "winner": false,
+        "exact": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "coverage": [
+          true,
+          false,
+          true,
+          false
+        ],
+        "all4": false,
+        "risk": 11,
+        "returned": 0,
+        "refund": 0,
+        "hits": [],
+        "byType": {
+          "win": {
+            "risk": 4,
+            "returned": 0
+          },
+          "exacta": {
+            "risk": 4,
+            "returned": 0
+          },
+          "trifecta": {
+            "risk": 3,
+            "returned": 0
+          }
+        }
+      },
+      "candidate": {
+        "picks": [
+          4,
+          11,
+          9,
+          5
+        ],
+        "winner": false,
+        "exact": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "coverage": [
+          true,
+          false,
+          true,
+          false
+        ],
+        "all4": false,
+        "risk": 11,
+        "returned": 0,
+        "refund": 0,
+        "hits": [],
+        "byType": {
+          "win": {
+            "risk": 4,
+            "returned": 0
+          },
+          "exacta": {
+            "risk": 4,
+            "returned": 0
+          },
+          "trifecta": {
+            "risk": 3,
+            "returned": 0
+          }
+        }
+      }
+    },
+    {
+      "track": "Keeneland",
+      "date": "2026-10-31",
+      "race": 2,
+      "complete": true,
+      "ranked": 9,
+      "eligible": 9,
+      "actual": [
+        9,
+        6,
+        8,
+        4
+      ],
+      "baseline": {
+        "picks": [
+          9,
+          5,
+          8,
+          3
+        ],
+        "winner": true,
+        "exact": [
+          true,
+          false,
+          true,
+          false
+        ],
+        "coverage": [
+          true,
+          false,
+          true,
+          false
+        ],
+        "all4": false,
+        "risk": 4,
+        "returned": 12.56,
+        "refund": 7,
+        "hits": [
+          {
+            "type": "win",
+            "pay": 12.56
+          }
+        ],
+        "byType": {
+          "win": {
+            "risk": 4,
+            "returned": 12.56
+          },
+          "exacta": {
+            "risk": 0,
+            "returned": 0
+          },
+          "trifecta": {
+            "risk": 0,
+            "returned": 0
+          }
+        }
+      },
+      "candidate": {
+        "picks": [
+          9,
+          5,
+          8,
+          4
+        ],
+        "winner": true,
+        "exact": [
+          true,
+          false,
+          true,
+          true
+        ],
+        "coverage": [
+          true,
+          false,
+          true,
+          true
+        ],
+        "all4": false,
+        "risk": 4,
+        "returned": 12.56,
+        "refund": 7,
+        "hits": [
+          {
+            "type": "win",
+            "pay": 12.56
+          }
+        ],
+        "byType": {
+          "win": {
+            "risk": 4,
+            "returned": 12.56
+          },
+          "exacta": {
+            "risk": 0,
+            "returned": 0
+          },
+          "trifecta": {
+            "risk": 0,
+            "returned": 0
+          }
+        }
+      }
+    },
+    {
+      "track": "Keeneland",
+      "date": "2026-10-31",
+      "race": 3,
+      "complete": true,
+      "ranked": 13,
+      "eligible": 13,
+      "actual": [
+        10,
+        1,
+        6,
+        11
+      ],
+      "baseline": {
+        "picks": [
+          11,
+          2,
+          9,
+          1
+        ],
+        "winner": false,
+        "exact": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "coverage": [
+          false,
+          true,
+          false,
+          true
+        ],
+        "all4": false,
+        "risk": 11,
+        "returned": 0,
+        "refund": 0,
+        "hits": [],
+        "byType": {
+          "win": {
+            "risk": 4,
+            "returned": 0
+          },
+          "exacta": {
+            "risk": 4,
+            "returned": 0
+          },
+          "trifecta": {
+            "risk": 3,
+            "returned": 0
+          }
+        }
+      },
+      "candidate": {
+        "picks": [
+          11,
+          2,
+          5,
+          1
+        ],
+        "winner": false,
+        "exact": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "coverage": [
+          false,
+          true,
+          false,
+          true
+        ],
+        "all4": false,
+        "risk": 8,
+        "returned": 0,
+        "refund": 3,
+        "hits": [],
+        "byType": {
+          "win": {
+            "risk": 4,
+            "returned": 0
+          },
+          "exacta": {
+            "risk": 4,
+            "returned": 0
+          },
+          "trifecta": {
+            "risk": 0,
+            "returned": 0
+          }
+        }
+      }
+    },
+    {
+      "track": "Keeneland",
+      "date": "2026-10-31",
+      "race": 4,
+      "complete": true,
+      "ranked": 13,
+      "eligible": 13,
+      "actual": [
+        2,
+        5,
+        11,
+        12
+      ],
+      "baseline": {
+        "picks": [
+          4,
+          2,
+          11,
+          5
+        ],
+        "winner": false,
+        "exact": [
+          false,
+          false,
+          true,
+          false
+        ],
+        "coverage": [
+          true,
+          true,
+          true,
+          false
+        ],
+        "all4": false,
+        "risk": 11,
+        "returned": 0,
+        "refund": 0,
+        "hits": [],
+        "byType": {
+          "win": {
+            "risk": 4,
+            "returned": 0
+          },
+          "exacta": {
+            "risk": 4,
+            "returned": 0
+          },
+          "trifecta": {
+            "risk": 3,
+            "returned": 0
+          }
+        }
+      },
+      "candidate": {
+        "picks": [
+          4,
+          2,
+          11,
+          7
+        ],
+        "winner": false,
+        "exact": [
+          false,
+          false,
+          true,
+          false
+        ],
+        "coverage": [
+          true,
+          false,
+          true,
+          false
+        ],
+        "all4": false,
+        "risk": 11,
+        "returned": 0,
+        "refund": 0,
+        "hits": [],
+        "byType": {
+          "win": {
+            "risk": 4,
+            "returned": 0
+          },
+          "exacta": {
+            "risk": 4,
+            "returned": 0
+          },
+          "trifecta": {
+            "risk": 3,
+            "returned": 0
+          }
+        }
+      }
+    },
+    {
+      "track": "Keeneland",
+      "date": "2026-10-31",
+      "race": 5,
+      "complete": false,
+      "ranked": 12,
+      "eligible": 14,
+      "actual": [
+        3,
+        10,
+        13,
+        5
+      ],
+      "baseline": {
+        "picks": [
+          9,
+          11,
+          5,
+          13
+        ],
+        "winner": false,
+        "exact": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "coverage": [
+          false,
+          false,
+          true,
+          true
+        ],
+        "all4": false,
+        "risk": 11,
+        "returned": 0,
+        "refund": 0,
+        "hits": [],
+        "byType": {
+          "win": {
+            "risk": 4,
+            "returned": 0
+          },
+          "exacta": {
+            "risk": 4,
+            "returned": 0
+          },
+          "trifecta": {
+            "risk": 3,
+            "returned": 0
+          }
+        }
+      },
+      "candidate": {
+        "picks": [
+          9,
+          11,
+          13,
+          6
+        ],
+        "winner": false,
+        "exact": [
+          false,
+          false,
+          true,
+          false
+        ],
+        "coverage": [
+          false,
+          false,
+          true,
+          false
+        ],
+        "all4": false,
+        "risk": 11,
+        "returned": 0,
+        "refund": 0,
+        "hits": [],
+        "byType": {
+          "win": {
+            "risk": 4,
+            "returned": 0
+          },
+          "exacta": {
+            "risk": 4,
+            "returned": 0
+          },
+          "trifecta": {
+            "risk": 3,
+            "returned": 0
+          }
+        }
+      }
+    },
+    {
+      "track": "Keeneland",
+      "date": "2026-10-31",
+      "race": 6,
+      "complete": false,
+      "ranked": 10,
+      "eligible": 11,
+      "actual": [
+        1,
+        10,
+        3,
+        8
+      ],
+      "baseline": {
+        "picks": [
+          7,
+          9,
+          1,
+          2
+        ],
+        "winner": false,
+        "exact": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "coverage": [
+          true,
+          false,
+          false,
+          false
+        ],
+        "all4": false,
+        "risk": 4,
+        "returned": 0,
+        "refund": 7,
+        "hits": [],
+        "byType": {
+          "win": {
+            "risk": 4,
+            "returned": 0
+          },
+          "exacta": {
+            "risk": 0,
+            "returned": 0
+          },
+          "trifecta": {
+            "risk": 0,
+            "returned": 0
+          }
+        }
+      },
+      "candidate": {
+        "picks": [
+          7,
+          9,
+          1,
+          4
+        ],
+        "winner": false,
+        "exact": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "coverage": [
+          true,
+          false,
+          false,
+          false
+        ],
+        "all4": false,
+        "risk": 4,
+        "returned": 0,
+        "refund": 7,
+        "hits": [],
+        "byType": {
+          "win": {
+            "risk": 4,
+            "returned": 0
+          },
+          "exacta": {
+            "risk": 0,
+            "returned": 0
+          },
+          "trifecta": {
+            "risk": 0,
+            "returned": 0
+          }
+        }
+      }
+    }
+  ]
+}
