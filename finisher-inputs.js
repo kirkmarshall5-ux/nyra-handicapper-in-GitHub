@@ -43,19 +43,23 @@ export function finisherInputs(race){
   return {...base,recent_speed:e.raw[1],matched_speed:matched.value,late_pace:e.raw[7]};
  });
 }
-export function runnerIdentityIssue(horses=[]){
+export function runnerIdentityIssue(horses=[],{allowMissingPrograms=false}={}){
  const numbers=new Set(),names=new Set();
  for(const h of horses){
   const n=String(h.n??'').trim(),name=String(h.name??'').trim();
-  if(!n)return 'Program number missing for '+(name||'unnamed runner');
+  if(!n&&!allowMissingPrograms)return 'Program number missing for '+(name||'unnamed runner');
   if(!name)return 'Horse name missing for #'+n;
-  if(numbers.has(n)||names.has(name))return 'Duplicate runner identity for #'+n+' ('+name+')';
-  numbers.add(n);names.add(name);
+  if(n&&numbers.has(n)||names.has(name.toLowerCase()))return 'Duplicate runner identity for #'+n+' ('+name+')';
+  if(n)numbers.add(n);names.add(name.toLowerCase());
  }
  return null;
 }
 export function rankFinishers(race){
- const field=(race.horses||[]).filter(active),issue=runnerIdentityIssue(field);
+ const field=(race.horses||[]).filter(active),issue=runnerIdentityIssue(field,{allowMissingPrograms:true});
  if(issue)return {model_id:FINISHER_SPEC.id,status:'HOLD',rankings:[],unrated:field.map(h=>({n:String(h.n??''),name:h.name,reason:issue})),eligible_count:field.length,probabilityCalibrated:false,bettingEnabled:false,research_only:true};
- return rankFinisherFeatures(finisherInputs(race));
+ const inputs=finisherInputs(race), originals=new Map();
+ const numbered=inputs.map((h,i)=>{const id=String(i+1); originals.set(id,h); return {...h,n:id};});
+ const result=rankFinisherFeatures(numbered);
+ const restore=h=>({...h,n:originals.get(h.n)?.n??'',name:originals.get(h.n)?.name??h.name});
+ return {...result,identity_mode:field.some(h=>!String(h.n??'').trim())?'NAME_ONLY':'PROGRAM',rankings:result.rankings.map(restore),unrated:result.unrated.map(restore)};
 }

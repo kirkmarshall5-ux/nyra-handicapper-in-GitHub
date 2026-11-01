@@ -209,7 +209,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 </main>
 
 <script type="module">
-import {buildPicksSheet,createPicksPreview} from "./print-picks.js?v=20261028-print1";
+import {buildPicksSheet,createPicksPreview} from "./print-picks.js?v=20261101-namefallback";
 import {correctRaceField} from "./race-field-corrections.js";
 import {prepareRaceDayResearchFreeze} from "./pre-race-raceday-integration.js";
 import {sealResearchSnapshots} from "./pre-race-provider-freeze.js";
@@ -224,8 +224,8 @@ import {runnerStateKey} from "./card-loader.js?v=20261008-qa1";
 import {researchRace} from "./jockey-research.js?v=20261008-qa1";
 import {evidenceProfile} from "./scoring-engine.js?v=20261008-qa1";
 import {estimatedWinLine,winLineFields,winLineNote} from "./fair-odds.js?v=20261015-mix1-line1";
-import {finisherRankingHtml} from "./finisher-ranking-display.js?v=20261101-identity";
-import {buildRaceDashboard,dashboardHtml} from "./race-day-dashboard.js?v=20261101-identity";
+import {finisherRankingHtml} from "./finisher-ranking-display.js?v=20261101-namefallback";
+import {buildRaceDashboard,dashboardHtml} from "./race-day-dashboard.js?v=20261101-namefallback";
 import {rankContenders} from "./contender-rankings.js?v=20261011-passdisplay1";
 import {rankBrisnetModels} from "./brisnet-models.js?v=20261023-distance1";
 import {brisnetRaceModelAudit} from "./brisnet-model-audit.js?v=20261023-distance1";
@@ -242,7 +242,7 @@ import {applyMorningLines} from "./morning-line-overlay.js?v=20261008-odds2";
 import {runnerContext} from "./release-context.js?v=20261008-qa1";
 import {PARSER_ID,restoredPage, parseRestoredCard} from "./release-card-parser.js?v=20261014-appendices1";
 
-import {runnerIdentityIssue} from "./finisher-inputs.js?v=20261101-identity";
+import {runnerIdentityIssue} from "./finisher-inputs.js?v=20261101-namefallback";
 import {parsePPCard,SUPPORTED_PARSERS} from "./pp-format-router.js?v=20261031-scratchwatch";
 import {brisnetPaceDisplay,brisnetPaceMapHtml,brisnetCallRanksHtml,brisnetComparisonHtml,brisnetEvidenceHtml,brisnetContextHtml} from "./brisnet-pace-display.js?v=20261022-label1";
 import {BRISNET_METHODS} from "./brisnet-models.js?v=20261023-distance1";
@@ -320,17 +320,17 @@ function renderModelRow(race,ids){
   return;
  }
  const r=currentRating(),v44cLine=estimatedWinLine(race,r,'v44c');
- const fullRankings=()=>candidateTable(r.rankings.slice(0,4).map((h,i)=>`<tr><td><b>${i+1}. #${escapeText(h.n||'—')} ${escapeText(h.name)}</b><div class="tiny muted">${h.v44c_signals.map(([k,v])=>escapeText(k)+' '+(v>0?'+':'')+v).join(' · ')||'No adjustment'}</div></td><td>${h.v44c_display_score}</td>${winLineFields(v44cLine,h)}</tr>`).join(''));
+ const fullRankings=()=>candidateTable(r.rankings.slice(0,4).map((h,i)=>`<tr><td><b>${i+1}. ${h.n?'#'+escapeText(h.n)+' ':''}${escapeText(h.name)}</b><div class="tiny muted">${h.v44c_signals.map(([k,v])=>escapeText(k)+' '+(v>0?'+':'')+v).join(' · ')||'No adjustment'}</div></td><td>${h.v44c_display_score}</td>${winLineFields(v44cLine,h)}</tr>`).join(''));
  if(r.decision==='PASS'){
   const p=passRaceDisplay(r);
-  const contenders=p.ranked.length?candidateTable(p.ranked.map((h,i)=>`<tr><td><b>${i+1}. #${escapeText(h.n||'—')} ${escapeText(h.name)}</b></td><td>${h.displayScore}</td>${winLineFields(v44cLine,h)}</tr>`).join('')):'<div class="tiny muted">No horses have enough verified evidence for a numerical rating.</div>';
+  const contenders=p.ranked.length?candidateTable(p.ranked.map((h,i)=>`<tr><td><b>${i+1}. ${h.n?'#'+escapeText(h.n)+' ':''}${escapeText(h.name)}</b></td><td>${h.displayScore}</td>${winLineFields(v44cLine,h)}</tr>`).join('')):'<div class="tiny muted">No horses have enough verified evidence for a numerical rating.</div>';
   const other=p.general.length?`<div class="tiny muted" style="margin-top:6px">Other pass reasons: ${p.general.map(escapeText).join('; ')}</div>`:'';
   topContenders.innerHTML='<b>V4.4c: PASS — no wager</b><div class="tiny muted" style="margin:5px 0">Provisional ranking of rated runners only; unrated horses may be competitive. Not an official full-field V4.4c ranking.</div>'+contenders+other;
  }else topContenders.innerHTML=fullRankings();
  topContenders.innerHTML=modelEvidenceHtml(race,r,{model:'v44c'})+topContenders.innerHTML+winLineNote(v44cLine);
  const contender=rankContenders(race,r,{displayPass:r.decision==='PASS'});
  const contenderLine=estimatedWinLine(race,contender,'contender');
- const contenderRows=(rows,offset=0)=>rows.map((h,i)=>`<tr><td><b>${offset+i+1}. #${escapeText(h.n||'—')} ${escapeText(h.name)}</b></td><td>${h.score.toFixed(3)}</td>${winLineFields(contenderLine,h)}</tr>`).join('');
+ const contenderRows=(rows,offset=0)=>rows.map((h,i)=>`<tr><td><b>${offset+i+1}. ${h.n?'#'+escapeText(h.n)+' ':''}${escapeText(h.name)}</b></td><td>${h.score.toFixed(3)}</td>${winLineFields(contenderLine,h)}</tr>`).join('');
  const contenderList=contender.rankings.length?candidateTable(contenderRows(contender.rankings.slice(0,4)),{showEstimateNote:false}):'';
  const remainingContenders=contender.rankings.length>4?`<details class="tiny muted remaining-ranked" style="margin-top:8px"><summary>Remaining Ranked Horses</summary>${candidateTable(contenderRows(contender.rankings.slice(4),4),{showEstimateNote:false})}</details>`:'';
 
@@ -689,15 +689,15 @@ async function loadProviderFile(provider,file){
   showUploadStatus('Reading '+provider+' PP: '+file.name+'…');
   const pages=await extractPdf(file,progress=>showUploadStatus(file.name+' · '+progress)),candidate=parsePPCard(pages,{sourceName:file.name});
   for(const r of Object.values(candidate.races)){
-   const issue=runnerIdentityIssue(r.horses);
-   if(issue)throw Error('Race '+r.race+': '+issue+'. This PDF needs printed program numbers for model and odds matching. Upload the numbered race-day PP; numbers are never assigned from horse order.');
+   const issue=runnerIdentityIssue(r.horses,{allowMissingPrograms:true});
+   if(issue)throw Error('Race '+r.race+': '+issue+'. Unique horse names and any supplied program numbers must be verified.');
   }
   putProviderCard({},candidate,provider);
   const races=Object.keys(candidate.races).length,runners=Object.values(candidate.races).reduce((n,r)=>n+r.horses.length,0);
   showUploadStatus('Verified '+candidate.track+' · '+candidate.date+' · '+races+' races · '+runners+' runners. Saving…');
   candidate.source_sha256=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',await file.arrayBuffer()))).map(x=>x.toString(16).padStart(2,'0')).join('');
   candidate.imported_at=new Date().toISOString();await activateCandidate(candidate);
-  showUploadStatus(provider+' card saved. '+candidate.track+' · '+candidate.date+' · '+races+' races · '+runners+' runners loaded. The other PP source is retained.');
+  showUploadStatus(provider+' card saved. '+candidate.track+' · '+candidate.date+' · '+races+' races · '+runners+' runners loaded. '+(Object.values(candidate.races).some(r=>r.horses.some(h=>!h.n))?'Name-only rankings enabled; verify program numbers before wagering or updating odds. ':'')+'The other PP source is retained.');
  }catch(e){showUploadStatus('Upload failed; both saved sources are preserved: '+(e.message||e));ppProg.style.width='0';}
  finally{ppUploadBusy=false;for(const id of ['uploadBrisnet','uploadDrf'])document.getElementById(id).disabled=false;}
 }

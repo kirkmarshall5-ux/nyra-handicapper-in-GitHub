@@ -12,9 +12,14 @@ test('scratches are excluded before percentiles, source objects are unchanged, a
 test('sixth-oldest negative does not discard usable recent history; printed negative in scoring window is retained',()=>{const dates=['2026-10-01','2026-09-01','2026-08-01','2026-07-01','2026-06-01','2026-05-01'];const a=runner(1,dates.map((d,i)=>line(d,i===5?-19:80))),b=runner(2,[line('2026-10-01',-5)]);const out=rankFinishers(race([a,b]));assert.equal(out.status,'COMPLETE_FIELD');assert.equal(out.rankings[0].components.recent_speed.raw,80);assert.equal(out.rankings[1].components.recent_speed.raw,-5);});
 test('no manufactured first-time ratings, stale/mismatched pace, future starts or unknown surface',()=>{const a=runner(1,[line('2026-10-01',80)]),fts=runner(2,[]);assert.equal(rankFinishers(race([a,fts])).status,'PARTIAL_FIELD');const m=runner(3,[{...line('2026-10-01',70),surface:'Turf'}]);const out=rankFinishers(race([a,m]));assert.equal(out.rankings.find(h=>h.n==='3').components.late_pace.raw,null);assert.equal(rankFinishers(race([runner(1,[line('2026-10-18',80)])])).status,'HOLD');assert.equal(rankFinishers({...race([a]),surface:'Unknown'}).status,'HOLD');});
 
-test('legacy cards with missing or duplicate identities hold without crashing other provider panels',()=>{
- for(const horses of [[runner('',[line('2026-10-01',80)],{name:'Captivated'})],[runner(1,[line('2026-10-01',80)]),runner(1,[line('2026-10-01',70)])]]){
-  const input=race(horses),before=structuredClone(input),out=rankFinishers(input);
-  assert.equal(out.status,'HOLD');assert.deepEqual(out.rankings,[]);assert.equal(out.unrated.length,horses.length);assert.equal(out.bettingEnabled,false);assert.deepEqual(input,before);
- }
+test('missing programs rank by name without changing scores or source data',()=>{
+ const numbered=race([runner(7,[line('2026-10-01',80)],{name:'Captivated'}),runner(9,[line('2026-10-01',70)],{name:'Live'})]);
+ const input=structuredClone(numbered);input.horses.forEach(h=>h.n='');const before=structuredClone(input);
+ const out=rankFinishers(input),base=rankFinishers(numbered);
+ assert.equal(out.identity_mode,'NAME_ONLY');assert.equal(out.status,'COMPLETE_FIELD');
+ assert.deepEqual(out.rankings.map(h=>[h.name,h.score,h.components]),base.rankings.map(h=>[h.name,h.score,h.components]));
+ assert.ok(out.rankings.every(h=>h.n===''));assert.deepEqual(input,before);
+});
+test('duplicate supplied programs and duplicate names still hold',()=>{
+ for(const horses of [[runner(1,[line('2026-10-01',80)]),runner(1,[line('2026-10-01',70)])],[runner('',[line('2026-10-01',80)],{name:'Same'}),runner('',[line('2026-10-01',70)],{name:'same'})]])assert.equal(rankFinishers(race(horses)).status,'HOLD');
 });

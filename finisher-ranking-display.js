@@ -1,15 +1,15 @@
 import {modelEvidenceHtml} from './model-evidence-display.js?v=20261018-evidence1';
-import {rankFinishers} from './finisher-inputs.js?v=20261101-identity';
+import {rankFinishers} from './finisher-inputs.js?v=20261101-namefallback';
 const escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export function finisherRankingHtml(race,{baselineDecision=null}={}){
  const result=rankFinishers(race),native=result.rankings.some(h=>h.source==='BRISNET')||(race.horses||[]).some(h=>h.ratings?.provider==='BRISNET');
  const pass=result.status!=='COMPLETE_FIELD'||baselineDecision==='PASS'||native;
  const title=pass?'Finisher: PASS — no wager':'Finisher · finishing-order ranking';
  const status=pass?'Provisional ranked runners; missing evidence or source validation may prevent a complete-field forecast.':'Complete field ranked. Scores compare this field; they are not win probabilities.';
- const rows=(rankings,offset=0)=>rankings.map((h,i)=>`<tr><td><b>${offset+i+1}. #${escape(h.n)} ${escape(h.name)}</b></td><td>${h.score.toFixed(2)}</td></tr>`).join('');
+ const rows=(rankings,offset=0)=>rankings.map((h,i)=>`<tr><td><b>${offset+i+1}. ${h.n?'#'+escape(h.n)+' ':''}${escape(h.name)}</b></td><td>${h.score.toFixed(2)}</td></tr>`).join('');
  const rankedTable=(rankings,offset=0)=>'<table class="finisher-table"><thead><tr><th scope="col">Horse</th><th scope="col">Score</th></tr></thead><tbody>'+rows(rankings,offset)+'</tbody></table>';
  const table=result.rankings.length?rankedTable(result.rankings.slice(0,4)):'<div class="tiny muted">No horses have enough verified recent-speed evidence for a numerical ranking.</div>';
  const remaining=result.rankings.length>4?`<details class="tiny muted remaining-ranked" style="margin-top:8px"><summary>Remaining Ranked Horses</summary>${rankedTable(result.rankings.slice(4),4)}</details>`:'';
  const source=native?'Brisnet native Speed / LP. Late pace uses matching history.':'DRF Beyer / TimeformUS Late. Matching speed uses verified distance decoding.';
- return `<b>${title}</b><div class="tiny muted" style="margin:5px 0">${status} Ranked ${result.rankings.length}/${result.eligible_count} eligible runners.</div>${table}${remaining}${modelEvidenceHtml(race,result,{model:'finisher'})}<div class="tiny muted" style="margin-top:10px">60% recent speed · 25% matched speed · 15% Late. ${source} Fair odds and win percentages are unavailable for Finisher.</div>`;
+ return `<b>${title}</b><div class="tiny muted" style="margin:5px 0">${status} Ranked ${result.rankings.length}/${result.eligible_count} eligible runners.</div>${result.identity_mode==='NAME_ONLY'?'<p class="tiny muted">Name-only rankings · program numbers unavailable. Verify numbers before wagering or updating odds.</p>':''}${table}${remaining}${modelEvidenceHtml(race,result,{model:'finisher'})}<div class="tiny muted" style="margin-top:10px">60% recent speed · 25% matched speed · 15% Late. ${source} Fair odds and win percentages are unavailable for Finisher.</div>`;
 }

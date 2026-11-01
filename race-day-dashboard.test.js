@@ -123,3 +123,13 @@ test('production adapters expose PASS and unranked first-time starters without m
  assert.equal(d.models[2].decision,'PASS');
  assert.equal(d.paper_plans.drfContender.total_cost,0);
 });
+
+test('unique names connect unnumbered DRF to numbered source without manufacturing programs',()=>{
+ const i=input();i.sources.DRF.race.horses.forEach(h=>h.n='');const before=structuredClone(i);
+ const d=buildRaceDashboard(i,(id,r)=>({decision:'PASS',rankings:r.horses}));
+ assert.ok(d.models.every(m=>m.available));assert.ok(d.models[1].rankings.every(h=>h.n===''));
+ assert.equal(d.shortlist[0].ranks.drfFinisher,1);assert.equal(d.paper_plans.drfFinisher.available,false);assert.deepEqual(i,before);
+ const names=input();names.anchor.horses.forEach(h=>h.n='');names.sources.DRF.race=structuredClone(names.anchor);
+ const html=dashboardHtml(buildRaceDashboard(names,(id,r)=>({rankings:r.horses})));
+ assert.match(html,/Horse 1/);assert.doesNotMatch(html,/# Horse/);
+});
