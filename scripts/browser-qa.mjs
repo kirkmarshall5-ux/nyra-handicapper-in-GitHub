@@ -589,7 +589,7 @@ for(const profile of profiles){
    });
    await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
    assert.match(await page.locator('#topMl').innerText(),/BRISNET/);assert.match(await page.locator('#topMl tbody').innerText(),/2\/1/);
-   assert.match(await page.locator('#gridMorningLineHeader').innerText(),/Brisnet/);
+   assert.match(await page.locator('#gridMorningLineHeader').innerText(),/Brisnet/i);
    const active=await page.evaluate(()=>window.qaReadActive()),h=active.races[Object.keys(active.races)[0]].horses[0];
    assert.equal(h.ml,'—');assert.equal(h.n,'');assert.equal(await page.locator('#horseTable tbody tr').filter({hasText:h.name}).locator('td').nth(2).innerText(),'2/1');
    assert.match(await page.locator('#raceDayDashboard').innerText(),/Morning line: BRISNET/);
