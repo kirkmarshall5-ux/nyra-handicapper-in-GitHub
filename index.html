@@ -210,13 +210,13 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 
 <script type="module">
 import {buildPicksSheet,createPicksPreview} from "./print-picks.js?v=20261101-namefallback";
-import {correctRaceField} from "./race-field-corrections.js";
+import {correctRaceField} from "./race-field-corrections.js?v=20261101-fieldnames";
 import {prepareRaceDayResearchFreeze} from "./pre-race-raceday-integration.js";
 import {sealResearchSnapshots} from "./pre-race-provider-freeze.js";
 import {readResearchFreezes,writeResearchFreezes} from "./pre-race-recorder-storage.js";
 import {fetchOtherTrackCombinedUpdate,otherTrackSource,OTHER_TRACK_FEEDS_READY} from "./other-track-updates.js?v=20261025-staged1";
 import {prepareCombinedOtherTrackUpdate} from "./other-track-update-plan.js?v=20261025-staged1";
-import {fetchNyraRaceUpdate,nyraRaceUpdateSource,applyNyraSnapshotToRace} from "./nyra-race-update.js?v=20261018-dual1";
+import {fetchNyraRaceUpdate,nyraRaceUpdateSource,prepareNyraCardUpdate} from "./nyra-race-update.js?v=20261101-fieldnames";
 import {initKnowledgeBase} from "./knowledge-base.js?v=20261008-kb1";
 import {connectionRows,LEADER_SCOPE,LEADER_SOURCE} from "./connection-research.js?v=20261008-jt1";
 import {fieldConnections} from "./pp-context.js?v=20261008-qa1";
@@ -527,9 +527,9 @@ function selectRace(n){if(!activeCard.races[n])return;race=structuredClone(activ
 function renderHorses(){
  const grid=contenderGridRating(),entries=new Map((grid.rankings||[]).map((h,i)=>[gridRunnerKey(h),{...h,gridRank:i+1}])),provisional=grid.provisional||grid.decision!=='RATEABLE';
  document.getElementById('gridModelStatus').textContent=(cardProvider(activeCard)==='BRISNET'?'Brisnet':'DRF')+' Contender · '+entries.size+'/'+race.horses.filter(paceEligible).length+' starters ranked'+(provisional?' · provisional / '+grid.decision:'')+(grid.reason?' · '+grid.reason:'');
- document.getElementById('gridFieldStatus').textContent='Scratched: '+([...race.horses,...scratchedGridRows()].filter(h=>h.odds==='SCR').map(h=>'#'+h.n+' '+h.name).join(', ')||'none')+'. Also eligible (not drawn in): '+(race.horses.filter(h=>['AE','ALSO_ELIGIBLE'].includes(h.entry_status)&&h.included_in_frozen_field!==true&&h.odds!=='SCR').map(h=>'#'+h.n+' '+h.name).join(', ')||'none')+'.';
+ document.getElementById('gridFieldStatus').textContent='Scratched: '+([...race.horses,...scratchedGridRows()].filter(h=>h.odds==='SCR').map(h=>(h.n?'#'+h.n+' ':'')+h.name).join(', ')||'none')+'. Also eligible (not drawn in): '+(race.horses.filter(h=>['AE','ALSO_ELIGIBLE'].includes(h.entry_status)&&h.included_in_frozen_field!==true&&h.odds!=='SCR').map(h=>(h.n?'#'+h.n+' ':'')+h.name).join(', ')||'none')+'.';
  horseTable.querySelector("tbody").innerHTML=sortedGridHorses(grid).map(h=>{const entry=entries.get(gridRunnerKey(h)),label=h.odds==='SCR'?'Scratched':!paceEligible(h)?'Excluded':'Unranked';let js=h.jockey_win!=null?{win:h.jockey_win}:null,ts=h.trainer_win!=null?{win:h.trainer_win}:null;return `<tr data-program="${escapeText(h.n)}" style="${h.odds==="SCR"?"opacity:.48":""}">
-<td><span class="num">${h.n}</span><span class="horse">${escapeText(h.name)}${h.entry_status&&h.entry_status!=="REGULAR"?` <span class="pill">${escapeText(h.entry_status)} ${h.included_in_frozen_field===true&&h.odds!=='SCR'?'drawn in':'excluded'}</span>`:""}</span></td><td>${h.odds==='SCR'?'<b>SCR — Scratched</b>':['AE','ALSO_ELIGIBLE'].includes(h.entry_status)&&h.included_in_frozen_field!==true?`<button type="button" data-field-action="running" data-program="${escapeText(h.n)}">Confirm running</button>`:`${h.field_status_evidence?.action==='running'?'AE drawn in':'Active'} <button type="button" data-field-action="scratch" data-program="${escapeText(h.n)}">Scratch</button>`}${['AE','ALSO_ELIGIBLE'].includes(h.entry_status)&&h.included_in_frozen_field!==true&&h.odds!=='SCR'?` <button type="button" data-field-action="scratch" data-program="${escapeText(h.n)}">Scratch</button>`:''}</td><td>${h.ml||"—"}</td>
+<td><span class="num">${h.n}</span><span class="horse">${escapeText(h.name)}${h.entry_status&&h.entry_status!=="REGULAR"?` <span class="pill">${escapeText(h.entry_status)} ${h.included_in_frozen_field===true&&h.odds!=='SCR'?'drawn in':'excluded'}</span>`:""}</span></td><td>${h.odds==='SCR'?`<b>SCR — Scratched</b> <button type="button" data-field-action="running" data-name="${escapeText(h.name)}" data-program="${escapeText(h.n)}" data-restore="true">Confirm running</button>`:['AE','ALSO_ELIGIBLE'].includes(h.entry_status)&&h.included_in_frozen_field!==true?`<button type="button" data-field-action="running" data-name="${escapeText(h.name)}" data-program="${escapeText(h.n)}">Confirm running</button>`:`${h.field_status_evidence?.action==='running'?'AE drawn in':'Active'} <button type="button" data-field-action="scratch" data-name="${escapeText(h.name)}" data-program="${escapeText(h.n)}">Scratch</button>`}${['AE','ALSO_ELIGIBLE'].includes(h.entry_status)&&h.included_in_frozen_field!==true&&h.odds!=='SCR'?` <button type="button" data-field-action="scratch" data-name="${escapeText(h.name)}" data-program="${escapeText(h.n)}">Scratch</button>`:''}</td><td>${h.ml||"—"}</td>
 <td><span class="pacechip ${escapeText(displayPaceStyle(h))}">${escapeText(displayPaceStyle(h))}</span></td><td>${escapeText(h.source_context?.jockey?.name||h.jockey_annual?.jockey||h.j||"—")}</td><td>${escapeText(h.source_context?.trainer?.name||h.t||"—")}</td>
 <td>${js?js.win.toFixed(1)+"%":"—"}</td><td>${ts?ts.win.toFixed(1)+"%":"—"}</td><td>${displayVal(h.ratings?.provider==="BRISNET"?h.ratings.lines?.[0]?.speed:h.last)}</td><td class="grid-contender-rank">${entry?entry.gridRank:label}</td><td><span class="score">${entry&&Number.isFinite(entry.score)?entry.score.toFixed(3):"N/A"}</span><div class="tiny muted" style="margin-top:4px">${entry?(provisional?"Provisional Contender rating":"Contender rating"):label}</div></td><td><b>${fairOddsMap()[h.n]||"—"}</b></td></tr>`}).join("");
 }
@@ -537,8 +537,9 @@ horseTable.addEventListener('click',async event=>{
  const button=event.target.closest('button[data-field-action]');if(!button)return;
  button.disabled=true;
  try{
+  if(button.dataset.restore==='true'&&!confirm('Confirm '+button.dataset.name+' is running? This clears its scratch status and resets current odds to unavailable.')){button.disabled=false;return;}
   const selected=cardProvider(activeCard),cards=putProviderCard(providerCards,{...activeCard,races:{...activeCard.races,[race.race]:structuredClone(race)}});
-  const updated=correctRaceField(cards,selected,race.race,button.dataset.program,button.dataset.fieldAction);
+  const updated=correctRaceField(cards,selected,race.race,{program:button.dataset.program,name:button.dataset.name},button.dataset.fieldAction);
   await writeProviderCardsSession(updated,state,selected);
   providerCards=updated;activeCard=structuredClone(updated[selected]);race=structuredClone(activeCard.races[race.race]);renderAll();
  }catch(error){document.getElementById('gridFieldStatus').textContent='Field correction failed: '+error.message;button.disabled=false;}
@@ -620,7 +621,7 @@ function renderNyraUpdateControls(){
  if(source.mode!=='automatic'){
   status.textContent=other.supported&&!OTHER_TRACK_FEEDS_READY?'Automatic updates for '+other.label+' are not connected yet. Existing odds and scratches are retained.':other.supported?'Update odds and scratches together for the loaded race. Unavailable or unverified data leaves both PP sources unchanged.':'Automatic updates are unavailable for '+(race.track||'this track')+'.';return;
  }
- const last=race.odds_snapshot?.fetchedAt,scratches=race.horses.filter(h=>h.odds==='SCR').map(h=>'#'+h.n).join(', ');
+ const last=race.odds_snapshot?.fetchedAt,scratches=race.horses.filter(h=>h.odds==='SCR').map(h=>h.n?'#'+h.n:h.name).join(', ');
  status.textContent=last?'Last NYRA update '+new Date(last).toLocaleTimeString()+'. Scratches: '+(scratches||'none')+'. Prices may be delayed.':'Fetch NYRA odds and scratches for Race '+race.race+' without pasting. Prices may be delayed.';
 }
 async function updateNyraTrack(){
@@ -631,11 +632,13 @@ async function updateNyraTrack(){
   const result=await fetchNyraRaceUpdate(race);
   if(!unchanged())return;
   if(JSON.stringify(race)!==before)throw Error('Race information changed during the request; please update again');
-  race=result.race;activeCard.races[race.race]=structuredClone(race);save();
-  let pairedUpdate='';const other=cardProvider(activeCard)==='BRISNET'?'DRF':'BRISNET',source=pairedRace(providerCards,other,race);
-  if(source.race){try{const updated=applyNyraSnapshotToRace(source.race,result.snapshot);for(const h of updated.horses)if(h.odds==='SCR')h.scratch_evidence={sourceUrl:result.snapshot.sourceUrl,observedAt:result.snapshot.fetchedAt,status:'NYRA_PUBLIC_PAGE_SCRATCH_SNAPSHOT'};const card=structuredClone(providerCards[other]);card.races[race.race]=updated;await persistProvider(card);pairedUpdate=' Matching '+other+' odds and scratches also refreshed.';}catch(e){pairedUpdate=' '+other+' retained its prior field: '+e.message;}}
+  const plan=prepareNyraCardUpdate(activeCard,providerCards,race,result.snapshot);
+  await writeProviderCardsSession(plan.cards,state,plan.selected);
+  if(!unchanged()||JSON.stringify(race)!==before){status.textContent='Update saved for the original race; current selection retained. Refresh before using it.';return;}
+  providerCards=plan.cards;activeCard=structuredClone(plan.cards[plan.selected]);race=structuredClone(plan.race);
+  const pairedUpdate=' '+(plan.pairedStatus||'');
   nyraUpdatePending=false;renderAll();
-  const scratches=race.horses.filter(h=>h.odds==='SCR').map(h=>'#'+h.n+' '+h.name).join(', ');
+  const scratches=race.horses.filter(h=>h.odds==='SCR').map(h=>(h.n?'#'+h.n+' ':'')+h.name).join(', ');
   status.textContent='Updated '+result.snapshot.runners.length+' runners at '+new Date(result.snapshot.fetchedAt).toLocaleTimeString()+'. Scratches: '+(scratches||'none')+'. Selected-source models refreshed.'+pairedUpdate+' Prices may be delayed.';
  }catch(e){if(unchanged())status.textContent='Update failed: '+e.message+'. Previous odds and scratches retained.';}
  finally{nyraUpdatePending=false;document.getElementById('updateOddsScratches').disabled=nyraRaceUpdateSource(race).mode!=='automatic';if(!unchanged())renderNyraUpdateControls();}

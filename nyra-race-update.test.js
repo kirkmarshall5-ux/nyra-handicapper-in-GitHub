@@ -5,3 +5,12 @@ test('direct update sends active race, retains PP inputs and atomically records 
 test('odds refresh works without reactivating a previously scratched horse',async()=>{const s={...snapshot,runners:[{program:'1',name:'Example',odds:'3/1'}]};assert.equal((await fetchNyraRaceUpdate(race,{now,fetcher:response(s)})).race.horses[0].odds,'3/1');await assert.rejects(fetchNyraRaceUpdate({...race,horses:[{...race.horses[0],odds:'SCR'}]},{now,fetcher:response(s)}),/Previously scratched/);});
 test('wrong race, partial field, identity mismatch and stale response preserve original data',async()=>{const before=structuredClone(race);for(const patch of [{race:2},{runners:[]},{runners:[{program:'1',name:'Wrong',odds:'SCR'}]},{fetchedAt:'2020-01-01T00:00:00Z'}])await assert.rejects(fetchNyraRaceUpdate(race,{now,fetcher:response({...snapshot,...patch})}));assert.deepEqual(race,before);});
 test('unsupported track never sends a NYRA request; HTTP and non-JSON failures remain errors',async()=>{await assert.rejects(fetchNyraRaceUpdate({...race,track:'Keeneland'},{fetcher:()=>{throw Error('must not fetch')}}),/unavailable/);await assert.rejects(fetchNyraRaceUpdate(race,{fetcher:async()=>({ok:false,status:503})}),/HTTP 503/);await assert.rejects(fetchNyraRaceUpdate(race,{fetcher:async()=>({ok:true,headers:new Headers({'content-type':'text/html'})})}),/did not return/);});
+test('two-source NYRA plan updates by name atomically and preserves printed numbers',async()=>{
+ const {prepareNyraCardUpdate}=await import('./nyra-race-update.js');
+ const drf={id:'DRF',source_format:'DRF',track:race.track,date:race.date,races:{1:{...race,horses:[{...race.horses[0],n:''}]}}};
+ const bris={...structuredClone(drf),id:'BRIS',source_format:'BRISNET_PREMIUM_PLUS'};bris.races[1].horses[0].n='1';
+ const cards={DRF:drf,BRISNET:bris},before=structuredClone(cards);
+ const plan=prepareNyraCardUpdate(drf,cards,drf.races[1],snapshot,now());
+ assert.equal(plan.cards.DRF.races[1].horses[0].odds,'SCR');assert.equal(plan.cards.DRF.races[1].horses[0].n,'');assert.equal(plan.cards.BRISNET.races[1].horses[0].odds,'SCR');assert.deepEqual(cards,before);
+ cards.BRISNET.races[1].horses[0].name='Wrong';assert.throws(()=>prepareNyraCardUpdate(drf,cards,drf.races[1],snapshot,now()),/identity/);assert.equal(cards.DRF.races[1].horses[0].odds,'—');
+});

@@ -1,5 +1,6 @@
+import {cardProvider,pairedRace} from './dual-pp-cards.js';
 import {oddsSourceForTrack} from './multitrack-odds.js';
-import {applyOddsSnapshot} from './odds-snapshot.js';
+import {applyOddsSnapshot} from './odds-snapshot.js?v=20261101-fieldnames';
 export const NYRA_UPDATE_SERVICE='https://nyra-odds-snapshot.beigebeech4.chatgpt.site/odds';
 export function nyraRaceUpdateSource(race){return oddsSourceForTrack(race.track);}
 export async function fetchNyraRaceUpdate(race,{fetcher=globalThis.fetch,now=()=>Date.now()}={}){
@@ -15,4 +16,15 @@ export async function fetchNyraRaceUpdate(race,{fetcher=globalThis.fetch,now=()=
 }
 
 // Reuse the strict snapshot validator for a matching saved PP source.
-export {applyOddsSnapshot as applyNyraSnapshotToRace} from './odds-snapshot.js';
+export {applyOddsSnapshot as applyNyraSnapshotToRace} from './odds-snapshot.js?v=20261101-fieldnames';
+
+// Stage both matching PP sources before writing either one.
+export function prepareNyraCardUpdate(activeCard,providerCards,race,snapshot,now=Date.now()){
+ const selected=cardProvider(activeCard),other=selected==='DRF'?'BRISNET':'DRF';
+ const apply=r=>{const out=applyOddsSnapshot(r,snapshot,now);for(const h of out.horses)if(h.odds==='SCR')h.scratch_evidence={sourceUrl:snapshot.sourceUrl,observedAt:snapshot.fetchedAt,status:'NYRA_PUBLIC_PAGE_SCRATCH_SNAPSHOT'};return out;};
+ const updated=apply(race),cards={...structuredClone(providerCards),[selected]:structuredClone(activeCard)};
+ cards[selected].races[race.race]=updated;
+ const paired=pairedRace(providerCards,other,race);
+ if(paired.race)cards[other].races[race.race]=apply(paired.race);
+ return {cards,selected,race:updated,pairedStatus:paired.race?'Matching '+other+' odds and scratches also refreshed.':paired.reason};
+}
