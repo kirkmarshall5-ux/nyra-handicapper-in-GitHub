@@ -550,6 +550,33 @@ for(const profile of profiles){
    await page.screenshot({path:`${out}/${profile.name}-print-picks.png`,fullPage:true});
   }finally{await popup.close();}
  });
+ await check('D-name-only-manual-and-automatic-field-updates',async()=>{
+  const saved=await page.evaluate(async()=>{const m=await import('./dual-pp-cards.js');return {cards:await m.readProviderCards(),session:await m.readProviderSession()};});
+  let names;
+  try{
+   names=await page.evaluate(async()=>{
+    const c=structuredClone(await window.qaReadActive()),r=c.races[Object.keys(c.races)[0]];
+    c.id='qa-name-field-updates';c.track='Belmont Park';c.date='2026-11-01';c.source_format='DRF';c.parser_version='DRF-positioned-v3';delete r.ratings_provider;r.source_format='DRF';r.horses.forEach(h=>delete h.ratings);
+    r.track=c.track;r.date=c.date;r.race=1;r.horses.forEach(h=>{h.n='';h.odds='—';h.entry_status='REGULAR';h.included_in_frozen_field=true;});
+    r.horses[1].entry_status='AE';r.horses[1].included_in_frozen_field=false;c.races={1:r};await window.qaSetActive(c);
+    return r.horses.map(h=>h.name);
+   });
+   await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
+   const first=page.locator('#horseTable tbody tr').filter({hasText:names[0]}),second=page.locator('#horseTable tbody tr').filter({hasText:names[1]});
+   await first.getByRole('button',{name:'Scratch',exact:true}).click();await first.getByText('SCR — Scratched',{exact:true}).waitFor();
+   assert.doesNotMatch(await second.innerText(),/SCR — Scratched/);
+   page.once('dialog',d=>d.accept());await first.getByRole('button',{name:'Confirm running',exact:true}).click();await first.getByRole('button',{name:'Scratch',exact:true}).waitFor();
+   await second.getByRole('button',{name:'Confirm running',exact:true}).click();await second.getByRole('button',{name:'Scratch',exact:true}).waitFor();
+   const route='https://nyra-odds-snapshot.beigebeech4.chatgpt.site/odds?*';
+   await page.route(route,async request=>{
+    const c=await page.evaluate(()=>window.qaReadActive()),r=c.races[1];
+    await request.fulfill({status:200,contentType:'application/json',body:JSON.stringify({schemaVersion:1,track:'belmont',date:r.date,race:1,fetchedAt:new Date().toISOString(),sourceUrl:'https://www.nyra.com/belmont/racing/entries/',runners:r.horses.map((h,i)=>({program:String(i+1),name:h.name,odds:i===0?'SCR':'7/1'}))})});
+   });
+   try{await page.locator('#updateOddsScratches').click();await page.locator('#nyraUpdateStatus').getByText('Updated ',{exact:false}).waitFor({timeout:20000});}finally{await page.unroute(route);}
+   const current=await page.evaluate(()=>window.qaReadActive());assert.ok(current.races[1].horses.every(h=>h.n===''));assert.equal(current.races[1].horses[0].odds,'SCR');assert.equal(current.races[1].horses[1].odds,'7/1');
+   await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});assert.match(await page.locator('#horseTable tbody tr').filter({hasText:names[0]}).innerText(),/SCR — Scratched/);
+  }finally{await page.evaluate(async saved=>{const m=await import('./dual-pp-cards.js');await m.writeProviderCardsSession(saved.cards,saved.session?.state||{},saved.session?.selectedProvider);},saved);await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});}
+ });
  await page.screenshot({path:`${out}/${profile.name}-final.png`,fullPage:true});
  await context.close();
 }

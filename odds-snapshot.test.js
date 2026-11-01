@@ -8,3 +8,10 @@ test('recognized country suffix matches while genuine different name rejects',()
 test('scratch rows update atomically without erasing PP or allowing reactivation',()=>{const s={...snapshot,runners:[{program:'1',name:'Hedge Book',odds:'SCR'}]},r=applyOddsSnapshot(race,s,now);assert.equal(r.horses[0].odds,'SCR');assert.equal(r.horses[0].ml,'3/1');assert.throws(()=>applyOddsSnapshot(r,snapshot,now));});
 
 test('NYRA snapshot rejects non-NYRA tracks rather than falling back to Belmont',()=>{assert.throws(()=>applyOddsSnapshot({...race,track:'Churchill Downs'},snapshot,now),/No NYRA odds adapter/);assert.throws(()=>applyOddsSnapshot({...race,track:'Keeneland'},snapshot,now),/No NYRA odds adapter/);});
+test('name-only odds and scratches match by unique name without copying snapshot programs',()=>{
+ const r={...race,horses:[{n:'',name:'First Horse',odds:'—'},{n:'',name:'Hedge Book',odds:'—'}]},before=structuredClone(r);
+ const s={...snapshot,runners:[{program:'7',name:'Hedge Book',odds:'SCR'},{program:'3',name:'First Horse',odds:'5/1'}]};
+ const out=applyOddsSnapshot(r,s,now);assert.deepEqual(out.horses.map(h=>[h.n,h.name,h.odds]),[['','First Horse','5/1'],['','Hedge Book','SCR']]);assert.deepEqual(r,before);
+ for(const runners of [[s.runners[0],s.runners[0]],[{...s.runners[0],program:'3'},s.runners[1]],[{...s.runners[0],name:'Unknown'},s.runners[1]]])assert.throws(()=>applyOddsSnapshot(r,{...s,runners},now));
+ const numbered={...race,horses:[{n:'8',name:'Hedge Book',odds:'—'}]};assert.throws(()=>applyOddsSnapshot(numbered,snapshot,now),/identity/);
+});
