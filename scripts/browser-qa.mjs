@@ -542,7 +542,7 @@ for(const profile of profiles){
    // Use the application's normal field action, then observe the already-open PDF refresh.
    const action=page.locator('#horseTable button[data-field-action="scratch"]').first();
    if(await action.count()){
-    page.once('dialog',d=>d.accept());await action.click();
+    await action.click();
     await popup.waitForURL(url=>url.toString().startsWith('blob:')&&url.toString()!==firstUrl,{timeout:20000,waitUntil:'commit'});
     const changed=await page.evaluate(async url=>new TextDecoder().decode(await (await fetch(url)).arrayBuffer()),popup.url());
     assert.notEqual(changed,pdf);assert.match(changed,/Scratched:/);
