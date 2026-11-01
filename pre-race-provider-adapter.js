@@ -3,7 +3,7 @@ import {rankBrisnetModels} from './brisnet-models.js';
 import {releaseRace} from './rankings-release.js';
 import {passRaceDisplay} from './pass-race-display.js';
 import {rankContenders} from './contender-rankings.js';
-import {rankFinishers} from './finisher-inputs.js';
+import {rankFinishers} from './finisher-inputs.js?v=20261101-identity';
 import {cardProvider} from './dual-pp-cards.js';
 export const eligible=h=>Boolean(h.n)&&h.odds!=='SCR'&&((!h.entry_status||h.entry_status==='REGULAR')?h.included_in_frozen_field!==false:['AE','ALSO_ELIGIBLE'].includes(h.entry_status)&&h.included_in_frozen_field===true);
 export function convertDisplayedModel(family,result,field,provider,{baselineDecision=null}={}){

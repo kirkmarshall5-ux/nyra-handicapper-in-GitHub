@@ -3,7 +3,7 @@ import {matchingCard} from './dual-pp-cards.js?v=20261018-dual1';
 import {releaseRace} from './rankings-release.js?v=20261008-qa1';
 import {rankContenders} from './contender-rankings.js?v=20261011-passdisplay1';
 import {rankBrisnetModels} from './brisnet-models.js?v=20261023-distance1';
-import {rankFinishers} from './finisher-inputs.js';
+import {rankFinishers} from './finisher-inputs.js?v=20261101-identity';
 import {decodeTodayDistance} from './finisher-drf-distance.js?v=20261018-5316';
 
 const active=h=>h.odds!=='SCR'&&h.included_in_frozen_field!==false&&(!h.entry_status||h.entry_status==='REGULAR');
