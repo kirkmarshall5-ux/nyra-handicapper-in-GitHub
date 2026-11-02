@@ -55,4 +55,5 @@ for(const ref of refs){
  }catch(e){excluded.push({date:ref.date,track:ref.track,race:ref.race,reason:e.message});}
 }
 fs.writeFileSync(outPath,JSON.stringify(output,null,2));
+fs.writeFileSync(outPath+'.exclusions.json',JSON.stringify({accepted:output.map(r=>r.race),excluded},null,2));
 console.log(JSON.stringify({accepted:output.length,excluded},null,2));
