@@ -1,0 +1,11 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {inventoryDrfRaces} from './scripts/drf-freeze-inventory.mjs';
+const card={source_format:'DRF',track:'Belmont',date:'2026-10-28',races:{1:{horses:[1,2,3,4].map(n=>({n:String(n)}))}}};
+const record={card,race:1,contender:[1,2,3,4],finisher:[2,1,3,4],finishOrder:[1,2,3,4]};
+const evidence={drf_source_verified:true,contender_frozen_before_post:true,finisher_frozen_before_post:true,independent_timestamp_verified:true,official_results_reconciled:true};
+test('empty inventory is empty, not a fabricated passing result',()=>assert.deepEqual(inventoryDrfRaces([]),[]));
+test('missing timestamp blocks grade',()=>assert.match(inventoryDrfRaces([{...record,evidence:{...evidence,independent_timestamp_verified:false}}])[0].reason,/timestamp/));
+test('verified race becomes gradeable',()=>assert.equal(inventoryDrfRaces([{...record,evidence}])[0].status,'GRADEABLE'));
+test('duplicate race does not get counted twice',()=>assert.equal(inventoryDrfRaces([{...record,evidence},{...record,evidence}])[1].status,'BLOCKED'));
+test('Brisnet race stays blocked',()=>assert.equal(inventoryDrfRaces([{...record,card:{...card,source_format:'BRISNET_PREMIUM_PLUS'},evidence}])[0].status,'BLOCKED'));
