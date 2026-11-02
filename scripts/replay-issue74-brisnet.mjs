@@ -2,7 +2,7 @@
 // text extraction and format router used by Race Day. Never commit source PDFs.
 import fs from 'node:fs';
 import { createHash } from 'node:crypto';
-import { getDocument } from 'pdfjs-dist/build/pdf.mjs';
+import { getDocument } from 'pdfjs-dist/legacy/build/pdf.mjs';
 import { restoredPage } from '../release-card-parser.js';
 import { parsePPCard } from '../pp-format-router.js';
 
@@ -30,6 +30,9 @@ const card=parsePPCard(pages,{sourceName:file.split(/[\\/]/).pop()});
 const audit=JSON.parse(fs.readFileSync(new URL('../audits/issue74-bel1025-equibase-official-chart-reconciliation.json',import.meta.url)));
 const failures=[];
 if(card.source_format!=='BRISNET_PREMIUM_PLUS')failures.push('Wrong PP format: '+card.source_format);
+if(card.track!=='Belmont Park')failures.push('Wrong track: '+card.track);
+if(card.date!=='2026-10-25')failures.push('Wrong card date: '+card.date);
+if(Object.keys(card.races||{}).length!==9)failures.push('Expected exactly 9 parsed races');
 if(pdf.numPages!==24)failures.push('Expected 24 source pages');
 const counts=[];
 for(const row of audit.races){
@@ -47,6 +50,6 @@ for(const row of audit.races){
 }
 const total=counts.reduce((s,r)=>s+r.entrants,0);
 if(total!==audit.totals.pp_entries)failures.push('Entrants '+total+' expected '+audit.totals.pp_entries);
-const result={schema:'issue74-production-pdfjs-replay-v1',source_sha256:digest,pages:pages.length,source_format:card.source_format,parser_version:card.parser_version||null,races:counts,total_entrants:total,failures,pass:failures.length===0,certifies_prospective_performance:false};
+const result={schema:'issue74-production-pdfjs-replay-v1',source_sha256:digest,pages:pages.length,track:card.track,date:card.date,source_format:card.source_format,parser_version:card.parser_version||null,parser_validation_issues:card.validation_issues||[],races:counts,total_entrants:total,failures,pass:failures.length===0,certifies_prospective_performance:false};
 console.log(JSON.stringify(result,null,2));
 if(failures.length)process.exitCode=1;
