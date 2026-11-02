@@ -15,7 +15,7 @@ test('winning $2 win and $1 exacta box use actual payouts and correct stakes',()
  const v=run([row],[{date:row.date,track:row.track,race:1,win_payout_2:12,exacta_payout_2:40,winner_final_odds:5,source:'official chart'}]);
  assert.equal(v.overall.win.stake,2);assert.equal(v.overall.win.returned,12);assert.equal(v.overall.win.roi,5);
  assert.equal(v.overall.exacta.stake,2);assert.equal(v.overall.exacta.returned,40);assert.equal(v.overall.exacta.roi,19);
- assert.equal(v.strata.turf_sprint.win.races,1);assert.equal(v.strata.odds_5to1_plus.win.races,1);
+ assert.equal(v.strata.turf_sprint.win.races,1);assert.equal(v.strata.winner_odds_5to1_plus.win.races,1);
 });
 test('missing payout does not silently count as a losing wager',()=>{
  const v=run([row],[]);assert.equal(v.overall.win.races,0);assert.equal(v.overall.win.roi,null);assert.equal(v.overall.win.missing_payouts,1);
@@ -23,4 +23,13 @@ test('missing payout does not silently count as a losing wager',()=>{
 test('incorrect exacta ordering does not pay',()=>{
  const v=run([{...row,runnerup_rank:3}],[{date:row.date,track:row.track,race:1,win_payout_2:12,exacta_payout_2:40,source:'official chart'}]);
  assert.equal(v.overall.exacta.returned,0);assert.equal(v.overall.exacta.stake,2);
+});
+
+test('unknown winner or runner-up rank must not produce an exacta hit',()=>{
+ const payout=[{date:row.date,track:row.track,race:1,win_payout_2:12,exacta_payout_2:40,source:'official chart'}];
+ for(const missing of [{winner_rank:null,runnerup_rank:1},{winner_rank:1,runnerup_rank:null}]){
+  const v=run([{...row,...missing}],payout);
+  assert.equal(v.overall.exacta.returned,0);
+  assert.equal(v.overall.exacta.stake,2);
+ }
 });
