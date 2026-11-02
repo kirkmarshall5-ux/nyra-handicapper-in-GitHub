@@ -28,7 +28,11 @@ for(const ref of refs){
   const ids=finish.map(h=>String(h.program));assert.equal(new Set(ids).size,ids.length);
   assert.equal(finish.filter(h=>h.finish===1).length,1);assert.equal(finish.filter(h=>h.finish===2).length,1);
   race.horses=finish.map(h=>{const match=race.horses.filter(x=>String(x.n)===String(h.program)&&clean(x.name)===clean(h.name));assert.equal(match.length,1,'missing/ambiguous horse '+h.program+' '+h.name);return {...match[0],odds:'—',entry_status:'REGULAR',included_in_frozen_field:true};});
-  const lifeStarts=race.horses.map(h=>h.life_starts??h.lifeStarts);\n  assert(lifeStarts.every(v=>Number.isInteger(v)&&v>=0),'unverified lifetime starts: cannot certify FTS');\n  const derivedFTS=lifeStarts.filter(v=>v===0).length;\n  if(ref.first_time_starters!=null)assert.equal(ref.first_time_starters,derivedFTS,'FTS count disagrees with DRF source');\n  const raceSurface=race.conditions?.surface||race.surface;
+  const lifeStarts=race.horses.map(h=>h.life_starts??h.lifeStarts);
+  assert(lifeStarts.every(v=>Number.isInteger(v)&&v>=0),'unverified lifetime starts: cannot certify FTS');
+  const derivedFTS=lifeStarts.filter(v=>v===0).length;
+  if(ref.first_time_starters!=null)assert.equal(ref.first_time_starters,derivedFTS,'FTS count disagrees with DRF source');
+  const raceSurface=race.conditions?.surface||race.surface;
   assert.equal(raceSurface,ref.surface,'surface mismatch');
   if(finite(race.distance_furlongs))assert.equal(race.distance_furlongs,ref.distance_furlongs,'distance mismatch');
   const released=releaseRace(race),ranked=rankContenders(race,released,{displayPass:released.decision==='PASS'});
