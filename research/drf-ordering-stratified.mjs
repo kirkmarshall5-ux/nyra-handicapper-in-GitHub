@@ -29,7 +29,7 @@ for(const race of races){
   for(const [variant,disabled] of Object.entries(variants)){
    const ordered=race.starters.map(h=>({...h,variant_score:h.score-disabled.reduce((s,i)=>s+h.contributions[i],0)})).sort((a,b)=>b.variant_score-a.variant_score||String(a.program).localeCompare(String(b.program)));
    const rank=(finish)=>{const i=ordered.findIndex(h=>h.finish===finish);return i<0?null:i+1};
-   const row={date:race.date,track:race.track,race:race.race,...strata,picks:ordered.slice(0,4).map(h=>String(h.program)),rank_finish:ordered.slice(0,4).map((h,i)=>({rank:i+1,finish:h.finish,notation:h.finish?`\${i+1}/\${h.finish}`:null})),winner_rank:rank(1),runnerup_rank:rank(2),winner_program:String(winners[0].program),runnerup_program:String(seconds[0].program)};
+   const row={date:race.date,track:race.track,race:race.race,...strata,picks:ordered.slice(0,4).map(h=>String(h.program)),rank_finish:ordered.slice(0,4).map((h,i)=>({rank:i+1,finish:h.finish,notation:h.finish?(i+1)+'/'+h.finish:null})),winner_rank:rank(1),runnerup_rank:rank(2),winner_program:String(winners[0].program),runnerup_program:String(seconds[0].program)};
    results.variants[variant].rows.push(row);
   }
  }catch(e){results.excluded.push({date:race.date,track:race.track,race:race.race,reason:e.message});}
