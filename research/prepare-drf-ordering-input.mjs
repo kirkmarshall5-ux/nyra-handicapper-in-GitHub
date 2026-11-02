@@ -35,7 +35,9 @@ for(const ref of refs){
   const raceSurface=race.conditions?.surface||race.surface;
   assert.equal(raceSurface,ref.surface,'surface mismatch');
   if(finite(race.distance_furlongs))assert.equal(race.distance_furlongs,ref.distance_furlongs,'distance mismatch');
-  const released=releaseRace(race),ranked=rankContenders(race,released,{displayPass:released.decision==='PASS'});
+  const released=releaseRace(race);
+  assert.notEqual(released.decision,'PASS','PASS race: cannot certify full-field contender ordering');
+  const ranked=rankContenders(race,released);
   assert.equal(ranked.rankings.length,finish.length,'incomplete ranked field');
   const raw=race.horses.map(h=>contenderFeatures(h,{...race,field:race.horses}).raw);
   const observed=MODEL.features.map((_,j)=>raw.map(a=>a[j]).filter(finite));
