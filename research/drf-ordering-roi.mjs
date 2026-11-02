@@ -12,7 +12,7 @@ const key=r=>[r.date,r.track,r.race].join('|');
 const index=new Map();
 for(const p of payouts){const k=key(p);if(index.has(k))throw Error('Duplicate payout record: '+k);index.set(k,p);}
 const valid=v=>typeof v==='number'&&Number.isFinite(v)&&v>=0;
-const buckets=[['turf_sprint',r=>r.surface==='Turf'&&r.trip==='sprint'],['turf_route',r=>r.surface==='Turf'&&r.trip==='route'],['dirt_sprint',r=>r.surface==='Dirt'&&r.trip==='sprint'],['dirt_route',r=>r.surface==='Dirt'&&r.trip==='route'],['synthetic',r=>r.surface==='Synthetic'],['maiden',r=>r.maiden],['nonmaiden',r=>!r.maiden],['primary',r=>r.primary_eligible],['fts',r=>r.fts],['small_field',r=>r.small_field],['odds_under_2to1',r=>r.winner_final_odds!==null&&r.winner_final_odds<2],['odds_2to1_to_5to1',r=>r.winner_final_odds!==null&&r.winner_final_odds>=2&&r.winner_final_odds<5],['odds_5to1_plus',r=>r.winner_final_odds!==null&&r.winner_final_odds>=5]];
+const buckets=[['turf_sprint',r=>r.surface==='Turf'&&r.trip==='sprint'],['turf_route',r=>r.surface==='Turf'&&r.trip==='route'],['dirt_sprint',r=>r.surface==='Dirt'&&r.trip==='sprint'],['dirt_route',r=>r.surface==='Dirt'&&r.trip==='route'],['synthetic',r=>r.surface==='Synthetic'],['maiden',r=>r.maiden],['nonmaiden',r=>!r.maiden],['primary',r=>r.primary_eligible],['fts',r=>r.fts],['small_field',r=>r.small_field],['winner_odds_under_2to1',r=>r.winner_final_odds!==null&&r.winner_final_odds<2],['winner_odds_2to1_to_5to1',r=>r.winner_final_odds!==null&&r.winner_final_odds>=2&&r.winner_final_odds<5],['winner_odds_5to1_plus',r=>r.winner_final_odds!==null&&r.winner_final_odds>=5]];
 function summarize(rows,kind){
  const eligible=rows.filter(r=>r[kind+'_eligible']);
  const stake=eligible.reduce((s,r)=>s+r[kind+'_stake'],0),returned=eligible.reduce((s,r)=>s+r[kind+'_return'],0);
@@ -27,7 +27,7 @@ for(const [name,v] of Object.entries(rankings.variants)){
   if(p&&p.winner_final_odds!=null&&!valid(p.winner_final_odds))throw Error('Invalid odds '+key(r));
   return {...r,winner_final_odds:p&&valid(p.winner_final_odds)?p.winner_final_odds:null,
    win_eligible:winEligible,win_stake:winEligible?2:0,win_return:winEligible&&r.winner_rank===1?p.win_payout_2:0,
-   exacta_eligible:exactaEligible,exacta_stake:exactaEligible?2:0,exacta_return:exactaEligible&&r.winner_rank<=2&&r.runnerup_rank<=2?p.exacta_payout_2:0,
+   exacta_eligible:exactaEligible,exacta_stake:exactaEligible?2:0,exacta_return:exactaEligible&&Number.isInteger(r.winner_rank)&&r.winner_rank>=1&&r.winner_rank<=2&&Number.isInteger(r.runnerup_rank)&&r.runnerup_rank>=1&&r.runnerup_rank<=2?p.exacta_payout_2:0,
    payout_source:p?.source||null};
  });
  const group=rs=>({win:summarize(rs,'win'),exacta:summarize(rs,'exacta')});
