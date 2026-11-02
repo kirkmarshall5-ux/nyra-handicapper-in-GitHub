@@ -14,7 +14,7 @@ export function extractDrfFreezeInventory(freeze){
   for(const [name,model] of [['Contender',contender],['Finisher',finisher]]){
    if(model&&(model.decision==='PASS'||model.complete!==true||(model.rankings||[]).length<4))blockers.push(name+' incomplete or PASS');
   }
-  blockers.push('Official results not supplied or reconciled');
+  // Official results are a separate input to the historical ranking comparison.
   return {track:freeze.track,date:freeze.card_date,race:r.race,source:'DRF',source_name:drf?.source_name||null,captured_at_utc:freeze.captured_at_utc,clock_source:freeze.clock_source,contender:{decision:contender?.decision||'MISSING',top_four:(contender?.rankings||[]).slice(0,4).map(x=>({program:x.n,name:x.name}))},finisher:{decision:finisher?.decision||'MISSING',top_four:(finisher?.rankings||[]).slice(0,4).map(x=>({program:x.n,name:x.name}))},status:blockers.length?'INCOMPLETE':'READY_FOR_RESULTS',blockers};
  });
 }
