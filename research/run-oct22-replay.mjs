@@ -3,11 +3,15 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
+import {createHash} from 'node:crypto';
 import {spawnSync} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const pdf=path.resolve(process.argv[2]||'');
 if(!process.argv[2]||!fs.existsSync(pdf))throw Error('Usage: node research/run-oct22-replay.mjs /path/to/BEL--10-22-2026.pdf');
+const digest=createHash('sha256').update(fs.readFileSync(pdf)).digest('hex');
+const expected='d89a8d574551519777ec00cb25fb5a71fcfba1f02c27bc52a0850660b9cf9762';
+if(digest!==expected)throw Error('Original DRF PDF checksum mismatch; refusing to replay an unverified source: '+digest);
 const tmp=fs.mkdtempSync(path.join(os.tmpdir(),'oct22-drf-replay-'));
 const inputs=path.join(tmp,'controlled-inputs'),out=path.join(tmp,'research-controlled');
 fs.mkdirSync(inputs);fs.mkdirSync(out);
