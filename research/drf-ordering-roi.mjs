@@ -27,7 +27,7 @@ for(const [name,v] of Object.entries(rankings.variants)){
   if(p&&p.winner_final_odds!=null&&!valid(p.winner_final_odds))throw Error('Invalid odds '+key(r));
   return {...r,winner_final_odds:p&&valid(p.winner_final_odds)?p.winner_final_odds:null,
    win_eligible:winEligible,win_stake:winEligible?2:0,win_return:winEligible&&r.winner_rank===1?p.win_payout_2:0,
-   exacta_eligible:exactaEligible,exacta_stake:exactaEligible?2:0,exacta_return:exactaEligible&&r.winner_rank<=2&&r.runnerup_rank<=2?p.exacta_payout_2/2:0,
+   exacta_eligible:exactaEligible,exacta_stake:exactaEligible?2:0,exacta_return:exactaEligible&&r.winner_rank<=2&&r.runnerup_rank<=2?p.p.exacta_payout_2:0,
    payout_source:p?.source||null};
  });
  const group=rs=>({win:summarize(rs,'win'),exacta:summarize(rs,'exacta')});
