@@ -22,13 +22,13 @@ for(const ref of refs){
   assert(typeof ref.race_type==='string'&&ref.race_type.trim());
   assert(finite(ref.distance_furlongs)&&ref.distance_furlongs>0);
   assert(['Dirt','Turf','Synthetic'].includes(ref.surface));
-  assert(Number.isInteger(ref.first_time_starters)&&ref.first_time_starters>=0);
+  assert(ref.first_time_starters==null||(Number.isInteger(ref.first_time_starters)&&ref.first_time_starters>=0));
   const race=structuredClone(card.races[ref.race]);assert(race,'race absent');
   const finish=ref.finish;assert(Array.isArray(finish)&&finish.length>=2);
   const ids=finish.map(h=>String(h.program));assert.equal(new Set(ids).size,ids.length);
   assert.equal(finish.filter(h=>h.finish===1).length,1);assert.equal(finish.filter(h=>h.finish===2).length,1);
   race.horses=finish.map(h=>{const match=race.horses.filter(x=>String(x.n)===String(h.program)&&clean(x.name)===clean(h.name));assert.equal(match.length,1,'missing/ambiguous horse '+h.program+' '+h.name);return {...match[0],odds:'—',entry_status:'REGULAR',included_in_frozen_field:true};});
-  const raceSurface=race.conditions?.surface||race.surface;
+  const lifeStarts=race.horses.map(h=>h.life_starts??h.lifeStarts);\n  assert(lifeStarts.every(v=>Number.isInteger(v)&&v>=0),'unverified lifetime starts: cannot certify FTS');\n  const derivedFTS=lifeStarts.filter(v=>v===0).length;\n  if(ref.first_time_starters!=null)assert.equal(ref.first_time_starters,derivedFTS,'FTS count disagrees with DRF source');\n  const raceSurface=race.conditions?.surface||race.surface;
   assert.equal(raceSurface,ref.surface,'surface mismatch');
   if(finite(race.distance_furlongs))assert.equal(race.distance_furlongs,ref.distance_furlongs,'distance mismatch');
   const released=releaseRace(race),ranked=rankContenders(race,released,{displayPass:released.decision==='PASS'});
@@ -44,7 +44,7 @@ for(const ref of refs){
    assert(finite(score.score)&&finite(trend_adjustment));assert(Math.abs(contributions.reduce((a,b)=>a+b,0)+trend_adjustment-score.score)<1e-9,'original parity failed');
    return {program:String(h.program),name:h.name,finish:h.finish,score:score.score,contributions,trend_adjustment};
   });
-  output.push({date:ref.date,track:ref.track,race:ref.race,race_type:ref.race_type,distance_furlongs:ref.distance_furlongs,surface:ref.surface,first_time_starters:ref.first_time_starters,starters});
+  output.push({date:ref.date,track:ref.track,race:ref.race,race_type:ref.race_type,distance_furlongs:ref.distance_furlongs,surface:ref.surface,first_time_starters:derivedFTS,starters});
  }catch(e){excluded.push({date:ref.date,track:ref.track,race:ref.race,reason:e.message});}
 }
 fs.writeFileSync(outPath,JSON.stringify(output,null,2));
