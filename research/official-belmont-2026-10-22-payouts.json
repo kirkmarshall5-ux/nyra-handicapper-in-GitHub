@@ -1,0 +1,82 @@
+[
+  {
+    "date": "2026-10-22",
+    "track": "Belmont Park",
+    "race": 1,
+    "win_payout_2": 2.96,
+    "exacta_payout_2": 6.74,
+    "winner_final_odds": null,
+    "source": "https://prodv2.nyra.com/belmont/racing/results/?day=2026-10-22&limit=results&race=1",
+    "payout_basis": "NYRA $2 win; NYRA $1 exacta converted to $2; final odds not used"
+  },
+  {
+    "date": "2026-10-22",
+    "track": "Belmont Park",
+    "race": 2,
+    "win_payout_2": 29.66,
+    "exacta_payout_2": 59.4,
+    "winner_final_odds": null,
+    "source": "https://prodv2.nyra.com/belmont/racing/results/?day=2026-10-22&limit=results&race=2",
+    "payout_basis": "NYRA $2 win; NYRA $1 exacta converted to $2; final odds not used"
+  },
+  {
+    "date": "2026-10-22",
+    "track": "Belmont Park",
+    "race": 3,
+    "win_payout_2": 61.52,
+    "exacta_payout_2": 589.02,
+    "winner_final_odds": null,
+    "source": "https://prodv2.nyra.com/belmont/racing/results/?day=2026-10-22&limit=results&race=3",
+    "payout_basis": "NYRA $2 win; NYRA $1 exacta converted to $2; final odds not used"
+  },
+  {
+    "date": "2026-10-22",
+    "track": "Belmont Park",
+    "race": 4,
+    "win_payout_2": 3.02,
+    "exacta_payout_2": 8.8,
+    "winner_final_odds": null,
+    "source": "https://prodv2.nyra.com/belmont/racing/results/?day=2026-10-22&limit=results&race=4",
+    "payout_basis": "NYRA $2 win; NYRA $1 exacta converted to $2; final odds not used"
+  },
+  {
+    "date": "2026-10-22",
+    "track": "Belmont Park",
+    "race": 5,
+    "win_payout_2": 6.82,
+    "exacta_payout_2": 122.12,
+    "winner_final_odds": null,
+    "source": "https://prodv2.nyra.com/belmont/racing/results/?day=2026-10-22&limit=results&race=5",
+    "payout_basis": "NYRA $2 win; NYRA $1 exacta converted to $2; final odds not used"
+  },
+  {
+    "date": "2026-10-22",
+    "track": "Belmont Park",
+    "race": 6,
+    "win_payout_2": 10.9,
+    "exacta_payout_2": 52.16,
+    "winner_final_odds": null,
+    "source": "https://prodv2.nyra.com/belmont/racing/results/?day=2026-10-22&limit=results&race=6",
+    "payout_basis": "NYRA $2 win; NYRA $1 exacta converted to $2; final odds not used"
+  },
+  {
+    "date": "2026-10-22",
+    "track": "Belmont Park",
+    "race": 7,
+    "win_payout_2": 5.54,
+    "exacta_payout_2": 24.02,
+    "winner_final_odds": null,
+    "source": "https://prodv2.nyra.com/belmont/racing/results/?day=2026-10-22&limit=results&race=7",
+    "payout_basis": "NYRA $2 win; NYRA $1 exacta converted to $2; final odds not used"
+  },
+  {
+    "date": "2026-10-22",
+    "track": "Belmont Park",
+    "race": 8,
+    "win_payout_2": 3.4,
+    "exacta_payout_2": 58.98,
+    "winner_final_odds": null,
+    "source": "https://prodv2.nyra.com/belmont/racing/results/?day=2026-10-22&limit=results&race=8",
+    "payout_basis": "NYRA $2 win; NYRA $1 exacta converted to $2; final odds not used"
+  }
+]
