@@ -32,3 +32,19 @@ Status: STARTED (2026-11-02). Retrospective research only. No production-model m
 - **E. Aggregate:** report per-model winner #1, top-4, exacta, stakes, profit, ROI, max drawdown and uncertainty; show coverage/exclusions by track, surface, distance, FTS and race type. Never optimize on the holdout.
 
 No aggregate performance estimate is authorized until at least two distinct verified cards are admitted. A larger sample is desirable but does not by itself guarantee statistical significance.
+
+
+## 2026-11-02 project-file discovery (availability only; not replay certification)
+
+The Project/Library file search located additional **DRF-named Belmont PDF files** not yet admitted to the controlled workspace:
+
+| File | Indexed bytes | Status |
+|---|---:|---|
+| `BEL--10-25-2026.pdf` | 1,317,609 | Located; provider/page contents, SHA-256, starter parity and timing still to verify |
+| `BEL--10-28-2026.pdf` | 1,328,154 | Located; same checks pending |
+| `BEL--10-29-2026.pdf` | 1,257,293 | Located; same checks pending |
+| `BEL--10-31-2026.pdf` | 1,468,413 | Located; same checks pending |
+
+These are file-discovery facts, not proof of pre-race certification. They supersede the *availability* gap in the earlier October recovery manifest for these four dates, but **do not** establish horse-level inputs or model results. Oct 23/24 DRF source still not located in this search; `bel1024p.pdf` is not automatically equivalent to DRF.
+
+Next: verify bytes and actual provider/content for each PDF, recover final-field and official payouts, then run controlled parser and signed-score parity on each date. Do not merge Brisnet PP inputs into the DRF study.
