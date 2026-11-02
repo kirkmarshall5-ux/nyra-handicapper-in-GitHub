@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { requireDrfPages,requireDrfCard } from './scripts/drf-only-research-guard.mjs';
+const page=(s)=>[{items:[{str:s}]}];
+test('accepts a DRF PP heading',()=>assert.equal(requireDrfPages(page('Bel, race 1, page: 1')),'DRF'));
+test('rejects Brisnet Premium Plus PP',()=>assert.throws(()=>requireDrfPages(page('Premium Plus PP\'s BRISNET')),/Brisnet testing is deferred/));
+test('rejects mixed provider evidence',()=>assert.throws(()=>requireDrfPages(page('Bel, race 1, page: 1 Premium Plus PP\'s BRISNET')),/Mixed PP providers/));
+test('rejects Brisnet source cards',()=>assert.throws(()=>requireDrfCard({source_format:'BRISNET_PREMIUM_PLUS',races:{1:{}}}),/DRF-only/));
+test('rejects unparsed DRF cards',()=>assert.throws(()=>requireDrfCard({source_format:'DRF',races:{}}),/parsed races/));
+test('accepts parsed DRF card',()=>assert.equal(requireDrfCard({source_format:'DRF',races:{1:{horses:[]}}}).source_format,'DRF'));
