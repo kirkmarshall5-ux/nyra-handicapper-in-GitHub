@@ -1,0 +1,67 @@
+{
+  "schema": "drf-oct22-entry-index-audit-v1",
+  "source_sha256": "d89a8d574551519777ec00cb25fb5a71fcfba1f02c27bc52a0850660b9cf9762",
+  "source_pages": 20,
+  "index_entries": 70,
+  "finishers": 59,
+  "scratches": 11,
+  "by_race": [
+    {
+      "race": 1,
+      "entries": 5,
+      "finishers": 4,
+      "scratches": 1
+    },
+    {
+      "race": 2,
+      "entries": 6,
+      "finishers": 6,
+      "scratches": 0
+    },
+    {
+      "race": 3,
+      "entries": 8,
+      "finishers": 8,
+      "scratches": 0
+    },
+    {
+      "race": 4,
+      "entries": 7,
+      "finishers": 4,
+      "scratches": 3
+    },
+    {
+      "race": 5,
+      "entries": 11,
+      "finishers": 11,
+      "scratches": 0
+    },
+    {
+      "race": 6,
+      "entries": 11,
+      "finishers": 11,
+      "scratches": 0
+    },
+    {
+      "race": 7,
+      "entries": 7,
+      "finishers": 5,
+      "scratches": 2
+    },
+    {
+      "race": 8,
+      "entries": 15,
+      "finishers": 10,
+      "scratches": 5
+    }
+  ],
+  "missing_entry_names": [],
+  "unaccounted_entry_names": [],
+  "ae_drawn_in": [
+    {
+      "race": 8,
+      "name": "Berman"
+    }
+  ],
+  "scope": "PDF INDEX NAMES VS OFFICIAL FINISH/SCRATCH NAMES ONLY; NO PROGRAM-NUMBER OR SCORE CERTIFICATION"
+}

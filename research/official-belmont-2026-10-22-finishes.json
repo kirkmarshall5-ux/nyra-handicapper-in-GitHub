@@ -1,0 +1,457 @@
+[
+  {
+    "date": "2026-10-22",
+    "track": "Belmont Park",
+    "race": 1,
+    "race_type": "Allowance",
+    "distance_furlongs": 8.5,
+    "surface": "Dirt",
+    "first_time_starters": null,
+    "finish": [
+      {
+        "program": "5",
+        "name": "Fedupwiththefed",
+        "finish": 1
+      },
+      {
+        "program": "3",
+        "name": "Lady Wisdom",
+        "finish": 2
+      },
+      {
+        "program": "4",
+        "name": "Full Pour",
+        "finish": 3
+      },
+      {
+        "program": "2",
+        "name": "Katie King",
+        "finish": 4
+      }
+    ],
+    "scratches": [
+      {
+        "program": "1",
+        "name": "Grace Reformed"
+      }
+    ],
+    "source": "https://www.nyra.com/belmont/racing/?day=2026-10-22&mode=results&race=1",
+    "validation_status": "OFFICIAL_FINISH_AND_SCRATCHES_RECORDED_FTS_UNVERIFIED"
+  },
+  {
+    "date": "2026-10-22",
+    "track": "Belmont Park",
+    "race": 2,
+    "race_type": "Claiming",
+    "distance_furlongs": 6,
+    "surface": "Dirt",
+    "first_time_starters": null,
+    "finish": [
+      {
+        "program": "1",
+        "name": "Waitin'onasunnyday",
+        "finish": 1
+      },
+      {
+        "program": "2",
+        "name": "Abrigado",
+        "finish": 2
+      },
+      {
+        "program": "6",
+        "name": "Rule Sixty Two",
+        "finish": 3
+      },
+      {
+        "program": "4",
+        "name": "Mouqeer",
+        "finish": 4
+      },
+      {
+        "program": "5",
+        "name": "Ican",
+        "finish": 5
+      },
+      {
+        "program": "3",
+        "name": "The Markinater",
+        "finish": 6
+      }
+    ],
+    "scratches": [],
+    "source": "https://www.nyra.com/belmont/racing/?day=2026-10-22&mode=results&race=2",
+    "validation_status": "OFFICIAL_FINISH_AND_SCRATCHES_RECORDED_FTS_UNVERIFIED"
+  },
+  {
+    "date": "2026-10-22",
+    "track": "Belmont Park",
+    "race": 3,
+    "race_type": "Maiden Special Weight",
+    "distance_furlongs": 7,
+    "surface": "Turf",
+    "first_time_starters": null,
+    "finish": [
+      {
+        "program": "4",
+        "name": "Spherical",
+        "finish": 1
+      },
+      {
+        "program": "6",
+        "name": "Bamboozie",
+        "finish": 2
+      },
+      {
+        "program": "3",
+        "name": "About Face",
+        "finish": 3
+      },
+      {
+        "program": "7",
+        "name": "Weseeulator",
+        "finish": 4
+      },
+      {
+        "program": "8",
+        "name": "I'm a Gunner",
+        "finish": 5
+      },
+      {
+        "program": "5",
+        "name": "Daythemusiclived",
+        "finish": 6
+      },
+      {
+        "program": "2",
+        "name": "He's My Kind",
+        "finish": 7
+      },
+      {
+        "program": "1",
+        "name": "Fort Griffin",
+        "finish": 8
+      }
+    ],
+    "scratches": [],
+    "source": "https://www.nyra.com/belmont/racing/?day=2026-10-22&mode=results&race=3",
+    "validation_status": "OFFICIAL_FINISH_AND_SCRATCHES_RECORDED_FTS_UNVERIFIED"
+  },
+  {
+    "date": "2026-10-22",
+    "track": "Belmont Park",
+    "race": 4,
+    "race_type": "Claiming",
+    "distance_furlongs": 6,
+    "surface": "Dirt",
+    "first_time_starters": null,
+    "finish": [
+      {
+        "program": "7",
+        "name": "Emerald Ember",
+        "finish": 1
+      },
+      {
+        "program": "3",
+        "name": "Margarita Molly",
+        "finish": 2
+      },
+      {
+        "program": "1",
+        "name": "Amelia's Echo",
+        "finish": 3
+      },
+      {
+        "program": "2",
+        "name": "Expecto Patronum",
+        "finish": 4
+      }
+    ],
+    "scratches": [
+      {
+        "program": "4",
+        "name": "Prince of Broadway"
+      },
+      {
+        "program": "5",
+        "name": "Maxisure"
+      },
+      {
+        "program": "6",
+        "name": "Big Heleonora"
+      }
+    ],
+    "source": "https://www.nyra.com/belmont/racing/?day=2026-10-22&mode=results&race=4",
+    "validation_status": "OFFICIAL_FINISH_AND_SCRATCHES_RECORDED_FTS_UNVERIFIED"
+  },
+  {
+    "date": "2026-10-22",
+    "track": "Belmont Park",
+    "race": 5,
+    "race_type": "Maiden Special Weight",
+    "distance_furlongs": 6,
+    "surface": "Turf",
+    "first_time_starters": null,
+    "finish": [
+      {
+        "program": "9",
+        "name": "Great Happenings",
+        "finish": 1
+      },
+      {
+        "program": "1",
+        "name": "Bocage Belle",
+        "finish": 2
+      },
+      {
+        "program": "5",
+        "name": "It'sgoodtobequeen",
+        "finish": 3
+      },
+      {
+        "program": "8",
+        "name": "Liberty's Advance",
+        "finish": 4
+      },
+      {
+        "program": "2",
+        "name": "Probable Choice",
+        "finish": 5
+      },
+      {
+        "program": "11",
+        "name": "Mighty Miss",
+        "finish": 6
+      },
+      {
+        "program": "6",
+        "name": "City War",
+        "finish": 7
+      },
+      {
+        "program": "7",
+        "name": "Gallipoli Girl",
+        "finish": 8
+      },
+      {
+        "program": "10",
+        "name": "Funny Gal",
+        "finish": 9
+      },
+      {
+        "program": "4",
+        "name": "Seize the Storm",
+        "finish": 10
+      },
+      {
+        "program": "3",
+        "name": "Lady Vortex",
+        "finish": 11
+      }
+    ],
+    "scratches": [],
+    "source": "https://www.nyra.com/belmont/racing/?day=2026-10-22&mode=results&race=5",
+    "validation_status": "OFFICIAL_FINISH_AND_SCRATCHES_RECORDED_FTS_UNVERIFIED"
+  },
+  {
+    "date": "2026-10-22",
+    "track": "Belmont Park",
+    "race": 6,
+    "race_type": "Maiden Claiming",
+    "distance_furlongs": 8,
+    "surface": "Turf",
+    "first_time_starters": null,
+    "finish": [
+      {
+        "program": "9",
+        "name": "Just Tell Anne",
+        "finish": 1
+      },
+      {
+        "program": "6",
+        "name": "Outro",
+        "finish": 2
+      },
+      {
+        "program": "4",
+        "name": "Portixol",
+        "finish": 3
+      },
+      {
+        "program": "1",
+        "name": "Timeless Melody",
+        "finish": 4
+      },
+      {
+        "program": "3",
+        "name": "Majestic Moonlight",
+        "finish": 5
+      },
+      {
+        "program": "8",
+        "name": "Red Beach",
+        "finish": 6
+      },
+      {
+        "program": "11",
+        "name": "Battle Winner",
+        "finish": 7
+      },
+      {
+        "program": "7",
+        "name": "Al Latafah",
+        "finish": 8
+      },
+      {
+        "program": "5",
+        "name": "Olatz (GB)",
+        "finish": 9
+      },
+      {
+        "program": "10",
+        "name": "Honor the Numbers",
+        "finish": 10
+      },
+      {
+        "program": "2",
+        "name": "No Difference",
+        "finish": 11
+      }
+    ],
+    "scratches": [],
+    "source": "https://www.nyra.com/belmont/racing/?day=2026-10-22&mode=results&race=6",
+    "validation_status": "OFFICIAL_FINISH_AND_SCRATCHES_RECORDED_FTS_UNVERIFIED"
+  },
+  {
+    "date": "2026-10-22",
+    "track": "Belmont Park",
+    "race": 7,
+    "race_type": "Claiming",
+    "distance_furlongs": 8.5,
+    "surface": "Dirt",
+    "first_time_starters": null,
+    "finish": [
+      {
+        "program": "3",
+        "name": "Jackson Heights",
+        "finish": 1
+      },
+      {
+        "program": "5",
+        "name": "Nantz",
+        "finish": 2
+      },
+      {
+        "program": "1",
+        "name": "Expensive Cut",
+        "finish": 3
+      },
+      {
+        "program": "7",
+        "name": "Screaming Uncle",
+        "finish": 4
+      },
+      {
+        "program": "2",
+        "name": "Laughing Boy",
+        "finish": 5
+      }
+    ],
+    "scratches": [
+      {
+        "program": "4",
+        "name": "Three Technique"
+      },
+      {
+        "program": "6",
+        "name": "Superpower"
+      }
+    ],
+    "source": "https://www.nyra.com/belmont/racing/?day=2026-10-22&mode=results&race=7",
+    "validation_status": "OFFICIAL_FINISH_AND_SCRATCHES_RECORDED_FTS_UNVERIFIED"
+  },
+  {
+    "date": "2026-10-22",
+    "track": "Belmont Park",
+    "race": 8,
+    "race_type": "Claiming",
+    "distance_furlongs": 9,
+    "surface": "Turf",
+    "first_time_starters": null,
+    "finish": [
+      {
+        "program": "5",
+        "name": "Exonerate",
+        "finish": 1
+      },
+      {
+        "program": "3",
+        "name": "City Nights",
+        "finish": 2
+      },
+      {
+        "program": "9",
+        "name": "Light Cav",
+        "finish": 3
+      },
+      {
+        "program": "6",
+        "name": "Rossbeigh",
+        "finish": 4
+      },
+      {
+        "program": "7",
+        "name": "Printer's Alley",
+        "finish": 5
+      },
+      {
+        "program": "11",
+        "name": "Berman",
+        "finish": 6
+      },
+      {
+        "program": "8",
+        "name": "Mosconi",
+        "finish": 7
+      },
+      {
+        "program": "10",
+        "name": "Noble One",
+        "finish": 8
+      },
+      {
+        "program": "4",
+        "name": "Maximum Heat",
+        "finish": 9
+      },
+      {
+        "program": "2",
+        "name": "Epico",
+        "finish": 10
+      }
+    ],
+    "scratches": [
+      {
+        "program": "1",
+        "name": "Newlyn"
+      },
+      {
+        "program": "12",
+        "name": "Blue Pill"
+      },
+      {
+        "program": "13",
+        "name": "Benjis Benefit (IRE)"
+      },
+      {
+        "program": "14",
+        "name": "D'oro Cavallo"
+      },
+      {
+        "program": "15",
+        "name": "Sharons Pharoah"
+      }
+    ],
+    "source": "https://www.nyra.com/belmont/racing/?day=2026-10-22&mode=results&race=8",
+    "validation_status": "OFFICIAL_FINISH_AND_SCRATCHES_RECORDED_FTS_UNVERIFIED"
+  }
+]
