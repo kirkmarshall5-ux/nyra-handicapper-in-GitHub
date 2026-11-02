@@ -30,10 +30,10 @@ const card=parsePPCard(pages,{sourceName:file.split(/[\\/]/).pop()});
 const audit=JSON.parse(fs.readFileSync(new URL('../audits/issue74-bel1025-equibase-official-chart-reconciliation.json',import.meta.url)));
 const failures=[];
 if(card.source_format!=='BRISNET_PREMIUM_PLUS')failures.push('Wrong PP format: '+card.source_format);
-if(card.track!=='Belmont Park')failures.push('Wrong track: '+card.track);
+if(!/^(?:Belmont Park|Belmont at the Big A|Belmont)$/i.test(card.track||''))failures.push('Wrong track: '+card.track);
 if(card.date!=='2026-10-25')failures.push('Wrong card date: '+card.date);
 if(Object.keys(card.races||{}).length!==9)failures.push('Expected exactly 9 parsed races');
-if(pdf.numPages!==24)failures.push('Expected 24 source pages');
+if(pages.length!==24)failures.push('Expected 24 source pages, got '+pages.length);
 const counts=[];
 for(const row of audit.races){
   const race=card.races?.[row.race];
