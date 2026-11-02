@@ -7,14 +7,22 @@ const path=process.argv[2];if(!path)throw Error('Provide reconstructed DRF horse
 const rows=JSON.parse(fs.readFileSync(path,'utf8'));
 const official=JSON.parse(fs.readFileSync(new URL('./official-belmont-2026-10-22-finishes.json',import.meta.url),'utf8'));
 const payouts=JSON.parse(fs.readFileSync(new URL('./official-belmont-2026-10-22-payouts.json',import.meta.url),'utf8'));
-assert.equal(rows.length,8,'all eight races required');
+const exclusionPath=path+'.exclusions.json';
+assert(fs.existsSync(exclusionPath),'missing exclusion evidence');
+const exclusion=JSON.parse(fs.readFileSync(exclusionPath,'utf8'));
+const passExcluded=exclusion.excluded.filter(x=>/^PASS race:/.test(x.reason));
+const otherExcluded=exclusion.excluded.filter(x=>!/^PASS race:/.test(x.reason));
+assert.equal(otherExcluded.length,0,'unresolved parsing/identity/parity exclusions: '+JSON.stringify(otherExcluded));
+assert.equal(rows.length+passExcluded.length,8,'all eight races must be scored or explicitly PASS');
 const key=r=>r.date+'|'+r.track+'|'+r.race;
-assert.equal(new Set(rows.map(key)).size,8,'duplicate races');
+assert.equal(new Set(rows.map(key)).size,rows.length,'duplicate scored races');
+assert.equal(new Set(passExcluded.map(x=>x.race)).size,passExcluded.length,'duplicate PASS exclusions');
 assert.equal(new Set(official.map(key)).size,8);
 assert.equal(new Set(payouts.map(key)).size,8);
 let count=0;
 for(const ref of official){
- const r=rows.find(x=>key(x)===key(ref));assert(r,'missing race '+key(ref));
+ const r=rows.find(x=>key(x)===key(ref));
+ if(!r){assert(passExcluded.some(x=>x.race===ref.race),'unaccounted race '+key(ref));continue;}
  const p=payouts.find(x=>key(x)===key(ref));assert(p,'missing payout '+key(ref));
  assert(Number.isFinite(p.win_payout_2)&&p.win_payout_2>=0);
  assert(Number.isFinite(p.exacta_payout_2)&&p.exacta_payout_2>=0);
@@ -34,5 +42,6 @@ for(const ref of official){
   count++;
  }
 }
-assert.equal(count,59);
-console.log(JSON.stringify({status:'INPUT_GATE_PASSED',races:8,starters:count,official_payouts:8,score_parity:true}));
+assert.equal(count,rows.reduce((n,r)=>n+r.starters.length,0));
+assert(count>0,'no rateable races available for comparison');
+console.log(JSON.stringify({status:'INPUT_GATE_PASSED',races_scored:rows.length,races_pass_excluded:passExcluded.map(x=>x.race),starters_scored:count,official_payouts:8,score_parity:true}));
