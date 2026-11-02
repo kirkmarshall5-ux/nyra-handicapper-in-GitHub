@@ -38,6 +38,7 @@ for(const ref of refs){
   const released=releaseRace(race);
   assert.notEqual(released.decision,'PASS','PASS race: cannot certify full-field contender ordering');
   const ranked=rankContenders(race,released);
+  assert.equal(ranked.decision,'RATEABLE','DRF contender decision is not certified rateable');
   assert.equal(ranked.rankings.length,finish.length,'incomplete ranked field');
   const raw=race.horses.map(h=>contenderFeatures(h,{...race,field:race.horses}).raw);
   const observed=MODEL.features.map((_,j)=>raw.map(a=>a[j]).filter(finite));
