@@ -209,6 +209,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 </main>
 
 <script type="module">
+import {exportDrfLabRace} from "./drf-research-lab-export.js";
 import {buildPicksSheet,createPicksPreview} from "./print-picks.js?v=20261101-mlfallback";
 import {correctRaceField} from "./race-field-corrections.js?v=20261101-fieldnames";
 import {prepareRaceDayResearchFreeze} from "./pre-race-raceday-integration.js";
@@ -758,6 +759,31 @@ document.getElementById('exportBrisnetModelAudit').onclick=()=>{
   status.textContent='Brisnet model-input audit exported: '+races.length+' races, V4.4c / Finisher / Contender traces.';
  }catch(e){status.textContent='Brisnet model audit failed: '+(e.message||e);}
 };
+
+// DRF Research Lab: one-click read-only evidence export from the currently loaded DRF card.
+// Never modifies live ratings, card storage, race freezes or betting decisions.
+const labButton=document.createElement('button');
+labButton.id='exportDrfResearchLab';labButton.type='button';labButton.className='secondary';
+labButton.textContent='Export DRF Research Lab Data';
+const drfUploadButton=document.getElementById('uploadDrf');
+drfUploadButton.insertAdjacentElement('afterend',labButton);
+labButton.onclick=()=>{
+ const status=document.getElementById('providerUploadStatus');
+ const card=providerCards.DRF;
+ if(!card?.races||!Object.keys(card.races).length){status.textContent='Research Lab export unavailable: upload a DRF card first.';return;}
+ const accepted=[],excluded=[];
+ for(const key of Object.keys(card.races).sort((a,b)=>+a-+b)){
+  const source=card.id===activeCard.id&&String(race.race)===String(key)?race:card.races[key];
+  try{accepted.push(exportDrfLabRace(source));}
+  catch(e){excluded.push({race:String(key),reason:String(e?.message||e)});}
+ }
+ if(!accepted.length){status.textContent='Research Lab export blocked: no complete DRF races. '+excluded.map(x=>'R'+x.race+': '+x.reason).join(' | ').slice(0,400);return;}
+ const data={schema:'drf-research-lab-v1',source_card_id:card.id,source_sha256:card.source_sha256??null,source_name:card.sourceName??null,parser_version:card.parser_version??null,exported_at:new Date().toISOString(),classification:'RESEARCH_ONLY',warning:'Browser-device export, not a certified pre-race snapshot. Historical scratches/edits may differ. No results included.',races:accepted,excluded};
+ const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+ a.href=url;a.download='DRF_RESEARCH_LAB_'+String(card.date||'undated').replace(/[^0-9-]/g,'')+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+ status.textContent='DRF Research Lab export: '+accepted.length+' complete races, '+excluded.length+' excluded. Open the Research Lab page and import the downloaded JSON.';
+};
+const labLink=document.createElement('a');labLink.href='./drf-research-lab.html';labLink.textContent='Open DRF Research Lab';labLink.style.marginLeft='12px';labButton.insertAdjacentElement('afterend',labLink);
 
 document.getElementById('uploadBrisnet').onclick=()=>document.getElementById('brisnetFile').click();
 document.getElementById('uploadDrf').onclick=()=>document.getElementById('drfFile').click();
