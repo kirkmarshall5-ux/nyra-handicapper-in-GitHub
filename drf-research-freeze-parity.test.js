@@ -12,3 +12,7 @@ test('rejects changed program identity and names',()=>{const d=structuredClone(d
 test('rejects partial or PASS frozen fields',()=>{const f=structuredClone(freeze);f.races[0].dashboard.models[0].decision='PASS';assert.throws(()=>compareDrfReplayWithFreeze(dataset,f),/missing\/incomplete/)});
 test('rejects mismatched source-card date',()=>{const f=structuredClone(freeze);f.races[0].dashboard.source_cards.DRF.date='2026-10-27';assert.throws(()=>compareDrfReplayWithFreeze(dataset,f),/source card identity mismatch/)});
 test('rejects missing replay runner',()=>{const d=structuredClone(dataset);d.races[0].finisher_baseline.pop();assert.throws(()=>compareDrfReplayWithFreeze(d,freeze),/baseline incomplete/)});
+
+test('rejects empty research export rather than declaring a vacuous pass',()=>assert.throws(()=>compareDrfReplayWithFreeze({...dataset,races:[]},freeze),/Production DRF Research Lab export required/));
+test('rejects duplicate race entries',()=>assert.throws(()=>compareDrfReplayWithFreeze({...dataset,races:[race,race]},freeze),/duplicate research race identity/));
+test('rejects duplicate replay program entries',()=>{const d=structuredClone(dataset);d.races[0].finisher_baseline[1]={...d.races[0].finisher_baseline[0]};assert.throws(()=>compareDrfReplayWithFreeze(d,freeze),/baseline incomplete/)});
