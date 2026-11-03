@@ -1,41 +1,31 @@
-# DRF Research Lab — draft MVP
+# DRF Research Lab — PR #215 certification guide
 
-Open `drf-research-lab.html` in a served checkout. The lab is isolated from the Race Day application and never writes production model weights or freezes.
+**Status:** Draft, research-only. The Race Day page includes **Export DRF Research Lab Data** and the separate `drf-research-lab.html` page imports the exported JSON. Neither page modifies live Contender, Finisher, V4.4c, wagers, or pre-race freezes. Do not merge or deploy solely because automated tests pass.
 
-## Input
+## Export and test
 
-Upload UTF-8 JSON with this shape:
+1. On a served checkout of this branch, upload an original DRF card in Race Day and confirm the intended track/date, runners, scratches and also-eligibles.
+2. Select **Export DRF Research Lab Data**. Only fully rateable DRF races with complete Contender and Finisher evidence are included. The export records excluded races and reasons. A zero-race export is blocked.
+3. Open `drf-research-lab.html`, upload the JSON, select the Contender Late multiplier, and run the scenarios. The Lab checks the original per-runner Contender and Finisher baseline scores before producing comparisons. Export the results CSV if needed.
+4. For a **historical freeze parity** check, use `compareDrfReplayWithFreeze(dataset,freeze)` from `drf-research-freeze-parity.js` with the *original* DRF local research freeze and the fresh production export. It requires matching card identity, complete frozen fields, unique programs, exact names, baseline scores within the specified tolerance, and full rank ordering for both models. The function throws on mismatch.
+5. Preserve the original DRF PDF, frozen JSON, exported dataset, excluded-race list, test results, and GitHub commit SHA as separate audit artifacts.
 
-```json
-{
-  "races": [
-    {
-      "id": "BEL-2026-10-28-R5",
-      "contender_coefficients": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-      "actual": ["12","10","6","3"],
-      "runners": [
-        {
-          "program": "12",
-          "name": "Example horse",
-          "contender": {"raw": [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null], "trend_adjustment": 0},
-          "finisher": {"recent_speed": 75, "matched_speed": 70, "late_pace": 90}
-        }
-      ]
-    }
-  ]
-}
-```
+The browser export is a **current replay**, not a reconstruction of the pre-race environment. Changes in scratches, entries, parser versions or source data can invalidate historical comparison. Never silently substitute the freeze's ranking scores for newly computed scores.
 
-This is a **shape example, not actual model evidence**. Supply all active runners, all 19 native Contender feature values, the *actual* 19 coefficients from the matching production model, and the original trend adjustment. For baseline verification, add `contender_baseline:[{"program":"12","score":0.123}]` for **every** runner. A real race needs at least two runners. If `actual` is omitted, the lab shows rankings without grading.
+## Scenario definitions
 
-**Important:** Research Lab v1 accepts already-extracted horse-level evidence; it does not yet extract original DRF PDFs or automatically retain scoring inputs at upload time. The next engineering increment is a read-only export adapter at the DRF parsing/scoring boundary, followed by baseline-parity tests and browser QA. Until then the lab is a working test harness, not a one-click historical-data importer.
+Contender neutralizations use frozen feature indices: surface win record (9), workout best rank within 30 days (16), and early pace (6), individually and in combinations. The optional Late multiplier applies to feature 7. Finisher scenarios are original Late weight, Late neutral, Late x1.25, and Late x1.5. All variants are **research-only**. The 19 Contender feature labels are checked against the frozen production feature order in regression tests.
 
-## Study design
+The Lab reports first-place winner accuracy, exact runner-up placement, ordered exactas, runner-up covered among the top four, and number of actual top-four finishers covered. Without supplied results, comparisons are ungraded. The export intentionally does **not** include results.
 
-Contender neutralizations: surface win record (feature index 9), workout rank (16), early pace (6); all singles and combinations. Optional Late coefficient multiplier. Finisher: original Late weight, neutral Late, +25% and +50%. Contender normalization uses original within-race midrank center and missing-neutral behavior. Finisher uses within-race 0–100 midrank percentile, missing-neutral 50.
+## Validation and certification boundaries
 
-Metrics: exact first, exact second, ordered exacta, runner-up among first four, and actual top-four members covered. No outcome-based selection or model deployment.
+Automated CI covers regression tests, locked V4.4c parity, and Chromium browser smoke QA. Passing CI establishes code checks, **not** historical DRF score parity or independent pre-race timestamp certification.
 
-## Known limitations
+`compareDrfReplayWithFreeze` explicitly returns `independent_timestamp_verified:false`; a browser-device clock is not an independent timestamp. For October 28 Belmont, complete the original-PDF-to-production-parser replay and compare all eligible runners' scores to the original freeze before declaring this gate closed. Races with incomplete evidence or PASS classifications must remain excluded, not scored as failures or promoted to full-field certified races.
 
-This is a draft, not deployed or regression-certified. A complete test suite, verified feature index parity, strict official-field and eligibility validation, Finisher baseline parity, persistent source evidence, and direct upload integration are still required. All retrospective results must remain clearly labeled as such.
+## Input contract
+
+The production export uses `schema:'drf-research-lab-v1'` with `races[]`. Each race has `id`, `metadata` (source, track, card date, race number), 19 `contender_coefficients`, `contender_baseline`, `finisher_baseline`, and `runners[]`. Each runner contains program, name, Contender `raw[19]`, `trend_adjustment`, and Finisher `recent_speed`, `matched_speed`, `late_pace`. Historical `actual[]` finish order is optional and must come from reconciled official results.
+
+Do not create synthetic evidence and call it an original-card replay. Test fixtures are only for unit tests.
