@@ -13,7 +13,7 @@ else {
   const excluded=(dataset.excluded||[]).map(x=>String(x.race));
   if(dataset.source_name&&freeze.races?.some(r=>r.dashboard?.source_cards?.DRF?.source_name!==dataset.source_name))throw Error('Original DRF source filename differs from fresh replay');
   const result=compareDrfReplayWithFreeze(dataset,freeze);
-  const completeFrozen=freeze.races.filter(r=>['drfContender','drfFinisher'].every(id=>{const m=r.dashboard?.models?.find(x=>x.id===id);return m?.complete===true&&m.decision!=='PASS'&&m.rankings?.length===r.dashboard?.field?.length}));
+  const completeFrozen=freeze.races.filter(r=>['drfContender','drfFinisher'].every(id=>{const m=r.dashboard?.models?.find(x=>x.id===id);return m?.complete===true&&m.decision!=='PASS'&&Array.isArray(r.dashboard?.field)&&m.rankings?.length===r.dashboard.field.length}));
   const completeIds=new Set(completeFrozen.map(r=>String(r.race)));
   const replayIds=new Set(dataset.races.map(r=>String(r.metadata?.race)));
   if(completeIds.size!==replayIds.size||[...completeIds].some(id=>!replayIds.has(id)))throw Error('Replay does not cover every complete frozen race; expected '+[...completeIds].join(','));
