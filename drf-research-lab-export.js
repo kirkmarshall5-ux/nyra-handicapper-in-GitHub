@@ -29,7 +29,7 @@ export function exportDrfLabRace(race,{actual=[]}={}){
   if(Math.abs(trend-score.matched_beyer_trend.score_adjustment)>1e-10)throw Error('Trend parity failed for '+h.name);
   const f=finByProgram.get(String(h.n));
   if(!f)throw Error('Finisher input missing for '+h.name);
-  return {program:String(h.n),name:h.name,contender:{raw:[...features[i].raw],trend_adjustment:trend},finisher:{recent_speed:f.recent_speed,matched_speed:f.matched_speed,late_pace:f.late_pace}};
+  return {program:String(h.n),name:h.name,contender:{raw:[...features[i].raw],trend_slope:features[i].slope,trend_adjustment:trend},finisher:{recent_speed:f.recent_speed,matched_speed:f.matched_speed,late_pace:f.late_pace}};
  });
  const baseline=ranked.rankings.map(h=>({program:String(h.n),score:h.score}));
  const finisher_baseline=fin.rankings.map(h=>({program:String(h.n),score:h.score}));
