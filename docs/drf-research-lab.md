@@ -29,3 +29,13 @@ Automated CI covers regression tests, locked V4.4c parity, and Chromium browser 
 The production export uses `schema:'drf-research-lab-v1'` with `races[]`. Each race has `id`, `metadata` (source, track, card date, race number), 19 `contender_coefficients`, `contender_baseline`, `finisher_baseline`, and `runners[]`. Each runner contains program, name, Contender `raw[19]`, `trend_adjustment`, and Finisher `recent_speed`, `matched_speed`, `late_pace`. Historical `actual[]` finish order is optional and must come from reconciled official results.
 
 Do not create synthetic evidence and call it an original-card replay. Test fixtures are only for unit tests.
+
+## October 28 Belmont production-export reconciliation (November 3, 2026)
+
+A user-generated export of `BEL--10-28-2026.pdf` has SHA-256 `560748d2d30b1e378ce63d262b378abef2986757e6770fec34a23b8d8a4b834e`, identical to the archived original PDF. It includes R1/R4/R5/R6/R7/R8 and excludes PASS R2/R3. The original freeze timestamp is browser-device-unverified.
+
+The current export includes one additional runner relative to each original frozen dashboard field in R1 (#5 Essence L Vee), R4 (#4 Osbourne), R5 (#4 Old Time Rocknroll), R7 (#8 Hardspun Reason), and R8 (#4 Quell). The freeze `starters` lists those horses, but the frozen `dashboard.field` and model rankings omit them. **The cause of exclusion has not been independently verified; do not label them scratched without corroboration.** R6 fields agree.
+
+For diagnostic purposes only, remove those five extra runners from the fresh export's raw feature arrays, then recompute field-relative Contender centering and Finisher percentiles. This yields **98/100 exact model score matches** and **12/12 original model/race rank orders**. DRF Finisher is exact in all six races. DRF Contender is exact except R4 #8 Sin Nombre (recomputed minus frozen = -0.016666666666666732) and R4 #1 Graywing (-0.033333333333333326). These two discrepancies require feature/trend/field-state inspection. This diagnostic is **not a certified parity pass**, because it reconstructs a historical field and has unresolved score differences. No production model coefficients or deployment should change.
+
+Next: verify original R1/R4/R5/R7/R8 scratch/entry status and isolate R4 feature or trend differences. Keep PR #215 draft until the original historical field can be justified and every eligible frozen score matches.
