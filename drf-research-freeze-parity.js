@@ -8,12 +8,14 @@ function frozenModel(r,id){
  return m;
 }
 export function compareDrfReplayWithFreeze(dataset,freeze,{tolerance=1e-8}={}){
- if(dataset?.schema!=='drf-research-lab-v1'||!Array.isArray(dataset.races))throw Error('Production DRF Research Lab export required');
+ if(dataset?.schema!=='drf-research-lab-v1'||!Array.isArray(dataset.races)||!dataset.races.length)throw Error('Production DRF Research Lab export required');
  if(freeze?.schema!=='nyra-local-research-freeze-v1'||freeze.source!=='DRF'||!Array.isArray(freeze.races))throw Error('Original DRF freeze required');
  if(!finite(tolerance)||tolerance<0||tolerance>1e-4)throw Error('Invalid score tolerance');
- const out=[];
+ const out=[],seenRaces=new Set();
  for(const race of dataset.races){
   const meta=race.metadata||{};
+  if(!Number.isInteger(Number(meta.race))||Number(meta.race)<1||seenRaces.has(String(meta.race)))throw Error('Invalid or duplicate research race identity: '+race.id);
+  seenRaces.add(String(meta.race));
   if(meta.source!=='DRF'||meta.track!==freeze.track||meta.card_date!==freeze.card_date)throw Error('DRF source identity mismatch: '+race.id);
   const fr=freeze.races.find(x=>String(x.race)===String(meta.race));
   if(!fr)throw Error('Frozen race missing: '+race.id);
@@ -27,7 +29,7 @@ export function compareDrfReplayWithFreeze(dataset,freeze,{tolerance=1e-8}={}){
    const originals=new Map(snapshot.map(h=>[key(h.n),h]));
    if(originals.size!==snapshot.length)throw Error('Duplicate frozen program: '+race.id);
    const replay=new Map((race[field]||[]).map(h=>[key(h.program),h]));
-   if(replay.size!==race.runners.length)throw Error('Replay baseline incomplete: '+race.id+' '+modelId);
+   if(replay.size!==race.runners.length||(race[field]||[]).length!==race.runners.length)throw Error('Replay baseline incomplete: '+race.id+' '+modelId);
    for(const [program,horse] of originals){
     const runner=expected.get(program),newScore=replay.get(program);
     if(!runner||!newScore||runner.name!==horse.name||!finite(horse.score)||!finite(newScore.score)||Math.abs(horse.score-newScore.score)>tolerance)
