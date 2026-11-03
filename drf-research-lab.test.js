@@ -3,7 +3,7 @@ import {runLab,summarize,VARIANTS} from './drf-research-lab.js';
 import {exportDrfLabRace} from './drf-research-lab-export.js';
 const coeff=Array(19).fill(0);coeff[9]=1;coeff[16]=.5;coeff[6]=.25;
 const make=(program,name,surface,workout,early)=>({program,name,contender:{raw:Array.from({length:19},(_,i)=>i===9?surface:i===16?workout:i===6?early:null),trend_adjustment:0},finisher:{recent_speed:surface,matched_speed:workout,late_pace:early}});
-const data={races:[{id:'TEST-R1',contender_coefficients:coeff,actual:['2','1','3'],runners:[make('1','Alpha',10,10,10),make('2','Bravo',20,20,20),make('3','Charlie',0,0,0)]}]};
+const data={races:[{id:'TEST-R1',contender_coefficients:coeff,actual:['2','3','1'],runners:[make('1','Alpha',10,10,10),make('2','Bravo',20,20,20),make('3','Charlie',0,0,0)]}]};
 test('all eight Contender scenarios plus four Finisher scenarios run',()=>{const rows=runLab(data);assert.equal(rows.length,12);assert.equal(rows.filter(r=>r.model==='DRF Contender').length,VARIANTS.length);assert.equal(summarize(rows).length,12)});
 test('metrics distinguish winner from second and exacta',()=>{const base=runLab(data).find(r=>r.model==='DRF Contender'&&r.variant==='baseline');assert.equal(base.first,1);assert.equal(base.second,0);assert.equal(base.exacta,0);assert.equal(base.runnerUpCovered,1)});
 test('missing inputs are not imputed',()=>{assert.throws(()=>runLab({races:[{...data.races[0],runners:[data.races[0].runners[0],{...data.races[0].runners[1],contender:null}]}]}),/Incomplete Contender/)});
