@@ -1,5 +1,5 @@
 // DRF Research Lab v1. Pure research calculations; never imports or mutates production scoring.
-export const CONTENDER_FEATURES = ['latest_beyer','weighted_recent_five','best_three','same_surface_average','same_surface_distance_average','same_surface_peak_90_days','early_pace','late_pace','pressure_late_fit','surface_win_record','distance_win_record','placing_record','career_record','jockey','trainer','workout_count','workout_rank','layoff','trip'];
+export const CONTENDER_FEATURES = ["latest_beyer","weighted_recent_five","best_three","same_surface_average","same_surface_distance_average","same_surface_peak_90_days","early_pace","late_pace","pressure_late_fit","surface_win_record","distance_win_record","placing_record","reliable_jockey_rate","reliable_trainer_rate","days_since_verified_latest_start","workout_count_30_days","workout_best_rank_30_days","verified_latest_trip_flag","prior_opposition_proxy"];
 export const VARIANTS = [
  ['baseline',[]],['surface-neutral',[9]],['workout-neutral',[16]],['early-neutral',[6]],
  ['surface+workout',[9,16]],['surface+early',[9,6]],['workout+early',[16,6]],['all-three',[9,16,6]]
