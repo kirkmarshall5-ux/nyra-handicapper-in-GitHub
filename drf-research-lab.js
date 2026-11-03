@@ -34,6 +34,7 @@ export function runLab(dataset,{late=1}={}){
    const observedFin=['recent_speed','matched_speed','late_pace'].map(k=>finishers.map(h=>h.finisher[k]).filter(finite));
    for(const mult of [1,0,1.25,1.5]){
     const picks=rank(finishers.map(h=>({program:String(h.program),name:h.name,score:.60*pct(h.finisher.recent_speed,observedFin[0])+.25*pct(h.finisher.matched_speed,observedFin[1])+.15*mult*pct(h.finisher.late_pace,observedFin[2])+(mult===0?7.5:0)})));
+    if(mult===1&&race.finisher_baseline){for(const h of picks){const expected=race.finisher_baseline.find(x=>String(x.program)===h.program);if(!expected||!finite(expected.score)||Math.abs(expected.score-h.score)>1e-8)throw Error('Finisher baseline parity failed: '+race.id+' #'+h.program);}}
     scenarios.push({model:'DRF Finisher',variant:mult===1?'baseline':mult===0?'Late neutral':'Late x'+mult,picks});
    }
   }
