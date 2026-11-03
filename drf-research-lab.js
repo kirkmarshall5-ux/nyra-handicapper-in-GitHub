@@ -24,6 +24,7 @@ export function runLab(dataset,{late=1}={}){
   if(contenders.length!==race.runners.length)throw Error('Incomplete Contender inputs in '+race.id);
   const observed=Array.from({length:19},(_,j)=>contenders.map(h=>h.contender.raw[j]).filter(finite));
   const baseline=rank(contenders.map(h=>({program:String(h.program),name:h.name,score:h.contender.raw.reduce((s,v,j)=>s+center(v,observed[j])*weights[j],h.contender.trend_adjustment)})));
+  if(dataset.schema==='drf-research-lab-v1'&&!race.contender_baseline)throw Error('Verified Contender baseline required: '+race.id);
   if(race.contender_baseline){for(const h of baseline){const expected=race.contender_baseline.find(x=>String(x.program)===h.program);if(!expected||!finite(expected.score)||Math.abs(expected.score-h.score)>1e-8)throw Error('Contender baseline parity failed: '+race.id+' #'+h.program);}}
   const scenarios=[];
   for(const [name,neutral] of VARIANTS){
@@ -34,6 +35,7 @@ export function runLab(dataset,{late=1}={}){
    const observedFin=['recent_speed','matched_speed','late_pace'].map(k=>finishers.map(h=>h.finisher[k]).filter(finite));
    for(const mult of [1,0,1.25,1.5]){
     const picks=rank(finishers.map(h=>({program:String(h.program),name:h.name,score:.60*pct(h.finisher.recent_speed,observedFin[0])+.25*pct(h.finisher.matched_speed,observedFin[1])+.15*mult*pct(h.finisher.late_pace,observedFin[2])+(mult===0?7.5:0)})));
+    if(mult===1&&dataset.schema==='drf-research-lab-v1'&&!race.finisher_baseline)throw Error('Verified Finisher baseline required: '+race.id);
     if(mult===1&&race.finisher_baseline){for(const h of picks){const expected=race.finisher_baseline.find(x=>String(x.program)===h.program);if(!expected||!finite(expected.score)||Math.abs(expected.score-h.score)>1e-8)throw Error('Finisher baseline parity failed: '+race.id+' #'+h.program);}}
     scenarios.push({model:'DRF Finisher',variant:mult===1?'baseline':mult===0?'Late neutral':'Late x'+mult,picks});
    }
