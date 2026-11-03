@@ -766,7 +766,7 @@ const labButton=document.createElement('button');
 labButton.id='exportDrfResearchLab';labButton.type='button';labButton.className='secondary';
 labButton.textContent='Export DRF Research Lab Data';
 const drfUploadButton=document.getElementById('uploadDrf');
-drfUploadButton.insertAdjacentElement('afterend',labButton);
+const researchControls=document.createElement('div');researchControls.id='drfResearchControls';researchControls.style.marginTop='10px';researchControls.appendChild(labButton);document.getElementById('raceDayUploadStatus').insertAdjacentElement('afterend',researchControls);
 labButton.onclick=()=>{
  const status=document.getElementById('providerUploadStatus');
  const card=providerCards.DRF;
@@ -783,7 +783,7 @@ labButton.onclick=()=>{
  a.href=url;a.download='DRF_RESEARCH_LAB_'+String(card.date||'undated').replace(/[^0-9-]/g,'')+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
  status.textContent='DRF Research Lab export: '+accepted.length+' complete races, '+excluded.length+' excluded. Open the Research Lab page and import the downloaded JSON.';
 };
-const labLink=document.createElement('a');labLink.href='./drf-research-lab.html';labLink.textContent='Open DRF Research Lab';labLink.style.marginLeft='12px';labButton.insertAdjacentElement('afterend',labLink);
+const labLink=document.createElement('a');labLink.href='./drf-research-lab.html';labLink.textContent='Open DRF Research Lab';labLink.style.marginLeft='12px';researchControls.appendChild(labLink);
 
 document.getElementById('uploadBrisnet').onclick=()=>document.getElementById('brisnetFile').click();
 document.getElementById('uploadDrf').onclick=()=>document.getElementById('drfFile').click();
