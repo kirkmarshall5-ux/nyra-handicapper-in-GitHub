@@ -8,6 +8,7 @@ const active=h=>h.odds!=='SCR'&&h.included_in_frozen_field!==false&&(!h.entry_st
 export function exportDrfLabRace(race,{actual=[]}={}){
  if(!race?.horses?.length||!race.date||!race.track||!race.race)throw Error('Complete race identity and parsed runners required');
  const field=race.horses.filter(active);
+ if(field.some(h=>!String(h.n??'').trim())||new Set(field.map(h=>String(h.n))).size!==field.length)throw Error('Verified unique program numbers required for research export');
  if(field.length<2)throw Error('At least two active runners required');
  if(field.some(h=>h.ratings?.provider==='BRISNET'))throw Error('DRF research export cannot contain Brisnet runners');
  const release=releaseRace(race);
@@ -31,6 +32,7 @@ export function exportDrfLabRace(race,{actual=[]}={}){
   return {program:String(h.n),name:h.name,contender:{raw:[...features[i].raw],trend_adjustment:trend},finisher:{recent_speed:f.recent_speed,matched_speed:f.matched_speed,late_pace:f.late_pace}};
  });
  const baseline=ranked.rankings.map(h=>({program:String(h.n),score:h.score}));
- return {id:[race.track,race.date,'R'+race.race].join('-'),contender_coefficients:[...MODEL.contender.coefficients],contender_baseline:baseline,actual:[...actual],runners,metadata:{source:'DRF',classification:'RESEARCH_ONLY',contender_model:MODEL.model_id,finisher_model:fin.model_id,card_date:race.date,track:race.track,race:race.race}};
+ const finisher_baseline=fin.rankings.map(h=>({program:String(h.n),score:h.score}));
+ return {id:[race.track,race.date,'R'+race.race].join('-'),contender_coefficients:[...MODEL.contender.coefficients],contender_baseline:baseline,finisher_baseline,actual:[...actual],runners,metadata:{source:'DRF',classification:'RESEARCH_ONLY',contender_model:MODEL.model_id,finisher_model:fin.model_id,card_date:race.date,track:race.track,race:race.race}};
 }
 export function exportDrfLabDataset(races){if(!Array.isArray(races)||!races.length)throw Error('Race array required');return {schema:'drf-research-lab-v1',races:races.map(r=>exportDrfLabRace(r))};}
