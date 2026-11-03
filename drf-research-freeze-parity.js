@@ -43,3 +43,24 @@ export function compareDrfReplayWithFreeze(dataset,freeze,{tolerance=1e-8}={}){
  }
  return {status:'SCORE_REPLAY_MATCHED',races:dataset.races.length,checks:out,independent_timestamp_verified:false};
 }
+
+// Research-only historical-field replay. A later export's trend adjustment must
+// never be reused when the original frozen field differs: it is field-relative.
+export function replayContenderOnFrozenField(race, frozenPrograms) {
+ const finite=x=>typeof x==='number'&&Number.isFinite(x);
+ const center=(v,a)=>!finite(v)||a.length<2||new Set(a).size<2?0:2*(a.filter(x=>x<v).length+.5*(a.filter(x=>x===v).length-1))/(a.length-1)-1;
+ if(!Array.isArray(race?.runners)||!Array.isArray(race.contender_coefficients)||race.contender_coefficients.length!==19||!race.contender_coefficients.every(finite))throw Error('Complete original Contender coefficients required');
+ if(!Array.isArray(frozenPrograms)||frozenPrograms.length<2||new Set(frozenPrograms.map(String)).size!==frozenPrograms.length)throw Error('Verified frozen field required');
+ const byProgram=new Map(race.runners.map(h=>[String(h.program),h]));
+ if(byProgram.size!==race.runners.length)throw Error('Duplicate export program');
+ const field=frozenPrograms.map(p=>byProgram.get(String(p)));
+ if(field.some(h=>!h))throw Error('Frozen runner missing from export');
+ if(field.some(h=>!Array.isArray(h.contender?.raw)||h.contender.raw.length!==19||!Object.hasOwn(h.contender,'trend_slope')||(h.contender.trend_slope!==null&&!finite(h.contender.trend_slope))))throw Error('Original raw factors and trend slopes required; re-export source card');
+ const observed=Array.from({length:19},(_,j)=>field.map(h=>h.contender.raw[j]).filter(finite));
+ const slopes=field.map(h=>h.contender.trend_slope).filter(finite);
+ return field.map(h=>{
+  const base=h.contender.raw.reduce((s,v,j)=>s+center(v,observed[j])*race.contender_coefficients[j],0);
+  const trend_adjustment=.10*center(h.contender.trend_slope,slopes);
+  return {program:String(h.program),name:h.name,score:base+trend_adjustment,base_score:base,trend_adjustment};
+ }).sort((a,b)=>b.score-a.score||a.name.localeCompare(b.name));
+}
