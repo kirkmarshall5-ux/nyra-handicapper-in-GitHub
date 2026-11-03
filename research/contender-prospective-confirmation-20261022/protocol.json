@@ -1,0 +1,93 @@
+{
+  "id": "CONTENDER-NO-CONTEXT-PROSPECTIVE-v1",
+  "status": "REGISTERED_AWAITING_FIRST_ELIGIBLE_PRE_RACE_FREEZE",
+  "registered_at_utc": "2026-10-22T01:02:23.368977+00:00",
+  "source_reference_commit": "afa70313de66998f70184578d7271729cb551263",
+  "parent_reference_commit": "91f9bc0460ca07521b5eedb6c42905f42242ac3e",
+  "engine_blob_shas": {
+    "contender-rankings.js": "eff0fae0883dce1c1adf58ff9e3781684660fb89",
+    "contender-model.js": "4dd8ec219c5d23d373bbff155a296ea1e5b1df15"
+  },
+  "candidate": "NO_CONTEXT",
+  "control": "CURRENT_CONTENDER",
+  "candidate_formula": "Sum the same 19 current contributions except index 8, plus unchanged trend. Do not redistribute weights or recalculate other features. Name-ascending tie break identical to parent.",
+  "selection_reason": "Development-only no-context arm had 438/744 correctly ordered actual-top-four pairs versus 435/744 and mean rank error 1.941532 versus 1.953629; it also lost two covered finishers and two winner-in-four hits. This is a reason to verify cautiously, not confirmation.",
+  "unchanged": [
+    "speed matching",
+    "strict pace matching",
+    "all other contributions and coefficients",
+    "trend",
+    "identity and source gates",
+    "first-time-starter policy",
+    "tie breaking"
+  ],
+  "excluded_variants": [
+    "MIX1",
+    "bounded replacement-context candidate",
+    "historical-effort-quality adjustment",
+    "any coefficient or threshold retuning"
+  ],
+  "eligibility": {
+    "providers": [
+      "DRF"
+    ],
+    "tracks": [
+      "AQU",
+      "BAQ",
+      "BEL",
+      "SAR",
+      "KEE",
+      "CD"
+    ],
+    "race_type": "flat Thoroughbred; no hurdles",
+    "minimum_field_size": 5,
+    "experienced_whole_field": true,
+    "complete_program_identity": true,
+    "verified_target_surface_and_distance": true,
+    "same_complete_field_both_arms": true,
+    "production_order_parity_required": true,
+    "rankable_PASS_races_included": true,
+    "card_date_on_or_after_registration_utc_date": true,
+    "known_results_or_post_off_freezes_excluded": true,
+    "sealed_holdouts": "All 30 remain inventory-only, unopened and unused; this protocol does not authorize their release."
+  },
+  "capture": "On every submitted eligible future card, register all races before first scheduled off, including exclusions; freeze all eligible field inputs and both full orders before first scheduled off. Publish freeze to independent timestamped storage before first off and verify receipt. Never replace a freeze. Subsequent scratches, surface changes or identity changes invalidate the original race for primary grading; log every exclusion. A corrected card requires a separately timestamped freeze and a new protocol, not retrospective substitution.",
+  "sampling": "Consecutive eligible races from every registered future card; no selecting interesting races, changed orders or winners. Missing eligible snapshots invalidate the card for primary analysis and remain in the ledger.",
+  "endpoint": {
+    "minimum_eligible_races": 100,
+    "minimum_independent_cards": 20,
+    "stop": "First completed card at which both minima are reached; include whole card. Do not peek at comparative results or change rule/sample target midstream.",
+    "interpretation": "Initial confirmation attempt, not a powered guarantee; inconclusive results stay inconclusive."
+  },
+  "primary_metric": "Mean absolute predicted-rank error for actual first four finishers; average per-race mean over all four actual finishers; lower is better. Retain full predicted field so outsiders ahead are penalized.",
+  "primary_difference": "candidate minus control; negative is improvement",
+  "uncertainty": {
+    "method": "paired whole-card bootstrap",
+    "replicates": 10000,
+    "seed": 20261022,
+    "interval": "two-sided 95% percentile; descriptive uncertainty for this prospective sample"
+  },
+  "confirmation_rule": [
+    "Endpoint completed with verified pre-off receipts and official final fields/results",
+    "Primary mean rank-error difference < 0 and upper 95% whole-card bootstrap bound < 0",
+    "Actual-top-four pair ordering no worse",
+    "Exact ordered top-four hits no worse",
+    "Top-four horse coverage no worse",
+    "Winner-in-four coverage no worse"
+  ],
+  "secondary_metrics": [
+    "All six actual-top-four pairs",
+    "Exacta, trifecta and superfecta in order",
+    "Exact finishing-slot hits",
+    "Underneath pair order",
+    "Winner first-choice count",
+    "Field-size 5-7 versus 8+ descriptive breakdown",
+    "Dirt/turf/synthetic descriptive breakdown",
+    "Changed-order count"
+  ],
+  "failure_policy": "Any safeguard failure means NOT_CONFIRMED. Insufficient sample, uncertain receipt, no order changes or interval including zero means NOT_CONFIRMED or INCONCLUSIVE; never claim success based on winners alone. No subgroup promotion or follow-up tuning on this sample.",
+  "production_changed": false,
+  "holdout_files_used": 0,
+  "betting_enabled": false,
+  "automatic_promotion": false
+}

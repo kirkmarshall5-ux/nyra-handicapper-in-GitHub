@@ -1,0 +1,42 @@
+{
+  "predicted_races": 141,
+  "geometry_counts": {
+    "INTERMEDIATE_GEOMETRY": 24,
+    "CLOSE_TOP_EARLY_RATINGS": 55,
+    "CLEAR_EARLY_RATING_GAP": 60,
+    "INCOMPLETE_EARLY_EVIDENCE": 2
+  },
+  "interpretation_counts": {
+    "UNCERTAIN_UNVERIFIED_STYLES": 139,
+    "UNCERTAIN_MISSING_EARLY": 2
+  },
+  "stable_geometry_races": 70,
+  "identity_incomplete_races": 17,
+  "official_chart_races_extracted": 11,
+  "evaluation_races": 11,
+  "evaluation_horses": 76,
+  "highest_early_top3_credit": 9.0,
+  "highest_early_leader_credit": 6.0,
+  "mean_normalized_early_position": 0.15108225108225107,
+  "mean_uniform_random_top3_reference": 0.4426406926406926,
+  "actual_fast_slow_labels": 0,
+  "models_changed": false,
+  "holdout_files_used": 0,
+  "visually_reviewed_chart_races": 11,
+  "visually_reviewed_chart_positions": 76,
+  "diagnostic_tests_passed": 11,
+  "later_line_candidates": {
+    "observations": 124,
+    "target_races": 57,
+    "unique_target_horses": 118,
+    "used_for_current_accuracy": false,
+    "reason": "Need explicit distance-specific physical call mapping and duplicate/conflict review. No generic slot is assumed to represent a universal first call."
+  },
+  "scoring_ready": false,
+  "remaining_gates": [
+    "Independently reviewed lead-seeking/tactical style evidence",
+    "Actual fast/slow tempo labels independent of finishing result",
+    "Wider dates/tracks and stable thresholds before scoring"
+  ],
+  "source_chart_sha256": "70408ec3467385109fc7ac5f6ae3d0d62e111ff0dced89ebe9e94aa7aee8edaa"
+}

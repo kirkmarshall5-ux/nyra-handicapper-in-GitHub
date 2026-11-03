@@ -1,0 +1,9 @@
+{
+  "protocol.json": "eef26b272c5d2c34afa10d194adcf0f1dc401eb07e8213a09fa9301547b9cce0",
+  "setup_diagnostic.py": "c9a49336fed723a6966293b86a4e12e860aa38bb9182a2166066123a0325ee9d",
+  "build_and_validate.py": "ecec24eab1e9cb73d70fae9768e7d9ac141e4767aa5faaa06066ec57adc7b720",
+  "test_setup_diagnostic.py": "11b5ccdafadf6d636ce268045a977a64634eb9a761cc053a4c689863bf3a8691",
+  "prediction-freeze.json.gz": "c3e68fe223a64392e64cab132800b917658435d601d75864f11ce7afd6a94b42",
+  "evaluation.json": "283efd36b5d42a9a27ad613e9e76f0764aa409a41d5650778851fea34eae659d",
+  "chart-review.json": "a7fbded49326f1df6262e69469539161bc7f8bd9b2129bac95a0dcebe0f042a2"
+}

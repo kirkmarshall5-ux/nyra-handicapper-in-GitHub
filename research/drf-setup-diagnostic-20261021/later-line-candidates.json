@@ -1,0 +1,1249 @@
+{
+  "observations": 124,
+  "target_races": 57,
+  "unique_target_horses": 118,
+  "used_for_current_accuracy": false,
+  "reason": "Need explicit distance-specific physical call mapping and duplicate/conflict review. No generic slot is assumed to represent a universal first call.",
+  "links": [
+    {
+      "target": "BAQ_2026-05-22_R5",
+      "horse": "Call Me Jal",
+      "target_source_id": "BAQ_2026-05-22_R5:callmejal",
+      "later_card": "BAQ_2026-06-18",
+      "later_source_sha256": "777d0b375e9cd7f1342ffb89cecbe268ca1ac6547458a26d3bd1c783b40f1150",
+      "page": 14,
+      "y": 328.038,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-05-23_R8",
+      "horse": "Whittington Park",
+      "target_source_id": "BAQ_2026-05-23_R8:whittingtonpark",
+      "later_card": "BAQ_2026-06-19",
+      "later_source_sha256": "32d344bd0162c0df21321efde8abeee75e59389b8dadb8e2f19246416281c5ed",
+      "page": 9,
+      "y": 424.246,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-05-23_R9",
+      "horse": "Middle Market",
+      "target_source_id": "BAQ_2026-05-23_R9:middlemarket",
+      "later_card": "BAQ_2026-06-19",
+      "later_source_sha256": "32d344bd0162c0df21321efde8abeee75e59389b8dadb8e2f19246416281c5ed",
+      "page": 16,
+      "y": 83.582,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-06-04_R3",
+      "horse": "Chips and Fish",
+      "target_source_id": "SAR_2026-06-04_R3:chipsandfish",
+      "later_card": "BAQ_2026-06-19",
+      "later_source_sha256": "32d344bd0162c0df21321efde8abeee75e59389b8dadb8e2f19246416281c5ed",
+      "page": 16,
+      "y": 371.273,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-05-23_R3",
+      "horse": "Red Miller",
+      "target_source_id": "BAQ_2026-05-23_R3:redmiller",
+      "later_card": "BAQ_2026-06-20",
+      "later_source_sha256": "438a3619db72bdaa70e533560a486a0ab247448e8909848efb2ed82f41a705de",
+      "page": 22,
+      "y": 533.433,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-05-23_R1",
+      "horse": "Charlie Charmer",
+      "target_source_id": "BAQ_2026-05-23_R1:charliecharmer",
+      "later_card": "BAQ_2026-06-20",
+      "later_source_sha256": "438a3619db72bdaa70e533560a486a0ab247448e8909848efb2ed82f41a705de",
+      "page": 23,
+      "y": 83.582,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-05-23_R3",
+      "horse": "Fiscal Drag",
+      "target_source_id": "BAQ_2026-05-23_R3:fiscaldrag",
+      "later_card": "BAQ_2026-06-20",
+      "later_source_sha256": "438a3619db72bdaa70e533560a486a0ab247448e8909848efb2ed82f41a705de",
+      "page": 23,
+      "y": 432.672,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-05-23_R1",
+      "horse": "Hafu",
+      "target_source_id": "BAQ_2026-05-23_R1:hafu",
+      "later_card": "BAQ_2026-06-21",
+      "later_source_sha256": "e14e01e79fb08ed3950e0e1c74b2d750ce495aaaf6cd91e2dd8b74db6da4e026",
+      "page": 1,
+      "y": 430.375,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-05-22_R8",
+      "horse": "Two Ducks",
+      "target_source_id": "BAQ_2026-05-22_R8:twoducks",
+      "later_card": "BAQ_2026-06-21",
+      "later_source_sha256": "e14e01e79fb08ed3950e0e1c74b2d750ce495aaaf6cd91e2dd8b74db6da4e026",
+      "page": 1,
+      "y": 606.612,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-05-22_R8",
+      "horse": "Nod to Tran",
+      "target_source_id": "BAQ_2026-05-22_R8:nodtotran",
+      "later_card": "BAQ_2026-06-21",
+      "later_source_sha256": "e14e01e79fb08ed3950e0e1c74b2d750ce495aaaf6cd91e2dd8b74db6da4e026",
+      "page": 2,
+      "y": 354.352,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-05-22_R8",
+      "horse": "Oligarch",
+      "target_source_id": "BAQ_2026-05-22_R8:oligarch",
+      "later_card": "BAQ_2026-06-21",
+      "later_source_sha256": "e14e01e79fb08ed3950e0e1c74b2d750ce495aaaf6cd91e2dd8b74db6da4e026",
+      "page": 2,
+      "y": 499.804,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-05-23_R5",
+      "horse": "Luna Moth",
+      "target_source_id": "BAQ_2026-05-23_R5:lunamoth",
+      "later_card": "BAQ_2026-06-21",
+      "later_source_sha256": "e14e01e79fb08ed3950e0e1c74b2d750ce495aaaf6cd91e2dd8b74db6da4e026",
+      "page": 5,
+      "y": 598.133,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-05-23_R5",
+      "horse": "My First Love",
+      "target_source_id": "BAQ_2026-05-23_R5:myfirstlove",
+      "later_card": "BAQ_2026-06-21",
+      "later_source_sha256": "e14e01e79fb08ed3950e0e1c74b2d750ce495aaaf6cd91e2dd8b74db6da4e026",
+      "page": 6,
+      "y": 83.582,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-05-23_R5",
+      "horse": "Whistler's Style",
+      "target_source_id": "BAQ_2026-05-23_R5:whistlersstyle",
+      "later_card": "BAQ_2026-06-21",
+      "later_source_sha256": "e14e01e79fb08ed3950e0e1c74b2d750ce495aaaf6cd91e2dd8b74db6da4e026",
+      "page": 6,
+      "y": 283.328,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-05-22_R6",
+      "horse": "Saratoga Snow",
+      "target_source_id": "BAQ_2026-05-22_R6:saratogasnow",
+      "later_card": "BAQ_2026-06-21",
+      "later_source_sha256": "e14e01e79fb08ed3950e0e1c74b2d750ce495aaaf6cd91e2dd8b74db6da4e026",
+      "page": 15,
+      "y": 194.779,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-05-22_R6",
+      "horse": "Downtown Channel",
+      "target_source_id": "BAQ_2026-05-22_R6:downtownchannel",
+      "later_card": "BAQ_2026-06-21",
+      "later_source_sha256": "e14e01e79fb08ed3950e0e1c74b2d750ce495aaaf6cd91e2dd8b74db6da4e026",
+      "page": 16,
+      "y": 83.582,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-06-04_R8",
+      "horse": "Ready to Jam",
+      "target_source_id": "SAR_2026-06-04_R8:readytojam",
+      "later_card": "BAQ_2026-06-25",
+      "later_source_sha256": "4b3a59f38d244e335bcd6586a6f8d4f882991d6d43e1a4b98142aeff20b96bb4",
+      "page": 8,
+      "y": 257.93,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-05-22_R4",
+      "horse": "Celestial Glaze",
+      "target_source_id": "BAQ_2026-05-22_R4:celestialglaze",
+      "later_card": "BAQ_2026-06-25",
+      "later_source_sha256": "4b3a59f38d244e335bcd6586a6f8d4f882991d6d43e1a4b98142aeff20b96bb4",
+      "page": 11,
+      "y": 603.213,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-05-22_R2",
+      "horse": "Shipsational",
+      "target_source_id": "BAQ_2026-05-22_R2:shipsational",
+      "later_card": "BAQ_2026-06-26",
+      "later_source_sha256": "d55511c8fc4734b17327c612e9dc97618c5a8915727238328444c8a373b3b132",
+      "page": 3,
+      "y": 518.953,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-06-07_R9",
+      "horse": "Quiet Wisdom",
+      "target_source_id": "SAR_2026-06-07_R9:quietwisdom",
+      "later_card": "BAQ_2026-06-26",
+      "later_source_sha256": "d55511c8fc4734b17327c612e9dc97618c5a8915727238328444c8a373b3b132",
+      "page": 4,
+      "y": 83.582,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-05-22_R4",
+      "horse": "Gypsy Dreaming",
+      "target_source_id": "BAQ_2026-05-22_R4:gypsydreaming",
+      "later_card": "BAQ_2026-06-26",
+      "later_source_sha256": "d55511c8fc4734b17327c612e9dc97618c5a8915727238328444c8a373b3b132",
+      "page": 7,
+      "y": 261.047,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-06-04_R9",
+      "horse": "Cocktailsnkringle",
+      "target_source_id": "SAR_2026-06-04_R9:cocktailsnkringle",
+      "later_card": "BAQ_2026-06-26",
+      "later_source_sha256": "d55511c8fc4734b17327c612e9dc97618c5a8915727238328444c8a373b3b132",
+      "page": 7,
+      "y": 445.736,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-05-23_R6",
+      "horse": "Gold Sovereign",
+      "target_source_id": "BAQ_2026-05-23_R6:goldsovereign",
+      "later_card": "BAQ_2026-06-26",
+      "later_source_sha256": "d55511c8fc4734b17327c612e9dc97618c5a8915727238328444c8a373b3b132",
+      "page": 12,
+      "y": 191.944,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-06-20_R2",
+      "horse": "Kunshan Bridge",
+      "target_source_id": "BAQ_2026-06-20_R2:kunshanbridge",
+      "later_card": "BEL_2026-10-17",
+      "later_source_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+      "page": 2,
+      "y": 294.987,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-07-10_R5",
+      "horse": "Commuted",
+      "target_source_id": "SAR_2026-07-10_R5:commuted",
+      "later_card": "BEL_2026-10-17",
+      "later_source_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+      "page": 2,
+      "y": 653.96,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-06-25_R4",
+      "horse": "So Sophia",
+      "target_source_id": "BAQ_2026-06-25_R4:sosophia",
+      "later_card": "BEL_2026-10-17",
+      "later_source_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+      "page": 4,
+      "y": 389.546,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-06-25_R6",
+      "horse": "Frizzante",
+      "target_source_id": "BAQ_2026-06-25_R6:frizzante",
+      "later_card": "BEL_2026-10-17",
+      "later_source_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+      "page": 5,
+      "y": 278.111,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-05-23_R8",
+      "horse": "Le Gris",
+      "target_source_id": "BAQ_2026-05-23_R8:legris",
+      "later_card": "BEL_2026-10-17",
+      "later_source_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+      "page": 6,
+      "y": 491.586,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-06-25_R6",
+      "horse": "Ambition",
+      "target_source_id": "BAQ_2026-06-25_R6:ambition",
+      "later_card": "BEL_2026-10-17",
+      "later_source_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+      "page": 7,
+      "y": 123.461,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-05-22_R3",
+      "horse": "Notable Exchange",
+      "target_source_id": "BAQ_2026-05-22_R3:notableexchange",
+      "later_card": "BEL_2026-10-17",
+      "later_source_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+      "page": 8,
+      "y": 194.351,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-06-21_R2",
+      "horse": "Lady Firefoot",
+      "target_source_id": "BAQ_2026-06-21_R2:ladyfirefoot",
+      "later_card": "BEL_2026-10-17",
+      "later_source_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+      "page": 9,
+      "y": 307.507,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-05-22_R3",
+      "horse": "Seat At the Table",
+      "target_source_id": "BAQ_2026-05-22_R3:seatatthetable",
+      "later_card": "BEL_2026-10-17",
+      "later_source_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+      "page": 9,
+      "y": 476.495,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-07-10_R8",
+      "horse": "Baby Sassicaia",
+      "target_source_id": "SAR_2026-07-10_R8:babysassicaia",
+      "later_card": "BEL_2026-10-17",
+      "later_source_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+      "page": 10,
+      "y": 109.013,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-05-23_R5",
+      "horse": "Baby Sassicaia",
+      "target_source_id": "BAQ_2026-05-23_R5:babysassicaia",
+      "later_card": "BEL_2026-10-17",
+      "later_source_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+      "page": 10,
+      "y": 134.443,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-07-11_R8",
+      "horse": "Mission Improbable",
+      "target_source_id": "SAR_2026-07-11_R8:missionimprobable",
+      "later_card": "BEL_2026-10-17",
+      "later_source_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+      "page": 12,
+      "y": 277.358,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-06-25_R7",
+      "horse": "Proud Foot",
+      "target_source_id": "BAQ_2026-06-25_R7:proudfoot",
+      "later_card": "BEL_2026-10-17",
+      "later_source_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+      "page": 15,
+      "y": 100.535,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-07-09_R5",
+      "horse": "Will Not Be Swayed",
+      "target_source_id": "SAR_2026-07-09_R5:willnotbeswayed",
+      "later_card": "BEL_2026-10-17",
+      "later_source_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+      "page": 15,
+      "y": 307.54,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-06-25_R7",
+      "horse": "City Blocks",
+      "target_source_id": "BAQ_2026-06-25_R7:cityblocks",
+      "later_card": "BEL_2026-10-17",
+      "later_source_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+      "page": 16,
+      "y": 116.237,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-07-11_R3",
+      "horse": "Edistrudis",
+      "target_source_id": "SAR_2026-07-11_R3:edistrudis",
+      "later_card": "BEL_2026-10-17",
+      "later_source_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+      "page": 16,
+      "y": 277.39,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-06-25_R7",
+      "horse": "Edistrudis",
+      "target_source_id": "BAQ_2026-06-25_R7:edistrudis",
+      "later_card": "BEL_2026-10-17",
+      "later_source_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+      "page": 16,
+      "y": 285.867,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-07-10_R4",
+      "horse": "Sardis",
+      "target_source_id": "SAR_2026-07-10_R4:sardis",
+      "later_card": "BEL_2026-10-17",
+      "later_source_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+      "page": 17,
+      "y": 568.194,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-06-18_R5",
+      "horse": "Emergence",
+      "target_source_id": "BAQ_2026-06-18_R5:emergence",
+      "later_card": "BEL_2026-10-17",
+      "later_source_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+      "page": 18,
+      "y": 124.713,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-07-09_R5",
+      "horse": "Brunch With Amy",
+      "target_source_id": "SAR_2026-07-09_R5:brunchwithamy",
+      "later_card": "BEL_2026-10-17",
+      "later_source_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+      "page": 20,
+      "y": 262.053,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-06-25_R7",
+      "horse": "Mursal",
+      "target_source_id": "BAQ_2026-06-25_R7:mursal",
+      "later_card": "BEL_2026-10-17",
+      "later_source_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+      "page": 21,
+      "y": 109.013,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-06-25_R7",
+      "horse": "Despo's Dream",
+      "target_source_id": "BAQ_2026-06-25_R7:desposdream",
+      "later_card": "BEL_2026-10-17",
+      "later_source_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+      "page": 21,
+      "y": 269.49,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-06-21_R6",
+      "horse": "Beira",
+      "target_source_id": "BAQ_2026-06-21_R6:beira",
+      "later_card": "BEL_2026-10-17",
+      "later_source_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+      "page": 22,
+      "y": 269.524,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-06-04_R9",
+      "horse": "Georgia Magic",
+      "target_source_id": "SAR_2026-06-04_R9:georgiamagic",
+      "later_card": "BEL_2026-10-17",
+      "later_source_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+      "page": 23,
+      "y": 263.305,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-07-03_R7",
+      "horse": "Magnanimous Max",
+      "target_source_id": "SAR_2026-07-03_R7:magnanimousmax",
+      "later_card": "BEL_2026-10-17",
+      "later_source_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+      "page": 24,
+      "y": 92.701,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-06-04_R9",
+      "horse": "Magnanimous Max",
+      "target_source_id": "SAR_2026-06-04_R9:magnanimousmax",
+      "later_card": "BEL_2026-10-17",
+      "later_source_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+      "page": 24,
+      "y": 101.178,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-07-12_R8",
+      "horse": "Highlands Way",
+      "target_source_id": "SAR_2026-07-12_R8:highlandsway",
+      "later_card": "BEL_2026-10-17",
+      "later_source_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+      "page": 26,
+      "y": 193.707,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-07-11_R7",
+      "horse": "Unit Economics",
+      "target_source_id": "SAR_2026-07-11_R7:uniteconomics",
+      "later_card": "BEL_2026-10-17",
+      "later_source_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+      "page": 27,
+      "y": 629.106,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-07-11_R4",
+      "horse": "Ciao Chuck",
+      "target_source_id": "SAR_2026-07-11_R4:ciaochuck",
+      "later_card": "BEL_2026-10-17",
+      "later_source_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+      "page": 28,
+      "y": 107.76,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-06-19_R6",
+      "horse": "Concorde Spirit",
+      "target_source_id": "BAQ_2026-06-19_R6:concordespirit",
+      "later_card": "BEL_2026-10-17",
+      "later_source_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+      "page": 29,
+      "y": 573.923,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-06-25_R6",
+      "horse": "Secured Landing",
+      "target_source_id": "BAQ_2026-06-25_R6:securedlanding",
+      "later_card": "BEL_2026-10-17",
+      "later_source_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+      "page": 30,
+      "y": 109.013,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-06-07_R9",
+      "horse": "Princip",
+      "target_source_id": "SAR_2026-06-07_R9:princip",
+      "later_card": "BEL_2026-10-17",
+      "later_source_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+      "page": 30,
+      "y": 322.564,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-06-20_R6",
+      "horse": "Life and Light",
+      "target_source_id": "BAQ_2026-06-20_R6:lifeandlight",
+      "later_card": "BEL_2026-10-17",
+      "later_source_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+      "page": 31,
+      "y": 92.701,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-06-04_R10",
+      "horse": "Navy Seal",
+      "target_source_id": "SAR_2026-06-04_R10:navyseal",
+      "later_card": "KEE_2026-10-09",
+      "later_source_sha256": "1ce36d439d1052663a4606d06aa299ec6948591fcebf38e95d0cebc710277c08",
+      "page": 22,
+      "y": 92.701,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "CD_2026-04-30_R3",
+      "horse": "Motown Sound",
+      "target_source_id": "CD_2026-04-30_R3:motownsound",
+      "later_card": "KEE_2026-10-10",
+      "later_source_sha256": "1ed95429a4e1a7428f5bc027874a7bcfb7a7a29d3238d50ff53350dc37815fdc",
+      "page": 2,
+      "y": 118.133,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-05-23_R8",
+      "horse": "Otello",
+      "target_source_id": "BAQ_2026-05-23_R8:otello",
+      "later_card": "KEE_2026-10-10",
+      "later_source_sha256": "1ed95429a4e1a7428f5bc027874a7bcfb7a7a29d3238d50ff53350dc37815fdc",
+      "page": 9,
+      "y": 116.236,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-06-04_R8",
+      "horse": "Time to Dazzle",
+      "target_source_id": "SAR_2026-06-04_R8:timetodazzle",
+      "later_card": "KEE_2026-10-11",
+      "later_source_sha256": "fdc820c22afc81dc31f13f6729a900fd40f34869ba6bf9482d1af41b13050e4e",
+      "page": 21,
+      "y": 614.584,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-07-11_R5",
+      "horse": "Movin' On Up",
+      "target_source_id": "SAR_2026-07-11_R5:movinonup",
+      "later_card": "KEE_2026-10-11",
+      "later_source_sha256": "fdc820c22afc81dc31f13f6729a900fd40f34869ba6bf9482d1af41b13050e4e",
+      "page": 23,
+      "y": 100.535,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "CD_2026-04-30_R1",
+      "horse": "Banned for Life",
+      "target_source_id": "CD_2026-04-30_R1:bannedforlife",
+      "later_card": "KEE_2026-10-15",
+      "later_source_sha256": "f87a2c71966152882894def25e0a7dfbbfe8291e9abbdef5cf3f179127a86969",
+      "page": 6,
+      "y": 462.444,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-05-22_R2",
+      "horse": "Apalta",
+      "target_source_id": "BAQ_2026-05-22_R2:apalta",
+      "later_card": "SAR_2026-06-04",
+      "later_source_sha256": "54e9d1349978feed6719f637316718c651b4a2c34e1fa61d388f71e78d283cff",
+      "page": 21,
+      "y": 176.244,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-05-22_R6",
+      "horse": "Considerate City",
+      "target_source_id": "BAQ_2026-05-22_R6:consideratecity",
+      "later_card": "SAR_2026-06-07",
+      "later_source_sha256": "8796264d2a62aefcc879b838385d212cf78ca888e6f97aa9a8049feb4afdc26a",
+      "page": 1,
+      "y": 528.646,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-06-07_R10",
+      "horse": "Mo for the King",
+      "target_source_id": "SAR_2026-06-07_R10:mofortheking",
+      "later_card": "SAR_2026-07-03",
+      "later_source_sha256": "752693a25efdb490dca5e68bc371f4e0ffafeaf7129bb42739b29747bb1f7bd4",
+      "page": 6,
+      "y": 238.411,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-06-07_R10",
+      "horse": "Anyway",
+      "target_source_id": "SAR_2026-06-07_R10:anyway",
+      "later_card": "SAR_2026-07-03",
+      "later_source_sha256": "752693a25efdb490dca5e68bc371f4e0ffafeaf7129bb42739b29747bb1f7bd4",
+      "page": 6,
+      "y": 584.831,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-06-07_R10",
+      "horse": "Fireballin",
+      "target_source_id": "SAR_2026-06-07_R10:fireballin",
+      "later_card": "SAR_2026-07-03",
+      "later_source_sha256": "752693a25efdb490dca5e68bc371f4e0ffafeaf7129bb42739b29747bb1f7bd4",
+      "page": 7,
+      "y": 83.582,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-06-05_R5",
+      "horse": "Paula's a Star",
+      "target_source_id": "SAR_2026-06-05_R5:paulasastar",
+      "later_card": "SAR_2026-07-03",
+      "later_source_sha256": "752693a25efdb490dca5e68bc371f4e0ffafeaf7129bb42739b29747bb1f7bd4",
+      "page": 11,
+      "y": 518.73,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-06-05_R5",
+      "horse": "Ratu Jawa",
+      "target_source_id": "SAR_2026-06-05_R5:ratujawa",
+      "later_card": "SAR_2026-07-03",
+      "later_source_sha256": "752693a25efdb490dca5e68bc371f4e0ffafeaf7129bb42739b29747bb1f7bd4",
+      "page": 11,
+      "y": 672.017,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-06-04_R2",
+      "horse": "Oscar Bound",
+      "target_source_id": "SAR_2026-06-04_R2:oscarbound",
+      "later_card": "SAR_2026-07-03",
+      "later_source_sha256": "752693a25efdb490dca5e68bc371f4e0ffafeaf7129bb42739b29747bb1f7bd4",
+      "page": 12,
+      "y": 83.582,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-06-20_R6",
+      "horse": "Polar Bear Plunge",
+      "target_source_id": "BAQ_2026-06-20_R6:polarbearplunge",
+      "later_card": "SAR_2026-07-03",
+      "later_source_sha256": "752693a25efdb490dca5e68bc371f4e0ffafeaf7129bb42739b29747bb1f7bd4",
+      "page": 13,
+      "y": 229.398,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-06-26_R2",
+      "horse": "Shipsational",
+      "target_source_id": "BAQ_2026-06-26_R2:shipsational",
+      "later_card": "SAR_2026-07-03",
+      "later_source_sha256": "752693a25efdb490dca5e68bc371f4e0ffafeaf7129bb42739b29747bb1f7bd4",
+      "page": 14,
+      "y": 282.719,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-05-22_R2",
+      "horse": "Shipsational",
+      "target_source_id": "BAQ_2026-05-22_R2:shipsational",
+      "later_card": "SAR_2026-07-03",
+      "later_source_sha256": "752693a25efdb490dca5e68bc371f4e0ffafeaf7129bb42739b29747bb1f7bd4",
+      "page": 14,
+      "y": 291.195,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-05-22_R2",
+      "horse": "Petrolo",
+      "target_source_id": "BAQ_2026-05-22_R2:petrolo",
+      "later_card": "SAR_2026-07-03",
+      "later_source_sha256": "752693a25efdb490dca5e68bc371f4e0ffafeaf7129bb42739b29747bb1f7bd4",
+      "page": 14,
+      "y": 481.213,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-06-05_R2",
+      "horse": "Hit the Post",
+      "target_source_id": "SAR_2026-06-05_R2:hitthepost",
+      "later_card": "SAR_2026-07-03",
+      "later_source_sha256": "752693a25efdb490dca5e68bc371f4e0ffafeaf7129bb42739b29747bb1f7bd4",
+      "page": 16,
+      "y": 345.588,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-06-04_R9",
+      "horse": "Magnanimous Max",
+      "target_source_id": "SAR_2026-06-04_R9:magnanimousmax",
+      "later_card": "SAR_2026-07-03",
+      "later_source_sha256": "752693a25efdb490dca5e68bc371f4e0ffafeaf7129bb42739b29747bb1f7bd4",
+      "page": 17,
+      "y": 252.57,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-06-05_R5",
+      "horse": "Pillar of Beauty",
+      "target_source_id": "SAR_2026-06-05_R5:pillarofbeauty",
+      "later_card": "SAR_2026-07-03",
+      "later_source_sha256": "752693a25efdb490dca5e68bc371f4e0ffafeaf7129bb42739b29747bb1f7bd4",
+      "page": 20,
+      "y": 184.794,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-05-23_R6",
+      "horse": "Heeere's Johnny",
+      "target_source_id": "BAQ_2026-05-23_R6:heeeresjohnny",
+      "later_card": "SAR_2026-07-03",
+      "later_source_sha256": "752693a25efdb490dca5e68bc371f4e0ffafeaf7129bb42739b29747bb1f7bd4",
+      "page": 22,
+      "y": 297.527,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-06-04_R3",
+      "horse": "Glavine",
+      "target_source_id": "SAR_2026-06-04_R3:glavine",
+      "later_card": "SAR_2026-07-03",
+      "later_source_sha256": "752693a25efdb490dca5e68bc371f4e0ffafeaf7129bb42739b29747bb1f7bd4",
+      "page": 23,
+      "y": 261.047,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-06-04_R3",
+      "horse": "Blinging It Back",
+      "target_source_id": "SAR_2026-06-04_R3:blingingitback",
+      "later_card": "SAR_2026-07-03",
+      "later_source_sha256": "752693a25efdb490dca5e68bc371f4e0ffafeaf7129bb42739b29747bb1f7bd4",
+      "page": 23,
+      "y": 480.922,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-06-04_R11",
+      "horse": "Pretty Lavish",
+      "target_source_id": "SAR_2026-06-04_R11:prettylavish",
+      "later_card": "SAR_2026-07-03",
+      "later_source_sha256": "752693a25efdb490dca5e68bc371f4e0ffafeaf7129bb42739b29747bb1f7bd4",
+      "page": 26,
+      "y": 213.335,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-06-04_R11",
+      "horse": "River Tay",
+      "target_source_id": "SAR_2026-06-04_R11:rivertay",
+      "later_card": "SAR_2026-07-03",
+      "later_source_sha256": "752693a25efdb490dca5e68bc371f4e0ffafeaf7129bb42739b29747bb1f7bd4",
+      "page": 27,
+      "y": 83.582,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-06-05_R13",
+      "horse": "Graceful Rose",
+      "target_source_id": "SAR_2026-06-05_R13:gracefulrose",
+      "later_card": "SAR_2026-07-04",
+      "later_source_sha256": "aaa04ab935f824c44d223c9aa1e20b4f13c4da9c295d9b45d2878a1244e389c8",
+      "page": 9,
+      "y": 262.944,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-06-05_R13",
+      "horse": "Angel Gift",
+      "target_source_id": "SAR_2026-06-05_R13:angelgift",
+      "later_card": "SAR_2026-07-04",
+      "later_source_sha256": "aaa04ab935f824c44d223c9aa1e20b4f13c4da9c295d9b45d2878a1244e389c8",
+      "page": 9,
+      "y": 525.847,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-06-20_R5",
+      "horse": "Baseball Lady",
+      "target_source_id": "BAQ_2026-06-20_R5:baseballlady",
+      "later_card": "SAR_2026-07-04",
+      "later_source_sha256": "aaa04ab935f824c44d223c9aa1e20b4f13c4da9c295d9b45d2878a1244e389c8",
+      "page": 10,
+      "y": 83.582,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-06-05_R13",
+      "horse": "Grace and Grit",
+      "target_source_id": "SAR_2026-06-05_R13:graceandgrit",
+      "later_card": "SAR_2026-07-04",
+      "later_source_sha256": "aaa04ab935f824c44d223c9aa1e20b4f13c4da9c295d9b45d2878a1244e389c8",
+      "page": 10,
+      "y": 361.616,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-06-05_R7",
+      "horse": "Full Screen",
+      "target_source_id": "SAR_2026-06-05_R7:fullscreen",
+      "later_card": "SAR_2026-07-04",
+      "later_source_sha256": "aaa04ab935f824c44d223c9aa1e20b4f13c4da9c295d9b45d2878a1244e389c8",
+      "page": 25,
+      "y": 548.564,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-05-22_R7",
+      "horse": "Tuscan Sky",
+      "target_source_id": "BAQ_2026-05-22_R7:tuscansky",
+      "later_card": "SAR_2026-07-04",
+      "later_source_sha256": "aaa04ab935f824c44d223c9aa1e20b4f13c4da9c295d9b45d2878a1244e389c8",
+      "page": 26,
+      "y": 416.298,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-06-05_R13",
+      "horse": "Margarita Molly",
+      "target_source_id": "SAR_2026-06-05_R13:margaritamolly",
+      "later_card": "SAR_2026-07-09",
+      "later_source_sha256": "73e36c552941cbbd253a7554df0036da0d5d8fe6a534bfa7d0bf56f47a0f1726",
+      "page": 8,
+      "y": 638.471,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-06-18_R8",
+      "horse": "Heavens Lee",
+      "target_source_id": "BAQ_2026-06-18_R8:heavenslee",
+      "later_card": "SAR_2026-07-09",
+      "later_source_sha256": "73e36c552941cbbd253a7554df0036da0d5d8fe6a534bfa7d0bf56f47a0f1726",
+      "page": 9,
+      "y": 359.037,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-06-07_R9",
+      "horse": "Gatsby",
+      "target_source_id": "SAR_2026-06-07_R9:gatsby",
+      "later_card": "SAR_2026-07-09",
+      "later_source_sha256": "73e36c552941cbbd253a7554df0036da0d5d8fe6a534bfa7d0bf56f47a0f1726",
+      "page": 15,
+      "y": 406.863,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-06-05_R2",
+      "horse": "Factually Correct",
+      "target_source_id": "SAR_2026-06-05_R2:factuallycorrect",
+      "later_card": "SAR_2026-07-09",
+      "later_source_sha256": "73e36c552941cbbd253a7554df0036da0d5d8fe6a534bfa7d0bf56f47a0f1726",
+      "page": 15,
+      "y": 592.195,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-06-26_R2",
+      "horse": "War Master",
+      "target_source_id": "BAQ_2026-06-26_R2:warmaster",
+      "later_card": "SAR_2026-07-09",
+      "later_source_sha256": "73e36c552941cbbd253a7554df0036da0d5d8fe6a534bfa7d0bf56f47a0f1726",
+      "page": 16,
+      "y": 83.582,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-06-20_R2",
+      "horse": "Burninhunkoflove",
+      "target_source_id": "BAQ_2026-06-20_R2:burninhunkoflove",
+      "later_card": "SAR_2026-07-09",
+      "later_source_sha256": "73e36c552941cbbd253a7554df0036da0d5d8fe6a534bfa7d0bf56f47a0f1726",
+      "page": 16,
+      "y": 267.628,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-06-07_R9",
+      "horse": "Stewie",
+      "target_source_id": "SAR_2026-06-07_R9:stewie",
+      "later_card": "SAR_2026-07-09",
+      "later_source_sha256": "73e36c552941cbbd253a7554df0036da0d5d8fe6a534bfa7d0bf56f47a0f1726",
+      "page": 17,
+      "y": 83.582,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-06-07_R9",
+      "horse": "Timaeus",
+      "target_source_id": "SAR_2026-06-07_R9:timaeus",
+      "later_card": "SAR_2026-07-09",
+      "later_source_sha256": "73e36c552941cbbd253a7554df0036da0d5d8fe6a534bfa7d0bf56f47a0f1726",
+      "page": 17,
+      "y": 282.076,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-06-05_R2",
+      "horse": "Russi",
+      "target_source_id": "SAR_2026-06-05_R2:russi",
+      "later_card": "SAR_2026-07-09",
+      "later_source_sha256": "73e36c552941cbbd253a7554df0036da0d5d8fe6a534bfa7d0bf56f47a0f1726",
+      "page": 18,
+      "y": 498.881,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-06-04_R3",
+      "horse": "Asked and Answered",
+      "target_source_id": "SAR_2026-06-04_R3:askedandanswered",
+      "later_card": "SAR_2026-07-10",
+      "later_source_sha256": "02c746b6a9f9363d201d1ae9c2599f5874c718a0b27fe4520d639be29202d314",
+      "page": 1,
+      "y": 569.814,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-06-05_R2",
+      "horse": "On the Hill",
+      "target_source_id": "SAR_2026-06-05_R2:onthehill",
+      "later_card": "SAR_2026-07-10",
+      "later_source_sha256": "02c746b6a9f9363d201d1ae9c2599f5874c718a0b27fe4520d639be29202d314",
+      "page": 5,
+      "y": 83.582,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-06-05_R2",
+      "horse": "Kenny Be",
+      "target_source_id": "SAR_2026-06-05_R2:kennybe",
+      "later_card": "SAR_2026-07-10",
+      "later_source_sha256": "02c746b6a9f9363d201d1ae9c2599f5874c718a0b27fe4520d639be29202d314",
+      "page": 5,
+      "y": 254.465,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-06-19_R8",
+      "horse": "Chips and Fish",
+      "target_source_id": "BAQ_2026-06-19_R8:chipsandfish",
+      "later_card": "SAR_2026-07-10",
+      "later_source_sha256": "02c746b6a9f9363d201d1ae9c2599f5874c718a0b27fe4520d639be29202d314",
+      "page": 7,
+      "y": 489.835,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-06-04_R3",
+      "horse": "Chips and Fish",
+      "target_source_id": "SAR_2026-06-04_R3:chipsandfish",
+      "later_card": "SAR_2026-07-10",
+      "later_source_sha256": "02c746b6a9f9363d201d1ae9c2599f5874c718a0b27fe4520d639be29202d314",
+      "page": 7,
+      "y": 498.312,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-06-05_R8",
+      "horse": "Whatchatalkinabout",
+      "target_source_id": "SAR_2026-06-05_R8:whatchatalkinabout",
+      "later_card": "SAR_2026-07-10",
+      "later_source_sha256": "02c746b6a9f9363d201d1ae9c2599f5874c718a0b27fe4520d639be29202d314",
+      "page": 11,
+      "y": 252.603,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-05-23_R5",
+      "horse": "Baby Sassicaia",
+      "target_source_id": "BAQ_2026-05-23_R5:babysassicaia",
+      "later_card": "SAR_2026-07-10",
+      "later_source_sha256": "02c746b6a9f9363d201d1ae9c2599f5874c718a0b27fe4520d639be29202d314",
+      "page": 17,
+      "y": 371.173,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-06-21_R3",
+      "horse": "Miss Lao",
+      "target_source_id": "BAQ_2026-06-21_R3:misslao",
+      "later_card": "SAR_2026-07-10",
+      "later_source_sha256": "02c746b6a9f9363d201d1ae9c2599f5874c718a0b27fe4520d639be29202d314",
+      "page": 18,
+      "y": 83.582,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-05-23_R5",
+      "horse": "Jackie the Joker",
+      "target_source_id": "BAQ_2026-05-23_R5:jackiethejoker",
+      "later_card": "SAR_2026-07-10",
+      "later_source_sha256": "02c746b6a9f9363d201d1ae9c2599f5874c718a0b27fe4520d639be29202d314",
+      "page": 18,
+      "y": 289.909,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-05-23_R5",
+      "horse": "Curlin's Magic",
+      "target_source_id": "BAQ_2026-05-23_R5:curlinsmagic",
+      "later_card": "SAR_2026-07-10",
+      "later_source_sha256": "02c746b6a9f9363d201d1ae9c2599f5874c718a0b27fe4520d639be29202d314",
+      "page": 19,
+      "y": 276.104,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-06-21_R3",
+      "horse": "Whistler's Style",
+      "target_source_id": "BAQ_2026-06-21_R3:whistlersstyle",
+      "later_card": "SAR_2026-07-10",
+      "later_source_sha256": "02c746b6a9f9363d201d1ae9c2599f5874c718a0b27fe4520d639be29202d314",
+      "page": 19,
+      "y": 466.765,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-05-23_R5",
+      "horse": "Whistler's Style",
+      "target_source_id": "BAQ_2026-05-23_R5:whistlersstyle",
+      "later_card": "SAR_2026-07-10",
+      "later_source_sha256": "02c746b6a9f9363d201d1ae9c2599f5874c718a0b27fe4520d639be29202d314",
+      "page": 19,
+      "y": 483.719,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-06-04_R2",
+      "horse": "Carmel Coast",
+      "target_source_id": "SAR_2026-06-04_R2:carmelcoast",
+      "later_card": "SAR_2026-07-10",
+      "later_source_sha256": "02c746b6a9f9363d201d1ae9c2599f5874c718a0b27fe4520d639be29202d314",
+      "page": 20,
+      "y": 397.88,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-06-04_R2",
+      "horse": "Mythical",
+      "target_source_id": "SAR_2026-06-04_R2:mythical",
+      "later_card": "SAR_2026-07-10",
+      "later_source_sha256": "02c746b6a9f9363d201d1ae9c2599f5874c718a0b27fe4520d639be29202d314",
+      "page": 21,
+      "y": 218.628,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-06-04_R2",
+      "horse": "Goodall",
+      "target_source_id": "SAR_2026-06-04_R2:goodall",
+      "later_card": "SAR_2026-07-10",
+      "later_source_sha256": "02c746b6a9f9363d201d1ae9c2599f5874c718a0b27fe4520d639be29202d314",
+      "page": 21,
+      "y": 625.698,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-07-03_R5",
+      "horse": "Next On Stage",
+      "target_source_id": "SAR_2026-07-03_R5:nextonstage",
+      "later_card": "SAR_2026-07-11",
+      "later_source_sha256": "3b86f953693896c194c2eeaf0569c8bfa372068833313ee2cf1c77801ce6987a",
+      "page": 4,
+      "y": 247.424,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-06-05_R5",
+      "horse": "Mischief Lady",
+      "target_source_id": "SAR_2026-06-05_R5:mischieflady",
+      "later_card": "SAR_2026-07-11",
+      "later_source_sha256": "3b86f953693896c194c2eeaf0569c8bfa372068833313ee2cf1c77801ce6987a",
+      "page": 4,
+      "y": 424.246,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-06-25_R7",
+      "horse": "Edistrudis",
+      "target_source_id": "BAQ_2026-06-25_R7:edistrudis",
+      "later_card": "SAR_2026-07-11",
+      "later_source_sha256": "3b86f953693896c194c2eeaf0569c8bfa372068833313ee2cf1c77801ce6987a",
+      "page": 5,
+      "y": 83.582,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-06-05_R8",
+      "horse": "Final Verdict",
+      "target_source_id": "SAR_2026-06-05_R8:finalverdict",
+      "later_card": "SAR_2026-07-11",
+      "later_source_sha256": "3b86f953693896c194c2eeaf0569c8bfa372068833313ee2cf1c77801ce6987a",
+      "page": 6,
+      "y": 517.235,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-06-04_R8",
+      "horse": "In Our Time",
+      "target_source_id": "SAR_2026-06-04_R8:inourtime",
+      "later_card": "SAR_2026-07-11",
+      "later_source_sha256": "3b86f953693896c194c2eeaf0569c8bfa372068833313ee2cf1c77801ce6987a",
+      "page": 11,
+      "y": 580.783,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-06-18_R5",
+      "horse": "Daunt",
+      "target_source_id": "BAQ_2026-06-18_R5:daunt",
+      "later_card": "SAR_2026-07-11",
+      "later_source_sha256": "3b86f953693896c194c2eeaf0569c8bfa372068833313ee2cf1c77801ce6987a",
+      "page": 15,
+      "y": 431.93,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-06-07_R9",
+      "horse": "Forgiving Spirit",
+      "target_source_id": "SAR_2026-06-07_R9:forgivingspirit",
+      "later_card": "SAR_2026-07-11",
+      "later_source_sha256": "3b86f953693896c194c2eeaf0569c8bfa372068833313ee2cf1c77801ce6987a",
+      "page": 19,
+      "y": 416.23,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-06-07_R10",
+      "horse": "Toscano",
+      "target_source_id": "SAR_2026-06-07_R10:toscano",
+      "later_card": "SAR_2026-07-11",
+      "later_source_sha256": "3b86f953693896c194c2eeaf0569c8bfa372068833313ee2cf1c77801ce6987a",
+      "page": 22,
+      "y": 622.59,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-06-20_R7",
+      "horse": "Sunday Boy",
+      "target_source_id": "BAQ_2026-06-20_R7:sundayboy",
+      "later_card": "SAR_2026-07-11",
+      "later_source_sha256": "3b86f953693896c194c2eeaf0569c8bfa372068833313ee2cf1c77801ce6987a",
+      "page": 23,
+      "y": 176.887,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-06-25_R2",
+      "horse": "Moonlit Weekend",
+      "target_source_id": "BAQ_2026-06-25_R2:moonlitweekend",
+      "later_card": "SAR_2026-07-12",
+      "later_source_sha256": "ad6ba7759eb8f72637b25e43e1f00830e06dbc7b60b4ae1cb65390f95181672f",
+      "page": 8,
+      "y": 83.582,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "SAR_2026-06-07_R3",
+      "horse": "Limes Don't Lie",
+      "target_source_id": "SAR_2026-06-07_R3:limesdontlie",
+      "later_card": "SAR_2026-07-12",
+      "later_source_sha256": "ad6ba7759eb8f72637b25e43e1f00830e06dbc7b60b4ae1cb65390f95181672f",
+      "page": 14,
+      "y": 605.568,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    },
+    {
+      "target": "BAQ_2026-05-23_R9",
+      "horse": "Freaky",
+      "target_source_id": "BAQ_2026-05-23_R9:freaky",
+      "later_card": "SAR_2026-07-12",
+      "later_source_sha256": "ad6ba7759eb8f72637b25e43e1f00830e06dbc7b60b4ae1cb65390f95181672f",
+      "page": 20,
+      "y": 274.852,
+      "status": "EVALUATION_CANDIDATE_ONLY_CALL_LABELS_NOT_CERTIFIED"
+    }
+  ]
+}

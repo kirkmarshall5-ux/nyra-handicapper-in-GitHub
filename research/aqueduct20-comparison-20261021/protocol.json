@@ -1,0 +1,24 @@
+{
+  "id": "AQU20-CONTENDER-ML-LAST3-20261021-v1",
+  "classification": "NEWLY_RELEASED_HISTORICAL_CARDS_RETROSPECTIVE_NOT_PROSPECTIVE",
+  "scope": "Exactly twenty AQU-- January-April 2026 PDFs uploaded Oct21; other ten reserved cards remain sealed",
+  "models": [
+    "CURRENT_CONTENDER",
+    "NO_CONTEXT",
+    "MORNING_LINE",
+    "LAST3_BEYER_DIAGNOSTIC",
+    "LAST3_PACE_BEYER_EQUAL"
+  ],
+  "contender": "Use source-pinned production engine; NO_CONTEXT removes only contribution8 with all else fixed; full source PP field frozen before result reconciliation; confirmed final scratches later require paired recalculation of field-relative terms",
+  "morning_line": "Four shortest source-printed morning-line fractional prices among final starters; ascending program numeric+suffix tie break. Ties at selection boundary flagged. Do not use final odds.",
+  "last3": "Exactly the three most recent prior actual race lines before card date, regardless of surface/distance. Require at least three races and all three corresponding certified Beyers; no substituting an older usable figure when a recent figure is missing. Exclude and list fewer-than-three, incomplete-line-alignment and missing-figure runners.",
+  "combined": "50/50 of within-race percentile ranks of last-three average individual pace and last-three average Beyer, per user choice. Source requires three actual individual pace figures, never substitute summary Early/Late. User explicitly chose strict last-three after source limitation disclosed. Unavailable where pace evidence absent.",
+  "combined_missing_pace": "Unscorable, not zero performance. Do not turn fractions, DRF speed-rating/variant or summary Early/Late into individual pace figures.",
+  "ties": "Source program ascending numeric/suffix for reference baselines, flagged; Contender retains source name tie-break.",
+  "grading": "Top-four coverage and 0/1/2/3/4 hit distribution, winner selected, exact 2/3/4 ordered, actual-top-four pair order and full-field predicted-rank error where all four actual finishers are ranked. Show denominator per metric; no fabricated ranks for excluded runners. For fewer than four eligible recent-three horses mark insufficient top-four selections rather than pad with excluded horses.",
+  "populations": "Show all audited race dispositions; matched Contender/no-context full-field cohort; ML all verified races; last-three Beyer eligible-selection cohort and common-race comparisons. Rankable PASS and partial fields distinguished, no betting interpretation.",
+  "selection_safeguard": "Freeze source features and all pre-result predictions before bulk result reconciliation. One January17 R1 public result was observed during source-access check; therefore do not claim totally blind outcomes. No tuning or model promotion.",
+  "result_sources": "Official NYRA results preferred; verified full program/name final fields and top-four, scratches and cancellations. No grading canceled/identity-unresolved races.",
+  "holdout_status": "Twenty authorized cards become used research data; ten others stay unopened. Historical test does not satisfy registered future pre-race prospective protocol.",
+  "production_changed": false
+}

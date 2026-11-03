@@ -1,0 +1,2912 @@
+[
+  {
+    "date": "2026-10-16",
+    "race": 1,
+    "surface": "Dirt",
+    "cohort": "ACTUAL_CONDITIONS_MAIN",
+    "observed_top4": [
+      "1",
+      "6",
+      "7",
+      "3"
+    ],
+    "horses": [
+      {
+        "program": "1",
+        "name": "Rhythm Riot",
+        "printed_style": "E",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_DISTANCE_CATEGORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 1,
+          "finisher": 1,
+          "contender": 1
+        }
+      },
+      {
+        "program": "5",
+        "name": "Chambered",
+        "printed_style": "NA",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_SURFACE_WITHIN_HISTORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 2,
+          "finisher": 2,
+          "contender": 2
+        }
+      },
+      {
+        "program": "3",
+        "name": "Cybertapping",
+        "printed_style": "NA",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_DISTANCE_CATEGORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 3,
+          "finisher": 3,
+          "contender": 3
+        }
+      },
+      {
+        "program": "6",
+        "name": "The Gabe Digger",
+        "printed_style": "E/P",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_DISTANCE_CATEGORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 5,
+          "finisher": 4,
+          "contender": 4
+        }
+      },
+      {
+        "program": "2",
+        "name": "Tutto a Posto",
+        "printed_style": "NA",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_DISTANCE_CATEGORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 4,
+          "finisher": 5,
+          "contender": 5
+        }
+      },
+      {
+        "program": "7",
+        "name": "Diamond Juan",
+        "printed_style": "NA",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_DISTANCE_CATEGORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 6,
+          "finisher": 6,
+          "contender": 6
+        }
+      }
+    ]
+  },
+  {
+    "date": "2026-10-16",
+    "race": 2,
+    "surface": "Dirt",
+    "cohort": "ACTUAL_CONDITIONS_MAIN",
+    "observed_top4": [
+      "6",
+      "3",
+      "7",
+      "1"
+    ],
+    "horses": [
+      {
+        "program": "1",
+        "name": "E Z Speaker",
+        "printed_style": "P",
+        "strict_late_count": 1,
+        "missing_reason": null,
+        "latest_late": 79,
+        "mean3_late": 79,
+        "strict_late_lines": [
+          {
+            "date": "2026-09-18",
+            "furlongs": 8,
+            "surface": "Dirt",
+            "early": 98,
+            "late": 79,
+            "speed": 88
+          }
+        ],
+        "baseline_ranks": {
+          "v44c": 1,
+          "finisher": 1,
+          "contender": 1
+        }
+      },
+      {
+        "program": "3",
+        "name": "D. C.'s Army",
+        "printed_style": "NA",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_DISTANCE_CATEGORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 3,
+          "finisher": 2,
+          "contender": 2
+        }
+      },
+      {
+        "program": "2",
+        "name": "Louden",
+        "printed_style": "E",
+        "strict_late_count": 1,
+        "missing_reason": null,
+        "latest_late": 75,
+        "mean3_late": 75,
+        "strict_late_lines": [
+          {
+            "date": "2026-09-18",
+            "furlongs": 8,
+            "surface": "Dirt",
+            "early": 99,
+            "late": 75,
+            "speed": 85
+          }
+        ],
+        "baseline_ranks": {
+          "v44c": 2,
+          "finisher": 3,
+          "contender": 3
+        }
+      },
+      {
+        "program": "7",
+        "name": "Shahnameh",
+        "printed_style": "NA",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_DISTANCE_CATEGORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 4,
+          "finisher": 4,
+          "contender": 4
+        }
+      }
+    ]
+  },
+  {
+    "date": "2026-10-16",
+    "race": 3,
+    "surface": "Synth",
+    "cohort": "ACTUAL_CONDITIONS_MAIN",
+    "observed_top4": [
+      "8",
+      "4",
+      "5",
+      "2"
+    ],
+    "horses": [
+      {
+        "program": "8",
+        "name": "Putonahappyface",
+        "printed_style": "E/P",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_SURFACE_WITHIN_HISTORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 3,
+          "finisher": 1,
+          "contender": 1
+        }
+      },
+      {
+        "program": "4",
+        "name": "Twirly",
+        "printed_style": "P",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_SURFACE_WITHIN_HISTORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 2,
+          "finisher": 2,
+          "contender": 3
+        }
+      },
+      {
+        "program": "1",
+        "name": "Key Actress",
+        "printed_style": "E",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_SURFACE_WITHIN_HISTORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 1,
+          "finisher": 3,
+          "contender": 2
+        }
+      },
+      {
+        "program": "6",
+        "name": "Nickel Saver",
+        "printed_style": "S",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_SURFACE_WITHIN_HISTORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 4,
+          "finisher": 4,
+          "contender": 4
+        }
+      },
+      {
+        "program": "2",
+        "name": "Mermaid",
+        "printed_style": "E/P",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_SURFACE_WITHIN_HISTORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 6,
+          "finisher": 5,
+          "contender": 5
+        }
+      },
+      {
+        "program": "3",
+        "name": "Luckforyou",
+        "printed_style": "E",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_SURFACE_WITHIN_HISTORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 7,
+          "finisher": 6,
+          "contender": 6
+        }
+      },
+      {
+        "program": "5",
+        "name": "Smokin Hot Blonde",
+        "printed_style": "E",
+        "strict_late_count": 0,
+        "missing_reason": "NO_DISTANCE_WITHIN_HALF_FURLONG",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 8,
+          "finisher": 7,
+          "contender": 8
+        }
+      },
+      {
+        "program": "7",
+        "name": "Queen Sally",
+        "printed_style": "P",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_SURFACE_WITHIN_HISTORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 5,
+          "finisher": 8,
+          "contender": 7
+        }
+      }
+    ]
+  },
+  {
+    "date": "2026-10-16",
+    "race": 4,
+    "surface": "Dirt",
+    "cohort": "ACTUAL_CONDITIONS_MAIN",
+    "observed_top4": [
+      "4",
+      "5",
+      "3",
+      "2"
+    ],
+    "horses": [
+      {
+        "program": "4",
+        "name": "Under the Moon",
+        "printed_style": "P",
+        "strict_late_count": 1,
+        "missing_reason": null,
+        "latest_late": 75,
+        "mean3_late": 75,
+        "strict_late_lines": [
+          {
+            "date": "2026-08-12",
+            "furlongs": 6,
+            "surface": "Dirt",
+            "early": 96,
+            "late": 75,
+            "speed": 79
+          }
+        ],
+        "baseline_ranks": {
+          "v44c": 1,
+          "finisher": 1,
+          "contender": 1
+        }
+      },
+      {
+        "program": "6",
+        "name": "In the Queue",
+        "printed_style": "E",
+        "strict_late_count": 2,
+        "missing_reason": null,
+        "latest_late": 58,
+        "mean3_late": 59,
+        "strict_late_lines": [
+          {
+            "date": "2026-08-12",
+            "furlongs": 6,
+            "surface": "Dirt",
+            "early": 98,
+            "late": 58,
+            "speed": 69
+          },
+          {
+            "date": "2026-07-11",
+            "furlongs": 5.5,
+            "surface": "Dirt",
+            "early": 92,
+            "late": 60,
+            "speed": 60
+          }
+        ],
+        "baseline_ranks": {
+          "v44c": 2,
+          "finisher": 2,
+          "contender": 2
+        }
+      },
+      {
+        "program": "9",
+        "name": "White Star",
+        "printed_style": "E",
+        "strict_late_count": 2,
+        "missing_reason": null,
+        "latest_late": 63,
+        "mean3_late": 70,
+        "strict_late_lines": [
+          {
+            "date": "2026-10-03",
+            "furlongs": 6,
+            "surface": "Dirt",
+            "early": 95,
+            "late": 63,
+            "speed": 66
+          },
+          {
+            "date": "2026-08-30",
+            "furlongs": 5.5,
+            "surface": "Dirt",
+            "early": 86,
+            "late": 77,
+            "speed": 59
+          }
+        ],
+        "baseline_ranks": {
+          "v44c": 3,
+          "finisher": 3,
+          "contender": 3
+        }
+      },
+      {
+        "program": "8",
+        "name": "Lilyluvsyellow",
+        "printed_style": "NA",
+        "strict_late_count": 0,
+        "missing_reason": "NO_DISTANCE_WITHIN_HALF_FURLONG",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 4,
+          "finisher": 4,
+          "contender": 4
+        }
+      },
+      {
+        "program": "3",
+        "name": "Judysdancin Tonite",
+        "printed_style": "NA",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_SURFACE_WITHIN_HISTORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 5,
+          "finisher": 5,
+          "contender": 5
+        }
+      }
+    ]
+  },
+  {
+    "date": "2026-10-16",
+    "race": 5,
+    "surface": "Synth",
+    "cohort": "ACTUAL_CONDITIONS_MAIN",
+    "observed_top4": [
+      "10",
+      "3",
+      "7",
+      "2"
+    ],
+    "horses": [
+      {
+        "program": "3",
+        "name": "Boer War",
+        "printed_style": "E",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_SURFACE_WITHIN_HISTORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 1,
+          "finisher": 1,
+          "contender": 1
+        }
+      },
+      {
+        "program": "4",
+        "name": "Papa Vegas",
+        "printed_style": "S",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_SURFACE_WITHIN_HISTORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 3,
+          "finisher": 2,
+          "contender": 2
+        }
+      },
+      {
+        "program": "1",
+        "name": "Fire Marshal",
+        "printed_style": "E",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_SURFACE_WITHIN_HISTORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 2,
+          "finisher": 3,
+          "contender": 3
+        }
+      },
+      {
+        "program": "6",
+        "name": "Gus's Boy",
+        "printed_style": "P",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_SURFACE_WITHIN_HISTORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 4,
+          "finisher": 4,
+          "contender": 4
+        }
+      },
+      {
+        "program": "10",
+        "name": "Worth Waiting For",
+        "printed_style": "NA",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_SURFACE_WITHIN_HISTORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 5,
+          "finisher": 5,
+          "contender": 5
+        }
+      }
+    ]
+  },
+  {
+    "date": "2026-10-16",
+    "race": 6,
+    "surface": "Synth",
+    "cohort": "ACTUAL_CONDITIONS_MAIN",
+    "observed_top4": [
+      "5",
+      "7",
+      "1",
+      "9"
+    ],
+    "horses": [
+      {
+        "program": "5",
+        "name": "Felixyn",
+        "printed_style": "S",
+        "strict_late_count": 0,
+        "missing_reason": "NO_DISTANCE_WITHIN_HALF_FURLONG",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 2,
+          "finisher": 1,
+          "contender": 1
+        }
+      },
+      {
+        "program": "1",
+        "name": "Ganderella",
+        "printed_style": "E/P",
+        "strict_late_count": 0,
+        "missing_reason": "NO_DISTANCE_WITHIN_HALF_FURLONG",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 1,
+          "finisher": 2,
+          "contender": 2
+        }
+      },
+      {
+        "program": "3",
+        "name": "Jarndyce",
+        "printed_style": "S",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_SURFACE_WITHIN_HISTORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 3,
+          "finisher": 3,
+          "contender": 3
+        }
+      },
+      {
+        "program": "8",
+        "name": "Fifty Shades Free",
+        "printed_style": "NA",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_SURFACE_WITHIN_HISTORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 5,
+          "finisher": 4,
+          "contender": 4
+        }
+      },
+      {
+        "program": "6",
+        "name": "Italianne",
+        "printed_style": "E/P",
+        "strict_late_count": 0,
+        "missing_reason": "NO_DISTANCE_WITHIN_HALF_FURLONG",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 4,
+          "finisher": 5,
+          "contender": 6
+        }
+      },
+      {
+        "program": "7",
+        "name": "Vicked",
+        "printed_style": "NA",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_SURFACE_WITHIN_HISTORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 7,
+          "finisher": 6,
+          "contender": 7
+        }
+      },
+      {
+        "program": "9",
+        "name": "Alesiamae",
+        "printed_style": "NA",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_SURFACE_WITHIN_HISTORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 6,
+          "finisher": 7,
+          "contender": 5
+        }
+      }
+    ]
+  },
+  {
+    "date": "2026-10-16",
+    "race": 7,
+    "surface": "Dirt",
+    "cohort": "ACTUAL_CONDITIONS_MAIN",
+    "observed_top4": [
+      "2",
+      "7",
+      "4",
+      "1"
+    ],
+    "horses": [
+      {
+        "program": "2",
+        "name": "Papa Yo",
+        "printed_style": "E/P",
+        "strict_late_count": 5,
+        "missing_reason": null,
+        "latest_late": 100,
+        "mean3_late": 89,
+        "strict_late_lines": [
+          {
+            "date": "2026-09-05",
+            "furlongs": 9,
+            "surface": "Dirt",
+            "early": 86,
+            "late": 100,
+            "speed": 95
+          },
+          {
+            "date": "2026-08-07",
+            "furlongs": 9,
+            "surface": "Dirt",
+            "early": 91,
+            "late": 91,
+            "speed": 93
+          },
+          {
+            "date": "2026-04-16",
+            "furlongs": 8.5,
+            "surface": "Dirt",
+            "early": 88,
+            "late": 76,
+            "speed": 81
+          },
+          {
+            "date": "2026-03-27",
+            "furlongs": 9,
+            "surface": "Dirt",
+            "early": 66,
+            "late": 100,
+            "speed": 84
+          },
+          {
+            "date": "2026-03-06",
+            "furlongs": 8.5,
+            "surface": "Dirt",
+            "early": 88,
+            "late": 93,
+            "speed": 91
+          }
+        ],
+        "baseline_ranks": {
+          "v44c": 1,
+          "finisher": 1,
+          "contender": 1
+        }
+      },
+      {
+        "program": "1",
+        "name": "Moe Eighty Eight",
+        "printed_style": "S",
+        "strict_late_count": 2,
+        "missing_reason": null,
+        "latest_late": 94,
+        "mean3_late": 97,
+        "strict_late_lines": [
+          {
+            "date": "2026-03-28",
+            "furlongs": 8.5,
+            "surface": "Dirt",
+            "early": 71,
+            "late": 94,
+            "speed": 83
+          },
+          {
+            "date": "2025-11-29",
+            "furlongs": 8,
+            "surface": "Dirt",
+            "early": 85,
+            "late": 100,
+            "speed": 92
+          }
+        ],
+        "baseline_ranks": {
+          "v44c": 4,
+          "finisher": 2,
+          "contender": 2
+        }
+      },
+      {
+        "program": "3",
+        "name": "First Call Bob",
+        "printed_style": "E/P",
+        "strict_late_count": 4,
+        "missing_reason": null,
+        "latest_late": 80,
+        "mean3_late": 85,
+        "strict_late_lines": [
+          {
+            "date": "2026-08-27",
+            "furlongs": 9,
+            "surface": "Dirt",
+            "early": 100,
+            "late": 80,
+            "speed": 92
+          },
+          {
+            "date": "2026-07-31",
+            "furlongs": 9,
+            "surface": "Dirt",
+            "early": 84,
+            "late": 98,
+            "speed": 93
+          },
+          {
+            "date": "2026-04-25",
+            "furlongs": 8,
+            "surface": "Dirt",
+            "early": 90,
+            "late": 77,
+            "speed": 81
+          },
+          {
+            "date": "2026-03-14",
+            "furlongs": 8,
+            "surface": "Dirt",
+            "early": 87,
+            "late": 86,
+            "speed": 85
+          }
+        ],
+        "baseline_ranks": {
+          "v44c": 5,
+          "finisher": 3,
+          "contender": 3
+        }
+      },
+      {
+        "program": "7",
+        "name": "Filoso",
+        "printed_style": "P",
+        "strict_late_count": 3,
+        "missing_reason": null,
+        "latest_late": 94,
+        "mean3_late": 91.33333333333333,
+        "strict_late_lines": [
+          {
+            "date": "2026-08-22",
+            "furlongs": 8,
+            "surface": "Dirt",
+            "early": 80,
+            "late": 94,
+            "speed": 86
+          },
+          {
+            "date": "2026-07-18",
+            "furlongs": 8.318181818181818,
+            "surface": "Dirt",
+            "early": 90,
+            "late": 90,
+            "speed": 90
+          },
+          {
+            "date": "2025-12-06",
+            "furlongs": 8,
+            "surface": "Dirt",
+            "early": 77,
+            "late": 90,
+            "speed": 81
+          }
+        ],
+        "baseline_ranks": {
+          "v44c": 6,
+          "finisher": 4,
+          "contender": 4
+        }
+      },
+      {
+        "program": "6",
+        "name": "Three B's",
+        "printed_style": "P",
+        "strict_late_count": 2,
+        "missing_reason": null,
+        "latest_late": 89,
+        "mean3_late": 94.5,
+        "strict_late_lines": [
+          {
+            "date": "2026-05-16",
+            "furlongs": 8,
+            "surface": "Dirt",
+            "early": 91,
+            "late": 89,
+            "speed": 89
+          },
+          {
+            "date": "2026-04-02",
+            "furlongs": 8,
+            "surface": "Dirt",
+            "early": 82,
+            "late": 100,
+            "speed": 90
+          }
+        ],
+        "baseline_ranks": {
+          "v44c": 2,
+          "finisher": 5,
+          "contender": 5
+        }
+      },
+      {
+        "program": "5",
+        "name": "Willintoriskitall",
+        "printed_style": "E",
+        "strict_late_count": 3,
+        "missing_reason": null,
+        "latest_late": 87,
+        "mean3_late": 80.33333333333333,
+        "strict_late_lines": [
+          {
+            "date": "2026-09-19",
+            "furlongs": 8,
+            "surface": "Dirt",
+            "early": 73,
+            "late": 87,
+            "speed": 77
+          },
+          {
+            "date": "2026-06-28",
+            "furlongs": 9,
+            "surface": "Dirt",
+            "early": 96,
+            "late": 72,
+            "speed": 85
+          },
+          {
+            "date": "2026-04-04",
+            "furlongs": 8,
+            "surface": "Dirt",
+            "early": 89,
+            "late": 82,
+            "speed": 84
+          }
+        ],
+        "baseline_ranks": {
+          "v44c": 3,
+          "finisher": 6,
+          "contender": 6
+        }
+      },
+      {
+        "program": "4",
+        "name": "Cocktailsnkringle",
+        "printed_style": "E/P",
+        "strict_late_count": 4,
+        "missing_reason": null,
+        "latest_late": 85,
+        "mean3_late": 82.66666666666667,
+        "strict_late_lines": [
+          {
+            "date": "2026-09-19",
+            "furlongs": 8,
+            "surface": "Dirt",
+            "early": 65,
+            "late": 85,
+            "speed": 71
+          },
+          {
+            "date": "2026-08-22",
+            "furlongs": 8,
+            "surface": "Dirt",
+            "early": 91,
+            "late": 80,
+            "speed": 84
+          },
+          {
+            "date": "2026-06-04",
+            "furlongs": 8,
+            "surface": "Dirt",
+            "early": 102,
+            "late": 83,
+            "speed": 92
+          },
+          {
+            "date": "2026-05-01",
+            "furlongs": 8,
+            "surface": "Dirt",
+            "early": 92,
+            "late": 86,
+            "speed": 88
+          }
+        ],
+        "baseline_ranks": {
+          "v44c": 7,
+          "finisher": 7,
+          "contender": 7
+        }
+      }
+    ]
+  },
+  {
+    "date": "2026-10-16",
+    "race": 8,
+    "surface": "Synth",
+    "cohort": "ACTUAL_CONDITIONS_MAIN",
+    "observed_top4": [
+      "2",
+      "1",
+      "6",
+      "8"
+    ],
+    "horses": [
+      {
+        "program": "5",
+        "name": "Bosun",
+        "printed_style": "P",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_SURFACE_WITHIN_HISTORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 2,
+          "finisher": 1,
+          "contender": 2
+        }
+      },
+      {
+        "program": "9",
+        "name": "Heart Headed",
+        "printed_style": "P",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_SURFACE_WITHIN_HISTORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 3,
+          "finisher": 2,
+          "contender": 1
+        }
+      },
+      {
+        "program": "1",
+        "name": "Final Verdict",
+        "printed_style": "E/P",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_SURFACE_WITHIN_HISTORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 7,
+          "finisher": 3,
+          "contender": 6
+        }
+      },
+      {
+        "program": "6",
+        "name": "No Evidence",
+        "printed_style": "P",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_SURFACE_WITHIN_HISTORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 1,
+          "finisher": 4,
+          "contender": 3
+        }
+      },
+      {
+        "program": "2",
+        "name": "Attfield",
+        "printed_style": "P",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_DISTANCE_CATEGORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 8,
+          "finisher": 5,
+          "contender": 7
+        }
+      },
+      {
+        "program": "4",
+        "name": "War Stride",
+        "printed_style": "E/P",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_SURFACE_WITHIN_HISTORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 5,
+          "finisher": 6,
+          "contender": 5
+        }
+      },
+      {
+        "program": "8",
+        "name": "Amoudi Bay",
+        "printed_style": "E",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_SURFACE_WITHIN_HISTORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 9,
+          "finisher": 7,
+          "contender": 4
+        }
+      },
+      {
+        "program": "10",
+        "name": "Candytown",
+        "printed_style": "P",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_SURFACE_WITHIN_HISTORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 6,
+          "finisher": 8,
+          "contender": 8
+        }
+      },
+      {
+        "program": "7",
+        "name": "Mischievous Angel",
+        "printed_style": "P",
+        "strict_late_count": 1,
+        "missing_reason": null,
+        "latest_late": 52,
+        "mean3_late": 52,
+        "strict_late_lines": [
+          {
+            "date": "2026-03-07",
+            "furlongs": 6,
+            "surface": "Synth",
+            "early": 87,
+            "late": 52,
+            "speed": 52
+          }
+        ],
+        "baseline_ranks": {
+          "v44c": 4,
+          "finisher": 9,
+          "contender": 9
+        }
+      }
+    ]
+  },
+  {
+    "date": "2026-10-16",
+    "race": 9,
+    "surface": "Synth",
+    "cohort": "ACTUAL_CONDITIONS_MAIN",
+    "observed_top4": [
+      "10",
+      "7",
+      "12",
+      "3"
+    ],
+    "horses": [
+      {
+        "program": "10",
+        "name": "Mom's On Break",
+        "printed_style": "S",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_SURFACE_WITHIN_HISTORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 1,
+          "finisher": 1,
+          "contender": 1
+        }
+      },
+      {
+        "program": "4",
+        "name": "Twice the Fun",
+        "printed_style": "NA",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_SURFACE_WITHIN_HISTORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 2,
+          "finisher": 2,
+          "contender": 2
+        }
+      },
+      {
+        "program": "9",
+        "name": "Convincing",
+        "printed_style": "NA",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_SURFACE_WITHIN_HISTORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 5,
+          "finisher": 3,
+          "contender": 3
+        }
+      },
+      {
+        "program": "7",
+        "name": "Naughty Nancy",
+        "printed_style": "NA",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_SURFACE_WITHIN_HISTORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 4,
+          "finisher": 4,
+          "contender": 4
+        }
+      },
+      {
+        "program": "12",
+        "name": "Seismic Activity",
+        "printed_style": "NA",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_SURFACE_WITHIN_HISTORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 3,
+          "finisher": 5,
+          "contender": 5
+        }
+      },
+      {
+        "program": "8",
+        "name": "Mc Cruiser",
+        "printed_style": "NA",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_SURFACE_WITHIN_HISTORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 6,
+          "finisher": 6,
+          "contender": 6
+        }
+      },
+      {
+        "program": "6",
+        "name": "Nater Tot",
+        "printed_style": "NA",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_SURFACE_WITHIN_HISTORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 7,
+          "finisher": 7,
+          "contender": 7
+        }
+      },
+      {
+        "program": "11",
+        "name": "The Paper Lady",
+        "printed_style": "NA",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_SURFACE_WITHIN_HISTORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 9,
+          "finisher": 8,
+          "contender": 8
+        }
+      },
+      {
+        "program": "1",
+        "name": "Coursiere",
+        "printed_style": "S",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_SURFACE_WITHIN_HISTORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 8,
+          "finisher": 9,
+          "contender": 9
+        }
+      },
+      {
+        "program": "3",
+        "name": "Baby Dancer",
+        "printed_style": "S",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_SURFACE_WITHIN_HISTORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 10,
+          "finisher": 10,
+          "contender": 10
+        }
+      },
+      {
+        "program": "2",
+        "name": "Cara's Chrome",
+        "printed_style": "NA",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_SURFACE_WITHIN_HISTORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 11,
+          "finisher": 11,
+          "contender": 11
+        }
+      }
+    ]
+  },
+  {
+    "date": "2026-10-21",
+    "race": 1,
+    "surface": "Dirt",
+    "cohort": "ACTUAL_CONDITIONS_MAIN",
+    "observed_top4": [
+      "1",
+      "6",
+      "5",
+      "4"
+    ],
+    "horses": [
+      {
+        "program": "1",
+        "name": "Midnight Rocket",
+        "printed_style": "NA",
+        "strict_late_count": 0,
+        "missing_reason": "NO_DISTANCE_WITHIN_HALF_FURLONG",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 2,
+          "finisher": 1,
+          "contender": 1
+        }
+      },
+      {
+        "program": "6",
+        "name": "Show Me the Munny",
+        "printed_style": "E/P",
+        "strict_late_count": 2,
+        "missing_reason": null,
+        "latest_late": 52,
+        "mean3_late": 54,
+        "strict_late_lines": [
+          {
+            "date": "2025-11-21",
+            "furlongs": 6.5,
+            "surface": "Dirt",
+            "early": 91,
+            "late": 52,
+            "speed": 55
+          },
+          {
+            "date": "2025-11-01",
+            "furlongs": 7,
+            "surface": "Dirt",
+            "early": 94,
+            "late": 56,
+            "speed": 63
+          }
+        ],
+        "baseline_ranks": {
+          "v44c": 3,
+          "finisher": 2,
+          "contender": 2
+        }
+      },
+      {
+        "program": "3",
+        "name": "Big Time Story",
+        "printed_style": "E/P",
+        "strict_late_count": 0,
+        "missing_reason": "NO_DISTANCE_WITHIN_HALF_FURLONG",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 1,
+          "finisher": 3,
+          "contender": 3
+        }
+      },
+      {
+        "program": "4",
+        "name": "Blueberryhillkeke",
+        "printed_style": "NA",
+        "strict_late_count": 0,
+        "missing_reason": "NO_DISTANCE_WITHIN_HALF_FURLONG",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 5,
+          "finisher": 4,
+          "contender": 4
+        }
+      },
+      {
+        "program": "2",
+        "name": "Klimt Master",
+        "printed_style": "S",
+        "strict_late_count": 0,
+        "missing_reason": "NO_DISTANCE_WITHIN_HALF_FURLONG",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 4,
+          "finisher": 5,
+          "contender": 5
+        }
+      },
+      {
+        "program": "5",
+        "name": "Ace in Hand",
+        "printed_style": "NA",
+        "strict_late_count": 1,
+        "missing_reason": null,
+        "latest_late": 56,
+        "mean3_late": 56,
+        "strict_late_lines": [
+          {
+            "date": "2026-09-03",
+            "furlongs": 6.5,
+            "surface": "Dirt",
+            "early": 89,
+            "late": 56,
+            "speed": 51
+          }
+        ],
+        "baseline_ranks": {
+          "v44c": 6,
+          "finisher": 6,
+          "contender": 6
+        }
+      }
+    ]
+  },
+  {
+    "date": "2026-10-21",
+    "race": 2,
+    "surface": "Dirt",
+    "cohort": "FIELD_UNCERTAIN_DIAGNOSTIC",
+    "observed_top4": [
+      "2",
+      "6",
+      "7",
+      "5"
+    ],
+    "horses": [
+      {
+        "program": "5",
+        "name": "Tough Street",
+        "printed_style": "E",
+        "strict_late_count": 4,
+        "missing_reason": null,
+        "latest_late": 94,
+        "mean3_late": 78,
+        "strict_late_lines": [
+          {
+            "date": "2026-09-03",
+            "furlongs": 8,
+            "surface": "Dirt",
+            "early": 79,
+            "late": 94,
+            "speed": 86
+          },
+          {
+            "date": "2026-08-23",
+            "furlongs": 8,
+            "surface": "Dirt",
+            "early": 78,
+            "late": 78,
+            "speed": 75
+          },
+          {
+            "date": "2026-07-09",
+            "furlongs": 8,
+            "surface": "Dirt",
+            "early": 101,
+            "late": 62,
+            "speed": 79
+          },
+          {
+            "date": "2026-06-14",
+            "furlongs": 8,
+            "surface": "Dirt",
+            "early": 88,
+            "late": 74,
+            "speed": 79
+          }
+        ],
+        "baseline_ranks": {
+          "v44c": 1,
+          "finisher": 1,
+          "contender": 1
+        }
+      },
+      {
+        "program": "2",
+        "name": "Pens Street",
+        "printed_style": "S",
+        "strict_late_count": 3,
+        "missing_reason": null,
+        "latest_late": 96,
+        "mean3_late": 90.66666666666667,
+        "strict_late_lines": [
+          {
+            "date": "2026-09-21",
+            "furlongs": 8,
+            "surface": "Dirt",
+            "early": 56,
+            "late": 96,
+            "speed": 72
+          },
+          {
+            "date": "2026-08-23",
+            "furlongs": 8,
+            "surface": "Dirt",
+            "early": 61,
+            "late": 84,
+            "speed": 68
+          },
+          {
+            "date": "2026-07-05",
+            "furlongs": 8,
+            "surface": "Dirt",
+            "early": 76,
+            "late": 92,
+            "speed": 82
+          }
+        ],
+        "baseline_ranks": {
+          "v44c": 2,
+          "finisher": 2,
+          "contender": 2
+        }
+      },
+      {
+        "program": "6",
+        "name": "That's Funny",
+        "printed_style": "P",
+        "strict_late_count": 3,
+        "missing_reason": null,
+        "latest_late": 87,
+        "mean3_late": 82.66666666666667,
+        "strict_late_lines": [
+          {
+            "date": "2026-09-21",
+            "furlongs": 8,
+            "surface": "Dirt",
+            "early": 66,
+            "late": 87,
+            "speed": 73
+          },
+          {
+            "date": "2026-08-23",
+            "furlongs": 8,
+            "surface": "Dirt",
+            "early": 75,
+            "late": 75,
+            "speed": 71
+          },
+          {
+            "date": "2026-07-22",
+            "furlongs": 8,
+            "surface": "Dirt",
+            "early": 68,
+            "late": 86,
+            "speed": 74
+          }
+        ],
+        "baseline_ranks": {
+          "v44c": 4,
+          "finisher": 3,
+          "contender": 3
+        }
+      },
+      {
+        "program": "7",
+        "name": "Summer Flower",
+        "printed_style": "P",
+        "strict_late_count": 2,
+        "missing_reason": null,
+        "latest_late": 80,
+        "mean3_late": 88,
+        "strict_late_lines": [
+          {
+            "date": "2026-08-23",
+            "furlongs": 8,
+            "surface": "Dirt",
+            "early": 65,
+            "late": 80,
+            "speed": 68
+          },
+          {
+            "date": "2026-05-31",
+            "furlongs": 8.318181818181818,
+            "surface": "Dirt",
+            "early": 62,
+            "late": 96,
+            "speed": 78
+          }
+        ],
+        "baseline_ranks": {
+          "v44c": 3,
+          "finisher": 4,
+          "contender": 4
+        }
+      },
+      {
+        "program": "4",
+        "name": "Santagata",
+        "printed_style": "E",
+        "strict_late_count": 2,
+        "missing_reason": null,
+        "latest_late": 79,
+        "mean3_late": 82,
+        "strict_late_lines": [
+          {
+            "date": "2026-06-21",
+            "furlongs": 8,
+            "surface": "Dirt",
+            "early": 76,
+            "late": 79,
+            "speed": 75
+          },
+          {
+            "date": "2026-05-24",
+            "furlongs": 8,
+            "surface": "Dirt",
+            "early": 66,
+            "late": 85,
+            "speed": 72
+          }
+        ],
+        "baseline_ranks": {
+          "v44c": 5,
+          "finisher": 5,
+          "contender": 5
+        }
+      },
+      {
+        "program": "3",
+        "name": "Pistol Liz Ablazen",
+        "printed_style": "S",
+        "strict_late_count": 5,
+        "missing_reason": null,
+        "latest_late": 51,
+        "mean3_late": 73,
+        "strict_late_lines": [
+          {
+            "date": "2026-07-05",
+            "furlongs": 8,
+            "surface": "Dirt",
+            "early": 56,
+            "late": 51,
+            "speed": 44
+          },
+          {
+            "date": "2026-05-25",
+            "furlongs": 8,
+            "surface": "Dirt",
+            "early": 65,
+            "late": 89,
+            "speed": 74
+          },
+          {
+            "date": "2026-05-10",
+            "furlongs": 8,
+            "surface": "Dirt",
+            "early": 67,
+            "late": 79,
+            "speed": 68
+          },
+          {
+            "date": "2026-03-28",
+            "furlongs": 8,
+            "surface": "Dirt",
+            "early": 77,
+            "late": 89,
+            "speed": 81
+          },
+          {
+            "date": "2026-02-27",
+            "furlongs": 8,
+            "surface": "Dirt",
+            "early": 91,
+            "late": 84,
+            "speed": 87
+          }
+        ],
+        "baseline_ranks": {
+          "v44c": 6,
+          "finisher": 6,
+          "contender": 6
+        }
+      }
+    ]
+  },
+  {
+    "date": "2026-10-21",
+    "race": 3,
+    "surface": "Dirt",
+    "cohort": "ACTUAL_CONDITIONS_MAIN",
+    "observed_top4": [
+      "7",
+      "8",
+      "4",
+      "1"
+    ],
+    "horses": [
+      {
+        "program": "5",
+        "name": "Madeline's Agenda",
+        "printed_style": "NA",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_SURFACE_WITHIN_HISTORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 2,
+          "finisher": 1,
+          "contender": 2
+        }
+      },
+      {
+        "program": "4",
+        "name": "Immaculate Moon",
+        "printed_style": "P",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_DISTANCE_CATEGORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 1,
+          "finisher": 2,
+          "contender": 1
+        }
+      },
+      {
+        "program": "7",
+        "name": "Bombs Away",
+        "printed_style": "E",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_DISTANCE_CATEGORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 3,
+          "finisher": 3,
+          "contender": 3
+        }
+      },
+      {
+        "program": "2",
+        "name": "Mia Sophia",
+        "printed_style": "S",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_DISTANCE_CATEGORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 6,
+          "finisher": 4,
+          "contender": 6
+        }
+      },
+      {
+        "program": "8",
+        "name": "Luciana's Honor",
+        "printed_style": "E",
+        "strict_late_count": 3,
+        "missing_reason": null,
+        "latest_late": 76,
+        "mean3_late": 58.666666666666664,
+        "strict_late_lines": [
+          {
+            "date": "2026-01-03",
+            "furlongs": 8,
+            "surface": "Dirt",
+            "early": 71,
+            "late": 76,
+            "speed": 70
+          },
+          {
+            "date": "2025-12-05",
+            "furlongs": 8,
+            "surface": "Dirt",
+            "early": 63,
+            "late": 55,
+            "speed": 52
+          },
+          {
+            "date": "2025-11-15",
+            "furlongs": 8,
+            "surface": "Dirt",
+            "early": 74,
+            "late": 45,
+            "speed": 52
+          }
+        ],
+        "baseline_ranks": {
+          "v44c": 5,
+          "finisher": 5,
+          "contender": 4
+        }
+      },
+      {
+        "program": "1",
+        "name": "Miss Snaffles",
+        "printed_style": "NA",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_SURFACE_WITHIN_HISTORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 4,
+          "finisher": 6,
+          "contender": 5
+        }
+      }
+    ]
+  },
+  {
+    "date": "2026-10-21",
+    "race": 4,
+    "surface": "Turf",
+    "cohort": "ACTUAL_CONDITIONS_MAIN",
+    "observed_top4": [
+      "2",
+      "4",
+      "6",
+      "1"
+    ],
+    "horses": [
+      {
+        "program": "5",
+        "name": "Sweet Anniversary",
+        "printed_style": "E/P",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_DISTANCE_CATEGORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 2,
+          "finisher": 1,
+          "contender": 1
+        }
+      },
+      {
+        "program": "2",
+        "name": "Maria Callas",
+        "printed_style": "P",
+        "strict_late_count": 1,
+        "missing_reason": null,
+        "latest_late": 88,
+        "mean3_late": 88,
+        "strict_late_lines": [
+          {
+            "date": "2026-09-18",
+            "furlongs": 7,
+            "surface": "Turf",
+            "early": 89,
+            "late": 88,
+            "speed": 86
+          }
+        ],
+        "baseline_ranks": {
+          "v44c": 1,
+          "finisher": 2,
+          "contender": 2
+        }
+      },
+      {
+        "program": "1",
+        "name": "Disco Star",
+        "printed_style": "S",
+        "strict_late_count": 0,
+        "missing_reason": "NO_DISTANCE_WITHIN_HALF_FURLONG",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 3,
+          "finisher": 3,
+          "contender": 4
+        }
+      },
+      {
+        "program": "6",
+        "name": "All of It",
+        "printed_style": "P",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_DISTANCE_CATEGORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 4,
+          "finisher": 4,
+          "contender": 3
+        }
+      },
+      {
+        "program": "3",
+        "name": "Hello Beauty",
+        "printed_style": "E",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_DISTANCE_CATEGORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 6,
+          "finisher": 5,
+          "contender": 6
+        }
+      },
+      {
+        "program": "4",
+        "name": "Brokealltherules",
+        "printed_style": "E/P",
+        "strict_late_count": 0,
+        "missing_reason": "NO_DISTANCE_WITHIN_HALF_FURLONG",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 5,
+          "finisher": 6,
+          "contender": 5
+        }
+      }
+    ]
+  },
+  {
+    "date": "2026-10-21",
+    "race": 5,
+    "surface": "Turf",
+    "cohort": "ACTUAL_CONDITIONS_MAIN",
+    "observed_top4": [
+      "4",
+      "5",
+      "6",
+      "3"
+    ],
+    "horses": [
+      {
+        "program": "5",
+        "name": "Joker On Fire",
+        "printed_style": "E/P",
+        "strict_late_count": 5,
+        "missing_reason": null,
+        "latest_late": 82,
+        "mean3_late": 84,
+        "strict_late_lines": [
+          {
+            "date": "2026-08-28",
+            "furlongs": 5.5,
+            "surface": "Turf",
+            "early": 93,
+            "late": 82,
+            "speed": 84
+          },
+          {
+            "date": "2026-08-01",
+            "furlongs": 5.5,
+            "surface": "Turf",
+            "early": 91,
+            "late": 86,
+            "speed": 88
+          },
+          {
+            "date": "2026-07-09",
+            "furlongs": 5.5,
+            "surface": "Turf",
+            "early": 96,
+            "late": 84,
+            "speed": 89
+          },
+          {
+            "date": "2026-06-07",
+            "furlongs": 5.5,
+            "surface": "Turf",
+            "early": 99,
+            "late": 76,
+            "speed": 84
+          },
+          {
+            "date": "2026-05-16",
+            "furlongs": 6,
+            "surface": "Turf",
+            "early": 93,
+            "late": 75,
+            "speed": 82
+          }
+        ],
+        "baseline_ranks": {
+          "v44c": 3,
+          "finisher": 1,
+          "contender": 1
+        }
+      },
+      {
+        "program": "3",
+        "name": "B Provocateur",
+        "printed_style": "E",
+        "strict_late_count": 1,
+        "missing_reason": null,
+        "latest_late": 74,
+        "mean3_late": 74,
+        "strict_late_lines": [
+          {
+            "date": "2026-06-07",
+            "furlongs": 5.5,
+            "surface": "Turf",
+            "early": 100,
+            "late": 74,
+            "speed": 82
+          }
+        ],
+        "baseline_ranks": {
+          "v44c": 4,
+          "finisher": 2,
+          "contender": 2
+        }
+      },
+      {
+        "program": "2",
+        "name": "Royal Browne",
+        "printed_style": "P",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_DISTANCE_CATEGORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 2,
+          "finisher": 3,
+          "contender": 3
+        }
+      },
+      {
+        "program": "6",
+        "name": "Rhyton",
+        "printed_style": "P",
+        "strict_late_count": 5,
+        "missing_reason": null,
+        "latest_late": 85,
+        "mean3_late": 84.66666666666667,
+        "strict_late_lines": [
+          {
+            "date": "2026-08-28",
+            "furlongs": 5.5,
+            "surface": "Turf",
+            "early": 87,
+            "late": 85,
+            "speed": 80
+          },
+          {
+            "date": "2026-08-01",
+            "furlongs": 5.5,
+            "surface": "Turf",
+            "early": 92,
+            "late": 83,
+            "speed": 83
+          },
+          {
+            "date": "2026-07-04",
+            "furlongs": 5.5,
+            "surface": "Turf",
+            "early": 87,
+            "late": 86,
+            "speed": 82
+          },
+          {
+            "date": "2026-06-07",
+            "furlongs": 5.5,
+            "surface": "Turf",
+            "early": 87,
+            "late": 80,
+            "speed": 76
+          },
+          {
+            "date": "2025-11-12",
+            "furlongs": 6,
+            "surface": "Turf",
+            "early": 91,
+            "late": 79,
+            "speed": 75
+          }
+        ],
+        "baseline_ranks": {
+          "v44c": 1,
+          "finisher": 4,
+          "contender": 4
+        }
+      },
+      {
+        "program": "1",
+        "name": "Dancing Bear",
+        "printed_style": "E/P",
+        "strict_late_count": 4,
+        "missing_reason": null,
+        "latest_late": 77,
+        "mean3_late": 74.33333333333333,
+        "strict_late_lines": [
+          {
+            "date": "2026-09-05",
+            "furlongs": 5.5,
+            "surface": "Turf",
+            "early": 93,
+            "late": 77,
+            "speed": 75
+          },
+          {
+            "date": "2026-08-09",
+            "furlongs": 5.5,
+            "surface": "Turf",
+            "early": 97,
+            "late": 74,
+            "speed": 84
+          },
+          {
+            "date": "2026-06-28",
+            "furlongs": 5.5,
+            "surface": "Turf",
+            "early": 89,
+            "late": 72,
+            "speed": 70
+          },
+          {
+            "date": "2026-06-07",
+            "furlongs": 5.5,
+            "surface": "Turf",
+            "early": 94,
+            "late": 71,
+            "speed": 69
+          }
+        ],
+        "baseline_ranks": {
+          "v44c": 6,
+          "finisher": 5,
+          "contender": 5
+        }
+      },
+      {
+        "program": "4",
+        "name": "Sir Walta",
+        "printed_style": "E/P",
+        "strict_late_count": 3,
+        "missing_reason": null,
+        "latest_late": 79,
+        "mean3_late": 77.33333333333333,
+        "strict_late_lines": [
+          {
+            "date": "2026-09-25",
+            "furlongs": 6,
+            "surface": "Turf",
+            "early": 87,
+            "late": 79,
+            "speed": 77
+          },
+          {
+            "date": "2026-08-06",
+            "furlongs": 5.5,
+            "surface": "Turf",
+            "early": 92,
+            "late": 80,
+            "speed": 75
+          },
+          {
+            "date": "2025-11-14",
+            "furlongs": 6,
+            "surface": "Turf",
+            "early": 97,
+            "late": 73,
+            "speed": 80
+          }
+        ],
+        "baseline_ranks": {
+          "v44c": 5,
+          "finisher": 6,
+          "contender": 7
+        }
+      },
+      {
+        "program": "7",
+        "name": "Racerx",
+        "printed_style": "P",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_SURFACE_WITHIN_HISTORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 7,
+          "finisher": 7,
+          "contender": 6
+        }
+      }
+    ]
+  },
+  {
+    "date": "2026-10-21",
+    "race": 6,
+    "surface": "Dirt",
+    "cohort": "ACTUAL_CONDITIONS_MAIN",
+    "observed_top4": [
+      "3",
+      "6",
+      "2",
+      "1"
+    ],
+    "horses": [
+      {
+        "program": "3",
+        "name": "I'm Worthy",
+        "printed_style": "E/P",
+        "strict_late_count": 5,
+        "missing_reason": null,
+        "latest_late": 83,
+        "mean3_late": 89.66666666666667,
+        "strict_late_lines": [
+          {
+            "date": "2026-07-31",
+            "furlongs": 9,
+            "surface": "Dirt",
+            "early": 84,
+            "late": 83,
+            "speed": 84
+          },
+          {
+            "date": "2026-05-02",
+            "furlongs": 8.5,
+            "surface": "Dirt",
+            "early": 72,
+            "late": 84,
+            "speed": 77
+          },
+          {
+            "date": "2026-04-12",
+            "furlongs": 8.5,
+            "surface": "Dirt",
+            "early": 77,
+            "late": 102,
+            "speed": 90
+          },
+          {
+            "date": "2026-03-07",
+            "furlongs": 8.5,
+            "surface": "Dirt",
+            "early": 81,
+            "late": 74,
+            "speed": 77
+          },
+          {
+            "date": "2026-02-06",
+            "furlongs": 8.5,
+            "surface": "Dirt",
+            "early": 84,
+            "late": 69,
+            "speed": 75
+          }
+        ],
+        "baseline_ranks": {
+          "v44c": 1,
+          "finisher": 1,
+          "contender": 1
+        }
+      },
+      {
+        "program": "5",
+        "name": "Magnum's Macrobrst",
+        "printed_style": "E/P",
+        "strict_late_count": 2,
+        "missing_reason": null,
+        "latest_late": 87,
+        "mean3_late": 80,
+        "strict_late_lines": [
+          {
+            "date": "2026-07-17",
+            "furlongs": 9,
+            "surface": "Dirt",
+            "early": 75,
+            "late": 87,
+            "speed": 82
+          },
+          {
+            "date": "2026-06-13",
+            "furlongs": 9,
+            "surface": "Dirt",
+            "early": 67,
+            "late": 73,
+            "speed": 71
+          }
+        ],
+        "baseline_ranks": {
+          "v44c": 3,
+          "finisher": 2,
+          "contender": 2
+        }
+      },
+      {
+        "program": "7",
+        "name": "Good Bali",
+        "printed_style": "NA",
+        "strict_late_count": 2,
+        "missing_reason": null,
+        "latest_late": 65,
+        "mean3_late": 61.5,
+        "strict_late_lines": [
+          {
+            "date": "2026-08-14",
+            "furlongs": 9,
+            "surface": "Dirt",
+            "early": 80,
+            "late": 65,
+            "speed": 73
+          },
+          {
+            "date": "2026-07-31",
+            "furlongs": 9,
+            "surface": "Dirt",
+            "early": 77,
+            "late": 58,
+            "speed": 67
+          }
+        ],
+        "baseline_ranks": {
+          "v44c": 2,
+          "finisher": 3,
+          "contender": 3
+        }
+      },
+      {
+        "program": "6",
+        "name": "Takahama",
+        "printed_style": "P",
+        "strict_late_count": 0,
+        "missing_reason": "NO_DISTANCE_WITHIN_HALF_FURLONG",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 4,
+          "finisher": 4,
+          "contender": 6
+        }
+      },
+      {
+        "program": "1",
+        "name": "Corvus",
+        "printed_style": "E",
+        "strict_late_count": 0,
+        "missing_reason": "NO_DISTANCE_WITHIN_HALF_FURLONG",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 5,
+          "finisher": 5,
+          "contender": 4
+        }
+      },
+      {
+        "program": "2",
+        "name": "Supreme Good",
+        "printed_style": "P",
+        "strict_late_count": 0,
+        "missing_reason": "NO_DISTANCE_WITHIN_HALF_FURLONG",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 6,
+          "finisher": 6,
+          "contender": 5
+        }
+      },
+      {
+        "program": "4",
+        "name": "Paul's Recovery",
+        "printed_style": "E",
+        "strict_late_count": 4,
+        "missing_reason": null,
+        "latest_late": 26,
+        "mean3_late": 69,
+        "strict_late_lines": [
+          {
+            "date": "2026-10-08",
+            "furlongs": 8.5,
+            "surface": "Dirt",
+            "early": 71,
+            "late": 26,
+            "speed": 43
+          },
+          {
+            "date": "2026-06-14",
+            "furlongs": 8.5,
+            "surface": "Dirt",
+            "early": 70,
+            "late": 84,
+            "speed": 76
+          },
+          {
+            "date": "2026-05-16",
+            "furlongs": 8.5,
+            "surface": "Dirt",
+            "early": 71,
+            "late": 97,
+            "speed": 84
+          },
+          {
+            "date": "2026-05-01",
+            "furlongs": 8.5,
+            "surface": "Dirt",
+            "early": 70,
+            "late": 81,
+            "speed": 74
+          }
+        ],
+        "baseline_ranks": {
+          "v44c": 7,
+          "finisher": 7,
+          "contender": 7
+        }
+      }
+    ]
+  },
+  {
+    "date": "2026-10-21",
+    "race": 7,
+    "surface": "Turf",
+    "cohort": "ACTUAL_CONDITIONS_MAIN",
+    "observed_top4": [
+      "7",
+      "2",
+      "8",
+      "1"
+    ],
+    "horses": [
+      {
+        "program": "8",
+        "name": "Aperitif",
+        "printed_style": "E/P",
+        "strict_late_count": 5,
+        "missing_reason": null,
+        "latest_late": 84,
+        "mean3_late": 82.33333333333333,
+        "strict_late_lines": [
+          {
+            "date": "2026-10-07",
+            "furlongs": 6.5,
+            "surface": "Turf",
+            "early": 95,
+            "late": 84,
+            "speed": 87
+          },
+          {
+            "date": "2026-08-21",
+            "furlongs": 5.5,
+            "surface": "Turf",
+            "early": 90,
+            "late": 83,
+            "speed": 74
+          },
+          {
+            "date": "2026-06-21",
+            "furlongs": 6,
+            "surface": "Turf",
+            "early": 85,
+            "late": 80,
+            "speed": 80
+          },
+          {
+            "date": "2026-05-17",
+            "furlongs": 6,
+            "surface": "Turf",
+            "early": 92,
+            "late": 78,
+            "speed": 79
+          },
+          {
+            "date": "2026-04-23",
+            "furlongs": 6,
+            "surface": "Turf",
+            "early": 93,
+            "late": 71,
+            "speed": 73
+          }
+        ],
+        "baseline_ranks": {
+          "v44c": 1,
+          "finisher": 1,
+          "contender": 1
+        }
+      },
+      {
+        "program": "5",
+        "name": "Denver's Alley",
+        "printed_style": "E",
+        "strict_late_count": 0,
+        "missing_reason": "NO_DISTANCE_WITHIN_HALF_FURLONG",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 4,
+          "finisher": 2,
+          "contender": 3
+        }
+      },
+      {
+        "program": "7",
+        "name": "Long Legged Queen",
+        "printed_style": "P",
+        "strict_late_count": 3,
+        "missing_reason": null,
+        "latest_late": 72,
+        "mean3_late": 78.66666666666667,
+        "strict_late_lines": [
+          {
+            "date": "2026-04-16",
+            "furlongs": 6,
+            "surface": "Turf",
+            "early": 95,
+            "late": 72,
+            "speed": 79
+          },
+          {
+            "date": "2025-11-15",
+            "furlongs": 6,
+            "surface": "Turf",
+            "early": 96,
+            "late": 75,
+            "speed": 86
+          },
+          {
+            "date": "2025-10-24",
+            "furlongs": 6,
+            "surface": "Turf",
+            "early": 80,
+            "late": 89,
+            "speed": 80
+          }
+        ],
+        "baseline_ranks": {
+          "v44c": 3,
+          "finisher": 3,
+          "contender": 4
+        }
+      },
+      {
+        "program": "6",
+        "name": "Vernon Valley",
+        "printed_style": "E/P",
+        "strict_late_count": 2,
+        "missing_reason": null,
+        "latest_late": 73,
+        "mean3_late": 74.5,
+        "strict_late_lines": [
+          {
+            "date": "2026-08-22",
+            "furlongs": 5.5,
+            "surface": "Turf",
+            "early": 91,
+            "late": 73,
+            "speed": 77
+          },
+          {
+            "date": "2026-07-25",
+            "furlongs": 5.5,
+            "surface": "Turf",
+            "early": 88,
+            "late": 76,
+            "speed": 74
+          }
+        ],
+        "baseline_ranks": {
+          "v44c": 7,
+          "finisher": 4,
+          "contender": 5
+        }
+      },
+      {
+        "program": "3",
+        "name": "Now Or Nevermore",
+        "printed_style": "E",
+        "strict_late_count": 2,
+        "missing_reason": null,
+        "latest_late": 72,
+        "mean3_late": 77.5,
+        "strict_late_lines": [
+          {
+            "date": "2026-10-02",
+            "furlongs": 5.5,
+            "surface": "Turf",
+            "early": 100,
+            "late": 72,
+            "speed": 77
+          },
+          {
+            "date": "2026-08-01",
+            "furlongs": 6,
+            "surface": "Turf",
+            "early": 96,
+            "late": 83,
+            "speed": 89
+          }
+        ],
+        "baseline_ranks": {
+          "v44c": 2,
+          "finisher": 5,
+          "contender": 2
+        }
+      },
+      {
+        "program": "1",
+        "name": "Arinata",
+        "printed_style": "S",
+        "strict_late_count": 1,
+        "missing_reason": null,
+        "latest_late": 72,
+        "mean3_late": 72,
+        "strict_late_lines": [
+          {
+            "date": "2026-08-22",
+            "furlongs": 5.5,
+            "surface": "Turf",
+            "early": 87,
+            "late": 72,
+            "speed": 71
+          }
+        ],
+        "baseline_ranks": {
+          "v44c": 6,
+          "finisher": 6,
+          "contender": 6
+        }
+      },
+      {
+        "program": "2",
+        "name": "Carmen Amalia",
+        "printed_style": "E",
+        "strict_late_count": 1,
+        "missing_reason": null,
+        "latest_late": 66,
+        "mean3_late": 66,
+        "strict_late_lines": [
+          {
+            "date": "2026-06-13",
+            "furlongs": 6,
+            "surface": "Turf",
+            "early": 82,
+            "late": 66,
+            "speed": 43
+          }
+        ],
+        "baseline_ranks": {
+          "v44c": 8,
+          "finisher": 7,
+          "contender": 7
+        }
+      },
+      {
+        "program": "4",
+        "name": "Kaaterskill",
+        "printed_style": "E/P",
+        "strict_late_count": 1,
+        "missing_reason": null,
+        "latest_late": 63,
+        "mean3_late": 63,
+        "strict_late_lines": [
+          {
+            "date": "2026-08-22",
+            "furlongs": 5.5,
+            "surface": "Turf",
+            "early": 86,
+            "late": 63,
+            "speed": 57
+          }
+        ],
+        "baseline_ranks": {
+          "v44c": 5,
+          "finisher": 8,
+          "contender": 8
+        }
+      }
+    ]
+  },
+  {
+    "date": "2026-10-21",
+    "race": 8,
+    "surface": "Turf",
+    "cohort": "UNGRADED",
+    "observed_top4": null,
+    "horses": [
+      {
+        "program": "5",
+        "name": "Sweetnessthrtyfour",
+        "printed_style": "E",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_SURFACE_WITHIN_HISTORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 1,
+          "finisher": 1,
+          "contender": 2
+        }
+      },
+      {
+        "program": "7",
+        "name": "Richies Love",
+        "printed_style": "E/P",
+        "strict_late_count": 1,
+        "missing_reason": null,
+        "latest_late": 74,
+        "mean3_late": 74,
+        "strict_late_lines": [
+          {
+            "date": "2026-09-24",
+            "furlongs": 6,
+            "surface": "Turf",
+            "early": 95,
+            "late": 74,
+            "speed": 73
+          }
+        ],
+        "baseline_ranks": {
+          "v44c": 3,
+          "finisher": 2,
+          "contender": 1
+        }
+      },
+      {
+        "program": "11",
+        "name": "Twenty One Red",
+        "printed_style": "P",
+        "strict_late_count": 1,
+        "missing_reason": null,
+        "latest_late": 79,
+        "mean3_late": 79,
+        "strict_late_lines": [
+          {
+            "date": "2026-06-13",
+            "furlongs": 6,
+            "surface": "Turf",
+            "early": 87,
+            "late": 79,
+            "speed": 75
+          }
+        ],
+        "baseline_ranks": {
+          "v44c": 2,
+          "finisher": 3,
+          "contender": 4
+        }
+      },
+      {
+        "program": "8",
+        "name": "Aggression",
+        "printed_style": "NA",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_DISTANCE_CATEGORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 7,
+          "finisher": 4,
+          "contender": 6
+        }
+      },
+      {
+        "program": "2",
+        "name": "Dinghy Bar",
+        "printed_style": "S",
+        "strict_late_count": 2,
+        "missing_reason": null,
+        "latest_late": 81,
+        "mean3_late": 81.5,
+        "strict_late_lines": [
+          {
+            "date": "2026-04-17",
+            "furlongs": 6,
+            "surface": "Turf",
+            "early": 78,
+            "late": 81,
+            "speed": 70
+          },
+          {
+            "date": "2025-11-14",
+            "furlongs": 6,
+            "surface": "Turf",
+            "early": 85,
+            "late": 82,
+            "speed": 80
+          }
+        ],
+        "baseline_ranks": {
+          "v44c": 6,
+          "finisher": 5,
+          "contender": 5
+        }
+      },
+      {
+        "program": "3",
+        "name": "Engraved",
+        "printed_style": "E",
+        "strict_late_count": 0,
+        "missing_reason": "NO_DISTANCE_WITHIN_HALF_FURLONG",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 4,
+          "finisher": 6,
+          "contender": 3
+        }
+      },
+      {
+        "program": "1",
+        "name": "Tizlawry",
+        "printed_style": "S",
+        "strict_late_count": 0,
+        "missing_reason": "NO_DISTANCE_WITHIN_HALF_FURLONG",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 8,
+          "finisher": 7,
+          "contender": 7
+        }
+      },
+      {
+        "program": "9",
+        "name": "Nothingbutnitro",
+        "printed_style": "NA",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_DISTANCE_CATEGORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 9,
+          "finisher": 8,
+          "contender": 10
+        }
+      },
+      {
+        "program": "6",
+        "name": "Rocolino",
+        "printed_style": "E",
+        "strict_late_count": 1,
+        "missing_reason": null,
+        "latest_late": 80,
+        "mean3_late": 80,
+        "strict_late_lines": [
+          {
+            "date": "2026-06-13",
+            "furlongs": 6,
+            "surface": "Turf",
+            "early": 67,
+            "late": 80,
+            "speed": 58
+          }
+        ],
+        "baseline_ranks": {
+          "v44c": 5,
+          "finisher": 9,
+          "contender": 8
+        }
+      },
+      {
+        "program": "4",
+        "name": "Thespian",
+        "printed_style": "S",
+        "strict_late_count": 0,
+        "missing_reason": "NO_SAME_DISTANCE_CATEGORY",
+        "latest_late": null,
+        "mean3_late": null,
+        "strict_late_lines": [],
+        "baseline_ranks": {
+          "v44c": 10,
+          "finisher": 10,
+          "contender": 9
+        }
+      }
+    ]
+  }
+]

@@ -1,0 +1,1357 @@
+{
+  "classification": "POSTHOC_DIAGNOSTIC_EVALUATION_NOT_INDEPENDENT_VALIDATION",
+  "summary": {
+    "predicted_races": 141,
+    "geometry_counts": {
+      "INTERMEDIATE_GEOMETRY": 24,
+      "CLOSE_TOP_EARLY_RATINGS": 55,
+      "CLEAR_EARLY_RATING_GAP": 60,
+      "INCOMPLETE_EARLY_EVIDENCE": 2
+    },
+    "interpretation_counts": {
+      "UNCERTAIN_UNVERIFIED_STYLES": 139,
+      "UNCERTAIN_MISSING_EARLY": 2
+    },
+    "stable_geometry_races": 70,
+    "identity_incomplete_races": 17,
+    "official_chart_races_extracted": 11,
+    "evaluation_races": 11,
+    "evaluation_horses": 76,
+    "highest_early_top3_credit": 9.0,
+    "highest_early_leader_credit": 6.0,
+    "mean_normalized_early_position": 0.15108225108225107,
+    "mean_uniform_random_top3_reference": 0.4426406926406926,
+    "actual_fast_slow_labels": 0,
+    "models_changed": false,
+    "holdout_files_used": 0
+  },
+  "chart_attempts": [],
+  "chart_labels": {
+    "1": {
+      "source_sha256": "70408ec3467385109fc7ac5f6ae3d0d62e111ff0dced89ebe9e94aa7aee8edaa",
+      "source": "Previously analyzed official chart, PP-preview table",
+      "page": 1,
+      "header_columns": {
+        "Pgm Horse Name": 158.43699645996094,
+        "Start": 256.53399658203125,
+        "1/4": 287.7149963378906,
+        "1/2": 321.7300109863281,
+        "Str": 355.7449951171875,
+        "Fin": 389.760009765625
+      },
+      "distance_text": "Six Furlongs On The Dirt",
+      "first_call": "1/4",
+      "first_call_basis": "QUARTER_MILE_SPRINT_HALF_MILE_ROUTE",
+      "entries": [
+        {
+          "program": "6",
+          "first_call_position": 6,
+          "beaten_lengths": 5.0,
+          "margin_label": null,
+          "margin_text": "5",
+          "near_lead_within_one_length": false,
+          "page": 1,
+          "y": 368.581,
+          "call": "1/4"
+        },
+        {
+          "program": "2",
+          "first_call_position": 4,
+          "beaten_lengths": 1.5,
+          "margin_label": null,
+          "margin_text": "1 1/2",
+          "near_lead_within_one_length": false,
+          "page": 1,
+          "y": 377.873,
+          "call": "1/4"
+        },
+        {
+          "program": "4",
+          "first_call_position": 3,
+          "beaten_lengths": 1.5,
+          "margin_label": null,
+          "margin_text": "1 1/2",
+          "near_lead_within_one_length": false,
+          "page": 1,
+          "y": 387.165,
+          "call": "1/4"
+        },
+        {
+          "program": "5",
+          "first_call_position": 5,
+          "beaten_lengths": 3.0,
+          "margin_label": null,
+          "margin_text": "3",
+          "near_lead_within_one_length": false,
+          "page": 1,
+          "y": 396.457,
+          "call": "1/4"
+        },
+        {
+          "program": "1",
+          "first_call_position": 1,
+          "beaten_lengths": 0,
+          "margin_label": null,
+          "margin_text": "1/2",
+          "near_lead_within_one_length": true,
+          "page": 1,
+          "y": 405.749,
+          "call": "1/4"
+        },
+        {
+          "program": "3",
+          "first_call_position": 2,
+          "beaten_lengths": 0.5,
+          "margin_label": null,
+          "margin_text": "1/2",
+          "near_lead_within_one_length": true,
+          "page": 1,
+          "y": 415.041,
+          "call": "1/4"
+        }
+      ],
+      "source_review_status": "VISUALLY_CHECKED_AGAINST_ORIGINAL"
+    },
+    "2": {
+      "source_sha256": "70408ec3467385109fc7ac5f6ae3d0d62e111ff0dced89ebe9e94aa7aee8edaa",
+      "source": "Previously analyzed official chart, PP-preview table",
+      "page": 2,
+      "header_columns": {
+        "Pgm Horse Name": 158.43699645996094,
+        "Start": 256.53399658203125,
+        "1/4": 287.7149963378906,
+        "1/2": 321.7300109863281,
+        "Str": 355.7449951171875,
+        "Fin": 389.760009765625
+      },
+      "distance_text": "Six Furlongs On The All Weather Track - Originally Scheduled For 6 Furlongs On Inner turf Current Track Record:",
+      "first_call": "1/4",
+      "first_call_basis": "QUARTER_MILE_SPRINT_HALF_MILE_ROUTE",
+      "entries": [
+        {
+          "program": "3",
+          "first_call_position": 1,
+          "beaten_lengths": 0,
+          "margin_label": null,
+          "margin_text": "2",
+          "near_lead_within_one_length": true,
+          "page": 2,
+          "y": 393.331,
+          "call": "1/4"
+        },
+        {
+          "program": "4",
+          "first_call_position": 4,
+          "beaten_lengths": 3.0,
+          "margin_label": null,
+          "margin_text": "3",
+          "near_lead_within_one_length": false,
+          "page": 2,
+          "y": 402.623,
+          "call": "1/4"
+        },
+        {
+          "program": "1",
+          "first_call_position": 3,
+          "beaten_lengths": 2.0,
+          "margin_label": null,
+          "margin_text": "2",
+          "near_lead_within_one_length": false,
+          "page": 2,
+          "y": 411.915,
+          "call": "1/4"
+        },
+        {
+          "program": "2",
+          "first_call_position": 6,
+          "beaten_lengths": 5.25,
+          "margin_label": null,
+          "margin_text": "5 1/4",
+          "near_lead_within_one_length": false,
+          "page": 2,
+          "y": 421.207,
+          "call": "1/4"
+        },
+        {
+          "program": "5",
+          "first_call_position": 2,
+          "beaten_lengths": 2.0,
+          "margin_label": null,
+          "margin_text": "2",
+          "near_lead_within_one_length": false,
+          "page": 2,
+          "y": 430.499,
+          "call": "1/4"
+        },
+        {
+          "program": "6",
+          "first_call_position": 5,
+          "beaten_lengths": 5.0,
+          "margin_label": null,
+          "margin_text": "5",
+          "near_lead_within_one_length": false,
+          "page": 2,
+          "y": 439.791,
+          "call": "1/4"
+        }
+      ],
+      "source_review_status": "VISUALLY_CHECKED_AGAINST_ORIGINAL"
+    },
+    "3": {
+      "source_sha256": "70408ec3467385109fc7ac5f6ae3d0d62e111ff0dced89ebe9e94aa7aee8edaa",
+      "source": "Previously analyzed official chart, PP-preview table",
+      "page": 3,
+      "header_columns": {
+        "Pgm Horse Name": 141.4290008544922,
+        "1/4": 239.5260009765625,
+        "1/2": 270.7070007324219,
+        "3/4": 304.72198486328125,
+        "1m": 338.73699951171875,
+        "Str": 372.75201416015625,
+        "Fin": 406.7669982910156
+      },
+      "distance_text": "One And One Fourth Miles On The Dirt",
+      "first_call": "1/2",
+      "first_call_basis": "QUARTER_MILE_SPRINT_HALF_MILE_ROUTE",
+      "entries": [
+        {
+          "program": "1",
+          "first_call_position": 4,
+          "beaten_lengths": 3.5,
+          "margin_label": null,
+          "margin_text": "3 1/2",
+          "near_lead_within_one_length": false,
+          "page": 3,
+          "y": 384.331,
+          "call": "1/2"
+        },
+        {
+          "program": "5",
+          "first_call_position": 1,
+          "beaten_lengths": 0,
+          "margin_label": null,
+          "margin_text": "3",
+          "near_lead_within_one_length": true,
+          "page": 3,
+          "y": 393.623,
+          "call": "1/2"
+        },
+        {
+          "program": "4",
+          "first_call_position": 5,
+          "beaten_lengths": 3.75,
+          "margin_label": null,
+          "margin_text": "3 3/4",
+          "near_lead_within_one_length": false,
+          "page": 3,
+          "y": 402.915,
+          "call": "1/2"
+        },
+        {
+          "program": "2",
+          "first_call_position": 6,
+          "beaten_lengths": 7.75,
+          "margin_label": null,
+          "margin_text": "7 3/4",
+          "near_lead_within_one_length": false,
+          "page": 3,
+          "y": 412.207,
+          "call": "1/2"
+        },
+        {
+          "program": "6",
+          "first_call_position": 3,
+          "beaten_lengths": 3.0,
+          "margin_label": null,
+          "margin_text": "3",
+          "near_lead_within_one_length": false,
+          "page": 3,
+          "y": 421.499,
+          "call": "1/2"
+        },
+        {
+          "program": "3",
+          "first_call_position": 2,
+          "beaten_lengths": 3.0,
+          "margin_label": null,
+          "margin_text": "3",
+          "near_lead_within_one_length": false,
+          "page": 3,
+          "y": 430.791,
+          "call": "1/2"
+        }
+      ],
+      "source_review_status": "VISUALLY_CHECKED_AGAINST_ORIGINAL"
+    },
+    "4": {
+      "source_sha256": "70408ec3467385109fc7ac5f6ae3d0d62e111ff0dced89ebe9e94aa7aee8edaa",
+      "source": "Previously analyzed official chart, PP-preview table",
+      "page": 4,
+      "header_columns": {
+        "Pgm Horse Name": 141.4290008544922,
+        "Start": 239.5260009765625,
+        "1/4": 270.7070007324219,
+        "1/2": 304.72198486328125,
+        "3/4": 338.73699951171875,
+        "Str": 372.75201416015625,
+        "Fin": 406.7669982910156
+      },
+      "distance_text": "One And One Sixteenth Miles On The All Weather Track - Originally Scheduled For 1 1/16 Miles On Turf Current Track",
+      "first_call": "1/2",
+      "first_call_basis": "QUARTER_MILE_SPRINT_HALF_MILE_ROUTE",
+      "entries": [
+        {
+          "program": "6",
+          "first_call_position": 5,
+          "beaten_lengths": 2.5,
+          "margin_label": null,
+          "margin_text": "2 1/2",
+          "near_lead_within_one_length": false,
+          "page": 4,
+          "y": 454.121,
+          "call": "1/2"
+        },
+        {
+          "program": "4",
+          "first_call_position": 6,
+          "beaten_lengths": 3.5,
+          "margin_label": null,
+          "margin_text": "3 1/2",
+          "near_lead_within_one_length": false,
+          "page": 4,
+          "y": 463.413,
+          "call": "1/2"
+        },
+        {
+          "program": "8",
+          "first_call_position": 3,
+          "beaten_lengths": 2.0,
+          "margin_label": null,
+          "margin_text": "2",
+          "near_lead_within_one_length": false,
+          "page": 4,
+          "y": 472.705,
+          "call": "1/2"
+        },
+        {
+          "program": "5",
+          "first_call_position": 4,
+          "beaten_lengths": 2.0,
+          "margin_label": null,
+          "margin_text": "2",
+          "near_lead_within_one_length": false,
+          "page": 4,
+          "y": 481.997,
+          "call": "1/2"
+        },
+        {
+          "program": "7",
+          "first_call_position": 7,
+          "beaten_lengths": 7.5,
+          "margin_label": null,
+          "margin_text": "7 1/2",
+          "near_lead_within_one_length": false,
+          "page": 4,
+          "y": 491.289,
+          "call": "1/2"
+        },
+        {
+          "program": "1",
+          "first_call_position": 1,
+          "beaten_lengths": 0,
+          "margin_label": null,
+          "margin_text": "1",
+          "near_lead_within_one_length": true,
+          "page": 4,
+          "y": 500.581,
+          "call": "1/2"
+        },
+        {
+          "program": "2",
+          "first_call_position": 2,
+          "beaten_lengths": 1.0,
+          "margin_label": null,
+          "margin_text": "1",
+          "near_lead_within_one_length": true,
+          "page": 4,
+          "y": 509.873,
+          "call": "1/2"
+        }
+      ],
+      "source_review_status": "VISUALLY_CHECKED_AGAINST_ORIGINAL"
+    },
+    "5": {
+      "source_sha256": "70408ec3467385109fc7ac5f6ae3d0d62e111ff0dced89ebe9e94aa7aee8edaa",
+      "source": "Previously analyzed official chart, PP-preview table",
+      "page": 5,
+      "header_columns": {
+        "Pgm Horse Name": 158.43699645996094,
+        "Start": 256.53399658203125,
+        "1/4": 287.7149963378906,
+        "1/2": 321.7300109863281,
+        "Str": 355.7449951171875,
+        "Fin": 389.760009765625
+      },
+      "distance_text": "Six Furlongs On The Inner turf",
+      "first_call": "1/4",
+      "first_call_basis": "QUARTER_MILE_SPRINT_HALF_MILE_ROUTE",
+      "entries": [
+        {
+          "program": "5",
+          "first_call_position": 6,
+          "beaten_lengths": 9.0,
+          "margin_label": null,
+          "margin_text": "9",
+          "near_lead_within_one_length": false,
+          "page": 5,
+          "y": 418.081,
+          "call": "1/4"
+        },
+        {
+          "program": "3",
+          "first_call_position": 1,
+          "beaten_lengths": 0,
+          "margin_label": null,
+          "margin_text": "3",
+          "near_lead_within_one_length": true,
+          "page": 5,
+          "y": 427.373,
+          "call": "1/4"
+        },
+        {
+          "program": "4",
+          "first_call_position": 2,
+          "beaten_lengths": 3.0,
+          "margin_label": null,
+          "margin_text": "3",
+          "near_lead_within_one_length": false,
+          "page": 5,
+          "y": 436.665,
+          "call": "1/4"
+        },
+        {
+          "program": "1",
+          "first_call_position": 3,
+          "beaten_lengths": 5.0,
+          "margin_label": null,
+          "margin_text": "5",
+          "near_lead_within_one_length": false,
+          "page": 5,
+          "y": 445.957,
+          "call": "1/4"
+        },
+        {
+          "program": "8",
+          "first_call_position": 4,
+          "beaten_lengths": 7.5,
+          "margin_label": null,
+          "margin_text": "7 1/2",
+          "near_lead_within_one_length": false,
+          "page": 5,
+          "y": 455.249,
+          "call": "1/4"
+        },
+        {
+          "program": "6",
+          "first_call_position": 5,
+          "beaten_lengths": 8.0,
+          "margin_label": null,
+          "margin_text": "8",
+          "near_lead_within_one_length": false,
+          "page": 5,
+          "y": 464.541,
+          "call": "1/4"
+        }
+      ],
+      "source_review_status": "VISUALLY_CHECKED_AGAINST_ORIGINAL"
+    },
+    "6": {
+      "source_sha256": "70408ec3467385109fc7ac5f6ae3d0d62e111ff0dced89ebe9e94aa7aee8edaa",
+      "source": "Previously analyzed official chart, PP-preview table",
+      "page": 6,
+      "header_columns": {
+        "Pgm Horse Name": 158.43699645996094,
+        "Start": 256.53399658203125,
+        "1/4": 287.7149963378906,
+        "1/2": 321.7300109863281,
+        "Str": 355.7449951171875,
+        "Fin": 389.760009765625
+      },
+      "distance_text": "Six And One Half Furlongs On The Dirt",
+      "first_call": "1/4",
+      "first_call_basis": "QUARTER_MILE_SPRINT_HALF_MILE_ROUTE",
+      "entries": [
+        {
+          "program": "1",
+          "first_call_position": 3,
+          "beaten_lengths": 1.5,
+          "margin_label": null,
+          "margin_text": "1 1/2",
+          "near_lead_within_one_length": false,
+          "page": 6,
+          "y": 402.915,
+          "call": "1/4"
+        },
+        {
+          "program": "5",
+          "first_call_position": 5,
+          "beaten_lengths": 3.0,
+          "margin_label": null,
+          "margin_text": "3",
+          "near_lead_within_one_length": false,
+          "page": 6,
+          "y": 412.207,
+          "call": "1/4"
+        },
+        {
+          "program": "6",
+          "first_call_position": 1,
+          "beaten_lengths": 0,
+          "margin_label": null,
+          "margin_text": "1/2",
+          "near_lead_within_one_length": true,
+          "page": 6,
+          "y": 421.499,
+          "call": "1/4"
+        },
+        {
+          "program": "8",
+          "first_call_position": 2,
+          "beaten_lengths": 0.5,
+          "margin_label": null,
+          "margin_text": "1/2",
+          "near_lead_within_one_length": true,
+          "page": 6,
+          "y": 430.791,
+          "call": "1/4"
+        },
+        {
+          "program": "7",
+          "first_call_position": 4,
+          "beaten_lengths": 1.5,
+          "margin_label": null,
+          "margin_text": "1 1/2",
+          "near_lead_within_one_length": false,
+          "page": 6,
+          "y": 440.083,
+          "call": "1/4"
+        },
+        {
+          "program": "4",
+          "first_call_position": 6,
+          "beaten_lengths": 3.25,
+          "margin_label": null,
+          "margin_text": "3 1/4",
+          "near_lead_within_one_length": false,
+          "page": 6,
+          "y": 449.375,
+          "call": "1/4"
+        },
+        {
+          "program": "3",
+          "first_call_position": 7,
+          "beaten_lengths": 5.75,
+          "margin_label": null,
+          "margin_text": "5 3/4",
+          "near_lead_within_one_length": false,
+          "page": 6,
+          "y": 458.667,
+          "call": "1/4"
+        },
+        {
+          "program": "2",
+          "first_call_position": 8,
+          "beaten_lengths": 5.75,
+          "margin_label": null,
+          "margin_text": "5 3/4",
+          "near_lead_within_one_length": false,
+          "page": 6,
+          "y": 467.959,
+          "call": "1/4"
+        }
+      ],
+      "source_review_status": "VISUALLY_CHECKED_AGAINST_ORIGINAL"
+    },
+    "7": {
+      "source_sha256": "70408ec3467385109fc7ac5f6ae3d0d62e111ff0dced89ebe9e94aa7aee8edaa",
+      "source": "Previously analyzed official chart, PP-preview table",
+      "page": 7,
+      "header_columns": {
+        "Pgm Horse Name": 141.4290008544922,
+        "Start": 239.5260009765625,
+        "1/4": 270.7070007324219,
+        "1/2": 304.72198486328125,
+        "3/4": 338.73699951171875,
+        "Str": 372.75201416015625,
+        "Fin": 406.7669982910156
+      },
+      "distance_text": "One And Three Sixteenth Miles On The All Weather Track - Originally Scheduled For 1 1/2 Miles On Turf Current Track",
+      "first_call": "1/2",
+      "first_call_basis": "QUARTER_MILE_SPRINT_HALF_MILE_ROUTE",
+      "entries": [
+        {
+          "program": "1",
+          "first_call_position": 1,
+          "beaten_lengths": 0,
+          "margin_label": "Head",
+          "margin_text": "Head",
+          "near_lead_within_one_length": true,
+          "page": 7,
+          "y": 459.146,
+          "call": "1/2"
+        },
+        {
+          "program": "6",
+          "first_call_position": 6,
+          "beaten_lengths": 4.5,
+          "margin_label": null,
+          "margin_text": "4 1/2",
+          "near_lead_within_one_length": false,
+          "page": 7,
+          "y": 468.438,
+          "call": "1/2"
+        },
+        {
+          "program": "4",
+          "first_call_position": 5,
+          "beaten_lengths": 2.5,
+          "margin_label": null,
+          "margin_text": "2 1/2",
+          "near_lead_within_one_length": false,
+          "page": 7,
+          "y": 477.73,
+          "call": "1/2"
+        },
+        {
+          "program": "3",
+          "first_call_position": 4,
+          "beaten_lengths": 1.5,
+          "margin_label": null,
+          "margin_text": "1 1/2",
+          "near_lead_within_one_length": false,
+          "page": 7,
+          "y": 487.022,
+          "call": "1/2"
+        },
+        {
+          "program": "7",
+          "first_call_position": 3,
+          "beaten_lengths": 1.0,
+          "margin_label": null,
+          "margin_text": "1",
+          "near_lead_within_one_length": true,
+          "page": 7,
+          "y": 496.314,
+          "call": "1/2"
+        },
+        {
+          "program": "5",
+          "first_call_position": 2,
+          "beaten_lengths": null,
+          "margin_label": "Head",
+          "margin_text": "Head",
+          "near_lead_within_one_length": true,
+          "page": 7,
+          "y": 505.606,
+          "call": "1/2"
+        }
+      ],
+      "source_review_status": "VISUALLY_CHECKED_AGAINST_ORIGINAL"
+    },
+    "8": {
+      "source_sha256": "70408ec3467385109fc7ac5f6ae3d0d62e111ff0dced89ebe9e94aa7aee8edaa",
+      "source": "Previously analyzed official chart, PP-preview table",
+      "page": 8,
+      "header_columns": {
+        "Pgm Horse Name": 141.4290008544922,
+        "Start": 239.5260009765625,
+        "1/4": 270.7070007324219,
+        "1/2": 304.72198486328125,
+        "3/4": 338.73699951171875,
+        "Str": 372.75201416015625,
+        "Fin": 406.7669982910156
+      },
+      "distance_text": "One Mile On The Dirt",
+      "first_call": "1/2",
+      "first_call_basis": "QUARTER_MILE_SPRINT_HALF_MILE_ROUTE",
+      "entries": [
+        {
+          "program": "1",
+          "first_call_position": 6,
+          "beaten_lengths": 4.0,
+          "margin_label": null,
+          "margin_text": "4",
+          "near_lead_within_one_length": false,
+          "page": 8,
+          "y": 412.207,
+          "call": "1/2"
+        },
+        {
+          "program": "4",
+          "first_call_position": 4,
+          "beaten_lengths": 2.0,
+          "margin_label": null,
+          "margin_text": "2",
+          "near_lead_within_one_length": false,
+          "page": 8,
+          "y": 421.499,
+          "call": "1/2"
+        },
+        {
+          "program": "7",
+          "first_call_position": 1,
+          "beaten_lengths": 0,
+          "margin_label": null,
+          "margin_text": "1/2",
+          "near_lead_within_one_length": true,
+          "page": 8,
+          "y": 430.791,
+          "call": "1/2"
+        },
+        {
+          "program": "5",
+          "first_call_position": 3,
+          "beaten_lengths": 2.0,
+          "margin_label": null,
+          "margin_text": "2",
+          "near_lead_within_one_length": false,
+          "page": 8,
+          "y": 440.083,
+          "call": "1/2"
+        },
+        {
+          "program": "2",
+          "first_call_position": 7,
+          "beaten_lengths": 5.0,
+          "margin_label": null,
+          "margin_text": "5",
+          "near_lead_within_one_length": false,
+          "page": 8,
+          "y": 449.375,
+          "call": "1/2"
+        },
+        {
+          "program": "3",
+          "first_call_position": 5,
+          "beaten_lengths": 3.5,
+          "margin_label": null,
+          "margin_text": "3 1/2",
+          "near_lead_within_one_length": false,
+          "page": 8,
+          "y": 458.667,
+          "call": "1/2"
+        },
+        {
+          "program": "8",
+          "first_call_position": 2,
+          "beaten_lengths": 0.5,
+          "margin_label": null,
+          "margin_text": "1/2",
+          "near_lead_within_one_length": true,
+          "page": 8,
+          "y": 467.959,
+          "call": "1/2"
+        },
+        {
+          "program": "6",
+          "first_call_position": 8,
+          "beaten_lengths": 8.0,
+          "margin_label": null,
+          "margin_text": "8",
+          "near_lead_within_one_length": false,
+          "page": 8,
+          "y": 477.251,
+          "call": "1/2"
+        },
+        {
+          "program": "9",
+          "first_call_position": 9,
+          "beaten_lengths": 9.5,
+          "margin_label": null,
+          "margin_text": "9 1/2",
+          "near_lead_within_one_length": false,
+          "page": 8,
+          "y": 486.543,
+          "call": "1/2"
+        }
+      ],
+      "source_review_status": "VISUALLY_CHECKED_AGAINST_ORIGINAL"
+    },
+    "9": {
+      "source_sha256": "70408ec3467385109fc7ac5f6ae3d0d62e111ff0dced89ebe9e94aa7aee8edaa",
+      "source": "Previously analyzed official chart, PP-preview table",
+      "page": 9,
+      "header_columns": {
+        "Pgm Horse Name": 141.4290008544922,
+        "Start": 239.5260009765625,
+        "1/4": 270.7070007324219,
+        "1/2": 304.72198486328125,
+        "3/4": 338.73699951171875,
+        "Str": 372.75201416015625,
+        "Fin": 406.7669982910156
+      },
+      "distance_text": "One Mile On The Dirt",
+      "first_call": "1/2",
+      "first_call_basis": "QUARTER_MILE_SPRINT_HALF_MILE_ROUTE",
+      "entries": [
+        {
+          "program": "1",
+          "first_call_position": 1,
+          "beaten_lengths": 0,
+          "margin_label": null,
+          "margin_text": "1",
+          "near_lead_within_one_length": true,
+          "page": 9,
+          "y": 419.498,
+          "call": "1/2"
+        },
+        {
+          "program": "6",
+          "first_call_position": 7,
+          "beaten_lengths": 3.75,
+          "margin_label": null,
+          "margin_text": "3 3/4",
+          "near_lead_within_one_length": false,
+          "page": 9,
+          "y": 428.79,
+          "call": "1/2"
+        },
+        {
+          "program": "3",
+          "first_call_position": 6,
+          "beaten_lengths": 3.75,
+          "margin_label": null,
+          "margin_text": "3 3/4",
+          "near_lead_within_one_length": false,
+          "page": 9,
+          "y": 438.082,
+          "call": "1/2"
+        },
+        {
+          "program": "5",
+          "first_call_position": 3,
+          "beaten_lengths": 2.5,
+          "margin_label": null,
+          "margin_text": "2 1/2",
+          "near_lead_within_one_length": false,
+          "page": 9,
+          "y": 447.374,
+          "call": "1/2"
+        },
+        {
+          "program": "7",
+          "first_call_position": 5,
+          "beaten_lengths": 3.5,
+          "margin_label": null,
+          "margin_text": "3 1/2",
+          "near_lead_within_one_length": false,
+          "page": 9,
+          "y": 456.666,
+          "call": "1/2"
+        },
+        {
+          "program": "2",
+          "first_call_position": 4,
+          "beaten_lengths": 2.5,
+          "margin_label": null,
+          "margin_text": "2 1/2",
+          "near_lead_within_one_length": false,
+          "page": 9,
+          "y": 465.958,
+          "call": "1/2"
+        },
+        {
+          "program": "4",
+          "first_call_position": 2,
+          "beaten_lengths": 1.0,
+          "margin_label": null,
+          "margin_text": "1",
+          "near_lead_within_one_length": true,
+          "page": 9,
+          "y": 475.25,
+          "call": "1/2"
+        }
+      ],
+      "source_review_status": "VISUALLY_CHECKED_AGAINST_ORIGINAL"
+    },
+    "10": {
+      "source_sha256": "70408ec3467385109fc7ac5f6ae3d0d62e111ff0dced89ebe9e94aa7aee8edaa",
+      "source": "Previously analyzed official chart, PP-preview table",
+      "page": 10,
+      "header_columns": {
+        "Pgm Horse Name": 141.4290008544922,
+        "Start": 239.5260009765625,
+        "1/4": 270.7070007324219,
+        "1/2": 304.72198486328125,
+        "3/4": 338.73699951171875,
+        "Str": 372.75201416015625,
+        "Fin": 406.7669982910156
+      },
+      "distance_text": "One And One Sixteenth Miles On The Turf",
+      "first_call": "1/2",
+      "first_call_basis": "QUARTER_MILE_SPRINT_HALF_MILE_ROUTE",
+      "entries": [
+        {
+          "program": "7",
+          "first_call_position": 4,
+          "beaten_lengths": 2.5,
+          "margin_label": null,
+          "margin_text": "2 1/2",
+          "near_lead_within_one_length": false,
+          "page": 10,
+          "y": 436.373,
+          "call": "1/2"
+        },
+        {
+          "program": "4",
+          "first_call_position": 7,
+          "beaten_lengths": 4.0,
+          "margin_label": null,
+          "margin_text": "4",
+          "near_lead_within_one_length": false,
+          "page": 10,
+          "y": 445.665,
+          "call": "1/2"
+        },
+        {
+          "program": "1",
+          "first_call_position": 3,
+          "beaten_lengths": 2.0,
+          "margin_label": null,
+          "margin_text": "2",
+          "near_lead_within_one_length": false,
+          "page": 10,
+          "y": 454.957,
+          "call": "1/2"
+        },
+        {
+          "program": "6",
+          "first_call_position": 5,
+          "beaten_lengths": 3.0,
+          "margin_label": null,
+          "margin_text": "3",
+          "near_lead_within_one_length": false,
+          "page": 10,
+          "y": 464.249,
+          "call": "1/2"
+        },
+        {
+          "program": "8",
+          "first_call_position": 2,
+          "beaten_lengths": 1.5,
+          "margin_label": null,
+          "margin_text": "1 1/2",
+          "near_lead_within_one_length": false,
+          "page": 10,
+          "y": 473.541,
+          "call": "1/2"
+        },
+        {
+          "program": "2",
+          "first_call_position": 6,
+          "beaten_lengths": 3.5,
+          "margin_label": null,
+          "margin_text": "3 1/2",
+          "near_lead_within_one_length": false,
+          "page": 10,
+          "y": 482.833,
+          "call": "1/2"
+        },
+        {
+          "program": "3",
+          "first_call_position": 1,
+          "beaten_lengths": 0,
+          "margin_label": null,
+          "margin_text": "1 1/2",
+          "near_lead_within_one_length": true,
+          "page": 10,
+          "y": 492.125,
+          "call": "1/2"
+        }
+      ],
+      "source_review_status": "VISUALLY_CHECKED_AGAINST_ORIGINAL"
+    },
+    "11": {
+      "source_sha256": "70408ec3467385109fc7ac5f6ae3d0d62e111ff0dced89ebe9e94aa7aee8edaa",
+      "source": "Previously analyzed official chart, PP-preview table",
+      "page": 11,
+      "header_columns": {
+        "Pgm Horse Name": 158.43699645996094,
+        "Start": 256.53399658203125,
+        "1/4": 287.7149963378906,
+        "1/2": 321.7300109863281,
+        "Str": 355.7449951171875,
+        "Fin": 389.760009765625
+      },
+      "distance_text": "Seven Furlongs On The Dirt",
+      "first_call": "1/4",
+      "first_call_basis": "QUARTER_MILE_SPRINT_HALF_MILE_ROUTE",
+      "entries": [
+        {
+          "program": "9",
+          "first_call_position": 1,
+          "beaten_lengths": 0,
+          "margin_label": null,
+          "margin_text": "1",
+          "near_lead_within_one_length": true,
+          "page": 11,
+          "y": 452.415,
+          "call": "1/4"
+        },
+        {
+          "program": "10",
+          "first_call_position": 2,
+          "beaten_lengths": 1.0,
+          "margin_label": null,
+          "margin_text": "1",
+          "near_lead_within_one_length": true,
+          "page": 11,
+          "y": 461.707,
+          "call": "1/4"
+        },
+        {
+          "program": "2",
+          "first_call_position": 3,
+          "beaten_lengths": 1.0,
+          "margin_label": null,
+          "margin_text": "1",
+          "near_lead_within_one_length": true,
+          "page": 11,
+          "y": 470.999,
+          "call": "1/4"
+        },
+        {
+          "program": "4",
+          "first_call_position": 4,
+          "beaten_lengths": 2.0,
+          "margin_label": null,
+          "margin_text": "2",
+          "near_lead_within_one_length": false,
+          "page": 11,
+          "y": 480.291,
+          "call": "1/4"
+        },
+        {
+          "program": "5",
+          "first_call_position": 8,
+          "beaten_lengths": 4.75,
+          "margin_label": null,
+          "margin_text": "4 3/4",
+          "near_lead_within_one_length": false,
+          "page": 11,
+          "y": 489.583,
+          "call": "1/4"
+        },
+        {
+          "program": "1",
+          "first_call_position": 7,
+          "beaten_lengths": 2.75,
+          "margin_label": null,
+          "margin_text": "2 3/4",
+          "near_lead_within_one_length": false,
+          "page": 11,
+          "y": 498.875,
+          "call": "1/4"
+        },
+        {
+          "program": "3",
+          "first_call_position": 6,
+          "beaten_lengths": 2.25,
+          "margin_label": null,
+          "margin_text": "2 1/4",
+          "near_lead_within_one_length": false,
+          "page": 11,
+          "y": 508.167,
+          "call": "1/4"
+        },
+        {
+          "program": "7",
+          "first_call_position": 5,
+          "beaten_lengths": 2.25,
+          "margin_label": null,
+          "margin_text": "2 1/4",
+          "near_lead_within_one_length": false,
+          "page": 11,
+          "y": 517.459,
+          "call": "1/4"
+        }
+      ],
+      "source_review_status": "VISUALLY_CHECKED_AGAINST_ORIGINAL"
+    }
+  },
+  "evaluation": [
+    {
+      "key": "BEL_2026-10-17_R1",
+      "field_size": 6,
+      "geometry": "CLOSE_TOP_EARLY_RATINGS",
+      "top_two_gap": 2,
+      "front_cluster_count": 3,
+      "top_early_programs": [
+        "3"
+      ],
+      "top_early_observed_positions": [
+        2
+      ],
+      "top_early_top3_credit": 1.0,
+      "top_early_leader_credit": 0.0,
+      "top_early_normalized_position": 0.2,
+      "uniform_random_top3_reference": 0.5,
+      "observed_near_lead_count": 2,
+      "unknown_near_lead_count": 0,
+      "actual_first_call": "1/4",
+      "actual_near_lead_programs": [
+        "1",
+        "3"
+      ],
+      "actual_tempo_label": null
+    },
+    {
+      "key": "BEL_2026-10-17_R2",
+      "field_size": 6,
+      "geometry": "CLEAR_EARLY_RATING_GAP",
+      "top_two_gap": 10,
+      "front_cluster_count": 1,
+      "top_early_programs": [
+        "3"
+      ],
+      "top_early_observed_positions": [
+        1
+      ],
+      "top_early_top3_credit": 1.0,
+      "top_early_leader_credit": 1.0,
+      "top_early_normalized_position": 0.0,
+      "uniform_random_top3_reference": 0.5,
+      "observed_near_lead_count": 1,
+      "unknown_near_lead_count": 0,
+      "actual_first_call": "1/4",
+      "actual_near_lead_programs": [
+        "3"
+      ],
+      "actual_tempo_label": null
+    },
+    {
+      "key": "BEL_2026-10-17_R3",
+      "field_size": 6,
+      "geometry": "CLEAR_EARLY_RATING_GAP",
+      "top_two_gap": 20,
+      "front_cluster_count": 1,
+      "top_early_programs": [
+        "5"
+      ],
+      "top_early_observed_positions": [
+        1
+      ],
+      "top_early_top3_credit": 1.0,
+      "top_early_leader_credit": 1.0,
+      "top_early_normalized_position": 0.0,
+      "uniform_random_top3_reference": 0.5,
+      "observed_near_lead_count": 1,
+      "unknown_near_lead_count": 0,
+      "actual_first_call": "1/2",
+      "actual_near_lead_programs": [
+        "5"
+      ],
+      "actual_tempo_label": null
+    },
+    {
+      "key": "BEL_2026-10-17_R4",
+      "field_size": 7,
+      "geometry": "CLEAR_EARLY_RATING_GAP",
+      "top_two_gap": 18,
+      "front_cluster_count": 1,
+      "top_early_programs": [
+        "2"
+      ],
+      "top_early_observed_positions": [
+        2
+      ],
+      "top_early_top3_credit": 1.0,
+      "top_early_leader_credit": 0.0,
+      "top_early_normalized_position": 0.16666666666666666,
+      "uniform_random_top3_reference": 0.42857142857142855,
+      "observed_near_lead_count": 2,
+      "unknown_near_lead_count": 0,
+      "actual_first_call": "1/2",
+      "actual_near_lead_programs": [
+        "1",
+        "2"
+      ],
+      "actual_tempo_label": null
+    },
+    {
+      "key": "BEL_2026-10-17_R5",
+      "field_size": 6,
+      "geometry": "CLEAR_EARLY_RATING_GAP",
+      "top_two_gap": 12,
+      "front_cluster_count": 1,
+      "top_early_programs": [
+        "3"
+      ],
+      "top_early_observed_positions": [
+        1
+      ],
+      "top_early_top3_credit": 1.0,
+      "top_early_leader_credit": 1.0,
+      "top_early_normalized_position": 0.0,
+      "uniform_random_top3_reference": 0.5,
+      "observed_near_lead_count": 1,
+      "unknown_near_lead_count": 0,
+      "actual_first_call": "1/4",
+      "actual_near_lead_programs": [
+        "3"
+      ],
+      "actual_tempo_label": null
+    },
+    {
+      "key": "BEL_2026-10-17_R6",
+      "field_size": 8,
+      "geometry": "CLOSE_TOP_EARLY_RATINGS",
+      "top_two_gap": 5,
+      "front_cluster_count": 2,
+      "top_early_programs": [
+        "6"
+      ],
+      "top_early_observed_positions": [
+        1
+      ],
+      "top_early_top3_credit": 1.0,
+      "top_early_leader_credit": 1.0,
+      "top_early_normalized_position": 0.0,
+      "uniform_random_top3_reference": 0.375,
+      "observed_near_lead_count": 2,
+      "unknown_near_lead_count": 0,
+      "actual_first_call": "1/4",
+      "actual_near_lead_programs": [
+        "6",
+        "8"
+      ],
+      "actual_tempo_label": null
+    },
+    {
+      "key": "BEL_2026-10-17_R7",
+      "field_size": 6,
+      "geometry": "CLOSE_TOP_EARLY_RATINGS",
+      "top_two_gap": 5,
+      "front_cluster_count": 2,
+      "top_early_programs": [
+        "5"
+      ],
+      "top_early_observed_positions": [
+        2
+      ],
+      "top_early_top3_credit": 1.0,
+      "top_early_leader_credit": 0.0,
+      "top_early_normalized_position": 0.2,
+      "uniform_random_top3_reference": 0.5,
+      "observed_near_lead_count": 3,
+      "unknown_near_lead_count": 0,
+      "actual_first_call": "1/2",
+      "actual_near_lead_programs": [
+        "1",
+        "7",
+        "5"
+      ],
+      "actual_tempo_label": null
+    },
+    {
+      "key": "BEL_2026-10-17_R8",
+      "field_size": 9,
+      "geometry": "CLEAR_EARLY_RATING_GAP",
+      "top_two_gap": 12,
+      "front_cluster_count": 1,
+      "top_early_programs": [
+        "7"
+      ],
+      "top_early_observed_positions": [
+        1
+      ],
+      "top_early_top3_credit": 1.0,
+      "top_early_leader_credit": 1.0,
+      "top_early_normalized_position": 0.0,
+      "uniform_random_top3_reference": 0.3333333333333333,
+      "observed_near_lead_count": 2,
+      "unknown_near_lead_count": 0,
+      "actual_first_call": "1/2",
+      "actual_near_lead_programs": [
+        "7",
+        "8"
+      ],
+      "actual_tempo_label": null
+    },
+    {
+      "key": "BEL_2026-10-17_R9",
+      "field_size": 7,
+      "geometry": "INTERMEDIATE_GEOMETRY",
+      "top_two_gap": 9,
+      "front_cluster_count": 1,
+      "top_early_programs": [
+        "1"
+      ],
+      "top_early_observed_positions": [
+        1
+      ],
+      "top_early_top3_credit": 1.0,
+      "top_early_leader_credit": 1.0,
+      "top_early_normalized_position": 0.0,
+      "uniform_random_top3_reference": 0.42857142857142855,
+      "observed_near_lead_count": 2,
+      "unknown_near_lead_count": 0,
+      "actual_first_call": "1/2",
+      "actual_near_lead_programs": [
+        "1",
+        "4"
+      ],
+      "actual_tempo_label": null
+    },
+    {
+      "key": "BEL_2026-10-17_R10",
+      "field_size": 7,
+      "geometry": "CLOSE_TOP_EARLY_RATINGS",
+      "top_two_gap": 5,
+      "front_cluster_count": 2,
+      "top_early_programs": [
+        "6"
+      ],
+      "top_early_observed_positions": [
+        5
+      ],
+      "top_early_top3_credit": 0.0,
+      "top_early_leader_credit": 0.0,
+      "top_early_normalized_position": 0.6666666666666666,
+      "uniform_random_top3_reference": 0.42857142857142855,
+      "observed_near_lead_count": 1,
+      "unknown_near_lead_count": 0,
+      "actual_first_call": "1/2",
+      "actual_near_lead_programs": [
+        "3"
+      ],
+      "actual_tempo_label": null
+    },
+    {
+      "key": "BEL_2026-10-17_R11",
+      "field_size": 8,
+      "geometry": "CLOSE_TOP_EARLY_RATINGS",
+      "top_two_gap": 3,
+      "front_cluster_count": 2,
+      "top_early_programs": [
+        "4"
+      ],
+      "top_early_observed_positions": [
+        4
+      ],
+      "top_early_top3_credit": 0.0,
+      "top_early_leader_credit": 0.0,
+      "top_early_normalized_position": 0.42857142857142855,
+      "uniform_random_top3_reference": 0.375,
+      "observed_near_lead_count": 3,
+      "unknown_near_lead_count": 0,
+      "actual_first_call": "1/4",
+      "actual_near_lead_programs": [
+        "9",
+        "10",
+        "2"
+      ],
+      "actual_tempo_label": null
+    }
+  ]
+}

@@ -1,0 +1,3714 @@
+[
+  {
+    "date": "2026-10-16",
+    "race": 4,
+    "model": "contender",
+    "policy": "S0.5_P1",
+    "before_ranking": [
+      "4",
+      "6",
+      "9",
+      "8",
+      "3"
+    ],
+    "after_ranking": [
+      "4",
+      "6",
+      "9",
+      "3",
+      "8"
+    ],
+    "before": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 1,
+      "comparable_pairs": 1,
+      "possible_pairs": 6,
+      "full_top4_ranked": false,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 0,
+      "underneath_comparable": 0,
+      "underneath_possible": 3,
+      "top4_position_error": 4
+    },
+    "after": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 1,
+      "comparable_pairs": 1,
+      "possible_pairs": 6,
+      "full_top4_ranked": false,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 0,
+      "underneath_comparable": 0,
+      "underneath_possible": 3,
+      "top4_position_error": 3.75
+    }
+  },
+  {
+    "date": "2026-10-16",
+    "race": 4,
+    "model": "contender",
+    "policy": "S0.5_P1.5",
+    "before_ranking": [
+      "4",
+      "6",
+      "9",
+      "8",
+      "3"
+    ],
+    "after_ranking": [
+      "4",
+      "6",
+      "9",
+      "3",
+      "8"
+    ],
+    "before": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 1,
+      "comparable_pairs": 1,
+      "possible_pairs": 6,
+      "full_top4_ranked": false,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 0,
+      "underneath_comparable": 0,
+      "underneath_possible": 3,
+      "top4_position_error": 4
+    },
+    "after": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 1,
+      "comparable_pairs": 1,
+      "possible_pairs": 6,
+      "full_top4_ranked": false,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 0,
+      "underneath_comparable": 0,
+      "underneath_possible": 3,
+      "top4_position_error": 3.75
+    }
+  },
+  {
+    "date": "2026-10-16",
+    "race": 4,
+    "model": "contender",
+    "policy": "S1_P0.5",
+    "before_ranking": [
+      "4",
+      "6",
+      "9",
+      "8",
+      "3"
+    ],
+    "after_ranking": [
+      "4",
+      "6",
+      "9",
+      "3",
+      "8"
+    ],
+    "before": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 1,
+      "comparable_pairs": 1,
+      "possible_pairs": 6,
+      "full_top4_ranked": false,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 0,
+      "underneath_comparable": 0,
+      "underneath_possible": 3,
+      "top4_position_error": 4
+    },
+    "after": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 1,
+      "comparable_pairs": 1,
+      "possible_pairs": 6,
+      "full_top4_ranked": false,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 0,
+      "underneath_comparable": 0,
+      "underneath_possible": 3,
+      "top4_position_error": 3.75
+    }
+  },
+  {
+    "date": "2026-10-16",
+    "race": 4,
+    "model": "finisher",
+    "policy": "S1_P1",
+    "before_ranking": [
+      "4",
+      "6",
+      "9",
+      "8",
+      "3"
+    ],
+    "after_ranking": [
+      "4",
+      "6",
+      "9",
+      "3",
+      "8"
+    ],
+    "before": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 1,
+      "comparable_pairs": 1,
+      "possible_pairs": 6,
+      "full_top4_ranked": false,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 0,
+      "underneath_comparable": 0,
+      "underneath_possible": 3,
+      "top4_position_error": 4
+    },
+    "after": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 1,
+      "comparable_pairs": 1,
+      "possible_pairs": 6,
+      "full_top4_ranked": false,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 0,
+      "underneath_comparable": 0,
+      "underneath_possible": 3,
+      "top4_position_error": 3.75
+    }
+  },
+  {
+    "date": "2026-10-16",
+    "race": 4,
+    "model": "contender",
+    "policy": "S1_P1",
+    "before_ranking": [
+      "4",
+      "6",
+      "9",
+      "8",
+      "3"
+    ],
+    "after_ranking": [
+      "4",
+      "6",
+      "9",
+      "3",
+      "8"
+    ],
+    "before": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 1,
+      "comparable_pairs": 1,
+      "possible_pairs": 6,
+      "full_top4_ranked": false,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 0,
+      "underneath_comparable": 0,
+      "underneath_possible": 3,
+      "top4_position_error": 4
+    },
+    "after": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 1,
+      "comparable_pairs": 1,
+      "possible_pairs": 6,
+      "full_top4_ranked": false,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 0,
+      "underneath_comparable": 0,
+      "underneath_possible": 3,
+      "top4_position_error": 3.75
+    }
+  },
+  {
+    "date": "2026-10-16",
+    "race": 4,
+    "model": "finisher",
+    "policy": "S1_P1.5",
+    "before_ranking": [
+      "4",
+      "6",
+      "9",
+      "8",
+      "3"
+    ],
+    "after_ranking": [
+      "4",
+      "6",
+      "9",
+      "3",
+      "8"
+    ],
+    "before": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 1,
+      "comparable_pairs": 1,
+      "possible_pairs": 6,
+      "full_top4_ranked": false,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 0,
+      "underneath_comparable": 0,
+      "underneath_possible": 3,
+      "top4_position_error": 4
+    },
+    "after": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 1,
+      "comparable_pairs": 1,
+      "possible_pairs": 6,
+      "full_top4_ranked": false,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 0,
+      "underneath_comparable": 0,
+      "underneath_possible": 3,
+      "top4_position_error": 3.75
+    }
+  },
+  {
+    "date": "2026-10-16",
+    "race": 4,
+    "model": "contender",
+    "policy": "S1_P1.5",
+    "before_ranking": [
+      "4",
+      "6",
+      "9",
+      "8",
+      "3"
+    ],
+    "after_ranking": [
+      "4",
+      "6",
+      "9",
+      "3",
+      "8"
+    ],
+    "before": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 1,
+      "comparable_pairs": 1,
+      "possible_pairs": 6,
+      "full_top4_ranked": false,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 0,
+      "underneath_comparable": 0,
+      "underneath_possible": 3,
+      "top4_position_error": 4
+    },
+    "after": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 1,
+      "comparable_pairs": 1,
+      "possible_pairs": 6,
+      "full_top4_ranked": false,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 0,
+      "underneath_comparable": 0,
+      "underneath_possible": 3,
+      "top4_position_error": 3.75
+    }
+  },
+  {
+    "date": "2026-10-16",
+    "race": 4,
+    "model": "contender",
+    "policy": "S1.5_P0.5",
+    "before_ranking": [
+      "4",
+      "6",
+      "9",
+      "8",
+      "3"
+    ],
+    "after_ranking": [
+      "4",
+      "6",
+      "9",
+      "3",
+      "8"
+    ],
+    "before": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 1,
+      "comparable_pairs": 1,
+      "possible_pairs": 6,
+      "full_top4_ranked": false,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 0,
+      "underneath_comparable": 0,
+      "underneath_possible": 3,
+      "top4_position_error": 4
+    },
+    "after": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 1,
+      "comparable_pairs": 1,
+      "possible_pairs": 6,
+      "full_top4_ranked": false,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 0,
+      "underneath_comparable": 0,
+      "underneath_possible": 3,
+      "top4_position_error": 3.75
+    }
+  },
+  {
+    "date": "2026-10-16",
+    "race": 4,
+    "model": "finisher",
+    "policy": "S1.5_P1",
+    "before_ranking": [
+      "4",
+      "6",
+      "9",
+      "8",
+      "3"
+    ],
+    "after_ranking": [
+      "4",
+      "6",
+      "9",
+      "3",
+      "8"
+    ],
+    "before": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 1,
+      "comparable_pairs": 1,
+      "possible_pairs": 6,
+      "full_top4_ranked": false,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 0,
+      "underneath_comparable": 0,
+      "underneath_possible": 3,
+      "top4_position_error": 4
+    },
+    "after": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 1,
+      "comparable_pairs": 1,
+      "possible_pairs": 6,
+      "full_top4_ranked": false,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 0,
+      "underneath_comparable": 0,
+      "underneath_possible": 3,
+      "top4_position_error": 3.75
+    }
+  },
+  {
+    "date": "2026-10-16",
+    "race": 4,
+    "model": "contender",
+    "policy": "S1.5_P1",
+    "before_ranking": [
+      "4",
+      "6",
+      "9",
+      "8",
+      "3"
+    ],
+    "after_ranking": [
+      "4",
+      "6",
+      "9",
+      "3",
+      "8"
+    ],
+    "before": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 1,
+      "comparable_pairs": 1,
+      "possible_pairs": 6,
+      "full_top4_ranked": false,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 0,
+      "underneath_comparable": 0,
+      "underneath_possible": 3,
+      "top4_position_error": 4
+    },
+    "after": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 1,
+      "comparable_pairs": 1,
+      "possible_pairs": 6,
+      "full_top4_ranked": false,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 0,
+      "underneath_comparable": 0,
+      "underneath_possible": 3,
+      "top4_position_error": 3.75
+    }
+  },
+  {
+    "date": "2026-10-16",
+    "race": 4,
+    "model": "finisher",
+    "policy": "S1.5_P1.5",
+    "before_ranking": [
+      "4",
+      "6",
+      "9",
+      "8",
+      "3"
+    ],
+    "after_ranking": [
+      "4",
+      "6",
+      "9",
+      "3",
+      "8"
+    ],
+    "before": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 1,
+      "comparable_pairs": 1,
+      "possible_pairs": 6,
+      "full_top4_ranked": false,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 0,
+      "underneath_comparable": 0,
+      "underneath_possible": 3,
+      "top4_position_error": 4
+    },
+    "after": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 1,
+      "comparable_pairs": 1,
+      "possible_pairs": 6,
+      "full_top4_ranked": false,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 0,
+      "underneath_comparable": 0,
+      "underneath_possible": 3,
+      "top4_position_error": 3.75
+    }
+  },
+  {
+    "date": "2026-10-16",
+    "race": 4,
+    "model": "contender",
+    "policy": "S1.5_P1.5",
+    "before_ranking": [
+      "4",
+      "6",
+      "9",
+      "8",
+      "3"
+    ],
+    "after_ranking": [
+      "4",
+      "6",
+      "9",
+      "3",
+      "8"
+    ],
+    "before": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 1,
+      "comparable_pairs": 1,
+      "possible_pairs": 6,
+      "full_top4_ranked": false,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 0,
+      "underneath_comparable": 0,
+      "underneath_possible": 3,
+      "top4_position_error": 4
+    },
+    "after": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 1,
+      "comparable_pairs": 1,
+      "possible_pairs": 6,
+      "full_top4_ranked": false,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 0,
+      "underneath_comparable": 0,
+      "underneath_possible": 3,
+      "top4_position_error": 3.75
+    }
+  },
+  {
+    "date": "2026-10-16",
+    "race": 6,
+    "model": "finisher",
+    "policy": "S1_P0.5",
+    "before_ranking": [
+      "5",
+      "1",
+      "3",
+      "8",
+      "6",
+      "7",
+      "9"
+    ],
+    "after_ranking": [
+      "5",
+      "1",
+      "3",
+      "8",
+      "7",
+      "6",
+      "9"
+    ],
+    "before": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 5,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 2,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 2
+    },
+    "after": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 5,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 2,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 1.75
+    }
+  },
+  {
+    "date": "2026-10-16",
+    "race": 6,
+    "model": "contender",
+    "policy": "S1_P0.5",
+    "before_ranking": [
+      "5",
+      "1",
+      "3",
+      "8",
+      "9",
+      "6",
+      "7"
+    ],
+    "after_ranking": [
+      "5",
+      "1",
+      "3",
+      "8",
+      "9",
+      "7",
+      "6"
+    ],
+    "before": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 4,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 1,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 1.75
+    },
+    "after": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 4,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 1,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 1.5
+    }
+  },
+  {
+    "date": "2026-10-16",
+    "race": 6,
+    "model": "finisher",
+    "policy": "S1_P1",
+    "before_ranking": [
+      "5",
+      "1",
+      "3",
+      "8",
+      "6",
+      "7",
+      "9"
+    ],
+    "after_ranking": [
+      "5",
+      "1",
+      "3",
+      "8",
+      "7",
+      "9",
+      "6"
+    ],
+    "before": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 5,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 2,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 2
+    },
+    "after": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 5,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 2,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 1.5
+    }
+  },
+  {
+    "date": "2026-10-16",
+    "race": 6,
+    "model": "finisher",
+    "policy": "S1_P1.5",
+    "before_ranking": [
+      "5",
+      "1",
+      "3",
+      "8",
+      "6",
+      "7",
+      "9"
+    ],
+    "after_ranking": [
+      "5",
+      "1",
+      "3",
+      "8",
+      "7",
+      "9",
+      "6"
+    ],
+    "before": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 5,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 2,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 2
+    },
+    "after": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 5,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 2,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 1.5
+    }
+  },
+  {
+    "date": "2026-10-16",
+    "race": 6,
+    "model": "finisher",
+    "policy": "S1.5_P0.5",
+    "before_ranking": [
+      "5",
+      "1",
+      "3",
+      "8",
+      "6",
+      "7",
+      "9"
+    ],
+    "after_ranking": [
+      "5",
+      "1",
+      "3",
+      "8",
+      "7",
+      "6",
+      "9"
+    ],
+    "before": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 5,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 2,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 2
+    },
+    "after": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 5,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 2,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 1.75
+    }
+  },
+  {
+    "date": "2026-10-16",
+    "race": 6,
+    "model": "contender",
+    "policy": "S1.5_P0.5",
+    "before_ranking": [
+      "5",
+      "1",
+      "3",
+      "8",
+      "9",
+      "6",
+      "7"
+    ],
+    "after_ranking": [
+      "5",
+      "1",
+      "3",
+      "8",
+      "9",
+      "7",
+      "6"
+    ],
+    "before": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 4,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 1,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 1.75
+    },
+    "after": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 4,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 1,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 1.5
+    }
+  },
+  {
+    "date": "2026-10-16",
+    "race": 6,
+    "model": "finisher",
+    "policy": "S1.5_P1",
+    "before_ranking": [
+      "5",
+      "1",
+      "3",
+      "8",
+      "6",
+      "7",
+      "9"
+    ],
+    "after_ranking": [
+      "5",
+      "1",
+      "3",
+      "8",
+      "7",
+      "9",
+      "6"
+    ],
+    "before": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 5,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 2,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 2
+    },
+    "after": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 5,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 2,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 1.5
+    }
+  },
+  {
+    "date": "2026-10-16",
+    "race": 6,
+    "model": "finisher",
+    "policy": "S1.5_P1.5",
+    "before_ranking": [
+      "5",
+      "1",
+      "3",
+      "8",
+      "6",
+      "7",
+      "9"
+    ],
+    "after_ranking": [
+      "5",
+      "1",
+      "3",
+      "8",
+      "7",
+      "9",
+      "6"
+    ],
+    "before": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 5,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 2,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 2
+    },
+    "after": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 5,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 2,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 1.5
+    }
+  },
+  {
+    "date": "2026-10-21",
+    "race": 1,
+    "model": "finisher",
+    "policy": "S0.5_P1",
+    "before_ranking": [
+      "1",
+      "6",
+      "3",
+      "4",
+      "2",
+      "5"
+    ],
+    "after_ranking": [
+      "6",
+      "1",
+      "3",
+      "4",
+      "2",
+      "5"
+    ],
+    "before": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": true,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 5,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        true,
+        false,
+        true
+      ],
+      "underneath_correct": 2,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 0.75
+    },
+    "after": {
+      "winner_rank": 2,
+      "win": false,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 4,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        false,
+        false,
+        false,
+        true
+      ],
+      "underneath_correct": 2,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 1.25
+    }
+  },
+  {
+    "date": "2026-10-21",
+    "race": 1,
+    "model": "contender",
+    "policy": "S0.5_P1",
+    "before_ranking": [
+      "1",
+      "6",
+      "3",
+      "4",
+      "2",
+      "5"
+    ],
+    "after_ranking": [
+      "1",
+      "6",
+      "3",
+      "4",
+      "5",
+      "2"
+    ],
+    "before": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": true,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 5,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        true,
+        false,
+        true
+      ],
+      "underneath_correct": 2,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 0.75
+    },
+    "after": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": true,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 5,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        true,
+        false,
+        true
+      ],
+      "underneath_correct": 2,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 0.5
+    }
+  },
+  {
+    "date": "2026-10-21",
+    "race": 1,
+    "model": "finisher",
+    "policy": "S0.5_P1.5",
+    "before_ranking": [
+      "1",
+      "6",
+      "3",
+      "4",
+      "2",
+      "5"
+    ],
+    "after_ranking": [
+      "6",
+      "1",
+      "3",
+      "4",
+      "2",
+      "5"
+    ],
+    "before": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": true,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 5,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        true,
+        false,
+        true
+      ],
+      "underneath_correct": 2,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 0.75
+    },
+    "after": {
+      "winner_rank": 2,
+      "win": false,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 4,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        false,
+        false,
+        false,
+        true
+      ],
+      "underneath_correct": 2,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 1.25
+    }
+  },
+  {
+    "date": "2026-10-21",
+    "race": 1,
+    "model": "contender",
+    "policy": "S0.5_P1.5",
+    "before_ranking": [
+      "1",
+      "6",
+      "3",
+      "4",
+      "2",
+      "5"
+    ],
+    "after_ranking": [
+      "1",
+      "6",
+      "3",
+      "4",
+      "5",
+      "2"
+    ],
+    "before": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": true,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 5,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        true,
+        false,
+        true
+      ],
+      "underneath_correct": 2,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 0.75
+    },
+    "after": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": true,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 5,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        true,
+        false,
+        true
+      ],
+      "underneath_correct": 2,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 0.5
+    }
+  },
+  {
+    "date": "2026-10-21",
+    "race": 1,
+    "model": "finisher",
+    "policy": "S1_P0.5",
+    "before_ranking": [
+      "1",
+      "6",
+      "3",
+      "4",
+      "2",
+      "5"
+    ],
+    "after_ranking": [
+      "1",
+      "6",
+      "3",
+      "4",
+      "5",
+      "2"
+    ],
+    "before": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": true,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 5,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        true,
+        false,
+        true
+      ],
+      "underneath_correct": 2,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 0.75
+    },
+    "after": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": true,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 5,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        true,
+        false,
+        true
+      ],
+      "underneath_correct": 2,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 0.5
+    }
+  },
+  {
+    "date": "2026-10-21",
+    "race": 1,
+    "model": "contender",
+    "policy": "S1_P1",
+    "before_ranking": [
+      "1",
+      "6",
+      "3",
+      "4",
+      "2",
+      "5"
+    ],
+    "after_ranking": [
+      "1",
+      "6",
+      "3",
+      "4",
+      "5",
+      "2"
+    ],
+    "before": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": true,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 5,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        true,
+        false,
+        true
+      ],
+      "underneath_correct": 2,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 0.75
+    },
+    "after": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": true,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 5,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        true,
+        false,
+        true
+      ],
+      "underneath_correct": 2,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 0.5
+    }
+  },
+  {
+    "date": "2026-10-21",
+    "race": 1,
+    "model": "contender",
+    "policy": "S1_P1.5",
+    "before_ranking": [
+      "1",
+      "6",
+      "3",
+      "4",
+      "2",
+      "5"
+    ],
+    "after_ranking": [
+      "1",
+      "6",
+      "3",
+      "4",
+      "5",
+      "2"
+    ],
+    "before": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": true,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 5,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        true,
+        false,
+        true
+      ],
+      "underneath_correct": 2,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 0.75
+    },
+    "after": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": true,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 5,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        true,
+        false,
+        true
+      ],
+      "underneath_correct": 2,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 0.5
+    }
+  },
+  {
+    "date": "2026-10-21",
+    "race": 1,
+    "model": "finisher",
+    "policy": "S1.5_P0.5",
+    "before_ranking": [
+      "1",
+      "6",
+      "3",
+      "4",
+      "2",
+      "5"
+    ],
+    "after_ranking": [
+      "1",
+      "6",
+      "3",
+      "4",
+      "5",
+      "2"
+    ],
+    "before": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": true,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 5,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        true,
+        false,
+        true
+      ],
+      "underneath_correct": 2,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 0.75
+    },
+    "after": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": true,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 5,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        true,
+        false,
+        true
+      ],
+      "underneath_correct": 2,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 0.5
+    }
+  },
+  {
+    "date": "2026-10-21",
+    "race": 1,
+    "model": "contender",
+    "policy": "S1.5_P1",
+    "before_ranking": [
+      "1",
+      "6",
+      "3",
+      "4",
+      "2",
+      "5"
+    ],
+    "after_ranking": [
+      "1",
+      "6",
+      "3",
+      "4",
+      "5",
+      "2"
+    ],
+    "before": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": true,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 5,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        true,
+        false,
+        true
+      ],
+      "underneath_correct": 2,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 0.75
+    },
+    "after": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": true,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 5,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        true,
+        false,
+        true
+      ],
+      "underneath_correct": 2,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 0.5
+    }
+  },
+  {
+    "date": "2026-10-21",
+    "race": 1,
+    "model": "contender",
+    "policy": "S1.5_P1.5",
+    "before_ranking": [
+      "1",
+      "6",
+      "3",
+      "4",
+      "2",
+      "5"
+    ],
+    "after_ranking": [
+      "1",
+      "6",
+      "3",
+      "4",
+      "5",
+      "2"
+    ],
+    "before": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": true,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 5,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        true,
+        false,
+        true
+      ],
+      "underneath_correct": 2,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 0.75
+    },
+    "after": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": true,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 5,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        true,
+        false,
+        true
+      ],
+      "underneath_correct": 2,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 0.5
+    }
+  },
+  {
+    "date": "2026-10-21",
+    "race": 4,
+    "model": "finisher",
+    "policy": "S1.5_P0.5",
+    "before_ranking": [
+      "5",
+      "2",
+      "1",
+      "6",
+      "3",
+      "4"
+    ],
+    "after_ranking": [
+      "2",
+      "5",
+      "6",
+      "1",
+      "3",
+      "4"
+    ],
+    "before": {
+      "winner_rank": 2,
+      "win": false,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 3,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 0,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 1.75
+    },
+    "after": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 4,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        false,
+        true,
+        true
+      ],
+      "underneath_correct": 1,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 1
+    }
+  },
+  {
+    "date": "2026-10-21",
+    "race": 4,
+    "model": "finisher",
+    "policy": "S1.5_P1",
+    "before_ranking": [
+      "5",
+      "2",
+      "1",
+      "6",
+      "3",
+      "4"
+    ],
+    "after_ranking": [
+      "2",
+      "5",
+      "6",
+      "1",
+      "3",
+      "4"
+    ],
+    "before": {
+      "winner_rank": 2,
+      "win": false,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 3,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 0,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 1.75
+    },
+    "after": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 4,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        false,
+        true,
+        true
+      ],
+      "underneath_correct": 1,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 1
+    }
+  },
+  {
+    "date": "2026-10-21",
+    "race": 4,
+    "model": "finisher",
+    "policy": "S1.5_P1.5",
+    "before_ranking": [
+      "5",
+      "2",
+      "1",
+      "6",
+      "3",
+      "4"
+    ],
+    "after_ranking": [
+      "2",
+      "5",
+      "6",
+      "1",
+      "3",
+      "4"
+    ],
+    "before": {
+      "winner_rank": 2,
+      "win": false,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 3,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 0,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 1.75
+    },
+    "after": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 4,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        false,
+        true,
+        true
+      ],
+      "underneath_correct": 1,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 1
+    }
+  },
+  {
+    "date": "2026-10-21",
+    "race": 6,
+    "model": "contender",
+    "policy": "S0.5_P1",
+    "before_ranking": [
+      "3",
+      "5",
+      "7",
+      "1",
+      "2",
+      "6",
+      "4"
+    ],
+    "after_ranking": [
+      "3",
+      "5",
+      "7",
+      "1",
+      "6",
+      "2",
+      "4"
+    ],
+    "before": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 3,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        true
+      ],
+      "underneath_correct": 0,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 1.5
+    },
+    "after": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 4,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        true
+      ],
+      "underneath_correct": 1,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 1.5
+    }
+  },
+  {
+    "date": "2026-10-21",
+    "race": 6,
+    "model": "contender",
+    "policy": "S0.5_P1.5",
+    "before_ranking": [
+      "3",
+      "5",
+      "7",
+      "1",
+      "2",
+      "6",
+      "4"
+    ],
+    "after_ranking": [
+      "3",
+      "5",
+      "7",
+      "1",
+      "6",
+      "2",
+      "4"
+    ],
+    "before": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 3,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        true
+      ],
+      "underneath_correct": 0,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 1.5
+    },
+    "after": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 4,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        true
+      ],
+      "underneath_correct": 1,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 1.5
+    }
+  },
+  {
+    "date": "2026-10-21",
+    "race": 6,
+    "model": "finisher",
+    "policy": "S1_P0.5",
+    "before_ranking": [
+      "3",
+      "5",
+      "7",
+      "6",
+      "1",
+      "2",
+      "4"
+    ],
+    "after_ranking": [
+      "3",
+      "5",
+      "7",
+      "6",
+      "1",
+      "4",
+      "2"
+    ],
+    "before": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 5,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 2,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 1.5
+    },
+    "after": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 5,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 2,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 1.75
+    }
+  },
+  {
+    "date": "2026-10-21",
+    "race": 6,
+    "model": "finisher",
+    "policy": "S1_P1",
+    "before_ranking": [
+      "3",
+      "5",
+      "7",
+      "6",
+      "1",
+      "2",
+      "4"
+    ],
+    "after_ranking": [
+      "3",
+      "7",
+      "5",
+      "6",
+      "1",
+      "4",
+      "2"
+    ],
+    "before": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 5,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 2,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 1.5
+    },
+    "after": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 5,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 2,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 1.75
+    }
+  },
+  {
+    "date": "2026-10-21",
+    "race": 6,
+    "model": "contender",
+    "policy": "S1_P1",
+    "before_ranking": [
+      "3",
+      "5",
+      "7",
+      "1",
+      "2",
+      "6",
+      "4"
+    ],
+    "after_ranking": [
+      "3",
+      "5",
+      "7",
+      "1",
+      "6",
+      "2",
+      "4"
+    ],
+    "before": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 3,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        true
+      ],
+      "underneath_correct": 0,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 1.5
+    },
+    "after": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 4,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        true
+      ],
+      "underneath_correct": 1,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 1.5
+    }
+  },
+  {
+    "date": "2026-10-21",
+    "race": 6,
+    "model": "finisher",
+    "policy": "S1_P1.5",
+    "before_ranking": [
+      "3",
+      "5",
+      "7",
+      "6",
+      "1",
+      "2",
+      "4"
+    ],
+    "after_ranking": [
+      "3",
+      "7",
+      "5",
+      "6",
+      "1",
+      "4",
+      "2"
+    ],
+    "before": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 5,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 2,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 1.5
+    },
+    "after": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 5,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 2,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 1.75
+    }
+  },
+  {
+    "date": "2026-10-21",
+    "race": 6,
+    "model": "contender",
+    "policy": "S1_P1.5",
+    "before_ranking": [
+      "3",
+      "5",
+      "7",
+      "1",
+      "2",
+      "6",
+      "4"
+    ],
+    "after_ranking": [
+      "3",
+      "5",
+      "7",
+      "1",
+      "6",
+      "2",
+      "4"
+    ],
+    "before": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 3,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        true
+      ],
+      "underneath_correct": 0,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 1.5
+    },
+    "after": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 4,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        true
+      ],
+      "underneath_correct": 1,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 1.5
+    }
+  },
+  {
+    "date": "2026-10-21",
+    "race": 6,
+    "model": "finisher",
+    "policy": "S1.5_P0.5",
+    "before_ranking": [
+      "3",
+      "5",
+      "7",
+      "6",
+      "1",
+      "2",
+      "4"
+    ],
+    "after_ranking": [
+      "3",
+      "5",
+      "7",
+      "6",
+      "1",
+      "4",
+      "2"
+    ],
+    "before": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 5,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 2,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 1.5
+    },
+    "after": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 5,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 2,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 1.75
+    }
+  },
+  {
+    "date": "2026-10-21",
+    "race": 6,
+    "model": "finisher",
+    "policy": "S1.5_P1",
+    "before_ranking": [
+      "3",
+      "5",
+      "7",
+      "6",
+      "1",
+      "2",
+      "4"
+    ],
+    "after_ranking": [
+      "3",
+      "7",
+      "5",
+      "6",
+      "1",
+      "4",
+      "2"
+    ],
+    "before": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 5,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 2,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 1.5
+    },
+    "after": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 5,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 2,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 1.75
+    }
+  },
+  {
+    "date": "2026-10-21",
+    "race": 6,
+    "model": "contender",
+    "policy": "S1.5_P1",
+    "before_ranking": [
+      "3",
+      "5",
+      "7",
+      "1",
+      "2",
+      "6",
+      "4"
+    ],
+    "after_ranking": [
+      "3",
+      "5",
+      "7",
+      "1",
+      "6",
+      "2",
+      "4"
+    ],
+    "before": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 3,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        true
+      ],
+      "underneath_correct": 0,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 1.5
+    },
+    "after": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 4,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        true
+      ],
+      "underneath_correct": 1,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 1.5
+    }
+  },
+  {
+    "date": "2026-10-21",
+    "race": 6,
+    "model": "finisher",
+    "policy": "S1.5_P1.5",
+    "before_ranking": [
+      "3",
+      "5",
+      "7",
+      "6",
+      "1",
+      "2",
+      "4"
+    ],
+    "after_ranking": [
+      "3",
+      "7",
+      "5",
+      "6",
+      "1",
+      "4",
+      "2"
+    ],
+    "before": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 5,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 2,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 1.5
+    },
+    "after": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 5,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 2,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 1.75
+    }
+  },
+  {
+    "date": "2026-10-21",
+    "race": 6,
+    "model": "contender",
+    "policy": "S1.5_P1.5",
+    "before_ranking": [
+      "3",
+      "5",
+      "7",
+      "1",
+      "2",
+      "6",
+      "4"
+    ],
+    "after_ranking": [
+      "3",
+      "5",
+      "7",
+      "1",
+      "6",
+      "2",
+      "4"
+    ],
+    "before": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 3,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        true
+      ],
+      "underneath_correct": 0,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 1.5
+    },
+    "after": {
+      "winner_rank": 1,
+      "win": true,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 4,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        true,
+        false,
+        false,
+        true
+      ],
+      "underneath_correct": 1,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 1.5
+    }
+  },
+  {
+    "date": "2026-10-21",
+    "race": 7,
+    "model": "finisher",
+    "policy": "S0.5_P1",
+    "before_ranking": [
+      "8",
+      "5",
+      "7",
+      "6",
+      "3",
+      "1",
+      "2",
+      "4"
+    ],
+    "after_ranking": [
+      "8",
+      "5",
+      "7",
+      "3",
+      "6",
+      "1",
+      "4",
+      "2"
+    ],
+    "before": {
+      "winner_rank": 3,
+      "win": false,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 3,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 1,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 2.75
+    },
+    "after": {
+      "winner_rank": 3,
+      "win": false,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 3,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 1,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 3
+    }
+  },
+  {
+    "date": "2026-10-21",
+    "race": 7,
+    "model": "contender",
+    "policy": "S0.5_P1",
+    "before_ranking": [
+      "8",
+      "3",
+      "5",
+      "7",
+      "6",
+      "1",
+      "2",
+      "4"
+    ],
+    "after_ranking": [
+      "8",
+      "3",
+      "5",
+      "7",
+      "6",
+      "1",
+      "4",
+      "2"
+    ],
+    "before": {
+      "winner_rank": 4,
+      "win": false,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 3,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 1,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 3
+    },
+    "after": {
+      "winner_rank": 4,
+      "win": false,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 3,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 1,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 3.25
+    }
+  },
+  {
+    "date": "2026-10-21",
+    "race": 7,
+    "model": "finisher",
+    "policy": "S0.5_P1.5",
+    "before_ranking": [
+      "8",
+      "5",
+      "7",
+      "6",
+      "3",
+      "1",
+      "2",
+      "4"
+    ],
+    "after_ranking": [
+      "8",
+      "5",
+      "7",
+      "3",
+      "6",
+      "1",
+      "4",
+      "2"
+    ],
+    "before": {
+      "winner_rank": 3,
+      "win": false,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 3,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 1,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 2.75
+    },
+    "after": {
+      "winner_rank": 3,
+      "win": false,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 3,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 1,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 3
+    }
+  },
+  {
+    "date": "2026-10-21",
+    "race": 7,
+    "model": "contender",
+    "policy": "S0.5_P1.5",
+    "before_ranking": [
+      "8",
+      "3",
+      "5",
+      "7",
+      "6",
+      "1",
+      "2",
+      "4"
+    ],
+    "after_ranking": [
+      "8",
+      "3",
+      "5",
+      "7",
+      "6",
+      "1",
+      "4",
+      "2"
+    ],
+    "before": {
+      "winner_rank": 4,
+      "win": false,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 3,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 1,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 3
+    },
+    "after": {
+      "winner_rank": 4,
+      "win": false,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 3,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 1,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 3.25
+    }
+  },
+  {
+    "date": "2026-10-21",
+    "race": 7,
+    "model": "finisher",
+    "policy": "S1_P1",
+    "before_ranking": [
+      "8",
+      "5",
+      "7",
+      "6",
+      "3",
+      "1",
+      "2",
+      "4"
+    ],
+    "after_ranking": [
+      "8",
+      "5",
+      "7",
+      "6",
+      "3",
+      "1",
+      "4",
+      "2"
+    ],
+    "before": {
+      "winner_rank": 3,
+      "win": false,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 3,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 1,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 2.75
+    },
+    "after": {
+      "winner_rank": 3,
+      "win": false,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 3,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 1,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 3
+    }
+  },
+  {
+    "date": "2026-10-21",
+    "race": 7,
+    "model": "contender",
+    "policy": "S1_P1",
+    "before_ranking": [
+      "8",
+      "3",
+      "5",
+      "7",
+      "6",
+      "1",
+      "2",
+      "4"
+    ],
+    "after_ranking": [
+      "8",
+      "3",
+      "5",
+      "7",
+      "6",
+      "1",
+      "4",
+      "2"
+    ],
+    "before": {
+      "winner_rank": 4,
+      "win": false,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 3,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 1,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 3
+    },
+    "after": {
+      "winner_rank": 4,
+      "win": false,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 3,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 1,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 3.25
+    }
+  },
+  {
+    "date": "2026-10-21",
+    "race": 7,
+    "model": "finisher",
+    "policy": "S1_P1.5",
+    "before_ranking": [
+      "8",
+      "5",
+      "7",
+      "6",
+      "3",
+      "1",
+      "2",
+      "4"
+    ],
+    "after_ranking": [
+      "8",
+      "5",
+      "7",
+      "6",
+      "3",
+      "1",
+      "4",
+      "2"
+    ],
+    "before": {
+      "winner_rank": 3,
+      "win": false,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 3,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 1,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 2.75
+    },
+    "after": {
+      "winner_rank": 3,
+      "win": false,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 3,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 1,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 3
+    }
+  },
+  {
+    "date": "2026-10-21",
+    "race": 7,
+    "model": "contender",
+    "policy": "S1_P1.5",
+    "before_ranking": [
+      "8",
+      "3",
+      "5",
+      "7",
+      "6",
+      "1",
+      "2",
+      "4"
+    ],
+    "after_ranking": [
+      "8",
+      "3",
+      "5",
+      "7",
+      "6",
+      "1",
+      "4",
+      "2"
+    ],
+    "before": {
+      "winner_rank": 4,
+      "win": false,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 3,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 1,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 3
+    },
+    "after": {
+      "winner_rank": 4,
+      "win": false,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 3,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 1,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 3.25
+    }
+  },
+  {
+    "date": "2026-10-21",
+    "race": 7,
+    "model": "finisher",
+    "policy": "S1.5_P1",
+    "before_ranking": [
+      "8",
+      "5",
+      "7",
+      "6",
+      "3",
+      "1",
+      "2",
+      "4"
+    ],
+    "after_ranking": [
+      "8",
+      "5",
+      "7",
+      "6",
+      "3",
+      "1",
+      "4",
+      "2"
+    ],
+    "before": {
+      "winner_rank": 3,
+      "win": false,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 3,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 1,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 2.75
+    },
+    "after": {
+      "winner_rank": 3,
+      "win": false,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 3,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 1,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 3
+    }
+  },
+  {
+    "date": "2026-10-21",
+    "race": 7,
+    "model": "contender",
+    "policy": "S1.5_P1",
+    "before_ranking": [
+      "8",
+      "3",
+      "5",
+      "7",
+      "6",
+      "1",
+      "2",
+      "4"
+    ],
+    "after_ranking": [
+      "8",
+      "3",
+      "5",
+      "7",
+      "6",
+      "1",
+      "4",
+      "2"
+    ],
+    "before": {
+      "winner_rank": 4,
+      "win": false,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 3,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 1,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 3
+    },
+    "after": {
+      "winner_rank": 4,
+      "win": false,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 3,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 1,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 3.25
+    }
+  },
+  {
+    "date": "2026-10-21",
+    "race": 7,
+    "model": "finisher",
+    "policy": "S1.5_P1.5",
+    "before_ranking": [
+      "8",
+      "5",
+      "7",
+      "6",
+      "3",
+      "1",
+      "2",
+      "4"
+    ],
+    "after_ranking": [
+      "8",
+      "5",
+      "7",
+      "6",
+      "3",
+      "1",
+      "4",
+      "2"
+    ],
+    "before": {
+      "winner_rank": 3,
+      "win": false,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 3,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 1,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 2.75
+    },
+    "after": {
+      "winner_rank": 3,
+      "win": false,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 3,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 1,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 3
+    }
+  },
+  {
+    "date": "2026-10-21",
+    "race": 7,
+    "model": "contender",
+    "policy": "S1.5_P1.5",
+    "before_ranking": [
+      "8",
+      "3",
+      "5",
+      "7",
+      "6",
+      "1",
+      "2",
+      "4"
+    ],
+    "after_ranking": [
+      "8",
+      "3",
+      "5",
+      "7",
+      "6",
+      "1",
+      "4",
+      "2"
+    ],
+    "before": {
+      "winner_rank": 4,
+      "win": false,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 3,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 1,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 3
+    },
+    "after": {
+      "winner_rank": 4,
+      "win": false,
+      "exacta": false,
+      "trifecta": false,
+      "superfecta": false,
+      "correct_pairs": 3,
+      "comparable_pairs": 6,
+      "possible_pairs": 6,
+      "full_top4_ranked": true,
+      "slot_hits": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "underneath_correct": 1,
+      "underneath_comparable": 3,
+      "underneath_possible": 3,
+      "top4_position_error": 3.25
+    }
+  }
+]

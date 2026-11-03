@@ -1,0 +1,43 @@
+{
+  "classification": "POSTHOC_REUSED_DRF_DEVELOPMENT_ONLY",
+  "hypothesis": "Incremental historical against-flow effort quality with current Contender context unchanged",
+  "population": "Same 124 previously analyzed DRF races; no sealed holdouts",
+  "arms": [
+    "CURRENT_CONTENDER",
+    "CURRENT_PLUS_HISTORICAL_QUALITY"
+  ],
+  "cap_score_points": 0.05,
+  "lookback_days": 365,
+  "matched_distance_tolerance_furlongs": 0.5,
+  "history": "Latest three prior rows matching target surface and distance; weights .5/.3/.2; do not replace malformed selected rows with older favorable rows",
+  "minimum_usable_rows": 2,
+  "row_weights": [
+    0.5,
+    0.3,
+    0.2
+  ],
+  "shape_map": {
+    "S": "FAVORED_SPEED",
+    "\u00ff": "EXTREMELY_FAVORED_SPEED",
+    "C": "FAVORED_CLOSERS",
+    "\u00fd": "EXTREMELY_FAVORED_CLOSERS"
+  },
+  "extreme_multiplier": 1,
+  "good_finish": "Top three and within three lengths; winning lead margins never treated as beaten margins",
+  "early_against_flow": "C/\u00fd; both middle pre-stretch printed checkpoints position <=2 and within two lengths of leader; good finish",
+  "late_against_flow": "S/\u00ff; both middle pre-stretch printed checkpoints position >=4 and at least two lengths behind; good finish; gains >=2 positions and >=2 beaten lengths from third printed checkpoint to finish",
+  "call_labels": "Five-slot standard rows only; use raw slots 2 and 3 without universal furlong labels",
+  "unknown_shapes": "Unmarked/unknown flow is unknown, earns zero reward; not assumed neutral",
+  "surface_gate": "Turf explicit \u00ea/\u00d1; dirt restricted to Aqu/BAQ/Sar/Bel/CD/Kee without synthetic/turf glyph; others withheld",
+  "adjustment": ".05 times weighted sum of qualifying row indicators; no field percentile, no new setup interaction, no penalties, no fitting or threshold search",
+  "freeze_before_grading": true,
+  "limitations": [
+    "Reused exposed development results, not independent validation",
+    "Only historical flow-supported effort, not full effort quality",
+    "At most three matching rows, not general style classification",
+    "No Brisnet raw figures mixed with DRF"
+  ],
+  "production_changed": false,
+  "holdout_files_used": 0,
+  "target_surface_consistency_gate": "If frozen parent surface and parsed PP metadata disagree, withhold whole-field adjustment; preserve parent baseline and report discrepancy. Do not silently correct in this isolated test."
+}
