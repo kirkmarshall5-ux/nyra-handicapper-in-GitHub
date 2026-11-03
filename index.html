@@ -774,7 +774,7 @@ labButton.onclick=()=>{
  const accepted=[],excluded=[];
  for(const key of Object.keys(card.races).sort((a,b)=>+a-+b)){
   const source=card.id===activeCard.id&&String(race.race)===String(key)?race:card.races[key];
-  try{accepted.push(exportDrfLabRace(source));}
+  try{accepted.push(exportDrfLabRace({...source,track:source.track||card.track,date:source.date||card.date,race:source.race||Number(key)}));}
   catch(e){excluded.push({race:String(key),reason:String(e?.message||e)});}
  }
  if(!accepted.length){status.textContent='Research Lab export blocked: no complete DRF races. '+excluded.map(x=>'R'+x.race+': '+x.reason).join(' | ').slice(0,400);return;}
