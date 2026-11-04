@@ -40,8 +40,8 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 .evidence .note{min-height:105px}@media(max-width:900px){.evidence{grid-template-columns:1fr}}
 @media(max-width:1100px){.span3{grid-column:span 6}.ticketgrid{grid-template-columns:repeat(3,1fr)}th,td{white-space:nowrap}.card{padding:14px}}
 @media(max-width:700px){.span3,.span4,.span5,.span6,.span7,.span8{grid-column:span 12}.ticketgrid,.controls{grid-template-columns:1fr 1fr}.wrap,main{padding-left:10px;padding-right:10px}}
-.comparison-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:stretch}.comparison-row>.card{grid-column:auto;min-width:0}.comparison-row .candidate-table th:nth-child(3){white-space:normal}.morning-line-table th:last-child,.morning-line-table td:last-child{white-space:normal;overflow-wrap:anywhere}
-@media(max-width:759px){.comparison-row{grid-template-columns:minmax(0,1fr)}}
+.comparison-row{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:14px;align-items:stretch}.comparison-row>.card{grid-column:span 2;min-width:0}.comparison-row>.card:nth-child(n+4){grid-column:span 3}.comparison-row .candidate-table th:nth-child(3){white-space:normal}.morning-line-table th:last-child,.morning-line-table td:last-child{white-space:normal;overflow-wrap:anywhere}
+@media(max-width:759px){.comparison-row{grid-template-columns:minmax(0,1fr)}.comparison-row>.card,.comparison-row>.card:nth-child(n+4){grid-column:auto}}
 .contender-rankings .candidate-table th:nth-child(n+3),.contender-rankings .candidate-table td:nth-child(n+3){display:none}
 .contender-rankings .candidate-table th:first-child{width:78%}.contender-rankings .candidate-table th:nth-child(2){width:22%}
 #pace > .grid > .card,#paceSourceEvidence{min-width:0}.pace-comparison-table{min-width:760px}.pace-comparison-table th{position:static}.pace-comparison-table td:first-child{min-width:180px;white-space:normal}.pace-comparison-table td{font-variant-numeric:tabular-nums}.pace-comparison-table th:first-child,.pace-comparison-table td:first-child{position:sticky;left:0;background:var(--panel);z-index:1}.pace-scroll-hint{display:none}@media(max-width:900px){.pace-scroll-hint{display:block;margin-bottom:8px}}
@@ -101,6 +101,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <div class="span12 comparison-row">
 <div class="card span4"><div class="kicker">Morning Line</div><div id="topMl" class="stack small"></div></div>
 <div class="card span4"><div class="kicker">Brisnet · Contender</div><div id="brisContenderCandidates" class="stack small contender-rankings"></div><details class="tiny muted" style="margin-top:10px"><summary>How Contender ranks</summary><p>Contender V2 combines relative field scores using frozen coefficients for recent Beyers, surface and distance form, Timeform Early and Late pace, race pressure, career records, jockey and trainer records, layoffs, workouts, verified trip comments and prior opposition. It also uses a surface/distance matched Beyer trend when at least three comparable starts are verified. Missing features are neutral. This model was trained for top-three contention; its win chances remain experimental. PASS races show provisional rated runners only.</p></details></div>
+<div class="card span4"><div class="kicker">Brisnet · Best Recent Research</div><div class="tiny muted">Best Recent 0.63400 · Late 25% · Early −25%</div><div id="brisResearchCandidates" class="stack small contender-rankings" aria-live="polite"></div></div>
 <div class="card span4"><div class="kicker">DRF · Contender · Late +50%</div><div id="contenderCandidates" class="stack small contender-rankings"></div><details class="tiny muted" style="margin-top:10px"><summary>How Contender ranks</summary><p>Contender V2 combines relative field scores using frozen coefficients for recent Beyers, surface and distance form, Timeform Early pace and Late pace with a 50% higher coefficient, race pressure, career records, jockey and trainer records, layoffs, workouts, verified trip comments and prior opposition. It also uses a surface/distance matched Beyer trend when at least three comparable starts are verified. Missing features are neutral. This model was trained for top-three contention; its win chances remain experimental. PASS races show provisional rated runners only.</p></details></div>
 <div class="card span4"><div class="kicker">DRF · Finisher</div><div id="finisherCandidates" class="stack small" aria-live="polite"></div><details class="tiny muted" style="margin-top:10px"><summary>How Finisher ranks</summary><p>Fixed weights: recent speed 60%, same-surface/distance speed 25%, Late pace 15%. Inputs use field percentiles from 0 to 100. Recent speed uses the latest five starts at 50/25/15/7/3, normalized for available figures. Matching speed uses the latest five proof rows, within 365 days and one furlong, with a 90-day decay half-life. Verified DRF fractional distances are decoded separately from the control. Missing optional inputs stay neutral at 50 without redistributing weights. First-time starters and runners without verified recent speed remain unranked; partial fields show PASS. Brisnet uses native Speed and matched LP. Exact score ties use horse name. V4.4c remains the control.</p></details></div>
 </div>
@@ -228,6 +229,7 @@ import {finisherRankingHtml} from "./finisher-ranking-display.js?v=20261101-name
 import {buildRaceDashboard,dashboardHtml,selectMorningLineProvider,morningLineForRunner,morningLineNumber} from "./race-day-dashboard.js?v=20261101-mlfallback";
 import {rankContenders} from "./contender-rankings.js?v=20261103-late150";
 import {rankBrisnetModels} from "./brisnet-models.js?v=20261023-distance1";
+import {rankBrisnetResearch} from "./brisnet-research.js?v=20261104-bestlate25early75";
 import {brisnetRaceModelAudit} from "./brisnet-model-audit.js?v=20261023-distance1";
 import {brisnetRankingHtml,updateBrisnetMethods} from "./brisnet-ranking-display.js?v=20261022-layout3";
 import {cardProvider,matchingCard,pairedRace,putProviderCard,readProviderCards,writeProviderCard,readProviderSession,writeProviderSession,writeProviderCardsSession} from "./dual-pp-cards.js?v=20261025-staged1";
@@ -354,6 +356,8 @@ document.getElementById('printPicks').onclick=()=>{
 let dashboardPaperSource='drfContender';
 function currentDashboard(){
  const dashboard=buildRaceDashboard({anchor:race,sources:{BRISNET:providerRace('BRISNET'),DRF:providerRace('DRF')},morningLineProvider:morningLineProvider()});
+ const researchRace=providerRace('BRISNET').race;
+ dashboard.research_models={brisnet_best_recent:researchRace?rankBrisnetResearch(researchRace):null};
  dashboard.demonstration=activeCard.id===sampleCard.id;
  dashboard.source_cards=Object.fromEntries(['BRISNET','DRF'].map(p=>{const c=providerCards[p];return [p,c?{card_id:c.id,track:c.track,date:c.date,source_name:c.sourceName||null,parser_version:c.parser_version||null,imported_at:c.imported_at||null}:null];}));
  return dashboard;
@@ -371,7 +375,7 @@ document.getElementById('freezeAllModels').onclick=()=>{
  const status=document.getElementById('freezeAllStatus');
  if(activeCard.id===sampleCard.id||!activeCard.date||!Object.keys(activeCard.races||{}).length){status.textContent='Freeze refused: load a verified, dated PP card first.';return;}
  const now=new Date(),original=structuredClone(race),rows=[];
- const ids=['brisTopContenders','brisFinisherCandidates','brisContenderCandidates','topContenders','finisherCandidates','contenderCandidates'];
+ const ids=['brisResearchCandidates','brisTopContenders','brisFinisherCandidates','brisContenderCandidates','topContenders','finisherCandidates','contenderCandidates'];
  const saved=ids.map(id=>[id,document.getElementById(id).innerHTML]);
  try{
   for(const key of Object.keys(activeCard.races).sort((a,b)=>+a-+b)){
@@ -430,6 +434,8 @@ function morningLineProvider(){
 }
 function renderRaceInsights(){
  renderDashboard();
+ const researchSource=providerRace('BRISNET'),research=researchSource.race?rankBrisnetResearch(researchSource.race):null;
+ document.getElementById('brisResearchCandidates').innerHTML=research?brisnetRankingHtml(research,'contender',researchSource.race).replace('Contender-Brisnet · experimental','Best Recent · research'):'<div class="note small">'+escapeText(researchSource.reason)+'</div>';
  const ids={BRISNET:['brisTopContenders','brisFinisherCandidates','brisContenderCandidates'],DRF:['topContenders','finisherCandidates','contenderCandidates']};
  for(const provider of ['BRISNET','DRF']){const source=providerRace(provider);if(source.race)renderModelRow(source.race,ids[provider]);else for(const id of ids[provider])document.getElementById(id).innerHTML='<div class="note small">'+escapeText(source.reason)+'</div>';}
  document.getElementById('ppSourceView').value=cardProvider(activeCard);
