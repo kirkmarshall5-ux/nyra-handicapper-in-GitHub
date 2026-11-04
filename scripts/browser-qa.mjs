@@ -47,10 +47,11 @@ for(const profile of profiles){
   await page.evaluate(()=>window.scrollTo(0,0));
   await page.locator('#racebar button').first().click();
  });
- await check('D02-four-comparison-panels-and-hidden-panels',async()=>{
+ await check('D02-five-comparison-panels-and-hidden-panels',async()=>{
   for(const id of ['topContenders','finisherCandidates','contenderCandidates'])assert.equal(await page.locator('#'+id).count(),1);
   const boxes=await Promise.all(['topMl','brisContenderCandidates','contenderCandidates','finisherCandidates'].map(id=>page.locator('#'+id).boundingBox()));
   assert.ok(boxes.every(Boolean));
+  const researchBox=await page.locator('#brisResearchCandidates').boundingBox();assert.ok(researchBox);if(profile.viewport.width>=760)assert.ok(researchBox.x>boxes[1].x&&Math.abs(researchBox.y-boxes[1].y)<2,'Research must sit right of preserved Brisnet Contender');
   if(profile.viewport.width>=760){assert.ok(boxes[0].x<boxes[1].x&&boxes[2].x<boxes[3].x,'Both rows must run left to right');assert.ok(Math.abs(boxes[0].y-boxes[1].y)<2&&Math.abs(boxes[2].y-boxes[3].y)<2,'Each pair must share a row');assert.ok(boxes[2].y>boxes[0].y&&Math.abs(boxes[0].x-boxes[2].x)<2,'DRF Contender must sit below Morning Line');}
   else{assert.ok(boxes[0].y<boxes[1].y&&boxes[1].y<boxes[2].y&&boxes[2].y<boxes[3].y,'Mobile panels must retain comparison order');}
   for(const id of ['contenderCandidates','brisContenderCandidates']){
@@ -433,12 +434,15 @@ for(const profile of profiles){
    await page.locator('[data-tab="pace"]').click();assert.equal(await page.locator('#ppSourceView').inputValue(),'BRISNET');assert.match(await page.locator('#paceCardStatus').innerText(),/Showing Brisnet.*2026-10-18.*Race 2/);assert.match(await page.locator('#paceSourceLabel').innerText(),/Brisnet native/i);assert.match(await page.locator('#weights').innerText(),/Brisnet/);
    await page.locator('[data-tab="raceday"]').click();assert.match(await page.locator('#horseTable tbody tr[data-program="1"]').innerText(),/71/);await page.locator('[data-tab="public"]').click();await page.locator('#ppSourceView').selectOption('DRF');await page.locator('[data-tab="raceday"]').click();
    await page.screenshot({path:`${out}/${profile.name}-paired-PPs.png`,fullPage:true});
+   const researchDownload=page.waitForEvent('download');await page.locator('[data-tab="public"]').click();await page.locator('#freezeAllModels').click();const researchFile=await researchDownload;const researchJson=JSON.parse(readFileSync(await researchFile.path(),'utf8'));assert.ok(researchJson.races.length);for(const rr of researchJson.races){const model=rr.dashboard.research_models.brisnet_best_recent;assert.equal(model.model_id,'BRISNET-BEST063400-LATE25-EARLY75-20261104');assert.ok(rr.models.brisResearchCandidates);assert.ok(model.rankings.every((h,i,a)=>i===0||a[i-1].score>=h.score));}await page.locator('[data-tab="raceday"]').click();
    const beforeFieldCorrection=await page.evaluate(async()=>{const m=await import('./dual-pp-cards.js');return JSON.stringify(await m.readProviderCards());});
    await page.evaluate(async()=>{const m=await import('./dual-pp-cards.js'),cards=await m.readProviderCards();for(const c of Object.values(cards)){const h=c.races[2].horses.find(h=>String(h.n)==='2');h.entry_status='AE';h.included_in_frozen_field=false;}await m.writeProviderCardsSession(cards,{},'DRF');});
    await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});await page.locator('#racebar button').nth(1).click();
    await page.locator('#horseTable [data-program="2"][data-field-action="running"]').click();await page.locator('#horseTable tr[data-program="2"]').getByText('AE drawn in',{exact:false}).waitFor();assert.doesNotMatch(await page.locator('#gridFieldStatus').innerText(),/Also eligible \(not drawn in\): #2/);assert.equal(await page.locator('#horseTable tr[data-program="2"] .grid-contender-rank').innerText()!=='Excluded',true);
+   const researchBefore=await page.locator('#brisResearchCandidates').innerText();assert.match(researchBefore,/QA Paired/);
    await page.locator('#horseTable [data-program="1"][data-field-action="scratch"]').click();await page.locator('#gridFieldStatus').getByText('Scratched: #1',{exact:false}).waitFor();assert.equal(await page.locator('#horseTable tr[data-program="1"]').count(),1);
    await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
+   assert.equal(await page.locator('#brisResearchCandidates tbody tr').filter({hasText:/#1 QA Paired/}).count(),0,'Scratched runner excluded from research after refresh');
    const corrected=await page.evaluate(async()=>{const m=await import('./dual-pp-cards.js');return m.readProviderCards();});for(const c of Object.values(corrected)){assert.equal(c.races[2].horses.find(h=>String(h.n)==='2').included_in_frozen_field,true);assert.equal(c.races[2].horses.find(h=>String(h.n)==='1').odds,'SCR');}
    await page.evaluate(async raw=>{const m=await import('./dual-pp-cards.js');await m.writeProviderCardsSession(JSON.parse(raw),{},'DRF');},beforeFieldCorrection);await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
 
