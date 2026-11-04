@@ -595,6 +595,32 @@ for(const profile of profiles){
    assert.match(await page.locator('#raceDayDashboard').innerText(),/Morning line: BRISNET/);
   }finally{await page.evaluate(async saved=>{const m=await import('./dual-pp-cards.js');await m.writeProviderCardsSession(saved.cards,saved.session?.state||{},saved.session?.selectedProvider);},saved);await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});}
  });
+ await check('D30-DRF-Late150-displayed-order',async()=>{
+  const saved=await page.evaluate(async()=>{const m=await import('./dual-pp-cards.js');return {cards:await m.readProviderCards(),session:await m.readProviderSession()};});
+  try{
+   await page.evaluate(async()=>{
+    const {PARSER_ID}=await import('./release-card-parser.js');
+    const h=(n,early,late)=>({n,name:'Late QA Runner '+n,ml:'3/1',odds:'—',entry_status:'REGULAR',life_starts:1,lifeStarts:1,beyer_figures:[70],figs:[70],timeform_early:early,timeform_late:late,parser_blockers:[],angles:[],source_context:{},switch_evidence:{running_lines:[{running_date_track:'1æ26=1Bel'}],boxes:{}},beyer_evidence:[{figure:70,running_date_track:'1æ26=1Bel',source_line:'1æ26=1Bel fst 6f 70 1/5'}]});
+    const date='2026-10-11',track='Belmont Park';
+    const r={race:1,date,track,surface:'Dirt',conditions:{surface:'Dirt'},header:'6 Furlongs',dist:'6 Furlongs',cls:'QA',post:'1:10 ET',parser_blockers:[],horses:[h('1',100,50),h('2',50,100)]};
+    await window.qaSetActive({id:'qa-late150',schemaVersion:3,date,track,races:{1:r},parser_version:PARSER_ID,warnings:[]});
+   });
+   await page.reload({waitUntil:'domcontentloaded'});
+   await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
+   await page.locator('[data-tab="raceday"]').click();
+   const panel=page.locator('#contenderCandidates');
+   assert.match(await panel.locator('tbody tr').first().innerText(),/Late QA Runner 2/);
+   assert.match(await panel.locator('tbody tr').nth(1).innerText(),/Late QA Runner 1/);
+   assert.match(await panel.locator('..').innerText(),/Late \+50%/i);
+   const id=await page.evaluate(async()=>{const {rankContenders}=await import('./contender-rankings.js');const {releaseRace}=await import('./rankings-release.js');const c=await window.qaReadActive(),r=c.races[1];return rankContenders(r,releaseRace(r)).model_id;});
+   assert.equal(id,'DRF-CONTENDER-LATE150-20261103');
+   assert.equal(errors.length,0,'Uncaught page errors');
+   await page.screenshot({path:`${out}/${profile.name}-late150.png`,fullPage:true});
+  }finally{
+   await page.evaluate(async saved=>{const m=await import('./dual-pp-cards.js');await m.writeProviderCardsSession(saved.cards,saved.session?.state||{},saved.session?.selectedProvider);},saved);
+   await page.reload({waitUntil:'domcontentloaded'});
+  }
+ });
  await page.screenshot({path:`${out}/${profile.name}-final.png`,fullPage:true});
  await context.close();
 }
