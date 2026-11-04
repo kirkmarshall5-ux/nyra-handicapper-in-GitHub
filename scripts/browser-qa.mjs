@@ -51,6 +51,7 @@ for(const profile of profiles){
   for(const id of ['topContenders','finisherCandidates','contenderCandidates'])assert.equal(await page.locator('#'+id).count(),1);
   const boxes=await Promise.all(['topMl','brisContenderCandidates','contenderCandidates','finisherCandidates'].map(id=>page.locator('#'+id).boundingBox()));
   assert.ok(boxes.every(Boolean));
+  for(const note of await page.locator('#raceday .model-evidence-note').all())assert.equal(await note.isVisible(),false,'Coverage and optional-gap boxes must not appear below models');
   const researchBox=await page.locator('#brisResearchCandidates').locator('..').boundingBox(),originalBox=await page.locator('#brisContenderCandidates').locator('..').boundingBox();assert.ok(researchBox);if(profile.viewport.width>=760)assert.ok(researchBox.x>originalBox.x&&Math.abs(researchBox.y-originalBox.y)<2,'Research must sit right of preserved Brisnet Contender');
   if(profile.viewport.width>=760){assert.ok(boxes[0].x<boxes[1].x&&boxes[2].x<boxes[3].x,'Both rows must run left to right');assert.ok(Math.abs(boxes[0].y-boxes[1].y)<2&&Math.abs(boxes[2].y-boxes[3].y)<2,'Each pair must share a row');assert.ok(boxes[2].y>boxes[0].y&&Math.abs(boxes[0].x-boxes[2].x)<2,'DRF Contender must sit below Morning Line');}
   else{assert.ok(boxes[0].y<boxes[1].y&&boxes[1].y<boxes[2].y&&boxes[2].y<boxes[3].y,'Mobile panels must retain comparison order');}
