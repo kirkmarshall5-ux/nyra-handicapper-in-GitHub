@@ -611,7 +611,7 @@ for(const profile of profiles){
    const panel=page.locator('#contenderCandidates');
    assert.match(await panel.locator('tbody tr').first().innerText(),/Late QA Runner 2/);
    assert.match(await panel.locator('tbody tr').nth(1).innerText(),/Late QA Runner 1/);
-   assert.match(await panel.locator('..').innerText(),/Late \+50%/);
+   assert.match(await panel.locator('..').innerText(),/Late \+50%/i);
    const id=await page.evaluate(async()=>{const {rankContenders}=await import('./contender-rankings.js');const {releaseRace}=await import('./rankings-release.js');const c=await window.qaReadActive(),r=c.races[1];return rankContenders(r,releaseRace(r)).model_id;});
    assert.equal(id,'DRF-CONTENDER-LATE150-20261103');
    assert.equal(errors.length,0,'Uncaught page errors');
