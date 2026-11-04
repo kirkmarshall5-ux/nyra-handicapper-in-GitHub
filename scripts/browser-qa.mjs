@@ -442,6 +442,7 @@ for(const profile of profiles){
    const researchBefore=await page.locator('#brisResearchCandidates').innerText();assert.match(researchBefore,/QA Paired/);
    await page.locator('#horseTable [data-program="1"][data-field-action="scratch"]').click();await page.locator('#gridFieldStatus').getByText('Scratched: #1',{exact:false}).waitFor();assert.equal(await page.locator('#horseTable tr[data-program="1"]').count(),1);
    await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
+   await page.locator('#racebar button').nth(1).click();
    assert.equal(await page.locator('#brisResearchCandidates tbody tr').filter({hasText:/#1 QA Paired/}).count(),0,'Scratched runner excluded from research after refresh');
    const corrected=await page.evaluate(async()=>{const m=await import('./dual-pp-cards.js');return m.readProviderCards();});for(const c of Object.values(corrected)){assert.equal(c.races[2].horses.find(h=>String(h.n)==='2').included_in_frozen_field,true);assert.equal(c.races[2].horses.find(h=>String(h.n)==='1').odds,'SCR');}
    await page.evaluate(async raw=>{const m=await import('./dual-pp-cards.js');await m.writeProviderCardsSession(JSON.parse(raw),{},'DRF');},beforeFieldCorrection);await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
