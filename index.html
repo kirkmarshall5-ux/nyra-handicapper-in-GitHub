@@ -96,6 +96,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <div class="card span12">
 <div id="raceConditions" class="small muted" style="margin-bottom:10px"></div><div id="declaredScratches" class="small muted" role="status"></div><div class="flex" style="margin-top:12px;flex-wrap:wrap"><button class="primary" id="uploadBrisnet">1. Upload Brisnet PP</button><input id="brisnetFile" type="file" accept=".pdf" hidden><button class="primary" id="uploadDrf">2. Upload DRF PP</button><input id="drfFile" type="file" accept=".pdf" hidden><button class="primary" id="updateOddsScratches" type="button">Update Odds &amp; Scratches</button><button class="primary" id="printPicks" type="button">Print Picks</button><span id="printPicksStatus" class="small muted" role="status" aria-live="polite"></span></div><div id="raceDayUploadStatus" class="small" role="status" aria-live="polite" style="margin-top:8px;overflow-wrap:anywhere"></div><div class="small muted" id="trackUpdateIdentity" style="margin-top:8px"></div><p id="nyraUpdateStatus" class="small muted" role="status" aria-live="polite">Updates use the loaded PP card and selected race.</p></div>
 
+<div class="card span12"><h3 class="sectiontitle">Adjust current race conditions</h3><p class="small muted">Use official race-day conditions. Applies to this race in matching loaded cards and recalculates rankings. Distances are in furlongs: 1 mile = 8; 1 1/16 miles = 8.5; 1 1/8 miles = 9.</p><div class="flex" style="flex-wrap:wrap;align-items:end"><label>Race surface<select id="manualRaceSurface"><option value="Dirt">Dirt</option><option value="Turf">Turf</option><option value="Synth">Synthetic</option></select></label><label>Distance (furlongs)<input id="manualRaceDistance" type="number" min="2" max="32" step="any" inputmode="decimal" style="width:130px"></label><button id="applyRaceConditions" type="button">Apply surface &amp; distance</button></div><div id="manualConditionsStatus" class="small muted" role="status" aria-live="polite"></div></div>
 <section id="raceDayDashboard" class="card span12" aria-label="Race day dashboard"></section>
 
 <div class="span12 comparison-row">
@@ -226,9 +227,11 @@ import {researchRace} from "./jockey-research.js?v=20261008-qa1";
 import {evidenceProfile} from "./scoring-engine.js?v=20261008-qa1";
 import {estimatedWinLine,winLineFields,winLineNote} from "./fair-odds.js?v=20261015-mix1-line1";
 import {finisherRankingHtml} from "./finisher-ranking-display.js?v=20261101-namefallback";
-import {buildRaceDashboard,dashboardHtml,selectMorningLineProvider,morningLineForRunner,morningLineNumber} from "./race-day-dashboard.js?v=20261101-mlfallback";
-import {rankContenders} from "./contender-rankings.js?v=20261103-late150";
+import {buildRaceDashboard,dashboardHtml,selectMorningLineProvider,morningLineForRunner,morningLineNumber} from "./race-day-dashboard.js?v=20261104-manualconditions";
+import {rankContenders} from "./contender-rankings.js?v=20261104-manualconditions";
 import {rankBrisnetModels} from "./brisnet-models.js?v=20261023-distance1";
+import {decodeTodayDistance} from "./finisher-drf-distance.js?v=20261018-5316";
+import {correctRaceConditions} from "./manual-race-conditions.js?v=20261104-conditions1";
 import {rankBrisnetResearch} from "./brisnet-research.js?v=20261104-bestlate25early75";
 import {brisnetRaceModelAudit} from "./brisnet-model-audit.js?v=20261023-distance1";
 import {brisnetRankingHtml,updateBrisnetMethods} from "./brisnet-ranking-display.js?v=20261022-layout3";
@@ -358,6 +361,8 @@ function currentDashboard(){
  const dashboard=buildRaceDashboard({anchor:race,sources:{BRISNET:providerRace('BRISNET'),DRF:providerRace('DRF')},morningLineProvider:morningLineProvider()});
  const researchRace=providerRace('BRISNET').race;
  dashboard.research_models={brisnet_best_recent:researchRace?rankBrisnetResearch(researchRace):null};
+ dashboard.manual_conditions=structuredClone(race.manual_conditions||null);
+ dashboard.race.distance_furlongs=race.distance_furlongs??null;
  dashboard.demonstration=activeCard.id===sampleCard.id;
  dashboard.source_cards=Object.fromEntries(['BRISNET','DRF'].map(p=>{const c=providerCards[p];return [p,c?{card_id:c.id,track:c.track,date:c.date,source_name:c.sourceName||null,parser_version:c.parser_version||null,imported_at:c.imported_at||null}:null];}));
  return dashboard;
@@ -432,7 +437,26 @@ function providerRace(provider){if(provider===cardProvider(activeCard))return {r
 function morningLineProvider(){
  return selectMorningLineProvider({anchor:race,sources:{DRF:providerRace('DRF'),BRISNET:providerRace('BRISNET')},preferredProvider:cardProvider(activeCard),importedAt:Object.fromEntries(Object.entries(providerCards).map(([p,c])=>[p,c.imported_at]))});
 }
+function renderManualConditions(){
+ document.getElementById('manualRaceSurface').value=race.surface||'Dirt';
+ document.getElementById('manualRaceDistance').value=race.distance_furlongs??decodeTodayDistance(race.conditions?.primaryDistanceLine||race.header||race.dist).furlongs??'';
+ document.getElementById('manualConditionsStatus').textContent=race.manual_conditions?'Manual conditions saved for Race '+race.race+': '+race.surface+' · '+race.distance_furlongs+' furlongs. Rankings recalculated. Freeze again to capture this change.':'Current race: '+race.surface+' · '+(race.dist||'distance unavailable')+'. No manual override.';
+}
+document.getElementById('applyRaceConditions').onclick=async()=>{
+ const button=document.getElementById('applyRaceConditions'),status=document.getElementById('manualConditionsStatus');button.disabled=true;
+ try{
+  const selected=cardProvider(activeCard),cards=putProviderCard(providerCards,{...activeCard,races:{...activeCard.races,[race.race]:structuredClone(race)}});
+  const updated=correctRaceConditions(cards,selected,race.race,{surface:document.getElementById('manualRaceSurface').value,furlongs:document.getElementById('manualRaceDistance').value});
+  await writeProviderCardsSession(updated,state,selected);
+  providerCards=updated;activeCard=structuredClone(updated[selected]);race=structuredClone(activeCard.races[race.race]);
+  document.getElementById('recorderSurfaceVerified').checked=false;document.getElementById('recorderFieldVerified').checked=false;
+  document.getElementById('freezeAllStatus').textContent='Race conditions changed. Freeze again to export the updated rankings.';
+  renderAll();
+ }catch(e){status.textContent='Conditions were not changed: '+e.message;}
+ finally{button.disabled=false;}
+};
 function renderRaceInsights(){
+ renderManualConditions();
  renderDashboard();
  const researchSource=providerRace('BRISNET'),research=researchSource.race?rankBrisnetResearch(researchSource.race):null;
  document.getElementById('brisResearchCandidates').innerHTML=research?brisnetRankingHtml(research,'contender',researchSource.race).replace('Contender-Brisnet · experimental','Best Recent · research'):'<div class="note small">'+escapeText(researchSource.reason)+'</div>';
