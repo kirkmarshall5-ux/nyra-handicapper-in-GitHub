@@ -1,5 +1,5 @@
 // Paper comparison only. Reuses the displayed model functions without changing scores.
-import {buildRaceDashboard,selectMorningLineProvider} from './race-day-dashboard.js?v=20261101-mlfallback';
+import {buildRaceDashboard,selectMorningLineProvider} from './race-day-dashboard.js?v=20261105-brisnetgrid';
 import {pairedRace,cardProvider} from './dual-pp-cards.js';
 import {decodeTodayDistance} from './finisher-drf-distance.js';
 
@@ -12,7 +12,7 @@ export function buildPicksSheet({cards,card,currentRace=null,notes={},now=new Da
   const paired=Object.fromEntries(['BRISNET','DRF'].map(p=>[p,pairedRace(sources,p,anchor)]));
   const morningLineProvider=selectMorningLineProvider({anchor,sources:paired,preferredProvider:provider,importedAt:Object.fromEntries(Object.entries(sources).map(([p,c])=>[p,c.imported_at]))});
   const dashboard=buildRaceDashboard({anchor,sources:paired,morningLineProvider},ranker);
-  const columns=[dashboard.morning_line,...dashboard.models].map(m=>({label:m.label,provider:m.provider|| (m.id==='brisContender'?'BRISNET':'DRF'),modelId:m.model_id||null,available:m.available,decision:m.decision||'REFERENCE',ranked:m.ranked,eligible:m.eligible,nameOnly:m.rankings.some(h=>!h.n),picks:m.rankings.slice(0,4).map(h=>String(h.n||h.name)),reason:m.available?null:m.reason}));
+  const columns=[dashboard.morning_line,...dashboard.models].map(m=>({label:m.label,provider:m.provider|| (m.id.startsWith('bris')?'BRISNET':'DRF'),modelId:m.model_id||null,available:m.available,decision:m.decision||'REFERENCE',ranked:m.ranked,eligible:m.eligible,nameOnly:m.rankings.some(h=>!h.n),picks:m.rankings.slice(0,4).map(h=>String(h.n||h.name)),reason:m.available?null:m.reason}));
   const scratches=[...new Set([...(anchor.horses||[]).filter(h=>h.odds==='SCR').map(h=>String(h.n)),...(anchor.predeclared_scratches||[]).map(h=>String(h.program))])];
   const conditional=(anchor.horses||[]).filter(h=>h.odds!=='SCR'&&['AE','ALSO_ELIGIBLE','MTO'].includes(h.entry_status)&&h.included_in_frozen_field!==true).map(h=>String(h.n));
   const dist=Number.isFinite(anchor.distance_furlongs)?anchor.distance_furlongs:decodeTodayDistance(anchor.conditions?.primaryDistanceLine||anchor.header||anchor.dist).furlongs;
@@ -40,19 +40,19 @@ export function picksPdf(sheet){
   const stamp=new Date(sheet.generatedAt).toLocaleString('en-US',{timeZone:'America/New_York',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',second:'2-digit'});
   text(36,709,'Updated '+stamp+' ET - verify official scratches and surface',8);
   sheet.races.slice(start,start+perPage).forEach((r,index)=>{
-   const y=680-index*303,xs=[36,132,243,354,465],labels=['Race #','Morning Line','Brisnet Contender','DRF Contender','DRF Finisher'];
-   labels.forEach((v,i)=>text(xs[i],y,v,i===0?11:9,true));line(36,y-7,576,y-7);
+   const y=680-index*303,xs=[36,116,208,300,392,484],labels=['Race #','Morning Line','Brisnet Contender','Brisnet-RR','DRF Contender','Brisnet Finisher'];
+   labels.forEach((v,i)=>text(xs[i],y,v,i===0?11:8,true));line(36,y-7,576,y-7);
    text(36,y-28,String(r.race),14,true);
    r.columns.forEach((c,i)=>{const x=xs[i+1],w=paperWagers(c.picks);
     if(perPage===1){
-     wrap(c.picks.map((p,j)=>`${j+1}. ${p}`).join(' / ')||'Unavailable',19).forEach((v,j)=>text(x,y-28-j*11,v,8,true));
+     wrap(c.picks.map((p,j)=>`${j+1}. ${p}`).join(' / ')||'Unavailable',17).forEach((v,j)=>text(x,y-28-j*11,v,8,true));
      text(x,y-155,`${c.ranked}/${c.eligible} ranked - ${c.decision}`,7);
-     wrap(w.win,19).forEach((v,j)=>text(x,y-190-j*11,v,8));
-     wrap(w.exacta,19).forEach((v,j)=>text(x,y-255-j*11,v,8));
+     wrap(w.win,17).forEach((v,j)=>text(x,y-190-j*11,v,8));
+     wrap(w.exacta,17).forEach((v,j)=>text(x,y-255-j*11,v,8));
      if(c.nameOnly)text(x,y-400,'Name-only paper selections',7);
      return;
     }
-    text(x,y-28,c.available?(c.picks.join('-')||'Unrated'):'Unavailable',13,true);text(x,y-44,c.available?`${c.ranked}/${c.eligible} ranked - ${c.decision}`:'Check PP / field status',7);
+    text(x,y-28,c.available?(c.picks.join('-')||'Unrated'):'Unavailable',11,true);text(x,y-44,c.available?`${c.ranked}/${c.eligible} ranked - ${c.decision}`:'Check PP / field status',7);
     text(x,y-86,w.win,10);wrap(w.exacta,20).slice(0,2).forEach((v,j)=>text(x,y-111-j*11,v,9));text(x,y-146,w.trifecta,9);
    });
    text(36,y-62,[r.distance,r.surface].filter(Boolean).join(' - '),8);
