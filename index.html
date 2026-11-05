@@ -809,7 +809,7 @@ initKnowledgeBase(()=>({card:activeCard,race,rating:currentRating()}));
 // Keep the original method descriptions available in Knowledge Base, away from Race Day.
 const modelMethodsPanel=document.createElement('div');modelMethodsPanel.id='contenderModelDetails';modelMethodsPanel.className='card span12';
 modelMethodsPanel.innerHTML='<div class="kicker">Model documentation</div><h3 class="sectiontitle">Model details</h3>';
-for(const [id,label]of [['contenderCandidates','DRF Contender'],['brisContenderCandidates','Brisnet Contender'],['finisherCandidates','DRF Finisher']]){
+for(const [id,label]of [['contenderCandidates','DRF Contender'],['brisContenderCandidates','Brisnet Contender'],['brisFinisherCandidates','Brisnet Finisher']]){
  const details=document.getElementById(id).closest('.card').querySelector(':scope > details');
  if(details){details.dataset.modelMethod=id;details.open=true;const heading=document.createElement('h4');heading.textContent=label;modelMethodsPanel.append(heading,details);}
 }

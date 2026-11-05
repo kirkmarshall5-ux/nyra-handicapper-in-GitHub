@@ -289,7 +289,7 @@ for(const profile of profiles){
    await page.reload({waitUntil:'domcontentloaded'});
    await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
    assert.match(await page.locator('#raceBadges').innerText(),/1 5\/16M/);
-   assert.match(await page.locator('#brisFinisherCandidates').innerText(),/QA Fraction Runner/);
+   assert.match(await page.locator('#brisFinisherCandidates').textContent(),/QA Fraction Runner/);
    assert.equal(await page.locator('#brisFinisherCandidates tbody tr').count(),0,'FTS must remain unranked');
    assert.equal(errors.length,0,'Fraction upload routing page errors: '+errors.join(' | '));
   }finally{
@@ -467,7 +467,7 @@ for(const profile of profiles){
     await page.locator('#drfFile').setInputFiles({name:'qa-wrong-provider.pdf',mimeType:'application/pdf',buffer:Buffer.from('synthetic QA bytes')});await page.locator('#providerUploadStatus').getByText('Upload failed',{exact:false}).waitFor({state:'attached',timeout:20000});assert.match(await page.locator('#raceDayUploadStatus').textContent(),/Upload failed/);assert.match(await page.locator('#raceDayUploadStatus').textContent(),/BRISNET/);
     assert.equal(await page.evaluate(async()=>{const m=await import('./dual-pp-cards.js');return JSON.stringify((await m.readProviderCards()).DRF);}),drfBefore);
     await page.locator('#brisnetFile').setInputFiles({name:'qa-correct-brisnet.pdf',mimeType:'application/pdf',buffer:Buffer.from('synthetic QA bytes')});await page.locator('#providerUploadStatus').getByText('card saved',{exact:false}).waitFor({state:'attached',timeout:20000});assert.match(await page.locator('#raceDayUploadStatus').textContent(),/card saved.*1 races.*1 runners loaded/);
-    assert.match(await page.locator('#brisFinisherCandidates').innerText(),/QA Upload FTS/);assert.match(await page.locator('#finisherCandidates').textContent(),/QA Paired/);assert.equal(await page.evaluate(async()=>{const m=await import('./dual-pp-cards.js');return JSON.stringify((await m.readProviderCards()).DRF);}),drfBefore);
+    assert.match(await page.locator('#brisFinisherCandidates').textContent(),/QA Upload FTS/);assert.match(await page.locator('#finisherCandidates').textContent(),/QA Paired/);assert.equal(await page.evaluate(async()=>{const m=await import('./dual-pp-cards.js');return JSON.stringify((await m.readProviderCards()).DRF);}),drfBefore);
    }finally{await page.unroute(pdfRoute);}
    await page.locator('[data-tab="public"]').click();await page.locator('#manageSavedCards summary').click();await page.locator('#clearPP').click();assert.match(await page.locator('#ppStatus').innerText(),/other source is retained/);assert.match(await page.locator('#finisherCandidates').textContent(),/QA Paired/);await page.locator('#resetSample').click();assert.match(await page.locator('#cardKicker').innerText(),/2026-10-03/);assert.match(await page.locator('#providerCardsStatus').innerText(),/BRISNET: Belmont Park.*2026-10-18/);
 
