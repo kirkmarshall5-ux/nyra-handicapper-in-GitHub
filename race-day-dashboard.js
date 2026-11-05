@@ -3,7 +3,7 @@ import {matchingCard} from './dual-pp-cards.js?v=20261018-dual1';
 import {releaseRace} from './rankings-release.js?v=20261008-qa1';
 import {rankContenders} from './contender-rankings.js?v=20261104-manualconditions';
 import {rankBrisnetModels} from './brisnet-models.js?v=20261023-distance1';
-import {rankFinishers} from './finisher-inputs.js?v=20261101-namefallback';
+import {rankBrisnetResearch} from './brisnet-research.js';
 import {decodeTodayDistance} from './finisher-drf-distance.js?v=20261018-5316';
 
 const active=h=>h.odds!=='SCR'&&h.included_in_frozen_field!==false&&(!h.entry_status||h.entry_status==='REGULAR');
@@ -15,8 +15,9 @@ const field=r=>(r?.horses||[]).filter(active);
 const distance=r=>Number.isFinite(r?.distance_furlongs)?r.distance_furlongs:decodeTodayDistance(r?.conditions?.primaryDistanceLine||r?.header||r?.dist).furlongs;
 const compare=(a,b)=>program(a).localeCompare(program(b),undefined,{numeric:true});
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const labels={brisContender:'Brisnet Contender',drfContender:'DRF Contender',drfFinisher:'DRF Finisher',morningLine:'Morning Line'};
-const modelIds=['brisContender','drfContender','drfFinisher'];
+const labels={brisContender:'Brisnet Contender',brisResearch:'Brisnet-RR',drfContender:'DRF Contender',brisFinisher:'Brisnet Finisher',morningLine:'Morning Line'};
+const modelIds=['brisContender','brisResearch','drfContender','brisFinisher'];
+const providerFor=id=>id.startsWith('bris')?'BRISNET':'DRF';
 export function morningLineNumber(value){
  const s=String(value??'').trim();
  if(/^\d+(?:\.\d+)?$/.test(s))return Number(s);
@@ -56,10 +57,8 @@ export function morningLineForRunner(source,h){
 }
 function forecast(id,r){
  if(id==='brisContender')return rankBrisnetModels(r)?.contender||{rankings:[],decision:'HOLD',reason:'Brisnet source unavailable'};
- if(id==='drfFinisher'){
-  const result=rankFinishers(r),base=releaseRace(r);
-  return {...result,decision:result.status==='COMPLETE_FIELD'&&base.decision!=='PASS'?'RESEARCH':'PASS'};
- }
+ if(id==='brisResearch')return rankBrisnetResearch(r)||{rankings:[],decision:'HOLD',reason:'Brisnet source unavailable'};
+ if(id==='brisFinisher')return rankBrisnetModels(r)?.finisher||{rankings:[],decision:'HOLD',reason:'Brisnet source unavailable'};
  const base=releaseRace(r);
  return rankContenders(r,base,{displayPass:base.decision==='PASS'});
 }
@@ -67,7 +66,7 @@ function summarize(id,r,result,reason){
  const allowed=new Set(field(r).map(key)),rows=result?.rankings||[];
  if(!reason&&(new Set(rows.map(key)).size!==rows.length||rows.some(h=>!allowed.has(key(h))||field(r).some(x=>key(x)===key(h)&&program(x)&&program(h)&&program(x)!==program(h)))))reason='Forecast contains duplicate or unmatched runners; excluded';
  const rankings=reason?[]:rows.map((h,i)=>({rank:i+1,n:program(h),name:h.name,score:h.score??null}));
- return {id,label:labels[id],available:!reason,reason:reason||result?.reason||null,model_id:result?.model_id||null,decision:reason?'UNAVAILABLE':result?.decision||'HOLD',status:result?.status||result?.ranking_status||null,ranked:rankings.length,eligible:field(r).length,complete:!reason&&rankings.length===field(r).length&&rankings.length>0,rankings};
+ return {id,label:labels[id],provider:providerFor(id),available:!reason,reason:reason||result?.reason||null,model_id:result?.model_id||null,decision:reason?'UNAVAILABLE':result?.decision||'HOLD',status:result?.status||result?.ranking_status||null,ranked:rankings.length,eligible:field(r).length,complete:!reason&&rankings.length===field(r).length&&rankings.length>0,rankings};
 }
 export function paperPlan(rankings,eligible=rankings){
  const h=rankings.slice(0,3),ticket=(label,cost,pairs)=>({label,cost,combinations:pairs});
@@ -85,7 +84,7 @@ export function paperPlan(rankings,eligible=rankings){
 export function buildRaceDashboard({anchor,sources,morningLineProvider='DRF'},ranker=forecast){
  morningLineProvider=selectMorningLineProvider({anchor,sources,preferredProvider:morningLineProvider});
  const checks=Object.fromEntries(['BRISNET','DRF'].map(p=>[p,sourceIssue(anchor,sources[p])]));
- const models=modelIds.map(id=>{const p=id==='brisContender'?'BRISNET':'DRF',r=sources[p]?.race;
+ const models=modelIds.map(id=>{const p=providerFor(id),r=sources[p]?.race;
   return summarize(id,r,checks[p]?null:ranker(id,r),checks[p]);
  });
  const mlRace=sources[morningLineProvider]?.race,mlReason=checks[morningLineProvider]||null;
@@ -99,15 +98,15 @@ export function buildRaceDashboard({anchor,sources,morningLineProvider='DRF'},ra
  return {schema:'nyra-race-dashboard-v1',race:{track:anchor.track,date:anchor.date,number:anchor.race,surface:anchor.surface,distance:anchor.dist},field:field(anchor).map(h=>({n:program(h),name:h.name})),models,morning_line:ml,shortlist,remaining,issues:[...new Set(Object.values(checks).filter(Boolean))],paper_plans:Object.fromEntries([...models,ml].map(m=>[m.id,{decision:m.decision||'REFERENCE',...paperPlan(m.rankings,field(anchor))}])),betting_enabled:false};
 }
 export function dashboardHtml(d,selected='drfContender'){
- const row=h=>`<tr><th scope="row">${h.n?'#'+esc(h.n)+' ':''}${esc(h.name)}</th>${[...modelIds,'morningLine'].map(id=>`<td>${h.ranks[id]??'—'}</td>`).join('')}<td>${h.top_four_models}/3</td></tr>`;
- const table=rows=>`<div class="dashboard-scroll" tabindex="0" role="region" aria-label="Model ranking comparison"><table class="dashboard-table"><thead><tr><th scope="col">Horse</th><th scope="col">Brisnet<br>Contender</th><th scope="col">DRF<br>Contender</th><th scope="col">DRF<br>Finisher</th><th scope="col">M/L<br>rank</th><th scope="col">Models<br>top 4</th></tr></thead><tbody>${rows.map(row).join('')}</tbody></table></div>`;
+ const row=h=>`<tr><th scope="row">${h.n?'#'+esc(h.n)+' ':''}${esc(h.name)}</th>${[...modelIds,'morningLine'].map(id=>`<td>${h.ranks[id]??'—'}</td>`).join('')}<td>${h.top_four_models}/${modelIds.length}</td></tr>`;
+ const table=rows=>`<div class="dashboard-scroll" tabindex="0" role="region" aria-label="Model ranking comparison"><table class="dashboard-table"><thead><tr><th scope="col">Horse</th><th scope="col">Brisnet<br>Contender</th><th scope="col">Brisnet-RR</th><th scope="col">DRF<br>Contender</th><th scope="col">Brisnet<br>Finisher</th><th scope="col">M/L<br>rank</th><th scope="col">Models<br>top 4</th></tr></thead><tbody>${rows.map(row).join('')}</tbody></table></div>`;
  const source=[...d.models,d.morning_line].find(m=>m.id===selected)||d.models[1],plan=d.paper_plans[source.id];
  const selection=source.rankings.slice(0,3).map(h=>h.n?`#${esc(h.n)}`:esc(h.name)).join(' → ')||'No ranked selections';
  return `<div class="dashboard-heading"><div><div class="kicker">Race day dashboard</div><h3 class="sectiontitle">Shared selections &amp; order</h3></div><span class="badge">${d.field.length} eligible runners</span></div>
  ${d.demonstration?'<p class="small muted">Demonstration card · upload current PPs before use.</p>':''}
  <div class="dashboard-readiness">${d.models.map(m=>`<div><b>${esc(m.label)}</b><span>${m.available?`${m.ranked}/${m.eligible} ranked · ${m.complete?'full field':'incomplete field'} · ${esc(m.decision)}`:esc(m.reason)}</span></div>`).join('')}</div>
  ${d.issues.length?`<p class="small bad" role="status">${d.issues.map(esc).join(' · ')}</p>`:''}
- <p class="tiny muted">Numbers are each system’s rank. “—” means unranked or unavailable. Top-four agreement is descriptive; the two DRF models share inputs. No combined rating.</p>
+ <p class="tiny muted">Numbers are each system’s rank. “—” means unranked or unavailable. Top-four agreement is descriptive; the three Brisnet models share inputs. No combined rating.</p>
  ${d.shortlist.length?table(d.shortlist.slice(0,6)):'<p class="small muted">Load verified PPs to compare selections.</p>'}
  ${d.shortlist.length>6?`<details class="dashboard-more"><summary>Show ${d.shortlist.length-6} more selections</summary>${table(d.shortlist.slice(6))}</details>`:''}
  ${(d.remaining||[]).length?`<details class="dashboard-remaining"><summary>Remaining ranked horses (${d.remaining.length})</summary>${table(d.remaining)}</details>`:''}

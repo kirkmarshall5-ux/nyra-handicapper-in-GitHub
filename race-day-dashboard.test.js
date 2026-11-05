@@ -18,12 +18,12 @@ test('Brisnet-only dashboard includes ranked horses beyond the shortlist',()=>{
 
 test('retains full orders and separate ML; agreement never changes or blends model scores',()=>{
  const i=input(),before=structuredClone(i);
- const d=buildRaceDashboard(i,(id,r)=>ranked(r,id==='drfFinisher'?[6,5,4,3,2,1]:[1,2,3,4,5,6]));
+ const d=buildRaceDashboard(i,(id,r)=>ranked(r,id==='brisFinisher'?[6,5,4,3,2,1]:[1,2,3,4,5,6]));
  assert.deepEqual(i,before);
  assert.equal(d.models[0].rankings.length,6);
- assert.equal(d.shortlist.find(h=>h.n==='4').top_four_models,3);
- assert.equal(d.shortlist.find(h=>h.n==='1').top_four_models,2);
- assert.equal(d.shortlist.find(h=>h.n==='1').ranks.drfFinisher,6);
+ assert.equal(d.shortlist.find(h=>h.n==='4').top_four_models,4);
+ assert.equal(d.shortlist.find(h=>h.n==='1').top_four_models,3);
+ assert.equal(d.shortlist.find(h=>h.n==='1').ranks.brisFinisher,6);
  assert.equal(d.morning_line.rankings[0].n,'1');
  assert.equal(d.betting_enabled,false);
  assert.equal(d.paper_plans.drfContender.total_cost,14);
@@ -34,9 +34,9 @@ test('wrong date, race, track, conditions and scratch fields cannot supply agree
  for(const change of [{date:'2026-10-22'},{race:2},{track:'Saratoga'},{surface:'Turf'},{distance_furlongs:8},{horses:race().horses.map(h=>h.n==='6'?{...h,odds:'SCR'}:h)}]){
   const i=input();Object.assign(i.sources.BRISNET.race,change);
   const calls=[];const d=buildRaceDashboard(i,(id,r)=>{calls.push(id);return ranked(r);});
-  assert.deepEqual(calls,['drfContender','drfFinisher']);
+  assert.deepEqual(calls,['drfContender']);
   assert.equal(d.models[0].available,false);
-  assert.equal(d.shortlist[0].top_four_models,2);
+  assert.equal(d.shortlist[0].top_four_models,1);
   assert.equal(d.paper_plans.brisContender.total_cost,0);
   assert.ok(d.issues.length);
  }
@@ -56,15 +56,15 @@ test('DRF header distances are checked when numeric distance is absent',()=>{
  delete i.sources.BRISNET.race.distance_furlongs;i.sources.BRISNET.race.header='1 Mile';
  const d=buildRaceDashboard(i,(_,r)=>ranked(r));
  assert.equal(d.models[0].available,false);
- assert.equal(d.models[1].available,true);
+ assert.equal(d.models[2].available,true);
  assert.match(d.models[0].reason,/conditions differ/);
 });
 
 test('partial and unloaded models retain unknown ranks and do not fabricate tickets',()=>{
  const i=input();i.sources.BRISNET={race:null,reason:'Upload Brisnet'};
  const d=buildRaceDashboard(i,(_,r)=>ranked(r,[1]));
- assert.equal(d.models[1].complete,false);
- assert.equal(d.models[1].ranked,1);
+ assert.equal(d.models[2].complete,false);
+ assert.equal(d.models[2].ranked,1);
  assert.equal(d.models[0].ranked,0);
  assert.equal(d.shortlist.find(h=>h.n==='2').ranks.drfContender,null);
  assert.equal(d.paper_plans.drfContender.total_cost,4);
@@ -119,16 +119,16 @@ test('production adapters expose PASS and unranked first-time starters without m
  const before=structuredClone(i),d=buildRaceDashboard(i);
  assert.deepEqual(i,before);
  assert.ok(d.models.every(m=>m.rankings.length===0));
- assert.equal(d.models[1].decision,'PASS');
  assert.equal(d.models[2].decision,'PASS');
+ assert.equal(d.models[3].decision,'UNAVAILABLE');
  assert.equal(d.paper_plans.drfContender.total_cost,0);
 });
 
 test('unique names connect unnumbered DRF to numbered source without manufacturing programs',()=>{
  const i=input();i.sources.DRF.race.horses.forEach(h=>h.n='');const before=structuredClone(i);
  const d=buildRaceDashboard(i,(id,r)=>({decision:'PASS',rankings:r.horses}));
- assert.ok(d.models.every(m=>m.available));assert.ok(d.models[1].rankings.every(h=>h.n===''));
- assert.equal(d.shortlist[0].ranks.drfFinisher,1);assert.equal(d.paper_plans.drfFinisher.available,false);assert.deepEqual(i,before);
+ assert.ok(d.models.every(m=>m.available));assert.ok(d.models[2].rankings.every(h=>h.n===''));
+ assert.equal(d.shortlist[0].ranks.drfContender,1);assert.equal(d.paper_plans.drfContender.available,false);assert.deepEqual(i,before);
  const names=input();names.anchor.horses.forEach(h=>h.n='');names.sources.DRF.race=structuredClone(names.anchor);
  const html=dashboardHtml(buildRaceDashboard(names,(id,r)=>({rankings:r.horses})));
  assert.match(html,/Horse 1/);assert.doesNotMatch(html,/# Horse/);
@@ -144,4 +144,22 @@ test('unpriced recent DRF falls back to matching priced Brisnet without modifyin
 test('fallback cannot substitute a different horse with the same program',()=>{
  assert.equal(morningLineForRunner(race(),{n:'1',name:'Other'}),null);
  assert.equal(morningLineForRunner(race(),{n:'2',name:'Horse 1'}),null);
+});
+
+ test('visible grid follows model order and excludes DRF Finisher from agreement and paper plans',()=>{
+ const d=buildRaceDashboard(input(),(_,r)=>ranked(r));
+ assert.deepEqual(d.models.map(m=>m.id),['brisContender','brisResearch','drfContender','brisFinisher']);
+ assert.deepEqual(d.models.map(m=>m.provider),['BRISNET','BRISNET','DRF','BRISNET']);
+ assert.equal(d.shortlist[0].top_four_models,4);assert.equal(d.shortlist[0].ranks.drfFinisher,undefined);assert.equal(d.paper_plans.drfFinisher,undefined);
+ const html=dashboardHtml(d);assert.match(html,/4\/4/);assert.doesNotMatch(html,/DRF<br>Finisher|value="drfFinisher"/);
+ assert.ok(html.indexOf('Brisnet<br>Contender')<html.indexOf('<th scope="col">Brisnet-RR'));
+ });
+
+test('production Brisnet dashboard adapters match each unchanged scoring engine',async()=>{
+ const {rankBrisnetModels}=await import('./brisnet-models.js'),{rankBrisnetResearch}=await import('./brisnet-research.js');
+ const h=(n,speeds,early,late)=>horse(n,{life_starts:speeds.length,entry_status:'REGULAR',ratings:{provider:'BRISNET',lines:speeds.map((speed,i)=>({date:['2026-10-20','2026-10-01','2026-09-10'][i],speed,e1:early,e2:early,late,surface:'Dirt',furlongs:6,source:{provider:'BRISNET',text:'synthetic test line'}}))}});
+ const anchor=race([h('1',[80,90,85],95,60),h('2',[90,80,85],60,95),h('3',[70,85,80],80,80)],{track:'Churchill Downs',date:'2026-11-04',ratings_provider:'BRISNET'}),before=structuredClone(anchor);
+ const d=buildRaceDashboard({anchor,sources:{BRISNET:{race:anchor}}}),base=rankBrisnetModels(anchor),expected={brisContender:base.contender,brisResearch:rankBrisnetResearch(anchor),brisFinisher:base.finisher};
+ for(const [id,result] of Object.entries(expected)){const m=d.models.find(m=>m.id===id);assert.deepEqual(m.rankings.map(h=>[h.n,h.score]),result.rankings.map(h=>[h.n,h.score]));assert.equal(m.model_id,result.model_id);assert.equal(m.decision,result.decision);}
+ assert.equal(d.models.find(m=>m.id==='drfContender').available,false);assert.deepEqual(anchor,before);
 });
