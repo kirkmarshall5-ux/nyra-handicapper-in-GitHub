@@ -4,6 +4,7 @@ import {releaseRace} from './rankings-release.js?v=20261008-qa1';
 import {rankContenders} from './contender-rankings.js?v=20261104-manualconditions';
 import {rankBrisnetModels} from './brisnet-models.js?v=20261023-distance1';
 import {rankBrisnetResearch} from './brisnet-research.js';
+import {rankFinishers} from './finisher-inputs.js?v=20261101-namefallback';
 import {decodeTodayDistance} from './finisher-drf-distance.js?v=20261018-5316';
 
 const active=h=>h.odds!=='SCR'&&h.included_in_frozen_field!==false&&(!h.entry_status||h.entry_status==='REGULAR');
@@ -58,7 +59,7 @@ export function morningLineForRunner(source,h){
 function forecast(id,r){
  if(id==='brisContender')return rankBrisnetModels(r)?.contender||{rankings:[],decision:'HOLD',reason:'Brisnet source unavailable'};
  if(id==='brisResearch')return rankBrisnetResearch(r)||{rankings:[],decision:'HOLD',reason:'Brisnet source unavailable'};
- if(id==='brisFinisher')return rankBrisnetModels(r)?.finisher||{rankings:[],decision:'HOLD',reason:'Brisnet source unavailable'};
+ if(id==='brisFinisher')return {...rankFinishers(r),decision:'PASS'};
  const base=releaseRace(r);
  return rankContenders(r,base,{displayPass:base.decision==='PASS'});
 }

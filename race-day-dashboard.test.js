@@ -156,10 +156,10 @@ test('fallback cannot substitute a different horse with the same program',()=>{
  });
 
 test('production Brisnet dashboard adapters match each unchanged scoring engine',async()=>{
- const {rankBrisnetModels}=await import('./brisnet-models.js'),{rankBrisnetResearch}=await import('./brisnet-research.js');
+ const {rankFinishers}=await import('./finisher-inputs.js'),{rankBrisnetModels}=await import('./brisnet-models.js'),{rankBrisnetResearch}=await import('./brisnet-research.js');
  const h=(n,speeds,early,late)=>horse(n,{life_starts:speeds.length,entry_status:'REGULAR',ratings:{provider:'BRISNET',lines:speeds.map((speed,i)=>({date:['2026-10-20','2026-10-01','2026-09-10'][i],speed,e1:early,e2:early,late,surface:'Dirt',furlongs:6,source:{provider:'BRISNET',text:'synthetic test line'}}))}});
  const anchor=race([h('1',[80,90,85],95,60),h('2',[90,80,85],60,95),h('3',[70,85,80],80,80)],{track:'Churchill Downs',date:'2026-11-04',ratings_provider:'BRISNET'}),before=structuredClone(anchor);
- const d=buildRaceDashboard({anchor,sources:{BRISNET:{race:anchor}}}),base=rankBrisnetModels(anchor),expected={brisContender:base.contender,brisResearch:rankBrisnetResearch(anchor),brisFinisher:base.finisher};
+ const d=buildRaceDashboard({anchor,sources:{BRISNET:{race:anchor}}}),base=rankBrisnetModels(anchor),expected={brisContender:base.contender,brisResearch:rankBrisnetResearch(anchor),brisFinisher:{...rankFinishers(anchor),decision:'PASS'}};
  for(const [id,result] of Object.entries(expected)){const m=d.models.find(m=>m.id===id);assert.deepEqual(m.rankings.map(h=>[h.n,h.score]),result.rankings.map(h=>[h.n,h.score]));assert.equal(m.model_id,result.model_id);assert.equal(m.decision,result.decision);}
  assert.equal(d.models.find(m=>m.id==='drfContender').available,false);assert.deepEqual(anchor,before);
 });
