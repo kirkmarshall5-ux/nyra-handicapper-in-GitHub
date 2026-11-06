@@ -1,0 +1,40 @@
+name: Gate 74 replay harness validation
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/issue74-replay-original-brisnet.mjs'
+      - '.github/workflows/issue74-replay-harness.yml'
+      - 'scripts/issue74-fullcard-replay-audit.mjs'
+      - 'issue74-fullcard-original-pdf-replay.test.js'
+  workflow_dispatch:
+jobs:
+  harness-validation:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install exact repository dependencies
+        run: npm install --ignore-scripts --no-audit --no-fund
+      - name: Check production replay script syntax
+        run: node --check scripts/issue74-replay-original-brisnet.mjs
+      - name: Verify existing issue 74 identity and fail-closed assertions
+        run: node --test issue74-fullcard-original-pdf-replay.test.js issue74-original-pdf-page-boundaries.test.js
+      - name: Verify replay requires the private source PDF
+        shell: bash
+        run: |
+          set +e
+          node scripts/issue74-replay-original-brisnet.mjs > /tmp/issue74-no-pdf.log 2>&1
+          status=$?
+          set -e
+          if [ "$status" -eq 0 ]; then
+            echo 'SECURITY FAILURE: replay accepted missing private source PDF'
+            exit 1
+          fi
+          grep -q 'Original private PDF path required' /tmp/issue74-no-pdf.log
+      - name: Certification boundary
+        run: echo 'This workflow validates the harness only. It does not run the private original PDF or certify Gate 74.'
