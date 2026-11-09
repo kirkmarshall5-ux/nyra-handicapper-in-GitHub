@@ -18,7 +18,7 @@ const compare=(a,b)=>program(a).localeCompare(program(b),undefined,{numeric:true
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const labels={brisContender:'Brisnet Contender',brisResearch:'Brisnet-RR',drfContender:'DRF Contender',brisFinisher:'Brisnet Finisher',morningLine:'Morning Line'};
 const modelIds=['brisContender','brisResearch','drfContender','brisFinisher'];
-const gridModelIds=['brisContender','brisResearch','brisFinisher','drfContender','drfContenderLate50'];
+const gridModelIds=['brisContender','brisResearch','brisFinisher','drfContender'];
 const providerFor=id=>id.startsWith('bris')?'BRISNET':'DRF';
 export function morningLineNumber(value){
  const s=String(value??'').trim();
@@ -100,15 +100,15 @@ export function buildRaceDashboard({anchor,sources,morningLineProvider='DRF'},ra
  return {schema:'nyra-race-dashboard-v1',race:{track:anchor.track,date:anchor.date,number:anchor.race,surface:anchor.surface,distance:anchor.dist},field:field(anchor).map(h=>({n:program(h),name:h.name})),models,morning_line:ml,shortlist,remaining,issues:[...new Set(Object.values(checks).filter(Boolean))],paper_plans:Object.fromEntries([...models,ml].map(m=>[m.id,{decision:m.decision||'REFERENCE',...paperPlan(m.rankings,field(anchor))}])),betting_enabled:false};
 }
 export function dashboardHtml(d,selected='drfContender'){
- const row=h=>`<tr><th scope="row">${h.n?'#'+esc(h.n)+' ':''}${esc(h.name)}</th>${[...gridModelIds,'morningLine'].map(id=>`<td>${h.ranks[id==='drfContenderLate50'?'drfContender':id]??'—'}</td>`).join('')}<td>${h.top_four_models}/${modelIds.length}</td></tr>`;
- const table=rows=>`<div class="dashboard-scroll" tabindex="0" role="region" aria-label="Model ranking comparison"><table class="dashboard-table"><thead><tr><th scope="col">Horse</th><th scope="col">Brisnet<br>Contender</th><th scope="col">Brisnet-RR</th><th scope="col">Brisnet<br>Finisher</th><th scope="col">DRF<br>Contender</th><th scope="col">DRF Contender<br>Late +50%</th><th scope="col">M/L<br>rank</th><th scope="col">Models<br>top 4</th></tr></thead><tbody>${rows.map(row).join('')}</tbody></table></div>`;
+ const row=h=>`<tr><th scope="row">${h.n?'#'+esc(h.n)+' ':''}${esc(h.name)}</th>${[...gridModelIds,'morningLine'].map(id=>`<td>${h.ranks[id]??'—'}</td>`).join('')}<td>${h.top_four_models}/${modelIds.length}</td></tr>`;
+ const table=rows=>`<div class="dashboard-scroll" tabindex="0" role="region" aria-label="Model ranking comparison"><table class="dashboard-table"><thead><tr><th scope="col">Horse</th><th scope="col">Brisnet<br>Contender</th><th scope="col">Brisnet-RR</th><th scope="col">Brisnet<br>Finisher</th><th scope="col">DRF Contender<br>Late +50%</th><th scope="col">M/L<br>rank</th><th scope="col">Models<br>top 4</th></tr></thead><tbody>${rows.map(row).join('')}</tbody></table></div>`;
  const source=[...d.models,d.morning_line].find(m=>m.id===selected)||d.models[1],plan=d.paper_plans[source.id];
  const selection=source.rankings.slice(0,3).map(h=>h.n?`#${esc(h.n)}`:esc(h.name)).join(' → ')||'No ranked selections';
  return `<div class="dashboard-heading"><div><div class="kicker">Race day dashboard</div><h3 class="sectiontitle">Shared selections &amp; order</h3></div><span class="badge">${d.field.length} eligible runners</span></div>
  ${d.demonstration?'<p class="small muted">Demonstration card · upload current PPs before use.</p>':''}
  <div class="dashboard-readiness">${d.models.map(m=>`<div><b>${esc(m.label)}</b><span>${m.available?`${m.ranked}/${m.eligible} ranked · ${m.complete?'full field':'incomplete field'} · ${esc(m.decision)}`:esc(m.reason)}</span></div>`).join('')}</div>
  ${d.issues.length?`<p class="small bad" role="status">${d.issues.map(esc).join(' · ')}</p>`:''}
- <p class="tiny muted">Numbers are each system’s rank. “—” means unranked or unavailable. Top-four agreement is descriptive; the three Brisnet models share inputs. DRF Contender currently uses Late +50%; its adjacent Late +50% column repeats that model and is counted once in agreement. No combined rating.</p>
+ <p class="tiny muted">Numbers are each system’s rank. “—” means unranked or unavailable. Top-four agreement is descriptive; the three Brisnet models share inputs. No combined rating.</p>
  ${d.shortlist.length?table(d.shortlist.slice(0,6)):'<p class="small muted">Load verified PPs to compare selections.</p>'}
  ${d.shortlist.length>6?`<details class="dashboard-more"><summary>Show ${d.shortlist.length-6} more selections</summary>${table(d.shortlist.slice(6))}</details>`:''}
  ${(d.remaining||[]).length?`<details class="dashboard-remaining"><summary>Remaining ranked horses (${d.remaining.length})</summary>${table(d.remaining)}</details>`:''}

@@ -51,7 +51,7 @@ for(const profile of profiles){
   for(const id of ['topContenders','finisherCandidates','contenderCandidates'])assert.equal(await page.locator('#'+id).count(),1);
   const boxes=await Promise.all(['topMl','brisContenderCandidates','contenderCandidates','brisFinisherCandidates'].map(id=>page.locator('#'+id).boundingBox()));
   assert.ok(boxes.every(Boolean));
-  const sharedHeaders=await page.locator('#raceDayDashboard .dashboard-table').first().locator('thead th').allTextContents();assert.deepEqual(sharedHeaders.map(s=>s.replace(/\s+/g,'')),['Horse','BrisnetContender','Brisnet-RR','BrisnetFinisher','DRFContender','DRFContenderLate+50%','M/Lrank','Modelstop4']);
+  const sharedHeaders=await page.locator('#raceDayDashboard .dashboard-table').first().locator('thead th').allTextContents();assert.deepEqual(sharedHeaders.map(s=>s.replace(/\s+/g,'')),['Horse','BrisnetContender','Brisnet-RR','BrisnetFinisher','DRFContenderLate+50%','M/Lrank','Modelstop4']);
   assert.equal(await page.locator('#raceDayDashboard option[value=drfFinisher]').count(),0);
   for(const note of await page.locator('#raceday .model-evidence-note').all())assert.equal(await note.isVisible(),false,'Coverage and optional-gap boxes must not appear below models');
   const researchBox=await page.locator('#brisResearchCandidates').locator('..').boundingBox(),originalBox=await page.locator('#brisContenderCandidates').locator('..').boundingBox();assert.ok(researchBox);if(profile.viewport.width>=760)assert.ok(researchBox.x>originalBox.x&&Math.abs(researchBox.y-originalBox.y)<2,'Research must sit right of preserved Brisnet Contender');
