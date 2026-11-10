@@ -26,3 +26,13 @@ test('unrecognized pages and Scratch Watch pages with runner evidence still reje
  const wrongTrack=scratchAppendix();wrongTrack.items[1].str='Keeneland';
  assert.throws(()=>parsePPCard([...fixture(),wrongTrack]),/race heading missing/);
 });
+
+test('retains printed Prime Power decimal and rank without deriving a new rank',()=>{
+ const f=fixture();f[0].items.push(i('Prime Power: 110.0 (3rd)',280,650));
+ const h=parsePPCard(f).races[1].horses[0];
+ assert.equal(h.ratings.prime_power,110);
+ assert.equal(h.ratings.prime_power_rank,'3rd');
+ assert.equal(h.ratings.prime_power_display,'110.0 (3rd)');
+ const blank=parsePPCard(fixture()).races[1].horses[0];
+ assert.equal(blank.ratings.prime_power_display,null);
+});

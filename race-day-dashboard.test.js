@@ -167,3 +167,18 @@ test('production Brisnet dashboard adapters match each unchanged scoring engine'
  for(const [id,result] of Object.entries(expected)){const m=d.models.find(m=>m.id===id);assert.deepEqual(m.rankings.map(h=>[h.n,h.score]),result.rankings.map(h=>[h.n,h.score]));assert.equal(m.model_id,result.model_id);assert.equal(m.decision,result.decision);}
  assert.equal(d.models.find(m=>m.id==='drfContender').available,false);assert.deepEqual(anchor,before);
 });
+
+test('Prime Power is a source-only display column and preserves all orders and model counts',()=>{
+ const i=input(),baseline=buildRaceDashboard(i,(_,r)=>ranked(r));
+ i.sources.BRISNET.race.horses[0].ratings={prime_power:110,prime_power_rank:'3rd',prime_power_display:'110.0 (3rd)'};
+ i.sources.BRISNET.race.horses[5].ratings={prime_power:200,prime_power_rank:'1st',prime_power_display:'200.0 (1st)'};
+ const before=structuredClone(i),d=buildRaceDashboard(i,(_,r)=>ranked(r));
+ for(const k of ['shortlist','remaining','models','paper_plans'])assert.deepEqual(d[k],baseline[k]);
+ assert.deepEqual(i,before);
+ const html=dashboardHtml(d);
+ assert.match(html,/<th scope="col">Prime Power<\/th><th scope="col">Brisnet/);
+ assert.match(html,/<td>110\.0 \(3rd\)<\/td>/);
+ assert.match(html,/<td>200\.0 \(1st\)<\/td>/);
+ i.sources.BRISNET.race.date='2026-10-22';
+ assert.deepEqual(buildRaceDashboard(i,(_,r)=>ranked(r)).prime_power,{});
+});
