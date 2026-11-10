@@ -1,0 +1,20 @@
+{
+  "version": "DRF-SETUP-DIAGNOSTIC-v1",
+  "classification": "RESEARCH_DIAGNOSTIC_ONLY_REUSED_DEVELOPMENT",
+  "parent_source_audit_commit": "87a20246d55d0cf41aceb9bc2f76ec8dc095037f",
+  "holdout_files_used": 0,
+  "production_changed": false,
+  "purpose": "Separate field-relative early-rating geometry from verified lead-seeking and actual early positioning; do not score late pace yet.",
+  "primary_policy": {"clear_gap": 10, "cluster_band": 5},
+  "sensitivity_policies": [{"clear_gap": 15, "cluster_band": 3}, {"clear_gap": 5, "cluster_band": 7}],
+  "threshold_status": "Prespecified exploratory engineering cutoffs, not provider-calibrated or fitted probabilities. Report all policies without selecting by outcomes.",
+  "prediction_inputs": ["Same-race printed TimeformUS Early summaries", "Source-verified identity", "FTS/missingness flags", "Separately reviewed historical style when available"],
+  "excluded_prediction_inputs": ["Late rating", "Threshold-derived stored styles", "Finish results", "Target chart positions/fractions", "Running lines from cards dated after the target"],
+  "geometry_labels": ["CLEAR_EARLY_RATING_GAP", "CLOSE_TOP_EARLY_RATINGS", "INTERMEDIATE_GEOMETRY", "INCOMPLETE_EARLY_EVIDENCE"],
+  "interpretation": "Geometry is not a fast/slow pace forecast. Missing independent styles prevent certification of a lone leader or committed speed duel.",
+  "validation_primary": "First-call positioning of highest-Early horse: top-three rate and normalized early position; report field coverage and tie handling.",
+  "validation_secondary": "Observed first-call near-lead count (within one length) using cumulative beaten lengths from PP-preview tables; never chart gap-to-next-horse margins.",
+  "validation_sources": ["Previously analyzed Belmont October 17 official chart, where first-call columns and field identity verify", "Later running lines from the already analyzed 25-card source pool; evaluation-only and separated from predictions"],
+  "unknowns": "No validated actual-fast/slow tempo labels or pars currently supplied; no claims of fast-pace prediction accuracy. Partial later-line coverage cannot establish an uncontested lead.",
+  "metrics_not_run": ["Winner selection", "Exacta/trifecta/superfecta", "Model weights", "ROI", "Probability calibration"]
+}

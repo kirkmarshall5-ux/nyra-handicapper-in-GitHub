@@ -1,0 +1,7 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {followup} from '../scripts/analyze-matching-robustness.mjs';
+const row=(race,variant,win,cohort='MAIN_SCHEDULED_SURFACE')=>({date:'2026-10-21',race,model:'finisher',variant,cohort,surface:'Turf',distance_furlongs:6,field_size:6,coverage:{rated:6,speed:4,late:4},rankings:[{program:'1'}],observed_top4:['1','2','3','4'],grade:{win,exacta:false,trifecta:false,superfecta:false,correct_pairs:3,comparable_pairs:6,possible_pairs:6}});
+test('leave-one-race-out exposes a single-race winner gain and keeps small-field counts',()=>{
+ const original={holdout_files_used:0,races:[row(1,'control',false),row(1,'latest5_1f',true),row(2,'control',true),row(2,'latest5_1f',true)]},actual={holdout_files_used:0,races:[]},before=structuredClone(original),r=followup(original,actual);
+ assert.equal(r.unique_graded_races,2);assert.equal(r.left_one_race_out.find(x=>x.omitted.endsWith('|1')).winner_delta,0);assert.equal(r.left_one_race_out.find(x=>x.omitted.endsWith('|2')).winner_delta,1);assert.equal(r.summaries.small_fields[0].races,2);assert.deepEqual(original,before);
+});
+test('same race cannot be counted twice as scheduled and actual-surface evidence',()=>{const original={holdout_files_used:0,races:[row(1,'control',true)]},actual={holdout_files_used:0,races:[row(1,'control',true,'ACTUAL_SURFACE_REPLAY')]};assert.throws(()=>followup(original,actual),/Duplicate race/);});

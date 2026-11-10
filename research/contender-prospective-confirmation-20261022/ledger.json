@@ -1,0 +1,10 @@
+{
+  "protocol_id": "CONTENDER-NO-CONTEXT-PROSPECTIVE-v1",
+  "status": "REGISTERED_AWAITING_FIRST_ELIGIBLE_PRE_RACE_FREEZE",
+  "registered_cards": [],
+  "eligible_races": 0,
+  "graded_races": 0,
+  "holdout_files_used": 0,
+  "production_changed": false,
+  "reason": "No eligible new future pre-race card with independently verified pre-off freeze is available in this experiment."
+}

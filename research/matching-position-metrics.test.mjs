@@ -1,0 +1,4 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {positionMetrics} from '../scripts/evaluate-speed-pace-matching.mjs';
+const rows=ns=>ns.map(n=>({n:String(n)}));
+test('underneath grading isolates places two through four when the winner is correct',()=>{const g=positionMetrics(rows([1,4,3,2]),['1','2','3','4'],6);assert.equal(g.win,true);assert.equal(g.underneath_correct,0);assert.equal(g.underneath_comparable,3);assert.deepEqual(g.slot_hits,[true,false,true,false]);assert.equal(g.top4_position_error,1);});
+test('unranked horses get no ordering credit and a declared rank-error penalty',()=>{const g=positionMetrics(rows([1,3,4]),['1','2','3','4'],6);assert.equal(g.underneath_correct,1);assert.equal(g.underneath_comparable,1);assert.equal(g.underneath_possible,3);assert.equal(g.top4_position_error,1.75);});

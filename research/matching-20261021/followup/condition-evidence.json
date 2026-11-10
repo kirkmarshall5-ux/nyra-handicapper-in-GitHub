@@ -1,0 +1,295 @@
+{
+  "date": "2026-10-16",
+  "source": "NYRA dated result pages: top four plus Also Rans and explicit Scratches",
+  "official_chart_status": "403 access blocked; no complete official order or DNF certification",
+  "forecast_timing_verified": false,
+  "actual_condition_replays": [
+    {
+      "race": 3,
+      "old_surface": "Turf",
+      "actual_surface": "Synth",
+      "distance_furlongs": 8.5,
+      "source": "https://www.nyra.com/belmont/racing/?day=2026-10-16&race=3",
+      "status": "NYRA_RESULT_PAGE_VERIFIED_CHART_PENDING",
+      "scratches": []
+    },
+    {
+      "race": 5,
+      "old_surface": "Turf",
+      "actual_surface": "Synth",
+      "distance_furlongs": 6,
+      "source": "https://www.nyra.com/belmont/racing/?day=2026-10-16&race=5",
+      "status": "NYRA_RESULT_PAGE_VERIFIED_CHART_PENDING",
+      "scratches": [
+        "5"
+      ]
+    },
+    {
+      "race": 6,
+      "old_surface": "Turf",
+      "actual_surface": "Synth",
+      "distance_furlongs": 8,
+      "source": "https://www.nyra.com/belmont/racing/?day=2026-10-16&race=6",
+      "status": "NYRA_RESULT_PAGE_VERIFIED_CHART_PENDING",
+      "scratches": [
+        "4"
+      ]
+    },
+    {
+      "race": 8,
+      "old_surface": "Turf",
+      "actual_surface": "Synth",
+      "distance_furlongs": 6,
+      "source": "https://www.nyra.com/belmont/racing/?day=2026-10-16&race=8",
+      "status": "NYRA_RESULT_PAGE_VERIFIED_CHART_PENDING",
+      "scratches": [
+        "3"
+      ]
+    },
+    {
+      "race": 9,
+      "old_surface": "Turf",
+      "actual_surface": "Synth",
+      "distance_furlongs": 8.5,
+      "source": "https://www.nyra.com/belmont/racing/?day=2026-10-16&race=9",
+      "status": "NYRA_RESULT_PAGE_VERIFIED_CHART_PENDING",
+      "scratches": []
+    }
+  ],
+  "listed_field_reconciliation": [
+    {
+      "race": 1,
+      "programs": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "saved_active_programs": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "match": true,
+      "source": "https://www.nyra.com/belmont/racing/?day=2026-10-16&race=1"
+    },
+    {
+      "race": 2,
+      "programs": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "saved_active_programs": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "match": true,
+      "source": "https://www.nyra.com/belmont/racing/?day=2026-10-16&race=2"
+    },
+    {
+      "race": 3,
+      "programs": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "saved_active_programs": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "match": true,
+      "source": "https://www.nyra.com/belmont/racing/?day=2026-10-16&race=3"
+    },
+    {
+      "race": 4,
+      "programs": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "saved_active_programs": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "match": true,
+      "source": "https://www.nyra.com/belmont/racing/?day=2026-10-16&race=4"
+    },
+    {
+      "race": 5,
+      "programs": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "saved_active_programs": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "match": true,
+      "source": "https://www.nyra.com/belmont/racing/?day=2026-10-16&race=5"
+    },
+    {
+      "race": 6,
+      "programs": [
+        1,
+        2,
+        3,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "saved_active_programs": [
+        1,
+        2,
+        3,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "match": true,
+      "source": "https://www.nyra.com/belmont/racing/?day=2026-10-16&race=6"
+    },
+    {
+      "race": 7,
+      "programs": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "saved_active_programs": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "match": true,
+      "source": "https://www.nyra.com/belmont/racing/?day=2026-10-16&race=7"
+    },
+    {
+      "race": 8,
+      "programs": [
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "saved_active_programs": [
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "match": true,
+      "source": "https://www.nyra.com/belmont/racing/?day=2026-10-16&race=8"
+    },
+    {
+      "race": 9,
+      "programs": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "saved_active_programs": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "match": true,
+      "source": "https://www.nyra.com/belmont/racing/?day=2026-10-16&race=9"
+    }
+  ],
+  "oct21_race2_status": "Unresolved: dated result/entry pages not retrievable; no scratch inferred; excluded from main replay"
+}
