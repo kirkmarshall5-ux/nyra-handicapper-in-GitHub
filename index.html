@@ -216,6 +216,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 import {buildPicksSheet,createPicksPreview} from "./print-picks.js?v=20261105-brisnetgrid-20261101-mlfallback";
 import {correctRaceField} from "./race-field-corrections.js?v=20261101-fieldnames";
 import {prepareRaceDayResearchFreeze} from "./pre-race-raceday-integration.js";
+import {officialPostTimeSourceType} from "./scripts/gate43-post-source.js";
 import {sealResearchSnapshots} from "./pre-race-provider-freeze.js";
 import {readResearchFreezes,writeResearchFreezes} from "./pre-race-recorder-storage.js";
 import {fetchOtherTrackCombinedUpdate,otherTrackSource,OTHER_TRACK_FEEDS_READY} from "./other-track-updates.js?v=20261025-staged1";
@@ -423,7 +424,7 @@ document.getElementById('recorderFreezeRace').onclick=async()=>{
    card,race:source,existing,now,
    fieldVerified:document.getElementById('recorderFieldVerified').checked,
    surfaceVerified:document.getElementById('recorderSurfaceVerified').checked,
-   postTimeEvidence:{scheduledPost,sourceUrl,sourceType:'NYRA_OFFICIAL',verifiedByUser:true,observedAt:new Date(now).toISOString()}
+   postTimeEvidence:{scheduledPost,sourceUrl,sourceType:officialPostTimeSourceType(provider,sourceUrl),verifiedByUser:true,observedAt:new Date(now).toISOString()}
   });
   if(result.errors.length)throw Error(result.errors.join(' | '));
   const records=[...existing,result.record];
