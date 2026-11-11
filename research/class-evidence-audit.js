@@ -157,7 +157,7 @@ export function compareClaimingConditions(a,b){
  const codeA=String(a?.class_code||''),codeB=String(b?.class_code||'');
  const family=code=>/^M(?:CL|C)\d/i.test(code)?'MAIDEN_CLAIMING':/^(?:CLM|C)\d/i.test(code)?'CLAIMING':null;
  const fa=family(codeA),fb=family(codeB);
- const amount=code=>{const m=code.match(/^(?:MCL|MC|CLM|C)(\d+(?:\.\d+)?)(k)?/i);return m?Number(m[1])*(m[2]?1000:1000):null;};
+ const amount=code=>{const m=code.match(/^(?:MCL|MC|CLM|C)(\d+(?:\.\d+)?)(k)?/i);return m?Number(m[1])*(m[2]||Number(m[1])<1000?1000:1):null;};
  const va=amount(codeA),vb=amount(codeB);
  if(!fa||fa!==fb||!Number.isFinite(va)||!Number.isFinite(vb))
   return {status:'NOT_COMPARABLE',direction:null,scoring_applied:false};
