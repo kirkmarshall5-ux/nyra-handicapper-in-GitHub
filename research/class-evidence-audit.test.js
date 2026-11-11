@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {classEvidenceForHorse,classEvidenceForRaceHeader,classEvidenceFromBrisnetRunningLine,compareClassMovement,classCoverageSummary,auditClassRace} from './class-evidence-audit.js';
+import {classEvidenceForHorse,classEvidenceForRaceHeader,classEvidenceFromBrisnetRunningLine,compareClassMovement,classCoverageSummary,speedClassCrosscheck,auditClassRace} from './class-evidence-audit.js';
 test('literal class evidence retains source and does not infer class from speed',()=>{
  const h={n:'4',name:'Runner',switch_evidence:{running_lines:[{running_date_track:'10Oct26= BEL',source_line:'10Oct26= BEL 6f MSW Purse $80,000 finished 2nd'},{running_date_track:'01Sep26= BEL',source_line:'01Sep26= BEL 7f Clm Price $25,000 finished 1st'}]}};
  const a=classEvidenceForHorse(h);
@@ -63,4 +63,13 @@ test('coverage counts all runners and distinguishes observed class from comparab
  assert.equal(s.evidenceCoverage,2/3);assert.equal(s.movementCoverage,1/3);
  assert.equal(s.raceSummaries[0].completeEvidence,false);
  assert.equal(classCoverageSummary([]).evidenceCoverage,null);
+});
+
+test('speed-class research requires verified speed and comparable class, never changes scores',()=>{
+ const comparable={status:'SAME_CLASS_FAMILY_COMPARISON',direction:'UP'};
+ const a=speedClassCrosscheck({speedFigure:90,comparisonSpeedFigure:86,comparison:comparable});
+ assert.equal(a.signal,'SPEED_AT_HIGHER_CONDITION');assert.equal(a.speedDelta,4);assert.equal(a.scoring_applied,false);
+ assert.equal(speedClassCrosscheck({speedFigure:90,comparisonSpeedFigure:86,comparison:{status:'NONCOMPARABLE_CLASS_CONDITIONS'}}).signal,null);
+ assert.equal(speedClassCrosscheck({speedFigure:90,comparisonSpeedFigure:null,comparison:comparable}).signal,null);
+ assert.equal(speedClassCrosscheck({speedFigure:0,comparisonSpeedFigure:86,comparison:comparable}).status,'RESEARCH_HYPOTHESIS_ONLY');
 });
