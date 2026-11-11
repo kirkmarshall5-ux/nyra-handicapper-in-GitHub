@@ -195,3 +195,19 @@ test('active runners absent from every model and morning line remain visible as 
  assert.doesNotMatch(dashboardHtml(d),/Active horses without a model ranking \(3\)/);
  assert.equal(d.paper_plans.brisContender.tickets.length,3);
 });
+
+
+test('optional official starter evidence distinguishes field match, missing starter and unverified source',()=>{
+ const i=input();
+ i.officialStarterRoster=[...i.anchor.horses.map(h=>({program:h.n,horse:h.name})),{program:'12',horse:'Safety Off'}];
+ i.officialStarterSource='https://example.org/official-starters';
+ const missing=buildRaceDashboard(i,(_,r)=>ranked(r));
+ assert.equal(missing.models[0].complete,true);
+ assert.equal(missing.starter_audit.status,'MISMATCH');
+ assert.deepEqual(missing.starter_audit.missing,['12']);
+ assert.match(dashboardHtml(missing),/Freeze acceptance blocked pending field reconciliation/);
+ i.officialStarterRoster.pop();
+ assert.equal(buildRaceDashboard(i,(_,r)=>ranked(r)).starter_audit.status,'MATCHES_SUPPLIED_ROSTER');
+ delete i.officialStarterSource;
+ assert.equal(buildRaceDashboard(i,(_,r)=>ranked(r)).starter_audit.status,'UNVERIFIED_ROSTER');
+});
