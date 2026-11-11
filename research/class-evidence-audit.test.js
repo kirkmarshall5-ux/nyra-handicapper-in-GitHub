@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {classEvidenceForHorse,classEvidenceForRaceHeader,classEvidenceFromBrisnetRunningLine,compareClassMovement,classCoverageSummary,speedClassCrosscheck,auditClassRace} from './class-evidence-audit.js';
+import {classEvidenceForHorse,classEvidenceForRaceHeader,classEvidenceFromBrisnetRunningLine,compareClassMovement,classCoverageSummary,speedClassCrosscheck,auditSpeedClassPairs,auditClassRace} from './class-evidence-audit.js';
 test('literal class evidence retains source and does not infer class from speed',()=>{
  const h={n:'4',name:'Runner',switch_evidence:{running_lines:[{running_date_track:'10Oct26= BEL',source_line:'10Oct26= BEL 6f MSW Purse $80,000 finished 2nd'},{running_date_track:'01Sep26= BEL',source_line:'01Sep26= BEL 7f Clm Price $25,000 finished 1st'}]}};
  const a=classEvidenceForHorse(h);
@@ -72,4 +72,17 @@ test('speed-class research requires verified speed and comparable class, never c
  assert.equal(speedClassCrosscheck({speedFigure:90,comparisonSpeedFigure:86,comparison:{status:'NONCOMPARABLE_CLASS_CONDITIONS'}}).signal,null);
  assert.equal(speedClassCrosscheck({speedFigure:90,comparisonSpeedFigure:null,comparison:comparable}).signal,null);
  assert.equal(speedClassCrosscheck({speedFigure:0,comparisonSpeedFigure:86,comparison:comparable}).status,'RESEARCH_HYPOTHESIS_ONLY');
+});
+
+test('speed-class pairs require class and speed on same running line',()=>{
+ const r=auditSpeedClassPairs([
+  {source_line:'10Oct26Bel 7f ft MC35000 82 90/86 86',speed_figure:86},
+  {source_line:'07Sep26Sar 6f ft MC35000 88 89/77 75'},
+  {source_line:'06Aug26Sar 7f ft 84 85/69 70',speed_figure:70},
+  {source_line:'20Jun26Baq 7f ft MC35000 90 91/63 70',speed_figure:70}
+ ]);
+ assert.equal(r.totalLines,4);assert.equal(r.eligiblePairs,2);
+ assert.equal(r.pairs[0].speedFigure,86);assert.equal(r.pairs[0].condition_amount,35000);
+ assert.deepEqual(r.excluded.map(x=>x.reason),['SPEED_FIGURE_UNVERIFIED','CLASS_UNVERIFIED']);
+ assert.equal(r.scoring_applied,false);
 });
