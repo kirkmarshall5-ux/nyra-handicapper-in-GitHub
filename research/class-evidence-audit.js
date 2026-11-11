@@ -163,3 +163,24 @@ export function compareClaimingConditions(a,b){
   return {status:'NOT_COMPARABLE',direction:null,scoring_applied:false};
  return {status:'CLAIMING_AMOUNT_PROXY_ONLY',family:fa,amountA:va,amountB:vb,direction:va>vb?'A_HIGHER':va<vb?'B_HIGHER':'EQUAL',scoring_applied:false};
 }
+
+
+// Within-horse evidence is a hypothesis generator, not a race prediction.
+// Compare same-family claiming lines only; all missing lines remain visible.
+export function withinHorseClassSpeedStudy(lines){
+ const audit=auditSpeedClassPairs(lines);
+ const comparisons=[];
+ for(let i=0;i<audit.pairs.length;i++)for(let j=i+1;j<audit.pairs.length;j++){
+  const a=audit.pairs[i],b=audit.pairs[j];
+  const condition=compareClassMovement(a,b);
+  if(condition.status!=='SAME_CLASS_FAMILY_COMPARISON')continue;
+  comparisons.push({lineA:a.index,lineB:b.index,condition:condition.direction,
+   speedA:a.speedFigure,speedB:b.speedFigure,speedDelta:a.speedFigure-b.speedFigure,
+   higherConditionSpeed:condition.direction==='UP'?a.speedFigure:condition.direction==='DOWN'?b.speedFigure:null,
+   lowerConditionSpeed:condition.direction==='UP'?b.speedFigure:condition.direction==='DOWN'?a.speedFigure:null});
+ }
+ return {research_only:true,scoring_applied:false,lines:audit.totalLines,
+  eligiblePairs:audit.eligiblePairs,excluded:audit.excluded,comparisons,
+  directionalComparisons:comparisons.filter(x=>x.condition!=='SAME').length,
+  caution:'Within-horse observations are confounded by distance, surface, form, and pace; no causal class effect inferred.'};
+}
