@@ -50,6 +50,20 @@ export function classEvidenceForRaceHeader(header){
   flags:[...(matches.length!==1?['CLASS_CODE_MISSING_OR_MULTIPLE']:[]),...(purses.length>1?['MULTIPLE_PURSES']:[])]};
 }
 
+
+// Conservative same-code class movement. Only compare the same class family
+// and explicit monetary condition; never order allowance/stakes vs claiming.
+export function compareClassMovement(current,previous){
+ if(!current||!previous)return {status:'INSUFFICIENT_CLASS_EVIDENCE',direction:null};
+ const a=String(current.class_code||'').toUpperCase(),b=String(previous.class_code||'').toUpperCase();
+ const n=Number(current.condition_amount),p=Number(previous.condition_amount);
+ if(!a||a!==b||!Number.isFinite(n)||!Number.isFinite(p)||n<=0||p<=0)
+  return {status:'NONCOMPARABLE_CLASS_CONDITIONS',direction:null};
+ if(!['MC','MCL','CLM'].includes(a))return {status:'CLASS_ORDERING_UNVERIFIED',direction:null};
+ // MC/MCL are separate codes and are not implicitly mapped to each other.
+ return {status:'SAME_CLASS_FAMILY_COMPARISON',direction:n>p?'UP':n<p?'DOWN':'SAME',from:p,to:n,code:a};
+}
+
 export function auditClassRace(race){
  const horses=(race?.horses||[]).filter(h=>h.odds!=='SCR'&&h.included_in_frozen_field!==false&&(!h.entry_status||h.entry_status==='REGULAR'));
  return {research_only:true,scoring_applied:false,header_class:classEvidenceForRaceHeader(race?.header||''),track:race?.track||null,date:race?.date||null,race:race?.race??null,horses:horses.map(h=>({program:String(h.n??''),name:h.name,...classEvidenceForHorse(h)}))};
