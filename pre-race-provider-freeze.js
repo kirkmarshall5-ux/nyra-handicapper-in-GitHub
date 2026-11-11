@@ -39,6 +39,24 @@ export function validateSnapshot(s, now=Date.now()) {
       if(source&&(String(source.odds??'').trim().toUpperCase()==='SCR'||String(source.fieldStatusEvidence??'').trim().toUpperCase()==='SCRATCHED'))errors.push('Scratched source runner cannot appear in active field.');
     }
   }
+  // An independently supplied official starter roster is a separate source of truth.
+  // PP-derived field size alone cannot establish official-starter completeness.
+  if(s?.officialStarterRoster!==undefined){
+    const roster=s.officialStarterRoster;
+    if(!Array.isArray(roster)||!roster.length)errors.push('Official starter roster must be a nonempty array.');
+    else {
+      const official=new Set();
+      for(const h of roster){
+        const p=String(h?.program??'').trim(),n=String(h?.horse??'').trim();
+        if(!p||!n||official.has(p))errors.push('Invalid or duplicate official starter.');
+        official.add(p);
+        const active=(s.field||[]).find(x=>String(x?.program??'').trim()===p);
+        if(!active||String(active.horse??'').trim()!==n)errors.push('Official starter missing from active field or identity differs.');
+      }
+      for(const h of s.field||[])if(!official.has(String(h?.program??'').trim()))errors.push('Active field includes runner absent from official starter roster.');
+    }
+    if(typeof s?.officialStarterSource!=='string'||!/^https:\\/\\/[^\\s/]+/.test(s.officialStarterSource))errors.push('Official starter roster source URL required.');
+  }
   if(!Array.isArray(s?.models)||s.models.length!==3||new Set(s.models.map(m=>m.family)).size!==3||!['V44C','CONTENDER','FINISHER'].every(f=>s.models.some(m=>m.family===f)))errors.push('All three provider model families required.');
   for(const m of s?.models||[]){
     if(!['V44C','CONTENDER','FINISHER'].includes(m?.family)||!m?.modelId||!['RATEABLE','PASS','HOLD'].includes(m?.decision)||!Array.isArray(m?.rankings)) {errors.push('Model output missing or unverified.');continue;}
