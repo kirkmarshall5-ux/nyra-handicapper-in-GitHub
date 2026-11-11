@@ -213,3 +213,16 @@ test('optional official starter evidence distinguishes field match, missing star
  delete i.officialStarterSource;
  assert.equal(buildRaceDashboard(i,(_,r)=>ranked(r)).starter_audit.status,'UNVERIFIED_ROSTER');
 });
+
+
+test('official starter audit distinguishes PP runner excluded from active field',()=>{
+ const i=input();
+ const inactive={n:'12',name:'Safety Off',odds:'SCR',entry_status:'REGULAR',included_in_frozen_field:true};
+ i.anchor.horses.push(inactive);
+ i.officialStarterRoster=[...i.anchor.horses.map(h=>({program:h.n,horse:h.name}))];
+ i.officialStarterSource='https://www.equibase.com/';
+ const d=buildRaceDashboard(i,(_,r)=>ranked(r));
+ assert.equal(d.starter_audit.status,'MISMATCH');
+ assert.deepEqual(d.starter_audit.inactiveInPP,['12']);
+ assert.deepEqual(d.starter_audit.absentFromPP,[]);
+});
