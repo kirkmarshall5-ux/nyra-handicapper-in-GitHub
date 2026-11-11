@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {classEvidenceForHorse,classEvidenceForRaceHeader,classEvidenceFromBrisnetRunningLine,compareClassMovement,auditClassRace} from './class-evidence-audit.js';
+import {classEvidenceForHorse,classEvidenceForRaceHeader,classEvidenceFromBrisnetRunningLine,compareClassMovement,classCoverageSummary,auditClassRace} from './class-evidence-audit.js';
 test('literal class evidence retains source and does not infer class from speed',()=>{
  const h={n:'4',name:'Runner',switch_evidence:{running_lines:[{running_date_track:'10Oct26= BEL',source_line:'10Oct26= BEL 6f MSW Purse $80,000 finished 2nd'},{running_date_track:'01Sep26= BEL',source_line:'01Sep26= BEL 7f Clm Price $25,000 finished 1st'}]}};
  const a=classEvidenceForHorse(h);
@@ -49,4 +49,18 @@ test('class movement is permitted only within verified comparable class conditio
  assert.equal(compareClassMovement({class_code:'OC',condition_amount:55000},mc(35000)).direction,null);
  assert.equal(compareClassMovement({class_code:'ALW',condition_amount:50000},{class_code:'ALW',condition_amount:40000}).direction,null);
  assert.equal(compareClassMovement({class_code:'MC',condition_amount:null},mc(35000)).direction,null);
+});
+
+test('coverage counts all runners and distinguishes observed class from comparable movement',()=>{
+ const audit={track:'Belmont Park',date:'2026-10-29',race:1,horses:[
+  {name:'A',observations:[{class_code:'MC',condition_amount:35000},{class_code:'MC',condition_amount:50000}]},
+  {name:'B',observations:[{class_code:'OC',condition_amount:55000}]},
+  {name:'C',observations:[]}
+ ]};
+ const s=classCoverageSummary([audit]);
+ assert.equal(s.totalHorses,3);assert.equal(s.withEvidence,2);
+ assert.equal(s.withComparableMovement,1);assert.equal(s.missingEvidence,1);
+ assert.equal(s.evidenceCoverage,2/3);assert.equal(s.movementCoverage,1/3);
+ assert.equal(s.raceSummaries[0].completeEvidence,false);
+ assert.equal(classCoverageSummary([]).evidenceCoverage,null);
 });
