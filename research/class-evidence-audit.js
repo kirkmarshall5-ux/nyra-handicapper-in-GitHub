@@ -89,3 +89,18 @@ export function classCoverageSummary(auditedRaces){
  }
  return {research_only:true,scoring_applied:false,races:races.length,totalHorses,withEvidence,missingEvidence,withComparableMovement,evidenceCoverage:totalHorses?withEvidence/totalHorses:null,movementCoverage:totalHorses?withComparableMovement/totalHorses:null,raceSummaries};
 }
+
+// Diagnostic only: a speed figure is not confirmed by purse or class code alone.
+// A confirmed comparison requires a verified prior speed figure and a documented,
+// comparable class relationship. This function never changes rankings.
+export function speedClassCrosscheck({speedFigure,comparison,comparisonSpeedFigure}={}){
+ const speed=Number(speedFigure),reference=Number(comparisonSpeedFigure);
+ if(speedFigure===null||speedFigure===undefined||!Number.isFinite(speed)||comparisonSpeedFigure===null||comparisonSpeedFigure===undefined||!Number.isFinite(reference))
+  return {status:'INSUFFICIENT_SPEED_EVIDENCE',signal:null,scoring_applied:false};
+ if(!comparison||comparison.status!=='SAME_CLASS_FAMILY_COMPARISON')
+  return {status:'CLASS_NOT_COMPARABLE',signal:null,scoring_applied:false};
+ // This is a hypothesis label for retrospective validation, NOT a claim
+ // that a stronger-class figure is inherently more accurate.
+ const delta=speed-reference;
+ return {status:'RESEARCH_HYPOTHESIS_ONLY',signal:comparison.direction==='UP'?'SPEED_AT_HIGHER_CONDITION':comparison.direction==='DOWN'?'SPEED_AT_LOWER_CONDITION':'SAME_CONDITION_SPEED',speedDelta:delta,scoring_applied:false};
+}
