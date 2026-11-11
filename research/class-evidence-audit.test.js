@@ -17,5 +17,5 @@ test('missing, ambiguous and unrecognized class evidence are explicitly flagged'
  const a=classEvidenceForHorse({switch_evidence:{running_lines:[{source_line:'Purse $50,000 Purse $60,000'},{source_line:'speed 95 pace 100'}]}});
  assert.ok(a.flags.includes('AMBIGUOUS_CLASS_AMOUNT_0'));
  assert.ok(a.flags.includes('NO_EXPLICIT_CLASS_TOKEN_1'));
- assert.equal(a.observations[0].purse,null);
+ assert.equal(a.observations.length,0,'Ambiguous amounts must not become accepted observations');
 });
