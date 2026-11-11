@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {classEvidenceForHorse,classEvidenceForRaceHeader,auditClassRace} from './class-evidence-audit.js';
+import {classEvidenceForHorse,classEvidenceForRaceHeader,classEvidenceFromBrisnetRunningLine,auditClassRace} from './class-evidence-audit.js';
 test('literal class evidence retains source and does not infer class from speed',()=>{
  const h={n:'4',name:'Runner',switch_evidence:{running_lines:[{running_date_track:'10Oct26= BEL',source_line:'10Oct26= BEL 6f MSW Purse $80,000 finished 2nd'},{running_date_track:'01Sep26= BEL',source_line:'01Sep26= BEL 7f Clm Price $25,000 finished 1st'}]}};
  const a=classEvidenceForHorse(h);
@@ -28,4 +28,15 @@ test('Belmont October 29 Brisnet race-header examples retain literal class and p
  const oc=classEvidenceForRaceHeader('OC 55000n1x 5½ Furlongs (t)');
  assert.equal(oc.class_code,'OC');assert.equal(oc.condition_amount,55000);assert.equal(oc.condition_suffix,'n1x');
  assert.equal(oc.purse,null);
+});
+
+test('actual October 29 Brisnet RACETYPE cells distinguish class conditions from speed and purse',()=>{
+ const a=classEvidenceFromBrisnetRunningLine('10Oct26Bel 7½ ft :23 :45 1:10 1:30 MC35000 82 90/86 -8 -4 86');
+ assert.equal(a.status,'LITERAL_RACETYPE');assert.equal(a.class_code,'MC');assert.equal(a.condition_amount,35000);
+ const b=classEvidenceFromBrisnetRunningLine('19Sep26Bel 1m fm :49 1:14 MC50000-c 68 67/72 0 +5 69');
+ assert.equal(b.condition_amount,50000);
+ const horse=classEvidenceForHorse({switch_evidence:{running_lines:[{running_date_track:'10Oct26Bel',source_line:'10Oct26Bel 7½ ft MC35000 82 90/86 86'}]}});
+ assert.equal(horse.observations[0].condition_amount,35000);
+ assert.equal(horse.observations[0].purse,null);
+ assert.equal(classEvidenceFromBrisnetRunningLine('10Oct26Bel 7f 82 90/86 86').status,'MISSING_OR_AMBIGUOUS_RACETYPE');
 });
