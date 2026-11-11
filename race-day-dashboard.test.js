@@ -205,7 +205,9 @@ test('optional official starter evidence distinguishes field match, missing star
  assert.equal(missing.models[0].complete,true);
  assert.equal(missing.starter_audit.status,'MISMATCH');
  assert.deepEqual(missing.starter_audit.missing,['12']);
- assert.match(dashboardHtml(missing),/Freeze acceptance blocked pending field reconciliation/);
+ assert.match(dashboardHtml(missing),/Structured freeze validation rejects this supplied-roster mismatch/);
+ assert.deepEqual(missing.starter_audit.absentFromPP,['12']);
+ assert.deepEqual(missing.starter_audit.inactiveInPP,[]);
  i.officialStarterRoster.pop();
  assert.equal(buildRaceDashboard(i,(_,r)=>ranked(r)).starter_audit.status,'MATCHES_SUPPLIED_ROSTER');
  delete i.officialStarterSource;
