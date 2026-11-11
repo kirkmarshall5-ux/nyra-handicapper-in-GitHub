@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {classEvidenceForHorse,classEvidenceForRaceHeader,classEvidenceFromBrisnetRunningLine,compareClassMovement,classCoverageSummary,speedClassCrosscheck,auditSpeedClassPairs,speedClassCoverageByRace,auditClassRace} from './class-evidence-audit.js';
+import {classEvidenceForHorse,classEvidenceForRaceHeader,classEvidenceFromBrisnetRunningLine,compareClassMovement,classCoverageSummary,speedClassCrosscheck,auditSpeedClassPairs,speedClassCoverageByRace,auditClassRace,compareClaimingConditions} from './class-evidence-audit.js';
 test('literal class evidence retains source and does not infer class from speed',()=>{
  const h={n:'4',name:'Runner',switch_evidence:{running_lines:[{running_date_track:'10Oct26= BEL',source_line:'10Oct26= BEL 6f MSW Purse $80,000 finished 2nd'},{running_date_track:'01Sep26= BEL',source_line:'01Sep26= BEL 7f Clm Price $25,000 finished 1st'}]}};
  const a=classEvidenceForHorse(h);
@@ -99,4 +99,14 @@ test('speed/class coverage preserves incomplete runners in denominator',()=>{
  assert.equal(s.excludedClass,1);assert.equal(s.excludedSpeed,1);
  assert.equal(s.horseCoverage,1/3);assert.equal(s.lineCoverage,1/3);
  assert.equal(s.perRace[0].completeFieldCoverage,false);
+});
+
+test('claiming amount proxy compares only compatible class families',()=>{
+ const c=(class_code)=>({class_code});
+ assert.equal(compareClaimingConditions(c('Clm25000-c'),c('Clm16000-c')).direction,'A_HIGHER');
+ assert.equal(compareClaimingConditions(c('C25k'),c('C25000')).direction,'EQUAL');
+ assert.equal(compareClaimingConditions(c('Mcl25000'),c('Clm25000')).status,'NOT_COMPARABLE');
+ assert.equal(compareClaimingConditions(c('OC50k-N'),c('Clm25000')).status,'NOT_COMPARABLE');
+ assert.equal(compareClaimingConditions(c('Alw110000n1x'),c('Clm25000')).status,'NOT_COMPARABLE');
+ assert.equal(compareClaimingConditions(c('Clm25000'),c('Clm16000')).scoring_applied,false);
 });
