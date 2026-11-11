@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {classEvidenceForHorse,classEvidenceForRaceHeader,classEvidenceFromBrisnetRunningLine,auditClassRace} from './class-evidence-audit.js';
+import {classEvidenceForHorse,classEvidenceForRaceHeader,classEvidenceFromBrisnetRunningLine,compareClassMovement,auditClassRace} from './class-evidence-audit.js';
 test('literal class evidence retains source and does not infer class from speed',()=>{
  const h={n:'4',name:'Runner',switch_evidence:{running_lines:[{running_date_track:'10Oct26= BEL',source_line:'10Oct26= BEL 6f MSW Purse $80,000 finished 2nd'},{running_date_track:'01Sep26= BEL',source_line:'01Sep26= BEL 7f Clm Price $25,000 finished 1st'}]}};
  const a=classEvidenceForHorse(h);
@@ -39,4 +39,14 @@ test('actual October 29 Brisnet RACETYPE cells distinguish class conditions from
  assert.equal(horse.observations[0].condition_amount,35000);
  assert.equal(horse.observations[0].purse,null);
  assert.equal(classEvidenceFromBrisnetRunningLine('10Oct26Bel 7f 82 90/86 86').status,'MISSING_OR_AMBIGUOUS_RACETYPE');
+});
+
+test('class movement is permitted only within verified comparable class conditions',()=>{
+ const mc=n=>({class_code:'MC',condition_amount:n});
+ assert.equal(compareClassMovement(mc(35000),mc(50000)).direction,'DOWN');
+ assert.equal(compareClassMovement(mc(50000),mc(35000)).direction,'UP');
+ assert.equal(compareClassMovement(mc(35000),mc(35000)).direction,'SAME');
+ assert.equal(compareClassMovement({class_code:'OC',condition_amount:55000},mc(35000)).direction,null);
+ assert.equal(compareClassMovement({class_code:'ALW',condition_amount:50000},{class_code:'ALW',condition_amount:40000}).direction,null);
+ assert.equal(compareClassMovement({class_code:'MC',condition_amount:null},mc(35000)).direction,null);
 });
