@@ -83,8 +83,19 @@ export function paperPlan(rankings,eligible=rankings){
  if(h[2])tickets.push(ticket('$1 exacta · top three box',6,h.flatMap(a=>h.filter(b=>b!==a).map(b=>[a.n,b.n]))));
  return {available:!!h.length,reason:h.length<3?'Fewer than three ranked runners; unavailable tickets omitted':null,tickets,total_cost:tickets.reduce((s,t)=>s+t.cost,0)};
 }
-export function buildRaceDashboard({anchor,sources,morningLineProvider='DRF'},ranker=forecast){
+export function buildRaceDashboard({anchor,sources,morningLineProvider='DRF',officialStarterRoster=null,officialStarterSource=null},ranker=forecast){
  morningLineProvider=selectMorningLineProvider({anchor,sources,preferredProvider:morningLineProvider});
+ const starterAudit={status:'NOT_PROVIDED',source:officialStarterSource||null,missing:[],inactiveInPP:[],absentFromPP:[],unexpected:[],identityMismatch:[]};
+ if(officialStarterRoster!==null){
+  if(!Array.isArray(officialStarterRoster)||!officialStarterRoster.length||typeof officialStarterSource!=='string'||!officialStarterSource.startsWith('https://'))starterAudit.status='UNVERIFIED_ROSTER';
+  else {
+   const actual=field(anchor),byProgram=new Map(actual.map(h=>[program(h),h]));
+   const official=new Map();let invalid=false;
+   for(const h of officialStarterRoster){const p=String(h?.program??'').trim().toUpperCase(),n=name({name:h?.horse});if(!p||!n||official.has(p)){invalid=true;continue;}official.set(p,n);const active=byProgram.get(p);if(!active){starterAudit.missing.push(p);if((anchor?.horses||[]).some(h=>program(h)===p))starterAudit.inactiveInPP.push(p);else starterAudit.absentFromPP.push(p);}else if(name(active)!==n)starterAudit.identityMismatch.push(p);}
+   for(const h of actual)if(!official.has(program(h)))starterAudit.unexpected.push(program(h));
+   starterAudit.status=invalid?'UNVERIFIED_ROSTER':starterAudit.missing.length||starterAudit.unexpected.length||starterAudit.identityMismatch.length?'MISMATCH':'MATCHES_SUPPLIED_ROSTER';
+  }
+ }
  const checks=Object.fromEntries(['BRISNET','DRF'].map(p=>[p,sourceIssue(anchor,sources[p])]));
  const models=modelIds.map(id=>{const p=providerFor(id),r=sources[p]?.race;
   return summarize(id,r,checks[p]?null:ranker(id,r),checks[p]);
@@ -98,7 +109,9 @@ export function buildRaceDashboard({anchor,sources,morningLineProvider='DRF'},ra
  const shortlist=field(anchor).map(h=>({n:program(h),name:h.name,ranks:Object.fromEntries(Object.entries(maps).map(([id,map])=>[id,map.get(key(h))??null]))})).map(h=>({...h,top_four_models:modelIds.filter(id=>h.ranks[id]!=null&&h.ranks[id]<=4).length})).filter(h=>h.top_four_models>0||h.ranks.morningLine!=null&&h.ranks.morningLine<=4).sort((a,b)=>b.top_four_models-a.top_four_models||compare(a,b));
  const selected=new Set(shortlist.map(key));
  const remaining=field(anchor).filter(h=>!selected.has(key(h))).map(h=>({n:program(h),name:h.name,ranks:Object.fromEntries(Object.entries(maps).map(([id,map])=>[id,map.get(key(h))??null])),top_four_models:0})).filter(h=>modelIds.some(id=>h.ranks[id]!=null)).sort(compare);
- return {prime_power:primePower,schema:'nyra-race-dashboard-v1',race:{track:anchor.track,date:anchor.date,number:anchor.race,surface:anchor.surface,distance:anchor.dist},field:field(anchor).map(h=>({n:program(h),name:h.name})),models,morning_line:ml,shortlist,remaining,issues:[...new Set(Object.values(checks).filter(Boolean))],paper_plans:Object.fromEntries([...models,ml].map(m=>[m.id,{decision:m.decision||'REFERENCE',...paperPlan(m.rankings,field(anchor))}])),betting_enabled:false};
+ const visible=new Set([...shortlist,...remaining].map(key));
+ const unranked=field(anchor).filter(h=>!visible.has(key(h))).map(h=>({n:program(h),name:h.name,ranks:Object.fromEntries(Object.entries(maps).map(([id,map])=>[id,map.get(key(h))??null])),top_four_models:0})).sort(compare);
+ return {prime_power:primePower,schema:'nyra-race-dashboard-v1',race:{track:anchor.track,date:anchor.date,number:anchor.race,surface:anchor.surface,distance:anchor.dist},field:field(anchor).map(h=>({n:program(h),name:h.name})),models,morning_line:ml,shortlist,remaining,unranked,starter_audit:starterAudit,issues:[...new Set(Object.values(checks).filter(Boolean))],paper_plans:Object.fromEntries([...models,ml].map(m=>[m.id,{decision:m.decision||'REFERENCE',...paperPlan(m.rankings,field(anchor))}])),betting_enabled:false};
 }
 export function dashboardHtml(d,selected='drfContender'){
  const row=h=>`<tr><th scope="row">${h.n?'#'+esc(h.n)+' ':''}${esc(h.name)}</th><td>${esc(d.prime_power?.[key(h)]||'—')}</td>${[...gridModelIds,'morningLine'].map(id=>`<td>${h.ranks[id]??'—'}</td>`).join('')}<td>${h.top_four_models}/${modelIds.length}</td></tr>`;
@@ -109,10 +122,12 @@ export function dashboardHtml(d,selected='drfContender'){
  ${d.demonstration?'<p class="small muted">Demonstration card · upload current PPs before use.</p>':''}
  <div class="dashboard-readiness">${d.models.map(m=>`<div><b>${esc(m.label)}</b><span>${m.available?`${m.ranked}/${m.eligible} ranked · ${m.complete?'full field':'incomplete field'} · ${esc(m.decision)}`:esc(m.reason)}</span></div>`).join('')}</div>
  ${d.issues.length?`<p class="small bad" role="status">${d.issues.map(esc).join(' · ')}</p>`:''}
+ ${d.starter_audit?.status==='MISMATCH'?`<p class="small bad" role="status">Official starter roster mismatch: missing ${esc(d.starter_audit.missing.join(', ')||'none')}; unexpected ${esc(d.starter_audit.unexpected.join(', ')||'none')}; identity mismatch ${esc(d.starter_audit.identityMismatch.join(', ')||'none')}. Structured freeze validation rejects this supplied-roster mismatch; the separate local Freeze All Models action is not certified.</p>`:d.starter_audit?.status==='MATCHES_SUPPLIED_ROSTER'?'<p class="tiny muted">Active field matches supplied starter roster; source and timing remain independently unverified.</p>':d.starter_audit?.status==='UNVERIFIED_ROSTER'?'<p class="small bad">Supplied starter roster is invalid or lacks an HTTPS source reference.</p>':''}
  <p class="tiny muted">Prime Power shows the number and rank printed in the Brisnet PP; printed ranks stay unchanged after scratches. Other numbers are each system’s rank. “—” means unranked or unavailable. Top-four agreement is descriptive; the three Brisnet models share inputs. No combined rating.</p>
  ${d.shortlist.length?table(d.shortlist.slice(0,6)):'<p class="small muted">Load verified PPs to compare selections.</p>'}
  ${d.shortlist.length>6?`<details class="dashboard-more"><summary>Show ${d.shortlist.length-6} more selections</summary>${table(d.shortlist.slice(6))}</details>`:''}
  ${(d.remaining||[]).length?`<details class="dashboard-remaining"><summary>Remaining ranked horses (${d.remaining.length})</summary>${table(d.remaining)}</details>`:''}
+ ${(d.unranked||[]).length?`<details class="dashboard-unranked"><summary>Active horses without a model ranking (${d.unranked.length})</summary><p class="tiny muted">These runners are in the active field but have no ranking from the displayed models or morning line. Do not treat them as scratched or as low-scoring horses.</p>${table(d.unranked)}</details>`:''}
  <details class="dashboard-paper"><summary>Paper betting plan · your four test strategies</summary><div class="dashboard-plan-controls"><label for="dashboardPaperSource">Use rankings from</label><select id="dashboardPaperSource">${[...d.models,d.morning_line].map(m=>`<option value="${m.id}" ${m.id===source.id?'selected':''}>${esc(m.label)}</option>`).join('')}</select><span class="small">${selection}</span></div>
  <p class="tiny muted">${esc(source.decision||'Morning-line reference')} · Cost illustration only. Existing PASS rules remain in force. These overlapping strategies are tracked separately; total is the cost if all are played.</p>
  ${plan.available?`<div class="dashboard-tickets">${plan.tickets.map(t=>`<div><span>${esc(t.label)}</span><b>$${t.cost}</b></div>`).join('')}<div><strong>All available tests</strong><strong>$${plan.total_cost}</strong></div></div>`:'<p class="small muted">No paper tickets available.</p>'}${plan.reason?`<p class="tiny muted">${esc(plan.reason)}</p>`:''}</details>

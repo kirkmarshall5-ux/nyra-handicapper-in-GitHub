@@ -146,3 +146,17 @@ test('source digest and source field snapshot cannot be omitted or laundered by 
   assert.equal(result.valid,false);
  }
 });
+
+
+test('official starter roster detects a Churchill 7-style missing starter despite full model ranking',()=>{
+ const snap=fixture();
+ snap.officialStarterSource='https://example.org/official-starters';
+ snap.officialStarterRoster=[{program:'1',horse:'A'},{program:'2',horse:'B'},{program:'12',horse:'Safety Off'}];
+ assert.match(freezeResearchSnapshot({snapshot:snap,now}).errors.join(' '),/Official starter missing from active field/);
+ snap.officialStarterRoster=[{program:'1',horse:'A'},{program:'2',horse:'B'}];
+ assert.deepEqual(freezeResearchSnapshot({snapshot:snap,now}).errors,[]);
+ snap.officialStarterRoster=[{program:'1',horse:'A'}];
+ assert.match(freezeResearchSnapshot({snapshot:snap,now}).errors.join(' '),/absent from official starter roster/);
+ snap.officialStarterRoster=[{program:'1',horse:'A'},{program:'1',horse:'A'}];
+ assert.match(freezeResearchSnapshot({snapshot:snap,now}).errors.join(' '),/duplicate official starter/);
+});

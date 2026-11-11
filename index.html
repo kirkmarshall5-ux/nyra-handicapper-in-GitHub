@@ -216,6 +216,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 import {buildPicksSheet,createPicksPreview} from "./print-picks.js?v=20261105-brisnetgrid-20261101-mlfallback";
 import {correctRaceField} from "./race-field-corrections.js?v=20261101-fieldnames";
 import {prepareRaceDayResearchFreeze} from "./pre-race-raceday-integration.js";
+import {parseOfficialStarterRoster} from "./official-starter-input.js";
 import {officialPostTimeSourceType} from "./scripts/gate43-post-source.js";
 import {sealResearchSnapshots} from "./pre-race-provider-freeze.js";
 import {readResearchFreezes,writeResearchFreezes} from "./pre-race-recorder-storage.js";
@@ -361,7 +362,10 @@ document.getElementById('printPicks').onclick=()=>{
 };
 let dashboardPaperSource='drfContender';
 function currentDashboard(){
- const dashboard=buildRaceDashboard({anchor:race,sources:{BRISNET:providerRace('BRISNET'),DRF:providerRace('DRF')},morningLineProvider:morningLineProvider()});
+ const starterRosterText=document.getElementById('recorderStarterRoster')?.value||'';
+ let starterRoster=null,starterRosterError=null;
+ try{starterRoster=parseOfficialStarterRoster(starterRosterText);}catch(e){starterRosterError=e.message;}
+ const dashboard=buildRaceDashboard({anchor:race,sources:{BRISNET:providerRace('BRISNET'),DRF:providerRace('DRF')},morningLineProvider:morningLineProvider(),officialStarterRoster:starterRosterError?[]:starterRoster,officialStarterSource:document.getElementById('recorderStarterSource')?.value?.trim()||null});
  const researchRace=providerRace('BRISNET').race;
  dashboard.research_models={brisnet_best_recent:researchRace?rankBrisnetResearch(researchRace):null};
  dashboard.manual_conditions=structuredClone(race.manual_conditions||null);
@@ -404,8 +408,12 @@ const structuredRecorder=document.createElement('div');
 structuredRecorder.id='structuredRecorder';
 structuredRecorder.className='note small span12';
 structuredRecorder.style.marginTop='12px';
-structuredRecorder.innerHTML='<b>Verified race recorder (research only)</b><p class="muted">Select the current race, confirm official field/scratches and surface, and enter an official post-time reference. The original PDF SHA-256 must be present. The resulting file is local-only until independently anchored.</p><div class="grid"><label class="span6">Official post time (with timezone, e.g. 2026-10-26T16:00:00-04:00)<input id="recorderPost" type="text" placeholder="YYYY-MM-DDTHH:MM:SS-04:00"></label><label class="span6">Official post-time HTTPS reference<input id="recorderPostUrl" type="url" placeholder="https://..."></label><label class="span6"><input id="recorderFieldVerified" type="checkbox" style="width:auto"> I verified runners and scratches against official entries</label><label class="span6"><input id="recorderSurfaceVerified" type="checkbox" style="width:auto"> I verified the race surface</label></div><button class="secondary" id="recorderFreezeRace" type="button">Freeze current race (structured research)</button><div id="recorderFreezeStatus" role="status" class="small muted" style="margin-top:8px">Not frozen. Independent server timestamp not established.</div>';
+structuredRecorder.innerHTML='<b>Verified race recorder (research only)</b><p class="muted">Select the current race, confirm official field/scratches and surface, and enter an official post-time reference. The original PDF SHA-256 must be present. The resulting file is local-only until independently anchored.</p><div class="grid"><label class="span6">Official post time (with timezone, e.g. 2026-10-26T16:00:00-04:00)<input id="recorderPost" type="text" placeholder="YYYY-MM-DDTHH:MM:SS-04:00"></label><label class="span6">Official post-time HTTPS reference<input id="recorderPostUrl" type="url" placeholder="https://..."></label><label class="span6">Official starter roster source (HTTPS)<input id="recorderStarterSource" type="url" placeholder="https://official-source/..."></label><label class="span6">Confirmed starters (one per line: PROGRAM | HORSE NAME)<textarea id="recorderStarterRoster" rows="4" placeholder="1 | Horse Name"></textarea></label><label class="span6"><input id="recorderFieldVerified" type="checkbox" style="width:auto"> I verified runners and scratches against official entries</label><label class="span6"><input id="recorderSurfaceVerified" type="checkbox" style="width:auto"> I verified the race surface</label></div><button class="secondary" id="recorderFreezeRace" type="button">Freeze current race (structured research)</button><div id="recorderFreezeStatus" role="status" class="small muted" style="margin-top:8px">Not frozen. Independent server timestamp not established.</div>';
 document.getElementById('raceDayDashboard').insertAdjacentElement('afterend',structuredRecorder);
+// Recompute the diagnostic immediately when official roster evidence is edited.
+for(const id of ['recorderStarterRoster','recorderStarterSource']){
+ document.getElementById(id).addEventListener('input',()=>renderDashboard());
+}
 document.getElementById('recorderFreezeRace').onclick=async()=>{
  const status=document.getElementById('recorderFreezeStatus'),button=document.getElementById('recorderFreezeRace');
  button.disabled=true;
@@ -424,6 +432,8 @@ document.getElementById('recorderFreezeRace').onclick=async()=>{
    card,race:source,existing,now,
    fieldVerified:document.getElementById('recorderFieldVerified').checked,
    surfaceVerified:document.getElementById('recorderSurfaceVerified').checked,
+   officialStarterRoster:parseOfficialStarterRoster(document.getElementById('recorderStarterRoster').value),
+   officialStarterSource:document.getElementById('recorderStarterSource').value.trim(),
    postTimeEvidence:{scheduledPost,sourceUrl,sourceType:officialPostTimeSourceType(provider,sourceUrl),verifiedByUser:true,observedAt:new Date(now).toISOString()}
   });
   if(result.errors.length)throw Error(result.errors.join(' | '));

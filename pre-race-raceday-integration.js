@@ -3,7 +3,7 @@ import {displayedProviderModels} from './pre-race-provider-adapter.js';
 import {verifyPostTimeEvidence} from './pre-race-post-time.js';
 import {freezeResearchSnapshot} from './pre-race-provider-freeze.js';
 
-export function prepareRaceDayResearchFreeze({card,race,postTimeEvidence,existing=[],now=Date.now(),fieldVerified=false,surfaceVerified=false}={}) {
+export function prepareRaceDayResearchFreeze({card,race,postTimeEvidence,existing=[],now=Date.now(),fieldVerified=false,surfaceVerified=false,officialStarterRoster=null,officialStarterSource=null}={}) {
   const errors=[];
   if(!card||!race||!Array.isArray(race.horses))return {record:null,errors:['Loaded provider card and race required.']};
   const check=verifyPostTimeEvidence(postTimeEvidence,{now,raceDate:race.date,track:race.track,raceNumber:race.race});
@@ -23,5 +23,6 @@ export function prepareRaceDayResearchFreeze({card,race,postTimeEvidence,existin
     field:adapted.field,models:adapted.models,unratedRunners:adapted.unratedRunners,ratedNotDisplayed:adapted.ratedNotDisplayed,
     fieldSnapshot:race.horses.map(h=>({program:String(h.n??''),horse:h.name,odds:h.odds??null,entryStatus:h.entry_status??'REGULAR',fieldStatusEvidence:h.field_status_evidence??null}))
   };
+  if(officialStarterRoster!==null){snapshot.officialStarterRoster=officialStarterRoster;snapshot.officialStarterSource=officialStarterSource;}
   return freezeResearchSnapshot({snapshot,existing,now});
 }

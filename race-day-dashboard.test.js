@@ -182,3 +182,47 @@ test('Prime Power is a source-only display column and preserves all orders and m
  i.sources.BRISNET.race.date='2026-10-22';
  assert.deepEqual(buildRaceDashboard(i,(_,r)=>ranked(r)).prime_power,{});
 });
+
+
+test('active runners absent from every model and morning line remain visible as unranked',()=>{
+ const r=race([horse(1),horse(2),horse(3,{ml:'—'}),horse(4,{ml:'—'}),horse(5,{ml:'—',odds:'SCR'})]);
+ const d=buildRaceDashboard(input(r),(id,source)=>ranked(source,[1,2]));
+ assert.equal(d.field.length,4);
+ assert.deepEqual(d.unranked.map(h=>h.n),['3','4']);
+ assert.equal(d.unranked[0].ranks.brisContender,null);
+ assert.equal(d.models[0].complete,false);
+ assert.match(dashboardHtml(d),/Active horses without a model ranking \(2\)/);
+ assert.doesNotMatch(dashboardHtml(d),/Active horses without a model ranking \(3\)/);
+ assert.equal(d.paper_plans.brisContender.tickets.length,3);
+});
+
+
+test('optional official starter evidence distinguishes field match, missing starter and unverified source',()=>{
+ const i=input();
+ i.officialStarterRoster=[...i.anchor.horses.map(h=>({program:h.n,horse:h.name})),{program:'12',horse:'Safety Off'}];
+ i.officialStarterSource='https://example.org/official-starters';
+ const missing=buildRaceDashboard(i,(_,r)=>ranked(r));
+ assert.equal(missing.models[0].complete,true);
+ assert.equal(missing.starter_audit.status,'MISMATCH');
+ assert.deepEqual(missing.starter_audit.missing,['12']);
+ assert.match(dashboardHtml(missing),/Structured freeze validation rejects this supplied-roster mismatch/);
+ assert.deepEqual(missing.starter_audit.absentFromPP,['12']);
+ assert.deepEqual(missing.starter_audit.inactiveInPP,[]);
+ i.officialStarterRoster.pop();
+ assert.equal(buildRaceDashboard(i,(_,r)=>ranked(r)).starter_audit.status,'MATCHES_SUPPLIED_ROSTER');
+ delete i.officialStarterSource;
+ assert.equal(buildRaceDashboard(i,(_,r)=>ranked(r)).starter_audit.status,'UNVERIFIED_ROSTER');
+});
+
+
+test('official starter audit distinguishes PP runner excluded from active field',()=>{
+ const i=input();
+ const inactive={n:'12',name:'Safety Off',odds:'SCR',entry_status:'REGULAR',included_in_frozen_field:true};
+ i.anchor.horses.push(inactive);
+ i.officialStarterRoster=[...i.anchor.horses.map(h=>({program:h.n,horse:h.name}))];
+ i.officialStarterSource='https://www.equibase.com/';
+ const d=buildRaceDashboard(i,(_,r)=>ranked(r));
+ assert.equal(d.starter_audit.status,'MISMATCH');
+ assert.deepEqual(d.starter_audit.inactiveInPP,['12']);
+ assert.deepEqual(d.starter_audit.absentFromPP,[]);
+});

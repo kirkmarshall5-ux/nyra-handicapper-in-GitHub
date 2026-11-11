@@ -71,6 +71,15 @@ for(const profile of profiles){
   assert.equal(await page.getByText('Potentially overlooked angles',{exact:false}).isVisible(),false);
   assert.equal(await page.locator('[data-tab="pp"]').count(),0);assert.equal(await page.locator('#ppFile').count(),0);assert.equal(await page.locator('#manageSavedCards').count(),1);assert.equal(await page.locator('#uploadBrisnet').count(),1);assert.equal(await page.locator('#uploadDrf').count(),1);assert.equal(await page.locator('#raceDayUploadStatus').count(),1);assert.equal(await page.locator('#raceDayUploadStatus').getAttribute('aria-live'),'polite');
  });
+ await check('D03-official-starter-input-controls',async()=>{
+  for(const id of ['recorderStarterRoster','recorderStarterSource','recorderFreezeRace'])assert.equal(await page.locator('#'+id).count(),1);
+  await page.locator('#recorderStarterRoster').fill('1 | QA Horse');
+  await page.locator('#recorderStarterSource').fill('https://www.equibase.com/');
+  assert.equal(await page.locator('#recorderStarterRoster').inputValue(),'1 | QA Horse');
+  assert.equal(errors.length,0,'Starter evidence input caused page errors: '+errors.join(' | '));
+  await page.locator('#recorderStarterRoster').fill('');
+  await page.locator('#recorderStarterSource').fill('');
+ });
  await check('D04-clean-Load-NYRA-layout',async()=>{
   assert.equal(await page.locator('#updateOddsScratches').count(),1);assert.equal(await page.locator('#raceday #updateOddsScratches').count(),1);assert.equal(await page.locator('#updateOtherOdds, #updateOtherScratches').count(),0);
   await page.locator('[data-tab="public"]').click();

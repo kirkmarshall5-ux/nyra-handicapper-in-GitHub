@@ -21,7 +21,10 @@ jobs:
           node --check scripts/real-pdf-replay.mjs
           node -e "const m=require('./fixtures/belmont-2026-10-17-real-pdf-manifest.json');const n=Object.values(m.raceNames).reduce((s,a)=>s+a.length,0);if(n!==85||Object.keys(m.raceNames).length!==11||m.expectedEntries!==n)process.exit(1)"
       - name: Install Chromium for browser QA
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install chromium
+        # Ubuntu package mirrors can have transient DNS failures; avoid apt when
+        # the hosted runner already has the necessary Chromium shared libraries.
+        # Browser launch/test still fails the job if libraries are actually missing.
       - name: Start local app server
         run: |
           python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/nyra-qa-http.log 2>&1 &
