@@ -182,3 +182,16 @@ test('Prime Power is a source-only display column and preserves all orders and m
  i.sources.BRISNET.race.date='2026-10-22';
  assert.deepEqual(buildRaceDashboard(i,(_,r)=>ranked(r)).prime_power,{});
 });
+
+
+test('active runners absent from every model and morning line remain visible as unranked',()=>{
+ const r=race([horse(1),horse(2),horse(3,{ml:'—'}),horse(4,{ml:'—'}),horse(5,{ml:'—',odds:'SCR'})]);
+ const d=buildRaceDashboard(input(r),(id,source)=>ranked(source,[1,2]));
+ assert.equal(d.field.length,4);
+ assert.deepEqual(d.unranked.map(h=>h.n),['3','4']);
+ assert.equal(d.unranked[0].ranks.brisContender,null);
+ assert.equal(d.models[0].complete,false);
+ assert.match(dashboardHtml(d),/Active horses without a model ranking \\(2\\)/);
+ assert.doesNotMatch(dashboardHtml(d),/Active horses without a model ranking \\(3\\)/);
+ assert.equal(d.paper_plans.brisContender.tickets.length,3);
+});
