@@ -85,13 +85,13 @@ export function paperPlan(rankings,eligible=rankings){
 }
 export function buildRaceDashboard({anchor,sources,morningLineProvider='DRF',officialStarterRoster=null,officialStarterSource=null},ranker=forecast){
  morningLineProvider=selectMorningLineProvider({anchor,sources,preferredProvider:morningLineProvider});
- const starterAudit={status:'NOT_PROVIDED',source:officialStarterSource||null,missing:[],unexpected:[],identityMismatch:[]};
+ const starterAudit={status:'NOT_PROVIDED',source:officialStarterSource||null,missing:[],inactiveInPP:[],absentFromPP:[],unexpected:[],identityMismatch:[]};
  if(officialStarterRoster!==null){
   if(!Array.isArray(officialStarterRoster)||!officialStarterRoster.length||typeof officialStarterSource!=='string'||!officialStarterSource.startsWith('https://'))starterAudit.status='UNVERIFIED_ROSTER';
   else {
    const actual=field(anchor),byProgram=new Map(actual.map(h=>[program(h),h]));
    const official=new Map();let invalid=false;
-   for(const h of officialStarterRoster){const p=String(h?.program??'').trim().toUpperCase(),n=name({name:h?.horse});if(!p||!n||official.has(p)){invalid=true;continue;}official.set(p,n);const active=byProgram.get(p);if(!active)starterAudit.missing.push(p);else if(name(active)!==n)starterAudit.identityMismatch.push(p);}
+   for(const h of officialStarterRoster){const p=String(h?.program??'').trim().toUpperCase(),n=name({name:h?.horse});if(!p||!n||official.has(p)){invalid=true;continue;}official.set(p,n);const active=byProgram.get(p);if(!active){starterAudit.missing.push(p);if((anchor?.horses||[]).some(h=>program(h)===p))starterAudit.inactiveInPP.push(p);else starterAudit.absentFromPP.push(p);}else if(name(active)!==n)starterAudit.identityMismatch.push(p);}
    for(const h of actual)if(!official.has(program(h)))starterAudit.unexpected.push(program(h));
    starterAudit.status=invalid?'UNVERIFIED_ROSTER':starterAudit.missing.length||starterAudit.unexpected.length||starterAudit.identityMismatch.length?'MISMATCH':'MATCHES_SUPPLIED_ROSTER';
   }
@@ -122,7 +122,7 @@ export function dashboardHtml(d,selected='drfContender'){
  ${d.demonstration?'<p class="small muted">Demonstration card · upload current PPs before use.</p>':''}
  <div class="dashboard-readiness">${d.models.map(m=>`<div><b>${esc(m.label)}</b><span>${m.available?`${m.ranked}/${m.eligible} ranked · ${m.complete?'full field':'incomplete field'} · ${esc(m.decision)}`:esc(m.reason)}</span></div>`).join('')}</div>
  ${d.issues.length?`<p class="small bad" role="status">${d.issues.map(esc).join(' · ')}</p>`:''}
- ${d.starter_audit?.status==='MISMATCH'?`<p class="small bad" role="status">Official starter roster mismatch: missing ${esc(d.starter_audit.missing.join(', ')||'none')}; unexpected ${esc(d.starter_audit.unexpected.join(', ')||'none')}; identity mismatch ${esc(d.starter_audit.identityMismatch.join(', ')||'none')}. Freeze acceptance blocked pending field reconciliation.</p>`:d.starter_audit?.status==='MATCHES_SUPPLIED_ROSTER'?'<p class="tiny muted">Active field matches supplied starter roster; source and timing remain independently unverified.</p>':d.starter_audit?.status==='UNVERIFIED_ROSTER'?'<p class="small bad">Supplied starter roster is invalid or lacks an HTTPS source reference.</p>':''}
+ ${d.starter_audit?.status==='MISMATCH'?`<p class="small bad" role="status">Official starter roster mismatch: missing ${esc(d.starter_audit.missing.join(', ')||'none')}; unexpected ${esc(d.starter_audit.unexpected.join(', ')||'none')}; identity mismatch ${esc(d.starter_audit.identityMismatch.join(', ')||'none')}. Structured freeze validation rejects this supplied-roster mismatch; the separate local Freeze All Models action is not certified.</p>`:d.starter_audit?.status==='MATCHES_SUPPLIED_ROSTER'?'<p class="tiny muted">Active field matches supplied starter roster; source and timing remain independently unverified.</p>':d.starter_audit?.status==='UNVERIFIED_ROSTER'?'<p class="small bad">Supplied starter roster is invalid or lacks an HTTPS source reference.</p>':''}
  <p class="tiny muted">Prime Power shows the number and rank printed in the Brisnet PP; printed ranks stay unchanged after scratches. Other numbers are each system’s rank. “—” means unranked or unavailable. Top-four agreement is descriptive; the three Brisnet models share inputs. No combined rating.</p>
  ${d.shortlist.length?table(d.shortlist.slice(0,6)):'<p class="small muted">Load verified PPs to compare selections.</p>'}
  ${d.shortlist.length>6?`<details class="dashboard-more"><summary>Show ${d.shortlist.length-6} more selections</summary>${table(d.shortlist.slice(6))}</details>`:''}
