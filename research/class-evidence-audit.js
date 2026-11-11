@@ -25,6 +25,7 @@ export function classEvidenceForHorse(h){
   const claims=[...raw.matchAll(/\b(?:Claiming|Clm)\s*(?:Price|Prc)?\s*[:$]?\s*\$?([\d,]+)\b/gi)];
   const purse=purses.length===1?money(purses[0][1]):null;
   const claiming_price=claims.length===1?money(claims[0][1]):null;
+  const bris=classEvidenceFromBrisnetRunningLine(raw);
   const raceClass=raw.match(/\b(MSW|MCL|ALW|AOC|STK|G[123])\b/i);
   const class_code=raceClass?raceClass[1].toUpperCase():bris.class_code;
   if(purses.length>1||claims.length>1)flags.push('AMBIGUOUS_CLASS_AMOUNT_'+index);
