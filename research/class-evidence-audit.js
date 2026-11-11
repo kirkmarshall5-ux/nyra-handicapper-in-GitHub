@@ -104,3 +104,21 @@ export function speedClassCrosscheck({speedFigure,comparison,comparisonSpeedFigu
  const delta=speed-reference;
  return {status:'RESEARCH_HYPOTHESIS_ONLY',signal:comparison.direction==='UP'?'SPEED_AT_HIGHER_CONDITION':comparison.direction==='DOWN'?'SPEED_AT_LOWER_CONDITION':'SAME_CONDITION_SPEED',speedDelta:delta,scoring_applied:false};
 }
+
+// Retrospective pairing: only explicitly supplied figure/class pairs from
+// the same historical running line are eligible. No cross-line interpolation.
+export function auditSpeedClassPairs(lines){
+ const rows=Array.isArray(lines)?lines:[];
+ const pairs=[],excluded=[];
+ for(const [index,line] of rows.entries()){
+  const raw=clean(line?.source_line);
+  const classInfo=classEvidenceFromBrisnetRunningLine(raw);
+  const figure=line?.speed_figure;
+  if(classInfo.status!=='LITERAL_RACETYPE'){excluded.push({index,reason:'CLASS_UNVERIFIED'});continue;}
+  if(figure===null||figure===undefined||figure===''||!Number.isFinite(Number(figure))){
+   excluded.push({index,reason:'SPEED_FIGURE_UNVERIFIED'});continue;
+  }
+  pairs.push({index,speedFigure:Number(figure),class_code:classInfo.class_code,condition_amount:classInfo.condition_amount,condition_suffix:classInfo.condition_suffix,source_line:raw});
+ }
+ return {research_only:true,scoring_applied:false,totalLines:rows.length,eligiblePairs:pairs.length,pairs,excluded};
+}
