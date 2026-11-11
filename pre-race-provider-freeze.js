@@ -55,7 +55,7 @@ export function validateSnapshot(s, now=Date.now()) {
       }
       for(const h of s.field||[])if(!official.has(String(h?.program??'').trim()))errors.push('Active field includes runner absent from official starter roster.');
     }
-    if(typeof s?.officialStarterSource!=='string'||!/^https:\\/\\/[^\\s/]+/.test(s.officialStarterSource))errors.push('Official starter roster source URL required.');
+    if(typeof s?.officialStarterSource!=='string'||!s.officialStarterSource.startsWith('https://'))errors.push('Official starter roster source URL required.');
   }
   if(!Array.isArray(s?.models)||s.models.length!==3||new Set(s.models.map(m=>m.family)).size!==3||!['V44C','CONTENDER','FINISHER'].every(f=>s.models.some(m=>m.family===f)))errors.push('All three provider model families required.');
   for(const m of s?.models||[]){
