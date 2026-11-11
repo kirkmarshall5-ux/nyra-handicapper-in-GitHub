@@ -191,7 +191,7 @@ test('active runners absent from every model and morning line remain visible as 
  assert.deepEqual(d.unranked.map(h=>h.n),['3','4']);
  assert.equal(d.unranked[0].ranks.brisContender,null);
  assert.equal(d.models[0].complete,false);
- assert.match(dashboardHtml(d),/Active horses without a model ranking \\(2\\)/);
- assert.doesNotMatch(dashboardHtml(d),/Active horses without a model ranking \\(3\\)/);
+ assert.match(dashboardHtml(d),/Active horses without a model ranking \(2\)/);
+ assert.doesNotMatch(dashboardHtml(d),/Active horses without a model ranking \(3\)/);
  assert.equal(d.paper_plans.brisContender.tickets.length,3);
 });
