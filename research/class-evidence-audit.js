@@ -156,7 +156,7 @@ export function speedClassCoverageByRace(races){
 export function compareClaimingConditions(a,b){
  const parse=x=>{
   const raw=String(x?.class_code||'').trim().toUpperCase();
-  const m=raw.match(/^(MCL|MC|CLM|C)(\\d+(?:\\.\\d+)?)(K)?(?:-.*)?$/);
+  const m=raw.match(/^(MCL|MC|CLM|C)(\d+(?:\.\d+)?)(K)?(?:-.*)?$/);
   const family=m?(/^(MCL|MC)$/.test(m[1])?'MAIDEN_CLAIMING':'CLAIMING'):
    /^(MC|MCL)$/.test(raw)?'MAIDEN_CLAIMING':/^(CLM|C)$/.test(raw)?'CLAIMING':null;
   const n=m?Number(m[2])*(m[3]||Number(m[2])<1000?1000:1):x?.condition_amount;
