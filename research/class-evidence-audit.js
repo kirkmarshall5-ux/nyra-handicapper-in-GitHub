@@ -154,14 +154,19 @@ export function speedClassCoverageByRace(races){
 // Claiming amounts are comparable only within the same literal claiming
 // family and cannot establish equivalence across optional or maiden races.
 export function compareClaimingConditions(a,b){
- const codeA=String(a?.class_code||''),codeB=String(b?.class_code||'');
- const family=code=>/^M(?:CL|C)\d/i.test(code)?'MAIDEN_CLAIMING':/^(?:CLM|C)\d/i.test(code)?'CLAIMING':null;
- const fa=family(codeA),fb=family(codeB);
- const amount=code=>{const m=code.match(/^(?:MCL|MC|CLM|C)(\d+(?:\.\d+)?)(k)?/i);return m?Number(m[1])*(m[2]||Number(m[1])<1000?1000:1):null;};
- const va=amount(codeA),vb=amount(codeB);
- if(!fa||fa!==fb||!Number.isFinite(va)||!Number.isFinite(vb))
+ const parse=x=>{
+  const raw=String(x?.class_code||'').trim().toUpperCase();
+  const m=raw.match(/^(MCL|MC|CLM|C)(\\d+(?:\\.\\d+)?)(K)?(?:-.*)?$/);
+  const family=m?(/^(MCL|MC)$/.test(m[1])?'MAIDEN_CLAIMING':'CLAIMING'):
+   /^(MC|MCL)$/.test(raw)?'MAIDEN_CLAIMING':/^(CLM|C)$/.test(raw)?'CLAIMING':null;
+  const n=m?Number(m[2])*(m[3]||Number(m[2])<1000?1000:1):x?.condition_amount;
+  return {family,amount:n===null||n===undefined?null:Number(n)};
+ };
+ const pa=parse(a),pb=parse(b);
+ if(!pa.family||pa.family!==pb.family||!Number.isFinite(pa.amount)||!Number.isFinite(pb.amount)||pa.amount<=0||pb.amount<=0)
   return {status:'NOT_COMPARABLE',direction:null,scoring_applied:false};
- return {status:'CLAIMING_AMOUNT_PROXY_ONLY',family:fa,amountA:va,amountB:vb,direction:va>vb?'A_HIGHER':va<vb?'B_HIGHER':'EQUAL',scoring_applied:false};
+ return {status:'CLAIMING_AMOUNT_PROXY_ONLY',family:pa.family,amountA:pa.amount,amountB:pb.amount,
+ direction:pa.amount>pb.amount?'A_HIGHER':pa.amount<pb.amount?'B_HIGHER':'EQUAL',scoring_applied:false};
 }
 
 
