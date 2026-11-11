@@ -125,3 +125,10 @@ test('within-horse study compares verified same-family speed/class lines only',(
  assert.equal(x.comparisons[0].lowerConditionSpeed,81);
  assert.equal(x.scoring_applied,false);
 });
+
+test('structured PP class and condition amount compare without invented cross-family strength',()=>{
+ assert.equal(compareClaimingConditions({class_code:'MC',condition_amount:35000},{class_code:'MC',condition_amount:25000}).direction,'A_HIGHER');
+ assert.equal(compareClaimingConditions({class_code:'C',condition_amount:25000},{class_code:'CLM',condition_amount:16000}).direction,'A_HIGHER');
+ assert.equal(compareClaimingConditions({class_code:'MC',condition_amount:35000},{class_code:'C',condition_amount:25000}).status,'NOT_COMPARABLE');
+ assert.equal(compareClaimingConditions({class_code:'MC',condition_amount:null},{class_code:'MC',condition_amount:25000}).status,'NOT_COMPARABLE');
+});
