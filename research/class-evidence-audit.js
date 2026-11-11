@@ -68,3 +68,24 @@ export function auditClassRace(race){
  const horses=(race?.horses||[]).filter(h=>h.odds!=='SCR'&&h.included_in_frozen_field!==false&&(!h.entry_status||h.entry_status==='REGULAR'));
  return {research_only:true,scoring_applied:false,header_class:classEvidenceForRaceHeader(race?.header||''),track:race?.track||null,date:race?.date||null,race:race?.race??null,horses:horses.map(h=>({program:String(h.n??''),name:h.name,...classEvidenceForHorse(h)}))};
 }
+
+
+export function classCoverageSummary(auditedRaces){
+ const races=Array.isArray(auditedRaces)?auditedRaces:[];
+ let totalHorses=0,withEvidence=0,withComparableMovement=0,missingEvidence=0;
+ const raceSummaries=[];
+ for(const race of races){
+  const horses=Array.isArray(race?.horses)?race.horses:[];
+  let raceEvidence=0,raceComparable=0;
+  for(const horse of horses){
+   totalHorses++;
+   const observations=Array.isArray(horse.observations)?horse.observations:[];
+   if(observations.length){withEvidence++;raceEvidence++;}else missingEvidence++;
+   if(observations.length>=2&&compareClassMovement(observations[0],observations[1]).direction!==null){
+    withComparableMovement++;raceComparable++;
+   }
+  }
+  raceSummaries.push({track:race?.track||null,date:race?.date||null,race:race?.race??null,horses:horses.length,withEvidence:raceEvidence,withComparableMovement:raceComparable,completeEvidence:horses.length>0&&raceEvidence===horses.length});
+ }
+ return {research_only:true,scoring_applied:false,races:races.length,totalHorses,withEvidence,missingEvidence,withComparableMovement,evidenceCoverage:totalHorses?withEvidence/totalHorses:null,movementCoverage:totalHorses?withComparableMovement/totalHorses:null,raceSummaries};
+}
