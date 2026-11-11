@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {classEvidenceForHorse,classEvidenceForRaceHeader,classEvidenceFromBrisnetRunningLine,compareClassMovement,classCoverageSummary,speedClassCrosscheck,auditSpeedClassPairs,auditClassRace} from './class-evidence-audit.js';
+import {classEvidenceForHorse,classEvidenceForRaceHeader,classEvidenceFromBrisnetRunningLine,compareClassMovement,classCoverageSummary,speedClassCrosscheck,auditSpeedClassPairs,speedClassCoverageByRace,auditClassRace} from './class-evidence-audit.js';
 test('literal class evidence retains source and does not infer class from speed',()=>{
  const h={n:'4',name:'Runner',switch_evidence:{running_lines:[{running_date_track:'10Oct26= BEL',source_line:'10Oct26= BEL 6f MSW Purse $80,000 finished 2nd'},{running_date_track:'01Sep26= BEL',source_line:'01Sep26= BEL 7f Clm Price $25,000 finished 1st'}]}};
  const a=classEvidenceForHorse(h);
@@ -85,4 +85,18 @@ test('speed-class pairs require class and speed on same running line',()=>{
  assert.equal(r.pairs[0].speedFigure,86);assert.equal(r.pairs[0].condition_amount,35000);
  assert.deepEqual(r.excluded.map(x=>x.reason),['SPEED_FIGURE_UNVERIFIED','CLASS_UNVERIFIED']);
  assert.equal(r.scoring_applied,false);
+});
+
+test('speed/class coverage preserves incomplete runners in denominator',()=>{
+ const races=[{track:'Belmont Park',date:'2026-10-29',race:1,horses:[
+  {switch_evidence:{running_lines:[{source_line:'10Oct26Bel 7f MC35000 82 90/86 86',speed_figure:86},{source_line:'07Sep26Sar 6f MC35000 88 89/77 75'}]}},
+  {switch_evidence:{running_lines:[{source_line:'06Aug26Sar 7f 84 85/69 70',speed_figure:70}]}},
+  {switch_evidence:{running_lines:[]}}
+ ]}];
+ const s=speedClassCoverageByRace(races);
+ assert.equal(s.horses,3);assert.equal(s.horsesWithPairs,1);
+ assert.equal(s.totalLines,3);assert.equal(s.eligiblePairs,1);
+ assert.equal(s.excludedClass,1);assert.equal(s.excludedSpeed,1);
+ assert.equal(s.horseCoverage,1/3);assert.equal(s.lineCoverage,1/3);
+ assert.equal(s.perRace[0].completeFieldCoverage,false);
 });
