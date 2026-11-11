@@ -148,3 +148,18 @@ export function speedClassCoverageByRace(races){
  }
  return {research_only:true,scoring_applied:false,races:input.length,horses,horsesWithPairs:withPairs,totalLines,eligiblePairs,excludedClass,excludedSpeed,horseCoverage:horses?withPairs/horses:null,lineCoverage:totalLines?eligiblePairs/totalLines:null,perRace};
 }
+
+
+// Conservative claiming-condition comparison for class/speed research.
+// Claiming amounts are comparable only within the same literal claiming
+// family and cannot establish equivalence across optional or maiden races.
+export function compareClaimingConditions(a,b){
+ const codeA=String(a?.class_code||''),codeB=String(b?.class_code||'');
+ const family=code=>/^M(?:CL|C)\d/i.test(code)?'MAIDEN_CLAIMING':/^(?:CLM|C)\d/i.test(code)?'CLAIMING':null;
+ const fa=family(codeA),fb=family(codeB);
+ const amount=code=>{const m=code.match(/^(?:MCL|MC|CLM|C)(\d+(?:\.\d+)?)(k)?/i);return m?Number(m[1])*(m[2]?1000:1000):null;};
+ const va=amount(codeA),vb=amount(codeB);
+ if(!fa||fa!==fb||!Number.isFinite(va)||!Number.isFinite(vb))
+  return {status:'NOT_COMPARABLE',direction:null,scoring_applied:false};
+ return {status:'CLAIMING_AMOUNT_PROXY_ONLY',family:fa,amountA:va,amountB:vb,direction:va>vb?'A_HIGHER':va<vb?'B_HIGHER':'EQUAL',scoring_applied:false};
+}
