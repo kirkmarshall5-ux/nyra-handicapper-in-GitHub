@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {classEvidenceForHorse,classEvidenceForRaceHeader,classEvidenceFromBrisnetRunningLine,compareClassMovement,classCoverageSummary,speedClassCrosscheck,auditSpeedClassPairs,speedClassCoverageByRace,auditClassRace,compareClaimingConditions} from './class-evidence-audit.js';
+import {classEvidenceForHorse,classEvidenceForRaceHeader,classEvidenceFromBrisnetRunningLine,compareClassMovement,classCoverageSummary,speedClassCrosscheck,auditSpeedClassPairs,speedClassCoverageByRace,auditClassRace,compareClaimingConditions,withinHorseClassSpeedStudy} from './class-evidence-audit.js';
 test('literal class evidence retains source and does not infer class from speed',()=>{
  const h={n:'4',name:'Runner',switch_evidence:{running_lines:[{running_date_track:'10Oct26= BEL',source_line:'10Oct26= BEL 6f MSW Purse $80,000 finished 2nd'},{running_date_track:'01Sep26= BEL',source_line:'01Sep26= BEL 7f Clm Price $25,000 finished 1st'}]}};
  const a=classEvidenceForHorse(h);
@@ -109,4 +109,19 @@ test('claiming amount proxy compares only compatible class families',()=>{
  assert.equal(compareClaimingConditions(c('OC50k-N'),c('Clm25000')).status,'NOT_COMPARABLE');
  assert.equal(compareClaimingConditions(c('Alw110000n1x'),c('Clm25000')).status,'NOT_COMPARABLE');
  assert.equal(compareClaimingConditions(c('Clm25000'),c('Clm16000')).scoring_applied,false);
+});
+
+test('within-horse study compares verified same-family speed/class lines only',()=>{
+ const x=withinHorseClassSpeedStudy([
+  {source_line:'10Oct26 Bel 6f MC35000 88 89/86 86',speed_figure:86},
+  {source_line:'01Sep26 Bel 6f MC25000 88 89/81 81',speed_figure:81},
+  {source_line:'01Aug26 Bel 6f OC50000 88 89/99 99',speed_figure:99},
+  {source_line:'01Jul26 Bel 6f MC35000 88 89/84 84'}
+ ]);
+ assert.equal(x.eligiblePairs,3);
+ assert.equal(x.comparisons.length,1);
+ assert.equal(x.comparisons[0].condition,'UP');
+ assert.equal(x.comparisons[0].higherConditionSpeed,86);
+ assert.equal(x.comparisons[0].lowerConditionSpeed,81);
+ assert.equal(x.scoring_applied,false);
 });
