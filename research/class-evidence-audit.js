@@ -122,3 +122,29 @@ export function auditSpeedClassPairs(lines){
  }
  return {research_only:true,scoring_applied:false,totalLines:rows.length,eligiblePairs:pairs.length,pairs,excluded};
 }
+
+// Summarize historical speed/class evidence without excluding incomplete horses.
+// This intentionally does not estimate class strength or betting ROI.
+export function speedClassCoverageByRace(races){
+ const input=Array.isArray(races)?races:[];
+ let horses=0,withPairs=0,totalLines=0,eligiblePairs=0,excludedClass=0,excludedSpeed=0;
+ const perRace=[];
+ for(const race of input){
+  const runners=Array.isArray(race?.horses)?race.horses:[];
+  let raceHorsesWithPairs=0,racePairs=0;
+  for(const h of runners){
+   horses++;
+   const lines=h?.contender_evidence?.switch_evidence?.running_lines||h?.switch_evidence?.running_lines||[];
+   const audit=auditSpeedClassPairs(lines);
+   totalLines+=audit.totalLines;eligiblePairs+=audit.eligiblePairs;
+   racePairs+=audit.eligiblePairs;
+   if(audit.eligiblePairs){withPairs++;raceHorsesWithPairs++;}
+   for(const x of audit.excluded){
+    if(x.reason==='CLASS_UNVERIFIED')excludedClass++;
+    else if(x.reason==='SPEED_FIGURE_UNVERIFIED')excludedSpeed++;
+   }
+  }
+  perRace.push({track:race?.track||null,date:race?.date||null,race:race?.race??null,horses:runners.length,horsesWithPairs:raceHorsesWithPairs,eligiblePairs:racePairs,completeFieldCoverage:runners.length>0&&raceHorsesWithPairs===runners.length});
+ }
+ return {research_only:true,scoring_applied:false,races:input.length,horses,horsesWithPairs:withPairs,totalLines,eligiblePairs,excludedClass,excludedSpeed,horseCoverage:horses?withPairs/horses:null,lineCoverage:totalLines?eligiblePairs/totalLines:null,perRace};
+}
