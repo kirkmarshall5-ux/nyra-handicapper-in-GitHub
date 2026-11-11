@@ -2,6 +2,17 @@
 // Class levels across jurisdictions are NOT assumed comparable.
 const clean=s=>String(s??'').replace(/\s+/g,' ').trim();
 const money=s=>Number(String(s).replace(/,/g,''));
+
+// Brisnet Premium PP RACETYPE column (e.g. 'MC35000', 'MC50000-c').
+// The compact amount is a race condition, not a purse or universal class score.
+export function classEvidenceFromBrisnetRunningLine(sourceLine){
+ const raw=clean(sourceLine);
+ const matches=[...raw.matchAll(/(?:^|\s)[‘'’]?\b(MC|OC|CLM|MCL|MSW|MDN|ALW|STK)(\d{4,6})?(n\d+[a-z0-9]*)?(?:-c)?(?=\s|$)/gi)];
+ if(matches.length!==1)return {status:'MISSING_OR_AMBIGUOUS_RACETYPE',class_code:null,condition_amount:null,condition_suffix:null,source_line:raw};
+ const m=matches[0];
+ return {status:'LITERAL_RACETYPE',class_code:m[1].toUpperCase(),condition_amount:m[2]?Number(m[2]):null,condition_suffix:m[3]||null,source_line:raw};
+}
+
 export function classEvidenceForHorse(h){
  const lines=h?.contender_evidence?.switch_evidence?.running_lines||h?.switch_evidence?.running_lines||[];
  const out=[],flags=[];
@@ -15,10 +26,10 @@ export function classEvidenceForHorse(h){
   const purse=purses.length===1?money(purses[0][1]):null;
   const claiming_price=claims.length===1?money(claims[0][1]):null;
   const raceClass=raw.match(/\b(MSW|MCL|ALW|AOC|STK|G[123])\b/i);
-  const class_code=raceClass?raceClass[1].toUpperCase():null;
+  const class_code=raceClass?raceClass[1].toUpperCase():bris.class_code;
   if(purses.length>1||claims.length>1)flags.push('AMBIGUOUS_CLASS_AMOUNT_'+index);
   if(purse===null&&claiming_price===null&&class_code===null){flags.push('NO_EXPLICIT_CLASS_TOKEN_'+index);continue;}
-  out.push({index,running_date_track:clean(line.running_date_track),purse,claiming_price,class_code,source_line:raw});
+  out.push({index,running_date_track:clean(line.running_date_track),purse,claiming_price,class_code,condition_amount:bris.condition_amount,condition_suffix:bris.condition_suffix,source_line:raw});
  }
  return {status:out.length?'PARTIAL_LITERAL_EVIDENCE':'NO_EXTRACTABLE_CLASS_EVIDENCE',observations:out,flags};
 }
