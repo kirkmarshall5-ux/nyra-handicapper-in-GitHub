@@ -438,7 +438,8 @@ document.getElementById('recorderFreezeRace').onclick=async()=>{
   });
   if(result.errors.length)throw Error(result.errors.join(' | '));
   const records=[...existing,result.record];
-  const exported=await sealResearchSnapshots(records);
+  // Anchor only the new race; keep the full immutable history in local storage.
+  const exported=await sealResearchSnapshots([result.record]);
   writeResearchFreezes(records);
   const blob=new Blob([JSON.stringify(exported,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),link=document.createElement('a');
   link.href=url;link.download='NYRA_STRUCTURED_RESEARCH_'+provider+'_'+source.date+'_R'+source.race+'.json';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
