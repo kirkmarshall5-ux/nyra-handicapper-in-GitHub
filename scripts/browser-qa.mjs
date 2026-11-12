@@ -76,7 +76,7 @@ for(const profile of profiles){
   for(const id of ['topContenders','finisherCandidates','contenderCandidates'])assert.equal(await page.locator('#'+id).count(),1);
   const boxes=await Promise.all(['brisResearchCandidates','brisFinisherCandidates','brisContenderCandidates','contenderCandidates','topMl'].map(id=>page.locator('#'+id).locator('..').boundingBox()));
   assert.ok(boxes.every(Boolean));assert.ok(boxes.every(b=>Math.abs(b.y-boxes[0].y)<2),'All individual model boxes share one row');assert.equal(await page.locator('#raceNotes').isVisible(),false);
-  const sharedHeaders=await page.locator('#raceDayDashboard .dashboard-table').first().locator('thead th').allTextContents();assert.deepEqual(sharedHeaders.map(s=>s.replace(/\s+/g,'')),['Horse','PrimePower','Brisnet-RR','BrisnetFinisher','BrisnetContender','DRFContenderLate+50%','M/Lrank','Modelstop4']);
+  const sharedHeaders=await page.locator('#raceDayDashboard .dashboard-table').first().locator('thead th').allTextContents();assert.deepEqual(sharedHeaders.map(s=>s.replace(/\s+/g,'')),['Horse','PrimePower','Brisnet-RR','BrisnetFinisher','BrisnetContender','DRFContenderLate+50%','M/Lrank']);
   assert.equal(await page.locator('#raceDayDashboard option[value=drfFinisher]').count(),0);
   for(const note of await page.locator('#raceday .model-evidence-note').all())assert.equal(await note.isVisible(),false,'Coverage and optional-gap boxes must not appear below models');
   assert.ok(boxes.every((b,i)=>i===0||boxes[i-1].x<b.x),'Panels match shared grid order across one scrollable row');

@@ -1,3 +1,4 @@
+import {ftsResearch} from './fts-research.js';
 // Read-only organization of existing forecasts. No new rating or betting rule.
 import {matchingCard} from './dual-pp-cards.js?v=20261018-dual1';
 import {releaseRace} from './rankings-release.js?v=20261008-qa1';
@@ -105,23 +106,39 @@ export function buildRaceDashboard({anchor,sources,morningLineProvider='DRF',off
  const mlRows=mlReason?[]:field(mlRace).filter(h=>Number.isFinite(morningLineNumber(h.ml))).sort((a,b)=>morningLineNumber(a.ml)-morningLineNumber(b.ml)).map((h,i)=>({rank:i+1,n:program(h),name:h.name,ml:h.ml}));
  const ml={id:'morningLine',label:labels.morningLine,provider:morningLineProvider,available:!mlReason,reason:mlReason,ranked:mlRows.length,eligible:field(mlRace).length,rankings:mlRows,complete:!mlReason&&mlRows.length===field(mlRace).length};
  const primePower=checks.BRISNET?{}:Object.fromEntries(field(sources.BRISNET.race).map(h=>[key(h),h.ratings?.prime_power_display||(Number.isFinite(h.ratings?.prime_power)?h.ratings.prime_power.toFixed(1):null)]));
+ const fts=Object.fromEntries(field(anchor).flatMap(h=>{
+  const other=!checks.BRISNET?field(sources.BRISNET?.race).find(q=>key(q)===key(h)):null;
+  const life=h.life_starts??h.lifeStarts;
+  if(life!==0&&!(life==null&&(other?.life_starts??other?.lifeStarts)===0))return [];
+  const evidence=other&&(other.life_starts??other.lifeStarts)===0?other:h;
+  return [[key(h),ftsResearch({...evidence,life_starts:0},anchor)]];
+ }));
  const maps=Object.fromEntries([...models,ml].map(m=>[m.id,new Map(m.rankings.map(h=>[key(h),h.rank]))]));
  const shortlist=field(anchor).map(h=>({n:program(h),name:h.name,ranks:Object.fromEntries(Object.entries(maps).map(([id,map])=>[id,map.get(key(h))??null]))})).map(h=>({...h,top_four_models:modelIds.filter(id=>h.ranks[id]!=null&&h.ranks[id]<=4).length})).filter(h=>h.top_four_models>0||h.ranks.morningLine!=null&&h.ranks.morningLine<=4).sort((a,b)=>b.top_four_models-a.top_four_models||compare(a,b));
  const selected=new Set(shortlist.map(key));
  const remaining=field(anchor).filter(h=>!selected.has(key(h))).map(h=>({n:program(h),name:h.name,ranks:Object.fromEntries(Object.entries(maps).map(([id,map])=>[id,map.get(key(h))??null])),top_four_models:0})).filter(h=>modelIds.some(id=>h.ranks[id]!=null)).sort(compare);
  const visible=new Set([...shortlist,...remaining].map(key));
  const unranked=field(anchor).filter(h=>!visible.has(key(h))).map(h=>({n:program(h),name:h.name,ranks:Object.fromEntries(Object.entries(maps).map(([id,map])=>[id,map.get(key(h))??null])),top_four_models:0})).sort(compare);
- return {prime_power:primePower,schema:'nyra-race-dashboard-v1',race:{track:anchor.track,date:anchor.date,number:anchor.race,surface:anchor.surface,distance:anchor.dist},field:field(anchor).map(h=>({n:program(h),name:h.name})),models,morning_line:ml,shortlist,remaining,unranked,starter_audit:starterAudit,issues:[...new Set(Object.values(checks).filter(Boolean))],paper_plans:Object.fromEntries([...models,ml].map(m=>[m.id,{decision:m.decision||'REFERENCE',...paperPlan(m.rankings,field(anchor))}])),betting_enabled:false};
+ return {fts_research:fts,has_fts:Object.keys(fts).length>0,prime_power:primePower,schema:'nyra-race-dashboard-v1',race:{track:anchor.track,date:anchor.date,number:anchor.race,surface:anchor.surface,distance:anchor.dist},field:field(anchor).map(h=>({n:program(h),name:h.name})),models,morning_line:ml,shortlist,remaining,unranked,starter_audit:starterAudit,issues:[...new Set(Object.values(checks).filter(Boolean))],paper_plans:Object.fromEntries([...models,ml].map(m=>[m.id,{decision:m.decision||'REFERENCE',...paperPlan(m.rankings,field(anchor))}])),betting_enabled:false};
 }
 export function dashboardHtml(d,selected='drfContender'){
- const row=h=>`<tr><th scope="row">${h.n?'#'+esc(h.n)+' ':''}${esc(h.name)}</th><td>${esc(d.prime_power?.[key(h)]||'—')}</td>${[...gridModelIds,'morningLine'].map(id=>`<td${id==='brisResearch'?' class="model-rr"':''}>${h.ranks[id]??'—'}</td>`).join('')}<td>${h.top_four_models}/${modelIds.length}</td></tr>`;
- const table=rows=>`<div class="dashboard-scroll" tabindex="0" role="region" aria-label="Model ranking comparison"><table class="dashboard-table"><thead><tr><th scope="col">Horse</th><th scope="col">Prime Power</th><th scope="col" class="model-rr">Brisnet-RR</th><th scope="col">Brisnet<br>Finisher</th><th scope="col">Brisnet<br>Contender</th><th scope="col">DRF Contender<br>Late +50%</th><th scope="col">M/L<br>rank</th><th scope="col">Models<br>top 4</th></tr></thead><tbody>${rows.map(row).join('')}</tbody></table></div>`;
+ const ftsCell=h=>{
+  const f=d.fts_research?.[key(h)];if(!f)return '—';
+  const ped=f.pedigree?f.pedigree.score.toFixed(1)+f.pedigree.flag:f.pedigree_status==='TAPETA_UNVALIDATED'?'— (Tapeta untested)':f.pedigree_status==='REUPLOAD_REQUIRED'?'— (re-upload Brisnet PP)':'—';
+  const t=f.trainer,w=f.workouts;
+  const trainer=t?`${t.category}: ${t.win_pct}% / ${t.starts}`:'Trainer debut: unavailable';
+  const work=w.percentile===null?'WORK —':`WORK ${Math.round(w.percentile)}/100 (${w.compared} ${w.compared===1?'work':'works'})`;
+  const recency=w.latest_days===null?'Recent works unavailable':`${w.count30} in 30d · latest ${w.latest_days}d ago`;
+  return `<div class="fts-research-cell"><b>PED ${esc(ped)}</b><span>${esc(trainer)}</span><span>${esc(work)} · ${esc(recency)}</span></div>`;
+ };
+ const row=h=>`<tr><th scope="row">${h.n?'#'+esc(h.n)+' ':''}${esc(h.name)}</th><td>${esc(d.prime_power?.[key(h)]||'—')}</td>${[...gridModelIds,'morningLine'].map(id=>`<td${id==='brisResearch'?' class="model-rr"':''}>${h.ranks[id]??'—'}</td>`).join('')}${d.has_fts?`<td>${ftsCell(h)}</td>`:''}</tr>`;
+ const table=rows=>`<div class="dashboard-scroll" tabindex="0" role="region" aria-label="Model ranking comparison"><table class="dashboard-table"><thead><tr><th scope="col">Horse</th><th scope="col">Prime Power</th><th scope="col" class="model-rr">Brisnet-RR</th><th scope="col">Brisnet<br>Finisher</th><th scope="col">Brisnet<br>Contender</th><th scope="col">DRF Contender<br>Late +50%</th><th scope="col">M/L<br>rank</th>${d.has_fts?'<th scope="col">FTS<br>Research</th>':''}</tr></thead><tbody>${rows.map(row).join('')}</tbody></table></div>`;
  return `<div class="dashboard-heading"><div><div class="kicker">Race day dashboard</div><h3 class="sectiontitle">Shared selections &amp; order</h3></div><span class="badge">${d.field.length} eligible runners</span></div>
  ${d.demonstration?'<p class="small muted">Demonstration card · upload current PPs before use.</p>':''}
  <div class="dashboard-readiness">${gridModelIds.map(id=>d.models.find(m=>m.id===id)).filter(Boolean).map(m=>`<div${m.id==='brisResearch'?' class="model-rr-summary"':''}><b>${esc(m.label)}</b><span>${m.available?`${m.ranked}/${m.eligible} ranked · ${m.complete?'full field':'incomplete field'} · ${esc(m.decision)}`:esc(m.reason)}</span></div>`).join('')}</div>
  ${d.issues.length?`<p class="small bad" role="status">${d.issues.map(esc).join(' · ')}</p>`:''}
  ${d.starter_audit?.status==='MISMATCH'?`<p class="small bad" role="status">Official starter roster mismatch: missing ${esc(d.starter_audit.missing.join(', ')||'none')}; unexpected ${esc(d.starter_audit.unexpected.join(', ')||'none')}; identity mismatch ${esc(d.starter_audit.identityMismatch.join(', ')||'none')}. Structured freeze validation rejects this supplied-roster mismatch; the separate local Freeze All Models action is not certified.</p>`:d.starter_audit?.status==='MATCHES_SUPPLIED_ROSTER'?'<p class="tiny muted">Active field matches supplied starter roster; source and timing remain independently unverified.</p>':d.starter_audit?.status==='UNVERIFIED_ROSTER'?'<p class="small bad">Supplied starter roster is invalid or lacks an HTTPS source reference.</p>':''}
- <p class="tiny muted">Prime Power shows the number and rank printed in the Brisnet PP; printed ranks stay unchanged after scratches. Other numbers are each system’s rank. “—” means unranked or unavailable. Top-four agreement is descriptive; the three Brisnet models share inputs. No combined rating.</p>
+ <p class="tiny muted">Prime Power shows the number and rank printed in the Brisnet PP; printed ranks stay unchanged after scratches. Other numbers are each system’s rank. “—” means unranked or unavailable. ${d.has_fts?'FTS Research shows pedigree, trainer debut stats and recent workout percentile; it does not change model ranks. ?/* flag small pedigree samples.':''}</p>
  ${d.shortlist.length?table(d.shortlist.slice(0,6)):'<p class="small muted">Load verified PPs to compare selections.</p>'}
  ${d.shortlist.length>6?`<details class="dashboard-more"><summary>Show ${d.shortlist.length-6} more selections</summary>${table(d.shortlist.slice(6))}</details>`:''}
  ${(d.remaining||[]).length?`<details class="dashboard-remaining"><summary>Remaining ranked horses (${d.remaining.length})</summary>${table(d.remaining)}</details>`:''}

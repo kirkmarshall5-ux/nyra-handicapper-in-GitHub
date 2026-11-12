@@ -151,7 +151,7 @@ test('fallback cannot substitute a different horse with the same program',()=>{
  assert.deepEqual(d.models.map(m=>m.id),['brisContender','brisResearch','drfContender','brisFinisher']);
  assert.deepEqual(d.models.map(m=>m.provider),['BRISNET','BRISNET','DRF','BRISNET']);
  assert.equal(d.shortlist[0].top_four_models,4);assert.equal(d.shortlist[0].ranks.drfFinisher,undefined);assert.equal(d.paper_plans.drfFinisher,undefined);
- const html=dashboardHtml(d);assert.match(html,/4\/4/);assert.doesNotMatch(html,/DRF<br>Finisher|value="drfFinisher"/);
+ const html=dashboardHtml(d);assert.doesNotMatch(html,/Models<br>top 4/);assert.doesNotMatch(html,/DRF<br>Finisher|value="drfFinisher"/);
  assert.ok(html.indexOf('Brisnet<br>Finisher</th>')<html.indexOf('Brisnet<br>Contender</th>'));
  assert.ok(html.indexOf('Brisnet-RR</th>')<html.indexOf('Brisnet<br>Finisher</th>'));assert.ok(html.indexOf('Brisnet<br>Finisher</th>')<html.indexOf('DRF Contender<br>Late +50%</th>'));
  assert.match(html, /<th scope="col">DRF Contender<br>Late \+50%<\/th>/);
