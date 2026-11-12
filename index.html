@@ -75,6 +75,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 .dashboard-table tbody tr:last-child td.model-rr{border-bottom:1px solid rgba(240,194,83,.45)}
 .dashboard-readiness>.model-rr-summary{border:1px solid rgba(240,194,83,.4);border-radius:8px;background:rgba(240,194,83,.04);padding:8px 10px}
 .dashboard-readiness>.model-rr-summary>b{color:#f3dfaa}
+.fts-research-cell{display:grid;gap:3px;min-width:205px;white-space:normal;text-align:left;font-size:12px}.fts-research-cell b{font-size:13px}
 </style>
 </head>
 <body>
@@ -246,7 +247,7 @@ import {researchRace} from "./jockey-research.js?v=20261008-qa1";
 import {evidenceProfile} from "./scoring-engine.js?v=20261008-qa1";
 import {estimatedWinLine,winLineFields,winLineNote} from "./fair-odds.js?v=20261015-mix1-line1";
 import {finisherRankingHtml} from "./finisher-ranking-display.js?v=20261112-compact";
-import {buildRaceDashboard,dashboardHtml,selectMorningLineProvider,morningLineForRunner,morningLineNumber} from "./race-day-dashboard.js?v=20261109-primepower";
+import {buildRaceDashboard,dashboardHtml,selectMorningLineProvider,morningLineForRunner,morningLineNumber} from "./race-day-dashboard.js?v=20261112-fts";
 import {rankContenders} from "./contender-rankings.js?v=20261104-manualconditions";
 import {rankBrisnetModels} from "./brisnet-models.js?v=20261023-distance1";
 import {decodeTodayDistance} from "./finisher-drf-distance.js?v=20261018-5316";
@@ -267,7 +268,7 @@ import {runnerContext} from "./release-context.js?v=20261008-qa1";
 import {PARSER_ID,restoredPage, parseRestoredCard} from "./release-card-parser.js?v=20261014-appendices1";
 
 import {runnerIdentityIssue} from "./finisher-inputs.js?v=20261101-namefallback";
-import {parsePPCard,SUPPORTED_PARSERS} from "./pp-format-router.js?v=20261109-primepower";
+import {parsePPCard,SUPPORTED_PARSERS} from "./pp-format-router.js?v=20261112-fts";
 import {brisnetPaceDisplay,brisnetPaceMapHtml,brisnetCallRanksHtml,brisnetComparisonHtml,brisnetEvidenceHtml,brisnetContextHtml} from "./brisnet-pace-display.js?v=20261022-label1";
 import {BRISNET_METHODS} from "./brisnet-models.js?v=20261023-distance1";
 
