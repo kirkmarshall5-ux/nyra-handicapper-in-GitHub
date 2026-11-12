@@ -2,6 +2,7 @@ async function openPrep(page,recorder=false){await page.locator('[data-tab="publ
 import assert from 'node:assert/strict';
 import {mkdirSync,writeFileSync,readFileSync} from 'node:fs';
 import {chromium} from 'playwright';
+import {parseEquibaseFeed} from '../equibase-feed.js';
 
 // Automated Chromium checks only. The iPad profile emulates viewport/touch;
 // it is NOT a real iPad Chrome or WebKit acceptance test.
@@ -329,7 +330,7 @@ for(const profile of profiles){
  });
  await check('D18-direct-NYRA-update-scratches-persist-and-fail-safe',async()=>{
   const original=await page.evaluate(async()=>JSON.stringify(await window.qaReadActive()));
-  const service='https://nyra-odds-snapshot.beigebeech4.chatgpt.site/odds?*';let fail=false,pause=false,release=null;
+  const service='https://nyra-odds-snapshot.kirkmarshall5.chatgpt.site/odds?*';let fail=false,pause=false,release=null;
   await page.route(service,async route=>{
    if(pause)await new Promise(resolve=>{release=resolve;});
    if(fail){await route.fulfill({status:503,headers:{'access-control-allow-origin':'*'},body:'Unavailable'});return;}
@@ -354,6 +355,33 @@ for(const profile of profiles){
   }finally{
    await page.unroute(service);await page.evaluate(async value=>{if(value!==null)await window.qaSetActive(JSON.parse(value));},original);await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
   }
+ });
+ await check('D18b-Equibase-and-NYRA-buttons-both-orders-and-stale-date',async()=>{
+  const original=await page.evaluate(async()=>JSON.stringify(await window.qaReadActive()));
+  const eqRoute='https://nyra-odds-snapshot.kirkmarshall5.chatgpt.site/equibase?*',nyRoute='https://nyra-odds-snapshot.kirkmarshall5.chatgpt.site/odds?*';
+  const parsed=parseEquibaseFeed(readFileSync('fixtures/equibase/BEL-2026-11-12.rss','utf8'),{date:'2026-11-12',now:Date.parse('2026-11-12T20:00:00Z')});
+  let wrongDate=false,pause=false,release=null;
+  await page.route(eqRoute,async route=>{if(pause)await new Promise(resolve=>{release=resolve;});await route.fulfill({contentType:'application/json',headers:{'access-control-allow-origin':'*'},body:JSON.stringify({...parsed,date:wrongDate?'2026-11-13':parsed.date,fetchedAt:new Date().toISOString()})});});
+  await page.route(nyRoute,route=>route.fulfill({contentType:'application/json',headers:{'access-control-allow-origin':'*'},body:JSON.stringify({schemaVersion:1,track:'belmont',date:'2026-11-12',race:7,fetchedAt:new Date().toISOString(),sourceUrl:'https://www.nyra.com/belmont/racing/entries/',runners:[['1',"Bobby M's Girl"],['3','Toes'],['4','Stand the Rain'],['6','Consensus View (GB)']].map(([program,name])=>({program,name,odds:'8/1'}))})}));
+  try{
+   await page.evaluate(async()=>{
+    const date='2026-11-12',track='Belmont Park',horses=[['1',"Bobby M's Girl"],['3','Toes'],['4','Stand the Rain'],['6','Consensus View (GB)']].map(([n,name])=>({n,name,ml:'4/1',odds:'—',entry_status:'REGULAR',included_in_frozen_field:true,life_starts:1,lifeStarts:1,angles:[],source_context:{},parser_blockers:['BRISNET_SPEED_NOT_BEYER'],ratings:{provider:'BRISNET',run_style:'P',lines:[{date:'2026-10-01',surface:'Synth',furlongs:9.5,speed:80,e1:80,e2:85,late:90,source:{provider:'BRISNET',text:'QA row'}}]}}));
+    const r={race:7,track,date,surface:'Turf',dist:'10 Furlongs',distance_furlongs:10,header:'10 Furlongs',conditions:{surface:'Turf',primaryDistanceLine:'10 Furlongs'},horses,parser_blockers:[]};
+    await window.qaSetActive({id:'qa-equibase',schemaVersion:3,track,date,races:{7:r},source_format:'BRISNET_PREMIUM_PLUS',warnings:[]});
+   });
+   await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});await openPrep(page);
+   const buttonOrder=await page.locator('#updateOddsScratches').evaluate(el=>el.nextElementSibling.id);assert.equal(buttonOrder,'updateEquibase');
+   await page.locator('#updateOddsScratches').click();await page.locator('#nyraUpdateStatus').getByText('Updated ',{exact:false}).waitFor();
+   await page.locator('#updateEquibase').click();await page.locator('#equibaseUpdateStatus').getByText('Equibase updated ',{exact:false}).waitFor();
+   let saved=await page.evaluate(async()=>(await window.qaReadActive()).races[7]);assert.equal(saved.surface,'Synth');assert.equal(saved.distance_furlongs,9.5);assert.equal(saved.going,'Fast');assert.deepEqual(saved.horses.map(h=>h.odds),['8/1','SCR','8/1','SCR']);
+   await page.locator('#updateOddsScratches').click();await page.locator('#nyraUpdateStatus').getByText('Updated ',{exact:false}).waitFor();
+   saved=await page.evaluate(async()=>(await window.qaReadActive()).races[7]);assert.equal(saved.horses[1].scratch_evidence.status,'EQUIBASE_RSS_SCRATCH');assert.equal(saved.surface,'Synth');assert.equal(saved.distance_furlongs,9.5);
+   const before=JSON.stringify(saved);wrongDate=true;await page.locator('#updateEquibase').click();await page.locator('#equibaseUpdateStatus').getByText('Equibase update unavailable:',{exact:false}).waitFor();assert.equal(JSON.stringify(await page.evaluate(async()=>(await window.qaReadActive()).races[7])),before);wrongDate=false;
+   pause=true;const request=page.waitForRequest(eqRoute);await page.locator('#updateEquibase').click();await request;assert.equal(await page.locator('#updateOddsScratches').isEnabled(),false);assert.equal(await page.locator('#updateEquibase').isEnabled(),false);assert.ok(release);release();await page.locator('#equibaseUpdateStatus').getByText('Equibase updated ',{exact:false}).waitFor();assert.equal(await page.locator('#updateOddsScratches').isEnabled(),true);pause=false;
+   await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});await openPrep(page);assert.match(await page.locator('#equibaseUpdateStatus').innerText(),/Equibase checked/);assert.match(await page.locator('#manualConditionsStatus').innerText(),/Equibase conditions.*9.5/);
+   const downloading=page.waitForEvent('download');await page.locator('#freezeAllModels').click();const download=await downloading,freeze=JSON.parse(readFileSync(await download.path(),'utf8'));assert.equal(freeze.races[0].dashboard.equibase_snapshot.sourceUrl,parsed.sourceUrl);assert.equal(freeze.races[0].dashboard.race.going,'Fast');
+   await page.screenshot({path:`${out}/${profile.name}-equibase-updates.png`,fullPage:true});
+  }finally{await page.unroute(eqRoute);await page.unroute(nyRoute);await page.evaluate(async value=>{if(value!==null)await window.qaSetActive(JSON.parse(value));},original);await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});}
  });
  await check('D19-structured-recorder-interface-acceptance',async()=>{
   await page.locator('[data-tab="raceday"]').click();
@@ -611,7 +639,7 @@ for(const profile of profiles){
    assert.doesNotMatch(await second.innerText(),/SCR — Scratched/);
    page.once('dialog',d=>d.accept());await first.getByRole('button',{name:'Confirm running',exact:true}).click();await first.getByRole('button',{name:'Scratch',exact:true}).waitFor();
    await second.getByRole('button',{name:'Confirm running',exact:true}).click();await second.getByRole('button',{name:'Scratch',exact:true}).waitFor();
-   const route='https://nyra-odds-snapshot.beigebeech4.chatgpt.site/odds?*';
+   const route='https://nyra-odds-snapshot.kirkmarshall5.chatgpt.site/odds?*';
    await page.route(route,async request=>{
     const c=await page.evaluate(()=>window.qaReadActive()),r=c.races[1];
     await request.fulfill({status:200,contentType:'application/json',body:JSON.stringify({schemaVersion:1,track:'belmont',date:r.date,race:1,fetchedAt:new Date().toISOString(),sourceUrl:'https://www.nyra.com/belmont/racing/entries/',runners:r.horses.map((h,i)=>({program:String(i+1),name:h.name,odds:i===0?'SCR':'7/1'}))})});
