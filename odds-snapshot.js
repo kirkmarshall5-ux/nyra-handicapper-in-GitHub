@@ -1,6 +1,6 @@
 import {oddsSourceForTrack} from './multitrack-odds.js';
 import {matchUpdateRunner,runnerName,runnerProgram} from './runner-identity.js';
-export function applyOddsSnapshot(race,snapshot,now=Date.now()){
+export function applyOddsSnapshot(race,snapshot,now=Date.now(),{preserveScratches=false}={}){
  const source=oddsSourceForTrack(race.track);
  if(source.mode!=='automatic')throw Error('No NYRA odds adapter for '+race.track);
  const venue=source.venue;
@@ -15,7 +15,7 @@ export function applyOddsSnapshot(race,snapshot,now=Date.now()){
   if(seen.has(runnerProgram(row.program))||names.has(runnerName(row.name)))throw Error(`Unknown or duplicate runner #${row.program} (${row.name}); previous prices retained`);
   seen.add(runnerProgram(row.program));names.add(runnerName(row.name));
   if(!/^(SCR|\d+(?:\.\d+)?\/\d+(?:\.\d+)?)$/.test(row.odds)||row.odds!=='SCR'&&Number(row.odds.split('/')[1])<=0)throw Error('Invalid price; previous prices retained');
-  if(horse.odds==='SCR'&&row.odds!=='SCR')throw Error('Previously scratched runner requires field verification');
+  if(horse.odds==='SCR'&&row.odds!=='SCR'){if(preserveScratches)continue;throw Error('Previously scratched runner requires field verification');}
   horse.odds=row.odds;
   horse.pre_race_evidence={sourceUrl:snapshot.sourceUrl,importedAt:snapshot.fetchedAt,observedAt:null,status:'PUBLIC_PAGE_SNAPSHOT',upstreamAgeSeconds:snapshot.upstreamAgeSeconds,bettingEligible:false};
  }

@@ -194,7 +194,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <section id="public" class="hidden"><div class="grid">
 <div class="card span12"><div class="kicker">Race Day Prep</div><h2 class="sectiontitle">Prepare the card</h2><p class="small muted">Load PPs, confirm changes, then freeze and print your selections.</p><div class="spread" style="flex-wrap:wrap;gap:12px"><div id="prepCardIdentity" class="small" role="status"></div><label for="prepRaceSelect">Current race <select id="prepRaceSelect" style="width:auto"></select></label></div></div>
 <div class="card span12"><h3 class="sectiontitle">1. Load PPs and update the field</h3>
-<div class="flex" style="margin-top:12px;flex-wrap:wrap"><button class="primary" id="uploadBrisnet">Upload Brisnet PP</button><input id="brisnetFile" type="file" accept=".pdf" hidden><button class="primary" id="uploadDrf">Upload DRF PP</button><input id="drfFile" type="file" accept=".pdf" hidden><button class="primary" id="updateOddsScratches" type="button">Update Odds &amp; Scratches</button><button class="primary" id="printPicks" type="button">Print Picks</button><span id="printPicksStatus" class="small muted" role="status" aria-live="polite"></span></div><div id="raceDayUploadStatus" class="small" role="status" aria-live="polite" style="margin-top:8px;overflow-wrap:anywhere"></div><div class="small muted" id="trackUpdateIdentity" style="margin-top:8px"></div><p id="nyraUpdateStatus" class="small muted" role="status" aria-live="polite">Updates use the loaded PP card and selected race.</p></div>
+<div class="flex" style="margin-top:12px;flex-wrap:wrap"><button class="primary" id="uploadBrisnet">Upload Brisnet PP</button><input id="brisnetFile" type="file" accept=".pdf" hidden><button class="primary" id="uploadDrf">Upload DRF PP</button><input id="drfFile" type="file" accept=".pdf" hidden><button class="primary" id="updateOddsScratches" type="button">Update Odds &amp; Scratches</button><button class="primary" id="updateEquibase" type="button">Equibase Scratches &amp; Changes</button><button class="primary" id="printPicks" type="button">Print Picks</button><span id="printPicksStatus" class="small muted" role="status" aria-live="polite"></span></div><div id="raceDayUploadStatus" class="small" role="status" aria-live="polite" style="margin-top:8px;overflow-wrap:anywhere"></div><div class="small muted" id="trackUpdateIdentity" style="margin-top:8px"></div><p id="nyraUpdateStatus" class="small muted" role="status" aria-live="polite">Updates use the loaded PP card and selected race.</p><p id="equibaseUpdateStatus" class="small muted" role="status" aria-live="polite"></p><a id="equibaseSourceLink" class="small" href="https://www.equibase.com/static/latechanges/html/latechangesBEL-USA.html" target="_blank" rel="noopener noreferrer">View Equibase changes ↗</a></div>
 <div class="card span12"><h3 class="sectiontitle">2. Adjust current race conditions</h3><p class="small muted">Use official race-day conditions. Applies to this race in matching loaded cards and recalculates rankings. Distances are in furlongs: 1 mile = 8; 1 1/16 miles = 8.5; 1 1/8 miles = 9.</p><div class="flex" style="flex-wrap:wrap;align-items:end"><label>Race surface<select id="manualRaceSurface"><option value="Dirt">Dirt</option><option value="Turf">Turf</option><option value="Synth">Synthetic</option></select></label><label>Distance (furlongs)<input id="manualRaceDistance" type="number" min="2" max="32" step="any" inputmode="decimal" style="width:130px"></label><button id="applyRaceConditions" type="button">Apply surface &amp; distance</button></div><div id="manualConditionsStatus" class="small muted" role="status" aria-live="polite"></div></div>
 
 
@@ -238,7 +238,8 @@ import {sealSingleRaceResearchSnapshot} from "./pre-race-provider-freeze.js";
 import {readResearchFreezes,writeResearchFreezes} from "./pre-race-recorder-storage.js";
 import {fetchOtherTrackCombinedUpdate,otherTrackSource,OTHER_TRACK_FEEDS_READY} from "./other-track-updates.js?v=20261025-staged1";
 import {prepareCombinedOtherTrackUpdate} from "./other-track-update-plan.js?v=20261025-staged1";
-import {fetchNyraRaceUpdate,nyraRaceUpdateSource,prepareNyraCardUpdate} from "./nyra-race-update.js?v=20261101-fieldnames";
+import {fetchEquibaseUpdate,prepareEquibaseCardUpdate,equibaseSupported} from "./equibase-update.js?v=20261112";
+import {fetchNyraRaceUpdate,nyraRaceUpdateSource,prepareNyraCardUpdate} from "./nyra-race-update.js?v=20261112-preserve-scratches";
 import {initKnowledgeBase} from "./knowledge-base.js?v=20261008-kb1";
 import {connectionRows,LEADER_SCOPE,LEADER_SOURCE} from "./connection-research.js?v=20261008-jt1";
 import {fieldConnections} from "./pp-context.js?v=20261008-qa1";
@@ -248,7 +249,7 @@ import {evidenceProfile} from "./scoring-engine.js?v=20261008-qa1";
 import {estimatedWinLine,winLineFields,winLineNote} from "./fair-odds.js?v=20261015-mix1-line1";
 import {finisherRankingHtml} from "./finisher-ranking-display.js?v=20261112-compact";
 import {buildRaceDashboard,dashboardHtml,selectMorningLineProvider,morningLineForRunner,morningLineNumber} from "./race-day-dashboard.js?v=20261112-allhorses";
-import {rankContenders} from "./contender-rankings.js?v=20261104-manualconditions";
+import {rankContenders} from "./contender-rankings.js?v=20261112-equibase-20261104-manualconditions";
 import {rankBrisnetModels} from "./brisnet-models.js?v=20261023-distance1";
 import {decodeTodayDistance} from "./finisher-drf-distance.js?v=20261018-5316";
 import {correctRaceConditions} from "./manual-race-conditions.js?v=20261104-conditions1";
@@ -385,6 +386,10 @@ function currentDashboard(){
  const researchRace=providerRace('BRISNET').race;
  dashboard.research_models={brisnet_best_recent:researchRace?rankBrisnetResearch(researchRace):null};
  dashboard.manual_conditions=structuredClone(race.manual_conditions||null);
+ dashboard.equibase_snapshot=structuredClone(race.equibase_snapshot||null);
+ dashboard.track_conditions=structuredClone(race.track_conditions||null);
+ dashboard.race.going=race.going||null;
+ dashboard.race.cancelled=!!race.equibase_cancelled;
  dashboard.race.distance_furlongs=race.distance_furlongs??null;
  dashboard.demonstration=activeCard.id===sampleCard.id;
  dashboard.source_cards=Object.fromEntries(['BRISNET','DRF'].map(p=>{const c=providerCards[p];return [p,c?{card_id:c.id,track:c.track,date:c.date,source_name:c.sourceName||null,parser_version:c.parser_version||null,imported_at:c.imported_at||null}:null];}));
@@ -469,9 +474,10 @@ function morningLineProvider(){
 function renderManualConditions(){
  document.getElementById('manualRaceSurface').value=race.surface||'Dirt';
  document.getElementById('manualRaceDistance').value=race.distance_furlongs??decodeTodayDistance(race.conditions?.primaryDistanceLine||race.header||race.dist).furlongs??'';
- document.getElementById('manualConditionsStatus').textContent=race.manual_conditions?'Manual conditions saved for Race '+race.race+': '+race.surface+' · '+race.distance_furlongs+' furlongs. Rankings recalculated. Freeze again to capture this change.':'Current race: '+race.surface+' · '+(race.dist||'distance unavailable')+'. No manual override.';
+ document.getElementById('manualConditionsStatus').textContent=race.manual_conditions?(race.manual_conditions.source==='EQUIBASE_RSS'?'Equibase conditions saved for Race ':'Manual conditions saved for Race ')+race.race+': '+race.surface+' · '+race.distance_furlongs+' furlongs. Rankings recalculated. Freeze again to capture this change.':'Current race: '+race.surface+' · '+(race.dist||'distance unavailable')+'. No manual override.';
 }
 document.getElementById('applyRaceConditions').onclick=async()=>{
+ if(raceUpdateBusy())return;
  const button=document.getElementById('applyRaceConditions'),status=document.getElementById('manualConditionsStatus');button.disabled=true;
  try{
   const selected=cardProvider(activeCard),cards=putProviderCard(providerCards,{...activeCard,races:{...activeCard.races,[race.race]:structuredClone(race)}});
@@ -551,7 +557,7 @@ function renderHeader(){
  document.getElementById("declaredScratches").textContent=(race.predeclared_scratches||[]).length?"Scratched in PPs (excluded): "+race.predeclared_scratches.map(h=>"#"+h.program+" "+h.name).join(", "):"";
  cardKicker.textContent=`${activeCard.track||race.track||"Race card"} · ${activeCard.date||race.date||"date unknown"} · active ${activeCard.source_format==="BRISNET_PREMIUM_PLUS"?"Brisnet Premium Plus":activeCard.source_format==="BRISNET_ULTIMATE"?"Brisnet Ultimate":"DRF"} card`;
  raceTitle.textContent=`${race.track} · Race ${race.race}`;
- raceBadges.innerHTML=`<span class="badge gold">${escapeText(displayDistance(race.dist)||"—")} ${race.surface||""}</span><span class="badge">${race.post||"—"}</span><span class="badge green">Active card</span>`;
+ raceBadges.innerHTML=`<span class="badge gold">${escapeText(displayDistance(race.dist)||"—")} ${race.surface||""}</span><span class="badge">${race.post||"—"}</span><span class="badge green">Active card</span>${race.going?`<span class="badge">${escapeText(race.going)}</span>`:""}${race.equibase_cancelled?'<span class="badge">RACE CANCELLED</span>':""}`;
  let active=race.horses.filter(h=>h.odds!=="SCR");
  const mlProvider=morningLineProvider(),mlSource=providerRace(mlProvider),ml=(mlSource.race?.horses||[]).filter(h=>h.odds!=='SCR'&&h.included_in_frozen_field!==false&&(!h.entry_status||h.entry_status==='REGULAR')&&Number.isFinite(morningLineNumber(h.ml))).sort((a,b)=>morningLineNumber(a.ml)-morningLineNumber(b.ml)).slice(0,4);
  topMl.innerHTML='<div class="tiny muted" style="margin:5px 0">Four shortest morning lines · reference odds only.</div><table class="candidate-table morning-line-table"><thead><tr><th scope="col">Horse</th><th scope="col">Rank</th><th scope="col">M/L Odds</th></tr></thead><tbody>'+(ml.length?ml.map((h,i)=>'<tr><td><b>'+(h.n?'#'+escapeText(h.n)+' ':'')+escapeText(h.name)+'</b></td><td>'+(i+1)+'</td><td>'+escapeText(h.ml)+'</td></tr>').join(''):'<tr><td colspan="3">'+escapeText('Verified morning line unavailable')+'</td></tr>')+'</tbody></table>';
@@ -595,7 +601,7 @@ function renderHorses(){
 <td>${js?js.win.toFixed(1)+"%":"—"}</td><td>${ts?ts.win.toFixed(1)+"%":"—"}</td><td>${displayVal(h.ratings?.provider==="BRISNET"?h.ratings.lines?.[0]?.speed:h.last)}</td><td class="grid-contender-rank">${entry?entry.gridRank:label}</td><td><span class="score">${entry&&Number.isFinite(entry.score)?entry.score.toFixed(3):"N/A"}</span><div class="tiny muted" style="margin-top:4px">${entry?(provisional?"Provisional Contender rating":"Contender rating"):label}</div></td><td><b>${fairOddsMap()[h.n]||"—"}</b></td></tr>`}).join("");
 }
 horseTable.addEventListener('click',async event=>{
- const button=event.target.closest('button[data-field-action]');if(!button)return;
+ const button=event.target.closest('button[data-field-action]');if(!button||raceUpdateBusy())return;
  button.disabled=true;
  try{
   if(button.dataset.restore==='true'&&!confirm('Confirm '+button.dataset.name+' is running? This clears its scratch status and resets current odds to unavailable.')){button.disabled=false;return;}
@@ -673,10 +679,41 @@ function weightsDiv(){if(brisnetPaceDisplay(race).available){document.getElement
 document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));b.classList.add("active");document.getElementById("raceContext").classList.toggle("hidden",b.dataset.tab==="knowledge");if(b.dataset.tab==="pace"){preferBrisnetPaceCard();renderAll();}["raceday","pace","connections","public","knowledge"].forEach(id=>document.getElementById(id).classList.toggle("hidden",id!==b.dataset.tab))});
 raceNotes.oninput=e=>{const cs=state.cards[activeCard.id]||(state.cards[activeCard.id]={runners:{},notes:{}});cs.notes=cs.notes||{};cs.notes[race.race]=e.target.value;save()};
 
-let nyraUpdatePending=false;
+let nyraUpdatePending=false,equibaseUpdatePending=false;
+function raceUpdateBusy(){return nyraUpdatePending||otherTrackPending||equibaseUpdatePending;}
+function renderEquibaseControls(){
+ const button=document.getElementById('updateEquibase'),status=document.getElementById('equibaseUpdateStatus');
+ button.disabled=raceUpdateBusy()||!equibaseSupported(race);
+ document.getElementById('applyRaceConditions').disabled=raceUpdateBusy();
+ document.getElementById('equibaseSourceLink').hidden=!equibaseSupported(race);
+ if(equibaseUpdatePending){status.textContent='Fetching Equibase scratches and race changes for the loaded card…';return;}
+ const last=race.equibase_snapshot;
+ status.textContent=!equibaseSupported(race)?'Equibase connection currently supports Belmont Park.':last?'Equibase checked '+new Date(last.fetchedAt).toLocaleTimeString()+'. Latest feed change '+new Date(last.publishedAt).toLocaleTimeString()+'. '+(race.going?'Current '+race.surface+' condition: '+race.going+'. ':'')+(race.equibase_cancelled?'RACE CANCELLED. ':'')+'Odds are updated separately.':'Equibase updates scratches, surface, distance and track conditions across the loaded Belmont card. NYRA retains odds updates.';
+}
+async function updateEquibase(){
+ if(raceUpdateBusy()||!equibaseSupported(race))return;
+ const before={card:activeCard.id,race:JSON.stringify(race),cards:JSON.stringify(providerCards)};
+ const unchanged=()=>activeCard.id===before.card&&JSON.stringify(race)===before.race&&JSON.stringify(providerCards)===before.cards;
+ const status=document.getElementById('equibaseUpdateStatus');equibaseUpdatePending=true;renderNyraUpdateControls();
+ try{
+  const snapshot=await fetchEquibaseUpdate(race);
+  if(!unchanged())throw Error('Card or race changed during request; update again');
+  const plan=prepareEquibaseCardUpdate(activeCard,providerCards,race,snapshot);
+  await writeProviderCardsSession(plan.cards,state,plan.selected);
+  if(!unchanged()){status.textContent='Changes saved for original card; current selection retained. Refresh before using it.';return;}
+  providerCards=plan.cards;activeCard=structuredClone(plan.cards[plan.selected]);race=structuredClone(plan.race);
+  document.getElementById('recorderSurfaceVerified').checked=false;document.getElementById('recorderFieldVerified').checked=false;
+  document.getElementById('freezeAllStatus').textContent='Equibase changes applied. Freeze again before the race to capture updated selections.';
+  equibaseUpdatePending=false;renderAll();
+  status.textContent='Equibase updated '+plan.applied.length+' races at '+new Date(snapshot.fetchedAt).toLocaleTimeString()+'. '+(race.going?'Current '+race.surface+' condition: '+race.going+'. ':'')+'Scratches and race changes saved; odds retained. Freeze again before post time.'+(plan.unmatched?' Some listed scratches were absent from the loaded PPs.':'');
+ }catch(e){status.textContent='Equibase update unavailable: '+e.message+'. Saved odds, scratches and conditions retained.';}
+ finally{equibaseUpdatePending=false;document.getElementById('updateOddsScratches').disabled=nyraRaceUpdateSource(race).mode!=='automatic'&&(!otherTrackSource(race.track).supported||!OTHER_TRACK_FEEDS_READY);document.getElementById('updateEquibase').disabled=!equibaseSupported(race);document.getElementById('applyRaceConditions').disabled=false;}
+}
+document.getElementById('updateEquibase').onclick=updateEquibase;
 function renderNyraUpdateControls(){
  const button=document.getElementById('updateOddsScratches'),status=document.getElementById('nyraUpdateStatus'),source=nyraRaceUpdateSource(race),other=otherTrackSource(race.track);
- button.disabled=nyraUpdatePending||otherTrackPending||(source.mode!=='automatic'&&(!other.supported||!OTHER_TRACK_FEEDS_READY));
+ renderEquibaseControls();
+ button.disabled=raceUpdateBusy()||(source.mode!=='automatic'&&(!other.supported||!OTHER_TRACK_FEEDS_READY));
  document.getElementById('trackUpdateIdentity').textContent=(race.track||'Unknown track')+' · '+race.date+' · Race '+race.race;
  if(nyraUpdatePending||otherTrackPending){status.textContent='Fetching odds and scratches for '+race.track+' Race '+race.race+'…';return;}
  if(source.mode!=='automatic'){
@@ -686,7 +723,7 @@ function renderNyraUpdateControls(){
  status.textContent=last?'Last NYRA update '+new Date(last).toLocaleTimeString()+'. Scratches: '+(scratches||'none')+'. Prices may be delayed.':'Fetch NYRA odds and scratches for Race '+race.race+' without pasting. Prices may be delayed.';
 }
 async function updateNyraTrack(){
- if(nyraUpdatePending)return;
+ if(raceUpdateBusy())return;
  const initial={card:activeCard.id,race:race.race,date:race.date,track:race.track},unchanged=()=>activeCard.id===initial.card&&race.race===initial.race&&race.date===initial.date&&race.track===initial.track;
  const before=JSON.stringify(race),status=document.getElementById('nyraUpdateStatus');nyraUpdatePending=true;renderNyraUpdateControls();
  try{
@@ -702,11 +739,11 @@ async function updateNyraTrack(){
   const scratches=race.horses.filter(h=>h.odds==='SCR').map(h=>(h.n?'#'+h.n+' ':'')+h.name).join(', ');
   status.textContent='Updated '+result.snapshot.runners.length+' runners at '+new Date(result.snapshot.fetchedAt).toLocaleTimeString()+'. Scratches: '+(scratches||'none')+'. Selected-source models refreshed.'+pairedUpdate+' Prices may be delayed.';
  }catch(e){if(unchanged())status.textContent='Update failed: '+e.message+'. Previous odds and scratches retained.';}
- finally{nyraUpdatePending=false;document.getElementById('updateOddsScratches').disabled=nyraRaceUpdateSource(race).mode!=='automatic';if(!unchanged())renderNyraUpdateControls();}
+ finally{nyraUpdatePending=false;renderEquibaseControls();document.getElementById('updateOddsScratches').disabled=nyraRaceUpdateSource(race).mode!=='automatic';if(!unchanged())renderNyraUpdateControls();}
 }
 let otherTrackPending=false;
 async function updateOtherTrack(){
- if(otherTrackPending||!OTHER_TRACK_FEEDS_READY||!otherTrackSource(race.track).supported)return;
+ if(raceUpdateBusy()||!OTHER_TRACK_FEEDS_READY||!otherTrackSource(race.track).supported)return;
  const status=document.getElementById('nyraUpdateStatus'),before={card:activeCard.id,race:JSON.stringify(race),cards:JSON.stringify(providerCards)};
  const unchanged=()=>activeCard.id===before.card&&JSON.stringify(race)===before.race&&JSON.stringify(providerCards)===before.cards;
  otherTrackPending=true;renderNyraUpdateControls();
@@ -721,7 +758,7 @@ async function updateOtherTrack(){
   activeCard=providerCards[plan.selected];race=structuredClone(plan.race);otherTrackPending=false;renderAll();
   status.textContent='Odds and scratches updated for '+race.track+' Race '+race.race+' at '+new Date(result.odds.fetchedAt).toLocaleTimeString()+'. '+plan.pairedStatus+' Verify before post time.';
  }catch(e){status.textContent='Update unavailable: '+e.message+'. Previous odds and scratches retained.';}
- finally{otherTrackPending=false;document.getElementById('updateOddsScratches').disabled=nyraRaceUpdateSource(race).mode!=='automatic'&&(!otherTrackSource(race.track).supported||!OTHER_TRACK_FEEDS_READY);}
+ finally{otherTrackPending=false;renderEquibaseControls();document.getElementById('updateOddsScratches').disabled=nyraRaceUpdateSource(race).mode!=='automatic'&&(!otherTrackSource(race.track).supported||!OTHER_TRACK_FEEDS_READY);}
 }
 document.getElementById('updateOddsScratches').onclick=()=>nyraRaceUpdateSource(race).mode==='automatic'?updateNyraTrack():updateOtherTrack();
 function updateUrl(){const venue=["belmont","aqueduct","saratoga"].includes(track.value)?track.value:"belmont";const url=`https://www.nyra.com/${venue}/racing/entries/?day=${race.date}&limit=entries&race=${race.race}`;raceUrl.value=url;openRace.href=url;nyraRaceLink.href=url}
