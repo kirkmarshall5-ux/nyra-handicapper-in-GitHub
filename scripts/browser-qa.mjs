@@ -168,6 +168,7 @@ for(const profile of profiles){
     assert.match(await target.textContent(),/First-time starter/);
     assert.match(await target.textContent(),/probability conversion has not been validated/);
    }
+   const ftsHeaders=await page.locator('#raceDayDashboard .dashboard-table').first().locator('thead th').allTextContents();assert.ok(ftsHeaders.some(s=>/FTS/.test(s)));assert.ok(ftsHeaders.some(s=>/Prime Power/.test(s)));assert.ok(!ftsHeaders.some(s=>/Models/.test(s)));
    assert.match(await page.locator('#brisFinisherCandidates').innerText(),/Ranked 2\/3/);
    assert.match(await page.locator('#brisFinisherCandidates').innerText(),/Finisher: PASS/);
    assert.equal(await page.locator('#brisFinisherCandidates tbody tr').count(),2);assert.equal(await page.locator('#horseTable tr[data-program="3"] .grid-contender-rank').innerText(),'Unranked');assert.equal(await page.locator('#horseTable tr[data-program="3"] .score').innerText(),'N/A');
