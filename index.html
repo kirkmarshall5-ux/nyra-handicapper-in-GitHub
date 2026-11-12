@@ -110,11 +110,11 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <section id="raceDayDashboard" class="card span12" aria-label="Race day dashboard"></section>
 
 <div class="span12 comparison-row">
-<div class="card span4"><div class="kicker">Morning Line</div><div id="topMl" class="stack small"></div></div>
+<div class="card span4"><div class="kicker">Brisnet RR</div><div class="tiny muted">Best Recent 0.63400 · Late 25% · Early −25%</div><div id="brisResearchCandidates" class="stack small contender-rankings" aria-live="polite"></div></div>
+<div class="card span4"><div class="kicker">Brisnet · Finisher</div><div id="brisFinisherCandidates" class="stack small" aria-live="polite"></div></div>
 <div class="card span4"><div class="kicker">Brisnet · Contender</div><div id="brisContenderCandidates" class="stack small contender-rankings"></div><details class="tiny muted" style="margin-top:10px"><summary>How Contender ranks</summary><p>Contender V2 combines relative field scores using frozen coefficients for recent Beyers, surface and distance form, Timeform Early and Late pace, race pressure, career records, jockey and trainer records, layoffs, workouts, verified trip comments and prior opposition. It also uses a surface/distance matched Beyer trend when at least three comparable starts are verified. Missing features are neutral. This model was trained for top-three contention; its win chances remain experimental. PASS races show provisional rated runners only.</p></details></div>
-<div class="card span4"><div class="kicker">Brisnet · Best Recent Research</div><div class="tiny muted">Best Recent 0.63400 · Late 25% · Early −25%</div><div id="brisResearchCandidates" class="stack small contender-rankings" aria-live="polite"></div></div>
 <div class="card span4"><div class="kicker">DRF · Contender · Late +50%</div><div id="contenderCandidates" class="stack small contender-rankings"></div><details class="tiny muted" style="margin-top:10px"><summary>How Contender ranks</summary><p>Contender V2 combines relative field scores using frozen coefficients for recent Beyers, surface and distance form, Timeform Early pace and Late pace with a 50% higher coefficient, race pressure, career records, jockey and trainer records, layoffs, workouts, verified trip comments and prior opposition. It also uses a surface/distance matched Beyer trend when at least three comparable starts are verified. Missing features are neutral. This model was trained for top-three contention; its win chances remain experimental. PASS races show provisional rated runners only.</p></details></div>
-<div class="card span4"><div class="kicker">Brisnet · Finisher</div><div id="brisFinisherCandidates" class="stack small" aria-live="polite"></div><details class="tiny muted" style="margin-top:10px"><summary>How Finisher ranks</summary><p>Fixed weights: recent speed 60%, same-surface/distance speed 25%, Late pace 15%. Inputs use field percentiles from 0 to 100. Recent speed uses the latest five starts at 50/25/15/7/3, normalized for available figures. Matching speed uses the latest five proof rows, within 365 days and one furlong, with a 90-day decay half-life. Verified DRF fractional distances are decoded separately from the control. Missing optional inputs stay neutral at 50 without redistributing weights. First-time starters and runners without verified recent speed remain unranked; partial fields show PASS. Brisnet uses native Speed and matched LP. Exact score ties use horse name. V4.4c remains the control.</p></details></div>
+<div class="card span4"><div class="kicker">Morning Line</div><div id="topMl" class="stack small"></div></div>
 </div>
 <!-- Preserved model panels: hidden from Race Day; ranking and snapshot logic retained. -->
 <textarea id="raceNotes" hidden aria-hidden="true"></textarea>
@@ -245,7 +245,7 @@ import {runnerStateKey} from "./card-loader.js?v=20261008-qa1";
 import {researchRace} from "./jockey-research.js?v=20261008-qa1";
 import {evidenceProfile} from "./scoring-engine.js?v=20261008-qa1";
 import {estimatedWinLine,winLineFields,winLineNote} from "./fair-odds.js?v=20261015-mix1-line1";
-import {finisherRankingHtml} from "./finisher-ranking-display.js?v=20261101-namefallback";
+import {finisherRankingHtml} from "./finisher-ranking-display.js?v=20261112-compact";
 import {buildRaceDashboard,dashboardHtml,selectMorningLineProvider,morningLineForRunner,morningLineNumber} from "./race-day-dashboard.js?v=20261109-primepower";
 import {rankContenders} from "./contender-rankings.js?v=20261104-manualconditions";
 import {rankBrisnetModels} from "./brisnet-models.js?v=20261023-distance1";
@@ -337,7 +337,7 @@ function renderModelRow(race,ids){
  const topContenders=document.getElementById(ids[0]),contenderTarget=document.getElementById(ids[2]);
  const currentRating=()=>rankBrisnetModels(race)?.v44c||websiteRace(race);
  const native=rankBrisnetModels(race);
- document.getElementById(ids[1]).innerHTML=finisherRankingHtml(race,{baselineDecision:currentRating().decision});
+ document.getElementById(ids[1]).innerHTML=finisherRankingHtml(race,{baselineDecision:currentRating().decision,showDescription:ids[1]!=='brisFinisherCandidates'});
  for(const [key,id] of [['v44c',ids[0]],['contender',ids[2]]])updateBrisnetMethods(document.getElementById(id),key,!!native);
  if(native){
   for(const [key,id] of [['v44c',ids[0]],['contender',ids[2]]])document.getElementById(id).innerHTML=brisnetRankingHtml(native[key],key,race);
@@ -487,7 +487,7 @@ function renderRaceInsights(){
  renderManualConditions();
  renderDashboard();
  const researchSource=providerRace('BRISNET'),research=researchSource.race?rankBrisnetResearch(researchSource.race):null;
- document.getElementById('brisResearchCandidates').innerHTML=research?brisnetRankingHtml(research,'contender',researchSource.race).replace('Contender-Brisnet · experimental','Best Recent · research'):'<div class="note small">'+escapeText(researchSource.reason)+'</div>';
+ document.getElementById('brisResearchCandidates').innerHTML=research?brisnetRankingHtml(research,'contender',researchSource.race).replace('Contender-Brisnet · experimental','Brisnet RR'):'<div class="note small">'+escapeText(researchSource.reason)+'</div>';
  const ids={BRISNET:['brisTopContenders','brisFinisherCandidates','brisContenderCandidates'],DRF:['topContenders','finisherCandidates','contenderCandidates']};
  for(const provider of ['BRISNET','DRF']){const source=providerRace(provider);if(source.race)renderModelRow(source.race,ids[provider]);else for(const id of ids[provider])document.getElementById(id).innerHTML='<div class="note small">'+escapeText(source.reason)+'</div>';}
  document.getElementById('ppSourceView').value=cardProvider(activeCard);
