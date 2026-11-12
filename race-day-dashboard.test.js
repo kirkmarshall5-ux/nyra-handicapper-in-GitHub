@@ -13,7 +13,7 @@ test('Brisnet-only dashboard includes ranked horses beyond the shortlist',()=>{
  assert.deepEqual(d.remaining.map(h=>h.n),['5','6']);
  assert.equal(d.remaining[0].ranks.brisContender,5);
  assert.equal(d.remaining[0].ranks.drfContender,null);
- assert.match(dashboardHtml(d),/Remaining ranked horses \(2\)/);
+ assert.doesNotMatch(dashboardHtml(d),/<details/);
 });
 
 test('retains full orders and separate ML; agreement never changes or blends model scores',()=>{
@@ -191,8 +191,8 @@ test('active runners absent from every model and morning line remain visible as 
  assert.deepEqual(d.unranked.map(h=>h.n),['3','4']);
  assert.equal(d.unranked[0].ranks.brisContender,null);
  assert.equal(d.models[0].complete,false);
- assert.match(dashboardHtml(d),/Active horses without a model ranking \(2\)/);
- assert.doesNotMatch(dashboardHtml(d),/Active horses without a model ranking \(3\)/);
+ assert.doesNotMatch(dashboardHtml(d),/<details/);
+ assert.equal((dashboardHtml(d).match(/<tr><th scope="row">/g)||[]).length,d.field.length);
  assert.equal(d.paper_plans.brisContender.tickets.length,3);
 });
 
