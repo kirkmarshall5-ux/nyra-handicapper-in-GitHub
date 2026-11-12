@@ -106,6 +106,12 @@ export async function sealResearchSnapshots(records) {
   return {...payload,digestSha256:Array.from(new Uint8Array(digest),b=>b.toString(16).padStart(2,'0')).join(''),anchorStatus:'UNVERIFIED_LOCAL_EXPORT'};
 }
 
+// A prospective anchor must cover only the newly frozen race, never prior browser history.
+export async function sealSingleRaceResearchSnapshot(record) {
+  if(!record || typeof record!=='object')throw Error('New frozen research record required.');
+  return sealResearchSnapshots([record]);
+}
+
 // Verifies export integrity only. A valid digest does not establish a trusted pre-race timestamp.
 export async function verifyResearchExport(exported){
  const errors=[];
