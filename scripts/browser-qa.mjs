@@ -249,8 +249,9 @@ for(const profile of profiles){
    assert.ok(record.races[0].dashboard.field.every(h=>h.n!=='5'));
    assert.equal(record.races[0].dashboard.source_cards.DRF.card_id,'qa-finisher-drf');
    assert.equal(record.races[0].dashboard.betting_enabled,false);
+   const prepFreezeStatus=await page.locator('#freezeAllStatus').innerText();await page.locator('[data-tab="raceday"]').click();
    assert.equal(await dashboard.locator('.dashboard-table').first().innerText(),dashboardBefore,'Freeze must restore the selected race dashboard');
-   assert.match(await page.locator('#dashboardSnapshotStatus').innerText(),/exported: 2 races/);
+   assert.match(prepFreezeStatus,/exported: 2 races/);
    await page.evaluate(async()=>window.scrollTo(0,0));
    await page.screenshot({path:`${out}/${profile.name}-race-dashboard.png`,fullPage:true});
    await page.setViewportSize({width:390,height:844});
@@ -562,6 +563,7 @@ for(const profile of profiles){
    const pdf=await page.evaluate(async url=>new TextDecoder().decode(await (await fetch(url)).arrayBuffer()),firstUrl);
    assert.ok(pdf.startsWith('%PDF-1.4'));assert.match(pdf,/Race Day Handicapper/);assert.match(pdf,/Finish Order/);
    // Use the application's normal field action, then observe the already-open PDF refresh.
+   await page.locator('[data-tab="raceday"]').click();
    const action=page.locator('#horseTable button[data-field-action="scratch"]').first();
    if(await action.count()){
     await action.click();
