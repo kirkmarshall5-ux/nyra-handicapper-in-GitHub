@@ -1,3 +1,4 @@
+async function openPrep(page,recorder=false){await page.locator('[data-tab="public"]').click();if(recorder&&await page.locator('#structuredRecorder').isVisible()===false)await page.getByText('Advanced: verified race recorder',{exact:true}).click();}
 import assert from 'node:assert/strict';
 import {mkdirSync,writeFileSync,readFileSync} from 'node:fs';
 import {chromium} from 'playwright';
@@ -73,27 +74,25 @@ for(const profile of profiles){
  });
  await check('D03-official-starter-input-controls',async()=>{
   for(const id of ['recorderStarterRoster','recorderStarterSource','recorderFreezeRace'])assert.equal(await page.locator('#'+id).count(),1);
-  await page.locator('#recorderStarterRoster').fill('1 | QA Horse');
-  await page.locator('#recorderStarterSource').fill('https://www.equibase.com/');
+  await openPrep(page,true); await page.locator('#recorderStarterRoster').fill('1 | QA Horse');
+  await openPrep(page,true); await page.locator('#recorderStarterSource').fill('https://www.equibase.com/');
   assert.equal(await page.locator('#recorderStarterRoster').inputValue(),'1 | QA Horse');
   assert.equal(errors.length,0,'Starter evidence input caused page errors: '+errors.join(' | '));
-  await page.locator('#recorderStarterRoster').fill('');
-  await page.locator('#recorderStarterSource').fill('');
+  await openPrep(page,true); await page.locator('#recorderStarterRoster').fill('');
+  await openPrep(page,true); await page.locator('#recorderStarterSource').fill('');
  });
- await check('D04-clean-Load-NYRA-layout',async()=>{
-  assert.equal(await page.locator('#updateOddsScratches').count(),1);assert.equal(await page.locator('#raceday #updateOddsScratches').count(),1);assert.equal(await page.locator('#updateOtherOdds, #updateOtherScratches').count(),0);
-  await page.locator('[data-tab="public"]').click();
-  for(const id of ['openRace','freezeAllModels','ppSourceView','exportBrisnetSourceAudit','exportBrisnetModelAudit'])assert.equal(await page.locator('#public #'+id).isVisible(),true);
-  for(const id of ['tryLoad','nyraPaste','parsePaste','loadSample','loadStatus'])assert.equal(await page.locator('#'+id).isVisible(),false);
-  assert.equal(await page.getByText('Why a fallback?',{exact:true}).isVisible(),false);
-  const link=await page.locator('#openRace').boundingBox(),source=await page.locator('#ppSourceView').boundingBox(),freeze=await page.locator('#freezeAllModels').boundingBox();
-  assert.ok(link.y<source.y&&source.y<freeze.y);
-  assert.ok(await page.evaluate(async()=>document.documentElement.scrollWidth<=innerWidth));
-  await page.screenshot({path:`${out}/${profile.name}-load-nyra-cleanup.png`,fullPage:true});
+ await check('D04-race-day-prep-layout',async()=>{
+  assert.equal(await page.locator('[data-tab="public"]').innerText(),'Race Day Prep');
+  await openPrep(page);
+  for(const id of ['uploadBrisnet','uploadDrf','updateOddsScratches','printPicks','manualRaceSurface','freezeAllModels','ppSourceView']){
+   assert.equal(await page.locator('#public #'+id).isVisible(),true);
+   assert.equal(await page.locator('#raceday #'+id).count(),0);
+  }
+  assert.equal(await page.locator('#dashboardFreeze').count(),0);
+  for(const id of ['exportBrisnetSourceAudit','recorderFreezeRace','openRace'])assert.equal(await page.locator('#'+id).isVisible(),false);
+  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+  await page.screenshot({path:`${out}/${profile.name}-race-day-prep.png`,fullPage:true});
   await page.locator('[data-tab="raceday"]').click();
-  for(const id of ['uploadBrisnet','uploadDrf','updateOddsScratches'])assert.equal(await page.locator('#raceday #'+id).isVisible(),true);
-  for(const id of ['freezeAllModels','ppSourceView'])assert.equal(await page.locator('#raceday #'+id).count(),0);
-  const upload=await page.locator('#uploadDrf').boundingBox(),update=await page.locator('#updateOddsScratches').boundingBox();assert.ok(update.x>upload.x&&Math.abs(update.y-upload.y)<2,'Update button must sit to the right of Upload DRF PP');
  });
  await check('D05-notes-follow-race-and-reload',async()=>{
   await page.locator('[data-tab="raceday"]').click();
@@ -239,7 +238,7 @@ for(const profile of profiles){
    await page.locator('#dashboardPaperSource').selectOption('morningLine');
    assert.match(await dashboard.locator('.dashboard-plan-controls').first().innerText(),/#7 → #1 → #2/);
    const dashboardBefore=await dashboard.locator('.dashboard-table').first().innerText();
-   const downloading=page.waitForEvent('download');await page.locator('#dashboardFreeze').click();
+   const downloading=page.waitForEvent('download');await openPrep(page); await page.locator('#freezeAllModels').click();
    const download=await downloading,record=JSON.parse(readFileSync(await download.path(),'utf8'));
    assert.equal(record.races.length,2);
    assert.equal(record.races[1].dashboard.race.number,2);
@@ -322,14 +321,14 @@ for(const profile of profiles){
     await window.qaSetActive({id:'qa-direct-update',schemaVersion:2,track,date,races:{1:race,2:{...structuredClone(race),race:2}},parser_version:'BRISNET-PREMIUM-PLUS-positioned-v3',source_format:'BRISNET_PREMIUM_PLUS',warnings:[]});
    });
    await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
-   await page.locator('[data-tab="raceday"]').click();assert.equal(await page.locator('#updateOddsScratches').isVisible(),true);await page.locator('#updateOddsScratches').click();
+   await openPrep(page);assert.equal(await page.locator('#updateOddsScratches').isVisible(),true);await openPrep(page); await page.locator('#updateOddsScratches').click();
    await page.locator('#nyraUpdateStatus').getByText('Selected-source models refreshed.',{exact:false}).waitFor({timeout:10000});
    assert.match(await page.locator('#nyraUpdateStatus').innerText(),/#3 QA Update Runner 3/);
    for(const id of ['brisTopContenders','brisFinisherCandidates','brisContenderCandidates']){assert.equal(await page.locator('#'+id+' tbody tr').count(),2);assert.doesNotMatch(await page.locator('#'+id+' tbody').innerText(),/QA Update Runner 3/);}
    const saved=await page.evaluate(async()=>(await window.qaReadActive()).races[1]);assert.equal(saved.horses[2].odds,'SCR');assert.equal(saved.horses[2].ratings.lines[0].speed,78);assert.equal(saved.horses[0].ml,'4/1');
    await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});await page.locator('[data-tab="raceday"]').click();assert.match(await page.locator('#nyraUpdateStatus').innerText(),/Last NYRA update/);assert.equal(await page.locator('#brisFinisherCandidates tbody tr').count(),2);
-   fail=true;await page.locator('#updateOddsScratches').click();await page.locator('#nyraUpdateStatus').getByText('Update failed:',{exact:false}).waitFor({timeout:10000});assert.equal(await page.evaluate(async()=>(await window.qaReadActive()).races[1].horses[2].odds),'SCR');assert.equal(await page.locator('#updateOddsScratches').isEnabled(),true);
-   fail=false;pause=true;const pending=page.waitForRequest(service);await page.locator('#updateOddsScratches').click();await pending;await page.locator('[data-tab="raceday"]').click();await page.locator('#racebar button').nth(1).click();await new Promise(r=>setTimeout(r,20));assert.ok(release);release();await page.waitForFunction(()=>!document.getElementById('updateOddsScratches').disabled);assert.doesNotMatch(await page.locator('#nyraUpdateStatus').innerText(),/Fetching/);assert.equal(await page.locator('#brisFinisherCandidates tbody tr').count(),3,'Late Race 1 response must not scratch Race 2');
+   fail=true;await openPrep(page); await page.locator('#updateOddsScratches').click();await page.locator('#nyraUpdateStatus').getByText('Update failed:',{exact:false}).waitFor({timeout:10000});assert.equal(await page.evaluate(async()=>(await window.qaReadActive()).races[1].horses[2].odds),'SCR');assert.equal(await page.locator('#updateOddsScratches').isEnabled(),true);
+   fail=false;pause=true;const pending=page.waitForRequest(service);await openPrep(page); await page.locator('#updateOddsScratches').click();await pending;await page.locator('[data-tab="raceday"]').click();await page.locator('#racebar button').nth(1).click();await new Promise(r=>setTimeout(r,20));assert.ok(release);release();await page.waitForFunction(()=>!document.getElementById('updateOddsScratches').disabled);assert.doesNotMatch(await page.locator('#nyraUpdateStatus').innerText(),/Fetching/);assert.equal(await page.locator('#brisFinisherCandidates tbody tr').count(),3,'Late Race 1 response must not scratch Race 2');
    assert.equal(errors.length,0,'NYRA update page errors: '+errors.join(' | '));
   }finally{
    await page.unroute(service);await page.evaluate(async value=>{if(value!==null)await window.qaSetActive(JSON.parse(value));},original);await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
@@ -339,18 +338,18 @@ for(const profile of profiles){
   await page.locator('[data-tab="raceday"]').click();
   const control=page.locator('#recorderFreezeRace'),status=page.locator('#recorderFreezeStatus');
   assert.equal(await control.count(),1);
-  const recorderBounds=await page.locator('#structuredRecorder').boundingBox();
+  await openPrep(page,true);const recorderBounds=await page.locator('#structuredRecorder').boundingBox();
   assert.ok(recorderBounds&&recorderBounds.width>Math.min(profile.viewport.width*0.65,650),'Recorder must occupy usable Race Day width');
-  await control.click();
+  await openPrep(page,true);await control.click();
   await status.getByText('Structured freeze refused:',{exact:false}).waitFor();
   assert.match(await status.innerText(),/scheduled post|post-time|Demonstration card/i);
   // This synthetic imported-card fixture has a fingerprint and verified field,
   // but an intentionally missing post-time URL must fail before any record is saved.
   const before=await page.evaluate(()=>localStorage.getItem('nyraResearchProviderFreezesV3'));
-  await page.locator('#recorderPost').fill('2099-10-26T16:00:00-04:00');
-  await page.locator('#recorderFieldVerified').check();
-  await page.locator('#recorderSurfaceVerified').check();
-  await control.click();
+  await openPrep(page,true); await page.locator('#recorderPost').fill('2099-10-26T16:00:00-04:00');
+  await openPrep(page,true); await page.locator('#recorderFieldVerified').check();
+  await openPrep(page,true); await page.locator('#recorderSurfaceVerified').check();
+  await openPrep(page,true);await control.click();
   await status.getByText('Structured freeze refused:',{exact:false}).waitFor();
   assert.match(await status.innerText(),/reference|post-time|Demonstration card/i);
   assert.equal(await page.evaluate(()=>localStorage.getItem('nyraResearchProviderFreezesV3')),before,'Failed recorder must not persist a freeze');
@@ -371,10 +370,10 @@ for(const profile of profiles){
    });
    await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
    await page.locator('[data-tab="raceday"]').click();
-   await page.locator('#recorderPost').fill('2099-10-26T16:00:00-04:00');
-   await page.locator('#recorderPostUrl').fill('https://www.nyra.com/');
-   await page.locator('#recorderFieldVerified').check();
-   await page.locator('#recorderSurfaceVerified').check();
+   await openPrep(page,true); await page.locator('#recorderPost').fill('2099-10-26T16:00:00-04:00');
+   await openPrep(page,true); await page.locator('#recorderPostUrl').fill('https://www.nyra.com/');
+   await openPrep(page,true); await page.locator('#recorderFieldVerified').check();
+   await openPrep(page,true); await page.locator('#recorderSurfaceVerified').check();
    const [download]=await Promise.all([page.waitForEvent('download',{timeout:15000}),page.locator('#recorderFreezeRace').click()]);
    assert.match(download.suggestedFilename(),/NYRA_STRUCTURED_RESEARCH_DRF/);
    const exported=JSON.parse(readFileSync(await download.path(),'utf8'));
@@ -385,7 +384,7 @@ for(const profile of profiles){
    assert.equal(exported.records[0].models.length,3);
    assert.equal(exported.records[0].sourceSha256,'a'.repeat(64));
    assert.equal(exported.records[0].anchorStatus,'UNVERIFIED_LOCAL');
-   await page.locator('#recorderFreezeRace').click();
+   await openPrep(page,true); await page.locator('#recorderFreezeRace').click();
    assert.match(await page.locator('#recorderFreezeStatus').innerText(),/already frozen|no overwrite/i);
    const after=await page.evaluate(()=>JSON.parse(localStorage.getItem('nyraResearchProviderFreezesV3')||'[]'));
    assert.equal(after.length,1,'Duplicate attempt cannot append another record');
@@ -446,13 +445,13 @@ for(const profile of profiles){
    await page.locator('[data-tab="pace"]').click();assert.equal(await page.locator('#ppSourceView').inputValue(),'BRISNET');assert.match(await page.locator('#paceCardStatus').innerText(),/Showing Brisnet.*2026-10-18.*Race 2/);assert.match(await page.locator('#paceSourceLabel').innerText(),/Brisnet native/i);assert.match(await page.locator('#weights').innerText(),/Brisnet/);
    await page.locator('[data-tab="raceday"]').click();assert.match(await page.locator('#horseTable tbody tr[data-program="1"]').innerText(),/71/);await page.locator('[data-tab="public"]').click();await page.locator('#ppSourceView').selectOption('DRF');await page.locator('[data-tab="raceday"]').click();
    await page.screenshot({path:`${out}/${profile.name}-paired-PPs.png`,fullPage:true});
-   const researchDownload=page.waitForEvent('download');await page.locator('[data-tab="public"]').click();await page.locator('#freezeAllModels').click();const researchFile=await researchDownload;const researchJson=JSON.parse(readFileSync(await researchFile.path(),'utf8'));assert.ok(researchJson.races.length);for(const rr of researchJson.races){const model=rr.dashboard.research_models.brisnet_best_recent;assert.equal(model.model_id,'BRISNET-BEST063400-LATE25-EARLY75-20261104');assert.ok(rr.models.brisResearchCandidates);assert.ok(model.rankings.every((h,i,a)=>i===0||a[i-1].score>=h.score));}await page.locator('[data-tab="raceday"]').click();
+   const researchDownload=page.waitForEvent('download');await page.locator('[data-tab="public"]').click();await openPrep(page); await page.locator('#freezeAllModels').click();const researchFile=await researchDownload;const researchJson=JSON.parse(readFileSync(await researchFile.path(),'utf8'));assert.ok(researchJson.races.length);for(const rr of researchJson.races){const model=rr.dashboard.research_models.brisnet_best_recent;assert.equal(model.model_id,'BRISNET-BEST063400-LATE25-EARLY75-20261104');assert.ok(rr.models.brisResearchCandidates);assert.ok(model.rankings.every((h,i,a)=>i===0||a[i-1].score>=h.score));}await page.locator('[data-tab="raceday"]').click();
    await page.locator('#racebar button').first().click();
-   await page.locator('#manualRaceSurface').selectOption('Turf');await page.locator('#manualRaceDistance').fill('8.5');await page.locator('#applyRaceConditions').click();await page.locator('#manualConditionsStatus').getByText('Manual conditions saved',{exact:false}).waitFor();
+   await openPrep(page); await page.locator('#manualRaceSurface').selectOption('Turf');await openPrep(page); await page.locator('#manualRaceDistance').fill('8.5');await openPrep(page); await page.locator('#applyRaceConditions').click();await page.locator('#manualConditionsStatus').getByText('Manual conditions saved',{exact:false}).waitFor();
    assert.match(await page.locator('#raceBadges').innerText(),/8.5F Turf/);
    await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});assert.equal(await page.locator('#manualRaceSurface').inputValue(),'Turf');assert.equal(await page.locator('#manualRaceDistance').inputValue(),'8.5');
-   const changedDownload=page.waitForEvent('download');await page.locator('[data-tab="public"]').click();await page.locator('#freezeAllModels').click();const changedFile=await changedDownload;const changedJson=JSON.parse(readFileSync(await changedFile.path(),'utf8'));const changedRace=changedJson.races.find(r=>r.race===1);assert.equal(changedRace.dashboard.race.surface,'Turf');assert.equal(changedRace.dashboard.race.distance_furlongs,8.5);assert.equal(changedRace.dashboard.manual_conditions.original.surface,'Dirt');
-   await page.locator('[data-tab="raceday"]').click();await page.locator('#manualRaceSurface').selectOption('Dirt');await page.locator('#manualRaceDistance').fill('6');await page.locator('#applyRaceConditions').click();await page.waitForFunction(()=>!document.querySelector('#applyRaceConditions').disabled);assert.match(await page.locator('#raceBadges').innerText(),/6F Dirt/);
+   const changedDownload=page.waitForEvent('download');await page.locator('[data-tab="public"]').click();await openPrep(page); await page.locator('#freezeAllModels').click();const changedFile=await changedDownload;const changedJson=JSON.parse(readFileSync(await changedFile.path(),'utf8'));const changedRace=changedJson.races.find(r=>r.race===1);assert.equal(changedRace.dashboard.race.surface,'Turf');assert.equal(changedRace.dashboard.race.distance_furlongs,8.5);assert.equal(changedRace.dashboard.manual_conditions.original.surface,'Dirt');
+   await page.locator('[data-tab="raceday"]').click();await openPrep(page); await page.locator('#manualRaceSurface').selectOption('Dirt');await openPrep(page); await page.locator('#manualRaceDistance').fill('6');await openPrep(page); await page.locator('#applyRaceConditions').click();await page.waitForFunction(()=>!document.querySelector('#applyRaceConditions').disabled);assert.match(await page.locator('#raceBadges').innerText(),/6F Dirt/);
    const beforeFieldCorrection=await page.evaluate(async()=>{const m=await import('./dual-pp-cards.js');return JSON.stringify(await m.readProviderCards());});
    await page.evaluate(async()=>{const m=await import('./dual-pp-cards.js'),cards=await m.readProviderCards();for(const c of Object.values(cards)){const h=c.races[2].horses.find(h=>String(h.n)==='2');h.entry_status='AE';h.included_in_frozen_field=false;}await m.writeProviderCardsSession(cards,{},'DRF');});
    await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});await page.locator('#racebar button').nth(1).click();
@@ -556,7 +555,7 @@ for(const profile of profiles){
   await page.locator('[data-tab="raceday"]').click();
   assert.equal(await page.locator('#printPicks').innerText(),'Print Picks');
   const order=await page.evaluate(()=>{const a=document.getElementById('updateOddsScratches'),b=document.getElementById('printPicks');return Boolean(a.compareDocumentPosition(b)&Node.DOCUMENT_POSITION_FOLLOWING);});assert.equal(order,true);
-  const opened=page.waitForEvent('popup');await page.locator('#printPicks').click();const popup=await opened;
+  const opened=page.waitForEvent('popup');await openPrep(page); await page.locator('#printPicks').click();const popup=await opened;
   try{
    await popup.waitForURL(/^blob:/,{timeout:20000,waitUntil:'commit'});
    const firstUrl=popup.url();
@@ -595,7 +594,7 @@ for(const profile of profiles){
     const c=await page.evaluate(()=>window.qaReadActive()),r=c.races[1];
     await request.fulfill({status:200,contentType:'application/json',body:JSON.stringify({schemaVersion:1,track:'belmont',date:r.date,race:1,fetchedAt:new Date().toISOString(),sourceUrl:'https://www.nyra.com/belmont/racing/entries/',runners:r.horses.map((h,i)=>({program:String(i+1),name:h.name,odds:i===0?'SCR':'7/1'}))})});
    });
-   try{await page.locator('#updateOddsScratches').click();await page.locator('#nyraUpdateStatus').getByText('Updated ',{exact:false}).waitFor({timeout:20000});}finally{await page.unroute(route);}
+   try{await openPrep(page); await page.locator('#updateOddsScratches').click();await page.locator('#nyraUpdateStatus').getByText('Updated ',{exact:false}).waitFor({timeout:20000});}finally{await page.unroute(route);}
    const current=await page.evaluate(()=>window.qaReadActive());assert.ok(current.races[1].horses.every(h=>h.n===''));assert.equal(current.races[1].horses[0].odds,'SCR');assert.equal(current.races[1].horses[1].odds,'7/1');
    await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});assert.match(await page.locator('#horseTable tbody tr').filter({hasText:names[0]}).innerText(),/SCR — Scratched/);
   }finally{await page.evaluate(async saved=>{const m=await import('./dual-pp-cards.js');await m.writeProviderCardsSession(saved.cards,saved.session?.state||{},saved.session?.selectedProvider);},saved);await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});}

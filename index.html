@@ -74,7 +74,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <button class="tab active" data-tab="raceday">Race Day</button>
 <button class="tab" data-tab="pace">Pace & Ratings</button>
 <button class="tab" data-tab="connections">Jockey / Trainer</button>
-<button class="tab" data-tab="public">Load NYRA</button>
+<button class="tab" data-tab="public">Race Day Prep</button>
 <button class="tab" data-tab="knowledge">Knowledge Base</button>
 </nav></div></header>
 
@@ -95,10 +95,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <div class="badges" id="raceBadges"><span class="badge gold">1 1/16M Dirt</span><span class="badge">Maiden Special Weight · $100,000</span><span class="badge">12:05 PM</span><span class="badge green">Public NYRA card</span></div></div>
 <div class="race-navigation"><div class="muted small" id="raceCount" style="margin-bottom:5px">Races on this card</div><div class="racebar" id="racebar" aria-label="Select race"></div></div>
 </div></section>
-<div class="card span12">
-<div id="raceConditions" class="small muted" style="margin-bottom:10px"></div><div id="declaredScratches" class="small muted" role="status"></div><div class="flex" style="margin-top:12px;flex-wrap:wrap"><button class="primary" id="uploadBrisnet">1. Upload Brisnet PP</button><input id="brisnetFile" type="file" accept=".pdf" hidden><button class="primary" id="uploadDrf">2. Upload DRF PP</button><input id="drfFile" type="file" accept=".pdf" hidden><button class="primary" id="updateOddsScratches" type="button">Update Odds &amp; Scratches</button><button class="primary" id="printPicks" type="button">Print Picks</button><span id="printPicksStatus" class="small muted" role="status" aria-live="polite"></span></div><div id="raceDayUploadStatus" class="small" role="status" aria-live="polite" style="margin-top:8px;overflow-wrap:anywhere"></div><div class="small muted" id="trackUpdateIdentity" style="margin-top:8px"></div><p id="nyraUpdateStatus" class="small muted" role="status" aria-live="polite">Updates use the loaded PP card and selected race.</p></div>
-
-<div class="card span12"><h3 class="sectiontitle">Adjust current race conditions</h3><p class="small muted">Use official race-day conditions. Applies to this race in matching loaded cards and recalculates rankings. Distances are in furlongs: 1 mile = 8; 1 1/16 miles = 8.5; 1 1/8 miles = 9.</p><div class="flex" style="flex-wrap:wrap;align-items:end"><label>Race surface<select id="manualRaceSurface"><option value="Dirt">Dirt</option><option value="Turf">Turf</option><option value="Synth">Synthetic</option></select></label><label>Distance (furlongs)<input id="manualRaceDistance" type="number" min="2" max="32" step="any" inputmode="decimal" style="width:130px"></label><button id="applyRaceConditions" type="button">Apply surface &amp; distance</button></div><div id="manualConditionsStatus" class="small muted" role="status" aria-live="polite"></div></div>
+<div class="card span12"><div id="raceConditions" class="small muted"></div><div id="declaredScratches" class="small muted" role="status"></div></div>
 <section id="raceDayDashboard" class="card span12" aria-label="Race day dashboard"></section>
 
 <div class="span12 comparison-row">
@@ -135,7 +132,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 </div></section>
 
 <section id="pace" class="hidden"><div class="grid">
-<div class="card span12"><div class="kicker">Pace &amp; Ratings source · Brisnet preferred</div><div id="paceCardStatus" class="small" role="status"></div><div class="tiny muted">Opening this tab selects the matching Brisnet card when available. This also updates the Horse grid / Pace source on Race Day. Upload Brisnet PPs there to use their E1, E2 and LP figures.</div></div>
+<div class="card span12"><div class="kicker">Pace &amp; Ratings source · Brisnet preferred</div><div id="paceCardStatus" class="small" role="status"></div><div class="tiny muted">Opening this tab selects the matching Brisnet card when available. This also updates the Horse grid / Pace source on Race Day. Upload Brisnet PPs in Race Day Prep to use their E1, E2 and LP figures.</div></div>
 <div class="card span12"><div class="kicker" id="paceSourceLabel">Pace-label proxy · not a validated scenario</div><h3 class="sectiontitle">Pace map</h3><div class="small muted" id="paceDescription">These lanes are Early/Late-derived display hints, not verified running styles. Source-call proxies are in the PP context panel.</div><div id="paceMap" class="stack"></div></div>
 <div class="card span4" id="transparentRatingRules"><div class="kicker">Transparent comparison</div><h3 class="sectiontitle" id="paceRulesTitle">Locked V4.4c rules</h3>
 <div class="small muted">The Handicap Rating is not a win probability. It compares the entered PP information and public context. “Things to Consider” stays separate so an angle does not secretly inflate the rating.</div>
@@ -182,7 +179,13 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 </div></section>
 
 <section id="public" class="hidden"><div class="grid">
-<div class="card span12"><div class="kicker">Public NYRA loader</div><h3 class="sectiontitle">Open NYRA race page</h3>
+<div class="card span12"><div class="kicker">Race Day Prep</div><h2 class="sectiontitle">Prepare the card</h2><p class="small muted">Load PPs, confirm changes, then freeze and print your selections.</p><div class="spread" style="flex-wrap:wrap;gap:12px"><div id="prepCardIdentity" class="small" role="status"></div><label for="prepRaceSelect">Current race <select id="prepRaceSelect" style="width:auto"></select></label></div></div>
+<div class="card span12"><h3 class="sectiontitle">1. Load PPs and update the field</h3>
+<div class="flex" style="margin-top:12px;flex-wrap:wrap"><button class="primary" id="uploadBrisnet">Upload Brisnet PP</button><input id="brisnetFile" type="file" accept=".pdf" hidden><button class="primary" id="uploadDrf">Upload DRF PP</button><input id="drfFile" type="file" accept=".pdf" hidden><button class="primary" id="updateOddsScratches" type="button">Update Odds &amp; Scratches</button><button class="primary" id="printPicks" type="button">Print Picks</button><span id="printPicksStatus" class="small muted" role="status" aria-live="polite"></span></div><div id="raceDayUploadStatus" class="small" role="status" aria-live="polite" style="margin-top:8px;overflow-wrap:anywhere"></div><div class="small muted" id="trackUpdateIdentity" style="margin-top:8px"></div><p id="nyraUpdateStatus" class="small muted" role="status" aria-live="polite">Updates use the loaded PP card and selected race.</p></div>
+<div class="card span12"><h3 class="sectiontitle">2. Adjust current race conditions</h3><p class="small muted">Use official race-day conditions. Applies to this race in matching loaded cards and recalculates rankings. Distances are in furlongs: 1 mile = 8; 1 1/16 miles = 8.5; 1 1/8 miles = 9.</p><div class="flex" style="flex-wrap:wrap;align-items:end"><label>Race surface<select id="manualRaceSurface"><option value="Dirt">Dirt</option><option value="Turf">Turf</option><option value="Synth">Synthetic</option></select></label><label>Distance (furlongs)<input id="manualRaceDistance" type="number" min="2" max="32" step="any" inputmode="decimal" style="width:130px"></label><button id="applyRaceConditions" type="button">Apply surface &amp; distance</button></div><div id="manualConditionsStatus" class="small muted" role="status" aria-live="polite"></div></div>
+
+
+<details class="card span12"><summary>NYRA race-page reference</summary><h3 class="sectiontitle">Open NYRA race page</h3>
 <div class="controls">
 <div><label>Track</label><select id="track"><option value="belmont">Belmont Park</option><option value="aqueduct">Aqueduct</option><option value="saratoga">Saratoga</option></select></div>
 <div><label>Date</label><input id="raceDate" type="date" value="2026-10-03"></div>
@@ -190,11 +193,11 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <div style="grid-column:span 3"><label>NYRA URL</label><input id="raceUrl" readonly></div>
 </div>
 <div class="flex" style="margin-top:12px"><a id="openRace" target="_blank"><button class="secondary">Open NYRA page</button></a></div>
-</div>
+</details>
 
 
-<div class="card span12"><div class="kicker">Keep both PP sources loaded</div><div class="flex" style="flex-wrap:wrap;margin-top:8px"><button class="secondary" id="exportBrisnetSourceAudit" type="button">Export Brisnet Source Audit</button><button class="secondary" id="exportBrisnetModelAudit" type="button">Export Brisnet Model Input Audit</button><label for="ppSourceView" class="small">Horse grid / Pace source</label><select id="ppSourceView" style="width:auto"><option value="BRISNET">Brisnet</option><option value="DRF">DRF</option></select></div><div class="small muted" id="providerCardsStatus" role="status" style="margin-top:10px"></div><div class="small" id="providerUploadStatus" role="status" style="margin-top:6px"></div><div class="progress" style="margin-top:10px"><i id="ppProg"></i></div><div id="ppStatus" class="muted small" role="status" style="margin-top:8px">Upload each PP once using its matching button. Processing and saved cards stay in this browser.</div><details id="manageSavedCards" class="small" style="margin-top:12px"><summary>Manage saved cards</summary><div class="flex" style="flex-wrap:wrap;margin-top:10px"><button class="secondary" id="clearPP">Clear selected PP evidence</button><button class="secondary" id="resetSample">Reset DRF sample card</button></div><p class="muted">Clear affects the source selected in Horse grid / Pace source. Reset loads the demonstration into the DRF slot. The other PP source is retained.</p></details></div>
-<div class="card span12"><div class="kicker">Prospective research snapshot</div><div class="flex" style="align-items:center;gap:12px;flex-wrap:wrap"><button class="primary" id="freezeAllModels">Freeze All Models</button><span class="small muted" id="freezeAllStatus" role="status">Local timestamped research export; no wager authorization. Verify before post time.</span></div></div>
+<div class="card span12"><div class="kicker">Keep both PP sources loaded</div><div class="flex" style="flex-wrap:wrap;margin-top:8px"><label for="ppSourceView" class="small">Horse grid / Pace source</label><select id="ppSourceView" style="width:auto"><option value="BRISNET">Brisnet</option><option value="DRF">DRF</option></select></div><div class="small muted" id="providerCardsStatus" role="status" style="margin-top:10px"></div><div class="small" id="providerUploadStatus" role="status" style="margin-top:6px"></div><div class="progress" style="margin-top:10px"><i id="ppProg"></i></div><div id="ppStatus" class="muted small" role="status" style="margin-top:8px">Upload each PP once using its matching button. Processing and saved cards stay in this browser.</div><details class="small" style="margin-top:12px"><summary>Advanced: source audit exports</summary><div class="flex" style="flex-wrap:wrap;margin-top:10px"><button class="secondary" id="exportBrisnetSourceAudit" type="button">Export Brisnet Source Audit</button><button class="secondary" id="exportBrisnetModelAudit" type="button">Export Brisnet Model Input Audit</button></div></details><details id="manageSavedCards" class="small" style="margin-top:12px"><summary>Manage saved cards</summary><div class="flex" style="flex-wrap:wrap;margin-top:10px"><button class="secondary" id="clearPP">Clear selected PP evidence</button><button class="secondary" id="resetSample">Reset DRF sample card</button></div><p class="muted">Clear affects the source selected in Horse grid / Pace source. Reset loads the demonstration into the DRF slot. The other PP source is retained.</p></details></div>
+<div class="card span12"><h3 class="sectiontitle">3. Freeze selections</h3><div class="flex" style="align-items:center;gap:12px;flex-wrap:wrap"><button class="primary" id="freezeAllModels">Freeze All Models</button><span class="small muted" id="freezeAllStatus" role="status">Local timestamped research export; no wager authorization. Verify before post time.</span></div></div>
 </div></section>
 
 <!-- Retired NYRA loading controls: preserved for future restoration; existing handlers remain intact. -->
@@ -380,7 +383,7 @@ function renderDashboard(){
  try{picksPreview.refresh();}catch(e){document.getElementById('printPicksStatus').textContent='PDF refresh failed: '+e.message+'. Print Picks again after checking the loaded card.';}
  for(const el of target.querySelectorAll('details'))el.open=openDetails.includes(el.className);
  document.getElementById('dashboardPaperSource').onchange=e=>{dashboardPaperSource=e.target.value;renderDashboard();document.getElementById('dashboardPaperSource').focus();};
- document.getElementById('dashboardFreeze').onclick=()=>{document.getElementById('freezeAllModels').click();document.getElementById('dashboardSnapshotStatus').textContent=document.getElementById('freezeAllStatus').textContent;};
+ target.querySelector('#dashboardFreeze')?.closest('.dashboard-plan-controls')?.remove();
 }
 // Research-only local freeze. Captures the current rendered model evidence without changing ratings.
 document.getElementById('freezeAllModels').onclick=()=>{
@@ -409,7 +412,7 @@ structuredRecorder.id='structuredRecorder';
 structuredRecorder.className='note small span12';
 structuredRecorder.style.marginTop='12px';
 structuredRecorder.innerHTML='<b>Verified race recorder (research only)</b><p class="muted">Select the current race, confirm official field/scratches and surface, and enter an official post-time reference. The original PDF SHA-256 must be present. The resulting file is local-only until independently anchored.</p><div class="grid"><label class="span6">Official post time (with timezone, e.g. 2026-10-26T16:00:00-04:00)<input id="recorderPost" type="text" placeholder="YYYY-MM-DDTHH:MM:SS-04:00"></label><label class="span6">Official post-time HTTPS reference<input id="recorderPostUrl" type="url" placeholder="https://..."></label><label class="span6">Official starter roster source (HTTPS)<input id="recorderStarterSource" type="url" placeholder="https://official-source/..."></label><label class="span6">Confirmed starters (one per line: PROGRAM | HORSE NAME)<textarea id="recorderStarterRoster" rows="4" placeholder="1 | Horse Name"></textarea></label><label class="span6"><input id="recorderFieldVerified" type="checkbox" style="width:auto"> I verified runners and scratches against official entries</label><label class="span6"><input id="recorderSurfaceVerified" type="checkbox" style="width:auto"> I verified the race surface</label></div><button class="secondary" id="recorderFreezeRace" type="button">Freeze current race (structured research)</button><div id="recorderFreezeStatus" role="status" class="small muted" style="margin-top:8px">Not frozen. Independent server timestamp not established.</div>';
-document.getElementById('raceDayDashboard').insertAdjacentElement('afterend',structuredRecorder);
+const recorderDetails=document.createElement('details');recorderDetails.className='card span12';recorderDetails.innerHTML='<summary>Advanced: verified race recorder</summary>';recorderDetails.append(structuredRecorder);document.querySelector('#public > .grid').append(recorderDetails);
 // Recompute the diagnostic immediately when official roster evidence is edited.
 for(const id of ['recorderStarterRoster','recorderStarterSource']){
  document.getElementById(id).addEventListener('input',()=>renderDashboard());
@@ -548,6 +551,8 @@ function renderHeader(){
  document.getElementById("raceCount").textContent=`Race ${race.race} · ${Object.keys(activeCard.races).length} races on this card`;
  racebar.innerHTML=Object.keys(activeCard.races).sort((a,b)=>+a-+b).map(n=>`<button class="racebtn ${+n===race.race?"active":""}" data-race="${n}">${n}</button>`).join("");
  racebar.querySelectorAll(".racebtn").forEach(b=>b.onclick=()=>selectRace(+b.dataset.race));
+ document.getElementById('prepCardIdentity').textContent=`${activeCard.track||race.track} · ${activeCard.date||race.date} · Race ${race.race} · ${race.surface} · ${race.dist||'distance unavailable'}`;
+ document.getElementById('prepRaceSelect').innerHTML=Object.keys(activeCard.races).sort((a,b)=>+a-+b).map(n=>`<option value="${n}" ${+n===+race.race?'selected':''}>Race ${n}</option>`).join('');
  raceDate.value=race.date;raceNo.value=race.race;
  const trackName=(race.track||activeCard.track||"").toLowerCase();
  if(trackName.includes("saratoga"))track.value="saratoga";
@@ -564,6 +569,7 @@ function renderPaceCardStatus(){
  document.getElementById('paceCardStatus').textContent='Showing '+(provider==='BRISNET'?'Brisnet':'DRF')+' · '+(race.track||activeCard.track)+' · '+race.date+' · Race '+race.race+' · '+(activeCard.sourceName||'saved card')+'.'+(source?.reason?' Brisnet unavailable for this race: '+source.reason+' Showing the selected DRF card as fallback.':'');
 }
 document.getElementById('ppSourceView').onchange=()=>{const provider=document.getElementById('ppSourceView').value,card=providerCards[provider];if(!card){document.getElementById('providerUploadStatus').textContent='Upload a '+provider+' card first.';document.getElementById('ppSourceView').value=cardProvider(activeCard);return;}save();activeCard=structuredClone(card);const n=activeCard.races[race.race]?race.race:+Object.keys(activeCard.races).sort((a,b)=>+a-+b)[0];race=structuredClone(activeCard.races[n]);restoreRunnerEdits();save();renderAll();};
+document.getElementById('prepRaceSelect').onchange=e=>selectRace(+e.target.value);
 function selectRace(n){if(!activeCard.races[n])return;race=structuredClone(activeCard.races[n]);restoreRunnerEdits();renderAll();window.scrollTo({top:0,behavior:"smooth"})}
 function renderHorses(){
  const mlProvider=morningLineProvider(),mlRace=providerRace(mlProvider).race;
