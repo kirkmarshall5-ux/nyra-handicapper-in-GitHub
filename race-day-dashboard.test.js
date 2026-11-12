@@ -152,11 +152,11 @@ test('fallback cannot substitute a different horse with the same program',()=>{
  assert.deepEqual(d.models.map(m=>m.provider),['BRISNET','BRISNET','DRF','BRISNET']);
  assert.equal(d.shortlist[0].top_four_models,4);assert.equal(d.shortlist[0].ranks.drfFinisher,undefined);assert.equal(d.paper_plans.drfFinisher,undefined);
  const html=dashboardHtml(d);assert.match(html,/4\/4/);assert.doesNotMatch(html,/DRF<br>Finisher|value="drfFinisher"/);
- assert.ok(html.indexOf('Brisnet<br>Contender')<html.indexOf('<th scope="col">Brisnet-RR'));
+ assert.ok(html.indexOf('Brisnet<br>Finisher</th>')<html.indexOf('Brisnet<br>Contender</th>'));
  assert.ok(html.indexOf('Brisnet-RR</th>')<html.indexOf('Brisnet<br>Finisher</th>'));assert.ok(html.indexOf('Brisnet<br>Finisher</th>')<html.indexOf('DRF Contender<br>Late +50%</th>'));
  assert.match(html, /<th scope="col">DRF Contender<br>Late \+50%<\/th>/);
  assert.doesNotMatch(html, /<th scope="col">DRF<br>Contender<\/th>/);
- const row=d.shortlist.find(h=>h.n==='1');row.ranks={brisContender:1,brisResearch:2,brisFinisher:3,drfContender:4,morningLine:5};assert.match(dashboardHtml({...d,shortlist:[row]}),/<td>1<\/td><td>2<\/td><td>3<\/td><td>4<\/td><td>5<\/td>/);
+ const row=d.shortlist.find(h=>h.n==='1');row.ranks={brisContender:1,brisResearch:2,brisFinisher:3,drfContender:4,morningLine:5};assert.match(dashboardHtml({...d,shortlist:[row]}),/<td class="model-rr">2<\/td><td>3<\/td><td>1<\/td><td>4<\/td><td>5<\/td>/);
  });
 
 test('production Brisnet dashboard adapters match each unchanged scoring engine',async()=>{
@@ -176,7 +176,7 @@ test('Prime Power is a source-only display column and preserves all orders and m
  for(const k of ['shortlist','remaining','models','paper_plans'])assert.deepEqual(d[k],baseline[k]);
  assert.deepEqual(i,before);
  const html=dashboardHtml(d);
- assert.match(html,/<th scope="col">Prime Power<\/th><th scope="col">Brisnet/);
+ assert.match(html,/<th scope="col">Prime Power<\/th><th scope="col" class="model-rr">Brisnet-RR/);
  assert.match(html,/<td>110\.0 \(3rd\)<\/td>/);
  assert.match(html,/<td>200\.0 \(1st\)<\/td>/);
  i.sources.BRISNET.race.date='2026-10-22';
