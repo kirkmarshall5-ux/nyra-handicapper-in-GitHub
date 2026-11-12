@@ -80,7 +80,7 @@ for(const profile of profiles){
   assert.equal(await page.locator('#raceDayDashboard option[value=drfFinisher]').count(),0);
   for(const note of await page.locator('#raceday .model-evidence-note').all())assert.equal(await note.isVisible(),false,'Coverage and optional-gap boxes must not appear below models');
   assert.ok(boxes.every((b,i)=>i===0||boxes[i-1].x<b.x),'Panels match shared grid order across one scrollable row');
-  assert.equal(await page.locator('#brisResearchCandidates').locator('..').locator('.kicker').innerText(),'Brisnet RR');
+  assert.equal(await page.locator('#brisResearchCandidates').locator('..').locator('.kicker').textContent(),'Brisnet RR');
   assert.doesNotMatch(await page.locator('#brisFinisherCandidates').innerText(),/60% recent speed/);
   for(const id of ['contenderCandidates','brisContenderCandidates']){
    const panel=page.locator('#'+id);
@@ -113,6 +113,7 @@ for(const profile of profiles){
    assert.equal(await page.locator('#raceday #'+id).count(),0);
   }
   assert.equal(await page.locator('#dashboardFreeze').count(),0);
+  if(await page.locator('#structuredRecorder').isVisible())await page.getByText('Advanced: verified race recorder',{exact:true}).click();
   for(const id of ['exportBrisnetSourceAudit','recorderFreezeRace'])assert.equal(await page.locator('#'+id).isVisible(),false);
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
   await page.screenshot({path:`${out}/${profile.name}-race-day-prep.png`,fullPage:true});
