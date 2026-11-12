@@ -177,3 +177,47 @@ test('Gate 43 single-race export excludes prior stored freezes while preserving 
  assert.match(freezeResearchSnapshot({snapshot:next,existing:stored,now:now+2000}).errors.join(' '),/already frozen/);
  assert.equal(exported.anchorStatus,'UNVERIFIED_LOCAL_EXPORT');
 });
+
+
+test('Gate 43 export binds exact field, scratches, surface and rankings to its digest',async()=>{
+ const snap=fixture();
+ snap.fieldSnapshot[1].odds='SCR';
+ snap.field=[{program:'1',horse:'A'}];
+ for(const model of snap.models){
+  model.rankings=[{program:'1',horse:'A',score:75}];
+  model.fullFieldRanked=true;
+ }
+ const invalid=freezeResearchSnapshot({snapshot:snap,now});
+ assert.deepEqual(invalid.errors,[],'scratched original runner is excluded from active field');
+ const exported=await sealSingleRaceResearchSnapshot(invalid.record);
+ assert.equal((await verifyResearchExport(exported)).valid,true);
+ assert.equal(exported.records.length,1);
+ const mutate=[
+  r=>{r.field[0].horse='Changed Horse';},
+  r=>{r.fieldSnapshot[1].odds='5/1';},
+  r=>{r.surface='Turf';},
+  r=>{r.models[0].rankings[0].score=99;},
+  r=>{r.scheduledPost='2026-10-19T15:00:00Z';}
+ ];
+ for(const change of mutate){
+  const altered=structuredClone(exported);
+  change(altered.records[0]);
+  const result=await verifyResearchExport(altered);
+  assert.equal(result.valid,false,'post-export modification must invalidate seal');
+  assert.match(result.errors.join(' '),/digest mismatch/);
+ }
+});
+
+test('Gate 43 export refuses post-time and duplicate race freezes',async()=>{
+ const initial=freezeResearchSnapshot({snapshot:fixture(),now}).record;
+ const rejected=freezeResearchSnapshot({snapshot:fixture(),existing:[initial],now:now+1000});
+ assert.equal(rejected.record,null);
+ assert.match(rejected.errors.join(' '),/already frozen/);
+ const late=freezeResearchSnapshot({snapshot:fixture(),now:Date.parse(fixture().scheduledPost)});
+ assert.equal(late.record,null);
+ assert.match(late.errors.join(' '),/at or after scheduled post/);
+ const exported=await sealSingleRaceResearchSnapshot(initial);
+ const duplicated=await sealResearchSnapshots([initial,initial]);
+ assert.equal((await verifyResearchExport(exported)).valid,true);
+ assert.equal((await verifyResearchExport(duplicated)).valid,false);
+});
