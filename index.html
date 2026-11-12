@@ -55,7 +55,9 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 @media(max-width:600px){.dashboard-readiness{grid-template-columns:1fr}.dashboard-heading{align-items:flex-start}.dashboard-heading .badge{white-space:nowrap}.dashboard-heading .sectiontitle{font-size:17px}.dashboard-table th:first-child{width:32%}}
 
 /* Keep selected race context below the existing app header while scrolling. */
-#raceContext{position:sticky;top:var(--app-header-height,130px);z-index:15;align-self:start;min-width:0;background:#111b2c;box-shadow:0 8px 18px #0005;border-top:3px solid var(--gold);padding:12px 16px}
+#raceContext{position:sticky;top:var(--app-header-height,130px);z-index:15;align-self:start;min-width:0;background:#111b2c;box-shadow:0 8px 18px #0005;border-top:3px solid var(--gold);padding:12px 16px;margin-bottom:14px}
+#raceContext .race-context-details{border-top:1px solid var(--line);margin-top:10px;padding-top:10px;line-height:1.4}
+#raceContext .race-context-details:has(#raceConditions:empty):has(#declaredScratches:empty){display:none}
 #raceContext .hero{align-items:center;gap:12px}
 #raceContext .hero>div{min-width:0}
 #raceContext h2{font-size:22px;margin:4px 0 7px}
@@ -95,15 +97,16 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 }
 </script>
 <main>
-<section id="raceday">
-<div class="grid">
 <section id="raceContext" class="card span12" aria-label="Track and race navigation">
 <div class="hero">
 <div><div class="kicker" id="cardKicker">Active race card</div><h2 id="raceTitle">Belmont Park · Race 1</h2>
 <div class="badges" id="raceBadges"><span class="badge gold">1 1/16M Dirt</span><span class="badge">Maiden Special Weight · $100,000</span><span class="badge">12:05 PM</span><span class="badge green">Public NYRA card</span></div></div>
 <div class="race-navigation"><div class="muted small" id="raceCount" style="margin-bottom:5px">Races on this card</div><div class="racebar" id="racebar" aria-label="Select race"></div></div>
-</div></section>
-<div class="card span12"><div id="raceConditions" class="small muted"></div><div id="declaredScratches" class="small muted" role="status"></div></div>
+</div>
+<div class="race-context-details"><div id="raceConditions" class="small muted"></div><div id="declaredScratches" class="small muted" role="status"></div></div>
+</section>
+<section id="raceday">
+<div class="grid">
 <section id="raceDayDashboard" class="card span12" aria-label="Race day dashboard"></section>
 
 <div class="span12 comparison-row">
@@ -666,7 +669,7 @@ function renderConnections(){
 function renderWeights(){weightsDiv()}
 function weightsDiv(){if(brisnetPaceDisplay(race).available){document.getElementById("weights").textContent=BRISNET_METHODS.v44c+" Pace has no weight in this native base version. No calibrated winning probabilities.";resetWeights.disabled=true;resetWeights.textContent="Brisnet research weights locked";return;}document.getElementById("weights").innerHTML='<div class="small">Last verified Beyer: 40 · best of latest 3: 22 · PP jockey: 7 · PP trainer: 8 · trainer context for ≤2 starts: 12. Verified zero figures remain included; only missing components are omitted. Figure values require source verification. V4.4c adjustments are capped at ±6. Rank unrounded totals, then horse name.</div>';resetWeights.disabled=true;resetWeights.textContent="V4.4c weights locked"}
 
-document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));b.classList.add("active");if(b.dataset.tab==="pace"){preferBrisnetPaceCard();renderAll();}["raceday","pace","connections","public","knowledge"].forEach(id=>document.getElementById(id).classList.toggle("hidden",id!==b.dataset.tab))});
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));b.classList.add("active");document.getElementById("raceContext").classList.toggle("hidden",b.dataset.tab==="knowledge");if(b.dataset.tab==="pace"){preferBrisnetPaceCard();renderAll();}["raceday","pace","connections","public","knowledge"].forEach(id=>document.getElementById(id).classList.toggle("hidden",id!==b.dataset.tab))});
 raceNotes.oninput=e=>{const cs=state.cards[activeCard.id]||(state.cards[activeCard.id]={runners:{},notes:{}});cs.notes=cs.notes||{};cs.notes[race.race]=e.target.value;save()};
 
 let nyraUpdatePending=false;
