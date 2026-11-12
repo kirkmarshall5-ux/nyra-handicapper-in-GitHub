@@ -31,6 +31,30 @@ for(const profile of profiles){
   await page.locator('#raceTitle').waitFor();
   assert.equal(errors.length,0,'Uncaught page errors: '+errors.join(' | '));
  });
+ await check('D01a-shared-race-header-across-tabs',async()=>{
+  for(const tab of ['raceday','pace','connections','public']){
+   await page.locator(`[data-tab="${tab}"]`).click();
+   assert.equal(await page.locator('#raceContext').isVisible(),true);
+   assert.equal(await page.locator('#raceContext #raceConditions').count(),1);
+   await page.evaluate(()=>window.scrollTo(0,900));
+   const box=await page.locator('#raceContext').boundingBox(),header=await page.locator('body>header').boundingBox();
+   assert.ok(box.y>=header.y+header.height-2,'Shared race header must not scroll behind app header');
+   assert.ok(box.y+box.height<profile.viewport.height,'Header must leave room for content');
+   const buttons=page.locator('#racebar button');
+   if(await buttons.count()>1){
+    await buttons.nth(1).click();assert.match(await page.locator('#raceTitle').textContent(),/Race 2/);
+    assert.equal(await buttons.nth(1).getAttribute('class'),'racebtn active');
+    assert.equal(await page.locator('#prepRaceSelect').inputValue(),'2');
+    await buttons.first().click();
+   }
+   await page.screenshot({path:`${out}/${profile.name}-shared-header-${tab}.png`});
+   await page.evaluate(()=>window.scrollTo(0,0));
+  }
+  await page.locator('[data-tab="knowledge"]').click();
+  assert.equal(await page.locator('#raceContext').isVisible(),false);
+  await page.locator('[data-tab="raceday"]').click();
+  assert.equal(await page.locator('#raceContext').isVisible(),true);
+ });
  await check('D01b-race-context-stays-visible-on-scroll',async()=>{
   const context=page.locator('#raceContext');
   const title=await page.locator('#raceTitle').textContent();
