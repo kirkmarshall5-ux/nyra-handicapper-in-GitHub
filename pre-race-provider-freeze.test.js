@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {freezeResearchSnapshot,sealResearchSnapshots,verifyResearchExport} from './pre-race-provider-freeze.js';
+import {freezeResearchSnapshot,sealResearchSnapshots,sealSingleRaceResearchSnapshot,verifyResearchExport} from './pre-race-provider-freeze.js';
 const now=Date.parse('2026-10-19T15:00:00Z');
 const fixture=(provider='BRISNET')=>({provider,cardId:provider+'-card',track:'Belmont Park',date:'2026-10-19',race:1,parserVersion:'verified-parser',sourceName:provider+'.pdf',sourceSha256:'a'.repeat(64),fieldSnapshot:[{program:'1',horse:'A'},{program:'2',horse:'B'}],scheduledPost:'2026-10-19T16:00:00Z',postTimeEvidence:{scheduledPost:'2026-10-19T16:00:00Z',verification:'USER_CONFIRMED_OFFICIAL_REFERENCE_NOT_INDEPENDENTLY_ANCHORED',sourceUrl:'https://www.nyra.com/'},fieldVerified:true,surfaceVerified:true,surface:'Dirt',field:[{program:'1',horse:'A'},{program:'2',horse:'B'}],models:['V44C','FINISHER','CONTENDER'].map(family=>({family,provider,modelId:provider+'-'+family,decision:'RATEABLE',fullFieldRanked:true,rankings:[{program:'1',horse:'A',score:75},{program:'2',horse:'B',score:70}]}))});
 test('provider isolation, duplicate protection and no bet',()=>{
@@ -159,4 +159,21 @@ test('official starter roster detects a Churchill 7-style missing starter despit
  assert.match(freezeResearchSnapshot({snapshot:snap,now}).errors.join(' '),/absent from official starter roster/);
  snap.officialStarterRoster=[{program:'1',horse:'A'},{program:'1',horse:'A'}];
  assert.match(freezeResearchSnapshot({snapshot:snap,now}).errors.join(' '),/duplicate official starter/);
+});
+
+
+test('Gate 43 single-race export excludes prior stored freezes while preserving duplicate guard',async()=>{
+ const previous=freezeResearchSnapshot({snapshot:fixture(),now}).record;
+ const next=fixture();next.race=2;
+ const existing=[previous];
+ const created=freezeResearchSnapshot({snapshot:next,existing,now:now+1000});
+ assert.deepEqual(created.errors,[]);
+ const stored=[...existing,created.record];
+ const exported=await sealSingleRaceResearchSnapshot(created.record);
+ assert.equal(stored.length,2,'local immutable history retains both races');
+ assert.equal(exported.records.length,1,'independent anchor excludes prior race');
+ assert.equal(exported.records[0].race,2);
+ assert.equal((await verifyResearchExport(exported)).valid,true);
+ assert.match(freezeResearchSnapshot({snapshot:next,existing:stored,now:now+2000}).errors.join(' '),/already frozen/);
+ assert.equal(exported.anchorStatus,'UNVERIFIED_LOCAL_EXPORT');
 });

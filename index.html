@@ -218,7 +218,7 @@ import {correctRaceField} from "./race-field-corrections.js?v=20261101-fieldname
 import {prepareRaceDayResearchFreeze} from "./pre-race-raceday-integration.js";
 import {parseOfficialStarterRoster} from "./official-starter-input.js";
 import {officialPostTimeSourceType} from "./scripts/gate43-post-source.js";
-import {sealResearchSnapshots} from "./pre-race-provider-freeze.js";
+import {sealSingleRaceResearchSnapshot} from "./pre-race-provider-freeze.js";
 import {readResearchFreezes,writeResearchFreezes} from "./pre-race-recorder-storage.js";
 import {fetchOtherTrackCombinedUpdate,otherTrackSource,OTHER_TRACK_FEEDS_READY} from "./other-track-updates.js?v=20261025-staged1";
 import {prepareCombinedOtherTrackUpdate} from "./other-track-update-plan.js?v=20261025-staged1";
@@ -438,7 +438,8 @@ document.getElementById('recorderFreezeRace').onclick=async()=>{
   });
   if(result.errors.length)throw Error(result.errors.join(' | '));
   const records=[...existing,result.record];
-  const exported=await sealResearchSnapshots(records);
+  // Anchor only the new race; keep the full immutable history in local storage.
+  const exported=await sealSingleRaceResearchSnapshot(result.record);
   writeResearchFreezes(records);
   const blob=new Blob([JSON.stringify(exported,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),link=document.createElement('a');
   link.href=url;link.download='NYRA_STRUCTURED_RESEARCH_'+provider+'_'+source.date+'_R'+source.race+'.json';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
