@@ -109,7 +109,7 @@ test('all dynamic labels are escaped and model details remain compact',()=>{
  const i=input(race([horse(1,{name:'<img src=x onerror=alert(1)>'})]));
  const d=buildRaceDashboard(i,(_,r)=>ranked(r,[1]));const html=dashboardHtml(d);
  assert.doesNotMatch(html,/<img/);assert.match(html,/&lt;img/);
- assert.match(html,/<details class="dashboard-paper">/);
+ assert.doesNotMatch(html,/dashboard-paper|Paper betting plan/);
  assert.doesNotMatch(html,/100%|confidence|recommended bet/i);
 });
 
