@@ -609,7 +609,7 @@ for(const profile of profiles){
    await popup.waitForURL(/^blob:/,{timeout:20000,waitUntil:'commit'});
    const firstUrl=popup.url();
    const pdf=await page.evaluate(async url=>new TextDecoder().decode(await (await fetch(url)).arrayBuffer()),firstUrl);
-   assert.ok(pdf.startsWith('%PDF-1.4'));assert.match(pdf,/Race Day Handicapper/);assert.match(pdf,/Finish Order/);
+   assert.ok(pdf.startsWith('%PDF-1.4'));assert.match(pdf,/Race Day Handicapper/);assert.match(pdf,/Notes:/);assert.doesNotMatch(pdf,/Finish Order|\$4 Win|\$2 Exacta box/);assert.match(pdf,/\/Count 2/);
    // Use the application's normal field action, then observe the already-open PDF refresh.
    await page.locator('[data-tab="raceday"]').click();
    const action=page.locator('#horseTable button[data-field-action="scratch"]').first();
@@ -617,7 +617,7 @@ for(const profile of profiles){
     await action.click();
     await popup.waitForURL(url=>url.toString().startsWith('blob:')&&url.toString()!==firstUrl,{timeout:20000,waitUntil:'commit'});
     const changed=await page.evaluate(async url=>new TextDecoder().decode(await (await fetch(url)).arrayBuffer()),popup.url());
-    assert.notEqual(changed,pdf);assert.match(changed,/Scratched:/);
+    assert.notEqual(changed,pdf);assert.match(changed,/Ranks 1-4 only/);
    }
    await page.screenshot({path:`${out}/${profile.name}-print-picks.png`,fullPage:true});
   }finally{await popup.close();}
