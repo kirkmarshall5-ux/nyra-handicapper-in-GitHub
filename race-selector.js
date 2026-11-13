@@ -2,7 +2,7 @@
 import {mix1Distance,MIX1_ID} from './mix1-rankings.js';
 import {RELEASE_ID} from './rankings-release.js';
 import {MODEL} from './contender-model.js';
-import {BRISNET_MODEL_IDS,isBrisnetRace} from './brisnet-models.js';
+import {BRISNET_MODEL_IDS,isBrisnetRace} from './brisnet-models.js?v=20261113-status';
 export const SELECTOR_VERSION='RACE-SELECTOR-v1';
 export const MODEL_KEYS=Object.freeze(['v44c','contender','mix1']);
 export const EQUAL_WEIGHTS=Object.freeze({v44c:1/3,contender:1/3,mix1:1/3});

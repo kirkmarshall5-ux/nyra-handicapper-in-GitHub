@@ -41,11 +41,11 @@ test('Priority 1: production Finisher and all native Brisnet heads agree with di
   assert.deepEqual(displayed.rankings.map(h=>[h.program,h.rank,h.score]),direct.rankings.map(h=>[h.n,h.rank,h.score]));
   assert.equal(displayed.bettingEnabled,false);
   assert.equal(displayed.probabilityCalibrated,false);
-  assert.equal(displayed.decision,'PASS');
+  assert.equal(displayed.decision,'RATEABLE');
  }
  assert.equal(audit.models.finisher.bettingEnabled,false);
  assert.equal(audit.models.finisher.probabilityCalibrated,false);
- assert.equal(audit.models.finisher.decision,'PASS');
+ assert.equal(audit.models.finisher.decision,'RATEABLE');
  assert.deepEqual(r,original,'source card cannot be mutated by replay');
 });
 test('Priority 1: one-furlong boundary changes matching inputs, not cross-surface or sprint/route rules',()=>{

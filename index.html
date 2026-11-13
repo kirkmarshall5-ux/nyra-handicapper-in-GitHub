@@ -229,9 +229,9 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 </main>
 
 <script type="module">
-import {buildPicksSheet,createPicksPreview} from "./print-picks.js?v=20261112-two-page-preview";
+import {buildPicksSheet,createPicksPreview} from "./print-picks.js?v=20261113-status";
 import {correctRaceField} from "./race-field-corrections.js?v=20261101-fieldnames";
-import {prepareRaceDayResearchFreeze} from "./pre-race-raceday-integration.js";
+import {prepareRaceDayResearchFreeze} from "./pre-race-raceday-integration.js?v=20261113-status";
 import {parseOfficialStarterRoster} from "./official-starter-input.js";
 import {officialPostTimeSourceType} from "./scripts/gate43-post-source.js";
 import {sealSingleRaceResearchSnapshot} from "./pre-race-provider-freeze.js";
@@ -247,15 +247,15 @@ import {runnerStateKey} from "./card-loader.js?v=20261008-qa1";
 import {researchRace} from "./jockey-research.js?v=20261008-qa1";
 import {evidenceProfile} from "./scoring-engine.js?v=20261008-qa1";
 import {estimatedWinLine,winLineFields,winLineNote} from "./fair-odds.js?v=20261015-mix1-line1";
-import {finisherRankingHtml} from "./finisher-ranking-display.js?v=20261112-compact";
-import {buildRaceDashboard,dashboardHtml,selectMorningLineProvider,morningLineForRunner,morningLineNumber} from "./race-day-dashboard.js?v=20261112-allhorses";
+import {finisherRankingHtml} from "./finisher-ranking-display.js?v=20261113-status";
+import {buildRaceDashboard,dashboardHtml,selectMorningLineProvider,morningLineForRunner,morningLineNumber} from "./race-day-dashboard.js?v=20261113-status";
 import {rankContenders} from "./contender-rankings.js?v=20261112-equibase-20261104-manualconditions";
-import {rankBrisnetModels} from "./brisnet-models.js?v=20261023-distance1";
+import {rankBrisnetModels} from "./brisnet-models.js?v=20261113-status";
 import {decodeTodayDistance} from "./finisher-drf-distance.js?v=20261018-5316";
 import {correctRaceConditions} from "./manual-race-conditions.js?v=20261104-conditions1";
-import {rankBrisnetResearch} from "./brisnet-research.js?v=20261104-bestlate25early75";
-import {brisnetRaceModelAudit} from "./brisnet-model-audit.js?v=20261023-distance1";
-import {brisnetRankingHtml,updateBrisnetMethods} from "./brisnet-ranking-display.js?v=20261022-layout3";
+import {rankBrisnetResearch} from "./brisnet-research.js?v=20261113-status";
+import {brisnetRaceModelAudit} from "./brisnet-model-audit.js?v=20261113-status";
+import {brisnetRankingHtml,updateBrisnetMethods} from "./brisnet-ranking-display.js?v=20261113-status";
 import {cardProvider,matchingCard,pairedRace,putProviderCard,readProviderCards,writeProviderCard,readProviderSession,writeProviderSession,writeProviderCardsSession} from "./dual-pp-cards.js?v=20261025-staged1";
 import {modelEvidenceHtml} from "./model-evidence-display.js?v=20261018-evidence1";
 import {passRaceDisplay} from "./pass-race-display.js?v=20261013-releaseqa1";
@@ -268,10 +268,10 @@ import {applyMorningLines} from "./morning-line-overlay.js?v=20261008-odds2";
 import {runnerContext} from "./release-context.js?v=20261008-qa1";
 import {PARSER_ID,restoredPage, parseRestoredCard} from "./release-card-parser.js?v=20261014-appendices1";
 
-import {runnerIdentityIssue} from "./finisher-inputs.js?v=20261101-namefallback";
+import {runnerIdentityIssue} from "./finisher-inputs.js?v=20261113-status";
 import {parsePPCard,SUPPORTED_PARSERS} from "./pp-format-router.js?v=20261112-fts";
 import {brisnetPaceDisplay,brisnetPaceMapHtml,brisnetCallRanksHtml,brisnetComparisonHtml,brisnetEvidenceHtml,brisnetContextHtml} from "./brisnet-pace-display.js?v=20261022-label1";
-import {BRISNET_METHODS} from "./brisnet-models.js?v=20261023-distance1";
+import {BRISNET_METHODS} from "./brisnet-models.js?v=20261113-status";
 
 import {readLegacyStorage,restoreStoredCard,migrateLegacyStorage} from "./pp-storage-migration.js?v=20261024-quota1";
 
@@ -882,15 +882,15 @@ modelMethodsPanel.innerHTML=`<div class="kicker">Model documentation</div><h3 cl
 <p class="small"><b>Version:</b> CONTENDER-BRISNET-20261021-input-v2. Uses native Brisnet Speed and pace figures from the Brisnet upload. It retains the original Contender coefficients; it does not include the DRF Late +50% adjustment.</p>
 <p class="small"><b>Speed:</b> latest Speed; weighted recent five starts at 50/25/15/7/3, normalized for available figures; best Speed among the latest three actual starts; same-surface average; same-surface/distance average; and 90-day surface peak. Surface averages use history within 365 days and a 90-day decay half-life. Distance matching is within 1 furlong and the same sprint/route category. A separate matched Speed trend requires at least three comparable starts.</p>
 <p class="small"><b>Pace and connections:</b> latest available matched E1 in sprints or E2 in routes, plus LP separately, among the latest five actual starts within 365 days, on the same surface/category and within 1 furlong. The Early and Late figures may come from different starts; there is no unmatched fallback. Reliable jockey/trainer rates require at least 25 starts, prefer verified annual records, and otherwise use verified local records. Layoff also contributes. Inputs are compared within the current field.</p>
-<p class="small"><b>Missing evidence:</b> unavailable career splits, pressure/late fit, workouts, trips and opposition are neutral. Missing optional features contribute neutral zero without redistributing coefficients. First-time starters and horses without verified latest Speed remain unranked. Native Brisnet rankings retain experimental PASS status, including complete fields.</p></details>
+<p class="small"><b>Missing evidence:</b> unavailable career splits, pressure/late fit, workouts, trips and opposition are neutral. Missing optional features contribute neutral zero without redistributing coefficients. First-time starters and horses without verified latest Speed remain unranked. Complete verified fields are RATEABLE. Missing required evidence retains PASS/HOLD. Model validation pending is a separate status.</p></details>
 <details open data-shared-model="brisResearch"><summary><b>Brisnet-RR</b></summary>
 <p class="small"><b>Version:</b> BRISNET-BEST063400-LATE25-EARLY75-20261104. Best Recent Research uses the same Brisnet source validation and eligible field as Brisnet Contender.</p>
 <p class="small"><b>Latest profile:</b> best Speed among the latest three actual starts has coefficient 0.6340027300. The other five speed components and matched Speed trend are neutralized. Early pace uses 75% of its original coefficient (a 25% reduction). Late pace uses 25% of its original coefficient (a 75% reduction).</p>
-<p class="small"><b>Label clarification:</b> the currently implemented Late setting is <b>original coefficient × 0.25</b>, not Late +25% (× 1.25). This describes the deployed formula; the formula has not been changed. Other connection, layoff, neutral-feature and matching rules remain those of Brisnet Contender. Scores are field-relative, not probabilities. First-time starters or unverified latest Speed remain unranked; experimental PASS remains in force.</p></details>
+<p class="small"><b>Label clarification:</b> the currently implemented Late setting is <b>original coefficient × 0.25</b>, not Late +25% (× 1.25). This describes the deployed formula; the formula has not been changed. Other connection, layoff, neutral-feature and matching rules remain those of Brisnet Contender. Scores are field-relative, not probabilities. First-time starters or unverified latest Speed remain unranked; race eligibility is separate from the model’s pending validation.</p></details>
 <details open data-shared-model="brisFinisher"><summary><b>Brisnet Finisher</b></summary>
 <p class="small"><b>Version:</b> FINISHER-3F-v1-20261018, native Brisnet adapter. Three fixed components: <b>60% recent Speed + 25% matched Speed + 15% matched LP</b>. Each component is converted to a within-field percentile from 0 to 100 before applying its weight.</p>
 <p class="small"><b>Recent Speed:</b> latest five actual starts at 50/25/15/7/3, normalized over available figures without shifting an older start into a missing start's slot. <b>Matched Speed:</b> available Speed among those five starts, within 365 days, same surface and sprint/route category, within 1 furlong; a 90-day half-life gives more recent starts more influence. <b>Late:</b> the latest available LP from that matching set.</p>
-<p class="small"><b>Missing evidence:</b> an optional missing matched Speed or LP component stays at percentile 50; the 60/25/15 weights are not redistributed. First-time starters and runners without verified latest Speed stay unranked. Unique horse names allow name-only ranking when program numbers are missing; names must be matched before wagering. Exact score ties use horse name. No extra running-style, jockey, trainer or workout bonus is added. The Shared Selections adapter retains experimental PASS status.</p></details>
+<p class="small"><b>Missing evidence:</b> an optional missing matched Speed or LP component stays at percentile 50; the 60/25/15 weights are not redistributed. First-time starters and runners without verified latest Speed stay unranked. Unique horse names allow name-only ranking when program numbers are missing; names must be matched before wagering. Exact score ties use horse name. No extra running-style, jockey, trainer or workout bonus is added. Complete verified fields are RATEABLE; incomplete fields retain PASS/HOLD. Model validation pending is shown separately.</p></details>
 <details open data-shared-model="drfContender"><summary><b>DRF Contender Late +50%</b></summary>
 <p class="small"><b>Version:</b> DRF-CONTENDER-LATE150-20261103. Uses the DRF upload's Beyers and TimeformUS Early/Late figures. This is the DRF Contender column currently shown in Shared Selections; a duplicate original DRF Contender column is not shown.</p>
 <p class="small"><b>Latest change:</b> only the original Late coefficient is multiplied by 1.50, from 0.1453618317 to 0.2180427476. Early and all other Contender coefficients remain unchanged. This is a relative coefficient increase, not a 50-point bonus or a 50% share of the score.</p>

@@ -3,9 +3,9 @@ import {ftsResearch} from './fts-research.js';
 import {matchingCard} from './dual-pp-cards.js?v=20261018-dual1';
 import {releaseRace} from './rankings-release.js?v=20261008-qa1';
 import {rankContenders} from './contender-rankings.js?v=20261104-manualconditions';
-import {rankBrisnetModels} from './brisnet-models.js?v=20261023-distance1';
-import {rankBrisnetResearch} from './brisnet-research.js';
-import {rankFinishers} from './finisher-inputs.js?v=20261101-namefallback';
+import {rankBrisnetModels} from './brisnet-models.js?v=20261113-status';
+import {rankBrisnetResearch} from './brisnet-research.js?v=20261113-status';
+import {rankFinishers} from './finisher-inputs.js?v=20261113-status';
 import {decodeTodayDistance} from './finisher-drf-distance.js?v=20261018-5316';
 
 const active=h=>h.odds!=='SCR'&&h.included_in_frozen_field!==false&&(!h.entry_status||h.entry_status==='REGULAR');
@@ -61,7 +61,7 @@ export function morningLineForRunner(source,h){
 function forecast(id,r){
  if(id==='brisContender')return rankBrisnetModels(r)?.contender||{rankings:[],decision:'HOLD',reason:'Brisnet source unavailable'};
  if(id==='brisResearch')return rankBrisnetResearch(r)||{rankings:[],decision:'HOLD',reason:'Brisnet source unavailable'};
- if(id==='brisFinisher')return {...rankFinishers(r),decision:'PASS'};
+ if(id==='brisFinisher')return rankFinishers(r);
  const base=releaseRace(r);
  return rankContenders(r,base,{displayPass:base.decision==='PASS'});
 }
@@ -69,7 +69,7 @@ function summarize(id,r,result,reason){
  const allowed=new Set(field(r).map(key)),rows=result?.rankings||[];
  if(!reason&&(new Set(rows.map(key)).size!==rows.length||rows.some(h=>!allowed.has(key(h))||field(r).some(x=>key(x)===key(h)&&program(x)&&program(h)&&program(x)!==program(h)))))reason='Forecast contains duplicate or unmatched runners; excluded';
  const rankings=reason?[]:rows.map((h,i)=>({rank:i+1,n:program(h),name:h.name,score:h.score??null}));
- return {id,label:labels[id],provider:providerFor(id),available:!reason,reason:reason||result?.reason||null,model_id:result?.model_id||null,decision:reason?'UNAVAILABLE':result?.decision||'HOLD',status:result?.status||result?.ranking_status||null,ranked:rankings.length,eligible:field(r).length,complete:!reason&&rankings.length===field(r).length&&rankings.length>0,rankings};
+ return {id,label:labels[id],provider:providerFor(id),available:!reason,reason:reason||result?.reason||null,model_id:result?.model_id||null,validation_status:result?.validation_status||(result?.research_only?'PENDING':null),decision:reason?'UNAVAILABLE':result?.decision||'HOLD',status:result?.status||result?.ranking_status||null,ranked:rankings.length,eligible:field(r).length,complete:!reason&&rankings.length===field(r).length&&rankings.length>0,rankings};
 }
 export function paperPlan(rankings,eligible=rankings){
  const h=rankings.slice(0,3),ticket=(label,cost,pairs)=>({label,cost,combinations:pairs});
@@ -135,10 +135,10 @@ export function dashboardHtml(d,selected='drfContender'){
  const table=rows=>`<div class="dashboard-scroll" tabindex="0" role="region" aria-label="Model ranking comparison"><table class="dashboard-table"><thead><tr><th scope="col">Horse</th><th scope="col">Prime Power</th><th scope="col" class="model-rr">Brisnet-RR</th><th scope="col">Brisnet<br>Finisher</th><th scope="col">Brisnet<br>Contender</th><th scope="col">DRF Contender<br>Late +50%</th><th scope="col">M/L<br>rank</th>${d.has_fts?'<th scope="col">FTS<br>Research</th>':''}</tr></thead><tbody>${rows.map(row).join('')}</tbody></table></div>`;
  return `<div class="dashboard-heading"><div><div class="kicker">Race day dashboard</div><h3 class="sectiontitle">Shared selections &amp; order</h3></div><span class="badge">${d.field.length} eligible runners</span></div>
  ${d.demonstration?'<p class="small muted">Demonstration card · upload current PPs before use.</p>':''}
- <div class="dashboard-readiness">${gridModelIds.map(id=>d.models.find(m=>m.id===id)).filter(Boolean).map(m=>`<div${m.id==='brisResearch'?' class="model-rr-summary"':''}><b>${esc(m.label)}</b><span>${m.available?`${m.ranked}/${m.eligible} ranked · ${m.complete?'full field':'incomplete field'} · ${esc(m.decision)}`:esc(m.reason)}</span></div>`).join('')}</div>
+ <div class="dashboard-readiness">${gridModelIds.map(id=>d.models.find(m=>m.id===id)).filter(Boolean).map(m=>`<div${m.id==='brisResearch'?' class="model-rr-summary"':''}><b>${esc(m.label)}</b><span>${m.available?`${m.ranked}/${m.eligible} ranked · ${m.complete?'full field':'incomplete field'} · ${esc(m.decision)}`:esc(m.reason)}</span>${m.validation_status==='PENDING'?'<small class="muted">Model validation pending · separate from race eligibility</small>':''}</div>`).join('')}</div>
  ${d.issues.length?`<p class="small bad" role="status">${d.issues.map(esc).join(' · ')}</p>`:''}
  ${d.starter_audit?.status==='MISMATCH'?`<p class="small bad" role="status">Official starter roster mismatch: missing ${esc(d.starter_audit.missing.join(', ')||'none')}; unexpected ${esc(d.starter_audit.unexpected.join(', ')||'none')}; identity mismatch ${esc(d.starter_audit.identityMismatch.join(', ')||'none')}. Structured freeze validation rejects this supplied-roster mismatch; the separate local Freeze All Models action is not certified.</p>`:d.starter_audit?.status==='MATCHES_SUPPLIED_ROSTER'?'<p class="tiny muted">Active field matches supplied starter roster; source and timing remain independently unverified.</p>':d.starter_audit?.status==='UNVERIFIED_ROSTER'?'<p class="small bad">Supplied starter roster is invalid or lacks an HTTPS source reference.</p>':''}
- <p class="tiny muted">Prime Power shows the number and rank printed in the Brisnet PP; printed ranks stay unchanged after scratches. Other numbers are each system’s rank. “—” means unranked or unavailable. ${d.has_fts?'FTS Research shows pedigree, trainer debut stats and recent workout percentile; it does not change model ranks. ?/* flag small pedigree samples.':''}</p>
+ <p class="tiny muted">Prime Power shows the number and rank printed in the Brisnet PP; printed ranks stay unchanged after scratches. RATEABLE means the field has ranking evidence; model validation and pre-race freeze verification are separate. Other numbers are each system’s rank. “—” means unranked or unavailable. ${d.has_fts?'FTS Research shows pedigree, trainer debut stats and recent workout percentile; it does not change model ranks. ?/* flag small pedigree samples.':''}</p>
  ${[...d.shortlist,...(d.remaining||[]),...(d.unranked||[])].length?table([...d.shortlist,...(d.remaining||[]),...(d.unranked||[])]):'<p class="small muted">Load verified PPs to compare selections.</p>'}
  <p class="tiny muted dashboard-footer">Morning line: ${esc(d.morning_line.provider)} · ${d.morning_line.ranked}/${d.morning_line.eligible} priced.</p><div class="dashboard-plan-controls"><button type="button" class="secondary" id="dashboardFreeze">Freeze full card</button><span id="dashboardSnapshotStatus" class="tiny muted" role="status"></span></div>`;
 }

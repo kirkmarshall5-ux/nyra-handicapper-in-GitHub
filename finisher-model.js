@@ -9,5 +9,5 @@ export function rankFinisherFeatures(entries){
  const observed=Object.fromEntries(Object.keys(FINISHER_SPEC.weights).map(k=>[k,eligible.map(h=>h[k]).filter(finite)]));
  const rankings=eligible.map(h=>{const components=Object.fromEntries(Object.keys(FINISHER_SPEC.weights).map(k=>[k,{raw:finite(h[k])?h[k]:null,percentile:percentile(h[k],observed[k]),weight:FINISHER_SPEC.weights[k],status:finite(h[k])?'AVAILABLE':'UNKNOWN_NEUTRAL'}]));const contributions=Object.values(components).map(c=>c.percentile*c.weight);return {n:String(h.n),name:h.name,score:contributions.reduce((a,b)=>a+b,0),components,source:h.source||null};}).sort((a,b)=>b.score-a.score||(a.name<b.name?-1:a.name>b.name?1:0)).map((h,i)=>({...h,rank:i+1}));
  if(JSON.stringify(entries)!==before)throw Error('Input mutation');
- return {model_id:FINISHER_SPEC.id,status:!rankings.length?'HOLD':unrated.length?'PARTIAL_FIELD':'COMPLETE_FIELD',rankings,unrated,eligible_count:entries.length,probabilityCalibrated:false,bettingEnabled:false,research_only:true};
+ return {model_id:FINISHER_SPEC.id,decision:!rankings.length?'HOLD':unrated.length?'PASS':'RATEABLE',validation_status:'PENDING',status:!rankings.length?'HOLD':unrated.length?'PARTIAL_FIELD':'COMPLETE_FIELD',rankings,unrated,eligible_count:entries.length,probabilityCalibrated:false,bettingEnabled:false,research_only:true};
 }

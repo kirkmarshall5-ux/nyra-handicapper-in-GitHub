@@ -14,7 +14,7 @@ test('six panel identities, ordering, scores and provider tags match source outp
   assert.deepEqual(frozen.rankings,[{program:'2',horse:'Beta',score:87},{program:'1',horse:'Alpha',score:80}]);
   assert.equal(frozen.provider,provider);
   assert.equal(frozen.family,family);
-  assert.equal(frozen.decision,provider==='BRISNET'?'PASS':'RATEABLE');
+  assert.equal(frozen.decision,provider==='BRISNET'&&family!=='FINISHER'?'PASS':'RATEABLE');
  }
 });
 test('Finisher HOLD is never mislabeled PASS',()=>{

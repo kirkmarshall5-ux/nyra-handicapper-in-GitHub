@@ -26,7 +26,7 @@ test('audit contains the displayed Finisher output and inputs, separate from res
  assert.equal(a.models.finisher.model_id,f.model_id);assert.deepEqual(a.models.finisher.rankings.map(({program,...h})=>h),f.rankings);
  assert.equal(a.models.finisher.inputs[0].late_pace,82);assert.equal(a.models.finisher.inputs[0].matched_speed,80);
  assert.equal(a.models.mix1.rankings[0].raw_features.surfaceDistance,null);
- for(const m of Object.values(a.models)){assert.equal(m.bettingEnabled,false);assert.equal(m.probabilityCalibrated,false);assert.equal(m.decision,'PASS');}
+ for(const m of Object.values(a.models)){assert.equal(m.bettingEnabled,false);assert.equal(m.probabilityCalibrated,false);assert.equal(m.decision,'RATEABLE');}
  assert.deepEqual(r,before);
 });
 test('matching trace explains exclusions and the different one/two-start thresholds',()=>{

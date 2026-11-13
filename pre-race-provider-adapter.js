@@ -1,14 +1,14 @@
 // Adapts exactly the current Race Day models; no scoring formula is changed.
-import {rankBrisnetModels} from './brisnet-models.js';
+import {rankBrisnetModels} from './brisnet-models.js?v=20261113-status';
 import {releaseRace} from './rankings-release.js';
 import {passRaceDisplay} from './pass-race-display.js';
 import {rankContenders} from './contender-rankings.js';
-import {rankFinishers} from './finisher-inputs.js?v=20261101-namefallback';
+import {rankFinishers} from './finisher-inputs.js?v=20261113-status';
 import {cardProvider} from './dual-pp-cards.js';
 export const eligible=h=>Boolean(h.n)&&h.odds!=='SCR'&&((!h.entry_status||h.entry_status==='REGULAR')?h.included_in_frozen_field!==false:['AE','ALSO_ELIGIBLE'].includes(h.entry_status)&&h.included_in_frozen_field===true);
 export function convertDisplayedModel(family,result,field,provider,{baselineDecision=null}={}){
  if(!result?.model_id||!Array.isArray(result.rankings))throw Error(family+' model unavailable');
- const status=family==='FINISHER'?(result.status==='HOLD'?'HOLD':provider==='BRISNET'||baselineDecision==='PASS'||result.status!=='COMPLETE_FIELD'?'PASS':'RATEABLE'):result.decision;
+ const status=family==='FINISHER'?(result.status==='HOLD'?'HOLD':baselineDecision==='PASS'||result.status!=='COMPLETE_FIELD'?'PASS':'RATEABLE'):result.decision;
  if(!['RATEABLE','PASS','HOLD'].includes(status))throw Error(family+' decision unavailable');
  const rankings=result.rankings.map(h=>({program:String(h.n),horse:h.name,score:family==='V44C'?(h.v44c_unrounded_score??h.base_rating??h.score):h.score}));
  const eligible=new Map(field.map(h=>[String(h.program),h.horse]));
@@ -19,7 +19,7 @@ export function convertDisplayedModel(family,result,field,provider,{baselineDeci
  }
  if(status==='RATEABLE'&&rankings.length!==field.length)throw Error(family+' incomplete RATEABLE panel');
  const fullFieldRanked=status==='RATEABLE'&&rankings.length===field.length;
- return {family,modelId:result.model_id,decision:status,fullFieldRanked,rankings,reason:result.reason||null,provider};
+ return {family,modelId:result.model_id,decision:status,fullFieldRanked,rankings,validation_status:result.validation_status||(result.research_only?'PENDING':null),reason:result.reason||null,provider};
 }
 // Separate rated-but-not-displayed runners from genuinely unrated runners.
 // DRF PASS displays only the top four provisional rows even when more have scores.
