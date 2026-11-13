@@ -1,5 +1,5 @@
 // Independent hypothesis model: never changes parent engines or authorizes bets.
-import {rankBrisnetModels,BRISNET_MODEL_IDS} from './brisnet-models.js';
+import {rankBrisnetModels,BRISNET_MODEL_IDS} from './brisnet-models.js?v=20261113-status';
 import {brisnetPaceDisplay} from './brisnet-pace-display.js';
 import {displayDistance} from './race-conditions.js';
 import {classifyRace,orderMetrics} from './race-selector.js';

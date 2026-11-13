@@ -1,4 +1,4 @@
-import {rankBrisnetModels} from './brisnet-models.js';
+import {rankBrisnetModels} from './brisnet-models.js?v=20261113-status';
 import {rankBrisnetPace,PACE_PROFILES} from './brisnet-pace-candidate.js';
 export const VERSION='V44C-PACE-BRISNET-v1';
 export const VARIANTS=Object.freeze(['CONTROL','PACE','LP_TIER_B','STYLE_PRESSURE','TURN','COMBINED']);

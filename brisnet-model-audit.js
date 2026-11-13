@@ -1,7 +1,7 @@
 // Read-only trace of the actual displayed models; MIX1 is retained as research.
-import {rankBrisnetModels} from './brisnet-models.js';
-import {finisherInputs} from './finisher-inputs.js';
-import {rankFinisherFeatures,FINISHER_SPEC} from './finisher-model.js';
+import {rankBrisnetModels} from './brisnet-models.js?v=20261113-status';
+import {finisherInputs} from './finisher-inputs.js?v=20261113-status';
+import {rankFinisherFeatures,FINISHER_SPEC} from './finisher-model.js?v=20261113-status';
 const finite=v=>typeof v==='number'&&Number.isFinite(v);
 const category=v=>finite(v)?v>=8?'route':'sprint':null;
 export function brisnetMatchTrace(h,r){
@@ -27,7 +27,7 @@ export function brisnetRaceModelAudit(r){
  if(!models)throw Error('Brisnet model adapter unavailable');
  const inputs=finisherInputs(r),finisher=rankFinisherFeatures(inputs);
  const native=Object.fromEntries(['v44c','mix1','contender'].map(id=>{const m=models[id];return [id,{model_id:m.model_id,decision:m.decision,bettingEnabled:m.bettingEnabled,probabilityCalibrated:m.probabilityCalibrated,eligible_count:m.eligible_count,rated_count:m.rated_count,unrated:m.unrated,rankings:m.rankings.map(h=>({program:h.n,name:h.name,rank:h.rank,score:h.score,raw_features:h.raw_features??null,component_scores:h.component_scores??null,effective_weights:h.effective_weights??null,available_weight:h.available_weight??null,feature_contributions:h.feature_contributions??null,trend_adjustment:h.trend_adjustment??null,evidence:h.evidence??null}))}]}));
- native.finisher={...finisher,decision:'PASS',rated_count:finisher.rankings.length,inputs,rankings:finisher.rankings.map(h=>({...h,program:h.n}))};
+ native.finisher={...finisher,rated_count:finisher.rankings.length,inputs,rankings:finisher.rankings.map(h=>({...h,program:h.n}))};
  return {race:r.race,date:r.date,surface:r.surface,distance_furlongs:r.distance_furlongs,conditions:r.conditions??null,parser_blockers:r.parser_blockers??[],
   displayed_models:['v44c','finisher','contender'],research_models:['mix1'],
   runners:(r.horses||[]).map(h=>({program:h.n,name:h.name,odds:h.odds??null,entry_status:h.entry_status??null,included_in_frozen_field:h.included_in_frozen_field??null,life_starts:h.life_starts??null,parser_blockers:h.parser_blockers??[],source_context:h.source_context??null,history:(h.ratings?.lines||[]).map(l=>({date:l.date,surface:l.surface,furlongs:l.furlongs,speed:l.speed,e1:l.e1,e2:l.e2,late:l.late,source_page:l.source?.page??null,source_text:l.source?.text??null}))})),

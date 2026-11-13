@@ -1,4 +1,4 @@
-import {FINISHER_SPEC,rankFinisherFeatures} from './finisher-model.js';
+import {FINISHER_SPEC,rankFinisherFeatures} from './finisher-model.js?v=20261113-status';
 import {contenderFeatures} from './contender-rankings.js';
 import {releaseRace} from './rankings-release.js';
 import {correctedMatchedSpeed} from './finisher-drf-distance.js?v=20261018-5316';
@@ -56,7 +56,7 @@ export function runnerIdentityIssue(horses=[],{allowMissingPrograms=false}={}){
 }
 export function rankFinishers(race){
  const field=(race.horses||[]).filter(active),issue=runnerIdentityIssue(field,{allowMissingPrograms:true});
- if(issue)return {model_id:FINISHER_SPEC.id,status:'HOLD',rankings:[],unrated:field.map(h=>({n:String(h.n??''),name:h.name,reason:issue})),eligible_count:field.length,probabilityCalibrated:false,bettingEnabled:false,research_only:true};
+ if(issue)return {model_id:FINISHER_SPEC.id,decision:'HOLD',validation_status:'PENDING',status:'HOLD',rankings:[],unrated:field.map(h=>({n:String(h.n??''),name:h.name,reason:issue})),eligible_count:field.length,probabilityCalibrated:false,bettingEnabled:false,research_only:true};
  const inputs=finisherInputs(race), originals=new Map();
  const numbered=inputs.map((h,i)=>{const id=String(i+1); originals.set(id,h); return {...h,n:id};});
  const result=rankFinisherFeatures(numbered);

@@ -1,5 +1,5 @@
 // Integration boundary for current Race Day. Research only; never changes rankings or wagers.
-import {displayedProviderModels} from './pre-race-provider-adapter.js';
+import {displayedProviderModels} from './pre-race-provider-adapter.js?v=20261113-status';
 import {verifyPostTimeEvidence} from './pre-race-post-time.js';
 import {freezeResearchSnapshot} from './pre-race-provider-freeze.js';
 

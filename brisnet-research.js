@@ -1,5 +1,5 @@
 // Separate research profile; the original Brisnet engine and coefficients are untouched.
-import {rankBrisnetModels} from './brisnet-models.js';
+import {rankBrisnetModels} from './brisnet-models.js?v=20261113-status';
 import {MODEL} from './contender-model.js';
 export const BRISNET_RESEARCH_ID='BRISNET-BEST063400-LATE25-EARLY75-20261104';
 export const BRISNET_RESEARCH_PROFILE=Object.freeze({best_recent:MODEL.contender.coefficients[1]+MODEL.contender.coefficients[2],late_multiplier:.25,early_multiplier:.75,trend_multiplier:0});
