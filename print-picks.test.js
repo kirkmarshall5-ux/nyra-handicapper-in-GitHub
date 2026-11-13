@@ -53,7 +53,9 @@ test('print grid limits each system to four ranks, includes Prime Power and FTS 
  const s=buildPicksSheet({cards:{BRISNET:c},card:c},ranked),r=s.races[0];
  assert.equal(r.columns[0].rankings[0].n,'5');assert.equal(r.fts[0].name,'Horse 5');
  assert.ok(r.columns.every(col=>col.rankings.length<=4));assert.ok(r.rows.every(h=>Object.values(h.ranks).every(x=>x===null||x<=4)));
- s.races=Array.from({length:11},(_,i)=>({...r,race:i+1}));const pdf=new TextDecoder().decode(picksPdf(s));
- assert.match(pdf,/\/Count 2/);assert.match(pdf,/RACE 11/);assert.match(pdf,/FIRST-TIME STARTERS/);assert.match(pdf,/Horse 5/);assert.match(pdf,/WORK -/);assert.match(pdf,/Notes:/);
+ s.races=Array.from({length:12},(_,i)=>({...r,race:i+1}));const pdf=new TextDecoder().decode(picksPdf(s));
+ assert.match(pdf,/\/Count 2/);assert.match(pdf,/RACE 12/);assert.match(pdf,/FIRST-TIME STARTERS/);assert.match(pdf,/Horse 5/);assert.match(pdf,/WORK -/);assert.match(pdf,/Notes:/);
  assert.doesNotMatch(pdf,/Finish Order|Exacta|Tri box|\$4 Win/);
 });
+
+test('notes retain their label and open space without a ruled line',()=>{const c=card(),sheet=buildPicksSheet({cards:{BRISNET:c},card:c},ranked);const pdf=new TextDecoder().decode(picksPdf(sheet));assert.match(pdf,/Notes:/);assert.doesNotMatch(pdf,/32 -?\d+(?:\.\d+)? m 552 -?\d+(?:\.\d+)? l S/);});
