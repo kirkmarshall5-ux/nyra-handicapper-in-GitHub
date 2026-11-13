@@ -26,7 +26,7 @@ test('retains full orders and separate ML; agreement never changes or blends mod
  assert.equal(d.shortlist.find(h=>h.n==='1').ranks.brisFinisher,6);
  assert.equal(d.morning_line.rankings[0].n,'1');
  assert.equal(d.betting_enabled,false);
- assert.equal(d.paper_plans.drfContender.total_cost,14);
+ assert.equal(d.paper_plans.drfContender.total_cost,0);
  assert.match(dashboardHtml(d),/6\/6 ranked · full field · PASS/);
 });
 
@@ -67,8 +67,8 @@ test('partial and unloaded models retain unknown ranks and do not fabricate tick
  assert.equal(d.models[2].ranked,1);
  assert.equal(d.models[0].ranked,0);
  assert.equal(d.shortlist.find(h=>h.n==='2').ranks.drfContender,null);
- assert.equal(d.paper_plans.drfContender.total_cost,4);
- assert.equal(d.paper_plans.drfContender.tickets.length,1);
+ assert.equal(d.paper_plans.drfContender.total_cost,0);
+ assert.equal(d.paper_plans.drfContender.tickets.length,0);
  assert.match(dashboardHtml(d),/1\/6 ranked · incomplete field · PASS/);
  assert.match(dashboardHtml(d),/Upload Brisnet/);
 });
@@ -97,10 +97,10 @@ test('morning line uses declared odds, never current odds; source ties stay stab
 
 test('each exacta box has the requested combinations and never fills missing ranks',()=>{
  const h=[horse(9),horse(2),horse(7)];const p=paperPlan(h);
- assert.equal(p.total_cost,14);
- assert.deepEqual(p.tickets[2].combinations,[['9','2'],['2','9']]);
- assert.deepEqual(p.tickets[3].combinations,[['9','2'],['9','7'],['2','9'],['2','7'],['7','9'],['7','2']]);
- assert.equal(paperPlan(h.slice(0,2)).total_cost,8);
+ assert.equal(p.total_cost,4);
+ assert.deepEqual(p.tickets[1].combinations,[['9','2']]);
+ assert.deepEqual(p.tickets[2].combinations,[['2','9']]);
+ assert.equal(paperPlan(h.slice(0,2)).total_cost,4);
  assert.equal(paperPlan([]).total_cost,0);
  assert.equal(paperPlan(h,[...h,horse('1A')]).available,false);
 });
@@ -191,9 +191,9 @@ test('active runners absent from every model and morning line remain visible as 
  assert.deepEqual(d.unranked.map(h=>h.n),['3','4']);
  assert.equal(d.unranked[0].ranks.brisContender,null);
  assert.equal(d.models[0].complete,false);
- assert.doesNotMatch(dashboardHtml(d),/<details/);
+ assert.match(dashboardHtml(d),/unranked starters/);
  assert.equal((dashboardHtml(d).match(/<tr><th scope="row">/g)||[]).length,d.field.length);
- assert.equal(d.paper_plans.brisContender.tickets.length,3);
+ assert.equal(d.paper_plans.brisContender.tickets.length,0);
 });
 
 

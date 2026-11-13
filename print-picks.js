@@ -1,5 +1,5 @@
 // Read-only print view of existing forecasts. No scoring changes.
-import {buildRaceDashboard,selectMorningLineProvider} from './race-day-dashboard.js?v=20261113-status';
+import {buildRaceDashboard,selectMorningLineProvider} from './race-day-dashboard.js?v=20261113-paper';
 import {pairedRace,cardProvider} from './dual-pp-cards.js';
 import {decodeTodayDistance} from './finisher-drf-distance.js';
 const ids=['primePower','brisResearch','brisFinisher','brisContender','drfContender','morningLine'];
