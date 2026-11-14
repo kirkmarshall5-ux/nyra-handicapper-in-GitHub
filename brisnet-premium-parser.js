@@ -67,6 +67,16 @@ function parsePace(row,heading,today){
  const pp=row.items.find(i=>i.x>ends[5]&&i.x<ends[5]+gap&&/^\d+$/.test(i.str));
  return {...d,...values,...conditions,turn_time:values.e1!==null&&values.e2!==null?values.e2-values.e1:null,race_rating:null,class_rating:null,past_post:pp?+pp.str:null,status:ratingStatus,rating_gaps,source:{provider:'BRISNET',page:row.pageNumber,y:row.y,text:row.text,cells}};
 }
+// Short-race headings omit the standard pace columns. Keep these starts in
+// history; never shift Wind/Winner/Horse values into handicapping ratings.
+function parseShortRace(row,heading,today){
+ const d=pastDate(row.text,today);if(!d)return null;
+ const cells={},values={};
+ for(const key of ['e1','e2','late','shape1','shape2','speed']){
+  values[key]=null;cells[key]={text:'',x:null,status:'UNSUPPORTED_SHORT_RACE_LAYOUT'};
+ }
+ return {...d,...values,...premiumHistoryConditions(row.text),turn_time:null,race_rating:null,class_rating:null,past_post:null,status:'PARTIAL_RATINGS_SOURCE_VERIFIED',rating_gaps:Object.keys(cells).map(field=>({field,reason:cells[field].status,source_text:''})),source:{provider:'BRISNET',page:row.pageNumber,y:row.y,text:row.text,heading_text:heading.text,cells}};
+}
 export function parsePremiumCard(input,{sourceName='Brisnet Premium Plus PDF'}={}){
  const pages=input.map(p=>{const r=reconstructPage(p.items,p.pageNumber,.65);const widths=new Map(p.items.map(q=>[clean(q.str)+'|'+q.transform[4].toFixed(2)+'|'+q.transform[5].toFixed(2),q.width]));for(const row of r.lines)for(const i of row.items)i.width=widths.get(i.str+'|'+i.x.toFixed(2)+'|'+i.y.toFixed(2))||0;return r;});
  const races={},excluded=[],issues=[];let track=null,date=null;
@@ -104,9 +114,17 @@ export function parsePremiumCard(input,{sourceName='Brisnet Premium Plus PDF'}={
    if(r.horses.some(h=>h.n===program||h.name===nm[1]))throw Error('Duplicate Premium Plus runner: race '+rn+', PDF page '+page.pageNumber+', program '+program+', horse '+JSON.stringify(nm[1])+'. Original card preserved.');
    const life=block.match(/Life:\s*(\d+)\s+(\d+)\s*-\s*(\d+)\s*-\s*(\d+)/);if(!life||+life[2]+ +life[3]+ +life[4]>+life[1])throw Error('Premium Plus career record unverified');
    const ml=items.filter(i=>i.x<start.transform[4]-15&&i.y<y-9&&i.y>y-18&&/^\d+(?:\/\d+|\.\d+)?$/.test(i.str));if(ml.length!==1)throw Error('Premium Plus morning line unverified: race '+rn+', PDF page '+page.pageNumber+', program '+program+', horse '+JSON.stringify(nm[1])+', positioned candidates '+ml.length+'. Original card preserved.');
-   const headings=lines.filter(l=>/DATE TRK/.test(l.text)&&/E1\s+E2\/\s+LP/.test(l.text)&&/\bSPD\b/.test(l.text));
+   const headings=lines.filter(l=>/DATE TRK/.test(l.text)&&/\bSPD\b/.test(l.text)&&(/E1\s+E2\/\s+LP/.test(l.text)||/Wind\s+Winner\s+Horse/.test(l.text)));
    const historical=lines.filter(l=>/^\d{2}[A-Za-z]{3}\d{2}[A-Za-z]+/.test(l.text));if(historical.length&&headings.length!==1)throw Error('Premium Plus running-line column heading unverified');
-   const history=historical.map(l=>parsePace(l,headings[0],date));
+   const shortLayout=/Wind\s+Winner\s+Horse/.test(headings[0]?.text||'');
+   const standardHeading=shortLayout?page.lines.find(l=>/DATE TRK/.test(l.text)&&/E1\s+E2\/\s+LP/.test(l.text)&&/\bSPD\b/.test(l.text)):headings[0];
+   const history=historical.map(l=>{
+    if(!shortLayout)return parsePace(l,headings[0],date);
+    // A mixed block still prints ordinary furlong races at the page's standard
+    // anchors. parsePace verifies every numeric token against those positions.
+    if(premiumHistoryConditions(l.text).condition_evidence.status==='SOURCE_TOKEN_VERIFIED'&&standardHeading)return parsePace(l,standardHeading,date);
+    return parseShortRace(l,headings[0],date);
+   });
    if(history.some(h=>!h))throw Error('Premium Plus recognized historical line produced null record for '+nm[1]);
    // Evidence coverage gate: printed historical dates must survive parsing exactly.
    // Never equate absent recognized history with a first-time starter.

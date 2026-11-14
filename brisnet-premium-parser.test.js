@@ -36,3 +36,18 @@ test('retains printed Prime Power decimal and rank without deriving a new rank',
  const blank=parsePPCard(fixture()).races[1].horses[0];
  assert.equal(blank.ratings.prime_power_display,null);
 });
+
+test('short-race heading retains starts without treating Wind/Winner/Horse as pace',()=>{
+ const f=fixture();f[0].items=f[0].items.filter(x=>x.transform[5]!==600||x.str==='DATE TRK'||x.str==='SPD PP ST');
+ f[0].items.push(i('Wind Winner Horse RACETYPE',60,600));
+ f[0].items.find(x=>x.str==='6f ft').str='1000 ft';
+ const h=parsePPCard(f).races[1].horses[0],l=h.ratings.lines[0];
+ assert.equal(h.life_starts,3);assert.equal(l.date,'2026-09-09');
+ assert.deepEqual([l.e1,l.e2,l.late,l.speed],[null,null,null,null]);
+ assert.equal(l.source.cells.speed.status,'UNSUPPORTED_SHORT_RACE_LAYOUT');
+ assert.match(l.source.heading_text,/Wind Winner Horse/);
+});
+test('unrecognized heading still rejects instead of guessing columns',()=>{
+ const f=fixture();f[0].items.find(x=>x.str==='E1').str='Unknown';
+ assert.throws(()=>parsePPCard(f),/column heading unverified/);
+});
