@@ -51,3 +51,10 @@ test('unrecognized heading still rejects instead of guessing columns',()=>{
  const f=fixture();f[0].items.find(x=>x.str==='E1').str='Unknown';
  assert.throws(()=>parsePPCard(f),/column heading unverified/);
 });
+
+test('Woodbine imported main course is synthetic while turf remains turf',()=>{
+ const f=fixture();f[0].items.find(x=>x.str==='Belmont').str='Woodbine';
+ const r=parsePPCard(f).races[1];assert.equal(r.surface,'Synth');assert.equal(r.conditions.surface,'Synth');
+ f[0].items.find(x=>x.str==='1 Mile. October 16, 2026 Race 1').str='1 Mile (T). October 16, 2026 Race 1';
+ assert.equal(parsePPCard(f).races[1].surface,'Turf');
+});

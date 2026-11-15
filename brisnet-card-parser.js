@@ -1,3 +1,4 @@
+import {brisnetRaceSurface} from './brisnet-race-surface.js';
 import {parseFtsEvidence} from './fts-research.js';
 import {parseBrisnetWorkouts} from './brisnet-workouts.js';
 // Brisnet Ultimate positioned-text adapter. Provider values never become Beyer/Timeform.
@@ -35,7 +36,7 @@ export function parseBrisnetCard(input,{sourceName='Brisnet PDF'}={}){
   const thisTrack=clean(trackItem.str),thisDate=dateFromHeading(header.text),rn=+header.text.match(/\bRace\s+(\d+)\b/)[1];
   if(track&&(track!==thisTrack||date!==thisDate))throw Error('Mixed Brisnet tracks/dates must be uploaded separately');track=thisTrack;date=thisDate;
   const distance=brisnetDistance(header.text);if(!distance)throw Error('Brisnet primary distance unverified');
-  const surface=/\(T\)|Turf|Grass/i.test(header.text)?'Turf':/All Weather|Synthetic/i.test(header.text)?'Synth':'Dirt';
+  const surface=brisnetRaceSurface(track,header.text);
   const r=races[rn]??={race:rn,track,date,header:header.text,dist:distance.display,distance_furlongs:distance.furlongs,surface,cls:header.text.split(thisTrack)[1]?.split(/Saturday|Sunday|Monday|Tuesday|Wednesday|Thursday|Friday/)[0].trim()||'',conditions:{surface,primaryDistanceLine:distance.display,unsupported:false},post:'Unverified',oddsMode:'Morning line (pre-race)',horses:[],parser_blockers:['BRISNET_SOURCE_MODEL_VALIDATION_PENDING'],source_format:'BRISNET_ULTIMATE',ratings_provider:'BRISNET',source_pages:[],brisnet_pars:null};
   if(r.dist!==distance.display||r.surface!==surface)throw Error('Conflicting Brisnet race conditions');r.source_pages.push(page.pageNumber);
   const ppLine=page.lines.find(l=>/Post Time:/.test(l.text));if(ppLine)r.post=ppLine.text.replace(/^.*?Post Time:\s*/,'')+' (printed zones; verify local time)';
