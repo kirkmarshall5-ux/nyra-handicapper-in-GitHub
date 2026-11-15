@@ -1,6 +1,6 @@
 import {FINISHER_SPEC,rankFinisherFeatures} from './finisher-model.js?v=20261113-status';
-import {contenderFeatures} from './contender-rankings.js';
-import {releaseRace} from './rankings-release.js';
+import {contenderFeatures} from './contender-rankings.js?v=20261115-beyer';
+import {releaseRace} from './rankings-release.js?v=20261115-beyer';
 import {correctedMatchedSpeed} from './finisher-drf-distance.js?v=20261018-5316';
 const finite=x=>typeof x==='number'&&Number.isFinite(x);
 const active=h=>h.odds!=='SCR'&&h.included_in_frozen_field!==false&&(!h.entry_status||h.entry_status==='REGULAR');

@@ -1,4 +1,4 @@
-import {parseRestoredCard,PARSER_ID} from './release-card-parser.js';
+import {parseRestoredCard,PARSER_ID} from './release-card-parser.js?v=20261115-beyer';
 import {parseBrisnetCard,BRISNET_PARSER_ID} from './brisnet-card-parser.js?v=20261114-tapeta';
 import {parsePremiumCard,PREMIUM_PARSER_ID} from './brisnet-premium-parser.js?v=20261114-tapeta';
 export const FORMAT_ROUTER_ID='PP-FORMAT-ROUTER-v2';

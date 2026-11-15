@@ -1,11 +1,11 @@
 // Read-only presentation of field coverage. Never changes ratings, eligibility or PASS.
-import {contenderFeatures} from './contender-rankings.js';
+import {contenderFeatures} from './contender-rankings.js?v=20261115-beyer';
 import {MODEL} from './contender-model.js';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const active=h=>h.odds!=='SCR'&&h.included_in_frozen_field!==false&&(!h.entry_status||h.entry_status==='REGULAR');
 const finite=v=>typeof v==='number'&&Number.isFinite(v);
 const key=h=>h.n!=null&&String(h.n)!==''?'#'+h.n:'name:'+h.name;
-const reason=v=>typeof v==='string'?v:v?.reason||'Source evidence unavailable';
+const reason=v=>{const r=typeof v==='string'?v:v?.reason||'Source evidence unavailable';return r==='no-beyer-evidence'?'Prior start verified; numerical Beyer unavailable':r;};
 export function morningLineValue(value){
  const s=String(value??'').trim();if(/^(?:evens?|evs)$/i.test(s))return 1;
  const m=s.match(/^(\d+(?:\.\d+)?)\s*[\/-]\s*(\d+(?:\.\d+)?)$/);if(m)return +m[2]>0?+m[1]/+m[2]:null;
@@ -22,6 +22,8 @@ export function modelEvidence(race,result){
  const unranked=field.filter(h=>!rankedKeys.has(key(h))).map(h=>{
   const d=details.find(x=>key(x)===key(h)),fts=(h.life_starts??h.lifeStarts)===0;
   const rs=fts?['First-time starter: no prior race speed or pace; ability unknown.']:[...(d?.reasons||[]),...(d?.reason?[d.reason]:[]),...(d?.unrated_reason?[d.unrated_reason]:[]),...(d?.parser_blockers||[])].map(reason);
+  const priorDrf=h.ratings?.provider!=='BRISNET'&&(h.life_starts??h.lifeStarts)>0&&!(h.beyer_figures||[]).length&&(h.beyer_source_status==='PRIOR_START_NUMERICAL_BEYER_UNAVAILABLE'||h.contender_evidence?.switch_evidence?.running_lines?.length);
+  if(priorDrf&&(!rs.length||rs.every(s=>s==='Recent speed / career evidence unverified or first-time starter')))rs.splice(0,rs.length,'Prior start verified; numerical Beyer unavailable');
   if(!rs.length)rs.push(result.reason||'No numerical ranking; required source evidence unavailable.');
   return {n:h.n,name:h.name,ml:h.ml,fts,reasons:[...new Set(rs)],favorite:favoriteKeys.has(key(h))};
  });

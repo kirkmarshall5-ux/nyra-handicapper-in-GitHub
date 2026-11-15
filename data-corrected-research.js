@@ -10,7 +10,11 @@ export function validatedInputs(h,{keepZero=true,removeCap=true}={}){
  if(x.life_starts===0)return {horse:x,base:null,reason:'FTS-unrated',issues,warnings};
  const figs=x.beyer_figures;
  if(!Array.isArray(figs)||!figs.length)return {horse:x,base:null,reason:'no-beyer-evidence',issues,warnings};
- if(figs.some(v=>!number(v)||v<0))return {horse:x,base:null,reason:'invalid-beyer-evidence',issues,warnings};
+ if(figs.some(v=>!number(v)))return {horse:x,base:null,reason:'invalid-beyer-evidence',issues,warnings};
+ for(const f of figs.filter(v=>v<0)){
+  const proof=(x.beyer_evidence||[]).some(p=>p.figure===f&&p.source_line&&p.running_date_track&&/Bold/i.test(p.font||'')&&Number.isInteger(p.post)&&p.post>=1&&p.post<=p.field_size);
+  if(!proof)return {horse:x,base:null,reason:'negative-beyer-source-verification-required',issues,warnings};
+ }
  for(const f of figs.filter(v=>v>120)){
   const proof=(x.beyer_evidence||[]).some(p=>p.figure===f&&p.source_line&&p.running_date_track&&/Bold/i.test(p.font||'')&&Number.isInteger(p.post)&&p.post>=1&&p.post<=p.field_size);
   const manual=x.beyer_range_review?.status==='SOURCE_VERIFIED'&&x.beyer_range_review?.source&&x.beyer_range_review.figures?.includes(f);

@@ -1,5 +1,5 @@
-import {restoredPage as originalPage,parseRestoredCard as originalParse} from './data-corrected-parser.js?v=20261013-circuits2';
-import {RELEASE_ID} from './rankings-release.js';
+import {restoredPage as originalPage,parseRestoredCard as originalParse} from './data-corrected-parser.js?v=20261115-beyer';
+import {RELEASE_ID} from './rankings-release.js?v=20261115-beyer';
 export const PARSER_ID='V44C-data-integrity-circuits-parser-v5-appendices';
 export function restoredPage(items,pageNumber,fonts={}){
  const page=originalPage(items,pageNumber,fonts),rows=[];let row=[];const flush=()=>{if(row.length){rows.push(row);row=[]}};
