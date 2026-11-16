@@ -89,6 +89,18 @@ export function validateSnapshot(s, now=Date.now()) {
       if(seen.size!==identities.size)errors.push('Every active runner must be displayed, rated-not-displayed, or unrated.');
     }
   }
+  if(s?.sharedSelections!==undefined){
+    const shared=s.sharedSelections,rr=shared?.brisnetRR;
+    if(s.provider!=='BRISNET'||rr?.family!=='BRISNET_RR'||rr?.provider!=='BRISNET'||!rr?.modelId||!['RATEABLE','PASS','HOLD'].includes(rr?.decision)||!Array.isArray(rr?.rankings)||!Array.isArray(shared?.primePower)||shared?.primePowerRole!=='REFERENCE_ONLY')errors.push('Invalid shared selection evidence.');
+    else {
+      const seen=new Set();
+      for(const h of rr.rankings){if(seen.has(h.program)||!identities.has(h.program)||s.field.find(f=>f.program===h.program)?.horse!==h.horse||!Number.isFinite(h.score))errors.push('Invalid RR ranking evidence.');seen.add(h.program);}
+      if(rr.fullFieldRanked!==(rr.decision==='RATEABLE'&&seen.size===identities.size)||rr.decision==='RATEABLE'&&seen.size!==identities.size)errors.push('RR full-field flag conflicts with evidence.');
+      const pp=new Set();
+      for(const h of shared.primePower){if(pp.has(h.program)||!identities.has(h.program)||s.field.find(f=>f.program===h.program)?.horse!==h.horse||h.score!==null&&!Number.isFinite(h.score))errors.push('Invalid Prime Power reference evidence.');pp.add(h.program);}
+      if(pp.size!==identities.size)errors.push('Prime Power reference must retain every active runner.');
+    }
+  }
   if(new Set((s?.models||[]).map(m=>m.family)).size!==(s?.models||[]).length)errors.push('Duplicate model family.');
   return [...new Set(errors)];
 }
