@@ -74,7 +74,7 @@ export function evaluateHistoricalRace(r,official,strategyId='WIN_EXACTA'){
  return r.models.map(m=>{
   const eligibility=paperEligibility(m,r.field),rows=m.rankings||[],a=p(rows[0]),b=p(rows[1]);
   const runnerUpRank=rows.findIndex(h=>p(h)===second)+1||null;
-  const base={model:m.id,label:m.label||m.id,modelVersion:m.model_id||null,race:r.race.number,runnerUpRank,firstChoiceWinner:a===winner,exactSecond:runnerUpRank===2,topTwoRunnerUp:runnerUpRank!==null&&runnerUpRank<=2,topFourRunnerUp:runnerUpRank!==null&&runnerUpRank<=4,rrCompanionMiss:m.id==='brisResearch'&&a===winner&&b!==second,actualSecond:second,chosenSecond:b,eligibility};
+  const base={model:m.id,label:m.label||m.id,modelVersion:m.model_id||null,race:r.race.number,runnerUpRank,firstChoiceWinner:a===winner,exactSecond:runnerUpRank===2,topTwoRunnerUp:runnerUpRank!==null&&runnerUpRank<=2,topFourRunnerUp:runnerUpRank!==null&&runnerUpRank<=4,rrCompanionMiss:m.id==='brisResearch'&&a===winner&&b!==second,actualWinner:winner,actualSecond:second,chosenFirst:a,chosenSecond:b,sourceRef:official.sourceRef,resultRecordedAt:official.recordedAt||null,eligibility};
   if(r.cancelled||!eligibility.included)return {...base,included:false,reason:r.cancelled?'Race cancelled':eligibility.reasons.join('; '),stake:0,returned:0,wagers:[]};
   const wagers=[];
   if(strategy.win)wagers.push({type:'win',cost:strategy.win,hit:a===winner,returned:a===winner?official.win2*strategy.win/2:0});
