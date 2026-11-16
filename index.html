@@ -437,6 +437,19 @@ const recorderDetails=document.createElement('details');recorderDetails.classNam
 for(const id of ['recorderStarterRoster','recorderStarterSource']){
  document.getElementById(id).addEventListener('input',()=>renderDashboard());
 }
+function renderRecorderStatus(){
+ const status=document.getElementById('recorderFreezeStatus');
+ if(!status)return;
+ try{
+  const saved=readResearchFreezes().find(r=>r.provider===cardProvider(activeCard)&&r.cardId===activeCard.id&&r.track===race.track&&r.date===race.date&&Number(r.race)===Number(race.race));
+  status.replaceChildren();
+  if(!saved){status.textContent='Not frozen. Independent server timestamp not established.';return;}
+  status.textContent='Saved immutable local freeze: '+saved.recordedAt+'. NOT independently timestamped. ';
+  const download=document.createElement('button');download.type='button';download.className='secondary';download.textContent='Download original frozen record';
+  download.onclick=async()=>{try{const exported=await sealSingleRaceResearchSnapshot(saved);const url=URL.createObjectURL(new Blob([JSON.stringify(exported,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='NYRA_STRUCTURED_RESEARCH_'+saved.provider+'_'+saved.date+'_R'+saved.race+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}catch(e){status.textContent='Original export failed: '+e.message;}};
+  status.append(download);
+ }catch(e){status.textContent='Recorder history unavailable: '+e.message+'. Do not replace existing records.';}
+}
 document.getElementById('recorderFreezeRace').onclick=async()=>{
  const status=document.getElementById('recorderFreezeStatus'),button=document.getElementById('recorderFreezeRace');
  button.disabled=true;
@@ -466,7 +479,8 @@ document.getElementById('recorderFreezeRace').onclick=async()=>{
   writeResearchFreezes(records);
   const blob=new Blob([JSON.stringify(exported,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),link=document.createElement('a');
   link.href=url;link.download='NYRA_STRUCTURED_RESEARCH_'+provider+'_'+source.date+'_R'+source.race+'.json';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
-  status.textContent='Saved research-only freeze for '+provider+' race '+source.race+'. JSON export downloaded. NOT independently timestamped; do not use as betting authorization.';
+  renderRecorderStatus();
+  status.textContent+=' JSON export downloaded. ';
  }catch(e){status.textContent='Structured freeze refused: '+e.message;}
  finally{button.disabled=false;}
 };
@@ -545,7 +559,7 @@ document.querySelectorAll(".sortbtn").forEach(b=>b.onclick=()=>{
  renderHorses();updateSortButtons();
 });
 function syncRaceNotes(){raceNotes.value=state.cards?.[activeCard.id]?.notes?.[race.race]||""}
-function renderAll(){syncRaceNotes();renderPaceCardStatus();document.getElementById("releaseStatus").textContent=`Rankings: ${currentRating().model_id} · PP formats: DRF / Brisnet Ultimate / Premium Plus · Saved card: ${activeCard.parser_version||"sample / legacy evidence"}. V4.4c, Finisher and Contender. Morning line is reference only. Verify scratches and surface against official entries.`;renderBrisnetEvidence();renderProjectedRaceSetup();renderReleaseContext();renderJ1Comparison();renderHeader();renderHorses();updateSortButtons();renderPace();renderEdit();renderEvidence();renderConnections();renderLeaderboards();renderWeights();renderThings();renderRaceInsights();renderNyraUpdateControls();updateUrl()}
+function renderAll(){syncRaceNotes();renderRecorderStatus();renderPaceCardStatus();document.getElementById("releaseStatus").textContent=`Rankings: ${currentRating().model_id} · PP formats: DRF / Brisnet Ultimate / Premium Plus · Saved card: ${activeCard.parser_version||"sample / legacy evidence"}. V4.4c, Finisher and Contender. Morning line is reference only. Verify scratches and surface against official entries.`;renderBrisnetEvidence();renderProjectedRaceSetup();renderReleaseContext();renderJ1Comparison();renderHeader();renderHorses();updateSortButtons();renderPace();renderEdit();renderEvidence();renderConnections();renderLeaderboards();renderWeights();renderThings();renderRaceInsights();renderNyraUpdateControls();updateUrl()}
 function renderThings(){
  const el=document.getElementById("thingsToConsider"); if(!el)return;
  let rows=[];

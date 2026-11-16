@@ -4,6 +4,7 @@ import {releaseRace} from './rankings-release.js';
 import {passRaceDisplay} from './pass-race-display.js';
 import {rankContenders} from './contender-rankings.js';
 import {rankFinishers} from './finisher-inputs.js?v=20261113-status';
+import {rankBrisnetResearch} from './brisnet-research.js';
 import {cardProvider} from './dual-pp-cards.js';
 export const eligible=h=>Boolean(h.n)&&h.odds!=='SCR'&&((!h.entry_status||h.entry_status==='REGULAR')?h.included_in_frozen_field!==false:['AE','ALSO_ELIGIBLE'].includes(h.entry_status)&&h.included_in_frozen_field===true);
 export function convertDisplayedModel(family,result,field,provider,{baselineDecision=null}={}){
@@ -63,7 +64,7 @@ export function displayedProviderModels(card,race){
   if(!native?.v44c||!native?.contender)throw Error('Native Brisnet models unavailable');
   const finisher=rankFinishers(race);
   const models=[convertDisplayedModel('V44C',native.v44c,field,provider),convertDisplayedModel('FINISHER',finisher,field,provider,{baselineDecision:native.v44c.decision}),convertDisplayedModel('CONTENDER',native.contender,field,provider)];
-  return {provider,field,models,...runnerRatingCoverage(race,field,models,provider,{native})};
+  return {provider,field,models,sharedSelections:{brisnetRR:convertDisplayedModel('BRISNET_RR',rankBrisnetResearch(race),field,provider),primePower:(race.horses||[]).filter(eligible).map(h=>({program:String(h.n),horse:h.name,score:Number.isFinite(h.ratings?.prime_power)?h.ratings.prime_power:null,printedRank:h.ratings?.prime_power_rank??null,display:h.ratings?.prime_power_display??null})),primePowerRole:'REFERENCE_ONLY'},...runnerRatingCoverage(race,field,models,provider,{native})};
  }
  const v44c=releaseRace(race);
  // Race Day intentionally displays provisional rated runners for DRF PASS races.
