@@ -1,0 +1,202 @@
+{
+  "schema": "nyra-historical-results-v1",
+  "kind": "RETROSPECTIVE",
+  "capturedAt": "2026-11-16T23:00:00.000Z",
+  "track": "Synthetic Test Track",
+  "date": "2024-08-31",
+  "sources": [],
+  "races": [
+    {
+      "race": {
+        "track": "Synthetic Test Track",
+        "date": "2024-08-31",
+        "number": 1,
+        "surface": "Dirt",
+        "distance": "6F"
+      },
+      "field": [
+        {
+          "n": "1",
+          "name": "Demo Alpha"
+        },
+        {
+          "n": "2",
+          "name": "Demo Beta"
+        },
+        {
+          "n": "3",
+          "name": "Demo Gamma"
+        }
+      ],
+      "models": [
+        {
+          "id": "primePower",
+          "label": "Prime Power",
+          "decision": "REFERENCE",
+          "available": true,
+          "reason": null,
+          "model_id": "BRISNET-PRIME-POWER-source",
+          "unrated": [],
+          "rankings": [
+            {
+              "n": "1",
+              "name": "Demo Alpha",
+              "rank": 1,
+              "score": 120.3
+            },
+            {
+              "n": "2",
+              "name": "Demo Beta",
+              "rank": 2,
+              "score": 118.2
+            },
+            {
+              "n": "3",
+              "name": "Demo Gamma",
+              "rank": 3,
+              "score": 110.4
+            }
+          ]
+        },
+        {
+          "id": "brisResearch",
+          "label": "Brisnet-RR",
+          "model_id": "SYNTHETIC-brisResearch",
+          "validation_status": "PENDING",
+          "available": true,
+          "decision": "RATEABLE",
+          "rankings": [
+            {
+              "n": "1",
+              "name": "Demo Alpha",
+              "rank": 1,
+              "score": 3
+            },
+            {
+              "n": "3",
+              "name": "Demo Gamma",
+              "rank": 2,
+              "score": 2
+            },
+            {
+              "n": "2",
+              "name": "Demo Beta",
+              "rank": 3,
+              "score": 1
+            }
+          ]
+        },
+        {
+          "id": "brisFinisher",
+          "label": "Brisnet Finisher",
+          "model_id": "SYNTHETIC-brisFinisher",
+          "validation_status": "PENDING",
+          "available": true,
+          "decision": "RATEABLE",
+          "rankings": [
+            {
+              "n": "1",
+              "name": "Demo Alpha",
+              "rank": 1,
+              "score": 3
+            },
+            {
+              "n": "2",
+              "name": "Demo Beta",
+              "rank": 2,
+              "score": 2
+            },
+            {
+              "n": "3",
+              "name": "Demo Gamma",
+              "rank": 3,
+              "score": 1
+            }
+          ]
+        },
+        {
+          "id": "brisContender",
+          "label": "Brisnet Contender",
+          "model_id": "SYNTHETIC-brisContender",
+          "validation_status": "PENDING",
+          "available": true,
+          "decision": "RATEABLE",
+          "rankings": [
+            {
+              "n": "2",
+              "name": "Demo Beta",
+              "rank": 1,
+              "score": 3
+            },
+            {
+              "n": "1",
+              "name": "Demo Alpha",
+              "rank": 2,
+              "score": 2
+            },
+            {
+              "n": "3",
+              "name": "Demo Gamma",
+              "rank": 3,
+              "score": 1
+            }
+          ]
+        },
+        {
+          "id": "drfContender",
+          "label": "DRF Contender Late +50%",
+          "model_id": "SYNTHETIC-drfContender",
+          "validation_status": "PENDING",
+          "available": true,
+          "decision": "RATEABLE",
+          "rankings": [
+            {
+              "n": "3",
+              "name": "Demo Gamma",
+              "rank": 1,
+              "score": 3
+            },
+            {
+              "n": "2",
+              "name": "Demo Beta",
+              "rank": 2,
+              "score": 2
+            },
+            {
+              "n": "1",
+              "name": "Demo Alpha",
+              "rank": 3,
+              "score": 1
+            }
+          ]
+        },
+        {
+          "id": "morningLine",
+          "label": "Morning Line",
+          "available": true,
+          "rankings": [
+            {
+              "n": "1",
+              "name": "Demo Alpha",
+              "rank": 1
+            },
+            {
+              "n": "2",
+              "name": "Demo Beta",
+              "rank": 2
+            },
+            {
+              "n": "3",
+              "name": "Demo Gamma",
+              "rank": 3
+            }
+          ],
+          "decision": "REFERENCE",
+          "model_id": "MORNING-LINE-source"
+        }
+      ],
+      "cancelled": false
+    }
+  ],
+  "notice": "Historical replay using the recorded model versions. Not verified pre-race profitability."
+}
