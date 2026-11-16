@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {historicalSnapshot,importHistoricalSnapshot,evaluateHistoricalRace,evaluateHistoricalCard,summarizeHistorical} from './historical-results.js';
-import {historicalReportHtml} from './historical-results-ui.js';
+import {historicalReportHtml,historicalStarterSelection} from './historical-results-ui.js';
 const d={"schema":"nyra-race-dashboard-v1","race":{"track":"Synthetic Test Track","date":"2024-08-31","number":1,"surface":"Dirt","distance":"6F"},"field":[{"n":"1","name":"Demo Alpha"},{"n":"2","name":"Demo Beta"},{"n":"3","name":"Demo Gamma"}],"models":[{"id":"brisResearch","label":"Brisnet-RR","model_id":"SYNTHETIC-brisResearch","validation_status":"PENDING","available":true,"decision":"RATEABLE","rankings":[{"n":"1","name":"Demo Alpha","rank":1,"score":3},{"n":"3","name":"Demo Gamma","rank":2,"score":2},{"n":"2","name":"Demo Beta","rank":3,"score":1}]},{"id":"brisFinisher","label":"Brisnet Finisher","model_id":"SYNTHETIC-brisFinisher","validation_status":"PENDING","available":true,"decision":"RATEABLE","rankings":[{"n":"1","name":"Demo Alpha","rank":1,"score":3},{"n":"2","name":"Demo Beta","rank":2,"score":2},{"n":"3","name":"Demo Gamma","rank":3,"score":1}]},{"id":"brisContender","label":"Brisnet Contender","model_id":"SYNTHETIC-brisContender","validation_status":"PENDING","available":true,"decision":"RATEABLE","rankings":[{"n":"2","name":"Demo Beta","rank":1,"score":3},{"n":"1","name":"Demo Alpha","rank":2,"score":2},{"n":"3","name":"Demo Gamma","rank":3,"score":1}]},{"id":"drfContender","label":"DRF Contender Late +50%","model_id":"SYNTHETIC-drfContender","validation_status":"PENDING","available":true,"decision":"RATEABLE","rankings":[{"n":"3","name":"Demo Gamma","rank":1,"score":3},{"n":"2","name":"Demo Beta","rank":2,"score":2},{"n":"1","name":"Demo Alpha","rank":3,"score":1}]}],"prime_power":{"demoalpha":"120.3 (1)","demobeta":"118.2 (2)","demogamma":"110.4 (3)"},"morning_line":{"id":"morningLine","label":"Morning Line","available":true,"rankings":[{"n":"1","name":"Demo Alpha","rank":1},{"n":"2","name":"Demo Beta","rank":2},{"n":"3","name":"Demo Gamma","rank":3}]}};
 const clone=x=>structuredClone(x);
 const snapshot=()=>historicalSnapshot({dashboards:[clone(d)],capturedAt:'2026-11-16T23:00:00Z'});
@@ -63,4 +63,15 @@ test('PDF/HTML report escapes source text and presents companion misses and wage
  const s=snapshot();s.track='<script>alert(1)</script>';
  const report=historicalReportHtml(s,evaluateHistoricalCard(s,{1:official()},'WIN_PLACE_EXACTA'),'WIN_PLACE_EXACTA');
  assert.ok(!report.includes('<script>'));assert.match(report,/&lt;script&gt;/);assert.match(report,/Runner-up at #2/);assert.match(report,/RR found the winner/);assert.match(report,/3\/4/);
+});
+
+test('historical actual-starter review handles activated AE/MTO runners without changing the live card',()=>{
+ const race={...d.race,race:1,horses:[{n:'1',name:'Demo Alpha',odds:'3/1',entry_status:'REGULAR'},{n:'2',name:'Demo Beta',odds:'SCR',entry_status:'MTO',included_in_frozen_field:false}]};
+ const cards={BRISNET:{date:d.race.date,track:d.race.track,races:{1:race}}},before=JSON.stringify(cards);
+ const out=historicalStarterSelection(cards,'BRISNET',1,['2']);
+ assert.equal(out.BRISNET.races[1].horses[0].odds,'SCR');
+ assert.equal(out.BRISNET.races[1].horses[1].entry_status,'REGULAR');
+ assert.equal(out.BRISNET.races[1].horses[1].included_in_frozen_field,true);
+ assert.equal(JSON.stringify(cards),before);
+ assert.throws(()=>historicalStarterSelection(cards,'BRISNET',1,['9']),/unique PP/);
 });

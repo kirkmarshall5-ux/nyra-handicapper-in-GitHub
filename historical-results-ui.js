@@ -35,6 +35,21 @@ async function pdfPages(file,progress){
  }finally{await pdf.destroy();}
  return pages;
 }
+export function historicalStarterSelection(cards,selected,number,programs){
+ const anchor=cards[selected],race=anchor?.races?.[number],chosen=new Set(programs.map(String));
+ if(!race||chosen.size!==programs.length||programs.some(p=>!race.horses.some(h=>String(h.n)===String(p))))throw Error('Actual starters must match unique PP program numbers.');
+ const next=structuredClone(cards);
+ for(const card of Object.values(next)){
+  if(!matchingCard(anchor,card)||!card.races[number])continue;
+  for(const h of card.races[number].horses){
+   const runs=chosen.has(String(h.n));
+   h.included_in_frozen_field=runs;
+   if(runs){if(h.odds==='SCR')h.odds=h.ml||'';h.entry_status='REGULAR';}
+   else h.odds='SCR';
+  }
+ }
+ return next;
+}
 function download(value,filename){
  const url=URL.createObjectURL(new Blob([JSON.stringify(value,null,2)],{type:'application/json'})),a=document.createElement('a');
  a.href=url;a.download=filename;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
@@ -62,18 +77,16 @@ export function initHistoricalResults(root){
   el('historicalFields').innerHTML='';const card=cards[selected];
   if(!card){el('historicalCard').textContent='No historical PPs loaded.';return;}
   el('historicalCard').textContent=card.track+' · '+card.date+' · Sources: '+Object.keys(cards).join(', ');
-  el('historicalFields').innerHTML=Object.values(card.races).map(r=>'<fieldset data-race="'+e(r.race)+'" style="margin:12px 0"><legend>Race '+e(r.race)+' · '+e(r.surface)+' · '+e(r.dist)+'</legend><label>Actual surface<select data-surface>'+['Dirt','Turf','Synth'].map(s=>'<option'+(s===r.surface?' selected':'')+'>'+s+'</option>').join('')+'</select></label> <label>Distance in furlongs (fill only to change)<input data-distance type="number" min="2" max="32" step="any" inputmode="decimal" value="'+e(r.distance_furlongs??'')+'"></label><div style="display:flex;flex-wrap:wrap;gap:12px;margin:10px 0">'+r.horses.map(h=>'<label><input type="checkbox" data-scratch="'+e(h.n)+'"'+(h.odds==='SCR'?' checked':'')+'> SCR #'+e(h.n)+' '+e(h.name)+'</label>').join('')+'</div></fieldset>').join('');
+  el('historicalFields').innerHTML=Object.values(card.races).map(r=>'<fieldset data-race="'+e(r.race)+'" style="margin:12px 0"><legend>Race '+e(r.race)+' · '+e(r.surface)+' · '+e(r.dist)+'</legend><label>Actual surface<select data-surface>'+['Dirt','Turf','Synth'].map(s=>'<option'+(s===r.surface?' selected':'')+'>'+s+'</option>').join('')+'</select></label> <label>Distance in furlongs (fill only to change)<input data-distance type="number" min="2" max="32" step="any" inputmode="decimal" value="'+e(r.distance_furlongs??'')+'"></label><div style="display:flex;flex-wrap:wrap;gap:12px;margin:10px 0">'+r.horses.map(h=>'<label><input type="checkbox" data-run="'+e(h.n)+'"'+(h.odds!=='SCR'&&h.included_in_frozen_field!==false&&(!h.entry_status||h.entry_status==='REGULAR')?' checked':'')+'> Runs #'+e(h.n)+' '+e(h.name)+(h.entry_status&&h.entry_status!=='REGULAR'?' ('+e(h.entry_status)+')':'')+'</label>').join('')+'</div></fieldset>').join('');
   el('historicalFieldVerified').checked=false;
  }
  function applyFields(){
   const next=structuredClone(cards),anchor=next[selected];
   for(const fs of el('historicalFields').querySelectorAll('fieldset')){
    const number=fs.dataset.race,r=anchor.races[number],surface=fs.querySelector('[data-surface]').value,distance=fs.querySelector('[data-distance]').value;
-   const scratched=new Set([...fs.querySelectorAll('[data-scratch]:checked')].map(i=>i.dataset.scratch));
-   for(const card of Object.values(next)){
-    if(!matchingCard(anchor,card)||!card.races[number])continue;
-    for(const h of card.races[number].horses){if(scratched.has(String(h.n)))h.odds='SCR';else if(h.odds==='SCR')h.odds=h.ml||'';}
-   }
+   const programs=[...fs.querySelectorAll('[data-run]:checked')].map(i=>i.dataset.run);
+   const reconciled=historicalStarterSelection(next,selected,number,programs);
+   for(const [p,card]of Object.entries(reconciled))next[p]=card;
    if(surface!==r.surface||distance!==''&&Number(distance)!==r.distance_furlongs){
     if(!distance)throw Error('Race '+number+': enter furlongs when changing surface.');
     const updated=correctRaceConditions(next,selected,number,{surface,furlongs:distance});
