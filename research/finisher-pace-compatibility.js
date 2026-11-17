@@ -18,7 +18,7 @@ export function paceScenario(horses) {
   const known = styles.filter(Boolean).length;
   const unknown = active.length - known;
   const pressure = early + 0.5 * pressers;
-  const scenario = pressure >= 2.5 ? 'FAST' : pressure <= 1 ? 'SLOW' : 'MODERATE';
+  const scenario = pressure >= 2 ? 'FAST' : pressure <= 1 ? 'SLOW' : 'MODERATE';
   return { scenario, early, pressers, pressure, known, unknown,
     confidence: active.length ? known / active.length : 0 };
 }
