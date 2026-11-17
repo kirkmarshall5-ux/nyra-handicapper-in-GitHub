@@ -23,3 +23,9 @@ test('missing official order skips rather than fabricates',()=>{
  const r=evaluateCompanions([{...race,officialFinish:[]}]);
  assert.equal(r.summary.races,0);
 });
+
+test('incomplete style evidence is excluded from paired research comparison',()=>{
+ const r=evaluateCompanions([{...race,horses:race.horses.map((h,i)=>i===2?{...h,runStyle:null}:h)}]);
+ assert.equal(r.summary.races,0);
+ assert.match(r.skipped[0].reason,/Incomplete verified running-style coverage/);
+});
