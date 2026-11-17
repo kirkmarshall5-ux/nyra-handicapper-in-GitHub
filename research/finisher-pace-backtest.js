@@ -24,6 +24,7 @@ export function evaluateCompanions(races,adjustment=5) {
   catch(e){skipped.push({key,reason:e.message});continue;}
   const baseline=result.originalFinisher.find(h=>h.program!==id(race.rrFirstProgram));
   const companion=result.companion;
+  if(result.scenario.confidence<1){skipped.push({key,reason:'Incomplete verified running-style coverage; research subset requires full field'});continue;}
   if(!baseline||!companion){skipped.push({key,reason:'No eligible companion score'});continue;}
   const winner=id(race.officialFinish[0]),second=id(race.officialFinish[1]),third=id(race.officialFinish[2]);
   const rr1=id(race.rrFirstProgram),rr2=id(race.rrSecondProgram);
