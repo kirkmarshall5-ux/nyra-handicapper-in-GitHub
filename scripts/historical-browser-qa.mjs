@@ -14,6 +14,7 @@ try{
   await page.locator('#historicalIdentity').waitFor({state:'visible'});
   await page.waitForFunction(()=>document.querySelector('#historicalStatus').textContent.includes('imported'));
   assert.match(await page.locator('#historicalReport').innerText(),/Official result not yet entered/);
+  await page.locator('#historicalCorrections summary').click();
   await page.locator('#historicalSourceRef').fill('synthetic-fixture-only.pdf');
   await page.locator('#historicalFinish').fill('1, 2, 3');
   await page.locator('#historicalWin').fill('8');
@@ -35,6 +36,13 @@ try{
   await page.locator('#historicalExactaBase').fill('0');
   await page.locator('#historicalSettle').click();
   await page.waitForFunction(()=>document.querySelector('#historicalStatus').textContent.includes('denomination'));
+  assert.match(await rr.innerText(),/\$8\.00/);
+  // Exercise the real PDF.js/file-input path with a clearly synthetic PDF.
+  await page.locator('#historicalResultFile').setInputFiles(new URL('../fixtures/equibase-results-synthetic.pdf',import.meta.url).pathname);
+  await page.waitForFunction(()=>document.querySelector('#historicalStatus').textContent.includes('1 races imported and checked automatically'));
+  const pp=page.locator('#historicalReport table').first().locator('tbody tr').filter({has:page.getByText('Prime Power',{exact:true})});
+  assert.match(await pp.innerText(),/\$23\.00/);
+  assert.match(await page.locator('#historicalReport').innerText(),/automatically checked/);
   assert.match(await rr.innerText(),/\$8\.00/);
   const dl=page.waitForEvent('download');await page.locator('#historicalBackup').click();assert.match((await dl).suggestedFilename(),/Historical_Results/);
   await page.screenshot({path:'browser-qa-artifacts/historical-'+name+'.png',fullPage:true});

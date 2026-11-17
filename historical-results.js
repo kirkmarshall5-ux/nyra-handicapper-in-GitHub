@@ -56,12 +56,15 @@ export function importHistoricalSnapshot(value){
  return out;
 }
 function verifyOfficial(r,official,needsPlace){
+ if(official?.chartIssue)fail(official.chartIssue);
  if(!official?.verified||!String(official.sourceRef||'').trim())fail('Confirm the official chart and retain its filename or source reference.');
  if(official.nonstandard)fail('Dead heat, coupled entry or nonstandard payout requires manual adjudication; excluded from automatic ROI.');
  if(official.track!==r.race.track||official.date!==r.race.date||Number(official.race)!==Number(r.race.number))fail('Official chart track, date or race does not match this snapshot.');
  if(official.surface!==r.race.surface||String(official.distance)!==String(r.race.distance))fail('Surface or distance differs. Create a corrected retrospective snapshot before settlement.');
  validateField(official.field);
- if(official.field.length!==r.field.length||r.field.some(h=>!official.field.some(x=>p(x)===p(h)&&name(x)===name(h))))fail('Official starters differ from the snapshot. Reconcile scratches before saving rankings.');
+ const absent=r.field.filter(h=>!official.field.some(x=>p(x)===p(h)&&name(x)===name(h)));
+ const added=official.field.filter(h=>!r.field.some(x=>p(x)===p(h)&&name(x)===name(h)));
+ if(absent.length||added.length)fail('Official starters differ from the snapshot. '+(absent.length?'Absent or changed in chart: '+absent.map(h=>'#'+p(h)+' '+h.name).join(', ')+'. ':'')+(added.length?'Additional or changed chart starters: '+added.map(h=>'#'+p(h)+' '+h.name).join(', ')+'. ':'')+'Reconcile scratches before saving rankings.');
  const finish=official.finish?.map(String);
  if(!Array.isArray(finish)||finish.length!==r.field.length||new Set(finish).size!==finish.length||finish.some(n=>!r.field.some(h=>p(h)===n)))fail('Enter the complete official finishing order, with every starter exactly once.');
  for(const k of ['win2','exactaPay','exactaBase'])if(typeof official[k]!=='number'||!Number.isFinite(official[k])||official[k]<=0)fail('Verified positive win/exacta payouts and exacta denomination are required.');
@@ -74,7 +77,7 @@ export function evaluateHistoricalRace(r,official,strategyId='WIN_EXACTA'){
  return r.models.map(m=>{
   const eligibility=paperEligibility(m,r.field),rows=m.rankings||[],a=p(rows[0]),b=p(rows[1]);
   const runnerUpRank=rows.findIndex(h=>p(h)===second)+1||null;
-  const base={model:m.id,label:m.label||m.id,modelVersion:m.model_id||null,race:r.race.number,runnerUpRank,firstChoiceWinner:a===winner,exactSecond:runnerUpRank===2,topTwoRunnerUp:runnerUpRank!==null&&runnerUpRank<=2,topFourRunnerUp:runnerUpRank!==null&&runnerUpRank<=4,rrCompanionMiss:m.id==='brisResearch'&&a===winner&&b!==second,actualWinner:winner,actualSecond:second,chosenFirst:a,chosenSecond:b,sourceRef:official.sourceRef,resultRecordedAt:official.recordedAt||null,eligibility};
+  const base={model:m.id,label:m.label||m.id,modelVersion:m.model_id||null,race:r.race.number,runnerUpRank,firstChoiceWinner:a===winner,exactSecond:runnerUpRank===2,topTwoRunnerUp:runnerUpRank!==null&&runnerUpRank<=2,topFourRunnerUp:runnerUpRank!==null&&runnerUpRank<=4,rrCompanionMiss:m.id==='brisResearch'&&a===winner&&b!==second,actualWinner:winner,actualSecond:second,chosenFirst:a,chosenSecond:b,sourceRef:official.sourceRef,resultVerification:official.verification,resultRecordedAt:official.recordedAt||null,eligibility};
   if(r.cancelled||!eligibility.included)return {...base,included:false,reason:r.cancelled?'Race cancelled':eligibility.reasons.join('; '),stake:0,returned:0,wagers:[]};
   const wagers=[];
   if(strategy.win)wagers.push({type:'win',cost:strategy.win,hit:a===winner,returned:a===winner?official.win2*strategy.win/2:0});
