@@ -145,8 +145,23 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 </div></section>
 
 <section id="pace" class="hidden"><div class="grid">
+<div class="card span12" id="hiddenWinnerOverview">
+ <div class="kicker">Brisnet RR supporting research · no change to live selections</div>
+ <h3 class="sectiontitle">Pace &amp; Hidden Winners</h3>
+ <div class="small muted">Use running styles, Quirin early-speed points, pace figures, form and Prime Power to investigate RR's #3/#4 horses. Flags are research prompts, never automatic promotions or wagers.</div>
+ <div class="grid" style="margin-top:12px">
+  <div class="card span6"><b>Early pace pressure</b><div id="hiddenPacePressure" class="small muted" role="status">Awaiting verified field evidence</div></div>
+  <div class="card span6"><b>Hidden Winner watch</b><div id="hiddenWinnerWatch" class="small muted" role="status">Awaiting verified RR ranks and pace/form evidence</div></div>
+ </div>
+</div>
 <div class="card span12"><div class="kicker">Pace &amp; Ratings source · Brisnet preferred</div><div id="paceCardStatus" class="small" role="status"></div><div class="tiny muted">Opening this tab selects the matching Brisnet card when available. This also updates the Horse grid / Pace source on Race Day. Upload Brisnet PPs in Race Day Prep to use their E1, E2 and LP figures.</div></div>
 <div class="card span12"><div class="kicker" id="paceSourceLabel">Pace-label proxy · not a validated scenario</div><h3 class="sectiontitle">Pace map</h3><div class="small muted" id="paceDescription">These lanes are Early/Late-derived display hints, not verified running styles. Source-call proxies are in the PP context panel.</div><div id="paceMap" class="stack"></div></div>
+<div class="card span12" id="hiddenWinnerComparison">
+ <div class="kicker">Horse-by-horse research · original RR selections remain authoritative</div>
+ <h3 class="sectiontitle">Horse Pace &amp; Form Comparison</h3>
+ <div class="small muted">Research pace figures use a stricter 0.5-furlong match; Brisnet RR scoring uses a 1-furlong match. These are not interchangeable. The E2+LP option requires same-date, same-page source evidence. Compare challengers with RR's first choice using verified figures, running style, recent Speed and Prime Power; missing evidence stays unknown.</div>
+ <div id="hiddenComparisonReadiness" class="note small" role="status" style="margin-top:10px">The existing projected race setup and source evidence below remain available while the verified comparison feed is connected.</div>
+ </div>
 <div class="card span4" id="transparentRatingRules"><div class="kicker">Transparent comparison</div><h3 class="sectiontitle" id="paceRulesTitle">Locked V4.4c rules</h3>
 <div class="small muted">The Handicap Rating is not a win probability. It compares the entered PP information and public context. “Things to Consider” stays separate so an angle does not secretly inflate the rating.</div>
 <div id="weights" style="margin-top:12px"></div><button id="resetWeights" class="secondary" style="width:100%;margin-top:8px">Reset weights</button></div>
@@ -648,7 +663,105 @@ function updatePaceSourceLabels(native){
  const rules=document.getElementById('contenderRules');if(!rules.dataset.originalHtml)rules.dataset.originalHtml=rules.innerHTML;
  rules.innerHTML=native?'<h3 class="sectiontitle">Native Brisnet model methods · experimental</h3>'+['contender'].map(k=>'<p class="small">'+escapeText(BRISNET_METHODS[k])+'</p>').join('')+'<div class="note small">Contender consumes early pace and LP. V4.4c-Brisnet base has no pace component. Source styles, turn index and race shapes add no score bonus. The original Beyer/Timeform controls are unchanged; Brisnet variants require separate validation.</div>':rules.dataset.originalHtml;
 }
+function renderHiddenWinnerResearch(){
+ const pressure=document.getElementById('hiddenPacePressure'),watch=document.getElementById('hiddenWinnerWatch'),comparison=document.getElementById('hiddenComparisonReadiness');
+ if(!pressure||!watch||!comparison)return;
+ const sourceRace=providerRace('BRISNET').race;
+ if(!sourceRace){pressure.textContent='Brisnet race unavailable';watch.textContent='Upload matching Brisnet PPs';comparison.textContent='No verified Brisnet comparison available';return;}
+ const native=brisnetPaceDisplay(sourceRace),rows=native.rows||[],rated=rankBrisnetResearch(sourceRace);
+ const ranks=rated?.rankings||[],byNumber=new Map(ranks.map(h=>[String(h.n??h.program??''),h]));
+ const byName=new Map(ranks.map(h=>[String(h.name||'').trim().toLowerCase(),h]));
+ const findRank=row=>byNumber.get(String(row.n))||byName.get(String(row.name||'').trim().toLowerCase());
+ const scored=rows.map(row=>({...row,rr:findRank(row)}));
+ const knownQ=scored.filter(h=>Number.isInteger(h.quirin)),leaders=knownQ.filter(h=>h.quirin>=6&&['E','E/P'].includes(h.style));
+ const incomplete=rows.length!==(sourceRace.horses||[]).filter(paceEligible).length||ranks.length!==rows.length||scored.some(h=>!h.rr);
+ pressure.textContent=knownQ.length+'/'+rows.length+' verified Quirin values · '+leaders.length+' E/E-P runners with 6–8 points'+(incomplete?' · Incomplete model/pace coverage':'')+'. This is an early-pressure indicator, not a predicted pace or finish.';
+ if(!ranks.length){watch.textContent='Brisnet RR rankings unavailable; no candidates calculated.';comparison.textContent='RR comparison unavailable.';return;}
+ const top=ranks.find(h=>h.rank===1)||ranks[0],topRow=scored.find(h=>h.rr?.rank===1);
+ const variant=watch.querySelector('#hiddenPaceVariant')?.value||'distance';
+ const isRoute=native.early_key==='e2';
+ const metricKey=variant==='e1'?'e1':variant==='e2'?'e2':variant==='distance'?(isRoute?'e2':'e1'):'e2';
+ const metricValue=h=>h.metrics?.[metricKey]?.value;
+ const lpValue=h=>h.metrics?.late?.value;
+ const sustained=h=>{const early=h.metrics?.e2,late=h.metrics?.late;return Number.isFinite(early?.value)&&Number.isFinite(late?.value)&&early.date===late.date&&early.page===late.page?(early.value+late.value)/2:null;};
+ const scoreValue=h=>variant==='sustained'?sustained(h):metricValue(h);
+ const maxEarly=Math.max(...scored.map(h=>Number.isFinite(scoreValue(h))?scoreValue(h):-Infinity));
+ const earlyCoverage=scored.filter(h=>Number.isFinite(scoreValue(h))).length;
+ const earlyComplete=rows.length>0&&earlyCoverage===rows.length&&!incomplete;
+ const variantLabel=variant==='sustained'?'E2 + LP average':metricKey.toUpperCase();
+ const variantSelector='<label class="small" for="hiddenPaceVariant">Research pace measure </label><select id="hiddenPaceVariant"><option value="e1"'+(variant==='e1'?' selected':'')+'>A · E1 all distances</option><option value="e2"'+(variant==='e2'?' selected':'')+'>B · E2 all distances</option><option value="distance"'+(variant==='distance'?' selected':'')+'>C · E1 sprint / E2 route</option><option value="sustained"'+(variant==='sustained'?' selected':'')+'>D · E2 + LP average</option></select>';
+ const validHistoryLine=l=>l.source?.provider==='BRISNET'&&/^\d{4}-\d{2}-\d{2}$/.test(l.date||'')&&Number.isFinite(Date.parse(l.date))&&new Date(l.date).toISOString().slice(0,10)===l.date&&l.date<sourceRace.date&&Number.isFinite(l.speed)&&l.speed>=0;
+ const recentSpeedLines=horse=>(horse?.ratings?.lines||[]).filter(validHistoryLine).sort((a,b)=>b.date.localeCompare(a.date)).slice(0,5);
+ const topSpeedHorse=(sourceRace.horses||[]).find(x=>String(x.n)===String(top.n)||String(x.name||'').toLowerCase()===String(top.name||'').toLowerCase());
+ const topSpeed=recentSpeedLines(topSpeedHorse).map(l=>l.speed);
+ const flags=scored.filter(h=>[3,4].includes(h.rr?.rank)).map(h=>{
+  const sourceHorse=(sourceRace.horses||[]).find(x=>String(x.n)===String(h.n)||String(x.name||'').toLowerCase()===String(h.name||'').toLowerCase());
+  const speed=recentSpeedLines(sourceHorse).map(l=>l.speed);
+  const hiddenSpeed=earlyComplete&&Number.isFinite(scoreValue(h))&&Number.isFinite(maxEarly)&&maxEarly-scoreValue(h)<=3;
+  const hiddenForm=earlyComplete&&speed.length===5&&Math.max(...speed)-Math.min(...speed)<=15&&Number.isFinite(scoreValue(h))&&maxEarly-scoreValue(h)<=6;
+  return {...h,hiddenSpeed,hiddenForm,speed};
+ }).filter(h=>h.hiddenSpeed||h.hiddenForm);
+ const missing=!earlyComplete?' · Hidden Winner flags withheld: complete ranked field and comparable early-pace coverage required.':'';
+ watch.innerHTML=variantSelector+'<div class="tiny muted">Current screen: '+variantLabel+'. Research variants only; no live model change.</div>'+(!earlyComplete?'Hidden Winner screening withheld: '+earlyCoverage+'/'+rows.length+' runners have comparable '+variantLabel+'; incomplete or unranked fields can hide the true leader.':flags.length?flags.map(h=>'<div class="note small"><b>#'+escapeText(h.n)+' '+escapeText(h.name)+'</b> · RR #'+h.rr.rank+' · '+(h.hiddenSpeed?'Hidden Speed ':'')+(h.hiddenForm?'Hidden Form':'')+' · '+variantLabel+' '+(scoreValue(h)??'Unknown')+' · Quirin '+(h.quirin??'Not verified')+'</div>').join('')+'<div class="tiny muted">In-sample screening thresholds; no automatic rank change.'+missing+'</div>':'No RR #3/#4 candidates met the preliminary Speed/Form thresholds.'+missing);
+ const paceSelect=watch.querySelector('#hiddenPaceVariant');
+ if(paceSelect)paceSelect.onchange=()=>renderHiddenWinnerResearch();
+ const fmt=h=>h?('#'+escapeText(h.n)+' '+escapeText(h.name)+' · '+(native.early_key==='e2'?'E2 ':'E1 ')+(h.early??'Unknown')+' · Quirin '+(h.quirin??'Not verified')+' · '+escapeText(h.style)):'Not available';
+ const speedLine=a=>a.length?a.map(v=>Number(v).toFixed(0)).join(' → '):'Not verified';
+ const horseSpeed=h=>{
+  if(!h)return [];
+  const horse=(sourceRace.horses||[]).find(x=>String(x.n)===String(h.n)||String(x.name||'').toLowerCase()===String(h.name||'').toLowerCase());
+  return recentSpeedLines(horse).map(l=>l.speed);
+ };
+ const primeValue=h=>{
+  if(!h)return null;
+  const horse=(sourceRace.horses||[]).find(x=>String(x.n)===String(h.n)||String(x.name||'').trim().toLowerCase()===String(h.name||'').trim().toLowerCase());
+  const raw=horse?.ratings?.prime_power;
+  return Number.isFinite(raw)?raw:(typeof horse?.ratings?.prime_power_display==='string'&&/^\d+(?:\.\d+)?$/.test(horse.ratings.prime_power_display.trim())?Number(horse.ratings.prime_power_display):null);
+ };
+ const ppValues=scored.map(primeValue).filter(Number.isFinite),ppBest=ppValues.length?Math.max(...ppValues):null;
+ const candidates=scored.filter(h=>[2,3,4].includes(h.rr?.rank));
+ const previous=comparison.querySelector('#hiddenChallengerSelect')?.value;
+ const selected=candidates.find(h=>String(h.n)===previous)||candidates.find(h=>flags.some(f=>String(f.n)===String(h.n)))||candidates[0]||null;
+ const optionHtml=candidates.map(h=>'<option value="'+escapeText(h.n)+'"'+(selected&&String(selected.n)===String(h.n)?' selected':'')+'>RR #'+h.rr.rank+' · #'+escapeText(h.n)+' '+escapeText(h.name)+'</option>').join('');
+ const row=(label,left,right)=>'<tr><td>'+label+'</td><td>'+escapeText(left??'Not verified')+'</td><td>'+escapeText(right??'Not verified')+'</td></tr>';
+ const speedBars=(a,b)=>{
+  const max=Math.max(1,...a,...b),scale=v=>Math.max(0,Math.min(100,v/max*100));
+  const line=(label,values)=>'<div class="small" style="margin-top:8px"><b>'+label+'</b></div>'+values.map((v,i)=>'<div class="small" style="display:flex;align-items:center;gap:8px;margin-top:4px"><span style="width:45px">#'+(i+1)+'</span><div style="flex:1;background:#253247;border-radius:5px;overflow:hidden;height:12px"><div style="width:'+scale(v)+'%;height:100%;background:'+(label==='RR #1'?'#5a9cd6':'#d5a65b')+'"></div></div><span style="width:32px;text-align:right">'+v+'</span></div>').join('');
+  return '<div style="margin-top:12px"><b>Recent BRIS speed comparison</b><div class="tiny muted">Latest start first. Each bar is a historical speed figure, not a win probability.</div>'+line('RR #1',a)+line('Challenger',b)+'</div>';
+ };
+ const provenance=h=>{
+  if(!h)return 'No matched runner';
+  const horse=(sourceRace.horses||[]).find(x=>String(x.n)===String(h.n)||String(x.name||'').trim().toLowerCase()===String(h.name||'').trim().toLowerCase());
+  const metric=h.metrics?.[native.early_key],late=h.metrics?.late;
+  const speed=recentSpeedLines(horse);
+  const metricText=(label,m)=>label+': '+(m?m.value+' ('+m.date+', PP page '+(m.page??'unknown')+')':'not verified');
+  return '#'+escapeText(h.n)+' '+escapeText(h.name)+' — '+escapeText(metricText(native.early_key.toUpperCase(),metric))+'; '+escapeText(metricText('LP',late))+'; speed lines: '+(speed.length?speed.map(l=>escapeText(l.speed+' ('+l.date+', PP page '+(l.source?.page??'unknown')+')')).join(', '):'not verified');
+ };
+ const provenancePanel=h=>'<details style="margin-top:10px"><summary>View source evidence and dates</summary><div class="small muted" style="margin-top:6px">'+provenance(topRow)+'</div><div class="small muted" style="margin-top:6px">'+provenance(h)+'</div><div class="tiny muted">Prime Power and Quirin are horse-level Brisnet ratings; individual PP page provenance is not exposed by this view. Verify against the uploaded PP.</div></details>';
+ const comparisonTable=h=>'<div style="overflow-x:auto;margin-top:10px"><table class="pace-comparison-table"><thead><tr><th>Evidence</th><th>RR #1</th><th>Selected challenger</th></tr></thead><tbody>'+
+ row('Horse',topRow?'#'+topRow.n+' '+topRow.name:'Unavailable',h?'#'+h.n+' '+h.name:'Unavailable')+
+ row('RR rank',topRow?.rr?.rank,h?.rr?.rank)+
+ row('Running style',topRow?.style,h?.style)+
+ row('Quirin (0–8)',topRow?.quirin,h?.quirin)+
+ row('Matched E1',topRow?.metrics?.e1?.value,h?.metrics?.e1?.value)+
+ row('Matched E2',topRow?.metrics?.e2?.value,h?.metrics?.e2?.value)+
+ row('Matched LP',topRow?.late,h?.late)+
+ row('Recent BRIS speed (newest first)',speedLine(topSpeed),speedLine(horseSpeed(h)))+
+ row('Prime Power',primeValue(topRow),primeValue(h))+
+ '</tbody></table></div>'+speedBars(topSpeed,horseSpeed(h))+provenancePanel(h);
+ const candidateSelect='<label for="hiddenChallengerSelect" class="small"><b>Compare RR #1 with</b></label> <select id="hiddenChallengerSelect" aria-label="Choose RR challenger"'+(!candidates.length?' disabled':'')+'>'+optionHtml+'</select>';
+ comparison.innerHTML=candidateSelect+'<div id="hiddenComparisonContent">'+comparisonTable(selected)+'</div>'+'<div class="tiny muted" style="margin-top:8px">Research only. Matched pace values use the existing Brisnet source rules; recent speed is from the latest verified prior starts. Prime Power is a reference only'+(ppBest===null?'; no verified Prime Power values':' (field high '+ppBest.toFixed(1)+')')+'. Quirin measures early positioning, not E1/E2 speed. No ranking changes or betting recommendations.'+missing+'</div>';
+ const select=comparison.querySelector('#hiddenChallengerSelect');
+ if(select)select.onchange=()=>{
+  const h=candidates.find(x=>String(x.n)===select.value)||null;
+  const content=comparison.querySelector('#hiddenComparisonContent');
+  if(content)content.innerHTML=comparisonTable(h);
+ };
+
+}
+
 function renderPace(){
+ renderHiddenWinnerResearch();
  const native=brisnetPaceDisplay(race);updatePaceSourceLabels(native.available);
  if(native.available){paceMap.innerHTML=brisnetPaceMapHtml(native,{compact:true});return;}
  const runners=race.horses.filter(paceEligible).map(h=>({...h,pace:paceProfile(h)})),unknown=runners.filter(h=>!h.pace.known);
