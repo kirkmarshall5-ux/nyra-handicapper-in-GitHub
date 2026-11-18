@@ -1,5 +1,5 @@
 import {brisnetRaceSurface} from './brisnet-race-surface.js';
-import {parseFtsEvidence} from './fts-research.js';
+import {parseFtsEvidence} from './fts-research.js?v=20261118-fts-month';
 // Separate modern Premium Plus adapter. Brisnet figures never become Beyer/Timeform.
 import {reconstructPage,fingerprintPages} from './card-loader.js';
 import {brisnetDistance} from './brisnet-card-parser.js?v=20261031-distance316';
