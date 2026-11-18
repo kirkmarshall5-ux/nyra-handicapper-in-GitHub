@@ -194,7 +194,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <div class="card span12" style="display:none" aria-hidden="true"><h3 class="sectiontitle">Edit runners</h3><div style="overflow:auto"><table id="editTable"><thead><tr><th>#</th><th>Horse</th><th>Style</th><th>Last Fig</th><th>Best 3</th><th>Form</th><th>Class</th><th>Trip</th><th>Works</th><th>Pedigree</th><th>Core coverage</th><th>Note</th></tr></thead><tbody></tbody></table></div></div>
 <div class="card span12" style="display:none" aria-hidden="true"><div class="note small"><b>Tip:</b> when your PP file is parsed, the dashboard will try to fill Last Fig / Best 3 and snippets. Verified rating inputs are locked. Notes and pace labels are saved locally on this device.</div></div>
 </div></details>
-<div class="card span12"><div class="kicker">Hidden challenger screening audit · all races</div><h3 class="sectiontitle">Why a race did or did not produce a flag</h3><div class="small muted">Strict thresholds stay active. Review-only near misses are never promoted to selections or wagers.</div><div id="hiddenScreeningAudit" style="overflow-x:auto;margin-top:12px" role="status">Awaiting Brisnet card</div></div>
+<div class="card span12"><div class="kicker">Hidden challenger screening audit · all races</div><h3 class="sectiontitle">Why a race did or did not produce a flag</h3><div class="small muted">Strict thresholds stay active. Show up to two closest well-supported candidates only; suppress reference candidates for FTS or thin-data races. Never promote to selections or wagers.</div><div id="hiddenScreeningAudit" style="overflow-x:auto;margin-top:12px" role="status">Awaiting Brisnet card</div></div>
 <div class="card span12" id="paceResearchFooter"><div class="kicker">Supporting pace research</div><div class="grid" style="margin-top:12px"><div class="card span6"><b>Early pace pressure</b><div id="hiddenPacePressure" class="small muted" role="status">Awaiting verified field evidence</div></div><div class="card span6"><b>Hidden Winner watch</b><div id="hiddenWinnerWatch" class="small muted" role="status">Awaiting verified RR ranks and pace/form evidence</div></div></div></div>
 </div></section>
 
@@ -675,17 +675,23 @@ function hiddenWinnerAuditRace(race,variant){
  if(rows.length!==horses.length)gaps.push('pace rows '+rows.length+'/'+horses.length);
  if(covered!==rows.length)gaps.push('comparable pace '+covered+'/'+rows.length);
  if(scored.some(h=>!h.rr))gaps.push('unmatched runner rankings');
+ const history=h=>(h?.ratings?.lines||[]).filter(l=>l.source?.provider==='BRISNET'&&/^\d{4}-\d{2}-\d{2}$/.test(l.date||'')&&l.date<race.date&&Number.isFinite(l.speed)&&l.speed>=0).sort((a,b)=>b.date.localeCompare(a.date)).slice(0,5).map(l=>l.speed);
+ const histories=horses.map(history);
+ // Conservative display gate: no near misses for any FTS or thin field history.
+ const fts=histories.some(lines=>lines.length===0);
+ const experienced=histories.filter(lines=>lines.length>=2).length;
+ const evidenceReady=horses.length>0&&!fts&&experienced/horses.length>=0.7;
  const max=Math.max(...scored.map(h=>Number.isFinite(score(h))?score(h):-Infinity));
  const candidates=scored.filter(h=>[3,4].includes(h.rr?.rank)).map(h=>{
   const source=horses.find(x=>String(x.n)===String(h.n)||String(x.name||'').trim().toLowerCase()===String(h.name||'').trim().toLowerCase());
-  const speeds=(source?.ratings?.lines||[]).filter(l=>l.source?.provider==='BRISNET'&&/^\\d{4}-\\d{2}-\\d{2}$/.test(l.date||'')&&l.date<race.date&&Number.isFinite(l.speed)&&l.speed>=0).sort((a,b)=>b.date.localeCompare(a.date)).slice(0,5).map(l=>l.speed);
-  const delta=Number.isFinite(score(h))?max-score(h):null;
+  const speeds=history(source),delta=Number.isFinite(score(h))?max-score(h):null;
   const stable=speeds.length===5&&Math.max(...speeds)-Math.min(...speeds)<=15;
   return {n:h.n,name:h.name,rank:h.rr.rank,delta,stable,speedCount:speeds.length,flag:complete&&delta!==null&&(delta<=3||(stable&&delta<=6))};
  });
  const flags=candidates.filter(c=>c.flag);
- const near=candidates.filter(c=>!c.flag&&c.delta!==null).sort((a,b)=>a.delta-b.delta).slice(0,2);
- return {complete,gaps,flags,near,candidates,covered,total:rows.length};
+ // Near misses are reference only, never relaxed strict flags. Cap at ten pace points.
+ const near=evidenceReady?candidates.filter(c=>!c.flag&&c.delta!==null&&c.delta>3&&c.delta<=10&&c.speedCount>=3).sort((a,b)=>a.delta-b.delta).slice(0,2):[];
+ return {complete,gaps,flags,near,candidates,covered,total:rows.length,evidenceReady,fts,experienced,horseCount:horses.length};
 }
 function renderHiddenScreeningAudit(variant){
  const el=document.getElementById('hiddenScreeningAudit');if(!el)return;
@@ -693,14 +699,14 @@ function renderHiddenScreeningAudit(variant){
  const races=Object.values(card?.races||{});
  if(!races.length){el.textContent='No Brisnet card loaded';return;}
  const esc=v=>escapeText(String(v));
- el.innerHTML='<table><thead><tr><th>Race</th><th>Strict result</th><th>Why / next review</th></tr></thead><tbody>'+races.map(r=>{
+ el.innerHTML='<table><thead><tr><th>Race</th><th>Strict result</th><th>Closest candidates (reference only)</th><th>Reason</th></tr></thead><tbody>'+races.map(r=>{
   const a=hiddenWinnerAuditRace(r,variant);
   const flagText=a.flags.map(h=>'#'+h.n+' '+h.name+' (RR '+h.rank+')').join(', ');
-  const review=a.near.map(h=>'#'+h.n+' '+h.name+' (RR '+h.rank+', '+h.delta.toFixed(1)+' pace points behind leader'+(h.stable?', stable form':'')+')').join('; ');
-  const status=!a.complete?'Screening incomplete':a.flags.length?'Verified flag':'No strict flag';
-  const why=!a.complete?a.gaps.join('; ')+(review?'; provisional candidates: '+review:''):a.flags.length?flagText:'No RR #3/#4 met the strict pace/form threshold'+(review?'; closest: '+review:'');
-  return '<tr><td>'+esc(r.race??r.number??'?')+'</td><td>'+esc(status)+'</td><td>'+esc(why)+'</td></tr>';
- }).join('')+'</tbody></table><div class="tiny muted" style="margin-top:8px">Review-only candidates may have failed thresholds or incomplete coverage. They are not flags. Pace measure: '+esc(variant)+'. No live RR formula, rankings, or bet changes.</div>';
+  const review=a.near.map(h=>'#'+h.n+' '+h.name+' (RR '+h.rank+', '+h.delta.toFixed(1)+' pace points back)').join('; ');
+  const status=!a.complete?'Screening incomplete':a.flags.length?'Strict flag':'No strict flag';
+  const reason=!a.evidenceReady?(a.fts?'FTS / no verified prior speed history in field':'Thin historical speed coverage ('+a.experienced+'/'+a.horseCount+' with 2+ lines)'):(a.complete?(a.flags.length?'Strict thresholds met':'Strict pace/form thresholds not met'):'Incomplete: '+a.gaps.join('; '));
+  return '<tr><td>'+esc(r.race??r.number??'?')+'</td><td>'+esc(status)+(flagText?' · '+esc(flagText):'')+'</td><td>'+esc(review||'—')+'</td><td>'+esc(reason)+'</td></tr>';
+ }).join('')+'</tbody></table><div class="tiny muted" style="margin-top:8px">Closest candidates: RR #3/#4 only, 3+ verified recent BRIS speeds, within 10 pace points of field leader; suppressed for any first-time starter or when fewer than 70% of runners have two speed lines. Strict flags remain unchanged. No rank, formula or bet changes. Research thresholds are unvalidated. Measure: '+esc(variant)+'.</div>';
 }
 function renderHiddenWinnerResearch(){
  const pressure=document.getElementById('hiddenPacePressure'),watch=document.getElementById('hiddenWinnerWatch'),comparison=document.getElementById('hiddenComparisonReadiness');
