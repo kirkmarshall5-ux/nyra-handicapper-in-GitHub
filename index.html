@@ -159,7 +159,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <div class="card span12" id="hiddenWinnerComparison">
  <div class="kicker">Horse-by-horse research · original RR selections remain authoritative</div>
  <h3 class="sectiontitle">Horse Pace &amp; Form Comparison</h3>
- <div class="small muted">Compare a challenger with RR's first choice using verified E1/E2, Quirin, running style, recent speed and Prime Power. Unavailable source fields must remain unknown.</div>
+ <div class="small muted">Research pace figures use a stricter 0.5-furlong match; Brisnet RR scoring uses a 1-furlong match. These are not interchangeable. The E2+LP option requires same-date, same-page source evidence. Compare challengers with RR's first choice using verified figures, running style, recent Speed and Prime Power; missing evidence stays unknown.</div>
  <div id="hiddenComparisonReadiness" class="note small" role="status" style="margin-top:10px">The existing projected race setup and source evidence below remain available while the verified comparison feed is connected.</div>
  </div>
 <div class="card span4" id="transparentRatingRules"><div class="kicker">Transparent comparison</div><h3 class="sectiontitle" id="paceRulesTitle">Locked V4.4c rules</h3>
@@ -683,7 +683,7 @@ function renderHiddenWinnerResearch(){
  const metricKey=variant==='e1'?'e1':variant==='e2'?'e2':variant==='distance'?(isRoute?'e2':'e1'):'e2';
  const metricValue=h=>h.metrics?.[metricKey]?.value;
  const lpValue=h=>h.metrics?.late?.value;
- const sustained=h=>Number.isFinite(metricValue(h))&&Number.isFinite(lpValue(h))?(metricValue(h)+lpValue(h))/2:null;
+ const sustained=h=>{const early=h.metrics?.e2,late=h.metrics?.late;return Number.isFinite(early?.value)&&Number.isFinite(late?.value)&&early.date===late.date&&early.page===late.page?(early.value+late.value)/2:null;};
  const scoreValue=h=>variant==='sustained'?sustained(h):metricValue(h);
  const maxEarly=Math.max(...scored.map(h=>Number.isFinite(scoreValue(h))?scoreValue(h):-Infinity));
  const earlyCoverage=scored.filter(h=>Number.isFinite(scoreValue(h))).length;
