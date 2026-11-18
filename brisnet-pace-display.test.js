@@ -65,7 +65,7 @@ test('clean pace layout keeps comparable dates, styles, ranks and Unknown withou
 test('source-only evidence retains unmatched latest start and preserves original detailed renderer',()=>{
  const m=brisnetPaceDisplay(race([horse(1,[line({furlongs:6})])])),compact=brisnetEvidenceHtml(m,{sourceOnly:true});
  assert.equal((compact.match(/<table/g)||[]).length,1);assert.match(compact,/Unmatched - context only/);assert.match(compact,/87<\/td><td>85<\/td><td>79/);assert.doesNotMatch(compact,/Research early figure/);
- assert.match(brisnetEvidenceHtml(m),/Research early figure/);assert.match(brisnetEvidenceHtml(m),/0\.5-furlong research display tolerance/);assert.match(brisnetCallRanksHtml(m),/Turn rank \/ index/);
+ assert.match(brisnetEvidenceHtml(m),/Research early figure/);assert.doesNotMatch(brisnetEvidenceHtml(m),/Early model input/);assert.match(brisnetEvidenceHtml(m),/0\.5-furlong research display tolerance/);assert.match(brisnetCallRanksHtml(m),/Turn rank \/ index/);
 });
 
 test('nonqualifying historical pace has a distinct label from absent figures and first-time starters',()=>{
