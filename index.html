@@ -697,11 +697,23 @@ function renderHiddenWinnerResearch(){
   const horse=(sourceRace.horses||[]).find(x=>String(x.n)===String(h.n)||String(x.name||'').toLowerCase()===String(h.name||'').toLowerCase());
   return (horse?.ratings?.lines||[]).filter(l=>l.source?.provider==='BRISNET'&&typeof l.date==='string'&&l.date<sourceRace.date&&Number.isFinite(l.speed)&&l.speed>=0).slice(0,5).map(l=>l.speed);
  };
+ const primeValue=h=>{
+  if(!h)return null;
+  const horse=(sourceRace.horses||[]).find(x=>String(x.n)===String(h.n)||String(x.name||'').trim().toLowerCase()===String(h.name||'').trim().toLowerCase());
+  const raw=horse?.ratings?.prime_power;
+  return Number.isFinite(raw)?raw:(typeof horse?.ratings?.prime_power_display==='string'&&/^\\d+(?:\\.\\d+)?$/.test(horse.ratings.prime_power_display.trim())?Number(horse.ratings.prime_power_display):null);
+ };
+ const ppValues=scored.map(primeValue).filter(Number.isFinite),ppBest=ppValues.length?Math.max(...ppValues):null;
  const candidates=scored.filter(h=>[2,3,4].includes(h.rr?.rank));
  const previous=comparison.querySelector('#hiddenChallengerSelect')?.value;
  const selected=candidates.find(h=>String(h.n)===previous)||candidates.find(h=>flags.some(f=>String(f.n)===String(h.n)))||candidates[0]||null;
  const optionHtml=candidates.map(h=>'<option value="'+escapeText(h.n)+'"'+(selected&&String(selected.n)===String(h.n)?' selected':'')+'>RR #'+h.rr.rank+' · #'+escapeText(h.n)+' '+escapeText(h.name)+'</option>').join('');
  const row=(label,left,right)=>'<tr><td>'+label+'</td><td>'+escapeText(left??'Not verified')+'</td><td>'+escapeText(right??'Not verified')+'</td></tr>';
+ const speedBars=(a,b)=>{
+  const max=Math.max(1,...a,...b),scale=v=>Math.max(0,Math.min(100,v/max*100));
+  const line=(label,values)=>'<div class="small" style="margin-top:8px"><b>'+label+'</b></div>'+values.map((v,i)=>'<div class="small" style="display:flex;align-items:center;gap:8px;margin-top:4px"><span style="width:45px">#'+(i+1)+'</span><div style="flex:1;background:#253247;border-radius:5px;overflow:hidden;height:12px"><div style="width:'+scale(v)+'%;height:100%;background:'+(label==='RR #1'?'#5a9cd6':'#d5a65b')+'"></div></div><span style="width:32px;text-align:right">'+v+'</span></div>').join('');
+  return '<div style="margin-top:12px"><b>Recent BRIS speed comparison</b><div class="tiny muted">Latest start first. Each bar is a historical speed figure, not a win probability.</div>'+line('RR #1',a)+line('Challenger',b)+'</div>';
+ };
  const comparisonTable=h=>'<div style="overflow-x:auto;margin-top:10px"><table class="pace-comparison-table"><thead><tr><th>Evidence</th><th>RR #1</th><th>Selected challenger</th></tr></thead><tbody>'+
  row('Horse',topRow?'#'+topRow.n+' '+topRow.name:'Unavailable',h?'#'+h.n+' '+h.name:'Unavailable')+
  row('RR rank',topRow?.rr?.rank,h?.rr?.rank)+
@@ -710,10 +722,10 @@ function renderHiddenWinnerResearch(){
  row(native.early_key==='e2'?'Matched E2':'Matched E1',topRow?.early,h?.early)+
  row('Matched LP',topRow?.late,h?.late)+
  row('Recent BRIS speed (newest first)',speedLine(topSpeed),speedLine(horseSpeed(h)))+
- row('Prime Power','Not yet mapped','Not yet mapped')+
- '</tbody></table></div>';
+ row('Prime Power',primeValue(topRow),primeValue(h))+
+ '</tbody></table></div>'+speedBars(topSpeed,horseSpeed(h));
  const candidateSelect='<label for="hiddenChallengerSelect" class="small"><b>Compare RR #1 with</b></label> <select id="hiddenChallengerSelect" aria-label="Choose RR challenger"'+(!candidates.length?' disabled':'')+'>'+optionHtml+'</select>';
- comparison.innerHTML=candidateSelect+comparisonTable(selected)+'<div class="tiny muted" style="margin-top:8px">Research only. Matched pace values use the existing Brisnet source rules; recent speed is from the latest verified prior starts. Quirin measures early positioning, not E1/E2 speed. No ranking changes or betting recommendations.'+missing+'</div>';
+ comparison.innerHTML=candidateSelect+comparisonTable(selected)+'<div class="tiny muted" style="margin-top:8px">Research only. Matched pace values use the existing Brisnet source rules; recent speed is from the latest verified prior starts. Prime Power is a reference only'+(ppBest===null?'; no verified Prime Power values':' (field high '+ppBest.toFixed(1)+')')+'. Quirin measures early positioning, not E1/E2 speed. No ranking changes or betting recommendations.'+missing+'</div>';
  const select=comparison.querySelector('#hiddenChallengerSelect');
  if(select)select.onchange=()=>{
   const h=candidates.find(x=>String(x.n)===select.value)||null;
