@@ -668,8 +668,10 @@ function hiddenWinnerAuditRace(race,variant){
  const scored=rows.map(h=>({...h,rr:byN.get(String(h.n))||byName.get(String(h.name||'').trim().toLowerCase())}));
  const metricKey=variant==='e1'?'e1':variant==='e2'?'e2':variant==='distance'?native.early_key:'e2';
  const score=h=>variant==='sustained'?(Number.isFinite(h.metrics?.e2?.value)&&Number.isFinite(h.metrics?.late?.value)&&h.metrics.e2.date===h.metrics.late.date&&h.metrics.e2.page===h.metrics.late.page?(h.metrics.e2.value+h.metrics.late.value)/2:null):h.metrics?.[metricKey]?.value;
- const covered=scored.filter(h=>Number.isFinite(score(h))).length;
- const complete=horses.length>0&&rows.length===horses.length&&ranks.length===rows.length&&scored.every(h=>h.rr)&&covered===rows.length;
+ const comparable=scored.map(h=>({...h,paceScore:score(h)})).filter(h=>Number.isFinite(h.paceScore));
+ const covered=comparable.length;
+ const fullyRanked=horses.length>0&&rows.length===horses.length&&ranks.length===rows.length&&scored.every(h=>h.rr);
+ const complete=fullyRanked&&covered===rows.length;
  const gaps=[];
  if(ranks.length!==horses.length)gaps.push('RR ranks '+ranks.length+'/'+horses.length);
  if(rows.length!==horses.length)gaps.push('pace rows '+rows.length+'/'+horses.length);
@@ -691,7 +693,16 @@ function hiddenWinnerAuditRace(race,variant){
  const flags=candidates.filter(c=>c.flag);
  // Near misses are reference only, never relaxed strict flags. Cap at ten pace points.
  const near=evidenceReady&&complete?candidates.filter(c=>!c.flag&&c.delta!==null&&c.delta>3&&c.delta<=10&&c.speedCount>=3).sort((a,b)=>a.delta-b.delta||a.rank-b.rank||String(a.n).localeCompare(String(b.n),undefined,{numeric:true})).slice(0,1):[];
- return {complete,gaps,flags,near,candidates,covered,total:rows.length,evidenceReady,fts,experienced,horseCount:horses.length};
+ const leaders=comparable.filter(h=>h.rr?.rank===1||h.rr?.rank===2).sort((a,b)=>a.rr.rank-b.rr.rank);
+ const limited=!complete&&fullyRanked&&evidenceReady&&covered>=0.8*horses.length&&leaders.length===2;
+ const limitedCandidate=limited?candidates.filter(c=>c.delta!==null&&c.delta<=10&&c.speedCount>=3)
+  .sort((a,b)=>a.delta-b.delta||a.rank-b.rank)[0]:null;
+ const runnerKey=h=>h.n?'program:'+String(h.n).trim().toUpperCase():'name:'+String(h.name||'').trim().toLowerCase();
+ const coveredKeys=new Set(comparable.map(runnerKey));
+ const missingPace=horses.filter(h=>!coveredKeys.has(runnerKey(h)));
+ const unranked=horses.filter(h=>!(h.n&&byN.has(String(h.n)))&&!byName.has(String(h.name||'').trim().toLowerCase()));
+ return {complete,gaps,flags,near,covered,evidenceReady,fts,experienced,horseCount:horses.length,
+  limited,limitedCandidate,leaders,missingPace,unranked,availablePace:comparable};
 }
 function hiddenStudySnapshot(variant){
  const card=providerCards.BRISNET||(cardProvider(activeCard)==='BRISNET'?activeCard:null);
@@ -739,8 +750,20 @@ function renderHiddenScreeningAudit(variant){
   const review=a.near.map(h=>'#'+h.n+' '+h.name+' (RR '+h.rank+', '+h.delta.toFixed(1)+' pace points back; '+h.speedCount+' speed figures)').join('; ');
   const status=!a.complete?'Screening incomplete':a.flags.length?'Strict flag':'No strict flag';
   const reason=!a.evidenceReady?(a.fts?'FTS / no verified prior speed history in field':'Thin historical speed coverage ('+a.experienced+'/'+a.horseCount+' with 2+ lines)'):(a.complete?(a.flags.length?'Strict thresholds met':'Strict pace/form thresholds not met'):'Incomplete: '+a.gaps.join('; '));
-  return '<tr><td>'+esc(r.race??r.number??'?')+'</td><td>'+esc(status)+(flagText?' · '+esc(flagText):'')+'</td><td>'+esc(review||'—')+'</td><td>'+esc(reason)+'</td></tr>';
- }).join('')+'</tbody></table><div class="tiny muted" style="margin-top:8px">Closest reference: at most one RR #3/#4 horse, 3+ verified recent BRIS speeds, within 10 pace points of the field leader; withheld for FTS, incomplete RR/pace coverage, or fewer than 70% of runners with two speed lines. Strict flags remain unchanged. No rank, formula or bet changes. Research thresholds are unvalidated. Measure: '+esc(variant)+'.</div>';
+  const horseLabel=h=>'#'+h.n+' '+h.name;
+  const paceLabel=h=>horseLabel(h)+' ('+h.paceScore.toFixed(1)+')';
+  const detail=a.limited?[
+   a.covered+'/'+a.horseCount+' runners with comparable pace',
+   ...a.leaders.map(h=>'RR #'+h.rr.rank+' '+paceLabel(h)),
+   'Missing pace: '+a.missingPace.map(horseLabel).join(', ')
+  ].join(' · '):null;
+  const candidate=a.limitedCandidate;
+  const limitedText=candidate?horseLabel(candidate)+' (RR #'+candidate.rank+', '+candidate.delta.toFixed(1)+' points back vs. best available pace)':'No qualifying challenger among the covered runners';
+  const paceDetails=!a.limited&&a.unranked.length&&a.evidenceReady&&a.covered>=0.8*a.horseCount
+   ?'<details><summary>Available pace figures</summary>'+esc(a.availablePace.map(paceLabel).join(', '))+'<div>'+esc('Unranked by RR: '+a.unranked.map(horseLabel).join(', '))+'</div></details>':'';
+  const reference=a.limited?'<b>Limited coverage</b><div>'+esc(limitedText)+'</div><div class="tiny muted">'+esc(detail)+'</div>':esc(review||'—')+paceDetails;
+  return '<tr><td>'+esc(r.race??r.number??'?')+'</td><td>'+esc(status)+(flagText?' · '+esc(flagText):'')+'</td><td>'+reference+'</td><td>'+esc(reason)+'</td></tr>';
+ }).join('')+'</tbody></table><div class="tiny muted" style="margin-top:8px">Research reference: show up to one RR #3/#4 horse with 3+ verified recent BRIS speeds and within 10 points of the best available pace. Limited coverage requires a complete RR ranking, comparable figures for both RR leaders and at least 80% comparable pace coverage. Both views require prior speed history for every runner and two or more speed lines for at least 70% of the field. A missing runner could be faster. Strict flags remain unchanged. Research thresholds are unvalidated. Measure: '+esc(variant)+'.</div>';
 }
 function renderHiddenWinnerResearch(){
  const pressure=document.getElementById('hiddenPacePressure'),watch=document.getElementById('hiddenWinnerWatch'),comparison=document.getElementById('hiddenComparisonReadiness');
