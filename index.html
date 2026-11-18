@@ -159,7 +159,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <div class="card span12" id="hiddenWinnerComparison">
  <div class="kicker">Horse-by-horse research · original RR selections remain authoritative</div>
  <h3 class="sectiontitle">Horse Pace &amp; Form Comparison</h3>
- <div class="small muted">Research pace figures use a stricter 0.5-furlong match; Brisnet RR scoring uses a 1-furlong match. These are not interchangeable. The E2+LP option requires same-date, same-page source evidence. Compare challengers with RR's first choice using verified figures, running style, recent Speed and Prime Power; missing evidence stays unknown.</div>
+ <div class="small muted">Research pace figures use a stricter 0.5-furlong match; Brisnet RR scoring uses a 1-furlong match. These are not interchangeable. The E2+LP option requires same-date, same-page source evidence. Compare RR #1, RR #2 and the strongest flagged RR #3/#4 challenger side by side using verified figures, running style, recent Speed and Prime Power; missing evidence stays unknown.</div>
  <div id="hiddenComparisonReadiness" class="note small" role="status" style="margin-top:10px">The existing projected race setup and source evidence below remain available while the verified comparison feed is connected.</div>
  </div>
 <div class="card span4" id="transparentRatingRules"><div class="kicker">Transparent comparison</div><h3 class="sectiontitle" id="paceRulesTitle">Locked V4.4c rules</h3>
@@ -719,15 +719,25 @@ function renderHiddenWinnerResearch(){
   return Number.isFinite(raw)?raw:(typeof horse?.ratings?.prime_power_display==='string'&&/^\d+(?:\.\d+)?$/.test(horse.ratings.prime_power_display.trim())?Number(horse.ratings.prime_power_display):null);
  };
  const ppValues=scored.map(primeValue).filter(Number.isFinite),ppBest=ppValues.length?Math.max(...ppValues):null;
- const candidates=scored.filter(h=>[2,3,4].includes(h.rr?.rank));
+ const rrSecond=scored.find(h=>h.rr?.rank===2)||null;
+ // A hidden challenger must come from outside RR's first two. Use only
+ // the already displayed research flags; never silently promote a horse.
+ const hiddenCandidates=flags.filter(h=>[3,4].includes(h.rr?.rank));
+ const hiddenRanked=hiddenCandidates.slice().sort((a,b)=>
+  Number(b.hiddenSpeed)-Number(a.hiddenSpeed)||
+  Number(b.hiddenForm)-Number(a.hiddenForm)||
+  (Number.isFinite(scoreValue(b))?scoreValue(b):-Infinity)-(Number.isFinite(scoreValue(a))?scoreValue(a):-Infinity)||
+  (b.rr?.rank??99)-(a.rr?.rank??99));
  const previous=comparison.querySelector('#hiddenChallengerSelect')?.value;
- const selected=candidates.find(h=>String(h.n)===previous)||candidates.find(h=>flags.some(f=>String(f.n)===String(h.n)))||candidates[0]||null;
- const optionHtml=candidates.map(h=>'<option value="'+escapeText(h.n)+'"'+(selected&&String(selected.n)===String(h.n)?' selected':'')+'>RR #'+h.rr.rank+' · #'+escapeText(h.n)+' '+escapeText(h.name)+'</option>').join('');
- const row=(label,left,right)=>'<tr><td>'+label+'</td><td>'+escapeText(left??'Not verified')+'</td><td>'+escapeText(right??'Not verified')+'</td></tr>';
- const speedBars=(a,b)=>{
-  const max=Math.max(1,...a,...b),scale=v=>Math.max(0,Math.min(100,v/max*100));
-  const line=(label,values)=>'<div class="small" style="margin-top:8px"><b>'+label+'</b></div>'+values.map((v,i)=>'<div class="small" style="display:flex;align-items:center;gap:8px;margin-top:4px"><span style="width:45px">#'+(i+1)+'</span><div style="flex:1;background:#253247;border-radius:5px;overflow:hidden;height:12px"><div style="width:'+scale(v)+'%;height:100%;background:'+(label==='RR #1'?'#5a9cd6':'#d5a65b')+'"></div></div><span style="width:32px;text-align:right">'+v+'</span></div>').join('');
-  return '<div style="margin-top:12px"><b>Recent BRIS speed comparison</b><div class="tiny muted">Latest start first. Each bar is a historical speed figure, not a win probability.</div>'+line('RR #1',a)+line('Challenger',b)+'</div>';
+ const selected=hiddenRanked.find(h=>String(h.n)===previous)||hiddenRanked[0]||null;
+ const optionHtml=hiddenRanked.map(h=>'<option value="'+escapeText(h.n)+'"'+(selected&&String(selected.n)===String(h.n)?' selected':'')+'>RR #'+h.rr.rank+' · #'+escapeText(h.n)+' '+escapeText(h.name)+'</option>').join('');
+ const row=(label,...values)=>'<tr><td>'+label+'</td>'+values.map(v=>'<td>'+escapeText(v??'Not verified')+'</td>').join('')+'</tr>';
+ const speedBars=(horses)=>{
+  const all=horses.flatMap(h=>horseSpeed(h)),max=Math.max(1,...all),scale=v=>Math.max(0,Math.min(100,v/max*100));
+  return '<div style="margin-top:12px"><b>Recent BRIS speed comparison</b><div class="tiny muted">Newest start first; historical figures, not win probabilities.</div>'+horses.map((h,i)=>{
+   const vals=horseSpeed(h),label=['RR #1','RR #2','Hidden challenger'][i];
+   return '<div class="small" style="margin-top:8px"><b>'+label+'</b> · '+(h?'#'+escapeText(h.n)+' '+escapeText(h.name):'Unavailable')+'</div>'+(vals.length?vals.map((v,j)=>'<div class="small" style="display:flex;align-items:center;gap:8px;margin-top:4px"><span style="width:45px">#'+(j+1)+'</span><div style="flex:1;background:#253247;border-radius:5px;overflow:hidden;height:12px"><div style="width:'+scale(v)+'%;height:100%;background:'+['#5a9cd6','#72b9a1','#d5a65b'][i]+'"></div></div><span style="width:32px;text-align:right">'+v+'</span></div>').join(''):'<div class="tiny muted">No verified recent speed figures</div>');
+  }).join('')+'</div>';
  };
  const provenance=h=>{
   if(!h)return 'No matched runner';
@@ -737,23 +747,26 @@ function renderHiddenWinnerResearch(){
   const metricText=(label,m)=>label+': '+(m?m.value+' ('+m.date+', PP page '+(m.page??'unknown')+')':'not verified');
   return '#'+escapeText(h.n)+' '+escapeText(h.name)+' — '+escapeText(metricText(native.early_key.toUpperCase(),metric))+'; '+escapeText(metricText('LP',late))+'; speed lines: '+(speed.length?speed.map(l=>escapeText(l.speed+' ('+l.date+', PP page '+(l.source?.page??'unknown')+')')).join(', '):'not verified');
  };
- const provenancePanel=h=>'<details style="margin-top:10px"><summary>View source evidence and dates</summary><div class="small muted" style="margin-top:6px">'+provenance(topRow)+'</div><div class="small muted" style="margin-top:6px">'+provenance(h)+'</div><div class="tiny muted">Prime Power and Quirin are horse-level Brisnet ratings; individual PP page provenance is not exposed by this view. Verify against the uploaded PP.</div></details>';
- const comparisonTable=h=>'<div style="overflow-x:auto;margin-top:10px"><table class="pace-comparison-table"><thead><tr><th>Evidence</th><th>RR #1</th><th>Selected challenger</th></tr></thead><tbody>'+
- row('Horse',topRow?'#'+topRow.n+' '+topRow.name:'Unavailable',h?'#'+h.n+' '+h.name:'Unavailable')+
- row('RR rank',topRow?.rr?.rank,h?.rr?.rank)+
- row('Running style',topRow?.style,h?.style)+
- row('Quirin (0–8)',topRow?.quirin,h?.quirin)+
- row('Matched E1',topRow?.metrics?.e1?.value,h?.metrics?.e1?.value)+
- row('Matched E2',topRow?.metrics?.e2?.value,h?.metrics?.e2?.value)+
- row('Matched LP',topRow?.late,h?.late)+
- row('Recent BRIS speed (newest first)',speedLine(topSpeed),speedLine(horseSpeed(h)))+
- row('Prime Power',primeValue(topRow),primeValue(h))+
- '</tbody></table></div>'+speedBars(topSpeed,horseSpeed(h))+provenancePanel(h);
- const candidateSelect='<label for="hiddenChallengerSelect" class="small"><b>Compare RR #1 with</b></label> <select id="hiddenChallengerSelect" aria-label="Choose RR challenger"'+(!candidates.length?' disabled':'')+'>'+optionHtml+'</select>';
- comparison.innerHTML=candidateSelect+'<div id="hiddenComparisonContent">'+comparisonTable(selected)+'</div>'+'<div class="tiny muted" style="margin-top:8px">Research only. Matched pace values use the existing Brisnet source rules; recent speed is from the latest verified prior starts. Prime Power is a reference only'+(ppBest===null?'; no verified Prime Power values':' (field high '+ppBest.toFixed(1)+')')+'. Quirin measures early positioning, not E1/E2 speed. No ranking changes or betting recommendations.'+missing+'</div>';
+ const provenancePanel=h=>'<details style="margin-top:10px"><summary>View source evidence and dates for all three horses</summary>'+[topRow,rrSecond,h].map(x=>'<div class="small muted" style="margin-top:6px">'+provenance(x)+'</div>').join('')+'<div class="tiny muted">Prime Power and Quirin are horse-level Brisnet ratings; individual PP page provenance is not exposed by this view.</div></details>';
+ const comparisonTable=h=>{
+  const horses=[topRow,rrSecond,h];
+  return '<div style="overflow-x:auto;margin-top:10px"><table class="pace-comparison-table"><thead><tr><th>Evidence</th><th>RR #1</th><th>RR #2</th><th>Strongest hidden challenger</th></tr></thead><tbody>'+
+   row('Horse',...horses.map(x=>x?'#'+x.n+' '+x.name:null))+
+   row('RR rank',...horses.map(x=>x?.rr?.rank))+
+   row('Running style',...horses.map(x=>x?.style))+
+   row('Quirin (0–8)',...horses.map(x=>x?.quirin))+
+   row('Matched E1',...horses.map(x=>x?.metrics?.e1?.value))+
+   row('Matched E2',...horses.map(x=>x?.metrics?.e2?.value))+
+   row('Matched LP',...horses.map(x=>x?.late))+
+   row('Recent BRIS speed (newest first)',...horses.map(x=>speedLine(horseSpeed(x))))+
+   row('Prime Power',...horses.map(primeValue))+
+   '</tbody></table></div>'+speedBars(horses)+provenancePanel(h);
+ };
+ const candidateSelect=hiddenRanked.length?'<label for="hiddenChallengerSelect" class="small"><b>Hidden challenger (RR #3/#4)</b></label> <select id="hiddenChallengerSelect" aria-label="Choose hidden challenger">'+optionHtml+'</select>':'<div class="note small">No RR #3/#4 horse meets the preliminary hidden Speed/Form screen. Challenger evidence remains unavailable; RR #1 and #2 stay visible.</div>';
+ comparison.innerHTML='<div class="small"><b>Side-by-side:</b> original RR #1 and #2 remain fixed. The third column shows the strongest eligible flagged RR #3/#4 horse, if any. Research only.</div>'+candidateSelect+'<div id="hiddenComparisonContent">'+comparisonTable(selected)+'</div>'+'<div class="tiny muted" style="margin-top:8px">Research only. Hidden challenger is chosen from existing preliminary Speed/Form flags, then research pace score; this is not a win probability or automatic promotion. Prime Power is reference only'+(ppBest===null?'; no verified Prime Power values':' (field high '+ppBest.toFixed(1)+')')+'. No RR ranking or wagering changes.'+missing+'</div>';
  const select=comparison.querySelector('#hiddenChallengerSelect');
  if(select)select.onchange=()=>{
-  const h=candidates.find(x=>String(x.n)===select.value)||null;
+  const h=hiddenRanked.find(x=>String(x.n)===select.value)||null;
   const content=comparison.querySelector('#hiddenComparisonContent');
   if(content)content.innerHTML=comparisonTable(h);
  };
