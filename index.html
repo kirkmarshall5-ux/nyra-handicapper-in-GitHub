@@ -678,21 +678,31 @@ function renderHiddenWinnerResearch(){
  pressure.textContent=knownQ.length+'/'+rows.length+' verified Quirin values · '+leaders.length+' E/E-P runners with 6–8 points'+(incomplete?' · Incomplete model/pace coverage':'')+'. This is an early-pressure indicator, not a predicted pace or finish.';
  if(!ranks.length){watch.textContent='Brisnet RR rankings unavailable; no candidates calculated.';comparison.textContent='RR comparison unavailable.';return;}
  const top=ranks.find(h=>h.rank===1)||ranks[0],topRow=scored.find(h=>h.rr?.rank===1);
- const e1Value=h=>h.metrics?.e1?.value;
- const maxEarly=Math.max(...scored.map(h=>Number.isFinite(e1Value(h))?e1Value(h):-Infinity));
- const earlyCoverage=scored.filter(h=>Number.isFinite(e1Value(h))).length;
- const earlyComplete=earlyCoverage===rows.length&&!incomplete;
+ const variant=watch.querySelector('#hiddenPaceVariant')?.value||'distance';
+ const isRoute=native.early_key==='e2';
+ const metricKey=variant==='e1'?'e1':variant==='e2'?'e2':variant==='distance'?(isRoute?'e2':'e1'):'e2';
+ const metricValue=h=>h.metrics?.[metricKey]?.value;
+ const lpValue=h=>h.metrics?.late?.value;
+ const sustained=h=>Number.isFinite(metricValue(h))&&Number.isFinite(lpValue(h))?(metricValue(h)+lpValue(h))/2:null;
+ const scoreValue=h=>variant==='sustained'?sustained(h):metricValue(h);
+ const maxEarly=Math.max(...scored.map(h=>Number.isFinite(scoreValue(h))?scoreValue(h):-Infinity));
+ const earlyCoverage=scored.filter(h=>Number.isFinite(scoreValue(h))).length;
+ const earlyComplete=rows.length>0&&earlyCoverage===rows.length&&!incomplete;
+ const variantLabel=variant==='sustained'?'E2 + LP average':metricKey.toUpperCase();
+ const variantSelector='<label class="small" for="hiddenPaceVariant">Research pace measure </label><select id="hiddenPaceVariant"><option value="e1"'+(variant==='e1'?' selected':'')+'>A · E1 all distances</option><option value="e2"'+(variant==='e2'?' selected':'')+'>B · E2 all distances</option><option value="distance"'+(variant==='distance'?' selected':'')+'>C · E1 sprint / E2 route</option><option value="sustained"'+(variant==='sustained'?' selected':'')+'>D · E2 + LP average</option></select>';
  const topSpeedHorse=(sourceRace.horses||[]).find(x=>String(x.n)===String(top.n)||String(x.name||'').toLowerCase()===String(top.name||'').toLowerCase());
  const topSpeed=(topSpeedHorse?.ratings?.lines||[]).filter(l=>l.source?.provider==='BRISNET'&&typeof l.date==='string'&&l.date<sourceRace.date&&Number.isFinite(l.speed)&&l.speed>=0).slice(0,5).map(l=>l.speed);
  const flags=scored.filter(h=>[3,4].includes(h.rr?.rank)).map(h=>{
   const sourceHorse=(sourceRace.horses||[]).find(x=>String(x.n)===String(h.n)||String(x.name||'').toLowerCase()===String(h.name||'').toLowerCase());
   const speed=(sourceHorse?.ratings?.lines||[]).filter(l=>l.source?.provider==='BRISNET'&&/^\d{4}-\d{2}-\d{2}$/.test(l.date||'')&&Number.isFinite(Date.parse(l.date))&&new Date(l.date).toISOString().slice(0,10)===l.date&&l.date<sourceRace.date&&Number.isFinite(l.speed)&&l.speed>=0).slice(0,5).map(l=>l.speed);
-  const hiddenSpeed=earlyComplete&&Number.isFinite(e1Value(h))&&Number.isFinite(maxEarly)&&maxEarly-e1Value(h)<=3;
-  const hiddenForm=earlyComplete&&speed.length===5&&Math.max(...speed)-Math.min(...speed)<=15&&Number.isFinite(h.early)&&maxEarly-e1Value(h)<=6;
+  const hiddenSpeed=earlyComplete&&Number.isFinite(scoreValue(h))&&Number.isFinite(maxEarly)&&maxEarly-scoreValue(h)<=3;
+  const hiddenForm=earlyComplete&&speed.length===5&&Math.max(...speed)-Math.min(...speed)<=15&&Number.isFinite(h.early)&&maxEarly-scoreValue(h)<=6;
   return {...h,hiddenSpeed,hiddenForm,speed};
  }).filter(h=>h.hiddenSpeed||h.hiddenForm);
  const missing=!earlyComplete?' · Hidden Winner flags withheld: complete ranked field and comparable early-pace coverage required.':'';
- watch.innerHTML=!earlyComplete?'Hidden Winner screening withheld: '+earlyCoverage+'/'+rows.length+' runners have comparable E1'+'; incomplete or unranked fields can hide the true leader.':flags.length?flags.map(h=>'<div class="note small"><b>#'+escapeText(h.n)+' '+escapeText(h.name)+'</b> · RR #'+h.rr.rank+' · '+(h.hiddenSpeed?'Hidden Speed ':'')+(h.hiddenForm?'Hidden Form':'')+' · E1 '+(e1Value(h)??'Unknown')+' · Quirin '+(h.quirin??'Not verified')+'</div>').join('')+'<div class="tiny muted">In-sample screening thresholds; no automatic rank change.'+missing+'</div>':'No RR #3/#4 candidates met the preliminary Speed/Form thresholds.'+missing;
+ watch.innerHTML=variantSelector+'<div class="tiny muted">Current screen: '+variantLabel+'. Research variants only; no live model change.</div>'+(!earlyComplete?'Hidden Winner screening withheld: '+earlyCoverage+'/'+rows.length+' runners have comparable '+variantLabel+'; incomplete or unranked fields can hide the true leader.':flags.length?flags.map(h=>'<div class="note small"><b>#'+escapeText(h.n)+' '+escapeText(h.name)+'</b> · RR #'+h.rr.rank+' · '+(h.hiddenSpeed?'Hidden Speed ':'')+(h.hiddenForm?'Hidden Form':'')+' · '+variantLabel+' '+(scoreValue(h)??'Unknown')+' · Quirin '+(h.quirin??'Not verified')+'</div>').join('')+'<div class="tiny muted">In-sample screening thresholds; no automatic rank change.'+missing+'</div>':'No RR #3/#4 candidates met the preliminary Speed/Form thresholds.'+missing);
+ const paceSelect=watch.querySelector('#hiddenPaceVariant');
+ if(paceSelect)paceSelect.onchange=()=>renderHiddenWinnerResearch();
  const fmt=h=>h?('#'+escapeText(h.n)+' '+escapeText(h.name)+' · '+(native.early_key==='e2'?'E2 ':'E1 ')+(h.early??'Unknown')+' · Quirin '+(h.quirin??'Not verified')+' · '+escapeText(h.style)):'Not available';
  const speedLine=a=>a.length?a.map(v=>Number(v).toFixed(0)).join(' → '):'Not verified';
  const horseSpeed=h=>{
