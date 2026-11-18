@@ -690,13 +690,15 @@ function renderHiddenWinnerResearch(){
  const earlyComplete=rows.length>0&&earlyCoverage===rows.length&&!incomplete;
  const variantLabel=variant==='sustained'?'E2 + LP average':metricKey.toUpperCase();
  const variantSelector='<label class="small" for="hiddenPaceVariant">Research pace measure </label><select id="hiddenPaceVariant"><option value="e1"'+(variant==='e1'?' selected':'')+'>A · E1 all distances</option><option value="e2"'+(variant==='e2'?' selected':'')+'>B · E2 all distances</option><option value="distance"'+(variant==='distance'?' selected':'')+'>C · E1 sprint / E2 route</option><option value="sustained"'+(variant==='sustained'?' selected':'')+'>D · E2 + LP average</option></select>';
+ const validHistoryLine=l=>l.source?.provider==='BRISNET'&&/^\d{4}-\d{2}-\d{2}$/.test(l.date||'')&&Number.isFinite(Date.parse(l.date))&&new Date(l.date).toISOString().slice(0,10)===l.date&&l.date<sourceRace.date&&Number.isFinite(l.speed)&&l.speed>=0;
+ const recentSpeedLines=horse=>(horse?.ratings?.lines||[]).filter(validHistoryLine).sort((a,b)=>b.date.localeCompare(a.date)).slice(0,5);
  const topSpeedHorse=(sourceRace.horses||[]).find(x=>String(x.n)===String(top.n)||String(x.name||'').toLowerCase()===String(top.name||'').toLowerCase());
- const topSpeed=(topSpeedHorse?.ratings?.lines||[]).filter(l=>l.source?.provider==='BRISNET'&&typeof l.date==='string'&&l.date<sourceRace.date&&Number.isFinite(l.speed)&&l.speed>=0).slice(0,5).map(l=>l.speed);
+ const topSpeed=recentSpeedLines(topSpeedHorse).map(l=>l.speed);
  const flags=scored.filter(h=>[3,4].includes(h.rr?.rank)).map(h=>{
   const sourceHorse=(sourceRace.horses||[]).find(x=>String(x.n)===String(h.n)||String(x.name||'').toLowerCase()===String(h.name||'').toLowerCase());
-  const speed=(sourceHorse?.ratings?.lines||[]).filter(l=>l.source?.provider==='BRISNET'&&/^\d{4}-\d{2}-\d{2}$/.test(l.date||'')&&Number.isFinite(Date.parse(l.date))&&new Date(l.date).toISOString().slice(0,10)===l.date&&l.date<sourceRace.date&&Number.isFinite(l.speed)&&l.speed>=0).slice(0,5).map(l=>l.speed);
+  const speed=recentSpeedLines(sourceHorse).map(l=>l.speed);
   const hiddenSpeed=earlyComplete&&Number.isFinite(scoreValue(h))&&Number.isFinite(maxEarly)&&maxEarly-scoreValue(h)<=3;
-  const hiddenForm=earlyComplete&&speed.length===5&&Math.max(...speed)-Math.min(...speed)<=15&&Number.isFinite(h.early)&&maxEarly-scoreValue(h)<=6;
+  const hiddenForm=earlyComplete&&speed.length===5&&Math.max(...speed)-Math.min(...speed)<=15&&Number.isFinite(scoreValue(h))&&maxEarly-scoreValue(h)<=6;
   return {...h,hiddenSpeed,hiddenForm,speed};
  }).filter(h=>h.hiddenSpeed||h.hiddenForm);
  const missing=!earlyComplete?' · Hidden Winner flags withheld: complete ranked field and comparable early-pace coverage required.':'';
@@ -708,7 +710,7 @@ function renderHiddenWinnerResearch(){
  const horseSpeed=h=>{
   if(!h)return [];
   const horse=(sourceRace.horses||[]).find(x=>String(x.n)===String(h.n)||String(x.name||'').toLowerCase()===String(h.name||'').toLowerCase());
-  return (horse?.ratings?.lines||[]).filter(l=>l.source?.provider==='BRISNET'&&typeof l.date==='string'&&l.date<sourceRace.date&&Number.isFinite(l.speed)&&l.speed>=0).slice(0,5).map(l=>l.speed);
+  return recentSpeedLines(horse).map(l=>l.speed);
  };
  const primeValue=h=>{
   if(!h)return null;
@@ -731,7 +733,7 @@ function renderHiddenWinnerResearch(){
   if(!h)return 'No matched runner';
   const horse=(sourceRace.horses||[]).find(x=>String(x.n)===String(h.n)||String(x.name||'').trim().toLowerCase()===String(h.name||'').trim().toLowerCase());
   const metric=h.metrics?.[native.early_key],late=h.metrics?.late;
-  const speed=(horse?.ratings?.lines||[]).filter(l=>l.source?.provider==='BRISNET'&&typeof l.date==='string'&&l.date<sourceRace.date&&Number.isFinite(l.speed)&&l.speed>=0).slice(0,5);
+  const speed=recentSpeedLines(horse);
   const metricText=(label,m)=>label+': '+(m?m.value+' ('+m.date+', PP page '+(m.page??'unknown')+')':'not verified');
   return '#'+escapeText(h.n)+' '+escapeText(h.name)+' — '+escapeText(metricText(native.early_key.toUpperCase(),metric))+'; '+escapeText(metricText('LP',late))+'; speed lines: '+(speed.length?speed.map(l=>escapeText(l.speed+' ('+l.date+', PP page '+(l.source?.page??'unknown')+')')).join(', '):'not verified');
  };
