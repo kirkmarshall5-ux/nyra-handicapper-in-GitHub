@@ -679,17 +679,19 @@ function renderHiddenWinnerResearch(){
  if(!ranks.length){watch.textContent='Brisnet RR rankings unavailable; no candidates calculated.';comparison.textContent='RR comparison unavailable.';return;}
  const top=ranks.find(h=>h.rank===1)||ranks[0],topRow=scored.find(h=>h.rr?.rank===1);
  const maxEarly=Math.max(...scored.map(h=>Number.isFinite(h.early)?h.early:-Infinity));
+ const earlyCoverage=scored.filter(h=>Number.isFinite(h.early)).length;
+ const earlyComplete=earlyCoverage===rows.length&&!incomplete;
  const topSpeedHorse=(sourceRace.horses||[]).find(x=>String(x.n)===String(top.n)||String(x.name||'').toLowerCase()===String(top.name||'').toLowerCase());
  const topSpeed=(topSpeedHorse?.ratings?.lines||[]).filter(l=>l.source?.provider==='BRISNET'&&typeof l.date==='string'&&l.date<sourceRace.date&&Number.isFinite(l.speed)&&l.speed>=0).slice(0,5).map(l=>l.speed);
  const flags=scored.filter(h=>[3,4].includes(h.rr?.rank)).map(h=>{
   const sourceHorse=(sourceRace.horses||[]).find(x=>String(x.n)===String(h.n)||String(x.name||'').toLowerCase()===String(h.name||'').toLowerCase());
   const speed=(sourceHorse?.ratings?.lines||[]).filter(l=>l.source?.provider==='BRISNET'&&typeof l.date==='string'&&l.date<sourceRace.date&&Number.isFinite(l.speed)&&l.speed>=0).slice(0,5).map(l=>l.speed);
-  const hiddenSpeed=Number.isFinite(h.early)&&Number.isFinite(maxEarly)&&maxEarly-h.early<=3;
-  const hiddenForm=speed.length===5&&Math.max(...speed)-Math.min(...speed)<=15&&Number.isFinite(h.early)&&maxEarly-h.early<=6;
+  const hiddenSpeed=earlyComplete&&Number.isFinite(h.early)&&Number.isFinite(maxEarly)&&maxEarly-h.early<=3;
+  const hiddenForm=earlyComplete&&speed.length===5&&Math.max(...speed)-Math.min(...speed)<=15&&Number.isFinite(h.early)&&maxEarly-h.early<=6;
   return {...h,hiddenSpeed,hiddenForm,speed};
  }).filter(h=>h.hiddenSpeed||h.hiddenForm);
- const missing=incomplete?' · Field coverage incomplete: signals provisional.':'';
- watch.innerHTML=flags.length?flags.map(h=>'<div class="note small"><b>#'+escapeText(h.n)+' '+escapeText(h.name)+'</b> · RR #'+h.rr.rank+' · '+(h.hiddenSpeed?'Hidden Speed ':'')+(h.hiddenForm?'Hidden Form':'')+' · E1/E2 '+(h.early??'Unknown')+' · Quirin '+(h.quirin??'Not verified')+'</div>').join('')+'<div class="tiny muted">In-sample screening thresholds; no automatic rank change.'+missing+'</div>':'No RR #3/#4 candidates met the preliminary Speed/Form thresholds.'+missing;
+ const missing=!earlyComplete?' · Hidden Winner flags withheld: complete ranked field and comparable early-pace coverage required.':'';
+ watch.innerHTML=!earlyComplete?'Hidden Winner screening withheld: '+earlyCoverage+'/'+rows.length+' runners have comparable '+(native.early_key==='e2'?'E2':'E1')+'; incomplete or unranked fields can hide the true leader.':flags.length?flags.map(h=>'<div class="note small"><b>#'+escapeText(h.n)+' '+escapeText(h.name)+'</b> · RR #'+h.rr.rank+' · '+(h.hiddenSpeed?'Hidden Speed ':'')+(h.hiddenForm?'Hidden Form':'')+' · E1/E2 '+(h.early??'Unknown')+' · Quirin '+(h.quirin??'Not verified')+'</div>').join('')+'<div class="tiny muted">In-sample screening thresholds; no automatic rank change.'+missing+'</div>':'No RR #3/#4 candidates met the preliminary Speed/Form thresholds.'+missing;
  const fmt=h=>h?('#'+escapeText(h.n)+' '+escapeText(h.name)+' · '+(native.early_key==='e2'?'E2 ':'E1 ')+(h.early??'Unknown')+' · Quirin '+(h.quirin??'Not verified')+' · '+escapeText(h.style)):'Not available';
  const speedLine=a=>a.length?a.map(v=>Number(v).toFixed(0)).join(' → '):'Not verified';
  const horseSpeed=h=>{
@@ -725,12 +727,12 @@ function renderHiddenWinnerResearch(){
  row('Prime Power',primeValue(topRow),primeValue(h))+
  '</tbody></table></div>'+speedBars(topSpeed,horseSpeed(h));
  const candidateSelect='<label for="hiddenChallengerSelect" class="small"><b>Compare RR #1 with</b></label> <select id="hiddenChallengerSelect" aria-label="Choose RR challenger"'+(!candidates.length?' disabled':'')+'>'+optionHtml+'</select>';
- comparison.innerHTML=candidateSelect+comparisonTable(selected)+'<div class="tiny muted" style="margin-top:8px">Research only. Matched pace values use the existing Brisnet source rules; recent speed is from the latest verified prior starts. Prime Power is a reference only'+(ppBest===null?'; no verified Prime Power values':' (field high '+ppBest.toFixed(1)+')')+'. Quirin measures early positioning, not E1/E2 speed. No ranking changes or betting recommendations.'+missing+'</div>';
+ comparison.innerHTML=candidateSelect+'<div id="hiddenComparisonContent">'+comparisonTable(selected)+'</div>'+'<div class="tiny muted" style="margin-top:8px">Research only. Matched pace values use the existing Brisnet source rules; recent speed is from the latest verified prior starts. Prime Power is a reference only'+(ppBest===null?'; no verified Prime Power values':' (field high '+ppBest.toFixed(1)+')')+'. Quirin measures early positioning, not E1/E2 speed. No ranking changes or betting recommendations.'+missing+'</div>';
  const select=comparison.querySelector('#hiddenChallengerSelect');
  if(select)select.onchange=()=>{
   const h=candidates.find(x=>String(x.n)===select.value)||null;
-  const old=comparison.querySelector('.pace-comparison-table')?.parentElement;
-  if(old)old.outerHTML=comparisonTable(h);
+  const content=comparison.querySelector('#hiddenComparisonContent');
+  if(content)content.innerHTML=comparisonTable(h);
  };
 
 }
