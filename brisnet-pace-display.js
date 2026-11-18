@@ -10,7 +10,7 @@ export function brisnetPaceDisplay(race){
  for(const h of race.horses.filter(eligible)){
   if(h.ratings?.provider!=='BRISNET')continue;
   const fts=h.life_starts===0,experienced=Number.isInteger(h.life_starts)&&h.life_starts>0;
-  const source=(h.ratings.lines||[]).slice(0,5),latest=experienced&&validLine(source[0]||{},race)?source[0]:null;
+  const source=[...(h.ratings.lines||[])].filter(l=>validLine(l,race)).sort((a,b)=>b.date.localeCompare(a.date)).slice(0,5),latest=experienced?source[0]||null:null;
   const matched=experienced?source.filter(l=>validLine(l,race)&&(Date.parse(race.date)-Date.parse(l.date))/864e5<=365&&l.surface===race.surface&&finite(l.furlongs)&&category!==null&&cat(l.furlongs)===category&&Math.abs(l.furlongs-race.distance_furlongs)<=.5):[];
   const metrics={};for(const key of ['e1','e2','late']){const l=matched.find(l=>finite(l[key])&&l[key]>=0);metrics[key]=l?{value:l[key],date:l.date,page:l.source.page}:null;}
   const turn=matched.find(l=>finite(l.e1)&&l.e1>=0&&finite(l.e2)&&l.e2>=0);metrics.turn=turn?{value:turn.e2-turn.e1,date:turn.date,page:turn.source.page}:null;
