@@ -689,8 +689,8 @@ function hiddenWinnerAuditRace(race,variant){
 }
 function renderHiddenScreeningAudit(variant){
  const el=document.getElementById('hiddenScreeningAudit');if(!el)return;
- const card=providerRace('BRISNET').card;
- const races=card?.races||[];
+ const card=providerCards.BRISNET||(cardProvider(activeCard)==='BRISNET'?activeCard:null);
+ const races=Object.values(card?.races||{});
  if(!races.length){el.textContent='No Brisnet card loaded';return;}
  const esc=v=>escapeText(String(v));
  el.innerHTML='<table><thead><tr><th>Race</th><th>Strict result</th><th>Why / next review</th></tr></thead><tbody>'+races.map(r=>{
