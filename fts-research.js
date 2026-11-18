@@ -1,6 +1,8 @@
 // Display-only first-time-starter evidence. Never consumed by scoring engines.
 export const FTS_RESEARCH_ID='FTS-EVIDENCE-20261112-v1';
 export function parseFtsEvidence(block,page){
+ const months=[...String(block).matchAll(/\b(?:[a-z]{1,3}\.\s*)+[fcgmhr]\.\s*\d{1,2}\s*\((JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)\)/gi)];
+ const birthMonth=months.length===1?months[0][1].toUpperCase():null;
  const pedigree={};
  for(const k of ['Fst','Off','Dis','Trf']){
   const matches=[...String(block).matchAll(new RegExp('\\b'+k+'\\s*\\(\\s*(\\d{1,3})([?*]?)\\s*\\)','g'))];
@@ -11,7 +13,7 @@ export function parseFtsEvidence(block,page){
  for(const m of trainerLine.matchAll(/(1st time str|Debut MdnSpWt|Debut Mdn Clm|Debut Turf|Debut >= 1m)\s*\(\s*(\d+)\s+(\d+)%\s+([+-]?\d+(?:\.\d+)?)\s*\)/g)){
   if(+m[2]>0&&+m[3]<=100)trainer.push({category:m[1],starts:+m[2],win_pct:+m[3],net_per_2:+m[4],source_text:m[0],page});
  }
- return {version:FTS_RESEARCH_ID,pedigree,trainer,scoring_enabled:false};
+ return {version:FTS_RESEARCH_ID,pedigree,trainer,...(birthMonth?{birth_month:birthMonth}:{}),scoring_enabled:false};
 }
 const finite=Number.isFinite;
 export function ftsResearch(h,race){
@@ -23,5 +25,5 @@ export function ftsResearch(h,race){
  const trainer=angles.find(a=>a.category===wanted)||angles.find(a=>a.category==='1st time str')||null;
  const today=Date.parse(race.date),works=(h.source_context?.workouts||[]).filter(w=>w.status==='SOURCE_FIELDS_PARSED'&&finite(w.rank)&&finite(w.total)&&w.rank>=1&&w.rank<=w.total&&finite(Date.parse(w.date))&&Date.parse(w.date)<today&&today-Date.parse(w.date)<=30*86400000).sort((a,b)=>b.date.localeCompare(a.date));
  const recent=works.slice(0,3),percentiles=recent.filter(w=>w.total>1).map(w=>100*(w.total-w.rank)/(w.total-1)).sort((a,b)=>a-b),mid=Math.floor(percentiles.length/2),median=percentiles.length?(percentiles.length%2?percentiles[mid]:(percentiles[mid-1]+percentiles[mid])/2):null;
- return {is_fts:true,version:FTS_RESEARCH_ID,pedigree,trainer,workouts:{count30:works.length,compared:percentiles.length,percentile:median,latest_days:works.length?Math.round((today-Date.parse(works[0].date))/86400000):null,status:h.source_context?.workout_status||'EXTRACTION_PENDING'},pedigree_status:surface==='Synth'?'TAPETA_UNVALIDATED':complete?'AVAILABLE':e?'MISSING':'REUPLOAD_REQUIRED',research_only:true};
+ return {is_fts:true,version:FTS_RESEARCH_ID,pedigree,trainer,...(e?.birth_month?{birth_month:e.birth_month}:{}),workouts:{count30:works.length,compared:percentiles.length,percentile:median,latest_days:works.length?Math.round((today-Date.parse(works[0].date))/86400000):null,status:h.source_context?.workout_status||'EXTRACTION_PENDING'},pedigree_status:surface==='Synth'?'TAPETA_UNVALIDATED':complete?'AVAILABLE':e?'MISSING':'REUPLOAD_REQUIRED',research_only:true};
 }
