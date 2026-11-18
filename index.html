@@ -708,7 +708,7 @@ function hiddenStudySnapshot(variant){
  return {schema:'hidden-challenger-study-v1',source:'current Brisnet card, research-only',track:card.track??null,card_id:card.id??null,parser_version:card.parser_version??null,exported_at:new Date().toISOString(),pace_variant:variant,
   rules:{strict:'unchanged',reference_rr_ranks:[3,4],reference_max_pace_gap:10,reference_min_speed_lines:3,reference_max_display:1,exclude_fts:true,min_experienced_fraction:0.7},
   outcomes:null,outcomes_status:'NOT_VERIFIED: join official results and payouts separately, by track/date/race/program; never infer finish or ROI',
-  freeze_status:'NOT_ATTESTED: export is a snapshot, not proof of pre-race freeze',research_policy:'Do not compute prospective ROI unless an independently verified pre-race freeze and official results/payouts are matched. Post-race snapshots are retrospective research only.',races};
+  freeze_status:'RESEARCH_SNAPSHOT: user-saved card freezes may be accepted as user-attested research evidence without an authenticated device clock; this separate export does not certify capture before post time',research_policy:'Preserve original freeze timestamp and selections. Record later scratches separately and exclude scratched horses from official starter comparison. Label unverified freeze timing as user-attested, not independently certified. Compute recreational historical ROI only after official finishes, payouts, starter eligibility and wagers are reconciled; do not call such results independently certified prospective ROI.',races};
 }
 function exportHiddenStudy(){
  const status=document.getElementById('exportHiddenStudyStatus');
