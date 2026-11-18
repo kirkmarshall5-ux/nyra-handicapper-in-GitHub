@@ -1,5 +1,5 @@
 import {brisnetRaceSurface} from './brisnet-race-surface.js';
-import {parseFtsEvidence} from './fts-research.js';
+import {parseFtsEvidence} from './fts-research.js?v=20261118-fts-month';
 import {parseBrisnetWorkouts} from './brisnet-workouts.js';
 // Brisnet Ultimate positioned-text adapter. Provider values never become Beyer/Timeform.
 import {fingerprintPages,reconstructPage} from './card-loader.js';
