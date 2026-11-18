@@ -685,7 +685,7 @@ function renderHiddenWinnerResearch(){
  const topSpeed=(topSpeedHorse?.ratings?.lines||[]).filter(l=>l.source?.provider==='BRISNET'&&typeof l.date==='string'&&l.date<sourceRace.date&&Number.isFinite(l.speed)&&l.speed>=0).slice(0,5).map(l=>l.speed);
  const flags=scored.filter(h=>[3,4].includes(h.rr?.rank)).map(h=>{
   const sourceHorse=(sourceRace.horses||[]).find(x=>String(x.n)===String(h.n)||String(x.name||'').toLowerCase()===String(h.name||'').toLowerCase());
-  const speed=(sourceHorse?.ratings?.lines||[]).filter(l=>l.source?.provider==='BRISNET'&&typeof l.date==='string'&&l.date<sourceRace.date&&Number.isFinite(l.speed)&&l.speed>=0).slice(0,5).map(l=>l.speed);
+  const speed=(sourceHorse?.ratings?.lines||[]).filter(l=>l.source?.provider==='BRISNET'&&/^\d{4}-\d{2}-\d{2}$/.test(l.date||'')&&Number.isFinite(Date.parse(l.date))&&new Date(l.date).toISOString().slice(0,10)===l.date&&l.date<sourceRace.date&&Number.isFinite(l.speed)&&l.speed>=0).slice(0,5).map(l=>l.speed);
   const hiddenSpeed=earlyComplete&&Number.isFinite(h.early)&&Number.isFinite(maxEarly)&&maxEarly-h.early<=3;
   const hiddenForm=earlyComplete&&speed.length===5&&Math.max(...speed)-Math.min(...speed)<=15&&Number.isFinite(h.early)&&maxEarly-h.early<=6;
   return {...h,hiddenSpeed,hiddenForm,speed};
