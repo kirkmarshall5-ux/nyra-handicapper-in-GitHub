@@ -1,6 +1,6 @@
 import {paperEligibility,paperTickets} from './paper-results.js';
 import {modelEvidence} from './model-evidence-display.js?v=20261115-beyer';
-import {ftsResearch} from './fts-research.js';
+import {ftsResearch} from './fts-research.js?v=20261118-fts-month';
 // Read-only organization of existing forecasts. No new rating or betting rule.
 import {matchingCard} from './dual-pp-cards.js?v=20261018-dual1';
 import {releaseRace} from './rankings-release.js?v=20261115-beyer';
@@ -122,7 +122,7 @@ export function dashboardHtml(d,selected='drfContender'){
   const trainer=t?`${t.category}: ${t.win_pct}% / ${t.starts}`:'Trainer debut: unavailable';
   const work=w.percentile===null?'WORK —':`WORK ${Math.round(w.percentile)}/100 (${w.compared} ${w.compared===1?'work':'works'})`;
   const recency=w.latest_days===null?'Recent works unavailable':`${w.count30} in 30d · latest ${w.latest_days}d ago`;
-  return `<div class="fts-research-cell"><b>PED ${esc(ped)}</b><span>${esc(trainer)}</span><span>${esc(work)} · ${esc(recency)}</span></div>`;
+  return `<div class="fts-research-cell"><b>${f.birth_month?`(${esc(f.birth_month)}) `:''}PED ${esc(ped)}</b><span>${esc(trainer)}</span><span>${esc(work)} · ${esc(recency)}</span></div>`;
  };
  const row=h=>`<tr><th scope="row">${h.n?'#'+esc(h.n)+' ':''}${esc(h.name)}</th><td>${esc(d.prime_power?.[key(h)]||'—')}</td>${[...gridModelIds,'morningLine'].map(id=>`<td${id==='brisResearch'?' class="model-rr"':''}>${h.ranks[id]??'—'}</td>`).join('')}${d.has_fts?`<td>${ftsCell(h)}</td>`:''}</tr>`;
  const table=rows=>`<div class="dashboard-scroll" tabindex="0" role="region" aria-label="Model ranking comparison"><table class="dashboard-table"><thead><tr><th scope="col">Horse</th><th scope="col">Prime Power</th><th scope="col" class="model-rr">Brisnet-RR</th><th scope="col">Brisnet<br>Finisher</th><th scope="col">Brisnet<br>Contender</th><th scope="col">DRF Contender<br>Late +50%</th><th scope="col">M/L<br>rank</th>${d.has_fts?'<th scope="col">FTS<br>Research</th>':''}</tr></thead><tbody>${rows.map(row).join('')}</tbody></table></div>`;
