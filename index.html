@@ -664,15 +664,34 @@ function updatePaceSourceLabels(native){
  rules.innerHTML=native?'<h3 class="sectiontitle">Native Brisnet model methods · experimental</h3>'+['contender'].map(k=>'<p class="small">'+escapeText(BRISNET_METHODS[k])+'</p>').join('')+'<div class="note small">Contender consumes early pace and LP. V4.4c-Brisnet base has no pace component. Source styles, turn index and race shapes add no score bonus. The original Beyer/Timeform controls are unchanged; Brisnet variants require separate validation.</div>':rules.dataset.originalHtml;
 }
 function renderHiddenWinnerResearch(){
- const native=brisnetPaceDisplay(race);
  const pressure=document.getElementById('hiddenPacePressure'),watch=document.getElementById('hiddenWinnerWatch'),comparison=document.getElementById('hiddenComparisonReadiness');
  if(!pressure||!watch||!comparison)return;
- const runners=(race.horses||[]).filter(paceEligible);
- const source=native.available?'Brisnet pace evidence available':'Verified Brisnet pace evidence unavailable';
- pressure.textContent=source+' · '+runners.length+' eligible runners. Pace-pressure classification pending verified Quirin points and complete field coverage.';
- watch.textContent='Hidden Speed / Hidden Form: research-only. No flag shown until verified RR #3/#4 ranks, E1, recent speed sequence and field coverage are available.';
- comparison.textContent='Use the Brisnet running-style map above and the existing projected setup below. Quirin, Prime Power and recent-form comparison will show only after source mapping is validated; no inferred values are displayed.';
+ const sourceRace=providerRace('BRISNET').race;
+ if(!sourceRace){pressure.textContent='Brisnet race unavailable';watch.textContent='Upload matching Brisnet PPs';comparison.textContent='No verified Brisnet comparison available';return;}
+ const native=brisnetPaceDisplay(sourceRace),rows=native.rows||[],rated=rankBrisnetResearch(sourceRace);
+ const ranks=rated?.rankings||[],byNumber=new Map(ranks.map(h=>[String(h.n??h.program??''),h]));
+ const byName=new Map(ranks.map(h=>[String(h.name||'').trim().toLowerCase(),h]));
+ const findRank=row=>byNumber.get(String(row.n))||byName.get(String(row.name||'').trim().toLowerCase());
+ const scored=rows.map(row=>({...row,rr:findRank(row)}));
+ const knownQ=scored.filter(h=>Number.isInteger(h.quirin)),leaders=knownQ.filter(h=>h.quirin>=6&&['E','E/P'].includes(h.style));
+ const incomplete=rows.length!==(sourceRace.horses||[]).filter(paceEligible).length||ranks.length!==rows.length;
+ pressure.textContent=knownQ.length+'/'+rows.length+' verified Quirin values · '+leaders.length+' E/E-P runners with 6–8 points'+(incomplete?' · Incomplete model/pace coverage':'')+'. This is an early-pressure indicator, not a predicted pace or finish.';
+ if(!ranks.length){watch.textContent='Brisnet RR rankings unavailable; no candidates calculated.';comparison.textContent='RR comparison unavailable.';return;}
+ const top=ranks.find(h=>h.rank===1)||ranks[0],topRow=scored.find(h=>h.rr?.rank===1);
+ const maxEarly=Math.max(...scored.map(h=>Number.isFinite(h.early)?h.early:-Infinity));
+ const flags=scored.filter(h=>[3,4].includes(h.rr?.rank)).map(h=>{
+  const sourceHorse=(sourceRace.horses||[]).find(x=>String(x.n)===String(h.n)||String(x.name||'').toLowerCase()===String(h.name||'').toLowerCase());
+  const speed=(sourceHorse?.ratings?.lines||[]).filter(l=>l.source?.provider==='BRISNET'&&typeof l.date==='string'&&l.date<sourceRace.date&&Number.isFinite(l.speed)&&l.speed>=0).slice(0,5).map(l=>l.speed);
+  const hiddenSpeed=Number.isFinite(h.early)&&Number.isFinite(maxEarly)&&maxEarly-h.early<=3;
+  const hiddenForm=speed.length===5&&Math.max(...speed)-Math.min(...speed)<=15&&Number.isFinite(h.early)&&maxEarly-h.early<=6;
+  return {...h,hiddenSpeed,hiddenForm,speed};
+ }).filter(h=>h.hiddenSpeed||h.hiddenForm);
+ const missing=incomplete?' · Field coverage incomplete: signals provisional.':'';
+ watch.innerHTML=flags.length?flags.map(h=>'<div class="note small"><b>#'+escapeText(h.n)+' '+escapeText(h.name)+'</b> · RR #'+h.rr.rank+' · '+(h.hiddenSpeed?'Hidden Speed ':'')+(h.hiddenForm?'Hidden Form':'')+' · E1/E2 '+(h.early??'Unknown')+' · Quirin '+(h.quirin??'Not verified')+'</div>').join('')+'<div class="tiny muted">In-sample screening thresholds; no automatic rank change.'+missing+'</div>':'No RR #3/#4 candidates met the preliminary Speed/Form thresholds.'+missing;
+ const fmt=h=>h?('#'+escapeText(h.n)+' '+escapeText(h.name)+' · E1/E2 '+(h.early??'Unknown')+' · Quirin '+(h.quirin??'Not verified')+' · '+escapeText(h.style)):'Not available';
+ comparison.innerHTML='<b>RR #1:</b> '+fmt(topRow)+'<div style="margin-top:8px"><b>Flagged challengers:</b></div>'+(flags.length?flags.map(h=>'<div>'+fmt(h)+' · '+(h.speed.length?'recent speed '+h.speed.join(', '):'recent speed unavailable')+'</div>').join(''):'None on this card')+'<div class="tiny muted" style="margin-top:8px">Verified comparable pace lines only. Quirin is a positioning tendency, not a speed figure. Prime Power comparison awaits validated source mapping. No betting recommendations.'+missing+'</div>';
 }
+
 function renderPace(){
  renderHiddenWinnerResearch();
  const native=brisnetPaceDisplay(race);updatePaceSourceLabels(native.available);
