@@ -692,13 +692,35 @@ function renderHiddenWinnerResearch(){
  watch.innerHTML=flags.length?flags.map(h=>'<div class="note small"><b>#'+escapeText(h.n)+' '+escapeText(h.name)+'</b> · RR #'+h.rr.rank+' · '+(h.hiddenSpeed?'Hidden Speed ':'')+(h.hiddenForm?'Hidden Form':'')+' · E1/E2 '+(h.early??'Unknown')+' · Quirin '+(h.quirin??'Not verified')+'</div>').join('')+'<div class="tiny muted">In-sample screening thresholds; no automatic rank change.'+missing+'</div>':'No RR #3/#4 candidates met the preliminary Speed/Form thresholds.'+missing;
  const fmt=h=>h?('#'+escapeText(h.n)+' '+escapeText(h.name)+' · '+(native.early_key==='e2'?'E2 ':'E1 ')+(h.early??'Unknown')+' · Quirin '+(h.quirin??'Not verified')+' · '+escapeText(h.style)):'Not available';
  const speedLine=a=>a.length?a.map(v=>Number(v).toFixed(0)).join(' → '):'Not verified';
- const compareTable='<div style="overflow-x:auto;margin-top:10px"><table class="pace-comparison-table"><thead><tr><th>Evidence</th><th>RR #1</th><th>Challenger</th></tr></thead><tbody>'+
- '<tr><td>RR rank</td><td>1</td><td>3 / 4</td></tr>'+
- '<tr><td>Recent speed (newest first)</td><td>'+speedLine(topSpeed)+'</td><td>Select candidate below</td></tr>'+
- '<tr><td>Early pace ('+(native.early_key==='e2'?'E2':'E1')+')</td><td>'+(topRow?.early??'Unknown')+'</td><td>See candidate</td></tr>'+
- '<tr><td>Quirin</td><td>'+(topRow?.quirin??'Not verified')+'</td><td>See candidate</td></tr>'+
+ const horseSpeed=h=>{
+  if(!h)return [];
+  const horse=(sourceRace.horses||[]).find(x=>String(x.n)===String(h.n)||String(x.name||'').toLowerCase()===String(h.name||'').toLowerCase());
+  return (horse?.ratings?.lines||[]).filter(l=>l.source?.provider==='BRISNET'&&typeof l.date==='string'&&l.date<sourceRace.date&&Number.isFinite(l.speed)&&l.speed>=0).slice(0,5).map(l=>l.speed);
+ };
+ const candidates=scored.filter(h=>[2,3,4].includes(h.rr?.rank));
+ const previous=comparison.querySelector('#hiddenChallengerSelect')?.value;
+ const selected=candidates.find(h=>String(h.n)===previous)||candidates.find(h=>flags.some(f=>String(f.n)===String(h.n)))||candidates[0]||null;
+ const optionHtml=candidates.map(h=>'<option value="'+escapeText(h.n)+'"'+(selected&&String(selected.n)===String(h.n)?' selected':'')+'>RR #'+h.rr.rank+' · #'+escapeText(h.n)+' '+escapeText(h.name)+'</option>').join('');
+ const row=(label,left,right)=>'<tr><td>'+label+'</td><td>'+escapeText(left??'Not verified')+'</td><td>'+escapeText(right??'Not verified')+'</td></tr>';
+ const comparisonTable=h=>'<div style="overflow-x:auto;margin-top:10px"><table class="pace-comparison-table"><thead><tr><th>Evidence</th><th>RR #1</th><th>Selected challenger</th></tr></thead><tbody>'+
+ row('Horse',topRow?'#'+topRow.n+' '+topRow.name:'Unavailable',h?'#'+h.n+' '+h.name:'Unavailable')+
+ row('RR rank',topRow?.rr?.rank,h?.rr?.rank)+
+ row('Running style',topRow?.style,h?.style)+
+ row('Quirin (0–8)',topRow?.quirin,h?.quirin)+
+ row(native.early_key==='e2'?'Matched E2':'Matched E1',topRow?.early,h?.early)+
+ row('Matched LP',topRow?.late,h?.late)+
+ row('Recent BRIS speed (newest first)',speedLine(topSpeed),speedLine(horseSpeed(h)))+
+ row('Prime Power','Not yet mapped','Not yet mapped')+
  '</tbody></table></div>';
- comparison.innerHTML='<b>RR #1:</b> '+fmt(topRow)+'<div class="tiny muted">Recent speed: '+speedLine(topSpeed)+'</div>'+compareTable+'<div style="margin-top:8px"><b>Flagged challengers:</b></div>'+(flags.length?flags.map(h=>'<div>'+fmt(h)+' · '+(h.speed.length?'recent speed '+h.speed.join(', '):'recent speed unavailable')+'</div>').join(''):'None on this card')+'<div class="tiny muted" style="margin-top:8px">Verified comparable pace lines only. Quirin is a positioning tendency, not a speed figure. Prime Power comparison awaits validated source mapping. No betting recommendations.'+missing+'</div>';
+ const candidateSelect='<label for="hiddenChallengerSelect" class="small"><b>Compare RR #1 with</b></label> <select id="hiddenChallengerSelect" aria-label="Choose RR challenger"'+(!candidates.length?' disabled':'')+'>'+optionHtml+'</select>';
+ comparison.innerHTML=candidateSelect+comparisonTable(selected)+'<div class="tiny muted" style="margin-top:8px">Research only. Matched pace values use the existing Brisnet source rules; recent speed is from the latest verified prior starts. Quirin measures early positioning, not E1/E2 speed. No ranking changes or betting recommendations.'+missing+'</div>';
+ const select=comparison.querySelector('#hiddenChallengerSelect');
+ if(select)select.onchange=()=>{
+  const h=candidates.find(x=>String(x.n)===select.value)||null;
+  const old=comparison.querySelector('.pace-comparison-table')?.parentElement;
+  if(old)old.outerHTML=comparisonTable(h);
+ };
+
 }
 
 function renderPace(){
