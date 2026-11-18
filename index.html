@@ -55,9 +55,9 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 @media(max-width:600px){.dashboard-readiness{grid-template-columns:1fr}.dashboard-heading{align-items:flex-start}.dashboard-heading .badge{white-space:nowrap}.dashboard-heading .sectiontitle{font-size:17px}.dashboard-table th:first-child{width:32%}}
 
 /* Keep selected race context below the existing app header while scrolling. */
-#raceContext{position:sticky;top:var(--app-header-height,130px);z-index:15;align-self:start;min-width:0;background:#111b2c;box-shadow:0 8px 18px #0005;border-top:3px solid var(--gold);padding:12px 16px;margin-bottom:14px}
+#raceContext{position:sticky;top:var(--app-header-height,130px);z-index:15;align-self:start;min-width:0;background:#111b2c;box-shadow:0 8px 18px #0005;border:2px solid var(--gold);padding:12px 16px;margin-bottom:14px}
 #raceContext .race-context-details{border-top:1px solid var(--line);margin-top:10px;padding-top:10px;line-height:1.4}
-#raceContext .race-context-details:has(#raceConditions:empty):has(#declaredScratches:empty){display:none}
+#raceContext .race-context-details:has(#declaredScratches:empty){display:none}\n#raceContext .badges{align-items:center}\n#raceContext .race-conditions-inline{flex:1 1 210px;min-width:150px;line-height:1.35}
 #raceContext .hero{align-items:center;gap:12px}
 #raceContext .hero>div{min-width:0}
 #raceContext h2{font-size:22px;margin:4px 0 7px}
@@ -101,10 +101,10 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <section id="raceContext" class="card span12" aria-label="Track and race navigation">
 <div class="hero">
 <div><div class="kicker" id="cardKicker">Active race card</div><h2 id="raceTitle">Belmont Park · Race 1</h2>
-<div class="badges" id="raceBadges"><span class="badge gold">1 1/16M Dirt</span><span class="badge">Maiden Special Weight · $100,000</span><span class="badge">12:05 PM</span><span class="badge green">Public NYRA card</span></div></div>
+<div class="badges" id="raceBadges"><span class="badge gold">1 1/16M Dirt</span><span class="badge">12:05 PM</span><span class="badge green">Active card</span><span id="raceConditions" class="small muted race-conditions-inline">Race conditions unavailable</span></div></div>
 <div class="race-navigation"><div class="muted small" id="raceCount" style="margin-bottom:5px">Races on this card</div><div class="racebar" id="racebar" aria-label="Select race"></div></div>
 </div>
-<div class="race-context-details"><div id="raceConditions" class="small muted"></div><div id="declaredScratches" class="small muted" role="status"></div></div>
+<div class="race-context-details"><div id="declaredScratches" class="small muted" role="status"></div></div>
 </section>
 <section id="raceday">
 <div class="grid">
@@ -586,7 +586,7 @@ function renderHeader(){
  document.getElementById("declaredScratches").textContent=(race.predeclared_scratches||[]).length?"Scratched in PPs (excluded): "+race.predeclared_scratches.map(h=>"#"+h.program+" "+h.name).join(", "):"";
  cardKicker.textContent=`${activeCard.track||race.track||"Race card"} · ${activeCard.date||race.date||"date unknown"} · active ${activeCard.source_format==="BRISNET_PREMIUM_PLUS"?"Brisnet Premium Plus":activeCard.source_format==="BRISNET_ULTIMATE"?"Brisnet Ultimate":"DRF"} card`;
  raceTitle.textContent=`${race.track} · Race ${race.race}`;
- raceBadges.innerHTML=`<span class="badge gold">${escapeText(displayDistance(race.dist)||"—")} ${race.surface||""}</span><span class="badge">${race.post||"—"}</span><span class="badge green">Active card</span>${race.going?`<span class="badge">${escapeText(race.going)}</span>`:""}${race.equibase_cancelled?'<span class="badge">RACE CANCELLED</span>':""}`;
+ raceBadges.innerHTML=`<span class="badge gold">${escapeText(displayDistance(race.dist)||"—")} ${race.surface||""}</span><span class="badge">${race.post||"—"}</span><span class="badge green">Active card</span><span id="raceConditions" class="small muted race-conditions-inline"></span>${race.going?`<span class="badge">${escapeText(race.going)}</span>`:""}${race.equibase_cancelled?'<span class="badge">RACE CANCELLED</span>':""}`;
  let active=race.horses.filter(h=>h.odds!=="SCR");
  const mlProvider=morningLineProvider(),mlSource=providerRace(mlProvider),ml=(mlSource.race?.horses||[]).filter(h=>h.odds!=='SCR'&&h.included_in_frozen_field!==false&&(!h.entry_status||h.entry_status==='REGULAR')&&Number.isFinite(morningLineNumber(h.ml))).sort((a,b)=>morningLineNumber(a.ml)-morningLineNumber(b.ml)).slice(0,4);
  topMl.innerHTML='<div class="tiny muted" style="margin:5px 0">Four shortest morning lines · reference odds only.</div><table class="candidate-table morning-line-table"><thead><tr><th scope="col">Horse</th><th scope="col">Rank</th><th scope="col">M/L Odds</th></tr></thead><tbody>'+(ml.length?ml.map((h,i)=>'<tr><td><b>'+(h.n?'#'+escapeText(h.n)+' ':'')+escapeText(h.name)+'</b></td><td>'+(i+1)+'</td><td>'+escapeText(h.ml)+'</td></tr>').join(''):'<tr><td colspan="3">'+escapeText('Verified morning line unavailable')+'</td></tr>')+'</tbody></table>';
