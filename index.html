@@ -762,13 +762,42 @@ function renderHiddenWinnerResearch(){
    row('Prime Power',...horses.map(primeValue))+
    '</tbody></table></div>'+speedBars(horses)+provenancePanel(h);
  };
+ // Conservative research-only RR #1 evidence classification. Missing source
+ // coverage is never treated as evidence of weakness or strength.
+ const confirmation=()=>{
+  const peers=[rrSecond,selected].filter(Boolean);
+  if(!earlyComplete||!topRow||!rrSecond||!selected||peers.length!==2)return {kind:'insufficient',label:'Insufficient',reason:'A complete ranked field, verified pace coverage and a flagged hidden challenger are required.'};
+  const relevant=[topRow,...peers];
+  if(relevant.some(h=>![h.metrics?.e2?.value,h.metrics?.late?.value,primeValue(h)].every(Number.isFinite)||horseSpeed(h).length<3))
+   return {kind:'insufficient',label:'Insufficient',reason:'E2, LP, Prime Power and at least three verified recent speed figures are required for all three horses.'};
+  // Fixed, transparent exploratory thresholds; validate against historical outcomes.
+  const recent=h=>horseSpeed(h).slice(0,3).reduce((a,b)=>a+b,0)/3;
+  const margins=peers.map(h=>({
+   e2:h.metrics.e2.value-topRow.metrics.e2.value,
+   lp:h.metrics.late.value-topRow.metrics.late.value,
+   speed:recent(h)-recent(topRow),
+   prime:primeValue(h)-primeValue(topRow)
+  }));
+  const threats=margins.filter(m=>(m.e2>=5&&m.lp>=5)||(m.speed>=5&&m.lp>=5)||(m.prime>=4&&m.speed>=5));
+  const support=margins.every(m=>m.e2<=3&&m.lp<=3&&m.speed<=3&&m.prime<=3);
+  if(threats.length)return {kind:'warning',label:'Challenger warning',reason:'At least one challenger has a substantial advantage in two supporting measures.'};
+  if(support)return {kind:'strong',label:'Strong support',reason:'Neither comparison horse exceeds RR #1 by more than three points in the four supporting measures.'};
+  return {kind:'mixed',label:'Mixed evidence',reason:'Some supporting measures favor another horse, but no defined challenger-warning threshold is met.'};
+ };
+ const confirmationHtml=()=>{
+  const c=confirmation(),colors={strong:'#23834a',mixed:'linear-gradient(90deg,#23834a 0%,#23834a 50%,#efc448 50%,#efc448 100%)',warning:'#efc448',insufficient:'#cb4545'};
+  const fill=c.kind==='mixed'?colors.mixed:colors[c.kind];
+  return '<div class="note small" role="status" aria-label="RR number one confirmation: '+escapeText(c.label)+'" style="margin-top:12px"><b>RR #1 Confirmation · '+escapeText(c.label)+'</b><div style="height:12px;border-radius:8px;background:'+fill+';margin:8px 0" aria-hidden="true"></div><div>'+escapeText(c.reason)+'</div><div class="tiny muted" style="margin-top:5px">Exploratory thresholds only; not a win probability, betting signal or RR score adjustment. Red means missing evidence, not a predicted loss.</div></div>';
+ };
  const candidateSelect=hiddenRanked.length?'<label for="hiddenChallengerSelect" class="small"><b>Hidden challenger (RR #3/#4)</b></label> <select id="hiddenChallengerSelect" aria-label="Choose hidden challenger">'+optionHtml+'</select>':'<div class="note small">No RR #3/#4 horse meets the preliminary hidden Speed/Form screen. Challenger evidence remains unavailable; RR #1 and #2 stay visible.</div>';
- comparison.innerHTML='<div class="small"><b>Side-by-side:</b> original RR #1 and #2 remain fixed. The third column shows the strongest eligible flagged RR #3/#4 horse, if any. Research only.</div>'+candidateSelect+'<div id="hiddenComparisonContent">'+comparisonTable(selected)+'</div>'+'<div class="tiny muted" style="margin-top:8px">Research only. Hidden challenger is chosen from existing preliminary Speed/Form flags, then research pace score; this is not a win probability or automatic promotion. Prime Power is reference only'+(ppBest===null?'; no verified Prime Power values':' (field high '+ppBest.toFixed(1)+')')+'. No RR ranking or wagering changes.'+missing+'</div>';
+ comparison.innerHTML=confirmationHtml()+'<div class="small"><b>Side-by-side:</b> original RR #1 and #2 remain fixed. The third column shows the strongest eligible flagged RR #3/#4 horse, if any. Research only.</div>'+candidateSelect+'<div id="hiddenComparisonContent">'+comparisonTable(selected)+'</div>'+'<div class="tiny muted" style="margin-top:8px">Research only. Hidden challenger is chosen from existing preliminary Speed/Form flags, then research pace score; this is not a win probability or automatic promotion. Prime Power is reference only'+(ppBest===null?'; no verified Prime Power values':' (field high '+ppBest.toFixed(1)+')')+'. No RR ranking or wagering changes.'+missing+'</div>';
  const select=comparison.querySelector('#hiddenChallengerSelect');
  if(select)select.onchange=()=>{
   const h=hiddenRanked.find(x=>String(x.n)===select.value)||null;
   const content=comparison.querySelector('#hiddenComparisonContent');
   if(content)content.innerHTML=comparisonTable(h);
+  const indicator=comparison.querySelector('[aria-label^="RR number one confirmation:"]');
+  if(indicator)indicator.outerHTML=confirmationHtml();
  };
 
 }
