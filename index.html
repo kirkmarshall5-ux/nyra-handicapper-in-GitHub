@@ -194,7 +194,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <div class="card span12" style="display:none" aria-hidden="true"><h3 class="sectiontitle">Edit runners</h3><div style="overflow:auto"><table id="editTable"><thead><tr><th>#</th><th>Horse</th><th>Style</th><th>Last Fig</th><th>Best 3</th><th>Form</th><th>Class</th><th>Trip</th><th>Works</th><th>Pedigree</th><th>Core coverage</th><th>Note</th></tr></thead><tbody></tbody></table></div></div>
 <div class="card span12" style="display:none" aria-hidden="true"><div class="note small"><b>Tip:</b> when your PP file is parsed, the dashboard will try to fill Last Fig / Best 3 and snippets. Verified rating inputs are locked. Notes and pace labels are saved locally on this device.</div></div>
 </div></details>
-<div class="card span12"><div class="kicker">Hidden challenger screening audit · all races</div><h3 class="sectiontitle">Why a race did or did not produce a flag</h3><div class="small muted">Strict thresholds stay active. Show up to two closest well-supported candidates only; suppress reference candidates for FTS or thin-data races. Never promote to selections or wagers.</div><div id="hiddenScreeningAudit" style="overflow-x:auto;margin-top:12px" role="status">Awaiting Brisnet card</div></div>
+<div class="card span12"><div class="kicker">Hidden challenger screening audit · all races</div><h3 class="sectiontitle">Why a race did or did not produce a flag</h3><div class="small muted">Strict thresholds stay active. Show up to two closest well-supported candidates only; suppress reference candidates for FTS or thin-data races. Never promote to selections or wagers.</div><div style="margin-top:10px"><button type="button" id="exportHiddenStudy">Export research screening JSON</button><span id="exportHiddenStudyStatus" class="small muted" role="status"></span></div><div id="hiddenScreeningAudit" style="overflow-x:auto;margin-top:12px" role="status">Awaiting Brisnet card</div></div>
 <div class="card span12" id="paceResearchFooter"><div class="kicker">Supporting pace research</div><div class="grid" style="margin-top:12px"><div class="card span6"><b>Early pace pressure</b><div id="hiddenPacePressure" class="small muted" role="status">Awaiting verified field evidence</div></div><div class="card span6"><b>Hidden Winner watch</b><div id="hiddenWinnerWatch" class="small muted" role="status">Awaiting verified RR ranks and pace/form evidence</div></div></div></div>
 </div></section>
 
@@ -693,11 +693,42 @@ function hiddenWinnerAuditRace(race,variant){
  const near=evidenceReady?candidates.filter(c=>!c.flag&&c.delta!==null&&c.delta>3&&c.delta<=10&&c.speedCount>=3).sort((a,b)=>a.delta-b.delta).slice(0,2):[];
  return {complete,gaps,flags,near,candidates,covered,total:rows.length,evidenceReady,fts,experienced,horseCount:horses.length};
 }
+function hiddenStudySnapshot(variant){
+ const card=providerCards.BRISNET||(cardProvider(activeCard)==='BRISNET'?activeCard:null);
+ if(!card||!card.races)return null;
+ const races=Object.values(card.races).map(r=>{
+  const a=hiddenWinnerAuditRace(r,variant);
+  return {race:r.race??r.number??null,date:r.date??null,surface:r.surface??null,distance_furlongs:r.distance_furlongs??null,
+   evidence_ready:a.evidenceReady,first_time_starter_or_missing_history:a.fts,complete_strict_coverage:a.complete,
+   missing_coverage:a.gaps,field_size:a.horseCount,experienced_runners:a.experienced,
+   strict_flags:a.flags.map(h=>({program:h.n,name:h.name,rr_rank:h.rank,pace_gap:h.delta})),
+   reference_candidates:a.near.map(h=>({program:h.n,name:h.name,rr_rank:h.rank,pace_gap:h.delta,verified_recent_speeds:h.speedCount})),
+   rr_top_two:(rankBrisnetResearch(r)?.rankings||[]).filter(h=>h.rank<=2).map(h=>({program:h.n??h.program,name:h.name,rr_rank:h.rank}))};
+ });
+ return {schema:'hidden-challenger-study-v1',source:'current Brisnet card, research-only',track:card.track??null,pace_variant:variant,
+  rules:{strict:'unchanged',reference_rr_ranks:[3,4],reference_max_pace_gap:10,reference_min_speed_lines:3,reference_max_display:2,exclude_fts:true,min_experienced_fraction:0.7},
+  outcomes:null,outcomes_status:'NOT_VERIFIED: join official results and payouts separately, by track/date/race/program; never infer finish or ROI',
+  freeze_status:'NOT_ATTESTED: export is a snapshot, not proof of pre-race freeze',races};
+}
+function exportHiddenStudy(){
+ const status=document.getElementById('exportHiddenStudyStatus');
+ try{
+  const variant=document.getElementById('hiddenPaceVariant')?.value||'distance';
+  const data=hiddenStudySnapshot(variant);
+  if(!data)throw Error('Load a Brisnet card first');
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download='HIDDEN_CHALLENGER_STUDY_'+String(data.track||'CARD').replace(/[^a-z0-9_-]/gi,'_')+'.json';
+  document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  if(status)status.textContent='Research snapshot prepared; official outcomes not included.';
+ }catch(err){if(status)status.textContent='Export failed: '+String(err.message||err);}
+}
 function renderHiddenScreeningAudit(variant){
  const el=document.getElementById('hiddenScreeningAudit');if(!el)return;
  const card=providerCards.BRISNET||(cardProvider(activeCard)==='BRISNET'?activeCard:null);
  const races=Object.values(card?.races||{});
  if(!races.length){el.textContent='No Brisnet card loaded';return;}
+ const exportButton=document.getElementById('exportHiddenStudy');if(exportButton)exportButton.onclick=exportHiddenStudy;
  const esc=v=>escapeText(String(v));
  el.innerHTML='<table><thead><tr><th>Race</th><th>Strict result</th><th>Closest candidates (reference only)</th><th>Reason</th></tr></thead><tbody>'+races.map(r=>{
   const a=hiddenWinnerAuditRace(r,variant);
