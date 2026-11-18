@@ -674,11 +674,13 @@ function renderHiddenWinnerResearch(){
  const findRank=row=>byNumber.get(String(row.n))||byName.get(String(row.name||'').trim().toLowerCase());
  const scored=rows.map(row=>({...row,rr:findRank(row)}));
  const knownQ=scored.filter(h=>Number.isInteger(h.quirin)),leaders=knownQ.filter(h=>h.quirin>=6&&['E','E/P'].includes(h.style));
- const incomplete=rows.length!==(sourceRace.horses||[]).filter(paceEligible).length||ranks.length!==rows.length;
+ const incomplete=rows.length!==(sourceRace.horses||[]).filter(paceEligible).length||ranks.length!==rows.length||scored.some(h=>!h.rr);
  pressure.textContent=knownQ.length+'/'+rows.length+' verified Quirin values · '+leaders.length+' E/E-P runners with 6–8 points'+(incomplete?' · Incomplete model/pace coverage':'')+'. This is an early-pressure indicator, not a predicted pace or finish.';
  if(!ranks.length){watch.textContent='Brisnet RR rankings unavailable; no candidates calculated.';comparison.textContent='RR comparison unavailable.';return;}
  const top=ranks.find(h=>h.rank===1)||ranks[0],topRow=scored.find(h=>h.rr?.rank===1);
  const maxEarly=Math.max(...scored.map(h=>Number.isFinite(h.early)?h.early:-Infinity));
+ const topSpeedHorse=(sourceRace.horses||[]).find(x=>String(x.n)===String(top.n)||String(x.name||'').toLowerCase()===String(top.name||'').toLowerCase());
+ const topSpeed=(topSpeedHorse?.ratings?.lines||[]).filter(l=>l.source?.provider==='BRISNET'&&typeof l.date==='string'&&l.date<sourceRace.date&&Number.isFinite(l.speed)&&l.speed>=0).slice(0,5).map(l=>l.speed);
  const flags=scored.filter(h=>[3,4].includes(h.rr?.rank)).map(h=>{
   const sourceHorse=(sourceRace.horses||[]).find(x=>String(x.n)===String(h.n)||String(x.name||'').toLowerCase()===String(h.name||'').toLowerCase());
   const speed=(sourceHorse?.ratings?.lines||[]).filter(l=>l.source?.provider==='BRISNET'&&typeof l.date==='string'&&l.date<sourceRace.date&&Number.isFinite(l.speed)&&l.speed>=0).slice(0,5).map(l=>l.speed);
@@ -688,8 +690,15 @@ function renderHiddenWinnerResearch(){
  }).filter(h=>h.hiddenSpeed||h.hiddenForm);
  const missing=incomplete?' · Field coverage incomplete: signals provisional.':'';
  watch.innerHTML=flags.length?flags.map(h=>'<div class="note small"><b>#'+escapeText(h.n)+' '+escapeText(h.name)+'</b> · RR #'+h.rr.rank+' · '+(h.hiddenSpeed?'Hidden Speed ':'')+(h.hiddenForm?'Hidden Form':'')+' · E1/E2 '+(h.early??'Unknown')+' · Quirin '+(h.quirin??'Not verified')+'</div>').join('')+'<div class="tiny muted">In-sample screening thresholds; no automatic rank change.'+missing+'</div>':'No RR #3/#4 candidates met the preliminary Speed/Form thresholds.'+missing;
- const fmt=h=>h?('#'+escapeText(h.n)+' '+escapeText(h.name)+' · E1/E2 '+(h.early??'Unknown')+' · Quirin '+(h.quirin??'Not verified')+' · '+escapeText(h.style)):'Not available';
- comparison.innerHTML='<b>RR #1:</b> '+fmt(topRow)+'<div style="margin-top:8px"><b>Flagged challengers:</b></div>'+(flags.length?flags.map(h=>'<div>'+fmt(h)+' · '+(h.speed.length?'recent speed '+h.speed.join(', '):'recent speed unavailable')+'</div>').join(''):'None on this card')+'<div class="tiny muted" style="margin-top:8px">Verified comparable pace lines only. Quirin is a positioning tendency, not a speed figure. Prime Power comparison awaits validated source mapping. No betting recommendations.'+missing+'</div>';
+ const fmt=h=>h?('#'+escapeText(h.n)+' '+escapeText(h.name)+' · '+(native.early_key==='e2'?'E2 ':'E1 ')+(h.early??'Unknown')+' · Quirin '+(h.quirin??'Not verified')+' · '+escapeText(h.style)):'Not available';
+ const speedLine=a=>a.length?a.map(v=>Number(v).toFixed(0)).join(' → '):'Not verified';
+ const compareTable='<div style="overflow-x:auto;margin-top:10px"><table class="pace-comparison-table"><thead><tr><th>Evidence</th><th>RR #1</th><th>Challenger</th></tr></thead><tbody>'+
+ '<tr><td>RR rank</td><td>1</td><td>3 / 4</td></tr>'+
+ '<tr><td>Recent speed (newest first)</td><td>'+speedLine(topSpeed)+'</td><td>Select candidate below</td></tr>'+
+ '<tr><td>Early pace ('+(native.early_key==='e2'?'E2':'E1')+')</td><td>'+(topRow?.early??'Unknown')+'</td><td>See candidate</td></tr>'+
+ '<tr><td>Quirin</td><td>'+(topRow?.quirin??'Not verified')+'</td><td>See candidate</td></tr>'+
+ '</tbody></table></div>';
+ comparison.innerHTML='<b>RR #1:</b> '+fmt(topRow)+'<div class="tiny muted">Recent speed: '+speedLine(topSpeed)+'</div>'+compareTable+'<div style="margin-top:8px"><b>Flagged challengers:</b></div>'+(flags.length?flags.map(h=>'<div>'+fmt(h)+' · '+(h.speed.length?'recent speed '+h.speed.join(', '):'recent speed unavailable')+'</div>').join(''):'None on this card')+'<div class="tiny muted" style="margin-top:8px">Verified comparable pace lines only. Quirin is a positioning tendency, not a speed figure. Prime Power comparison awaits validated source mapping. No betting recommendations.'+missing+'</div>';
 }
 
 function renderPace(){
