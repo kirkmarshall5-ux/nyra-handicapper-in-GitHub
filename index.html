@@ -705,10 +705,10 @@ function hiddenStudySnapshot(variant){
    reference_candidates:a.near.map(h=>({program:h.n,name:h.name,rr_rank:h.rank,pace_gap:h.delta,verified_recent_speeds:h.speedCount})),
    rr_top_two:(rankBrisnetResearch(r)?.rankings||[]).filter(h=>h.rank<=2).map(h=>({program:h.n??h.program,name:h.name,rr_rank:h.rank}))};
  });
- return {schema:'hidden-challenger-study-v1',source:'current Brisnet card, research-only',track:card.track??null,pace_variant:variant,
+ return {schema:'hidden-challenger-study-v1',source:'current Brisnet card, research-only',track:card.track??null,card_id:card.id??null,parser_version:card.parser_version??null,exported_at:new Date().toISOString(),pace_variant:variant,
   rules:{strict:'unchanged',reference_rr_ranks:[3,4],reference_max_pace_gap:10,reference_min_speed_lines:3,reference_max_display:2,exclude_fts:true,min_experienced_fraction:0.7},
   outcomes:null,outcomes_status:'NOT_VERIFIED: join official results and payouts separately, by track/date/race/program; never infer finish or ROI',
-  freeze_status:'NOT_ATTESTED: export is a snapshot, not proof of pre-race freeze',races};
+  freeze_status:'NOT_ATTESTED: export is a snapshot, not proof of pre-race freeze',research_policy:'Do not compute prospective ROI unless an independently verified pre-race freeze and official results/payouts are matched. Post-race snapshots are retrospective research only.',races};
 }
 function exportHiddenStudy(){
  const status=document.getElementById('exportHiddenStudyStatus');
@@ -716,6 +716,7 @@ function exportHiddenStudy(){
   const variant=document.getElementById('hiddenPaceVariant')?.value||'distance';
   const data=hiddenStudySnapshot(variant);
   if(!data)throw Error('Load a Brisnet card first');
+  if(!data.races.length)throw Error('No Brisnet races available to export');
   const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
   const url=URL.createObjectURL(blob),a=document.createElement('a');
   a.href=url;a.download='HIDDEN_CHALLENGER_STUDY_'+String(data.track||'CARD').replace(/[^a-z0-9_-]/gi,'_')+'.json';
