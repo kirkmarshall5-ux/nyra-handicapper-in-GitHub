@@ -714,14 +714,16 @@ function exportHiddenStudy(){
  const status=document.getElementById('exportHiddenStudyStatus');
  try{
   const variant=document.getElementById('hiddenPaceVariant')?.value||'distance';
-  const data=hiddenStudySnapshot(variant);
-  if(!data)throw Error('Load a Brisnet card first');
-  if(!data.races.length)throw Error('No Brisnet races available to export');
+  const variants=['e1','e2','distance','sustained'];
+  const studies=variants.map(v=>hiddenStudySnapshot(v));
+  if(studies.some(d=>!d))throw Error('Load a Brisnet card first');
+  if(!studies[0].races.length)throw Error('No Brisnet races available to export');
+  const data={schema:'hidden-challenger-multi-variant-study-v1',exported_at:new Date().toISOString(),selected_display_variant:variant,variants,studies,comparison_status:'SOURCE_REPLAY_ONLY: reconcile independently with freeze, starters, official finishes and payouts; no ROI calculated'};
   const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
   const url=URL.createObjectURL(blob),a=document.createElement('a');
-  a.href=url;a.download='HIDDEN_CHALLENGER_STUDY_'+String(data.track||'CARD').replace(/[^a-z0-9_-]/gi,'_')+'.json';
+  a.href=url;a.download='HIDDEN_CHALLENGER_STUDY_'+String(studies[0].track||'CARD').replace(/[^a-z0-9_-]/gi,'_')+'.json';
   document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
-  if(status)status.textContent='Research snapshot prepared; official outcomes not included.';
+  if(status)status.textContent='Four-variant research snapshot prepared (E1, E2, distance, E2 + LP); official outcomes not included.';
  }catch(err){if(status)status.textContent='Export failed: '+String(err.message||err);}
 }
 function renderHiddenScreeningAudit(variant){
