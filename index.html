@@ -145,8 +145,23 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 </div></section>
 
 <section id="pace" class="hidden"><div class="grid">
+<div class="card span12" id="hiddenWinnerOverview">
+ <div class="kicker">Brisnet RR supporting research · no change to live selections</div>
+ <h3 class="sectiontitle">Pace &amp; Hidden Winners</h3>
+ <div class="small muted">Use running styles, Quirin early-speed points, pace figures, form and Prime Power to investigate RR's #3/#4 horses. Flags are research prompts, never automatic promotions or wagers.</div>
+ <div class="grid" style="margin-top:12px">
+  <div class="card span6"><b>Early pace pressure</b><div id="hiddenPacePressure" class="small muted" role="status">Awaiting verified field evidence</div></div>
+  <div class="card span6"><b>Hidden Winner watch</b><div id="hiddenWinnerWatch" class="small muted" role="status">Awaiting verified RR ranks and pace/form evidence</div></div>
+ </div>
+</div>
 <div class="card span12"><div class="kicker">Pace &amp; Ratings source · Brisnet preferred</div><div id="paceCardStatus" class="small" role="status"></div><div class="tiny muted">Opening this tab selects the matching Brisnet card when available. This also updates the Horse grid / Pace source on Race Day. Upload Brisnet PPs in Race Day Prep to use their E1, E2 and LP figures.</div></div>
 <div class="card span12"><div class="kicker" id="paceSourceLabel">Pace-label proxy · not a validated scenario</div><h3 class="sectiontitle">Pace map</h3><div class="small muted" id="paceDescription">These lanes are Early/Late-derived display hints, not verified running styles. Source-call proxies are in the PP context panel.</div><div id="paceMap" class="stack"></div></div>
+<div class="card span12" id="hiddenWinnerComparison">
+ <div class="kicker">Horse-by-horse research · original RR selections remain authoritative</div>
+ <h3 class="sectiontitle">Horse Pace &amp; Form Comparison</h3>
+ <div class="small muted">Compare a challenger with RR's first choice using verified E1/E2, Quirin, running style, recent speed and Prime Power. Unavailable source fields must remain unknown.</div>
+ <div id="hiddenComparisonReadiness" class="note small" role="status" style="margin-top:10px">The existing projected race setup and source evidence below remain available while the verified comparison feed is connected.</div>
+ </div>
 <div class="card span4" id="transparentRatingRules"><div class="kicker">Transparent comparison</div><h3 class="sectiontitle" id="paceRulesTitle">Locked V4.4c rules</h3>
 <div class="small muted">The Handicap Rating is not a win probability. It compares the entered PP information and public context. “Things to Consider” stays separate so an angle does not secretly inflate the rating.</div>
 <div id="weights" style="margin-top:12px"></div><button id="resetWeights" class="secondary" style="width:100%;margin-top:8px">Reset weights</button></div>
@@ -648,7 +663,18 @@ function updatePaceSourceLabels(native){
  const rules=document.getElementById('contenderRules');if(!rules.dataset.originalHtml)rules.dataset.originalHtml=rules.innerHTML;
  rules.innerHTML=native?'<h3 class="sectiontitle">Native Brisnet model methods · experimental</h3>'+['contender'].map(k=>'<p class="small">'+escapeText(BRISNET_METHODS[k])+'</p>').join('')+'<div class="note small">Contender consumes early pace and LP. V4.4c-Brisnet base has no pace component. Source styles, turn index and race shapes add no score bonus. The original Beyer/Timeform controls are unchanged; Brisnet variants require separate validation.</div>':rules.dataset.originalHtml;
 }
+function renderHiddenWinnerResearch(){
+ const native=brisnetPaceDisplay(race);
+ const pressure=document.getElementById('hiddenPacePressure'),watch=document.getElementById('hiddenWinnerWatch'),comparison=document.getElementById('hiddenComparisonReadiness');
+ if(!pressure||!watch||!comparison)return;
+ const runners=(race.horses||[]).filter(paceEligible);
+ const source=native.available?'Brisnet pace evidence available':'Verified Brisnet pace evidence unavailable';
+ pressure.textContent=source+' · '+runners.length+' eligible runners. Pace-pressure classification pending verified Quirin points and complete field coverage.';
+ watch.textContent='Hidden Speed / Hidden Form: research-only. No flag shown until verified RR #3/#4 ranks, E1, recent speed sequence and field coverage are available.';
+ comparison.textContent='Use the Brisnet running-style map above and the existing projected setup below. Quirin, Prime Power and recent-form comparison will show only after source mapping is validated; no inferred values are displayed.';
+}
 function renderPace(){
+ renderHiddenWinnerResearch();
  const native=brisnetPaceDisplay(race);updatePaceSourceLabels(native.available);
  if(native.available){paceMap.innerHTML=brisnetPaceMapHtml(native,{compact:true});return;}
  const runners=race.horses.filter(paceEligible).map(h=>({...h,pace:paceProfile(h)})),unknown=runners.filter(h=>!h.pace.known);
