@@ -701,7 +701,7 @@ function renderHiddenWinnerResearch(){
   if(!h)return null;
   const horse=(sourceRace.horses||[]).find(x=>String(x.n)===String(h.n)||String(x.name||'').trim().toLowerCase()===String(h.name||'').trim().toLowerCase());
   const raw=horse?.ratings?.prime_power;
-  return Number.isFinite(raw)?raw:(typeof horse?.ratings?.prime_power_display==='string'&&/^\\d+(?:\\.\\d+)?$/.test(horse.ratings.prime_power_display.trim())?Number(horse.ratings.prime_power_display):null);
+  return Number.isFinite(raw)?raw:(typeof horse?.ratings?.prime_power_display==='string'&&/^\d+(?:\.\d+)?$/.test(horse.ratings.prime_power_display.trim())?Number(horse.ratings.prime_power_display):null);
  };
  const ppValues=scored.map(primeValue).filter(Number.isFinite),ppBest=ppValues.length?Math.max(...ppValues):null;
  const candidates=scored.filter(h=>[2,3,4].includes(h.rr?.rank));
