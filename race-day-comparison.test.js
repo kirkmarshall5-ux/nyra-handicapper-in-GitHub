@@ -4,6 +4,7 @@ import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
 import {selectMorningLineProvider,morningLineNumber} from './race-day-dashboard.js';
 import {rankBrisnetModels} from './brisnet-models.js';
+import {rankBrisnetResearch} from './brisnet-research.js';
 import {brisnetRankingHtml} from './brisnet-ranking-display.js';
 import {rankContenders} from './contender-rankings.js';
 import {releaseRace} from './rankings-release.js';
@@ -37,18 +38,28 @@ const gridKey=html.match(/const gridRunnerKey=[^\n]+/)[0];
 const scratchedGridFn=html.match(/function scratchedGridRows\(\)\{[\s\S]*?\n\}/)[0];
 const gridSortFn=html.match(/function sortedGridHorses\([^\n]*\)\{[\s\S]*?\n\}/)[0];
 const drfGridRace=()=>({date:'2026-10-11',surface:'Dirt',conditions:{surface:'Dirt'},header:'6 Furlongs',parser_blockers:[],horses:[60,70,80].map((figure,i)=>({n:String(i+1),name:'Grid runner '+(i+1),life_starts:1,beyer_figures:[figure],timeform_early:80+10*i,timeform_late:80,entry_status:'REGULAR',parser_blockers:[],switch_evidence:{running_lines:[{running_date_track:'1æ26=1Bel'}],boxes:{}},beyer_evidence:[{figure,running_date_track:'1æ26=1Bel',source_line:'1æ26=1Bel fst 6f '+figure+' 1/5'}],source_context:{}}))});
-function gridContext(race){const context={race,rankBrisnetModels,rankContenders,websiteRace:releaseRace,gridSort:{key:'contender',dir:1}};vm.runInNewContext(gridFn+'\n'+gridKey+'\n'+scratchedGridFn+'\n'+gridSortFn,context);return context;}
-test('handicapping grid uses DRF Contender scores and rank order without modifying either engine',()=>{
- const race=drfGridRace(),before=structuredClone(race),baseline=releaseRace(race),expected=rankContenders(race,baseline),context=gridContext(race),actual=context.contenderGridRating();
- assert.deepEqual(actual,expected);assert.deepEqual(Array.from(context.sortedGridHorses(),h=>h.n),expected.rankings.map(h=>h.n));assert.deepEqual(race,before);assert.deepEqual(releaseRace(race),baseline);
+function gridContext(race,hasBrisnet=true){
+ const context={race,providerRace:()=>({race:hasBrisnet?race:null}),rankBrisnetResearch,gridSort:{key:'rr',dir:1}};
+ vm.runInNewContext(gridFn+'\n'+gridKey+'\n'+scratchedGridFn+'\n'+gridSortFn,context);
+ return context;
+}
+test('handicapping grid uses Brisnet RR rankings without changing its scoring',()=>{
+ const race={date:'2026-10-22',surface:'Dirt',distance_furlongs:6,ratings_provider:'BRISNET',horses:[70,90,80].map((speed,i)=>({n:String(i+1),name:'Native grid '+i,life_starts:1,odds:'—',ratings:{provider:'BRISNET',lines:[{date:'2026-10-01',surface:'Dirt',furlongs:6,speed,late:80,e1:80,e2:80,source:{provider:'BRISNET',page:1,text:'fixture'}}]}}))};
+ const before=structuredClone(race),expected=rankBrisnetResearch(race),context=gridContext(race);
+ assert.deepEqual(context.contenderGridRating(),expected);
+ assert.deepEqual(Array.from(context.sortedGridHorses(),h=>h.n),expected.rankings.map(h=>h.n));
+ assert.deepEqual(race,before);
 });
-test('handicapping grid uses native Brisnet Contender instead of V4.4c',()=>{
- const race={date:'2026-10-22',surface:'Dirt',distance_furlongs:6,ratings_provider:'BRISNET',horses:[70,90].map((speed,i)=>({n:String(i+1),name:'Native grid '+i,life_starts:1,odds:'—',ratings:{provider:'BRISNET',lines:[{date:'2026-10-01',surface:'Dirt',furlongs:6,speed,source:{provider:'BRISNET',page:1,text:'fixture'}}]}}))};
- const models=rankBrisnetModels(race),context=gridContext(race),out=context.contenderGridRating();assert.deepEqual(out,models.contender);assert.notEqual(out.model_id,models.v44c.model_id);
+test('missing Brisnet source does not fall back to Contender',()=>{
+ const context=gridContext(drfGridRace(),false),out=context.contenderGridRating();
+ assert.equal(out.decision,'HOLD');assert.equal(out.rankings.length,0);
 });
-test('grid keeps first-time starters and scratches unranked, including reverse rank sort',()=>{
- const race=drfGridRace();race.horses[0].life_starts=0;race.horses[0].beyer_figures=[];race.horses.push({...race.horses[2],n:'4',name:'Scratched grid runner',odds:'SCR'});
- const context=gridContext(race),out=context.contenderGridRating();assert.equal(out.provisional,true);assert.deepEqual(out.rankings.map(h=>h.n),['3','2']);
- assert.deepEqual(Array.from(context.sortedGridHorses(),h=>h.n),['3','2','1','4']);context.gridSort.dir=-1;assert.deepEqual(Array.from(context.sortedGridHorses(),h=>h.n),['2','3','1','4']);
- context.gridSort={key:'number',dir:1};assert.deepEqual(Array.from(context.sortedGridHorses(),h=>h.n),['1','2','3','4']);
+test('RR-unranked and scratched horses remain in grid',()=>{
+ const race={date:'2026-10-22',surface:'Dirt',distance_furlongs:6,ratings_provider:'BRISNET',horses:[70,90,80].map((speed,i)=>({n:String(i+1),name:'Native grid '+i,life_starts:i===0?0:1,odds:i===2?'SCR':'—',ratings:{provider:'BRISNET',lines:[{date:'2026-10-01',surface:'Dirt',furlongs:6,speed,late:80,e1:80,e2:80,source:{provider:'BRISNET',page:1,text:'fixture'}}]}}))};
+ const context=gridContext(race),out=context.contenderGridRating();
+ const ordered=Array.from(context.sortedGridHorses(),h=>h.n);
+ assert.equal(ordered.length,3);assert.equal(new Set(ordered).size,3);
+ assert.equal(ordered[ordered.length-1],'3');
+ context.gridSort={key:'number',dir:1};
+ assert.deepEqual(Array.from(context.sortedGridHorses(),h=>h.n),['1','2','3']);
 });
