@@ -228,3 +228,18 @@ test('official starter audit distinguishes PP runner excluded from active field'
  assert.deepEqual(d.starter_audit.inactiveInPP,['12']);
  assert.deepEqual(d.starter_audit.absentFromPP,[]);
 });
+
+test('DRF blend shows shared ratings on a PASS field with a first-time starter',()=>{
+ const horses=[horse(1,{life_starts:2,beyer_figures:[70],contender_evidence:{}}),
+  horse(2,{life_starts:2,beyer_figures:[80],contender_evidence:{}}),horse(3,{life_starts:0})];
+ const i=input(race(horses));
+ i.sources.BRISNET={race:null,reason:'Not loaded'};
+ const d=buildRaceDashboard(i);
+ assert.equal(d.drf_blend.decision,'PASS');
+ assert.deepEqual(d.drf_blend.rankings.map(h=>h.n),['2','1']);
+ assert.equal(d.models.find(m=>m.id==='drfContender').decision,'PASS');
+ assert.equal(d.paper_plans.drfContender.total_cost,0);
+ assert.match(dashboardHtml(d),/Provisional rankings for 2 of 3 active runners/);
+ i.sources.DRF.race.parser_blockers=['Race conditions need verification'];
+ assert.deepEqual(buildRaceDashboard(i).drf_blend.rankings,[]);
+});
