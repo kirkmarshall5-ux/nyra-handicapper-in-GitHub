@@ -1,6 +1,6 @@
 import {parseRestoredCard,PARSER_ID} from './release-card-parser.js?v=20261115-beyer';
 import {parseBrisnetCard,BRISNET_PARSER_ID} from './brisnet-card-parser.js?v=20261118-fts-month';
-import {parsePremiumCard,PREMIUM_PARSER_ID} from './brisnet-premium-parser.js?v=20261118-fts-month';
+import {parsePremiumCard,PREMIUM_PARSER_ID} from './brisnet-premium-parser.js?v=20261120-drf-coverage';
 export const FORMAT_ROUTER_ID='PP-FORMAT-ROUTER-v2';
 // v2 cards remain usable as previously verified evidence. New structured
 // workouts and the added distance glyph require an explicit source re-upload.

@@ -69,14 +69,19 @@ function forecast(id,r){
 }
 function drfBlend(r){
  const horses=field(r),race={...r,horses};
- const control=releaseRace(race),finisher=rankFinishers(race),size=horses.length;
- if(control.decision!=='RATEABLE'||control.rankings.length!==size||finisher.rankings.length!==size){
-  return {decision:'PASS',reason:'V4.4c and Finisher both need complete rankings',rankings:[]};
+ const fullControl=releaseRace(race),finisher=rankFinishers(race);
+ const finisherNames=new Set(finisher.rankings.map(key));
+ const common=horses.filter(h=>finisherNames.has(key(h)));
+ const partial=common.length!==horses.length||fullControl.decision!=='RATEABLE';
+ const control=partial&&common.length?releaseRace({...race,horses:common}):fullControl;
+ if(control.decision!=='RATEABLE'||!common.length){
+  return {decision:'PASS',reason:'No shared ratings from V4.4c and Finisher',rankings:[]};
  }
  const topFour=rankings=>new Map(rankings.slice(0,4).map((h,i)=>[key(h),{horse:h,points:4-i}]));
  const v=topFour(control.rankings),f=topFour(finisher.rankings);
  return {
-  decision:'RESEARCH',
+  decision:partial?'PASS':'RESEARCH',
+  reason:partial?`Provisional rankings for ${common.length} of ${horses.length} active runners`:null,
   rankings:[...new Set([...v.keys(),...f.keys()])].map(id=>{
    const controlPoints=v.get(id)?.points??0,finisherPoints=f.get(id)?.points??0;
    return {horse:(v.get(id)||f.get(id)).horse,score:2*controlPoints+finisherPoints,controlPoints};
@@ -149,6 +154,7 @@ export function dashboardHtml(d,selected='brisResearch'){
  return `<div class="dashboard-heading"><div><div class="kicker">Race day dashboard</div><h3 class="sectiontitle">Shared selections &amp; order</h3></div><span class="badge">${d.field.length} eligible runners</span></div>
  ${d.demonstration?'<p class="small muted">Demonstration card · upload current PPs before use.</p>':''}
  <div class="dashboard-readiness">${gridModelIds.map(id=>d.models.find(m=>m.id===id)).filter(Boolean).map(m=>`<div${m.id==='brisResearch'?' class="model-rr-summary"':''}><b>${esc(m.label)}</b><span>${m.available?`${m.ranked}/${m.eligible} ranked · ${m.complete?'full field':'incomplete field'} · ${esc(m.decision)}`:esc(m.reason)}</span>${m.validation_status==='PENDING'?'<small class="muted">Validation pending</small>':''}${m.unrated?.length?`<details class="tiny muted"><summary>PASS/HOLD: ${m.unrated.length} unranked starter${m.unrated.length===1?'':'s'}</summary><ul>${m.unrated.map(h=>`<li>#${esc(h.n)} ${esc(h.name)}: ${h.reasons.map(esc).join('; ')}</li>`).join('')}</ul></details>`:''}</div>`).join('')}</div>
+ ${d.drf_blend?.decision==='PASS'?`<p class="tiny muted">DRF Blend PASS · ${esc(d.drf_blend.reason)}</p>`:''}
  ${d.issues.length?`<p class="small bad" role="status">${d.issues.map(esc).join(' · ')}</p>`:''}
  ${d.starter_audit?.status==='MISMATCH'?`<p class="small bad" role="status">Official starter roster mismatch: missing ${esc(d.starter_audit.missing.join(', ')||'none')}; unexpected ${esc(d.starter_audit.unexpected.join(', ')||'none')}; identity mismatch ${esc(d.starter_audit.identityMismatch.join(', ')||'none')}. Structured freeze validation rejects this supplied-roster mismatch; the separate local Freeze All Models action is not certified.</p>`:d.starter_audit?.status==='MATCHES_SUPPLIED_ROSTER'?'<p class="tiny muted">Active field matches supplied starter roster; source and timing remain independently unverified.</p>':d.starter_audit?.status==='UNVERIFIED_ROSTER'?'<p class="small bad">Supplied starter roster is invalid or lacks an HTTPS source reference.</p>':''}
  <p class="tiny muted">Horse rows are ordered by Brisnet RR rank; RR-unranked runners follow in program-number order. Other model rankings remain independent.</p>
