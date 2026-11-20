@@ -36,6 +36,8 @@ jobs:
           exit 1
       - name: Browser QA (desktop Chromium and emulated iPad viewport)
         run: node scripts/browser-qa.mjs
+      - name: Historical Results QA (desktop, iPad and iPhone viewports)
+        run: node scripts/historical-browser-qa.mjs
       - name: Upload QA report and screenshots
         if: always()
         uses: actions/upload-artifact@v4
