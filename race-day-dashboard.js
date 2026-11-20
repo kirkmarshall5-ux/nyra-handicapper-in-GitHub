@@ -1,7 +1,7 @@
 import {paperEligibility,paperTickets} from './paper-results.js';
 import {modelEvidence} from './model-evidence-display.js?v=20261115-beyer';
 import {ftsResearch} from './fts-research.js?v=20261118-fts-month';
-// Read-only organization of existing forecasts. No new rating or betting rule.
+// Shared rankings and paper settlement for matching race cards.
 import {matchingCard} from './dual-pp-cards.js?v=20261018-dual1';
 import {releaseRace} from './rankings-release.js?v=20261115-beyer';
 import {rankContenders} from './contender-rankings.js?v=20261115-beyer';
@@ -67,6 +67,23 @@ function forecast(id,r){
  const base=releaseRace(r);
  return {...rankContenders(r,base,{displayPass:base.decision==='PASS'}),runners:base.runners};
 }
+function drfBlend(r){
+ const horses=field(r),race={...r,horses};
+ const control=releaseRace(race),finisher=rankFinishers(race),size=horses.length;
+ if(control.decision!=='RATEABLE'||control.rankings.length!==size||finisher.rankings.length!==size){
+  return {decision:'PASS',reason:'V4.4c and Finisher both need complete rankings',rankings:[]};
+ }
+ const topFour=rankings=>new Map(rankings.slice(0,4).map((h,i)=>[key(h),{horse:h,points:4-i}]));
+ const v=topFour(control.rankings),f=topFour(finisher.rankings);
+ return {
+  decision:'RESEARCH',
+  rankings:[...new Set([...v.keys(),...f.keys()])].map(id=>{
+   const controlPoints=v.get(id)?.points??0,finisherPoints=f.get(id)?.points??0;
+   return {horse:(v.get(id)||f.get(id)).horse,score:2*controlPoints+finisherPoints,controlPoints};
+  }).sort((a,b)=>b.score-a.score||b.controlPoints-a.controlPoints)
+   .slice(0,4).map(({horse,score},i)=>({rank:i+1,n:program(horse),name:horse.name,score}))
+ };
+}
 function summarize(id,r,result,reason){
  const allowed=new Set(field(r).map(key)),rows=result?.rankings||[];
  if(!reason&&(new Set(rows.map(key)).size!==rows.length||rows.some(h=>!allowed.has(key(h))||field(r).some(x=>key(x)===key(h)&&program(x)&&program(h)&&program(x)!==program(h)))))reason='Forecast contains duplicate or unmatched runners; excluded';
@@ -106,13 +123,14 @@ export function buildRaceDashboard({anchor,sources,morningLineProvider='DRF',off
   const evidence=other&&(other.life_starts??other.lifeStarts)===0?other:h;
   return [[key(h),ftsResearch({...evidence,life_starts:0},anchor)]];
  }));
+ const blend=checks.DRF?null:drfBlend(sources.DRF.race);
  const maps=Object.fromEntries([...models,ml].map(m=>[m.id,new Map(m.rankings.map(h=>[key(h),h.rank]))]));
  const shortlist=field(anchor).map(h=>({n:program(h),name:h.name,ranks:Object.fromEntries(Object.entries(maps).map(([id,map])=>[id,map.get(key(h))??null]))})).map(h=>({...h,top_four_models:modelIds.filter(id=>h.ranks[id]!=null&&h.ranks[id]<=4).length})).filter(h=>h.top_four_models>0||h.ranks.morningLine!=null&&h.ranks.morningLine<=4).sort((a,b)=>b.top_four_models-a.top_four_models||compare(a,b));
  const selected=new Set(shortlist.map(key));
  const remaining=field(anchor).filter(h=>!selected.has(key(h))).map(h=>({n:program(h),name:h.name,ranks:Object.fromEntries(Object.entries(maps).map(([id,map])=>[id,map.get(key(h))??null])),top_four_models:0})).filter(h=>modelIds.some(id=>h.ranks[id]!=null)).sort(compare);
  const visible=new Set([...shortlist,...remaining].map(key));
  const unranked=field(anchor).filter(h=>!visible.has(key(h))).map(h=>({n:program(h),name:h.name,ranks:Object.fromEntries(Object.entries(maps).map(([id,map])=>[id,map.get(key(h))??null])),top_four_models:0})).sort(compare);
- return {fts_research:fts,has_fts:Object.keys(fts).length>0,prime_power:primePower,schema:'nyra-race-dashboard-v1',race:{track:anchor.track,date:anchor.date,number:anchor.race,surface:anchor.surface,distance:anchor.dist},field:field(anchor).map(h=>({n:program(h),name:h.name})),models,morning_line:ml,shortlist,remaining,unranked,starter_audit:starterAudit,issues:[...new Set(Object.values(checks).filter(Boolean))],paper_plans:Object.fromEntries([...models,ml].map(m=>[m.id,{decision:m.decision||'REFERENCE',...paperPlan(m.rankings,field(anchor),['MISMATCH','UNVERIFIED_ROSTER'].includes(starterAudit.status)?{...m,available:false,reason:'Official starter roster mismatch or unverified roster; review the named starter audit.'}:m)}])),betting_enabled:false};
+ return {drf_blend:blend,fts_research:fts,has_fts:Object.keys(fts).length>0,prime_power:primePower,schema:'nyra-race-dashboard-v1',race:{track:anchor.track,date:anchor.date,number:anchor.race,surface:anchor.surface,distance:anchor.dist},field:field(anchor).map(h=>({n:program(h),name:h.name})),models,morning_line:ml,shortlist,remaining,unranked,starter_audit:starterAudit,issues:[...new Set(Object.values(checks).filter(Boolean))],paper_plans:Object.fromEntries([...models,ml].map(m=>[m.id,{decision:m.decision||'REFERENCE',...paperPlan(m.rankings,field(anchor),['MISMATCH','UNVERIFIED_ROSTER'].includes(starterAudit.status)?{...m,available:false,reason:'Official starter roster mismatch or unverified roster; review the named starter audit.'}:m)}])),betting_enabled:false};
 }
 export function dashboardHtml(d,selected='brisResearch'){
  const ftsCell=h=>{
@@ -124,8 +142,10 @@ export function dashboardHtml(d,selected='brisResearch'){
   const recency=w.latest_days===null?'Recent works unavailable':`${w.count30} in 30d · latest ${w.latest_days}d ago`;
   return `<div class="fts-research-cell"><b>${f.birth_month?`(${esc(f.birth_month)}) `:''}PED ${esc(ped)}</b><span>${esc(trainer)}</span><span>${esc(work)} · ${esc(recency)}</span></div>`;
  };
- const row=h=>`<tr><th scope="row">${h.n?'#'+esc(h.n)+' ':''}${esc(h.name)}</th><td>${esc(d.prime_power?.[key(h)]||'—')}</td>${[...gridModelIds,'morningLine'].map(id=>`<td${id==='brisResearch'?' class="model-rr"':''}>${h.ranks[id]??'—'}</td>`).join('')}${d.has_fts?`<td>${ftsCell(h)}</td>`:''}</tr>`;
- const table=rows=>`<div class="dashboard-scroll" tabindex="0" role="region" aria-label="Model ranking comparison"><table class="dashboard-table"><thead><tr><th scope="col">Horse</th><th scope="col">Prime Power</th><th scope="col" class="model-rr">Brisnet-RR</th><th scope="col">Brisnet<br>Finisher</th><th scope="col">Brisnet<br>Contender</th><th scope="col">DRF Contender<br>Late +50%</th><th scope="col">M/L<br>rank</th>${d.has_fts?'<th scope="col">FTS<br>Research</th>':''}</tr></thead><tbody>${rows.map(row).join('')}</tbody></table></div>`;
+ const visibleModelIds=d.drf_blend?[...gridModelIds,'drfBlend']:gridModelIds;
+ const blendRanks=new Map((d.drf_blend?.rankings??[]).map(h=>[key(h),h.rank]));
+ const row=h=>`<tr><th scope="row">${h.n?'#'+esc(h.n)+' ':''}${esc(h.name)}</th><td>${esc(d.prime_power?.[key(h)]||'—')}</td>${[...visibleModelIds,'morningLine'].map(id=>`<td${id==='brisResearch'?' class="model-rr"':''}>${(id==='drfBlend'?blendRanks.get(key(h)):h.ranks[id])??'—'}</td>`).join('')}${d.has_fts?`<td>${ftsCell(h)}</td>`:''}</tr>`;
+ const table=rows=>`<div class="dashboard-scroll" tabindex="0" role="region" aria-label="Model ranking comparison"><table class="dashboard-table"><thead><tr><th scope="col">Horse</th><th scope="col">Prime Power</th><th scope="col" class="model-rr">Brisnet-RR</th><th scope="col">Brisnet<br>Finisher</th><th scope="col">Brisnet<br>Contender</th><th scope="col">DRF Contender<br>Late +50%</th>${d.drf_blend?'<th scope="col" title="DRF-only challenger. Twice the points for V4.4c, with Finisher contributing to the top-four order.">DRF V4.4c–Finisher<br>Blend</th>':''}<th scope="col">M/L<br>rank</th>${d.has_fts?'<th scope="col">FTS<br>Research</th>':''}</tr></thead><tbody>${rows.map(row).join('')}</tbody></table></div>`;
  return `<div class="dashboard-heading"><div><div class="kicker">Race day dashboard</div><h3 class="sectiontitle">Shared selections &amp; order</h3></div><span class="badge">${d.field.length} eligible runners</span></div>
  ${d.demonstration?'<p class="small muted">Demonstration card · upload current PPs before use.</p>':''}
  <div class="dashboard-readiness">${gridModelIds.map(id=>d.models.find(m=>m.id===id)).filter(Boolean).map(m=>`<div${m.id==='brisResearch'?' class="model-rr-summary"':''}><b>${esc(m.label)}</b><span>${m.available?`${m.ranked}/${m.eligible} ranked · ${m.complete?'full field':'incomplete field'} · ${esc(m.decision)}`:esc(m.reason)}</span>${m.validation_status==='PENDING'?'<small class="muted">Validation pending</small>':''}${m.unrated?.length?`<details class="tiny muted"><summary>PASS/HOLD: ${m.unrated.length} unranked starter${m.unrated.length===1?'':'s'}</summary><ul>${m.unrated.map(h=>`<li>#${esc(h.n)} ${esc(h.name)}: ${h.reasons.map(esc).join('; ')}</li>`).join('')}</ul></details>`:''}</div>`).join('')}</div>
