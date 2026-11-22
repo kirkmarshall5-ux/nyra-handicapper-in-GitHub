@@ -86,6 +86,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <button class="tab" data-tab="pace">Pace & Ratings</button>
 <button class="tab" data-tab="connections">Jockey / Trainer</button>
 <button class="tab" data-tab="public">Race Day Prep</button>
+<button class="tab" data-tab="historical">Historical Results</button>
 <button class="tab" data-tab="knowledge">Knowledge Base</button>
 </nav></div></header>
 
@@ -236,12 +237,14 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <div id="parseStatus" class="small muted" style="margin-top:8px"></div></div>
 </div>
 
+<section id="historical" class="hidden" aria-label="Historical Results"></section>
 <section id="knowledge" class="hidden"></section>
 
 <footer id="releaseStatus" class="muted small" style="margin-top:20px">V4.4c, Finisher and Contender · Morning line is reference only. Probability validation pending.</footer>
 </main>
 
 <script type="module">
+import {initHistoricalResults} from "./historical-results-ui.js?v=20261122-integrated";
 import {buildPicksSheet,createPicksPreview} from "./print-picks.js?v=20261113-status";
 import {correctRaceField} from "./race-field-corrections.js?v=20261101-fieldnames";
 import {prepareRaceDayResearchFreeze} from "./pre-race-raceday-integration.js?v=20261113-status";
@@ -928,7 +931,7 @@ function renderConnections(){
 function renderWeights(){weightsDiv()}
 function weightsDiv(){if(brisnetPaceDisplay(race).available){document.getElementById("weights").textContent=BRISNET_METHODS.v44c+" Pace has no weight in this native base version. No calibrated winning probabilities.";resetWeights.disabled=true;resetWeights.textContent="Brisnet research weights locked";return;}document.getElementById("weights").innerHTML='<div class="small">Last verified Beyer: 40 · best of latest 3: 22 · PP jockey: 7 · PP trainer: 8 · trainer context for ≤2 starts: 12. Verified zero figures remain included; only missing components are omitted. Figure values require source verification. V4.4c adjustments are capped at ±6. Rank unrounded totals, then horse name.</div>';resetWeights.disabled=true;resetWeights.textContent="V4.4c weights locked"}
 
-document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));b.classList.add("active");document.getElementById("raceContext").classList.toggle("hidden",b.dataset.tab==="knowledge");if(b.dataset.tab==="pace"){preferBrisnetPaceCard();renderAll();}["raceday","pace","connections","public","knowledge"].forEach(id=>document.getElementById(id).classList.toggle("hidden",id!==b.dataset.tab))});
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));b.classList.add("active");document.getElementById("raceContext").classList.toggle("hidden",b.dataset.tab==="knowledge");if(b.dataset.tab==="pace"){preferBrisnetPaceCard();renderAll();}["raceday","pace","connections","public","historical","knowledge"].forEach(id=>document.getElementById(id).classList.toggle("hidden",id!==b.dataset.tab))});
 raceNotes.oninput=e=>{const cs=state.cards[activeCard.id]||(state.cards[activeCard.id]={runners:{},notes:{}});cs.notes=cs.notes||{};cs.notes[race.race]=e.target.value;save()};
 
 let nyraUpdatePending=false,equibaseUpdatePending=false;
@@ -1157,6 +1160,7 @@ if(knowledgeGrid){const guide=document.createElement('div');guide.className='car
 if(knowledgeGrid){const before=modelMethodsPanel.nextSibling;for(const id of ['transparentRatingRules','contenderRules']){const panel=document.getElementById(id);panel.classList.remove('span4');panel.classList.add('span12');knowledgeGrid.insertBefore(panel,before);}}
 
 
+initHistoricalResults(document.getElementById("historical"));
 renderAll();
 </script>
 </body></html>
