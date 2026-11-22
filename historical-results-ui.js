@@ -155,6 +155,8 @@ export function initHistoricalResults(root){
    if(!snapshot){
     if(!selected)throw Error('Upload a historical PP before the Equibase chart.');
     if(parsed.identities.some(id=>id.date!==cards[selected].date||id.track.toLowerCase().replace(/[^a-z0-9]/g,'')!==cards[selected].track.toLowerCase().replace(/[^a-z0-9]/g,'')))throw Error('Equibase results track/date does not match the PP. Nothing was changed.');
+    if(!parsed.identities.some(id=>Object.values(cards[selected].races).some(r=>Number(r.race)===id.race)))throw Error('Equibase chart contains no races on this PP card. No rankings were saved.');
+    chartPending=[];
     // Reconcile only races with independently parsed, complete official starter rosters.
     // Never infer scratches or override an unreadable race from incomplete chart text.
     for(const official of parsed.races){
