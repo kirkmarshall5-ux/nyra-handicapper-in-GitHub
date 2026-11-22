@@ -16,3 +16,9 @@ test('duplicate or missing chart starters fail closed',()=>{
  assert.equal(reconcileChartStarters(pp,[{n:'1',name:'Runner One'},{n:'1',name:'Runner One'}]).ok,false);
  assert.equal(reconcileChartStarters(pp,[]).ok,false);
 });
+
+test('Belmont November 20 Race 8 official AE Papa Brez is retained as a starter',()=>{
+ const field=[{n:'12',name:'Rugby'},{n:'13',name:'Papa Brez'},{n:'14',name:'Other AE'}];
+ const official=[{n:'12',name:'Rugby'},{n:'13',name:'Papa Brez'}];
+ assert.deepEqual(reconcileChartStarters(field,official),{ok:true,starters:['12','13']});
+});
