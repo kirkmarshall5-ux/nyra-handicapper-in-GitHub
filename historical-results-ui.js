@@ -129,6 +129,7 @@ export function initHistoricalResults(root){
   busyRun(async()=>{
    const pages=await pdfPages(file,status),card=parsePPCard(pages,{sourceName:file.name}),provider=cardProvider(card);
    if(provider!==expected)throw Error('Use the matching '+provider+' upload button.');
+   if(snapshot)throw Error('A historical snapshot is already open. Tap New test before importing another PP, so previously saved rankings and results cannot be overwritten.');
    if(Object.values(cards).some(c=>!matchingCard(c,card)))throw Error('This source belongs to another track or date. Start a new test first.');
    card.source_sha256=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',await file.arrayBuffer()))).map(b=>b.toString(16).padStart(2,'0')).join('');
    cards={...cards,[provider]:card};selected=cards.BRISNET?'BRISNET':'DRF';renderPrep();status('Historical PP loaded. Next: tap Upload matching Equibase results PDF. The chart will reconcile starters, surfaces and distances automatically before rankings and ROI are saved.');
