@@ -130,9 +130,14 @@ export function buildRaceDashboard({anchor,sources,morningLineProvider='DRF',off
  }));
  const blend=checks.DRF?null:drfBlend(sources.DRF.race);
  const maps=Object.fromEntries([...models,ml].map(m=>[m.id,new Map(m.rankings.map(h=>[key(h),h.rank]))]));
- const shortlist=field(anchor).map(h=>({n:program(h),name:h.name,ranks:Object.fromEntries(Object.entries(maps).map(([id,map])=>[id,map.get(key(h))??null]))})).map(h=>({...h,top_four_models:modelIds.filter(id=>h.ranks[id]!=null&&h.ranks[id]<=4).length})).filter(h=>h.top_four_models>0||h.ranks.morningLine!=null&&h.ranks.morningLine<=4).sort((a,b)=>b.top_four_models-a.top_four_models||compare(a,b));
+ const resolvedProgram=h=>{
+  if(program(h))return program(h);
+  const matches=[...models,ml].flatMap(m=>m.rankings.filter(x=>key(x)===key(h)&&program(x)).map(program));
+  return new Set(matches).size===1?matches[0]:'';
+ };
+ const shortlist=field(anchor).map(h=>({n:resolvedProgram(h),name:h.name,ranks:Object.fromEntries(Object.entries(maps).map(([id,map])=>[id,map.get(key(h))??null]))})).map(h=>({...h,top_four_models:modelIds.filter(id=>h.ranks[id]!=null&&h.ranks[id]<=4).length})).filter(h=>h.top_four_models>0||h.ranks.morningLine!=null&&h.ranks.morningLine<=4).sort((a,b)=>b.top_four_models-a.top_four_models||compare(a,b));
  const selected=new Set(shortlist.map(key));
- const remaining=field(anchor).filter(h=>!selected.has(key(h))).map(h=>({n:program(h),name:h.name,ranks:Object.fromEntries(Object.entries(maps).map(([id,map])=>[id,map.get(key(h))??null])),top_four_models:0})).filter(h=>modelIds.some(id=>h.ranks[id]!=null)).sort(compare);
+ const remaining=field(anchor).filter(h=>!selected.has(key(h))).map(h=>({n:resolvedProgram(h),name:h.name,ranks:Object.fromEntries(Object.entries(maps).map(([id,map])=>[id,map.get(key(h))??null])),top_four_models:0})).filter(h=>modelIds.some(id=>h.ranks[id]!=null)).sort(compare);
  const visible=new Set([...shortlist,...remaining].map(key));
  const unranked=field(anchor).filter(h=>!visible.has(key(h))).map(h=>({n:program(h),name:h.name,ranks:Object.fromEntries(Object.entries(maps).map(([id,map])=>[id,map.get(key(h))??null])),top_four_models:0})).sort(compare);
  return {drf_blend:blend,fts_research:fts,has_fts:Object.keys(fts).length>0,prime_power:primePower,schema:'nyra-race-dashboard-v1',race:{track:anchor.track,date:anchor.date,number:anchor.race,surface:anchor.surface,distance:anchor.dist},field:field(anchor).map(h=>({n:program(h),name:h.name})),models,morning_line:ml,shortlist,remaining,unranked,starter_audit:starterAudit,issues:[...new Set(Object.values(checks).filter(Boolean))],paper_plans:Object.fromEntries([...models,ml].map(m=>[m.id,{decision:m.decision||'REFERENCE',...paperPlan(m.rankings,field(anchor),['MISMATCH','UNVERIFIED_ROSTER'].includes(starterAudit.status)?{...m,available:false,reason:'Official starter roster mismatch or unverified roster; review the named starter audit.'}:m)}])),betting_enabled:false};
