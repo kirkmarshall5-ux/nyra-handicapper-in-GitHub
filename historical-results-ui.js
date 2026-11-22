@@ -188,7 +188,7 @@ export function initHistoricalResults(root){
    officials=next;sourceRef=file.name;chartPending=[];el('historicalPdfText').textContent=resultText;
    renderOfficial();renderReport();
    const saved=save();
-   if(saved)status(Object.keys(matched.officials).length+' races automatically reconciled and included in ROI. '+Object.values(next).filter(o=>o.chartIssue).length+' races held for review. Saved rankings are retrospective and separate from Race Day. See the report for pending reasons.');
+   if(saved)status(Object.keys(matched.officials).length+' races imported and checked automatically. '+Object.values(next).filter(o=>o.chartIssue).length+' races pending review. Verified results are included in ROI; saved rankings are retrospective and separate from Race Day. See the report for pending reasons.');
   });
  };
  el('historicalRace').onchange=renderOfficial;
