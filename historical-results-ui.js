@@ -180,7 +180,7 @@ export function initHistoricalResults(root){
     if(next[number])revisions.push({race:Number(number),previous:structuredClone(next[number]),replacedAt:now});
     next[number]={...official,sourceSha256};
    }
-   for(const issue of [...matched.pending,...chartPending.filter(p=>!matched.pending.some(m=>m.race===p.race))]){
+   for(const issue of [...matched.pending.filter(p=>!chartPending.some(m=>m.race===p.race)),...chartPending]){
     const number=String(issue.race);
     if(next[number])revisions.push({race:issue.race,previous:structuredClone(next[number]),replacedAt:now});
     next[number]={verified:false,chartIssue:issue.reason,sourceRef:file.name,sourceSha256,recordedAt:now};
@@ -188,7 +188,7 @@ export function initHistoricalResults(root){
    officials=next;sourceRef=file.name;chartPending=[];el('historicalPdfText').textContent=resultText;
    renderOfficial();renderReport();
    const saved=save();
-   if(saved)status(Object.keys(matched.officials).length+' races imported and checked automatically. '+Object.values(next).filter(o=>o.chartIssue).length+' races pending review. Verified results are included in ROI; saved rankings are retrospective and separate from Race Day. See the report for pending reasons.');
+   if(saved)status(Object.keys(next).filter(n=>next[n]?.verified===true).length+' races imported and checked automatically. '+Object.values(next).filter(o=>o.chartIssue).length+' races pending review. Verified results are included in ROI; saved rankings are retrospective and separate from Race Day. See the report for pending reasons.');
   });
  };
  el('historicalRace').onchange=renderOfficial;
