@@ -1,3 +1,4 @@
+import {reconcileChartStarters} from './historical-chart-reconcile.js';
 import {parseEquibaseResults,matchEquibaseResults} from './equibase-results-parser.js';
 import {HISTORICAL_SCHEMA,STRATEGIES,historicalSnapshot,importHistoricalSnapshot,evaluateHistoricalCard} from './historical-results.js';
 import {buildRaceDashboard} from './race-day-dashboard.js?v=20261115-beyer';
@@ -160,10 +161,10 @@ export function initHistoricalResults(root){
      const fs=[...el('historicalFields').querySelectorAll('fieldset')].find(x=>Number(x.dataset.race)===official.race);
      if(!fs)continue;
      const choices=[...fs.querySelectorAll('[data-run]')];
-     const normalize=x=>String(x).toLowerCase().replace(/[^a-z0-9]/g,'');
-     const mismatches=official.field.filter(h=>!choices.some(c=>c.dataset.run===String(h.n)&&normalize(c.parentElement.textContent.replace(/^\s*Runs\s*#\d+\s*/, '').replace(/\s*\([A-Z]{2,3}\)\s*$/,''))===normalize(h.name)));
-     if(mismatches.length){chartPending.push({race:official.race,reason:'Official horse names or programs could not be reconciled: '+mismatches.map(h=>'#'+h.n+' '+h.name).join(', ')});continue;}
-     const starters=new Set(official.field.map(h=>String(h.n)));
+     const ppField=choices.map(c=>({n:c.dataset.run,name:c.parentElement.textContent.replace(/^\s*Runs\s*#\d+\s*/, '').replace(/\s*\([A-Z]{2,3}\)\s*$/,'').trim()}));
+     const checked=reconcileChartStarters(ppField,official.field);
+     if(!checked.ok){chartPending.push({race:official.race,reason:checked.reason});continue;}
+     const starters=new Set(checked.starters);
      for(const c of choices)c.checked=starters.has(c.dataset.run);
      fs.querySelector('[data-surface]').value=official.surface;
      fs.querySelector('[data-distance]').value=String(official.distanceFurlongs);
