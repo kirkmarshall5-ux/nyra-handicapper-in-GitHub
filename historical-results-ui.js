@@ -161,7 +161,7 @@ export function initHistoricalResults(root){
      if(!fs)continue;
      const choices=[...fs.querySelectorAll('[data-run]')];
      const normalize=x=>String(x).toLowerCase().replace(/[^a-z0-9]/g,'');
-     const mismatches=official.field.filter(h=>!choices.some(c=>c.dataset.run===String(h.n)&&normalize(c.parentElement.textContent.replace(/^\\s*Runs\\s*#\\d+\\s*/, '').replace(/\\s*\\([A-Z]{2,3}\\)\\s*$/,''))===normalize(h.name)));
+     const mismatches=official.field.filter(h=>!choices.some(c=>c.dataset.run===String(h.n)&&normalize(c.parentElement.textContent.replace(/^\s*Runs\s*#\d+\s*/, '').replace(/\s*\([A-Z]{2,3}\)\s*$/,''))===normalize(h.name)));
      if(mismatches.length){chartPending.push({race:official.race,reason:'Official horse names or programs could not be reconciled: '+mismatches.map(h=>'#'+h.n+' '+h.name).join(', ')});continue;}
      const starters=new Set(official.field.map(h=>String(h.n)));
      for(const c of choices)c.checked=starters.has(c.dataset.run);
