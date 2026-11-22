@@ -176,6 +176,7 @@ export function initHistoricalResults(root){
    const sourceSha256=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',await file.arrayBuffer()))).map(b=>b.toString(16).padStart(2,'0')).join('');
    const next={...officials},now=new Date().toISOString();
    for(const [number,official]of Object.entries(matched.officials)){
+    if(chartPending.some(p=>String(p.race)===number))continue;
     if(next[number])revisions.push({race:Number(number),previous:structuredClone(next[number]),replacedAt:now});
     next[number]={...official,sourceSha256};
    }
