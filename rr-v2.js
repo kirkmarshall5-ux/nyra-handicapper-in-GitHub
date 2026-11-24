@@ -13,6 +13,7 @@ function e2(r,h){
 export function rankRRV2(race,base=rankBrisnetResearch(race)){
  if(!base)return null;
  const order=base.rankings.map(h=>({...h}));
+ const originalTopFour=order.slice(0,4);
  const horses=new Map((race.horses||[]).map(h=>[String(h.n),h]));
  const pp=h=>horses.get(String(h.n))?.ratings?.prime_power;
  const decisions=[];
@@ -27,7 +28,7 @@ export function rankRRV2(race,base=rankBrisnetResearch(race)){
  for(const slot of [0,1]){
  const old=order[slot],c=power.find(h=>slot===0||h.n!==order[0].n);
  const x=c.raw_features,y=old.raw_features;
- const checks={different:c.n!==old.n,topFour:order.slice(0,4).includes(c),primePower:pp(c)-pp(old)>=(slot===0?10:3),score:finite(old.score)&&finite(c.score)&&old.score-c.score<=.25,recent:finite(x?.[1])&&finite(y?.[1])&&x[1]>=y[1]-5,matched:finite(x?.[4])&&finite(y?.[4])&&x[4]>=y[4],late:finite(x?.[7])&&finite(y?.[7])&&x[7]>=y[7]};
+ const checks={different:c.n!==old.n,topFour:originalTopFour.includes(c),primePower:pp(c)-pp(old)>=(slot===0?10:3),score:finite(old.score)&&finite(c.score)&&old.score-c.score<=.25,recent:finite(x?.[1])&&finite(y?.[1])&&x[1]>=y[1]-5,matched:finite(x?.[4])&&finite(y?.[4])&&x[4]>=y[4],late:finite(x?.[7])&&finite(y?.[7])&&x[7]>=y[7]};
  if(slot===1){const a=e2(race,horses.get(String(c.n))),b=e2(race,horses.get(String(old.n)));checks.e2=finite(a)&&finite(b)&&a>=b;}
  const accepted=Object.values(checks).every(Boolean);
  decisions.push({slot:slot+1,original:old.n,challenger:c.n,accepted,checks});
