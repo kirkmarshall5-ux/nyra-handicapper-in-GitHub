@@ -22,3 +22,12 @@ test('Belmont November 20 Race 8 official AE Papa Brez is retained as a starter'
  const official=[{n:'12',name:'Rugby'},{n:'13',name:'Papa Brez'}];
  assert.deepEqual(reconcileChartStarters(field,official),{ok:true,starters:['12','13']});
 });
+
+test('country suffix differences do not prevent matching official starters',()=>{
+ const horse={n:'3',name:'Carmensita'};
+ const foreign={n:'3',name:'Carmensita (ARG)'};
+ assert.deepEqual(reconcileChartStarters([horse],[foreign]),{ok:true,starters:['3']});
+ assert.deepEqual(reconcileChartStarters([foreign],[horse]),{ok:true,starters:['3']});
+ assert.equal(reconcileChartStarters([horse],[{n:'4',name:foreign.name}]).ok,false);
+ assert.equal(reconcileChartStarters([horse],[{n:'3',name:'Different Horse (ARG)'}]).ok,false);
+});
