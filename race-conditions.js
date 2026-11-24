@@ -13,3 +13,5 @@ export function raceConditions(header=''){
 }
 export function conditionBlockers(conditions){return !conditions.verified?[{reason:'primary-race-conditions-unverified'}]:conditions.unsupported?[{reason:'unsupported-race-type'}]:[];}
 
+
+export function mandatoryPass(race={}){return race.unsupported===true||race.conditions?.unsupported===true||/\b(?:Hurdles?|Steeplechase|Quarter Horse|Arabian)\b|National Fences/i.test([race.header,race.cls,race.surface,race.distance].join(" "));}

@@ -75,9 +75,9 @@ export function evaluateHistoricalRace(r,official,strategyId='WIN_EXACTA'){
  const strategy=STRATEGIES[strategyId];if(!strategy)fail('Unknown betting strategy.');
  const finish=verifyOfficial(r,official,strategy.place>0),[winner,second]=finish;
  return r.models.map(m=>{
-  const eligibility=paperEligibility(m,r.field),rows=m.rankings||[],a=p(rows[0]),b=p(rows[1]);
+  const eligibility=paperEligibility(m,r.field,r.race),rows=m.rankings||[],a=p(rows[0]),b=p(rows[1]);
   const runnerUpRank=rows.findIndex(h=>p(h)===second)+1||null;
-  const base={model:m.id,label:m.label||m.id,modelVersion:m.model_id||null,race:r.race.number,runnerUpRank,firstChoiceWinner:a===winner,exactSecond:runnerUpRank===2,topTwoRunnerUp:runnerUpRank!==null&&runnerUpRank<=2,topFourRunnerUp:runnerUpRank!==null&&runnerUpRank<=4,rrCompanionMiss:m.id==='brisResearch'&&a===winner&&b!==second,actualWinner:winner,actualSecond:second,chosenFirst:a,chosenSecond:b,sourceRef:official.sourceRef,resultVerification:official.verification,resultRecordedAt:official.recordedAt||null,eligibility};
+  const base={model:m.id,label:m.label||m.id,modelVersion:m.model_id||null,recovery_status:m.recovery_status||null,recovery_reasons:m.recovery_reasons||[],race:r.race.number,runnerUpRank,firstChoiceWinner:a===winner,exactSecond:runnerUpRank===2,topTwoRunnerUp:runnerUpRank!==null&&runnerUpRank<=2,topFourRunnerUp:runnerUpRank!==null&&runnerUpRank<=4,rrCompanionMiss:m.id==='brisResearch'&&a===winner&&b!==second,actualWinner:winner,actualSecond:second,chosenFirst:a,chosenSecond:b,sourceRef:official.sourceRef,resultVerification:official.verification,resultRecordedAt:official.recordedAt||null,eligibility};
   if(r.cancelled||!eligibility.included)return {...base,included:false,reason:r.cancelled?'Race cancelled':eligibility.reasons.join('; '),stake:0,returned:0,wagers:[]};
   const wagers=[];
   if(strategy.win)wagers.push({type:'win',cost:strategy.win,hit:a===winner,returned:a===winner?official.win2*strategy.win/2:0});
@@ -108,5 +108,10 @@ export function evaluateHistoricalCard(snapshot,officials,strategyId){
   if(!o){pending.push({race:r.race.number,reason:'Official result not yet entered'});continue;}
   try{rows.push(...evaluateHistoricalRace(r,o,strategyId));}catch(e){pending.push({race:r.race.number,reason:e.message});}
  }
- return {rows,pending,summary:summarizeHistorical(rows)};
+ return {rows,pending,summary:summarizeHistorical(rows),rrRecoverySummary:summarizeRRRecovery(rows)};
+}
+
+export function summarizeRRRecovery(rows){
+ const rr=rows.filter(r=>r.model==='brisResearch'&&r.included);
+ return ['STANDARD','RECOVERED','UNKNOWN'].map(status=>{const group=rr.filter(r=>(['STANDARD','RECOVERED'].includes(r.recovery_status)?r.recovery_status:'UNKNOWN')===status);return {status,races:group.length,...totals(group.flatMap(r=>r.wagers)),winners:group.filter(r=>r.firstChoiceWinner).length,exactaHits:group.filter(r=>r.exactaHit).length};});
 }
