@@ -1,5 +1,5 @@
 // Validate Equibase's full starter roster before changing a historical PP field.
-const normalize = value => String(value ?? '').toLowerCase().replace(/[^a-z0-9]/g, '');
+const normalize = value => String(value ?? '').replace(/\s*\([A-Za-z]{2,3}\)\s*$/, '').toLowerCase().replace(/[^a-z0-9]/g, '');
 export function reconcileChartStarters(ppHorses, chartField) {
  if (!Array.isArray(ppHorses) || !Array.isArray(chartField) || !chartField.length)
   return {ok:false, reason:'Official starter roster is missing or unreadable.'};
