@@ -1,3 +1,4 @@
+import {reconcileChartStarters} from './historical-chart-reconcile.js';
 import {parseEquibaseResults,matchEquibaseResults} from './equibase-results-parser.js';
 import {HISTORICAL_SCHEMA,STRATEGIES,historicalSnapshot,importHistoricalSnapshot,evaluateHistoricalCard} from './historical-results.js';
 import {buildRaceDashboard} from './race-day-dashboard.js?v=20261115-beyer';
@@ -57,9 +58,10 @@ function download(value,filename){
 }
 export function initHistoricalResults(root){
  let cards={},selected=null,snapshot=null,officials={},revisions=[],strategyId='WIN_PLACE_EXACTA',resultText='',sourceRef='',records=[],busy=false,storageReadable=true;
+ let chartPending=[];
  const el=id=>root.querySelector('#'+id);
  const status=text=>{el('historicalStatus').textContent=text;};
- root.innerHTML='<div class="grid"><div class="card span12"><div class="kicker">Historical research</div><h2>Historical Results</h2><p>Run old PPs through the current models, preserve their rankings, then compare with official results. This workspace is separate from Race Day. Historical returns are retrospective paper tests.</p><div class="flex" style="flex-wrap:wrap;gap:10px"><button type="button" id="historicalNew">New test</button><label>Saved tests<select id="historicalSaved"><option value="">Choose a saved test</option></select></label><button type="button" id="historicalOpen">Open saved test</button><button type="button" id="historicalImport">Import freeze / backup JSON</button><input id="historicalJson" type="file" accept=".json,application/json" hidden></div><p id="historicalStatus" role="status" aria-live="polite"></p></div><div class="card span12" id="historicalPrep"><h3>1. Load historical PPs and reconcile the field</h3><p>Upload each matching source separately. Review scratches and actual conditions for every race before saving rankings. The PP files and Race Day session remain unchanged.</p><div class="flex" style="flex-wrap:wrap;gap:10px"><button type="button" id="historicalBrisnet">Upload Brisnet PP</button><button type="button" id="historicalDrf">Upload DRF PP</button><input id="historicalPpFile" type="file" accept=".pdf,application/pdf" hidden></div><p id="historicalCard"></p><div id="historicalFields"></div><label><input id="historicalFieldVerified" type="checkbox"> I checked starters, scratches and actual conditions for all races against the official card.</label><p><button type="button" class="primary" id="historicalCapture">Save retrospective rankings</button></p></div><div class="card span12" id="historicalSettlement" hidden><h3>2. Add official results</h3><p id="historicalIdentity"></p><p>Upload the Equibase full-chart results PDF to fill finish order and payouts for every matching race and calculate the recap automatically. No routine typing or confirmation is needed. Unreadable, mismatched or nonstandard races stay pending with the reason shown.</p><div class="flex" style="flex-wrap:wrap;gap:10px"><button type="button" id="historicalResultPdf">Import Equibase results PDF</button><input id="historicalResultFile" type="file" accept=".pdf,application/pdf" hidden><label>Race<select id="historicalRace"></select></label><label>Betting strategy<select id="historicalStrategy">'+Object.entries(STRATEGIES).map(([id,s])=>'<option value="'+id+'">'+e(s.label)+'</option>').join('')+'</select></label></div><details><summary>Imported chart text</summary><pre id="historicalPdfText" style="white-space:pre-wrap;max-height:400px;overflow:auto"></pre></details><details id="historicalCorrections"><summary>Optional: inspect or correct one race</summary><div id="historicalOfficialForm"></div><p><button type="button" id="historicalSettle">Save manual correction</button></p></details></div><div class="card span12" id="historicalOutput" hidden><h3>3. Compare and save</h3><div class="flex" style="flex-wrap:wrap;gap:10px"><button type="button" id="historicalBackup">Export test backup JSON</button><button type="button" id="historicalPdf">Print / Save PDF</button></div><p>Save a backup to Files. Browser storage is local to this device and can be cleared. Results corrections retain the earlier saved result in the backup.</p><div id="historicalReport"></div></div></div>';
+ root.innerHTML='<div class="grid"><div class="card span12"><div class="kicker">Historical research</div><h2>Historical Results</h2><p>Run old PPs through the current models, preserve their rankings, then compare with official results. This workspace is separate from Race Day. Historical returns are retrospective paper tests.</p><div class="flex" style="flex-wrap:wrap;gap:10px"><button type="button" id="historicalNew">New test</button><label>Saved tests<select id="historicalSaved"><option value="">Choose a saved test</option></select></label><button type="button" id="historicalOpen">Open saved test</button><button type="button" id="historicalImport">Import freeze / backup JSON</button><input id="historicalJson" type="file" accept=".json,application/json" hidden></div><p id="historicalStatus" role="status" aria-live="polite"></p></div><div class="card span12" id="historicalPrep"><h3>1. Load historical PPs and reconcile the field</h3><p>Upload each matching source separately. After uploading a PP, upload the matching Equibase full-chart PDF. Verified official starters and conditions will automatically reconcile the field, save rankings, and calculate returns. Races with unreadable or nonstandard chart details remain pending. The PP files and Race Day session remain unchanged.</p><div class="flex" style="flex-wrap:wrap;gap:10px"><button type="button" id="historicalBrisnet">Upload Brisnet PP</button><button type="button" id="historicalDrf">Upload DRF PP</button><button type="button" id="historicalChartBefore">Upload matching Equibase results PDF</button><input id="historicalPpFile" type="file" accept=".pdf,application/pdf" hidden></div><p id="historicalCard"></p><div id="historicalFields"></div><label><input id="historicalFieldVerified" type="checkbox"> I checked starters, scratches and actual conditions for all races against the official card.</label><p><button type="button" class="primary" id="historicalCapture">Save retrospective rankings</button></p></div><div class="card span12" id="historicalSettlement" hidden><h3>2. Add official results</h3><p id="historicalIdentity"></p><p>Upload the Equibase full-chart results PDF to fill finish order and payouts for every matching race and calculate the recap automatically. No routine typing or confirmation is needed. Unreadable, mismatched or nonstandard races stay pending with the reason shown.</p><div class="flex" style="flex-wrap:wrap;gap:10px"><button type="button" id="historicalResultPdf">Import Equibase results PDF</button><input id="historicalResultFile" type="file" accept=".pdf,application/pdf" hidden><label>Race<select id="historicalRace"></select></label><label>Betting strategy<select id="historicalStrategy">'+Object.entries(STRATEGIES).map(([id,s])=>'<option value="'+id+'">'+e(s.label)+'</option>').join('')+'</select></label></div><details><summary>Imported chart text</summary><pre id="historicalPdfText" style="white-space:pre-wrap;max-height:400px;overflow:auto"></pre></details><details id="historicalCorrections"><summary>Optional: inspect or correct one race</summary><div id="historicalOfficialForm"></div><p><button type="button" id="historicalSettle">Save manual correction</button></p></details></div><div class="card span12" id="historicalOutput" hidden><h3>3. Compare and save</h3><div class="flex" style="flex-wrap:wrap;gap:10px"><button type="button" id="historicalBackup">Export test backup JSON</button><button type="button" id="historicalPdf">Print / Save PDF</button></div><p>Save a backup to Files. Browser storage is local to this device and can be cleared. Results corrections retain the earlier saved result in the backup.</p><div id="historicalReport"></div></div></div>';
  function refreshSaved(){
   el('historicalSaved').innerHTML='<option value="">Choose a saved test</option>'+records.map(r=>'<option value="'+e(r.id)+'">'+e(r.snapshot.track+' · '+r.snapshot.date+' · '+r.snapshot.capturedAt)+'</option>').join('');
  }
@@ -118,29 +120,32 @@ export function initHistoricalResults(root){
   finally{busy=false;root.querySelectorAll('button').forEach(b=>b.disabled=false);}
  }
  el('historicalNew').onclick=()=>{
-  cards={};selected=null;snapshot=null;officials={};revisions=[];resultText='';sourceRef='';
+  cards={};selected=null;snapshot=null;officials={};revisions=[];resultText='';sourceRef='';chartPending=[];
   el('historicalPrep').hidden=false;el('historicalSettlement').hidden=true;el('historicalOutput').hidden=true;el('historicalPdfText').textContent='';renderPrep();status('New retrospective test. Previously saved tests are retained.');
  };
  for(const p of ['Brisnet','Drf'])el('historical'+p).onclick=()=>{el('historicalPpFile').dataset.provider=p==='Brisnet'?'BRISNET':'DRF';el('historicalPpFile').click();};
  el('historicalPpFile').onchange=event=>{
   const file=event.target.files[0],expected=event.target.dataset.provider;event.target.value='';if(!file)return;
   busyRun(async()=>{
+   if(snapshot)throw Error('A historical snapshot is already open. Tap New test before importing another PP, so previously saved rankings and results cannot be overwritten.');
    const pages=await pdfPages(file,status),card=parsePPCard(pages,{sourceName:file.name}),provider=cardProvider(card);
    if(provider!==expected)throw Error('Use the matching '+provider+' upload button.');
    if(Object.values(cards).some(c=>!matchingCard(c,card)))throw Error('This source belongs to another track or date. Start a new test first.');
    card.source_sha256=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',await file.arrayBuffer()))).map(b=>b.toString(16).padStart(2,'0')).join('');
-   cards={...cards,[provider]:card};selected=cards.BRISNET?'BRISNET':'DRF';renderPrep();status('Historical PP loaded. Review every race’s scratches and actual conditions.');
+   cards={...cards,[provider]:card};selected=cards.BRISNET?'BRISNET':'DRF';renderPrep();status('Historical PP loaded. Next: tap Upload matching Equibase results PDF. The chart will reconcile starters, surfaces and distances automatically before rankings and ROI are saved.');
   });
  };
- el('historicalCapture').onclick=()=>busyRun(async()=>{
+ async function capturePrepared(automatic=false){
   if(!selected)throw Error('Upload a historical PP first.');
-  if(!el('historicalFieldVerified').checked)throw Error('Review and confirm the historical field and conditions first.');
+  if(!automatic&&!el('historicalFieldVerified').checked)throw Error('Review and confirm the historical field and conditions first.');
   const prepared=applyFields(),card=prepared[selected];
   const dashboards=Object.values(card.races).map(anchor=>buildRaceDashboard({anchor,sources:{BRISNET:pairedRace(prepared,'BRISNET',anchor),DRF:pairedRace(prepared,'DRF',anchor)}}));
   const next=historicalSnapshot({dashboards,sources:Object.entries(prepared).map(([provider,c])=>({provider,name:c.sourceName,sha256:c.source_sha256,parserVersion:c.parser_version}))});
   openSnapshot(next);if(save())status('Retrospective rankings saved. Add official results; these selections will not be recalculated from the results.');
- });
+ }
+ el('historicalCapture').onclick=()=>busyRun(()=>capturePrepared());
  el('historicalResultPdf').onclick=()=>el('historicalResultFile').click();
+ el('historicalChartBefore').onclick=()=>{if(!selected){status('Upload a historical Brisnet or DRF PP first.');return;}el('historicalResultFile').click();};
  el('historicalResultFile').onchange=event=>{
   const file=event.target.files[0];event.target.value='';if(!file)return;
   busyRun(async()=>{
@@ -148,22 +153,49 @@ export function initHistoricalResults(root){
    resultText=pages.map((p,i)=>'PAGE '+(i+1)+'\n'+(p.lines||[]).map(l=>l.text||'').join('\n')).join('\n\n');
    if(!resultText.trim())throw Error('No readable chart text found. Use the original PDF and enter verified results manually.');
    const parsed=parseEquibaseResults(pages,{sourceRef:file.name});
+   if(!snapshot){
+    if(!selected)throw Error('Upload a historical PP before the Equibase chart.');
+    if(parsed.identities.some(id=>id.date!==cards[selected].date||id.track.toLowerCase().replace(/[^a-z0-9]/g,'')!==cards[selected].track.toLowerCase().replace(/[^a-z0-9]/g,'')))throw Error('Equibase results track/date does not match the PP. Nothing was changed.');
+    if(!parsed.identities.some(id=>Object.values(cards[selected].races).some(r=>Number(r.race)===id.race)))throw Error('Equibase chart contains no races on this PP card. No rankings were saved.');
+    const ppRaces=Object.values(cards[selected].races).map(r=>Number(r.race));
+    const missingChartRaces=ppRaces.filter(n=>!parsed.identities.some(id=>id.race===n));
+    if(missingChartRaces.length)throw Error('Equibase PDF does not contain full charts for races '+missingChartRaces.join(', ')+'. Upload the complete matching chart before automatic rankings are saved.');
+    chartPending=[];
+    // Reconcile only races with independently parsed, complete official starter rosters.
+    // Never infer scratches or override an unreadable race from incomplete chart text.
+    for(const official of parsed.races){
+     const fs=[...el('historicalFields').querySelectorAll('fieldset')].find(x=>Number(x.dataset.race)===official.race);
+     if(!fs)continue;
+     const choices=[...fs.querySelectorAll('[data-run]')];
+     const ppField=choices.map(c=>({n:c.dataset.run,name:c.parentElement.textContent.replace(/^\s*Runs\s*#\d+\s*/, '').replace(/\s*\([A-Z]{2,3}\)\s*$/,'').trim()}));
+     const checked=reconcileChartStarters(ppField,official.field);
+     if(!checked.ok){chartPending.push({race:official.race,reason:checked.reason});continue;}
+     const starters=new Set(checked.starters);
+     for(const c of choices)c.checked=starters.has(c.dataset.run);
+     fs.querySelector('[data-surface]').value=official.surface;
+     fs.querySelector('[data-distance]').value=String(official.distanceFurlongs);
+    }
+    // The parser itself may flag an ambiguous race. Keep it pending, not silently settled.
+    chartPending.push(...parsed.pending.map(p=>({race:p.race,reason:p.reason})));
+    await capturePrepared(true);
+   }
    const matched=matchEquibaseResults(snapshot,parsed,strategyId);
    const sourceSha256=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',await file.arrayBuffer()))).map(b=>b.toString(16).padStart(2,'0')).join('');
    const next={...officials},now=new Date().toISOString();
    for(const [number,official]of Object.entries(matched.officials)){
+    if(chartPending.some(p=>String(p.race)===number))continue;
     if(next[number])revisions.push({race:Number(number),previous:structuredClone(next[number]),replacedAt:now});
     next[number]={...official,sourceSha256};
    }
-   for(const issue of matched.pending){
+   for(const issue of [...matched.pending.filter(p=>!chartPending.some(m=>m.race===p.race)),...chartPending]){
     const number=String(issue.race);
     if(next[number])revisions.push({race:issue.race,previous:structuredClone(next[number]),replacedAt:now});
     next[number]={verified:false,chartIssue:issue.reason,sourceRef:file.name,sourceSha256,recordedAt:now};
    }
-   officials=next;sourceRef=file.name;el('historicalPdfText').textContent=resultText;
+   officials=next;sourceRef=file.name;chartPending=[];el('historicalPdfText').textContent=resultText;
    renderOfficial();renderReport();
    const saved=save();
-   if(saved)status(Object.keys(matched.officials).length+' races imported and checked automatically. '+matched.pending.length+' imported races pending review. Races absent from this PDF retain any previously saved results. See the report for exclusions and pending reasons.');
+   if(saved)status(Object.keys(next).filter(n=>next[n]?.verified===true).length+' races imported and checked automatically. '+Object.values(next).filter(o=>o.chartIssue).length+' races pending review. Verified results are included in ROI; saved rankings are retrospective and separate from Race Day. See the report for pending reasons.');
   });
  };
  el('historicalRace').onchange=renderOfficial;

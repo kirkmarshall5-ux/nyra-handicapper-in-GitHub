@@ -25,6 +25,7 @@ function requiredAnchor(r,re){const x=anchor(r,re);if(x===undefined)fail('Chart 
 function amount(s){if(!/^\d[\d,]*\.\d{2}$/.test(s))fail('Missing or ambiguous chart payout: '+s);const n=Number(s.replaceAll(',',''));if(!(n>0))fail('Nonpositive payout requires review');return n;}
 export function chartDistance(s){
  s=String(s).replace(/\bSixteen\b/gi,'16').replace(/\bFifteen\b/gi,'15').replace(/\bFourteen\b/gi,'14').replace(/\bThirteen\b/gi,'13').replace(/\bTwelve\b/gi,'12').replace(/\bEleven\b/gi,'11').replace(/\bTen\b/gi,'10').replace(/\bNine\b/gi,'9').replace(/\bEight\b/gi,'8').replace(/\bSeven\b/gi,'7').replace(/\bSix\b/gi,'6').replace(/\bFive\b/gi,'5').replace(/\bFour\b/gi,'4').replace(/\bThree\b/gi,'3').replace(/\bTwo\b/gi,'2').replace(/\bOne\b/gi,'1');
+ s=s.replace(/And\s+1\s+Fourth\b/gi,'1/4').replace(/And\s+3\s+Fourths\b/gi,'3/4');
  s=s.replace(/And\s+1\s+Half/gi,'1/2').replace(/And\s+1\s+Quarter/gi,'1/4').replace(/And\s+3\s+Quarters/gi,'3/4').replace(/And\s+1\s+Sixteenth/gi,'1/16').replace(/And\s+3\s+Sixteenths?/gi,'3/16').replace(/And\s+5\s+Sixteenths?/gi,'5/16').replace(/And\s+7\s+Sixteenths?/gi,'7/16').replace(/And\s+1\s+Eighths?/gi,'1/8').replace(/And\s+3\s+Eighths?/gi,'3/8').replace(/And\s+5\s+Eighths?/gi,'5/8').replace(/And\s+7\s+Eighths?/gi,'7/8');
  const m=s.trim().match(/^(\d+(?:\.\d+)?(?:\s+\d+\/\d+|\s*[¼½¾⅛⅜⅝⅞Â°±²´³¶ô])?)\s*(Furlongs?|Miles?|F|M)\b/i);
  return m?decodeDistanceToken(m[1],/^m/i.test(m[2])?'mile':'f'):null;

@@ -46,7 +46,7 @@ test('bad denomination and duplicate charts are rejected; unreadable PDFs do not
  const a=chart(),b=chart({date:'September 1, 2024'});assert.throws(()=>parseEquibaseResults([...a,...b,...a]),/Duplicate race/);
 });
 test('distance decoding handles chart words and frozen compact distances',()=>{
- for(const [s,n]of [['One And Three Sixteenth Miles',9.5],['One And Five Sixteenth Miles',10.5],['One And Three Eighth Miles',11],['Six And One Half Furlongs',6.5],['6 1/2F',6.5],['1M',8],['8.5F',8.5],['1½M',12]])assert.equal(chartDistance(s),n,s);
+ for(const [s,n]of [['One And Three Sixteenth Miles',9.5],['One And Five Sixteenth Miles',10.5],['One And Three Eighth Miles',11],['Six And One Half Furlongs',6.5],['6 1/2F',6.5],['1M',8],['8.5F',8.5],['1½M',12],['One And One Fourth Miles',10]])assert.equal(chartDistance(s),n,s);
 });
 test('pending parser reason contributes no wagers or returns',()=>{
  const report=evaluateHistoricalCard(snapshot,{'1':{chartIssue:'Unreadable exacta payout',verified:false}},'WIN_EXACTA');assert.equal(report.rows.length,0);assert.equal(report.pending[0].reason,'Unreadable exacta payout');

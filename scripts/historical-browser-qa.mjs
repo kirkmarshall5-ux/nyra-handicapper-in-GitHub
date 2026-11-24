@@ -13,6 +13,9 @@ try{
   await page.locator('#historicalJson').setInputFiles({name:'synthetic-historical.json',mimeType:'application/json',buffer:snapshot});
   await page.locator('#historicalIdentity').waitFor({state:'visible'});
   await page.waitForFunction(()=>document.querySelector('#historicalStatus').textContent.includes('imported'));
+  // An opened snapshot must not be replaced by another PP without explicitly starting a new test.
+  await page.locator('#historicalPpFile').setInputFiles({name:'replacement.pdf',mimeType:'application/pdf',buffer:await readFile(new URL('../fixtures/equibase-results-synthetic.pdf',import.meta.url))});
+  await page.waitForFunction(()=>/snapshot is already open|Use the matching/.test(document.querySelector('#historicalStatus').textContent));
   assert.match(await page.locator('#historicalReport').innerText(),/Official result not yet entered/);
   await page.locator('#historicalCorrections summary').click();
   await page.locator('#historicalSourceRef').fill('synthetic-fixture-only.pdf');
