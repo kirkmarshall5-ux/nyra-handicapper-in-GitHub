@@ -5,3 +5,14 @@ const h=(n,speeds,early,late)=>({n,name:'Horse '+n,life_starts:speeds.length,ent
 const fixture=()=>({track:'Churchill Downs',race:1,date:'2026-11-04',surface:'Dirt',distance_furlongs:6,ratings_provider:'BRISNET',horses:[h('1',[80,90,85],95,60),h('2',[90,80,85],60,95),h('3',[70,85,80],80,80)]});
 test('research profile keeps original output and computes independent expected score',()=>{const r=fixture(),before=structuredClone(r),base=rankBrisnetModels(r),research=rankBrisnetResearch(r);assert.equal(research.model_id,BRISNET_RESEARCH_ID);assert.ok(Math.abs(BRISNET_RESEARCH_PROFILE.best_recent-.6340027300148168)<1e-15);for(const row of research.rankings){const original=base.contender.rankings.find(h=>h.n===row.n);const value=original.feature_contributions;const bestPercentile=row.n==='3'?-1:.5;const expected=bestPercentile*BRISNET_RESEARCH_PROFILE.best_recent+value[6]*.75+value[7]*.25+value.slice(8).reduce((a,b)=>a+b,0);assert.ok(Math.abs(row.score-expected)<1e-12);assert.equal(row.trend_adjustment,0);}assert.deepEqual(r,before);assert.deepEqual(rankBrisnetModels(r),base);});
 test('manual scratch, restoration, missing pace, FTS and wrong source remain safe',()=>{const r=fixture();r.horses[0].odds='SCR';assert.ok(!rankBrisnetResearch(r).rankings.some(h=>h.n==='1'));r.horses[0].odds='—';assert.ok(rankBrisnetResearch(r).rankings.some(h=>h.n==='1'));r.horses[1].ratings.lines.forEach(l=>{l.e1=null;l.late=null;});assert.ok(rankBrisnetResearch(r).rankings.every(h=>Number.isFinite(h.score)));r.horses.push({...h('4',[],null,null),life_starts:0});const result=rankBrisnetResearch(r);assert.ok(result.unrated.some(h=>h.n==='4'));assert.equal(result.ranking_status,'PARTIAL_RESEARCH_RANKING');assert.equal(result.bettingEnabled,false);assert.equal(rankBrisnetResearch({ratings_provider:'DRF',horses:[]}),null);});
+test('recovery status follows active field and scratch restoration',()=>{const r=fixture();r.horses[0].ratings.lines[0].speed=null;let a=rankBrisnetResearch(r);assert.equal(a.recovery_status,'RECOVERED');assert.equal(a.recovery_reasons[0].n,'1');r.horses[0].odds='SCR';assert.equal(rankBrisnetResearch(r).recovery_status,'STANDARD');r.horses[0].odds='—';assert.equal(rankBrisnetResearch(r).recovery_status,'RECOVERED');});
+
+test('negative speed requires matching positioned Brisnet source token',()=>{
+ const r=fixture(),l=r.horses[0].ratings.lines[0];l.speed=-18;
+ const cell={text:'-18',x:350,status:'POSITIONED_NUMBER_VERIFIED'};
+ for(const bad of [undefined,{...cell,text:'-17'},{...cell,x:null},{...cell,status:'SOURCE_BLANK'}]){
+ l.source.cells={speed:bad};assert.ok(rankBrisnetResearch(r).unrated.some(h=>h.n==='1'));
+ }
+ l.source.cells={speed:cell};assert.equal(rankBrisnetResearch(r).decision,'RATEABLE');
+ l.e1=-1;assert.ok(rankBrisnetResearch(r).unrated.some(h=>h.n==='1'));
+});

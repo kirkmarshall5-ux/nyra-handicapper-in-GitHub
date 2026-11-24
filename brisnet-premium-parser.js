@@ -1,3 +1,4 @@
+import {mandatoryPass} from "./race-conditions.js";
 import {brisnetRaceSurface} from './brisnet-race-surface.js?v=20261120-drf-coverage';
 import {parseFtsEvidence} from './fts-research.js?v=20261118-fts-month';
 // Separate modern Premium Plus adapter. Brisnet figures never become Beyer/Timeform.
@@ -11,7 +12,8 @@ const months={January:1,February:2,March:3,April:4,May:5,June:6,July:7,August:8,
 const short={Jan:1,Feb:2,Mar:3,Apr:4,May:5,Jun:6,Jul:7,Jly:7,Aug:8,Sep:9,Oct:10,Nov:11,Dec:12};
 function iso(y,m,d){const v=new Date(Date.UTC(y,m-1,d));if(v.getUTCFullYear()!==y||v.getUTCMonth()!==m-1||v.getUTCDate()!==d)throw Error('Invalid Premium Plus calendar date');return v.toISOString().slice(0,10);}
 function dateHeading(s){const m=s.match(/\b([A-Z][a-z]+)\s+(\d{1,2}),\s*(20\d{2})\b/);if(!m||!months[m[1]])throw Error('Premium Plus heading date unverified');return iso(+m[3],months[m[1]],+m[2]);}
-function pastDate(s,today){const m=s.match(/^(\d{2})([A-Za-z]{3})(\d{2})([A-Za-z]+)/);if(!m||!short[m[2]])return null;const d=iso(+m[3]>=70?1900+ +m[3]:2000+ +m[3],short[m[2]],+m[1]);if(d>=today)throw Error('Premium Plus running line is not before card date');return {date:d,track:m[4]};}
+function internationalPrefix(s){return s.match(/^(\d{2}[A-Za-z]{3}\d{2})\s+([A-Za-z][A-Za-z .’\x27-]*\([A-Za-z]{2,3}\))\s+/);}
+function pastDate(s,today){const foreign=internationalPrefix(s);const m=(foreign?foreign[1]+"Intl":s).match(/^(\d{2})([A-Za-z]{3})(\d{2})([A-Za-z]+)/);if(!m||!short[m[2]])return null;const d=iso(+m[3]>=70?1900+ +m[3]:2000+ +m[3],short[m[2]],+m[1]);if(d>=today)throw Error('Premium Plus running line is not before card date');return {date:d,track:foreign?foreign[2]:m[4]};}
 function numeric(s){s=clean(s).replace(/\/$/,'');return /^[+-]?\d+$/.test(s)?+s:null;}
 function connection(text,kind){
  const rx=kind==='trainer'?/Trnr:\s*(.*?)\s*\((\d+)\s+(\d+)-(\d+)-(\d+)\s+(\d+)%\)\s*(?:(20\d{2})\s*:\s*\((\d+)\/\s*(\d+)\s+(\d+)%\))?/:/^([A-Z][A-Z ,.'’-]+)\s*\((\d+)\s+(\d+)-(\d+)-(\d+)\s+(\d+)%\)\s*(?:(20\d{2})\s*:\s*\((\d+)\/\s*(\d+)\s+(\d+)%\))?/m;
@@ -22,6 +24,7 @@ function connection(text,kind){
 }
 function parsePace(row,heading,today){
  const d=pastDate(row.text,today);if(!d)return null;
+ if(internationalPrefix(row.text)){const cells={},values={};for(const key of ['e1','e2','late','shape1','shape2','speed']){values[key]=null;cells[key]={text:'',x:null,status:'INTERNATIONAL_LAYOUT_UNVERIFIED'};}return {...d,...values,...premiumHistoryConditions(row.text.replace(internationalPrefix(row.text)[0],internationalPrefix(row.text)[1]+'Intl ')),turn_time:null,race_rating:null,class_rating:null,past_post:null,status:'PARTIAL_RATINGS_SOURCE_VERIFIED',rating_gaps:Object.keys(cells).map(field=>({field,reason:cells[field].status,source_text:''})),source:{provider:'BRISNET',page:row.pageNumber,y:row.y,text:row.text,cells}};}
  const labels=Object.fromEntries(heading.items.map(i=>[clean(i.str),i.x]));
  if(!['E1','E2/','LP','1c','2c'].every(k=>Number.isFinite(labels[k])))throw Error('Premium Plus pace heading incomplete');
  const spd=heading.items.find(i=>/^SPD(?:\s|$)/.test(i.str));if(!spd)throw Error('Premium Plus SPD anchor missing');
@@ -56,7 +59,7 @@ function parsePace(row,heading,today){
   // A negative printed SPD is not a usable nonnegative speed rating. Retain
   // the source token and its position in cells, but keep the model input null.
   // Do not reject all of a horse's other verified running lines.
-  const invalidSpeed=rawValue!==null&&n===5&&rawValue<0;
+  const invalidSpeed=false;
   const value=invalidPace||invalidSpeed?null:rawValue;
   values[keys[n]]=value;cells[keys[n]]={text,x:items[0]?.x??null,status:invalidPace?'NEGATIVE_PACE_TOKEN_REJECTED':invalidSpeed?'NEGATIVE_SPEED_SOURCE_TOKEN_RETAINED_UNRATED':value===null?(items.length===0||text==='/'?'SOURCE_BLANK':'MISSING_OR_AMBIGUOUS'):'POSITIONED_NUMBER_VERIFIED'};
  }
@@ -97,7 +100,7 @@ export function parsePremiumCard(input,{sourceName='Brisnet Premium Plus PDF'}={
   if(track&&(name!==track||day!==date))throw Error('Mixed Premium Plus track/date');track=name;date=day;
   const distance=brisnetDistance(head.text);if(!distance)throw Error('Premium Plus primary distance unverified: race '+rn+', PDF page '+page.pageNumber+', heading '+JSON.stringify(clean(head.text).slice(0,240)));
   const surface=brisnetRaceSurface(track,head.text);
-  const r=races[rn]??={race:rn,track,date,header:head.text,dist:distance.display,distance_furlongs:distance.furlongs,surface,cls:head.items.slice(ti+2).map(i=>i.str).join(' '),conditions:{surface,primaryDistanceLine:distance.display,unsupported:false},post:'Unverified',oddsMode:'Morning line (pre-race)',horses:[],parser_blockers:['BRISNET_SOURCE_MODEL_VALIDATION_PENDING'],source_format:'BRISNET_PREMIUM_PLUS',ratings_provider:'BRISNET',source_pages:[],brisnet_pars:null};
+  const r=races[rn]??={race:rn,track,date,header:head.text,dist:distance.display,distance_furlongs:distance.furlongs,surface,cls:head.items.slice(ti+2).map(i=>i.str).join(' '),conditions:{surface,primaryDistanceLine:distance.display,unsupported:mandatoryPass({header:head.text})},post:'Unverified',oddsMode:'Morning line (pre-race)',horses:[],parser_blockers:['BRISNET_SOURCE_MODEL_VALIDATION_PENDING'],source_format:'BRISNET_PREMIUM_PLUS',ratings_provider:'BRISNET',source_pages:[],brisnet_pars:null};
   if(r.distance_furlongs!==distance.furlongs||r.surface!==surface)throw Error('Conflicting Premium Plus race conditions');r.source_pages.push(page.pageNumber);
   const post=page.lines.find(l=>/Post Time:/.test(l.text));if(post)r.post=post.text.replace(/^.*Post Time:\s*/,'')+' (printed zones; verify local time)';
   const par=page.lines.find(l=>/PARS:/.test(l.text));
@@ -116,7 +119,7 @@ export function parsePremiumCard(input,{sourceName='Brisnet Premium Plus PDF'}={
    const life=block.match(/Life:\s*(\d+)\s+(\d+)\s*-\s*(\d+)\s*-\s*(\d+)/);if(!life||+life[2]+ +life[3]+ +life[4]>+life[1])throw Error('Premium Plus career record unverified');
    const ml=items.filter(i=>i.x<start.transform[4]-15&&i.y<y-9&&i.y>y-18&&/^\d+(?:\/\d+|\.\d+)?$/.test(i.str));if(ml.length!==1)throw Error('Premium Plus morning line unverified: race '+rn+', PDF page '+page.pageNumber+', program '+program+', horse '+JSON.stringify(nm[1])+', positioned candidates '+ml.length+'. Original card preserved.');
    const headings=lines.filter(l=>/DATE TRK/.test(l.text)&&/\bSPD\b/.test(l.text)&&(/E1\s+E2\/\s+LP/.test(l.text)||/Wind\s+Winner\s+Horse/.test(l.text)));
-   const historical=lines.filter(l=>/^\d{2}[A-Za-z]{3}\d{2}[A-Za-z]+/.test(l.text));if(historical.length&&headings.length!==1)throw Error('Premium Plus running-line column heading unverified');
+   const historical=lines.filter(l=>/^\d{2}[A-Za-z]{3}\d{2}[A-Za-z]+/.test(l.text)||internationalPrefix(l.text));if(historical.length&&headings.length!==1)throw Error('Premium Plus running-line column heading unverified');
    const shortLayout=/Wind\s+Winner\s+Horse/.test(headings[0]?.text||'');
    const standardHeading=shortLayout?page.lines.find(l=>/DATE TRK/.test(l.text)&&/E1\s+E2\/\s+LP/.test(l.text)&&/\bSPD\b/.test(l.text)):headings[0];
    const history=historical.map(l=>{
