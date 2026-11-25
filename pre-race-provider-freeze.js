@@ -96,6 +96,17 @@ export function validateSnapshot(s, now=Date.now()) {
       const seen=new Set();
       for(const h of rr.rankings){if(seen.has(h.program)||!identities.has(h.program)||s.field.find(f=>f.program===h.program)?.horse!==h.horse||!Number.isFinite(h.score))errors.push('Invalid RR ranking evidence.');seen.add(h.program);}
       if(rr.fullFieldRanked!==(rr.decision==='RATEABLE'&&seen.size===identities.size)||rr.decision==='RATEABLE'&&seen.size!==identities.size)errors.push('RR full-field flag conflicts with evidence.');
+      const v2=shared.brisnetRRV2;
+      if(v2!==undefined){
+        const base=new Map(rr.rankings.map(h=>[h.program,h]));
+        const seenV2=new Set();
+        if(v2.family!=='BRISNET_RRV2'||v2.provider!=='BRISNET'||!v2.modelId||v2.decision!==rr.decision||v2.fullFieldRanked!==rr.fullFieldRanked||!Array.isArray(v2.rankings)||!Array.isArray(v2.override_decisions))errors.push('Invalid RR-V2 metadata.');
+        else {
+          for(const h of v2.rankings){const b=base.get(h.program);if(!b||seenV2.has(h.program)||b.horse!==h.horse||b.score!==h.score)errors.push('RR-V2 must preserve RR runner identities and scores.');seenV2.add(h.program);}
+          if(seenV2.size!==base.size)errors.push('RR-V2 must preserve RR coverage.');
+          if(rr.decision!=='RATEABLE'&&v2.rankings.some((h,i)=>h.program!==rr.rankings[i]?.program))errors.push('RR-V2 cannot reorder PASS/HOLD.');
+        }
+      }
       const pp=new Set();
       for(const h of shared.primePower){if(pp.has(h.program)||!identities.has(h.program)||s.field.find(f=>f.program===h.program)?.horse!==h.horse||h.score!==null&&!Number.isFinite(h.score))errors.push('Invalid Prime Power reference evidence.');pp.add(h.program);}
       if(pp.size!==identities.size)errors.push('Prime Power reference must retain every active runner.');

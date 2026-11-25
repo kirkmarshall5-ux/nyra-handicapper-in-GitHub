@@ -1,3 +1,4 @@
+import {rankRRV2} from './rr-v2.js';
 import {paperEligibility,paperTickets} from './paper-results.js';
 import {modelEvidence} from './model-evidence-display.js?v=20261115-beyer';
 import {ftsResearch} from './fts-research.js?v=20261118-fts-month';
@@ -19,9 +20,9 @@ const field=r=>(r?.horses||[]).filter(active);
 const distance=r=>Number.isFinite(r?.distance_furlongs)?r.distance_furlongs:decodeTodayDistance(r?.conditions?.primaryDistanceLine||r?.header||r?.dist).furlongs;
 const compare=(a,b)=>program(a).localeCompare(program(b),undefined,{numeric:true});
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const labels={brisContender:'Brisnet Contender',brisResearch:'Brisnet-RR',drfContender:'DRF Contender',brisFinisher:'Brisnet Finisher',morningLine:'Morning Line'};
-const modelIds=['brisContender','brisResearch','drfContender','brisFinisher'];
-const gridModelIds=['brisResearch','brisFinisher','brisContender','drfContender'];
+const labels={brisContender:'Brisnet Contender',brisResearch:'Brisnet-RR',drfContender:'DRF Contender',brisRRV2:'RR-V2',morningLine:'Morning Line'};
+const modelIds=['brisContender','brisResearch','drfContender','brisRRV2'];
+const gridModelIds=['brisResearch','brisRRV2','brisContender','drfContender'];
 const providerFor=id=>id.startsWith('bris')?'BRISNET':'DRF';
 export function morningLineNumber(value){
  const s=String(value??'').trim();
@@ -63,7 +64,7 @@ export function morningLineForRunner(source,h){
 function forecast(id,r){
  if(id==='brisContender')return rankBrisnetModels(r)?.contender||{rankings:[],decision:'HOLD',reason:'Brisnet source unavailable'};
  if(id==='brisResearch')return rankBrisnetResearch(r)||{rankings:[],decision:'HOLD',reason:'Brisnet source unavailable'};
- if(id==='brisFinisher')return rankFinishers(r);
+ if(id==='brisRRV2')return rankRRV2(r)||{rankings:[],decision:'HOLD',reason:'Brisnet source unavailable'};
  const base=releaseRace(r);
  return {...rankContenders(r,base,{displayPass:base.decision==='PASS'}),runners:base.runners};
 }
@@ -93,7 +94,7 @@ function summarize(id,r,result,reason){
  const allowed=new Set(field(r).map(key)),rows=result?.rankings||[];
  if(!reason&&(new Set(rows.map(key)).size!==rows.length||rows.some(h=>!allowed.has(key(h))||field(r).some(x=>key(x)===key(h)&&program(x)&&program(h)&&program(x)!==program(h)))))reason='Forecast contains duplicate or unmatched runners; excluded';
  const rankings=reason?[]:rows.map((h,i)=>({rank:i+1,n:program(h),name:h.name,score:h.score??null}));
- return {id,label:labels[id],provider:providerFor(id),available:!reason,reason:reason||result?.reason||null,model_id:result?.model_id||null,validation_status:result?.validation_status||(result?.research_only?'PENDING':null),decision:reason?'UNAVAILABLE':result?.decision||'HOLD',status:result?.status||result?.ranking_status||null,recovery_status:result?.recovery_status||null,recovery_reasons:result?.recovery_reasons||[],ranked:rankings.length,eligible:field(r).length,complete:!reason&&rankings.length===field(r).length&&rankings.length>0,unrated:reason?[]:modelEvidence(r,result).unranked.map(h=>({n:program(h),name:h.name,reasons:h.reasons})),rankings};
+ return {id,label:labels[id],provider:providerFor(id),available:!reason,reason:reason||result?.reason||null,model_id:result?.model_id||null,validation_status:result?.validation_status||(result?.research_only?'PENDING':null),decision:reason?'UNAVAILABLE':result?.decision||'HOLD',status:result?.status||result?.ranking_status||null,recovery_status:result?.recovery_status||null,recovery_reasons:result?.recovery_reasons||[],override_decisions:result?.override_decisions||[],ranked:rankings.length,eligible:field(r).length,complete:!reason&&rankings.length===field(r).length&&rankings.length>0,unrated:reason?[]:modelEvidence(r,result).unranked.map(h=>({n:program(h),name:h.name,reasons:h.reasons})),rankings};
 }
 export function paperPlan(rankings,eligible=rankings,model={decision:'RATEABLE'}){
  const eligibility=paperEligibility({...model,rankings},eligible);
@@ -155,7 +156,7 @@ export function dashboardHtml(d,selected='brisResearch'){
  const visibleModelIds=d.drf_blend?[...gridModelIds,'drfBlend']:gridModelIds;
  const blendRanks=new Map((d.drf_blend?.rankings??[]).map(h=>[key(h),h.rank]));
  const row=h=>`<tr><th scope="row">${h.n?'#'+esc(h.n)+' ':''}${esc(h.name)}</th><td>${esc(d.prime_power?.[key(h)]||'—')}</td>${[...visibleModelIds,'morningLine'].map(id=>`<td${id==='brisResearch'?' class="model-rr"':''}>${(id==='drfBlend'?blendRanks.get(key(h)):h.ranks[id])??'—'}</td>`).join('')}${d.has_fts?`<td>${ftsCell(h)}</td>`:''}</tr>`;
- const table=rows=>`<div class="dashboard-scroll" tabindex="0" role="region" aria-label="Model ranking comparison"><table class="dashboard-table"><thead><tr><th scope="col">Horse</th><th scope="col">Prime Power</th><th scope="col" class="model-rr">Brisnet-RR</th><th scope="col">Brisnet<br>Finisher</th><th scope="col">Brisnet<br>Contender</th><th scope="col">DRF Contender<br>Late +50%</th>${d.drf_blend?'<th scope="col" title="DRF-only challenger. Twice the points for V4.4c, with Finisher contributing to the top-four order.">DRF V4.4c–Finisher<br>Blend</th>':''}<th scope="col">M/L<br>rank</th>${d.has_fts?'<th scope="col">FTS<br>Research</th>':''}</tr></thead><tbody>${rows.map(row).join('')}</tbody></table></div>`;
+ const table=rows=>`<div class="dashboard-scroll" tabindex="0" role="region" aria-label="Model ranking comparison"><table class="dashboard-table"><thead><tr><th scope="col">Horse</th><th scope="col">Prime Power</th><th scope="col" class="model-rr">Brisnet-RR</th><th scope="col">RR-V2</th><th scope="col">Brisnet<br>Contender</th><th scope="col">DRF Contender<br>Late +50%</th>${d.drf_blend?'<th scope="col" title="DRF-only challenger. Twice the points for V4.4c, with a secondary ranking contributing to the top-four order.">DRF V4.4c<br>Blend</th>':''}<th scope="col">M/L<br>rank</th>${d.has_fts?'<th scope="col">FTS<br>Research</th>':''}</tr></thead><tbody>${rows.map(row).join('')}</tbody></table></div>`;
  return `<div class="dashboard-heading"><div><div class="kicker">Race day dashboard</div><h3 class="sectiontitle">Shared selections &amp; order</h3></div><span class="badge">${d.field.length} eligible runners</span></div>
  ${d.demonstration?'<p class="small muted">Demonstration card · upload current PPs before use.</p>':''}
  <div class="dashboard-readiness">${gridModelIds.map(id=>d.models.find(m=>m.id===id)).filter(Boolean).map(m=>`<div${m.id==='brisResearch'?' class="model-rr-summary"':''}><b>${esc(m.label)}</b><span>${m.available?`${m.ranked}/${m.eligible} ranked · ${m.complete?'full field':'incomplete field'} · ${esc(m.decision)}`:esc(m.reason)}</span>${m.recovery_status==='RECOVERED'?`<small>RATEABLE — Recovered: ${m.recovery_reasons.map(h=>esc('#'+h.n+' '+h.name+': '+h.reasons.join('; '))).join(' · ')}</small>`:''}${m.validation_status==='PENDING'?'<small class="muted">Validation pending</small>':''}${m.unrated?.length?`<details class="tiny muted"><summary>PASS/HOLD: ${m.unrated.length} unranked starter${m.unrated.length===1?'':'s'}</summary><ul>${m.unrated.map(h=>`<li>#${esc(h.n)} ${esc(h.name)}: ${h.reasons.map(esc).join('; ')}</li>`).join('')}</ul></details>`:''}</div>`).join('')}</div>

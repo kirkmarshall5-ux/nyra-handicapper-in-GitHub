@@ -18,12 +18,12 @@ test('Brisnet-only dashboard includes ranked horses beyond the shortlist',()=>{
 
 test('retains full orders and separate ML; agreement never changes or blends model scores',()=>{
  const i=input(),before=structuredClone(i);
- const d=buildRaceDashboard(i,(id,r)=>ranked(r,id==='brisFinisher'?[6,5,4,3,2,1]:[1,2,3,4,5,6]));
+ const d=buildRaceDashboard(i,(id,r)=>ranked(r,id==='brisRRV2'?[6,5,4,3,2,1]:[1,2,3,4,5,6]));
  assert.deepEqual(i,before);
  assert.equal(d.models[0].rankings.length,6);
  assert.equal(d.shortlist.find(h=>h.n==='4').top_four_models,4);
  assert.equal(d.shortlist.find(h=>h.n==='1').top_four_models,3);
- assert.equal(d.shortlist.find(h=>h.n==='1').ranks.brisFinisher,6);
+ assert.equal(d.shortlist.find(h=>h.n==='1').ranks.brisRRV2,6);
  assert.equal(d.morning_line.rankings[0].n,'1');
  assert.equal(d.betting_enabled,false);
  assert.equal(d.paper_plans.drfContender.total_cost,0);
@@ -148,24 +148,24 @@ test('fallback cannot substitute a different horse with the same program',()=>{
 
  test('visible grid follows model order and excludes DRF Finisher from agreement and paper plans',()=>{
  const d=buildRaceDashboard(input(),(_,r)=>ranked(r));
- assert.deepEqual(d.models.map(m=>m.id),['brisContender','brisResearch','drfContender','brisFinisher']);
+ assert.deepEqual(d.models.map(m=>m.id),['brisContender','brisResearch','drfContender','brisRRV2']);
  assert.deepEqual(d.models.map(m=>m.provider),['BRISNET','BRISNET','DRF','BRISNET']);
  assert.equal(d.shortlist[0].top_four_models,4);assert.equal(d.shortlist[0].ranks.drfFinisher,undefined);assert.equal(d.paper_plans.drfFinisher,undefined);
  const html=dashboardHtml(d);assert.doesNotMatch(html,/Models<br>top 4/);assert.doesNotMatch(html,/DRF<br>Finisher|value="drfFinisher"/);
- assert.ok(html.indexOf('Brisnet<br>Finisher</th>')<html.indexOf('Brisnet<br>Contender</th>'));
- assert.ok(html.indexOf('Brisnet-RR</th>')<html.indexOf('Brisnet<br>Finisher</th>'));assert.ok(html.indexOf('Brisnet<br>Finisher</th>')<html.indexOf('DRF Contender<br>Late +50%</th>'));
+ assert.ok(html.indexOf('RR-V2</th>')<html.indexOf('Brisnet<br>Contender</th>'));
+ assert.ok(html.indexOf('Brisnet-RR</th>')<html.indexOf('RR-V2</th>'));assert.ok(html.indexOf('RR-V2</th>')<html.indexOf('DRF Contender<br>Late +50%</th>'));
  assert.match(html, /<th scope="col">DRF Contender<br>Late \+50%<\/th>/);
- assert.match(html, /Late \+50%<\/th><th[^>]+>DRF V4\.4c–Finisher<br>Blend<\/th>/);
+ assert.match(html, /Late \+50%<\/th><th[^>]+>DRF V4\.4c<br>Blend<\/th>/);
  assert.equal(d.paper_plans.drfBlend,undefined);
  assert.doesNotMatch(html, /<th scope="col">DRF<br>Contender<\/th>/);
- const row=d.shortlist.find(h=>h.n==='1');row.ranks={brisContender:1,brisResearch:2,brisFinisher:3,drfContender:4,morningLine:5};assert.match(dashboardHtml({...d,shortlist:[row]}),/<td class="model-rr">2<\/td><td>3<\/td><td>1<\/td><td>4<\/td><td>—<\/td><td>5<\/td>/);
+ const row=d.shortlist.find(h=>h.n==='1');row.ranks={brisContender:1,brisResearch:2,brisRRV2:3,drfContender:4,morningLine:5};assert.match(dashboardHtml({...d,shortlist:[row]}),/<td class="model-rr">2<\/td><td>3<\/td><td>1<\/td><td>4<\/td><td>—<\/td><td>5<\/td>/);
  });
 
 test('production Brisnet dashboard adapters match each unchanged scoring engine',async()=>{
- const {rankFinishers}=await import('./finisher-inputs.js'),{rankBrisnetModels}=await import('./brisnet-models.js'),{rankBrisnetResearch}=await import('./brisnet-research.js');
+ const {rankRRV2}=await import('./rr-v2.js'),{rankBrisnetModels}=await import('./brisnet-models.js'),{rankBrisnetResearch}=await import('./brisnet-research.js');
  const h=(n,speeds,early,late)=>horse(n,{life_starts:speeds.length,entry_status:'REGULAR',ratings:{provider:'BRISNET',lines:speeds.map((speed,i)=>({date:['2026-10-20','2026-10-01','2026-09-10'][i],speed,e1:early,e2:early,late,surface:'Dirt',furlongs:6,source:{provider:'BRISNET',text:'synthetic test line'}}))}});
  const anchor=race([h('1',[80,90,85],95,60),h('2',[90,80,85],60,95),h('3',[70,85,80],80,80)],{track:'Churchill Downs',date:'2026-11-04',ratings_provider:'BRISNET'}),before=structuredClone(anchor);
- const d=buildRaceDashboard({anchor,sources:{BRISNET:{race:anchor}}}),base=rankBrisnetModels(anchor),expected={brisContender:base.contender,brisResearch:rankBrisnetResearch(anchor),brisFinisher:rankFinishers(anchor)};
+ const d=buildRaceDashboard({anchor,sources:{BRISNET:{race:anchor}}}),base=rankBrisnetModels(anchor),expected={brisContender:base.contender,brisResearch:rankBrisnetResearch(anchor),brisRRV2:rankRRV2(anchor)};
  for(const [id,result] of Object.entries(expected)){const m=d.models.find(m=>m.id===id);assert.deepEqual(m.rankings.map(h=>[h.n,h.score]),result.rankings.map(h=>[h.n,h.score]));assert.equal(m.model_id,result.model_id);assert.equal(m.decision,result.decision);}
  assert.equal(d.models.find(m=>m.id==='drfContender').available,false);assert.deepEqual(anchor,before);
 });

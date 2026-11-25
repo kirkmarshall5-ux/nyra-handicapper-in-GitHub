@@ -2,8 +2,8 @@
 import {buildRaceDashboard,selectMorningLineProvider} from './race-day-dashboard.js?v=20261113-paper';
 import {pairedRace,cardProvider} from './dual-pp-cards.js';
 import {decodeTodayDistance} from './finisher-drf-distance.js';
-const ids=['primePower','brisResearch','brisFinisher','brisContender','drfContender','morningLine'];
-const labels=['Prime Power','Brisnet-RR','Brisnet Finisher','Brisnet Contender','DRF Contender Late +50%','M/L'];
+const ids=['primePower','brisResearch','brisRRV2','brisContender','drfContender','morningLine'];
+const labels=['Prime Power','Brisnet-RR','RR-V2','Brisnet Contender','DRF Contender Late +50%','M/L'];
 const key=h=>String(h.name||'').replace(/\s*\([A-Za-z]{2,3}\)\s*$/,'').toLowerCase().replace(/[^a-z0-9]/g,'');
 export function printableRace(d,anchor,notes=''){
  const pp=d.field.map(h=>{const value=d.prime_power?.[key(h)]||'',m=value.match(/^(\d+(?:\.\d+)?)\s*\((\d+)/);return {...h,value,score:m?+m[1]:null,printedRank:m?+m[2]:null};}).filter(h=>Number.isFinite(h.score)).sort((a,b)=>b.score-a.score||a.printedRank-b.printedRank).slice(0,4).map((h,i)=>({...h,rank:i+1}));
@@ -52,7 +52,7 @@ export function picksPdf(sheet){
   const group=groups[pageIndex],layouts=group.map(r=>raceLayout(r,sheet.races.length>10)),natural=layouts.reduce((s,l)=>s+l.height,0),scale=Math.min(1,660/Math.max(1,natural)),extra=group.length?Math.max(0,660/scale-natural)/group.length:0;
   commands.push(`q ${scale} 0 0 ${scale} ${(612-552*scale)/2} 704 cm`);let y=0;
   group.forEach((r,index)=>{
-   const l=layouts[index],xs=[0,165,229.5,294,358.5,423,487.5],cw=[165,64.5,64.5,64.5,64.5,64.5,64.5],headers=[['Horse # / Name'],['Prime','Power'],['Brisnet','RR'],['Brisnet','Finisher'],['Brisnet','Contender'],['DRF Contender','Late +50%'],['M/L','Rank']];
+   const l=layouts[index],xs=[0,165,229.5,294,358.5,423,487.5],cw=[165,64.5,64.5,64.5,64.5,64.5,64.5],headers=[['Horse # / Name'],['Prime','Power'],['Brisnet','RR'],['RR-V2',''],['Brisnet','Contender'],['DRF Contender','Late +50%'],['M/L','Rank']];
    text(0,y,'RACE '+r.race,10,true);text(57,y,[r.distance,r.surface,r.going].filter(Boolean).join(' - '),8);text(452,y,(r.rows||[]).length+' horses shown',7);
    const top=y-8,bottom=top-l.tableHeight;commands.push(`0.98 0.97 0.93 rg ${xs[2]} ${bottom} ${cw[2]} ${l.tableHeight} re f 0 g`);
    headers.forEach((a,i)=>a.forEach((s,j)=>text(xs[i]+(i?Math.max(3,(cw[i]-width(s,7.2))/2):3),top-9-j*8,s,7.2,true)));
