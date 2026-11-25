@@ -33,7 +33,7 @@ export function historicalSnapshot({dashboards,sources=[],capturedAt=new Date().
  const races=dashboards.map(d=>{
   if(d.demonstration||d.race?.track!==first.track||d.race?.date!==first.date||!Number.isInteger(Number(d.race.number))||Number(d.race.number)<1||seen.has(Number(d.race.number)))fail('Mixed, duplicate or demonstration races cannot be combined.');
   seen.add(Number(d.race.number));validateField(d.field);
-  return {race:copy(d.race),field:copy(d.field),models:dashboardModels(d),cancelled:!!d.race.cancelled};
+  return {race:copy(d.race),field:copy(d.field),models:dashboardModels(d),fts_research:d.fts_research===undefined?null:copy(d.fts_research),cancelled:!!d.race.cancelled};
  });
  return {schema:HISTORICAL_SCHEMA,kind:'RETROSPECTIVE',capturedAt,track:first.track,date:first.date,sources:copy(sources),races,notice:'Historical replay using the recorded model versions. Not verified pre-race profitability.'};
 }
@@ -110,10 +110,14 @@ export function evaluateHistoricalCard(snapshot,officials,strategyId){
   if(!o){pending.push({race:r.race.number,reason:'Official result not yet entered'});continue;}
   try{rows.push(...evaluateHistoricalRace(r,o,strategyId));}catch(e){pending.push({race:r.race.number,reason:e.message});}
  }
- return {rows,pending,summary:summarizeHistorical(rows),rrRecoverySummary:summarizeRRRecovery(rows)};
+ return {rows,pending,summary:summarizeHistorical(rows),rrRecoverySummary:summarizeRRRecovery(rows),research:summarizeHistoricalResearch(snapshot,rows,pending)};
 }
 
 export function summarizeRRRecovery(rows){
  const rr=rows.filter(r=>r.model==='brisResearch'&&r.included);
  return ['STANDARD','RECOVERED','UNKNOWN'].map(status=>{const group=rr.filter(r=>(['STANDARD','RECOVERED'].includes(r.recovery_status)?r.recovery_status:'UNKNOWN')===status);return {status,races:group.length,...totals(group.flatMap(r=>r.wagers)),winners:group.filter(r=>r.firstChoiceWinner).length,exactaHits:group.filter(r=>r.exactaHit).length};});
+}
+
+export function summarizeHistoricalResearch(snapshot,rows,pending){
+ return snapshot.races.map(r=>{const results=rows.filter(x=>Number(x.race)===Number(r.race.number)),issue=pending.find(x=>Number(x.race)===Number(r.race.number)),fts=r.fts_research??null,starters=fts===null?null:r.field.filter(h=>Object.prototype.hasOwnProperty.call(fts,name(h))),first=results[0];return {race:r.race.number,pending:issue?.reason??null,eligibleModels:results.filter(x=>x.included).map(x=>x.label),excludedModels:results.filter(x=>!x.included).map(x=>({label:x.label,reason:x.reason,ftsUnranked:starters===null?null:x.eligibility.unrated.filter(h=>starters.some(s=>p(s)===p(h))).map(h=>p(h))})),ftsCount:starters?.length??null,fts:starters?.map(h=>({n:p(h),name:h.name,research:fts[name(h)],finish:first?(p(h)===first.actualWinner?1:p(h)===first.actualSecond?2:null):null}))??null};});
 }
