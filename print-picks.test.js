@@ -7,7 +7,7 @@ const ranked=(id,r)=>({model_id:'fixed-'+id,decision:'PASS',rankings:r.horses.fi
 test('print uses matching providers and records missing DRF without substituting Brisnet',()=>{
  const c=card(),before=structuredClone(c);const s=buildPicksSheet({cards:{BRISNET:c},card:c},ranked);
  assert.deepEqual(c,before);assert.equal(s.bettingEnabled,false);
- assert.deepEqual(s.races[0].columns.map(x=>x.label),['Prime Power','Brisnet-RR','Brisnet Finisher','Brisnet Contender','DRF Contender Late +50%','M/L']);
+ assert.deepEqual(s.races[0].columns.map(x=>x.label),['Prime Power','Brisnet-RR','RR-V2','Brisnet Contender','DRF Contender Late +50%','M/L']);
  assert.deepEqual(s.races[0].columns[1].picks,['1','2','3','4']);assert.equal(s.races[0].columns[4].available,false);
 });
 test('fresh sheet reflects current scratch and removes it from wagers without mutating source',()=>{
