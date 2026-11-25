@@ -113,7 +113,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 
 <div class="span12 comparison-row">
 <div class="card span4"><div class="kicker">Brisnet RR</div><div class="tiny muted">Best Recent 0.63400 · Late 25% · Early −25%</div><div id="brisResearchCandidates" class="stack small contender-rankings" aria-live="polite"></div></div>
-<div class="card span4"><div class="kicker">Brisnet · Finisher</div><div id="brisFinisherCandidates" class="stack small" aria-live="polite"></div></div>
+<div class="card span4"><div class="kicker">Brisnet · RR-V2</div><div id="brisFinisherCandidates" class="stack small" aria-live="polite"></div></div>
 <div class="card span4"><div class="kicker">Brisnet · Contender</div><div id="brisContenderCandidates" class="stack small contender-rankings"></div><details class="tiny muted" style="margin-top:10px"><summary>How Contender ranks</summary><p>Contender V2 combines relative field scores using frozen coefficients for recent Beyers, surface and distance form, Timeform Early and Late pace, race pressure, career records, jockey and trainer records, layoffs, workouts, verified trip comments and prior opposition. It also uses a surface/distance matched Beyer trend when at least three comparable starts are verified. Missing features are neutral. This model was trained for top-three contention; its win chances remain experimental. PASS races show provisional rated runners only.</p></details></div>
 <div class="card span4"><div class="kicker">DRF · Contender · Late +50%</div><div id="contenderCandidates" class="stack small contender-rankings"></div><details class="tiny muted" style="margin-top:10px"><summary>How Contender ranks</summary><p>Contender V2 combines relative field scores using frozen coefficients for recent Beyers, surface and distance form, Timeform Early pace and Late pace with a 50% higher coefficient, race pressure, career records, jockey and trainer records, layoffs, workouts, verified trip comments and prior opposition. It also uses a surface/distance matched Beyer trend when at least three comparable starts are verified. Missing features are neutral. This model was trained for top-three contention; its win chances remain experimental. PASS races show provisional rated runners only.</p></details></div>
 <div class="card span4"><div class="kicker">Morning Line</div><div id="topMl" class="stack small"></div></div>
@@ -122,7 +122,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <textarea id="raceNotes" hidden aria-hidden="true"></textarea>
 <div id="preservedModelPanels" hidden aria-hidden="true" style="display:none">
 <div class="card span4"><div class="kicker">Brisnet · V4.4c</div><div id="brisTopContenders" class="stack small"></div><details class="tiny muted" style="margin-top:10px"><summary>How V4.4c ranks</summary><p>Latest Beyer 40 weight points · best Beyer from the latest three starts 22 · jockey 7 · trainer 8. Jockey and trainer win percentages are multiplied by three, capped at 100. Horses with one or two starts can also use a verified trainer-context score at 12 weight points. Missing inputs redistribute the available weights; verified zero counts. Field strength, pace fit, rebound protection and lightly raced upside can adjust the base rating by up to ±6 points. PASS races show provisional rated runners only.</p></details></div>
-<div class="card span4"><div class="kicker">DRF · Finisher</div><div id="finisherCandidates" class="stack small" aria-live="polite"></div><details class="tiny muted" style="margin-top:10px"><summary>How Finisher ranks</summary><p>Fixed weights: recent speed 60%, same-surface/distance speed 25%, Late pace 15%. Inputs use field percentiles from 0 to 100. Recent speed uses the latest five starts at 50/25/15/7/3, normalized for available figures. Matching speed uses the latest five proof rows, within 365 days and one furlong, with a 90-day decay half-life. Verified DRF fractional distances are decoded separately from the control. Missing optional inputs stay neutral at 50 without redistributing weights. First-time starters and runners without verified recent speed remain unranked; partial fields show PASS. Brisnet uses native Speed and matched LP. Exact score ties use horse name. V4.4c remains the control.</p></details></div>
+<div class="card span4" hidden><div id="finisherCandidates"></div></div>
 <div class="card span4"><div class="kicker">DRF · V4.4c</div><div id="topContenders" class="stack small"></div><details class="tiny muted" style="margin-top:10px"><summary>How V4.4c ranks</summary><p>Latest Beyer 40 weight points · best Beyer from the latest three starts 22 · jockey 7 · trainer 8. Jockey and trainer win percentages are multiplied by three, capped at 100. Horses with one or two starts can also use a verified trainer-context score at 12 weight points. Missing inputs redistribute the available weights; verified zero counts. Field strength, pace fit, rebound protection and lightly raced upside can adjust the base rating by up to ±6 points. PASS races show provisional rated runners only.</p></details></div>
 </div>
 <div style="display:none" aria-hidden="true" class="card span3"><div class="kicker">Top jockeys · this race</div><div id="topJockeys" class="stack small"></div></div>
@@ -240,7 +240,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <section id="historical" class="hidden" aria-label="Historical Results"></section>
 <section id="knowledge" class="hidden"></section>
 
-<footer id="releaseStatus" class="muted small" style="margin-top:20px">V4.4c, Finisher and Contender · Morning line is reference only. Probability validation pending.</footer>
+<footer id="releaseStatus" class="muted small" style="margin-top:20px">V4.4c, RR-V2 and Contender · Morning line is reference only. Probability validation pending.</footer>
 </main>
 
 <script type="module">
@@ -263,7 +263,7 @@ import {runnerStateKey} from "./card-loader.js?v=20261008-qa1";
 import {researchRace} from "./jockey-research.js?v=20261008-qa1";
 import {evidenceProfile} from "./scoring-engine.js?v=20261008-qa1";
 import {estimatedWinLine,winLineFields,winLineNote} from "./fair-odds.js?v=20261015-mix1-line1";
-import {finisherRankingHtml} from "./finisher-ranking-display.js?v=20261115-beyer";
+import {rankRRV2} from './rr-v2.js';
 import {buildRaceDashboard,dashboardHtml,selectMorningLineProvider,morningLineForRunner,morningLineNumber} from "./race-day-dashboard.js?v=20261120-drf-coverage";
 import {rankContenders} from "./contender-rankings.js?v=20261115-beyer";
 import {rankBrisnetModels} from "./brisnet-models.js?v=20261113-status";
@@ -358,7 +358,8 @@ function renderModelRow(race,ids){
  const topContenders=document.getElementById(ids[0]),contenderTarget=document.getElementById(ids[2]);
  const currentRating=()=>rankBrisnetModels(race)?.v44c||websiteRace(race);
  const native=rankBrisnetModels(race);
- document.getElementById(ids[1]).innerHTML=finisherRankingHtml(race,{baselineDecision:currentRating().decision,showDescription:ids[1]!=='brisFinisherCandidates'});
+ const v2=rankRRV2(race);
+ document.getElementById(ids[1]).innerHTML=v2?'<b>'+escapeText(v2.decision)+'</b>'+candidateTable(v2.rankings.slice(0,4).map(h=>'<tr><td><b>'+h.rank+'. #'+escapeText(String(h.n))+' '+escapeText(h.name)+'</b></td><td>'+h.score.toFixed(3)+'</td></tr>').join(''))+'<div class="tiny muted">'+escapeText(v2.override_decisions.filter(d=>d.accepted).map(d=>'Position '+d.slot+': #'+d.original+' → #'+d.challenger).join('; ')||'Original RR order retained')+'</div>':'';
  for(const [key,id] of [['v44c',ids[0]],['contender',ids[2]]])updateBrisnetMethods(document.getElementById(id),key,!!native);
  if(native){
   for(const [key,id] of [['v44c',ids[0]],['contender',ids[2]]])document.getElementById(id).innerHTML=brisnetRankingHtml(native[key],key,race);
@@ -575,7 +576,7 @@ document.querySelectorAll(".sortbtn").forEach(b=>b.onclick=()=>{
  renderHorses();updateSortButtons();
 });
 function syncRaceNotes(){raceNotes.value=state.cards?.[activeCard.id]?.notes?.[race.race]||""}
-function renderAll(){syncRaceNotes();renderRecorderStatus();renderPaceCardStatus();document.getElementById("releaseStatus").textContent=`Rankings: ${currentRating().model_id} · PP formats: DRF / Brisnet Ultimate / Premium Plus · Saved card: ${activeCard.parser_version||"sample / legacy evidence"}. V4.4c, Finisher and Contender. Morning line is reference only. Verify scratches and surface against official entries.`;renderBrisnetEvidence();renderProjectedRaceSetup();renderReleaseContext();renderJ1Comparison();renderHeader();renderHorses();updateSortButtons();renderPace();renderEdit();renderEvidence();renderConnections();renderLeaderboards();renderWeights();renderThings();renderRaceInsights();renderNyraUpdateControls();updateUrl()}
+function renderAll(){syncRaceNotes();renderRecorderStatus();renderPaceCardStatus();document.getElementById("releaseStatus").textContent=`Rankings: ${currentRating().model_id} · PP formats: DRF / Brisnet Ultimate / Premium Plus · Saved card: ${activeCard.parser_version||"sample / legacy evidence"}. V4.4c, RR-V2 and Contender. Morning line is reference only. Verify scratches and surface against official entries.`;renderBrisnetEvidence();renderProjectedRaceSetup();renderReleaseContext();renderJ1Comparison();renderHeader();renderHorses();updateSortButtons();renderPace();renderEdit();renderEvidence();renderConnections();renderLeaderboards();renderWeights();renderThings();renderRaceInsights();renderNyraUpdateControls();updateUrl()}
 function renderThings(){
  const el=document.getElementById("thingsToConsider"); if(!el)return;
  let rows=[];
@@ -1109,7 +1110,7 @@ document.getElementById('exportBrisnetModelAudit').onclick=()=>{
    warning:'Research-only read-only recomputation. Not a pre-race freeze, not independently timestamped, not a betting authorization. Current saved runner edits and scratch flags may differ from historical pre-race state.',races};
   const blob=new Blob([JSON.stringify(audit,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');
   a.href=url;a.download='BRISNET_MODEL_INPUT_AUDIT_'+String(card.date||'undated').replace(/[^0-9-]/g,'')+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
-  status.textContent='Brisnet model-input audit exported: '+races.length+' races, V4.4c / Finisher / Contender traces.';
+  status.textContent='Brisnet model-input audit exported: '+races.length+' races, Legacy model-input traces.';
  }catch(e){status.textContent='Brisnet model audit failed: '+(e.message||e);}
 };
 
@@ -1142,10 +1143,7 @@ modelMethodsPanel.innerHTML=`<div class="kicker">Model documentation</div><h3 cl
 <p class="small"><b>Version:</b> BRISNET-BEST063400-LATE25-EARLY75-20261104. Best Recent Research uses the same Brisnet source validation and eligible field as Brisnet Contender.</p>
 <p class="small"><b>Latest profile:</b> best Speed among the latest three actual starts has coefficient 0.6340027300. The other five speed components and matched Speed trend are neutralized. Early pace uses 75% of its original coefficient (a 25% reduction). Late pace uses 25% of its original coefficient (a 75% reduction).</p>
 <p class="small"><b>Label clarification:</b> the currently implemented Late setting is <b>original coefficient × 0.25</b>, not Late +25% (× 1.25). This describes the deployed formula; the formula has not been changed. Other connection, layoff, neutral-feature and matching rules remain those of Brisnet Contender. Scores are field-relative, not probabilities. First-time starters or unverified latest Speed remain unranked; race eligibility is separate from the model’s pending validation.</p></details>
-<details open data-shared-model="brisFinisher"><summary><b>Brisnet Finisher</b></summary>
-<p class="small"><b>Version:</b> FINISHER-3F-v1-20261018, native Brisnet adapter. Three fixed components: <b>60% recent Speed + 25% matched Speed + 15% matched LP</b>. Each component is converted to a within-field percentile from 0 to 100 before applying its weight.</p>
-<p class="small"><b>Recent Speed:</b> latest five actual starts at 50/25/15/7/3, normalized over available figures without shifting an older start into a missing start's slot. <b>Matched Speed:</b> available Speed among those five starts, within 365 days, same surface and sprint/route category, within 1 furlong; a 90-day half-life gives more recent starts more influence. <b>Late:</b> the latest available LP from that matching set.</p>
-<p class="small"><b>Missing evidence:</b> an optional missing matched Speed or LP component stays at percentile 50; the 60/25/15 weights are not redistributed. First-time starters and runners without verified latest Speed stay unranked. Unique horse names allow name-only ranking when program numbers are missing; names must be matched before wagering. Exact score ties use horse name. No extra running-style, jockey, trainer or workout bonus is added. Complete verified fields are RATEABLE; incomplete fields retain PASS/HOLD. Model validation pending is shown separately.</p></details>
+<details open data-shared-model="brisRRV2"><summary><b>RR-V2</b></summary><p class="small">Independent RR ordering overlay. Prime Power challengers within the original RR top four must pass recent Speed, matched Speed, Late Pace and score-gap checks; second-position changes also require comparable E2 support. Original RR scores remain unchanged. Incomplete evidence prevents overrides.</p></details>
 <details open data-shared-model="drfContender"><summary><b>DRF Contender Late +50%</b></summary>
 <p class="small"><b>Version:</b> DRF-CONTENDER-LATE150-20261103. Uses the DRF upload's Beyers and TimeformUS Early/Late figures. This is the DRF Contender column currently shown in Shared Selections; a duplicate original DRF Contender column is not shown.</p>
 <p class="small"><b>Latest change:</b> only the original Late coefficient is multiplied by 1.50, from 0.1453618317 to 0.2180427476. Early and all other Contender coefficients remain unchanged. This is a relative coefficient increase, not a 50-point bonus or a 50% share of the score.</p>
