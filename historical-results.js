@@ -57,7 +57,7 @@ export function importHistoricalSnapshot(value){
  }
  return out;
 }
-function verifyOfficial(r,official,strategy){
+export function verifyOfficial(r,official,strategy={}){
  if(official?.chartIssue)fail(official.chartIssue);
  if(!official?.verified||!String(official.sourceRef||'').trim())fail('Confirm the official chart and retain its filename or source reference.');
  if(official.nonstandard)fail('Dead heat, coupled entry or nonstandard payout requires manual adjudication; excluded from automatic ROI.');
