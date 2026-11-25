@@ -26,7 +26,7 @@ export function dashboardModels(d){
  const valid=values.filter(h=>h.value!==null);
  const pp={id:'primePower',label:'Prime Power',decision:'REFERENCE',available:valid.length===field.length,reason:valid.length===field.length?null:'Prime Power missing for active starter(s)',model_id:'BRISNET-PRIME-POWER-source',unrated:values.filter(h=>h.value===null).map(h=>({n:p(h),name:h.name,reasons:['Printed Prime Power unavailable']})),rankings:valid.sort((a,b)=>b.value-a.value||a.index-b.index).map((h,i)=>({n:p(h),name:h.name,rank:i+1,score:h.value}))};
  const ml=d.morning_line?{...copy(d.morning_line),decision:'REFERENCE',model_id:'MORNING-LINE-source'}:null;
- return [pp,...['brisResearch','brisRRV2','brisContender','drfContender'].map(id=>models.find(m=>m.id===id)).filter(Boolean),...models.filter(m=>m.id!=='brisFinisher'&&!['brisResearch','brisRRV2','brisContender','drfContender'].includes(m.id)),...(ml?[ml]:[])];
+ return [pp,...['brisResearch','brisRRV2','brisTapeta','brisContender','drfContender'].map(id=>models.find(m=>m.id===id)).filter(Boolean),...models.filter(m=>m.id!=='brisFinisher'&&!['brisResearch','brisRRV2','brisTapeta','brisContender','drfContender'].includes(m.id)),...(ml?[ml]:[])];
 }
 export function historicalSnapshot({dashboards,sources=[],capturedAt=new Date().toISOString()}){
  if(!Array.isArray(dashboards)||!dashboards.length||!Number.isFinite(Date.parse(capturedAt)))fail('Dated card snapshots are required.');
@@ -114,7 +114,7 @@ export function evaluateHistoricalCard(snapshot,officials,strategyId){
   if(!o){pending.push({race:r.race.number,reason:'Official result not yet entered'});continue;}
   try{rows.push(...evaluateHistoricalRace(r,o,strategyId));}catch(e){pending.push({race:r.race.number,reason:e.message});}
  }
- return {rows,pending,summary:summarizeHistorical(rows),rrRecoverySummary:summarizeRRRecovery(rows),research:summarizeHistoricalResearch(snapshot,rows,pending),commonComparisons:[summarizeCommonRaces(rows,['brisResearch','brisRRV2']),summarizeCommonRaces(rows,['brisResearch','brisRRV2','brisContender','primePower','morningLine'])]};
+ return {rows,pending,summary:summarizeHistorical(rows),rrRecoverySummary:summarizeRRRecovery(rows),research:summarizeHistoricalResearch(snapshot,rows,pending),commonComparisons:[summarizeCommonRaces(rows,['brisResearch','brisRRV2']),summarizeCommonRaces(rows,['brisResearch','brisRRV2','brisContender','primePower','morningLine']),...(snapshot.races.some(r=>r.models.some(m=>m.id==='brisTapeta'))?[summarizeCommonRaces(rows,['brisResearch','brisRRV2','brisTapeta'])]:[])]};
 }
 
 export function summarizeRRRecovery(rows){
