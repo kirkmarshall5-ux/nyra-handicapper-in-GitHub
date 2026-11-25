@@ -1,3 +1,4 @@
+import {activeRunner} from './active-field.js';
 import {rankRRV2} from './rr-v2.js';
 // Adapts exactly the current Race Day models; no scoring formula is changed.
 import {rankBrisnetModels} from './brisnet-models.js?v=20261113-status';
@@ -7,7 +8,7 @@ import {rankContenders} from './contender-rankings.js';
 import {rankFinishers} from './finisher-inputs.js?v=20261113-status';
 import {rankBrisnetResearch} from './brisnet-research.js';
 import {cardProvider} from './dual-pp-cards.js';
-export const eligible=h=>Boolean(h.n)&&h.odds!=='SCR'&&((!h.entry_status||h.entry_status==='REGULAR')?h.included_in_frozen_field!==false:['AE','ALSO_ELIGIBLE'].includes(h.entry_status)&&h.included_in_frozen_field===true);
+export const eligible=h=>Boolean(h.n)&&activeRunner(h);
 export function convertDisplayedModel(family,result,field,provider,{baselineDecision=null}={}){
  if(!result?.model_id||!Array.isArray(result.rankings))throw Error(family+' model unavailable');
  const status=family==='FINISHER'?(result.status==='HOLD'?'HOLD':baselineDecision==='PASS'||result.status!=='COMPLETE_FIELD'?'PASS':'RATEABLE'):result.decision;
