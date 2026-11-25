@@ -85,3 +85,5 @@ test('legacy freeze remains immutable and never fabricates RR-V2 rankings',()=>{
 });
 
 test('win/place-only settlement neither requires exacta payouts nor credits an unwagered exacta',()=>{const o=official();delete o.exactaPay;delete o.exactaBase;const result=evaluateHistoricalCard(snapshot(),{1:o},'WIN_PLACE');assert.deepEqual(result.pending,[]);const rr=result.summary.find(s=>s.id==='brisRRV2');assert.equal(rr.stake,4);assert.equal(rr.returned,12);assert.equal(rr.exactSecond,1);assert.equal(rr.exactaHits,0);assert.equal(rr.byWager.exacta12.bets,0);assert.equal(evaluateHistoricalCard(snapshot(),{1:o},'WIN_EXACTA').pending.length,1);});
+
+test('historical starter reconciliation rejects cross-source name mismatch atomically',()=>{const race={...d.race,race:1,horses:clone(d.field)};const cards={BRISNET:{date:d.race.date,track:d.race.track,races:{1:race}},DRF:{date:d.race.date,track:d.race.track,races:{1:clone(race)}}};cards.DRF.races[1].horses[0].name='Wrong horse';const before=JSON.stringify(cards);assert.throws(()=>historicalStarterSelection(cards,'BRISNET',1,['1','2']),/source starter mismatch/);assert.equal(JSON.stringify(cards),before);});
