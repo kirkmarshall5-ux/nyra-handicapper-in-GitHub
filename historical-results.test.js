@@ -83,3 +83,5 @@ test('legacy freeze remains immutable and never fabricates RR-V2 rankings',()=>{
  const s=importHistoricalSnapshot(input);assert.equal(JSON.stringify(input),before);assert.equal(s.races[0].models.some(m=>m.id==='brisRRV2'||m.id==='brisFinisher'),false);
  const rows=evaluateHistoricalRace(s.races[0],official(),'WIN_PLACE_EXACTA');assert.equal(rows.find(r=>r.model==='brisResearch').returned,12);assert.equal(rows.some(r=>r.model==='brisRRV2'),false);
 });
+
+test('win/place-only settlement neither requires exacta payouts nor credits an unwagered exacta',()=>{const o=official();delete o.exactaPay;delete o.exactaBase;const result=evaluateHistoricalCard(snapshot(),{1:o},'WIN_PLACE');assert.deepEqual(result.pending,[]);const rr=result.summary.find(s=>s.id==='brisRRV2');assert.equal(rr.stake,4);assert.equal(rr.returned,12);assert.equal(rr.exactSecond,1);assert.equal(rr.exactaHits,0);assert.equal(rr.byWager.exacta12.bets,0);assert.equal(evaluateHistoricalCard(snapshot(),{1:o},'WIN_EXACTA').pending.length,1);});
