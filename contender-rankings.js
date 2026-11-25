@@ -1,3 +1,4 @@
+import {activeRunner} from './active-field.js';
 import {MODEL} from './contender-model.js';
 // DRF-only live profile. Shared coefficients remain unchanged for native Brisnet.
 export const DRF_CONTENDER_MODEL_ID='DRF-CONTENDER-LATE150-20261103';
@@ -44,7 +45,7 @@ function percentile(v,observed){if(v===null||observed.length<=1||new Set(observe
 export function rankContenders(race,baseline,{displayPass=false}={}){
  if(baseline.decision==='PASS'&&!displayPass)return {decision:'PASS',rankings:[],reason:'Full-field evidence incomplete',model_id:DRF_CONTENDER_MODEL_ID};
  const rated=new Set((baseline.runners||[]).filter(h=>Number.isFinite(h.base_rating)&&!h.unrated_reason&&!(h.parser_blockers||[]).length).map(h=>h.name));
- const field=race.horses.filter(h=>h.odds!=='SCR'&&(!h.entry_status||h.entry_status==='REGULAR')&&(!displayPass||rated.has(h.name)));
+ const field=race.horses.filter(h=>activeRunner(h)&&(!displayPass||rated.has(h.name)));
  if(!field.length)return {decision:baseline.decision,rankings:[],provisional:displayPass,reason:'No horses have enough verified evidence for a numerical rating.',model_id:DRF_CONTENDER_MODEL_ID};
  if(!field.every(h=>h.contender_evidence||h.switch_evidence))return {decision:'HOLD',rankings:[],reason:'Re-upload the source PP to populate Contender evidence.',model_id:DRF_CONTENDER_MODEL_ID};
  const r={...race,field},es=field.map(h=>contenderFeatures(h,r)),observed=MODEL.features.map((_,j)=>es.map(e=>e.raw[j]).filter(v=>v!==null)),slopes=es.map(e=>e.slope).filter(v=>v!==null);
