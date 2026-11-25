@@ -244,8 +244,8 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 </main>
 
 <script type="module">
-import {initHistoricalResults} from "./historical-results-ui.js?v=20261122-integrated";
-import {buildPicksSheet,createPicksPreview} from "./print-picks.js?v=20261113-status";
+import {initHistoricalResults} from "./historical-results-ui.js?v=20261124-rrv2";
+import {buildPicksSheet,createPicksPreview} from "./print-picks.js?v=20261124-rrv2";
 import {correctRaceField} from "./race-field-corrections.js?v=20261101-fieldnames";
 import {prepareRaceDayResearchFreeze} from "./pre-race-raceday-integration.js?v=20261113-status";
 import {parseOfficialStarterRoster} from "./official-starter-input.js";
@@ -264,7 +264,7 @@ import {researchRace} from "./jockey-research.js?v=20261008-qa1";
 import {evidenceProfile} from "./scoring-engine.js?v=20261008-qa1";
 import {estimatedWinLine,winLineFields,winLineNote} from "./fair-odds.js?v=20261015-mix1-line1";
 import {rankRRV2} from './rr-v2.js';
-import {buildRaceDashboard,dashboardHtml,selectMorningLineProvider,morningLineForRunner,morningLineNumber} from "./race-day-dashboard.js?v=20261120-drf-coverage";
+import {buildRaceDashboard,dashboardHtml,selectMorningLineProvider,morningLineForRunner,morningLineNumber} from "./race-day-dashboard.js?v=20261124-rrv2";
 import {rankContenders} from "./contender-rankings.js?v=20261115-beyer";
 import {rankBrisnetModels} from "./brisnet-models.js?v=20261113-status";
 import {decodeTodayDistance} from "./finisher-drf-distance.js?v=20261018-5316";
@@ -358,8 +358,8 @@ function renderModelRow(race,ids){
  const topContenders=document.getElementById(ids[0]),contenderTarget=document.getElementById(ids[2]);
  const currentRating=()=>rankBrisnetModels(race)?.v44c||websiteRace(race);
  const native=rankBrisnetModels(race);
- const v2=rankRRV2(race);
- document.getElementById(ids[1]).innerHTML=v2?'<b>'+escapeText(v2.decision)+'</b>'+candidateTable(v2.rankings.slice(0,4).map(h=>'<tr><td><b>'+h.rank+'. #'+escapeText(String(h.n))+' '+escapeText(h.name)+'</b></td><td>'+h.score.toFixed(3)+'</td></tr>').join(''))+'<div class="tiny muted">'+escapeText(v2.override_decisions.filter(d=>d.accepted).map(d=>'Position '+d.slot+': #'+d.original+' → #'+d.challenger).join('; ')||'Original RR order retained')+'</div>':'';
+ const v2=native?rankRRV2(race):null;
+ document.getElementById(ids[1]).innerHTML=v2?modelEvidenceHtml(race,v2,{model:'contender'})+'<b>'+escapeText(v2.decision)+'</b>'+candidateTable(v2.rankings.slice(0,4).map(h=>'<tr><td><b>'+h.rank+'. #'+escapeText(String(h.n))+' '+escapeText(h.name)+'</b></td><td>'+h.score.toFixed(3)+'</td><td>—</td><td>—</td></tr>').join(''))+'<div class="tiny muted">'+escapeText(v2.override_decisions.filter(d=>d.accepted).map(d=>'Position '+d.slot+': #'+d.original+' → #'+d.challenger).join('; ')||'Original RR order retained')+'</div>':'';
  for(const [key,id] of [['v44c',ids[0]],['contender',ids[2]]])updateBrisnetMethods(document.getElementById(id),key,!!native);
  if(native){
   for(const [key,id] of [['v44c',ids[0]],['contender',ids[2]]])document.getElementById(id).innerHTML=brisnetRankingHtml(native[key],key,race);
