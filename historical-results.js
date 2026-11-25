@@ -6,6 +6,7 @@ export const STRATEGIES=Object.freeze({
  WIN_PLACE:{label:'$2 win/place',win:2,place:2,exacta:0}
 });
 const copy=x=>structuredClone(x);
+export function immutableHistoricalSnapshot(value){const out=copy(value);const freeze=x=>{if(x&&typeof x==='object'){for(const v of Object.values(x))freeze(v);Object.freeze(x);}return x;};return freeze(out);}
 const p=h=>String(h?.n??h?.program??'').trim();
 const name=h=>String(h?.name??h?.horse??'').replace(/\s*\([A-Za-z]{2,3}\)\s*$/,'').toLowerCase().replace(/[^a-z0-9]/g,'');
 const cents=x=>Math.round(x*100)/100;
