@@ -1,7 +1,8 @@
+import {activeRunner} from './active-field.js';
 import {displayDistance} from './race-conditions.js';
 // Display-only, deterministic illustration. No odds, handicap ratings, or betting logic.
 const numberOrNull=x=>((typeof x==='number'||typeof x==='string')&&String(x).trim()!==''&&Number.isFinite(Number(x))&&Number(x)>=0)?Number(x):null;
-export function paceEligible(h){return h.odds!=='SCR'&&h.included_in_frozen_field!==false&&(!h.entry_status||h.entry_status==='REGULAR')}
+export function paceEligible(h){return activeRunner(h)}
 export function paceProfile(h){
  const starts=h.life_starts??h.lifeStarts;
  if(starts===0||starts==='0')return {known:false,style:'UNKNOWN',early:null,late:null,source:'FTS — pace unknown'};

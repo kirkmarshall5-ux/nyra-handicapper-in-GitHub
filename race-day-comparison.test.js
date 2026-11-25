@@ -1,3 +1,4 @@
+import {activeRunner} from './active-field.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -21,7 +22,7 @@ test('morning line renders four eligible runners from only the chosen source',()
  const horses=Array.from({length:7},(_,i)=>({n:String(i+1),name:'Horse '+(i+1),ml:(i+1)+'/1',odds:i===0?'SCR':'—',entry_status:i===1?'AE':'REGULAR'}));
  const body=html.slice(html.indexOf(' const mlProvider='),html.indexOf(' const panel=kind=>'));
  const oddsFn=html.match(/function oddsNumber\(o\)\{[^\n]+/)[0];
- const context={morningLineNumber,morningLineProvider:()=> 'DRF',providerRace:p=>{assert.equal(p,'DRF');return {race:{horses}};},topMl:{innerHTML:''},escapeText:s=>String(s)};
+ const context={activeRunner,morningLineNumber,morningLineProvider:()=> 'DRF',providerRace:p=>{assert.equal(p,'DRF');return {race:{horses}};},topMl:{innerHTML:''},escapeText:s=>String(s)};
  vm.runInNewContext(oddsFn+'\n'+body,context);
  assert.equal((context.topMl.innerHTML.match(/<tr><td>/g)||[]).length,4);
  assert.match(context.topMl.innerHTML,/#3 Horse 3/);assert.match(context.topMl.innerHTML,/#6 Horse 6/);assert.doesNotMatch(context.topMl.innerHTML,/#7 Horse 7|BRISNET/);

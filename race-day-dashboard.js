@@ -1,3 +1,4 @@
+import {activeRunner} from './active-field.js';
 import {rankRRV2} from './rr-v2.js';
 import {paperEligibility,paperTickets} from './paper-results.js';
 import {modelEvidence} from './model-evidence-display.js?v=20261115-beyer';
@@ -11,7 +12,7 @@ import {rankBrisnetResearch} from './brisnet-research.js?v=20261113-status';
 import {rankFinishers} from './finisher-inputs.js?v=20261115-beyer';
 import {decodeTodayDistance} from './finisher-drf-distance.js?v=20261018-5316';
 
-const active=h=>h.odds!=='SCR'&&h.included_in_frozen_field!==false&&(!h.entry_status||h.entry_status==='REGULAR');
+const active=h=>activeRunner(h);
 const program=h=>String(h.n??'').trim().toUpperCase();
 // Country suffixes and punctuation can differ between PP publishers. Word order cannot.
 const name=h=>String(h.name??'').replace(/\s*\([A-Za-z]{2,3}\)\s*$/,'').toLowerCase().replace(/[^a-z0-9]/g,'');

@@ -1,9 +1,10 @@
+import {activeRunner} from './active-field.js';
 import {FINISHER_SPEC,rankFinisherFeatures} from './finisher-model.js?v=20261113-status';
 import {contenderFeatures} from './contender-rankings.js?v=20261115-beyer';
 import {releaseRace} from './rankings-release.js?v=20261115-beyer';
 import {correctedMatchedSpeed} from './finisher-drf-distance.js?v=20261018-5316';
 const finite=x=>typeof x==='number'&&Number.isFinite(x);
-const active=h=>h.odds!=='SCR'&&h.included_in_frozen_field!==false&&(!h.entry_status||h.entry_status==='REGULAR');
+const active=h=>activeRunner(h);
 const dateOK=d=>typeof d==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(d)&&Number.isFinite(Date.parse(d))&&new Date(d).toISOString().slice(0,10)===d;
 const category=d=>finite(d)?d>=8?'route':'sprint':null;
 export function finisherInputs(race){
