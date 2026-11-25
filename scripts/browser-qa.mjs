@@ -294,8 +294,10 @@ for(const profile of profiles){
    await page.evaluate(async()=>{const c=(await window.qaReadActive()),h=c.races[1].horses[6];h.life_starts=1;h.lifeStarts=1;h.beyer_figures=[95];h.figs=[95];await window.qaSetActive(c);});
    await page.reload({waitUntil:'domcontentloaded'});
    await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
-   assert.match(await target.textContent(),/Complete field ranked/);assert.match(await target.textContent(),/Ranked 6\/6/);
-   assert.match(await target.locator('tbody tr').first().innerText(),/Runner 7/);
+   assert.equal(await target.textContent(),'');
+   assert.match(await drfPanel.textContent(),/ranked 6\/6 starters/i);
+   assert.match(await drfPanel.locator('tbody tr').first().innerText(),/Runner 7/);
+   assert.equal(await page.locator('#brisFinisherCandidates tbody tr').count(),0);
    await page.screenshot({path:`${out}/${profile.name}-finisher-raceday.png`,fullPage:true});
    assert.equal(errors.length,0,'Finisher page errors: '+errors.join(' | '));
   }finally{
