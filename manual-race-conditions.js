@@ -8,6 +8,7 @@ export function correctRaceConditions(cards,selected,raceNumber,{surface,furlong
   const r=card.races?.[raceNumber];if(!r||!matchingCard(anchor,card)||Number(r.race)!==Number(race.race))continue;
   const original=r.manual_conditions?.original||{surface:r.surface,distance_furlongs:r.distance_furlongs??null,dist:r.dist??null,header:r.header??null,conditions:structuredClone(r.conditions||{})};
   r.surface=surface;r.distance_furlongs=distance;r.dist=distance+'F';
+  if(surface!=='Dirt')for(const h of r.horses||[]){const status=h.original_entry_status||h.entry_status;if(['MTO','MAIN_TRACK_ONLY'].includes(status)){h.entry_status=status;h.included_in_frozen_field=false;}}
   const line=distance+' Furlongs';r.conditions={...(r.conditions||{}),surface,primaryDistanceLine:line,distance_furlongs:distance};
   r.header=line+'\n'+(original.header||'');
   r.manual_conditions={source:'USER_MANUAL_OVERRIDE',observed_at:observedAt,surface,distance_furlongs:distance,original};
