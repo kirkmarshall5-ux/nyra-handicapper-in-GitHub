@@ -1,3 +1,6 @@
 import {runnerProgram} from './runner-identity.js';
 // Explicit official mapping is required for suffixed programs; never infer coupling from a suffix alone.
 export function distinctInterests(rankings,officialMap={}){const seen=new Set(),out=[];for(const h of rankings){const program=runnerProgram(h.n??h.program);if(!/^\d+[A-Z]?$/.test(program))throw Error('Unverified runner program');const mapped=Object.prototype.hasOwnProperty.call(officialMap,program)?String(officialMap[program]):null;if(!mapped&&!/^\d+$/.test(program))throw Error('Official wagering interest required for '+program);const interest=mapped??program;if(!/^\d+$/.test(interest))throw Error('Invalid wagering interest');if(!seen.has(interest)){seen.add(interest);out.push({program,interest});}}return out;}
+
+// Validate official exacta numbers against distinct interests in official finish order.
+export function verifyInterestExacta(finish,officialMap,pair){const order=distinctInterests(finish.map(n=>({n})),officialMap).map(h=>h.interest);if(order.length<2||!Array.isArray(pair)||pair.length!==2||pair.map(String).join('-')!==order.slice(0,2).join('-'))throw Error('Official exacta conflicts with verified wagering interests');return order.slice(0,2);}
