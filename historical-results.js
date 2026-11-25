@@ -76,8 +76,9 @@ export function evaluateHistoricalRace(r,official,strategyId='WIN_EXACTA'){
  const finish=verifyOfficial(r,official,strategy),[winner,second]=finish;
  return r.models.map(m=>{
   const eligibility=paperEligibility(m,r.field,r.race),rows=m.rankings||[],a=p(rows[0]),b=p(rows[1]);
+  const winnerRank=rows.findIndex(h=>p(h)===winner)+1||null;
   const runnerUpRank=rows.findIndex(h=>p(h)===second)+1||null;
-  const base={model:m.id,label:m.label||m.id,modelVersion:m.model_id||null,recovery_status:m.recovery_status||null,recovery_reasons:m.recovery_reasons||[],race:r.race.number,runnerUpRank,firstChoiceWinner:a===winner,exactSecond:runnerUpRank===2,topTwoRunnerUp:runnerUpRank!==null&&runnerUpRank<=2,topFourRunnerUp:runnerUpRank!==null&&runnerUpRank<=4,rrCompanionMiss:m.id==='brisResearch'&&a===winner&&b!==second,actualWinner:winner,actualSecond:second,chosenFirst:a,chosenSecond:b,sourceRef:official.sourceRef,resultVerification:official.verification,resultRecordedAt:official.recordedAt||null,eligibility};
+  const base={model:m.id,label:m.label||m.id,modelVersion:m.model_id||null,recovery_status:m.recovery_status||null,recovery_reasons:m.recovery_reasons||[],race:r.race.number,winnerRank,winnerTopFour:winnerRank!==null&&winnerRank<=4,orderedTopTwo:a===winner&&b===second,reverseTopTwo:b===winner&&a===second,runnerUpRank,firstChoiceWinner:a===winner,exactSecond:runnerUpRank===2,topTwoRunnerUp:runnerUpRank!==null&&runnerUpRank<=2,topFourRunnerUp:runnerUpRank!==null&&runnerUpRank<=4,rrCompanionMiss:m.id==='brisResearch'&&a===winner&&b!==second,actualWinner:winner,actualSecond:second,chosenFirst:a,chosenSecond:b,sourceRef:official.sourceRef,resultVerification:official.verification,resultRecordedAt:official.recordedAt||null,eligibility};
   if(r.cancelled||!eligibility.included)return {...base,included:false,reason:r.cancelled?'Race cancelled':eligibility.reasons.join('; '),stake:0,returned:0,wagers:[]};
   const wagers=[];
   if(strategy.win)wagers.push({type:'win',cost:strategy.win,hit:a===winner,returned:a===winner?official.win2*strategy.win/2:0});
@@ -98,7 +99,7 @@ export function summarizeHistorical(rows){
  const ids=[...new Set(rows.map(r=>r.model))];
  return ids.map(id=>{
   const all=rows.filter(r=>r.model===id),included=all.filter(r=>r.included),wagers=included.flatMap(r=>r.wagers);
-  return {id,label:all[0].label,races:included.length,excluded:all.length-included.length,...totals(wagers),winners:included.filter(r=>r.firstChoiceWinner).length,exactSecond:included.filter(r=>r.exactSecond).length,runnerUpTopTwo:included.filter(r=>r.topTwoRunnerUp).length,runnerUpTopFour:included.filter(r=>r.topFourRunnerUp).length,exactaHits:included.filter(r=>r.exactaHit).length,byWager:Object.fromEntries(['win','place','exacta12','exacta21'].map(type=>[type,totals(wagers.filter(w=>w.type===type))]))};
+  return {id,label:all[0].label,races:included.length,excluded:all.length-included.length,...totals(wagers),winners:included.filter(r=>r.firstChoiceWinner).length,winnerTopFour:included.filter(r=>r.winnerTopFour).length,orderedTopTwo:included.filter(r=>r.orderedTopTwo).length,reverseTopTwo:included.filter(r=>r.reverseTopTwo).length,exactSecond:included.filter(r=>r.exactSecond).length,runnerUpTopTwo:included.filter(r=>r.topTwoRunnerUp).length,runnerUpTopFour:included.filter(r=>r.topFourRunnerUp).length,exactaHits:included.filter(r=>r.exactaHit).length,byWager:Object.fromEntries(['win','place','exacta12','exacta21'].map(type=>[type,totals(wagers.filter(w=>w.type===type))]))};
  });
 }
 export function evaluateHistoricalCard(snapshot,officials,strategyId){
