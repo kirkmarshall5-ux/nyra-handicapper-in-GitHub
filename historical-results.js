@@ -87,19 +87,20 @@ export function evaluateHistoricalRace(r,official,strategyId='WIN_EXACTA'){
    wagers.push({type:'exacta12',cost:strategy.exacta,hit:a===winner&&b===second,returned:a===winner&&b===second?official.exactaPay*strategy.exacta/official.exactaBase:0});
    wagers.push({type:'exacta21',cost:strategy.exacta,hit:b===winner&&a===second,returned:b===winner&&a===second?official.exactaPay*strategy.exacta/official.exactaBase:0});
   }
+  for(const w of wagers)w.returned=cents(w.returned);
   const stake=cents(wagers.reduce((s,w)=>s+w.cost,0)),returned=cents(wagers.reduce((s,w)=>s+w.returned,0));
   return {...base,included:true,stake,returned,net:cents(returned-stake),roi:100*(returned/stake-1),exactaHit:!!strategy.exacta&&((a===winner&&b===second)||(b===winner&&a===second)),wagers};
  });
 }
 function totals(wagers){
  const stake=cents(wagers.reduce((s,w)=>s+w.cost,0)),returned=cents(wagers.reduce((s,w)=>s+w.returned,0));
- return {winning:wagers.filter(w=>w.hit).length,bets:wagers.length,stake,returned,net:cents(returned-stake),roi:stake?100*(returned/stake-1):null};
+ return {winning:wagers.filter(w=>w.hit).length,bets:wagers.length,hitRate:wagers.length?100*wagers.filter(w=>w.hit).length/wagers.length:null,stake,returned,net:cents(returned-stake),roi:stake?100*(returned/stake-1):null};
 }
 export function summarizeHistorical(rows){
  const ids=[...new Set(rows.map(r=>r.model))];
  return ids.map(id=>{
   const all=rows.filter(r=>r.model===id),included=all.filter(r=>r.included),wagers=included.flatMap(r=>r.wagers);
-  return {id,label:all[0].label,races:included.length,excluded:all.length-included.length,...totals(wagers),winners:included.filter(r=>r.firstChoiceWinner).length,winnerTopFour:included.filter(r=>r.winnerTopFour).length,orderedTopTwo:included.filter(r=>r.orderedTopTwo).length,reverseTopTwo:included.filter(r=>r.reverseTopTwo).length,exactSecond:included.filter(r=>r.exactSecond).length,runnerUpTopTwo:included.filter(r=>r.topTwoRunnerUp).length,runnerUpTopFour:included.filter(r=>r.topFourRunnerUp).length,exactaHits:included.filter(r=>r.exactaHit).length,byWager:Object.fromEntries(['win','place','exacta12','exacta21'].map(type=>[type,totals(wagers.filter(w=>w.type===type))]))};
+  return {id,label:all[0].label,races:included.length,excluded:all.length-included.length,...totals(wagers),winners:included.filter(r=>r.firstChoiceWinner).length,winnerTopFour:included.filter(r=>r.winnerTopFour).length,orderedTopTwo:included.filter(r=>r.orderedTopTwo).length,companionWhenWinner:included.some(r=>r.firstChoiceWinner)?100*included.filter(r=>r.orderedTopTwo).length/included.filter(r=>r.firstChoiceWinner).length:null,reverseTopTwo:included.filter(r=>r.reverseTopTwo).length,exactSecond:included.filter(r=>r.exactSecond).length,runnerUpTopTwo:included.filter(r=>r.topTwoRunnerUp).length,runnerUpTopFour:included.filter(r=>r.topFourRunnerUp).length,exactaHits:included.filter(r=>r.exactaHit).length,byWager:Object.fromEntries(['win','place','exacta12','exacta21'].map(type=>[type,totals(wagers.filter(w=>w.type===type))]))};
  });
 }
 export function evaluateHistoricalCard(snapshot,officials,strategyId){
