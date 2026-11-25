@@ -14,7 +14,9 @@ export function correctRaceField(cards,selected,raceNumber,program,action,now=ne
   if(!horse)throw Error('Matching PP runner identity differs; no field changes saved');
   if(action==='running'){
    if(horse.odds==='SCR'){horse.odds='—';delete horse.scratch_evidence;}
-   if(!['AE','ALSO_ELIGIBLE','REGULAR'].includes(horse.entry_status||'REGULAR'))throw Error('Only an also-eligible can be confirmed running');
+   const status=horse.original_entry_status||horse.entry_status||'REGULAR';
+   if(['MTO','MAIN_TRACK_ONLY'].includes(status)){if(race.surface!=='Dirt')throw Error('MTO can only be confirmed running on dirt; verify official starters.');}
+   else if(!['AE','ALSO_ELIGIBLE','REGULAR'].includes(status))throw Error('Unsupported conditional entry status');
    horse.original_entry_status??=horse.entry_status||'REGULAR';horse.entry_status='REGULAR';horse.included_in_frozen_field=true;
   }else{horse.odds='SCR';horse.scratch_evidence={status:'USER_CONFIRMED_SCRATCH',observedAt:now};}
   horse.field_status_evidence={status:'USER_CONFIRMED',action,observedAt:now,program:String(horse.n??''),name:horse.name};
