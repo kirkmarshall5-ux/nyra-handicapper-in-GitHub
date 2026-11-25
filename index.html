@@ -114,6 +114,7 @@ button.primary{border:0;background:var(--gold);color:#111;font-weight:850;paddin
 <div class="span12 comparison-row">
 <div class="card span4"><div class="kicker">Brisnet RR</div><div class="tiny muted">Best Recent 0.63400 · Late 25% · Early −25%</div><div id="brisResearchCandidates" class="stack small contender-rankings" aria-live="polite"></div></div>
 <div class="card span4"><div class="kicker">Brisnet · RR-V2</div><div id="brisFinisherCandidates" class="stack small" aria-live="polite"></div></div>
+<div class="card span4" id="tapetaModelCard" hidden><div class="kicker">Brisnet · RR-Tapeta (Research)</div><div id="tapetaCandidates" class="stack small" aria-live="polite"></div></div>
 <div class="card span4"><div class="kicker">Brisnet · Contender</div><div id="brisContenderCandidates" class="stack small contender-rankings"></div><details class="tiny muted" style="margin-top:10px"><summary>How Contender ranks</summary><p>Contender V2 combines relative field scores using frozen coefficients for recent Beyers, surface and distance form, Timeform Early and Late pace, race pressure, career records, jockey and trainer records, layoffs, workouts, verified trip comments and prior opposition. It also uses a surface/distance matched Beyer trend when at least three comparable starts are verified. Missing features are neutral. This model was trained for top-three contention; its win chances remain experimental. PASS races show provisional rated runners only.</p></details></div>
 <div class="card span4"><div class="kicker">DRF · Contender · Late +50%</div><div id="contenderCandidates" class="stack small contender-rankings"></div><details class="tiny muted" style="margin-top:10px"><summary>How Contender ranks</summary><p>Contender V2 combines relative field scores using frozen coefficients for recent Beyers, surface and distance form, Timeform Early pace and Late pace with a 50% higher coefficient, race pressure, career records, jockey and trainer records, layoffs, workouts, verified trip comments and prior opposition. It also uses a surface/distance matched Beyer trend when at least three comparable starts are verified. Missing features are neutral. This model was trained for top-three contention; its win chances remain experimental. PASS races show provisional rated runners only.</p></details></div>
 <div class="card span4"><div class="kicker">Morning Line</div><div id="topMl" class="stack small"></div></div>
@@ -265,7 +266,7 @@ import {researchRace} from "./jockey-research.js?v=20261008-qa1";
 import {evidenceProfile} from "./scoring-engine.js?v=20261008-qa1";
 import {estimatedWinLine,winLineFields,winLineNote} from "./fair-odds.js?v=20261015-mix1-line1";
 import {rankRRV2} from './rr-v2.js';
-import {buildRaceDashboard,dashboardHtml,selectMorningLineProvider,morningLineForRunner,morningLineNumber} from "./race-day-dashboard.js?v=20261124-rrv2";
+import {buildRaceDashboard,dashboardHtml,selectMorningLineProvider,morningLineForRunner,morningLineNumber} from "./race-day-dashboard.js?v=20261125-tapeta";
 import {rankContenders} from "./contender-rankings.js?v=20261115-beyer";
 import {rankBrisnetModels} from "./brisnet-models.js?v=20261113-status";
 import {decodeTodayDistance} from "./finisher-drf-distance.js?v=20261018-5316";
@@ -530,6 +531,11 @@ function renderRaceInsights(){
  renderDashboard();
  const researchSource=providerRace('BRISNET'),research=researchSource.race?rankBrisnetResearch(researchSource.race):null;
  document.getElementById('brisResearchCandidates').innerHTML=research?brisnetRankingHtml(research,'contender',researchSource.race).replace('Contender-Brisnet · experimental','Brisnet RR'):'<div class="note small">'+escapeText(researchSource.reason)+'</div>';
+ const tapetaCard=document.getElementById('tapetaModelCard');
+ tapetaCard.hidden=race.surface!=='Synth';
+ tapetaCard.style.display=tapetaCard.hidden?'none':'';
+ const tapeta=tapetaCard.hidden?null:currentDashboard().models.find(m=>m.id==='brisTapeta');
+ document.getElementById('tapetaCandidates').innerHTML=tapeta?'<b>'+escapeText(tapeta.decision)+'</b><div class="tiny muted">Validation pending · synthetic evidence: '+escapeText(tapeta.syntheticCoverage??'unavailable')+'/'+escapeText(tapeta.eligible)+'</div>'+ (tapeta.reason?'<div>'+escapeText(tapeta.reason)+'</div>':'')+tapeta.rankings.slice(0,4).map(h=>'<div>'+h.rank+'. #'+escapeText(h.n)+' '+escapeText(h.name)+'</div>').join(''):'';
  const ids={BRISNET:['brisTopContenders','brisFinisherCandidates','brisContenderCandidates'],DRF:['topContenders','finisherCandidates','contenderCandidates']};
  for(const provider of ['BRISNET','DRF']){const source=providerRace(provider);if(source.race)renderModelRow(source.race,ids[provider]);else for(const id of ids[provider])document.getElementById(id).innerHTML='<div class="note small">'+escapeText(source.reason)+'</div>';}
  document.getElementById('ppSourceView').value=cardProvider(activeCard);
