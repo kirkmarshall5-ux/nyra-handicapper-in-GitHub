@@ -6,7 +6,8 @@ const horse=h=>String(h?.name??h?.horse??'').replace(/\s*\([A-Za-z]{2,3}\)\s*$/,
 const reason=x=>typeof x==='string'?x:x?.reason||'Required source evidence unavailable';
 export function paperEligibility(model,field,race={}){
  const rankings=model.rankings||[],ranked=new Map(rankings.map(h=>[program(h),h]));
- const exclusions=(model.unrated||[]).map(h=>({n:program(h),name:h.name,reasons:(h.reasons||[h.reason||'Required numerical ranking unavailable']).map(reason)}));
+ const activePrograms=new Set(field.map(program));
+ const exclusions=(model.unrated||[]).filter(h=>activePrograms.has(program(h))).map(h=>({n:program(h),name:h.name,reasons:(h.reasons||[h.reason||'Required numerical ranking unavailable']).map(reason)}));
  for(const h of field)if(!ranked.has(program(h))&&!exclusions.some(x=>program(x)===program(h)))exclusions.push({n:program(h),name:h.name,reasons:[model.reason||'Required numerical ranking unavailable; inspect source PP.']});
  const reasons=[];
  if(mandatoryPass(race))reasons.push("Mandatory PASS: unsupported race type");

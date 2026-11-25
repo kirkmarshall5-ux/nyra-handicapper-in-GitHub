@@ -41,13 +41,17 @@ async function pdfPages(file,progress){
 export function historicalStarterSelection(cards,selected,number,programs){
  const anchor=cards[selected],race=anchor?.races?.[number],chosen=new Set(programs.map(String));
  if(!race||chosen.size!==programs.length||programs.some(p=>!race.horses.some(h=>String(h.n)===String(p))))throw Error('Actual starters must match unique PP program numbers.');
+ const roster=race.horses.filter(h=>chosen.has(String(h.n)));
+ if(roster.length!==chosen.size)throw Error('Duplicate PP starter identity.');
  const next=structuredClone(cards);
  for(const card of Object.values(next)){
   if(!matchingCard(anchor,card)||!card.races[number])continue;
+  const verified=reconcileChartStarters(card.races[number].horses,roster);
+  if(!verified.ok)throw Error('Historical source starter mismatch: '+verified.reason);
   for(const h of card.races[number].horses){
    const runs=chosen.has(String(h.n));
    h.included_in_frozen_field=runs;
-   if(runs){if(h.odds==='SCR')h.odds=h.ml||'';h.entry_status='REGULAR';}
+   if(runs){if(h.entry_status&&h.entry_status!=='REGULAR')h.original_entry_status=h.original_entry_status||h.entry_status;if(h.odds==='SCR')h.odds=h.ml||'';h.entry_status='REGULAR';}
    else h.odds='SCR';
   }
  }
