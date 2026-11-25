@@ -28,8 +28,8 @@ test('$1 and $2 exacta charts yield identical normalized $1 winning tickets',()=
  const settle=options=>evaluateHistoricalCard(snapshot,matchEquibaseResults(snapshot,parseEquibaseResults(chart(options)),'WIN_EXACTA').officials,'WIN_EXACTA').summary;
  assert.deepEqual(settle({base:1,pay:15}),settle({base:2,pay:30}));
 });
-test('missing payouts, conflicting exacta, coupled entries and dead heats remain pending',()=>{
- for(const option of [{place:false},{pair:'2-1'},{coupled:true},{extra:'Dead Heat: 1 and 2'}]){
+test('conflicting exacta, coupled entries and dead heats remain pending',()=>{
+ for(const option of [{pair:'2-1'},{coupled:true},{extra:'Dead Heat: 1 and 2'}]){
   const p=parseEquibaseResults(chart(option));assert.equal(p.races.length,0);assert.equal(p.pending.length,1);
  }
 });
@@ -62,3 +62,5 @@ test('an explicit disqualification reorders the official field before payout rec
  }
  const parsed=parseEquibaseResults(pages);assert.deepEqual(parsed.pending,[]);assert.deepEqual(parsed.races[0].finish,['2','3','1']);
 });
+
+test('automatic chart intake permits missing unused payouts but selected strategy still requires them',()=>{const noPlace=parseEquibaseResults(chart({place:false}));assert.deepEqual(noPlace.pending,[]);assert.deepEqual(matchEquibaseResults(snapshot,noPlace,'WIN_EXACTA').pending,[]);assert.equal(matchEquibaseResults(snapshot,noPlace,'WIN_PLACE').pending.length,1);const pages=chart();pages[0].items=pages[0].items.filter(i=>!['$2.00 Exacta','1-2','30.00'].includes(i.str));const noExacta=parseEquibaseResults(pages);assert.deepEqual(noExacta.pending,[]);assert.deepEqual(matchEquibaseResults(snapshot,noExacta,'WIN_PLACE').pending,[]);assert.equal(matchEquibaseResults(snapshot,noExacta,'WIN_EXACTA').pending.length,1);});

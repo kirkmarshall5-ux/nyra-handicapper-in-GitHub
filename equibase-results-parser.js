@@ -86,8 +86,8 @@ function parseRace(rows,id,sourceRef){
    exacta={base:Number(base[1]),pair:pair.slice(1),pay:amount(r.items.filter(i=>i.x>=payoffX-30&&i.x+i.width<=edge(/^Payoff$/)+1).map(i=>i.str).join(' ').trim())};
   }
  }
- if(!exacta||exacta.base<=0||exacta.pair.join('-')!==field.slice(0,2).map(h=>h.n).join('-'))fail('Exacta winning pair conflicts with official finishing order');
- if(payRows.length<2||payRows[0].n!==field[0].n||payRows[1].n!==field[1].n||horseKey(payRows[0].name)!==horseKey(field[0].name)||horseKey(payRows[1].name)!==horseKey(field[1].name)||!payRows[0].win||!payRows[0].place||!payRows[1].place||payRows.slice(1).some(r=>r.win))fail('Win/place table conflicts with official order or is incomplete');
+ if(exacta&&(exacta.base<=0||exacta.pair.join('-')!==field.slice(0,2).map(h=>h.n).join('-')))fail('Exacta winning pair conflicts with official finishing order');
+ if(payRows.length<2||payRows[0].n!==field[0].n||payRows[1].n!==field[1].n||horseKey(payRows[0].name)!==horseKey(field[0].name)||horseKey(payRows[1].name)!==horseKey(field[1].name)||!payRows[0].win||payRows.slice(1).some(r=>r.win))fail('Win/place table conflicts with official order or is incomplete');
  const oddsValue=Number(oddsByProgram[field[0].n]);
  if(!/^\d+(?:\.\d+)?$/.test(oddsByProgram[field[0].n]||'')||Math.abs(payRows[0].win-2*(1+oddsValue))>0.031)fail('Standard $2 WPS denomination could not be verified against winner odds');
  const distanceLine=rows.find(r=>/^Distance:/.test(text(r)));
@@ -95,7 +95,7 @@ function parseRace(rows,id,sourceRef){
  const conditions=text(distanceLine).split(/ - Originally| Current Track Record:/i)[0].replace(/^Distance:\s*/,'');
  const distanceFurlongs=chartDistance(conditions),surface=/All Weather|Synthetic|Tapeta/i.test(conditions)?'Synth':/On The (?:Inner |Outer )?Turf/i.test(conditions)?'Turf':/On The Dirt/i.test(conditions)?'Dirt':null;
  if(distanceFurlongs===null||!surface||/\bAbout\b/i.test(conditions))fail('Actual distance/surface could not be read exactly');
- return {...id,field,finish:field.map(h=>h.n),surface,distanceFurlongs,conditions,win2:payRows[0].win,place2:Object.fromEntries(payRows.slice(0,2).map(h=>[h.n,h.place])),exactaPay:exacta.pay,exactaBase:exacta.base,verified:true,verification:'AUTOMATIC_EQUIBASE_CHART',parserVersion:CHART_PARSER_VERSION,sourceRef,sourcePages:[...new Set(rows.map(r=>r.page))],scratches:(all.match(/Scratched Horse\(s\):\s*([^\n]+)/)||[])[1]||'',recordedAt:new Date().toISOString()};
+ return {...id,field,finish:field.map(h=>h.n),surface,distanceFurlongs,conditions,win2:payRows[0].win,place2:Object.fromEntries(payRows.slice(0,2).map(h=>[h.n,h.place])),exactaPay:exacta?.pay??null,exactaBase:exacta?.base??null,verified:true,verification:'AUTOMATIC_EQUIBASE_CHART',parserVersion:CHART_PARSER_VERSION,sourceRef,sourcePages:[...new Set(rows.map(r=>r.page))],scratches:(all.match(/Scratched Horse\(s\):\s*([^\n]+)/)||[])[1]||'',recordedAt:new Date().toISOString()};
 }
 export function parseEquibaseResults(pages,{sourceRef='Equibase results PDF'}={}){
  const rows=chartRows(pages),groups=[];let current=null;
