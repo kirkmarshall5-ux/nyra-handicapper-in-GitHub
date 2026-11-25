@@ -1,0 +1,758 @@
+{
+  "all_qualifying_rows_visually_checked": true,
+  "scope": "All 12 rewarded row occurrences; five positions, source margins, shape glyph, surface and historical distance compared with original PP crops. Not a certification of every unselected or unrewarded row. Carmel Coast same historical effort repeats across two target cards.",
+  "prediction_freeze_sha256": "ce7c3bea1b44e8fb5bc3175dd3718fcd857578b569ca06a2ae13af304523cd89",
+  "symbol_mapping": {
+    "S": "plain S, favored speed",
+    "\u00ff": "circled S, extremely favored speed",
+    "C": "plain C, favored closers",
+    "\u00fd": "circled C, extremely favored closers"
+  },
+  "symbol_reference": "https://www.drf.com/news/new-symbols-more-clearly-define-race-shape-feature",
+  "expected": [
+    {
+      "key": "BAQ_2026-05-23_R7",
+      "program": "7",
+      "name": "Glorious Boy",
+      "date": "2025-11-09",
+      "page": 17,
+      "y": 391.725,
+      "source_pdf_sha256": "614767346217703688eae3e4cf1413883f7097082fa62923120ac081b05b8da4",
+      "shape_token": [
+        "\u00ff"
+      ],
+      "positions": [
+        2,
+        4,
+        4,
+        4,
+        2
+      ],
+      "calls": [
+        {
+          "position": 2,
+          "margin_token": null,
+          "margin_kind": "BEATEN_MARGIN",
+          "numeric_margin": null,
+          "margin_label": null,
+          "margin_status": "NOT_PRINTED"
+        },
+        {
+          "position": 4,
+          "margin_token": "\u00a8",
+          "margin_kind": "BEATEN_MARGIN",
+          "numeric_margin": 3,
+          "margin_label": null,
+          "margin_status": "DECODED_SOURCE_GLYPHS"
+        },
+        {
+          "position": 4,
+          "margin_token": "\u00aa\u00f4",
+          "margin_kind": "BEATEN_MARGIN",
+          "numeric_margin": 5.5,
+          "margin_label": null,
+          "margin_status": "DECODED_SOURCE_GLYPHS"
+        },
+        {
+          "position": 4,
+          "margin_token": "\u00a9",
+          "margin_kind": "BEATEN_MARGIN",
+          "numeric_margin": 4,
+          "margin_label": null,
+          "margin_status": "DECODED_SOURCE_GLYPHS"
+        },
+        {
+          "position": 2,
+          "margin_token": "\u00a6\u00f5",
+          "margin_kind": "BEATEN_MARGIN",
+          "numeric_margin": 1.25,
+          "margin_label": null,
+          "margin_status": "DECODED_SOURCE_GLYPHS"
+        }
+      ],
+      "reason": "LATE_GAIN_AGAINST_FLOW"
+    },
+    {
+      "key": "BAQ_2026-05-23_R8",
+      "program": "7",
+      "name": "Classicist",
+      "date": "2026-02-04",
+      "page": 19,
+      "y": 620.663,
+      "source_pdf_sha256": "614767346217703688eae3e4cf1413883f7097082fa62923120ac081b05b8da4",
+      "shape_token": [
+        "C"
+      ],
+      "positions": [
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "calls": [
+        {
+          "position": 2,
+          "margin_token": "\u00a6",
+          "margin_kind": "BEATEN_MARGIN",
+          "numeric_margin": 1,
+          "margin_label": null,
+          "margin_status": "DECODED_SOURCE_GLYPHS"
+        },
+        {
+          "position": 2,
+          "margin_token": "\u00f4",
+          "margin_kind": "BEATEN_MARGIN",
+          "numeric_margin": 0.5,
+          "margin_label": null,
+          "margin_status": "DECODED_SOURCE_GLYPHS"
+        },
+        {
+          "position": 2,
+          "margin_token": "\u00c7",
+          "margin_kind": "BEATEN_MARGIN",
+          "numeric_margin": null,
+          "margin_label": "HEAD",
+          "margin_status": "LABEL_ONLY"
+        },
+        {
+          "position": 2,
+          "margin_token": "\u00a6",
+          "margin_kind": "BEATEN_MARGIN",
+          "numeric_margin": 1,
+          "margin_label": null,
+          "margin_status": "DECODED_SOURCE_GLYPHS"
+        },
+        {
+          "position": 2,
+          "margin_token": "\u00a6\u00f6",
+          "margin_kind": "BEATEN_MARGIN",
+          "numeric_margin": 1.75,
+          "margin_label": null,
+          "margin_status": "DECODED_SOURCE_GLYPHS"
+        }
+      ],
+      "reason": "EARLY_RESILIENCE_AGAINST_FLOW"
+    },
+    {
+      "key": "SAR_2026-06-04_R2",
+      "program": "1",
+      "name": "Carmel Coast",
+      "date": "2026-05-01",
+      "page": 3,
+      "y": 185.767,
+      "source_pdf_sha256": "54e9d1349978feed6719f637316718c651b4a2c34e1fa61d388f71e78d283cff",
+      "shape_token": [
+        "C"
+      ],
+      "positions": [
+        2,
+        2,
+        1,
+        1,
+        1
+      ],
+      "calls": [
+        {
+          "position": 2,
+          "margin_token": null,
+          "margin_kind": "BEATEN_MARGIN",
+          "numeric_margin": null,
+          "margin_label": null,
+          "margin_status": "NOT_PRINTED"
+        },
+        {
+          "position": 2,
+          "margin_token": "\u00f4",
+          "margin_kind": "BEATEN_MARGIN",
+          "numeric_margin": 0.5,
+          "margin_label": null,
+          "margin_status": "DECODED_SOURCE_GLYPHS"
+        },
+        {
+          "position": 1,
+          "margin_token": "\u00c7",
+          "margin_kind": "LEAD_MARGIN",
+          "numeric_margin": null,
+          "margin_label": "HEAD",
+          "margin_status": "LABEL_ONLY"
+        },
+        {
+          "position": 1,
+          "margin_token": "\u00a6\u00f4",
+          "margin_kind": "LEAD_MARGIN",
+          "numeric_margin": 1.5,
+          "margin_label": null,
+          "margin_status": "DECODED_SOURCE_GLYPHS"
+        },
+        {
+          "position": 1,
+          "margin_token": "\u00a7",
+          "margin_kind": "LEAD_MARGIN",
+          "numeric_margin": 2,
+          "margin_label": null,
+          "margin_status": "DECODED_SOURCE_GLYPHS"
+        }
+      ],
+      "reason": "EARLY_RESILIENCE_AGAINST_FLOW"
+    },
+    {
+      "key": "SAR_2026-06-05_R8",
+      "program": "3",
+      "name": "Final Verdict",
+      "date": "2025-11-15",
+      "page": 20,
+      "y": 558.615,
+      "source_pdf_sha256": "4f08301fa175e608415a0f991a32981fcb32c853d1a3d3d06df5e3544e298ec8",
+      "shape_token": [
+        "\u00fd"
+      ],
+      "positions": [
+        1,
+        2,
+        2,
+        1,
+        2
+      ],
+      "calls": [
+        {
+          "position": 1,
+          "margin_token": null,
+          "margin_kind": "LEAD_MARGIN",
+          "numeric_margin": null,
+          "margin_label": null,
+          "margin_status": "NOT_PRINTED"
+        },
+        {
+          "position": 2,
+          "margin_token": "\u00f4",
+          "margin_kind": "BEATEN_MARGIN",
+          "numeric_margin": 0.5,
+          "margin_label": null,
+          "margin_status": "DECODED_SOURCE_GLYPHS"
+        },
+        {
+          "position": 2,
+          "margin_token": "\u00f4",
+          "margin_kind": "BEATEN_MARGIN",
+          "numeric_margin": 0.5,
+          "margin_label": null,
+          "margin_status": "DECODED_SOURCE_GLYPHS"
+        },
+        {
+          "position": 1,
+          "margin_token": "\u00c7",
+          "margin_kind": "LEAD_MARGIN",
+          "numeric_margin": null,
+          "margin_label": "HEAD",
+          "margin_status": "LABEL_ONLY"
+        },
+        {
+          "position": 2,
+          "margin_token": "\u00c9",
+          "margin_kind": "BEATEN_MARGIN",
+          "numeric_margin": null,
+          "margin_label": "NECK",
+          "margin_status": "LABEL_ONLY"
+        }
+      ],
+      "reason": "EARLY_RESILIENCE_AGAINST_FLOW"
+    },
+    {
+      "key": "SAR_2026-06-05_R9",
+      "program": "3",
+      "name": "Coach Mazzula",
+      "date": "2026-04-18",
+      "page": 25,
+      "y": 469.305,
+      "source_pdf_sha256": "4f08301fa175e608415a0f991a32981fcb32c853d1a3d3d06df5e3544e298ec8",
+      "shape_token": [
+        "C"
+      ],
+      "positions": [
+        2,
+        2,
+        2,
+        1,
+        1
+      ],
+      "calls": [
+        {
+          "position": 2,
+          "margin_token": "\u00a6\u00f4",
+          "margin_kind": "BEATEN_MARGIN",
+          "numeric_margin": 1.5,
+          "margin_label": null,
+          "margin_status": "DECODED_SOURCE_GLYPHS"
+        },
+        {
+          "position": 2,
+          "margin_token": "\u00f4",
+          "margin_kind": "BEATEN_MARGIN",
+          "numeric_margin": 0.5,
+          "margin_label": null,
+          "margin_status": "DECODED_SOURCE_GLYPHS"
+        },
+        {
+          "position": 2,
+          "margin_token": "\u00c7",
+          "margin_kind": "BEATEN_MARGIN",
+          "numeric_margin": null,
+          "margin_label": "HEAD",
+          "margin_status": "LABEL_ONLY"
+        },
+        {
+          "position": 1,
+          "margin_token": "\u00a7\u00f4",
+          "margin_kind": "LEAD_MARGIN",
+          "numeric_margin": 2.5,
+          "margin_label": null,
+          "margin_status": "DECODED_SOURCE_GLYPHS"
+        },
+        {
+          "position": 1,
+          "margin_token": "\u00a7\u00f5",
+          "margin_kind": "LEAD_MARGIN",
+          "numeric_margin": 2.25,
+          "margin_label": null,
+          "margin_status": "DECODED_SOURCE_GLYPHS"
+        }
+      ],
+      "reason": "EARLY_RESILIENCE_AGAINST_FLOW"
+    },
+    {
+      "key": "SAR_2026-07-10_R3",
+      "program": "1",
+      "name": "New York Scrappy",
+      "date": "2026-04-30",
+      "page": 4,
+      "y": 264.377,
+      "source_pdf_sha256": "02c746b6a9f9363d201d1ae9c2599f5874c718a0b27fe4520d639be29202d314",
+      "shape_token": [
+        "C"
+      ],
+      "positions": [
+        2,
+        1,
+        1,
+        1,
+        2
+      ],
+      "calls": [
+        {
+          "position": 2,
+          "margin_token": null,
+          "margin_kind": "BEATEN_MARGIN",
+          "numeric_margin": null,
+          "margin_label": null,
+          "margin_status": "NOT_PRINTED"
+        },
+        {
+          "position": 1,
+          "margin_token": "\u00c7",
+          "margin_kind": "LEAD_MARGIN",
+          "numeric_margin": null,
+          "margin_label": "HEAD",
+          "margin_status": "LABEL_ONLY"
+        },
+        {
+          "position": 1,
+          "margin_token": "\u00a6",
+          "margin_kind": "LEAD_MARGIN",
+          "numeric_margin": 1,
+          "margin_label": null,
+          "margin_status": "DECODED_SOURCE_GLYPHS"
+        },
+        {
+          "position": 1,
+          "margin_token": "\u00a8",
+          "margin_kind": "LEAD_MARGIN",
+          "numeric_margin": 3,
+          "margin_label": null,
+          "margin_status": "DECODED_SOURCE_GLYPHS"
+        },
+        {
+          "position": 2,
+          "margin_token": "\u00f4",
+          "margin_kind": "BEATEN_MARGIN",
+          "numeric_margin": 0.5,
+          "margin_label": null,
+          "margin_status": "DECODED_SOURCE_GLYPHS"
+        }
+      ],
+      "reason": "EARLY_RESILIENCE_AGAINST_FLOW"
+    },
+    {
+      "key": "SAR_2026-07-10_R5",
+      "program": "5",
+      "name": "Whatchatalkinabout",
+      "date": "2025-08-30",
+      "page": 11,
+      "y": 287.153,
+      "source_pdf_sha256": "02c746b6a9f9363d201d1ae9c2599f5874c718a0b27fe4520d639be29202d314",
+      "shape_token": [
+        "C"
+      ],
+      "positions": [
+        1,
+        2,
+        2,
+        1,
+        2
+      ],
+      "calls": [
+        {
+          "position": 1,
+          "margin_token": null,
+          "margin_kind": "LEAD_MARGIN",
+          "numeric_margin": null,
+          "margin_label": null,
+          "margin_status": "NOT_PRINTED"
+        },
+        {
+          "position": 2,
+          "margin_token": "\u00f4",
+          "margin_kind": "BEATEN_MARGIN",
+          "numeric_margin": 0.5,
+          "margin_label": null,
+          "margin_status": "DECODED_SOURCE_GLYPHS"
+        },
+        {
+          "position": 2,
+          "margin_token": "\u00f4",
+          "margin_kind": "BEATEN_MARGIN",
+          "numeric_margin": 0.5,
+          "margin_label": null,
+          "margin_status": "DECODED_SOURCE_GLYPHS"
+        },
+        {
+          "position": 1,
+          "margin_token": "\u00a6",
+          "margin_kind": "LEAD_MARGIN",
+          "numeric_margin": 1,
+          "margin_label": null,
+          "margin_status": "DECODED_SOURCE_GLYPHS"
+        },
+        {
+          "position": 2,
+          "margin_token": "\u00c7",
+          "margin_kind": "BEATEN_MARGIN",
+          "numeric_margin": null,
+          "margin_label": "HEAD",
+          "margin_status": "LABEL_ONLY"
+        }
+      ],
+      "reason": "EARLY_RESILIENCE_AGAINST_FLOW"
+    },
+    {
+      "key": "SAR_2026-07-10_R9",
+      "program": "3",
+      "name": "Carmel Coast",
+      "date": "2026-05-01",
+      "page": 20,
+      "y": 406.358,
+      "source_pdf_sha256": "02c746b6a9f9363d201d1ae9c2599f5874c718a0b27fe4520d639be29202d314",
+      "shape_token": [
+        "C"
+      ],
+      "positions": [
+        2,
+        2,
+        1,
+        1,
+        1
+      ],
+      "calls": [
+        {
+          "position": 2,
+          "margin_token": null,
+          "margin_kind": "BEATEN_MARGIN",
+          "numeric_margin": null,
+          "margin_label": null,
+          "margin_status": "NOT_PRINTED"
+        },
+        {
+          "position": 2,
+          "margin_token": "\u00f4",
+          "margin_kind": "BEATEN_MARGIN",
+          "numeric_margin": 0.5,
+          "margin_label": null,
+          "margin_status": "DECODED_SOURCE_GLYPHS"
+        },
+        {
+          "position": 1,
+          "margin_token": "\u00c7",
+          "margin_kind": "LEAD_MARGIN",
+          "numeric_margin": null,
+          "margin_label": "HEAD",
+          "margin_status": "LABEL_ONLY"
+        },
+        {
+          "position": 1,
+          "margin_token": "\u00a6\u00f4",
+          "margin_kind": "LEAD_MARGIN",
+          "numeric_margin": 1.5,
+          "margin_label": null,
+          "margin_status": "DECODED_SOURCE_GLYPHS"
+        },
+        {
+          "position": 1,
+          "margin_token": "\u00a7",
+          "margin_kind": "LEAD_MARGIN",
+          "numeric_margin": 2,
+          "margin_label": null,
+          "margin_status": "DECODED_SOURCE_GLYPHS"
+        }
+      ],
+      "reason": "EARLY_RESILIENCE_AGAINST_FLOW"
+    },
+    {
+      "key": "KEE_2026-10-10_R4",
+      "program": "2",
+      "name": "Morunning",
+      "date": "2026-05-22",
+      "page": 8,
+      "y": 354.936,
+      "source_pdf_sha256": "1ed95429a4e1a7428f5bc027874a7bcfb7a7a29d3238d50ff53350dc37815fdc",
+      "shape_token": [
+        "C"
+      ],
+      "positions": [
+        2,
+        2,
+        1,
+        1,
+        2
+      ],
+      "calls": [
+        {
+          "position": 2,
+          "margin_token": "\u00f4",
+          "margin_kind": "BEATEN_MARGIN",
+          "numeric_margin": 0.5,
+          "margin_label": null,
+          "margin_status": "DECODED_SOURCE_GLYPHS"
+        },
+        {
+          "position": 2,
+          "margin_token": "\u00a6\u00f4",
+          "margin_kind": "BEATEN_MARGIN",
+          "numeric_margin": 1.5,
+          "margin_label": null,
+          "margin_status": "DECODED_SOURCE_GLYPHS"
+        },
+        {
+          "position": 1,
+          "margin_token": "\u00a6\u00f4",
+          "margin_kind": "LEAD_MARGIN",
+          "numeric_margin": 1.5,
+          "margin_label": null,
+          "margin_status": "DECODED_SOURCE_GLYPHS"
+        },
+        {
+          "position": 1,
+          "margin_token": "\u00a7",
+          "margin_kind": "LEAD_MARGIN",
+          "numeric_margin": 2,
+          "margin_label": null,
+          "margin_status": "DECODED_SOURCE_GLYPHS"
+        },
+        {
+          "position": 2,
+          "margin_token": "\u00c7",
+          "margin_kind": "BEATEN_MARGIN",
+          "numeric_margin": null,
+          "margin_label": "HEAD",
+          "margin_status": "LABEL_ONLY"
+        }
+      ],
+      "reason": "EARLY_RESILIENCE_AGAINST_FLOW"
+    },
+    {
+      "key": "KEE_2026-10-14_R6",
+      "program": "2",
+      "name": "Blast Furnace",
+      "date": "2026-08-30",
+      "page": 13,
+      "y": 418.844,
+      "source_pdf_sha256": "217159278a03aab49503263b228968839bd95c529d8cecf7672252f5096d3f42",
+      "shape_token": [
+        "\u00fd"
+      ],
+      "positions": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "calls": [
+        {
+          "position": 1,
+          "margin_token": "\u00a6\u00f4",
+          "margin_kind": "LEAD_MARGIN",
+          "numeric_margin": 1.5,
+          "margin_label": null,
+          "margin_status": "DECODED_SOURCE_GLYPHS"
+        },
+        {
+          "position": 1,
+          "margin_token": "\u00a7\u00f4",
+          "margin_kind": "LEAD_MARGIN",
+          "numeric_margin": 2.5,
+          "margin_label": null,
+          "margin_status": "DECODED_SOURCE_GLYPHS"
+        },
+        {
+          "position": 1,
+          "margin_token": "\u00a9\u00f4",
+          "margin_kind": "LEAD_MARGIN",
+          "numeric_margin": 4.5,
+          "margin_label": null,
+          "margin_status": "DECODED_SOURCE_GLYPHS"
+        },
+        {
+          "position": 1,
+          "margin_token": "\u00ab",
+          "margin_kind": "LEAD_MARGIN",
+          "numeric_margin": 6,
+          "margin_label": null,
+          "margin_status": "DECODED_SOURCE_GLYPHS"
+        },
+        {
+          "position": 1,
+          "margin_token": "\u00a4\u00f5",
+          "margin_kind": "LEAD_MARGIN",
+          "numeric_margin": 8.25,
+          "margin_label": null,
+          "margin_status": "DECODED_SOURCE_GLYPHS"
+        }
+      ],
+      "reason": "EARLY_RESILIENCE_AGAINST_FLOW"
+    },
+    {
+      "key": "BEL_2026-10-17_R1",
+      "program": "4",
+      "name": "Kunshan Bridge",
+      "date": "2026-06-20",
+      "page": 2,
+      "y": 294.987,
+      "source_pdf_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+      "shape_token": [
+        "C"
+      ],
+      "positions": [
+        3,
+        2,
+        2,
+        1,
+        1
+      ],
+      "calls": [
+        {
+          "position": 3,
+          "margin_token": null,
+          "margin_kind": "BEATEN_MARGIN",
+          "numeric_margin": null,
+          "margin_label": null,
+          "margin_status": "NOT_PRINTED"
+        },
+        {
+          "position": 2,
+          "margin_token": "\u00a6",
+          "margin_kind": "BEATEN_MARGIN",
+          "numeric_margin": 1,
+          "margin_label": null,
+          "margin_status": "DECODED_SOURCE_GLYPHS"
+        },
+        {
+          "position": 2,
+          "margin_token": "\u00c7",
+          "margin_kind": "BEATEN_MARGIN",
+          "numeric_margin": null,
+          "margin_label": "HEAD",
+          "margin_status": "LABEL_ONLY"
+        },
+        {
+          "position": 1,
+          "margin_token": "\u00a7\u00f4",
+          "margin_kind": "LEAD_MARGIN",
+          "numeric_margin": 2.5,
+          "margin_label": null,
+          "margin_status": "DECODED_SOURCE_GLYPHS"
+        },
+        {
+          "position": 1,
+          "margin_token": "\u00a7\u00f4",
+          "margin_kind": "LEAD_MARGIN",
+          "numeric_margin": 2.5,
+          "margin_label": null,
+          "margin_status": "DECODED_SOURCE_GLYPHS"
+        }
+      ],
+      "reason": "EARLY_RESILIENCE_AGAINST_FLOW"
+    },
+    {
+      "key": "BEL_2026-10-17_R8",
+      "program": "8",
+      "name": "Furry Fox",
+      "date": "2026-09-20",
+      "page": 22,
+      "y": 83.582,
+      "source_pdf_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+      "shape_token": [
+        "\u00fd"
+      ],
+      "positions": [
+        3,
+        1,
+        1,
+        1,
+        1
+      ],
+      "calls": [
+        {
+          "position": 3,
+          "margin_token": null,
+          "margin_kind": "BEATEN_MARGIN",
+          "numeric_margin": null,
+          "margin_label": null,
+          "margin_status": "NOT_PRINTED"
+        },
+        {
+          "position": 1,
+          "margin_token": "\u00a6",
+          "margin_kind": "LEAD_MARGIN",
+          "numeric_margin": 1,
+          "margin_label": null,
+          "margin_status": "DECODED_SOURCE_GLYPHS"
+        },
+        {
+          "position": 1,
+          "margin_token": "\u00a6",
+          "margin_kind": "LEAD_MARGIN",
+          "numeric_margin": 1,
+          "margin_label": null,
+          "margin_status": "DECODED_SOURCE_GLYPHS"
+        },
+        {
+          "position": 1,
+          "margin_token": "\u00a6\u00f4",
+          "margin_kind": "LEAD_MARGIN",
+          "numeric_margin": 1.5,
+          "margin_label": null,
+          "margin_status": "DECODED_SOURCE_GLYPHS"
+        },
+        {
+          "position": 1,
+          "margin_token": "\u00a6",
+          "margin_kind": "LEAD_MARGIN",
+          "numeric_margin": 1,
+          "margin_label": null,
+          "margin_status": "DECODED_SOURCE_GLYPHS"
+        }
+      ],
+      "reason": "EARLY_RESILIENCE_AGAINST_FLOW"
+    }
+  ]
+}

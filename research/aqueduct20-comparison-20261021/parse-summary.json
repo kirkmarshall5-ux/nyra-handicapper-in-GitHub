@@ -1,0 +1,202 @@
+[
+  {
+    "file": "AQU--01-17-2026(1).pdf",
+    "date": "2026-01-17",
+    "track": "Aqueduct",
+    "races": 9,
+    "horses": 67,
+    "pages": 25,
+    "blockers": [],
+    "source_sha256": "46f9b08dd7339bf0ec5a15ea32c3709901a015375a0ac2a83f9f7295a2d86afa"
+  },
+  {
+    "file": "AQU--01-18-2026(1).pdf",
+    "date": "2026-01-18",
+    "track": "Aqueduct",
+    "races": 8,
+    "horses": 57,
+    "pages": 18,
+    "blockers": [],
+    "source_sha256": "b628d84460d7418ff961d32fcccd6ddc83bfe6bcb58d8d31a1d2ddba0e8de0e1"
+  },
+  {
+    "file": "AQU--01-22-2026.pdf",
+    "date": "2026-01-22",
+    "track": "Aqueduct",
+    "races": 8,
+    "horses": 53,
+    "pages": 17,
+    "blockers": [],
+    "source_sha256": "84f6c6808ed8a05c289b37d2651def95f441b6b4a05e9e0c22de2b3cd3d016d1"
+  },
+  {
+    "file": "AQU--01-23-2026.pdf",
+    "date": "2026-01-23",
+    "track": "Aqueduct",
+    "races": 8,
+    "horses": 61,
+    "pages": 18,
+    "blockers": [],
+    "source_sha256": "30e00f1873cc838a6b1c194e23430bd1db27a1e453267cbbb31729391887676e"
+  },
+  {
+    "file": "AQU--02-11-2026.pdf",
+    "date": "2026-02-11",
+    "track": "Aqueduct",
+    "races": 9,
+    "horses": 81,
+    "pages": 22,
+    "blockers": [],
+    "source_sha256": "dafaa6dc21124f3fe8598baea589ba039a65457d869e4b6cb168dda453917f95"
+  },
+  {
+    "file": "AQU--02-12-2026.pdf",
+    "date": "2026-02-12",
+    "track": "Aqueduct",
+    "races": 9,
+    "horses": 62,
+    "pages": 18,
+    "blockers": [],
+    "source_sha256": "0dcb8e9accef940c10fa3d4a94ada53e4857c3c8ce362f63e80d1174346ce03d"
+  },
+  {
+    "file": "AQU--02-14-2026.pdf",
+    "date": "2026-02-14",
+    "track": "Aqueduct",
+    "races": 10,
+    "horses": 74,
+    "pages": 22,
+    "blockers": [],
+    "source_sha256": "e2a5ea0203ad4f06c0ceeb92b1cd61d2db4cfaf1cf0b6335e88a7efe2155475f"
+  },
+  {
+    "file": "AQU--02-15-2026.pdf",
+    "date": "2026-02-15",
+    "track": "Aqueduct",
+    "races": 8,
+    "horses": 56,
+    "pages": 17,
+    "blockers": [],
+    "source_sha256": "88f194002c88d2d762729bb32f41edc99759b088c8dbc8cd25e6cb0f0ad52916"
+  },
+  {
+    "file": "AQU--02-19-2026.pdf",
+    "date": "2026-02-19",
+    "track": "Aqueduct",
+    "races": 8,
+    "horses": 64,
+    "pages": 20,
+    "blockers": [],
+    "source_sha256": "9bcb447f747d6dfb74525d4e07d0c5e41da57140b67c2c336afd64b67fda5b00"
+  },
+  {
+    "file": "AQU--02-20-2026.pdf",
+    "date": "2026-02-20",
+    "track": "Aqueduct",
+    "races": 8,
+    "horses": 51,
+    "pages": 17,
+    "blockers": [],
+    "source_sha256": "909be534938e553b1755b9f080943b0091570e0a203e208a6b1b28726865d2b0"
+  },
+  {
+    "file": "AQU--02-21-2026(1).pdf",
+    "date": "2026-02-21",
+    "track": "Aqueduct",
+    "races": 9,
+    "horses": 62,
+    "pages": 19,
+    "blockers": [],
+    "source_sha256": "71eb58a578c5ba61d8022608f59c8709741e0be773fcdf71e1fbe6c5b764a9fa"
+  },
+  {
+    "file": "AQU--02-22-2026.pdf",
+    "date": "2026-02-22",
+    "track": "Aqueduct",
+    "races": 8,
+    "horses": 55,
+    "pages": 17,
+    "blockers": [],
+    "source_sha256": "99c43b5a705aef3cfffabb96f6bd731a4f93da5844586c996bdf1ca762588fea"
+  },
+  {
+    "file": "AQU--02-26-2026.pdf",
+    "date": "2026-02-26",
+    "track": "Aqueduct",
+    "races": 7,
+    "horses": 45,
+    "pages": 14,
+    "blockers": [],
+    "source_sha256": "c65ca2610ef0c38ab644d1199c4aba15fd9e70a8c5d755579c6047861ff351a8"
+  },
+  {
+    "file": "AQU--02-27-2026.pdf",
+    "date": "2026-02-27",
+    "track": "Aqueduct",
+    "races": 8,
+    "horses": 52,
+    "pages": 16,
+    "blockers": [],
+    "source_sha256": "d78e5036e02d1f87d1e4d298565f131b71ce5e6af76ac27d10c132984953632e"
+  },
+  {
+    "file": "AQU--03-05-2026(1).pdf",
+    "date": "2026-03-05",
+    "track": "Aqueduct",
+    "races": 8,
+    "horses": 61,
+    "pages": 18,
+    "blockers": [],
+    "source_sha256": "236e0b7163a7d67d9628861a72000a9576d28df82ed24b9fb30239bb6920d90b"
+  },
+  {
+    "file": "AQU--03-15-2026(1).pdf",
+    "date": "2026-03-15",
+    "track": "Aqueduct",
+    "races": 8,
+    "horses": 54,
+    "pages": 18,
+    "blockers": [],
+    "source_sha256": "dffd037650c65e8099469870570ba52ac90f3899ee698940cd3d367f736beb92"
+  },
+  {
+    "file": "AQU--03-27-2026.pdf",
+    "date": "2026-03-27",
+    "track": "Aqueduct",
+    "races": 8,
+    "horses": 60,
+    "pages": 21,
+    "blockers": [],
+    "source_sha256": "ecf5c0284578616ffa690e31000ec0e0ebf79d0af03e1420050f1bd3c0f91007"
+  },
+  {
+    "file": "AQU--03-28-2026.pdf",
+    "date": "2026-03-28",
+    "track": "Aqueduct",
+    "races": 9,
+    "horses": 78,
+    "pages": 27,
+    "blockers": [],
+    "source_sha256": "3f327d164e68a27e80f1a5ce0cadca2b33b52a2ce1d558838bfe33cd96c75815"
+  },
+  {
+    "file": "AQU--04-04-2026.pdf",
+    "date": "2026-04-04",
+    "track": "Aqueduct",
+    "races": 12,
+    "horses": 98,
+    "pages": 30,
+    "blockers": [],
+    "source_sha256": "c07b2f883b8cf94a233e51ca3e2c3fb5180e9b1fe0a9a7bef88ae0076834c956"
+  },
+  {
+    "file": "AQU--04-09-2026.pdf",
+    "date": "2026-04-09",
+    "track": "Aqueduct",
+    "races": 7,
+    "horses": 49,
+    "pages": 18,
+    "blockers": [],
+    "source_sha256": "848993081953b95a0637b73876a605c6b2f4ebe59e91c93cc9d9745706d9ea2b"
+  }
+]

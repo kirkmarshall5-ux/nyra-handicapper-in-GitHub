@@ -1,0 +1,4 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {gradeOrder} from '../scripts/evaluate-brisnet-matching.mjs';
+const ranked=ns=>ns.map(n=>({n:String(n)}));
+test('known first-four pairs are graded without inventing the rest of the order',()=>{const g=gradeOrder(ranked([1,2,3,4,5]),['1','2','3','4']);assert.equal(g.correct_pairs,6);assert.equal(g.comparable_pairs,6);assert.equal(g.superfecta,true);const x=gradeOrder(ranked([4,3,2,1]),['1','2','3','4']);assert.equal(x.correct_pairs,0);assert.equal(x.win,false);});
+test('unranked actual finishers stay visible in pair coverage and exact-order failures',()=>{const g=gradeOrder(ranked([2,3,4]),['1','2','3','4']);assert.equal(g.winner_rank,null);assert.equal(g.win,false);assert.equal(g.possible_pairs,6);assert.equal(g.comparable_pairs,3);assert.equal(g.correct_pairs,3);assert.equal(g.full_top4_ranked,false);});

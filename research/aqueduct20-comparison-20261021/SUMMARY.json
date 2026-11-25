@@ -1,0 +1,799 @@
+{
+  "classification": "NEWLY_RELEASED_HISTORICAL_CARDS_RETROSPECTIVE_NOT_PROSPECTIVE",
+  "cards_uploaded": 20,
+  "scheduled_races": 169,
+  "completed_races": 156,
+  "cards_with_results": 19,
+  "cancelled_races": 13,
+  "final_starters": 1032,
+  "scratched_entries": 112,
+  "fewer_than_three_starts": 147,
+  "missing_certified_recent_three_beyer": 39,
+  "recent3_beyer_eligible_horses": 846,
+  "recent3_pace_beyer_eligible_horses": 0,
+  "recent3_combined_status": "NOT_TESTABLE_NO_INDIVIDUAL_LAST_THREE_PACE_FIGURES",
+  "full_contender_races": 131,
+  "partial_contender_races": 25,
+  "insufficient_beyer_top4_races": 21,
+  "all_arms_available_descriptive": [
+    {
+      "arm": "CURRENT_CONTENDER",
+      "races": 131,
+      "cards": 19,
+      "covered_finishers": 378,
+      "possible_finishers": 524,
+      "mean_top4_hits": 2.885496183206107,
+      "hits_distribution": {
+        "0": 0,
+        "1": 4,
+        "2": 34,
+        "3": 66,
+        "4": 27
+      },
+      "winner_selected": 109,
+      "winner": 38,
+      "exacta": 14,
+      "trifecta": 5,
+      "superfecta": 4,
+      "slots": [
+        38,
+        28,
+        25,
+        23
+      ],
+      "fully_ranked_actual4_races": 131,
+      "rank_error": 1.6145038167938932,
+      "pairs_correct": 477,
+      "pairs_possible": 786
+    },
+    {
+      "arm": "NO_CONTEXT",
+      "races": 131,
+      "cards": 19,
+      "covered_finishers": 379,
+      "possible_finishers": 524,
+      "mean_top4_hits": 2.8931297709923665,
+      "hits_distribution": {
+        "0": 0,
+        "1": 4,
+        "2": 33,
+        "3": 67,
+        "4": 27
+      },
+      "winner_selected": 109,
+      "winner": 38,
+      "exacta": 14,
+      "trifecta": 5,
+      "superfecta": 4,
+      "slots": [
+        38,
+        27,
+        25,
+        23
+      ],
+      "fully_ranked_actual4_races": 131,
+      "rank_error": 1.6125954198473282,
+      "pairs_correct": 480,
+      "pairs_possible": 786
+    },
+    {
+      "arm": "MORNING_LINE",
+      "races": 156,
+      "cards": 19,
+      "covered_finishers": 465,
+      "possible_finishers": 624,
+      "mean_top4_hits": 2.980769230769231,
+      "hits_distribution": {
+        "0": 1,
+        "1": 2,
+        "2": 27,
+        "3": 95,
+        "4": 31
+      },
+      "winner_selected": 134,
+      "winner": 58,
+      "exacta": 16,
+      "trifecta": 5,
+      "superfecta": 1,
+      "slots": [
+        58,
+        30,
+        31,
+        28
+      ],
+      "fully_ranked_actual4_races": 156,
+      "rank_error": 1.4903846153846154,
+      "pairs_correct": 593,
+      "pairs_possible": 936
+    },
+    {
+      "arm": "LAST3_BEYER_DIAGNOSTIC",
+      "races": 135,
+      "cards": 19,
+      "covered_finishers": 391,
+      "possible_finishers": 540,
+      "mean_top4_hits": 2.8962962962962964,
+      "hits_distribution": {
+        "0": 0,
+        "1": 7,
+        "2": 26,
+        "3": 76,
+        "4": 26
+      },
+      "winner_selected": 107,
+      "winner": 33,
+      "exacta": 9,
+      "trifecta": 4,
+      "superfecta": 0,
+      "slots": [
+        33,
+        33,
+        21,
+        28
+      ],
+      "fully_ranked_actual4_races": 104,
+      "rank_error": 1.6442307692307692,
+      "pairs_correct": 353,
+      "pairs_possible": 624
+    }
+  ],
+  "common_contender_ml": [
+    {
+      "arm": "CURRENT_CONTENDER",
+      "races": 131,
+      "cards": 19,
+      "covered_finishers": 378,
+      "possible_finishers": 524,
+      "mean_top4_hits": 2.885496183206107,
+      "hits_distribution": {
+        "0": 0,
+        "1": 4,
+        "2": 34,
+        "3": 66,
+        "4": 27
+      },
+      "winner_selected": 109,
+      "winner": 38,
+      "exacta": 14,
+      "trifecta": 5,
+      "superfecta": 4,
+      "slots": [
+        38,
+        28,
+        25,
+        23
+      ],
+      "fully_ranked_actual4_races": 131,
+      "rank_error": 1.6145038167938932,
+      "pairs_correct": 477,
+      "pairs_possible": 786
+    },
+    {
+      "arm": "NO_CONTEXT",
+      "races": 131,
+      "cards": 19,
+      "covered_finishers": 379,
+      "possible_finishers": 524,
+      "mean_top4_hits": 2.8931297709923665,
+      "hits_distribution": {
+        "0": 0,
+        "1": 4,
+        "2": 33,
+        "3": 67,
+        "4": 27
+      },
+      "winner_selected": 109,
+      "winner": 38,
+      "exacta": 14,
+      "trifecta": 5,
+      "superfecta": 4,
+      "slots": [
+        38,
+        27,
+        25,
+        23
+      ],
+      "fully_ranked_actual4_races": 131,
+      "rank_error": 1.6125954198473282,
+      "pairs_correct": 480,
+      "pairs_possible": 786
+    },
+    {
+      "arm": "MORNING_LINE",
+      "races": 131,
+      "cards": 19,
+      "covered_finishers": 388,
+      "possible_finishers": 524,
+      "mean_top4_hits": 2.9618320610687023,
+      "hits_distribution": {
+        "0": 1,
+        "1": 1,
+        "2": 25,
+        "3": 79,
+        "4": 25
+      },
+      "winner_selected": 112,
+      "winner": 44,
+      "exacta": 12,
+      "trifecta": 4,
+      "superfecta": 1,
+      "slots": [
+        44,
+        26,
+        24,
+        21
+      ],
+      "fully_ranked_actual4_races": 131,
+      "rank_error": 1.532442748091603,
+      "pairs_correct": 486,
+      "pairs_possible": 786
+    }
+  ],
+  "common_all4_actual4_ranked": [
+    {
+      "arm": "CURRENT_CONTENDER",
+      "races": 102,
+      "cards": 19,
+      "covered_finishers": 300,
+      "possible_finishers": 408,
+      "mean_top4_hits": 2.9411764705882355,
+      "hits_distribution": {
+        "0": 0,
+        "1": 2,
+        "2": 24,
+        "3": 54,
+        "4": 22
+      },
+      "winner_selected": 88,
+      "winner": 30,
+      "exacta": 9,
+      "trifecta": 2,
+      "superfecta": 2,
+      "slots": [
+        30,
+        18,
+        17,
+        17
+      ],
+      "fully_ranked_actual4_races": 102,
+      "rank_error": 1.6127450980392157,
+      "pairs_correct": 366,
+      "pairs_possible": 612
+    },
+    {
+      "arm": "NO_CONTEXT",
+      "races": 102,
+      "cards": 19,
+      "covered_finishers": 301,
+      "possible_finishers": 408,
+      "mean_top4_hits": 2.950980392156863,
+      "hits_distribution": {
+        "0": 0,
+        "1": 2,
+        "2": 23,
+        "3": 55,
+        "4": 22
+      },
+      "winner_selected": 88,
+      "winner": 30,
+      "exacta": 9,
+      "trifecta": 2,
+      "superfecta": 2,
+      "slots": [
+        30,
+        17,
+        18,
+        17
+      ],
+      "fully_ranked_actual4_races": 102,
+      "rank_error": 1.6102941176470589,
+      "pairs_correct": 367,
+      "pairs_possible": 612
+    },
+    {
+      "arm": "MORNING_LINE",
+      "races": 102,
+      "cards": 19,
+      "covered_finishers": 303,
+      "possible_finishers": 408,
+      "mean_top4_hits": 2.9705882352941178,
+      "hits_distribution": {
+        "0": 1,
+        "1": 0,
+        "2": 20,
+        "3": 61,
+        "4": 20
+      },
+      "winner_selected": 89,
+      "winner": 34,
+      "exacta": 5,
+      "trifecta": 1,
+      "superfecta": 0,
+      "slots": [
+        34,
+        15,
+        13,
+        17
+      ],
+      "fully_ranked_actual4_races": 102,
+      "rank_error": 1.5784313725490196,
+      "pairs_correct": 373,
+      "pairs_possible": 612
+    },
+    {
+      "arm": "LAST3_BEYER_DIAGNOSTIC",
+      "races": 102,
+      "cards": 19,
+      "covered_finishers": 308,
+      "possible_finishers": 408,
+      "mean_top4_hits": 3.019607843137255,
+      "hits_distribution": {
+        "0": 0,
+        "1": 3,
+        "2": 17,
+        "3": 57,
+        "4": 25
+      },
+      "winner_selected": 87,
+      "winner": 22,
+      "exacta": 5,
+      "trifecta": 1,
+      "superfecta": 0,
+      "slots": [
+        22,
+        26,
+        14,
+        23
+      ],
+      "fully_ranked_actual4_races": 102,
+      "rank_error": 1.6642156862745099,
+      "pairs_correct": 342,
+      "pairs_possible": 612
+    }
+  ],
+  "paired_contender": {
+    "races": 131,
+    "cards": 19,
+    "arm": "NO_CONTEXT",
+    "control": "CURRENT_CONTENDER",
+    "changed_orders": 9,
+    "mean_rank_error_difference": -0.001908396946564972,
+    "paired_card_bootstrap_95": [
+      -0.008445945945945946,
+      0.004032258064516129
+    ],
+    "replicates": 10000,
+    "seed": 20261021,
+    "pair_delta": 3,
+    "coverage_delta": 1,
+    "winner_selected_delta": 0,
+    "exact_top4_delta": 0,
+    "better_rank_error_races": 2,
+    "worse_rank_error_races": 1
+  },
+  "paired_contender_min5": {
+    "races": 123,
+    "cards": 19,
+    "arm": "NO_CONTEXT",
+    "control": "CURRENT_CONTENDER",
+    "changed_orders": 8,
+    "mean_rank_error_difference": -0.00203252032520318,
+    "paired_card_bootstrap_95": [
+      -0.008928571428571428,
+      0.004273504273504274
+    ],
+    "replicates": 10000,
+    "seed": 20261021,
+    "pair_delta": 2,
+    "coverage_delta": 1,
+    "winner_selected_delta": 0,
+    "exact_top4_delta": 0,
+    "better_rank_error_races": 2,
+    "worse_rank_error_races": 1
+  },
+  "field_size_breakdowns": {
+    "4": [
+      {
+        "arm": "CURRENT_CONTENDER",
+        "races": 8,
+        "cards": 6,
+        "covered_finishers": 32,
+        "possible_finishers": 32,
+        "mean_top4_hits": 4.0,
+        "hits_distribution": {
+          "0": 0,
+          "1": 0,
+          "2": 0,
+          "3": 0,
+          "4": 8
+        },
+        "winner_selected": 8,
+        "winner": 1,
+        "exacta": 1,
+        "trifecta": 1,
+        "superfecta": 1,
+        "slots": [
+          1,
+          3,
+          3,
+          5
+        ],
+        "fully_ranked_actual4_races": 8,
+        "rank_error": 1.0625,
+        "pairs_correct": 26,
+        "pairs_possible": 48
+      },
+      {
+        "arm": "NO_CONTEXT",
+        "races": 8,
+        "cards": 6,
+        "covered_finishers": 32,
+        "possible_finishers": 32,
+        "mean_top4_hits": 4.0,
+        "hits_distribution": {
+          "0": 0,
+          "1": 0,
+          "2": 0,
+          "3": 0,
+          "4": 8
+        },
+        "winner_selected": 8,
+        "winner": 1,
+        "exacta": 1,
+        "trifecta": 1,
+        "superfecta": 1,
+        "slots": [
+          1,
+          2,
+          3,
+          5
+        ],
+        "fully_ranked_actual4_races": 8,
+        "rank_error": 1.0625,
+        "pairs_correct": 27,
+        "pairs_possible": 48
+      },
+      {
+        "arm": "MORNING_LINE",
+        "races": 8,
+        "cards": 6,
+        "covered_finishers": 32,
+        "possible_finishers": 32,
+        "mean_top4_hits": 4.0,
+        "hits_distribution": {
+          "0": 0,
+          "1": 0,
+          "2": 0,
+          "3": 0,
+          "4": 8
+        },
+        "winner_selected": 8,
+        "winner": 1,
+        "exacta": 1,
+        "trifecta": 1,
+        "superfecta": 1,
+        "slots": [
+          1,
+          3,
+          2,
+          4
+        ],
+        "fully_ranked_actual4_races": 8,
+        "rank_error": 1.0625,
+        "pairs_correct": 29,
+        "pairs_possible": 48
+      },
+      {
+        "arm": "LAST3_BEYER_DIAGNOSTIC",
+        "races": 7,
+        "cards": 6,
+        "covered_finishers": 28,
+        "possible_finishers": 28,
+        "mean_top4_hits": 4.0,
+        "hits_distribution": {
+          "0": 0,
+          "1": 0,
+          "2": 0,
+          "3": 0,
+          "4": 7
+        },
+        "winner_selected": 7,
+        "winner": 1,
+        "exacta": 0,
+        "trifecta": 0,
+        "superfecta": 0,
+        "slots": [
+          1,
+          1,
+          2,
+          3
+        ],
+        "fully_ranked_actual4_races": 7,
+        "rank_error": 1.2142857142857142,
+        "pairs_correct": 22,
+        "pairs_possible": 42
+      }
+    ],
+    "5-7": [
+      {
+        "arm": "CURRENT_CONTENDER",
+        "races": 98,
+        "cards": 19,
+        "covered_finishers": 287,
+        "possible_finishers": 392,
+        "mean_top4_hits": 2.9285714285714284,
+        "hits_distribution": {
+          "0": 0,
+          "1": 0,
+          "2": 25,
+          "3": 55,
+          "4": 18
+        },
+        "winner_selected": 83,
+        "winner": 32,
+        "exacta": 11,
+        "trifecta": 4,
+        "superfecta": 3,
+        "slots": [
+          32,
+          23,
+          20,
+          13
+        ],
+        "fully_ranked_actual4_races": 98,
+        "rank_error": 1.4948979591836735,
+        "pairs_correct": 367,
+        "pairs_possible": 588
+      },
+      {
+        "arm": "NO_CONTEXT",
+        "races": 98,
+        "cards": 19,
+        "covered_finishers": 287,
+        "possible_finishers": 392,
+        "mean_top4_hits": 2.9285714285714284,
+        "hits_distribution": {
+          "0": 0,
+          "1": 0,
+          "2": 25,
+          "3": 55,
+          "4": 18
+        },
+        "winner_selected": 83,
+        "winner": 32,
+        "exacta": 11,
+        "trifecta": 4,
+        "superfecta": 3,
+        "slots": [
+          32,
+          23,
+          19,
+          13
+        ],
+        "fully_ranked_actual4_races": 98,
+        "rank_error": 1.4948979591836735,
+        "pairs_correct": 369,
+        "pairs_possible": 588
+      },
+      {
+        "arm": "MORNING_LINE",
+        "races": 113,
+        "cards": 19,
+        "covered_finishers": 341,
+        "possible_finishers": 452,
+        "mean_top4_hits": 3.017699115044248,
+        "hits_distribution": {
+          "0": 0,
+          "1": 0,
+          "2": 19,
+          "3": 73,
+          "4": 21
+        },
+        "winner_selected": 102,
+        "winner": 48,
+        "exacta": 11,
+        "trifecta": 3,
+        "superfecta": 0,
+        "slots": [
+          48,
+          18,
+          22,
+          21
+        ],
+        "fully_ranked_actual4_races": 113,
+        "rank_error": 1.3628318584070795,
+        "pairs_correct": 441,
+        "pairs_possible": 678
+      },
+      {
+        "arm": "LAST3_BEYER_DIAGNOSTIC",
+        "races": 99,
+        "cards": 19,
+        "covered_finishers": 296,
+        "possible_finishers": 396,
+        "mean_top4_hits": 2.98989898989899,
+        "hits_distribution": {
+          "0": 0,
+          "1": 0,
+          "2": 19,
+          "3": 62,
+          "4": 18
+        },
+        "winner_selected": 79,
+        "winner": 27,
+        "exacta": 6,
+        "trifecta": 3,
+        "superfecta": 0,
+        "slots": [
+          27,
+          27,
+          17,
+          21
+        ],
+        "fully_ranked_actual4_races": 78,
+        "rank_error": 1.5224358974358974,
+        "pairs_correct": 268,
+        "pairs_possible": 468
+      }
+    ],
+    "8+": [
+      {
+        "arm": "CURRENT_CONTENDER",
+        "races": 25,
+        "cards": 11,
+        "covered_finishers": 59,
+        "possible_finishers": 100,
+        "mean_top4_hits": 2.36,
+        "hits_distribution": {
+          "0": 0,
+          "1": 4,
+          "2": 9,
+          "3": 11,
+          "4": 1
+        },
+        "winner_selected": 18,
+        "winner": 5,
+        "exacta": 2,
+        "trifecta": 0,
+        "superfecta": 0,
+        "slots": [
+          5,
+          2,
+          2,
+          5
+        ],
+        "fully_ranked_actual4_races": 25,
+        "rank_error": 2.26,
+        "pairs_correct": 84,
+        "pairs_possible": 150
+      },
+      {
+        "arm": "NO_CONTEXT",
+        "races": 25,
+        "cards": 11,
+        "covered_finishers": 60,
+        "possible_finishers": 100,
+        "mean_top4_hits": 2.4,
+        "hits_distribution": {
+          "0": 0,
+          "1": 4,
+          "2": 8,
+          "3": 12,
+          "4": 1
+        },
+        "winner_selected": 18,
+        "winner": 5,
+        "exacta": 2,
+        "trifecta": 0,
+        "superfecta": 0,
+        "slots": [
+          5,
+          2,
+          3,
+          5
+        ],
+        "fully_ranked_actual4_races": 25,
+        "rank_error": 2.25,
+        "pairs_correct": 84,
+        "pairs_possible": 150
+      },
+      {
+        "arm": "MORNING_LINE",
+        "races": 35,
+        "cards": 14,
+        "covered_finishers": 92,
+        "possible_finishers": 140,
+        "mean_top4_hits": 2.6285714285714286,
+        "hits_distribution": {
+          "0": 1,
+          "1": 2,
+          "2": 8,
+          "3": 22,
+          "4": 2
+        },
+        "winner_selected": 24,
+        "winner": 9,
+        "exacta": 4,
+        "trifecta": 1,
+        "superfecta": 0,
+        "slots": [
+          9,
+          9,
+          7,
+          3
+        ],
+        "fully_ranked_actual4_races": 35,
+        "rank_error": 2.0,
+        "pairs_correct": 123,
+        "pairs_possible": 210
+      },
+      {
+        "arm": "LAST3_BEYER_DIAGNOSTIC",
+        "races": 29,
+        "cards": 12,
+        "covered_finishers": 67,
+        "possible_finishers": 116,
+        "mean_top4_hits": 2.310344827586207,
+        "hits_distribution": {
+          "0": 0,
+          "1": 7,
+          "2": 7,
+          "3": 14,
+          "4": 1
+        },
+        "winner_selected": 21,
+        "winner": 5,
+        "exacta": 3,
+        "trifecta": 1,
+        "superfecta": 0,
+        "slots": [
+          5,
+          5,
+          2,
+          4
+        ],
+        "fully_ranked_actual4_races": 19,
+        "rank_error": 2.3026315789473686,
+        "pairs_correct": 63,
+        "pairs_possible": 114
+      }
+    ]
+  },
+  "ml_boundary_ties": 25,
+  "beyer_boundary_ties": 6,
+  "prediction_freeze_sha256": "df00ad412a676c3c1682ba32b98cb239c1dfc27ea4b590bd73ad09af44f58132",
+  "production_changed": false,
+  "newly_used_cards": 20,
+  "still_sealed_cards": 10,
+  "prospective_confirmation_claimed": false,
+  "morning_line_rank_by_actual_finish_1_2_3_4_outside": [
+    [
+      58,
+      42,
+      23,
+      17,
+      16
+    ],
+    [
+      36,
+      30,
+      30,
+      24,
+      36
+    ],
+    [
+      20,
+      27,
+      31,
+      23,
+      55
+    ],
+    [
+      20,
+      25,
+      31,
+      28,
+      52
+    ]
+  ]
+}

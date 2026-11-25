@@ -1,0 +1,13 @@
+{
+  "classification": "RESEARCH_CALL_SLOT_LABEL_CORRECTION",
+  "parent_source_audit_commit": "87a20246d55d0cf41aceb9bc2f76ec8dc095037f",
+  "reason": "Five PP positions cannot universally be called Start/First/Second across distances. Preserve raw slots until physical call is certified.",
+  "numeric_source_evidence_changed": false,
+  "production_changed": false,
+  "prior_protocol_hashes": "Historical original audit version; corrected files separately identified here.",
+  "corrected_sha256": {
+    "audit_drf_sources.py": "cecb00d7ced36b15ac2a54ba0051729a6ff5e3e3370e36f83a5b5132e2b14a3d",
+    "test_drf_source_audit.py": "3913276e0c7126be5ad2cd92b5d3c4b9d94f76ed3fcf0d92aa97f0ca8babab60",
+    "finalize_audit.py": "babcd6d7bcf698f22037a658e11ca43e3c627162b281f6ae4ab69cb6e091a195"
+  }
+}

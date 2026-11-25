@@ -1,0 +1,263 @@
+{
+  "classification": "POSTHOC_REUSED_DRF_DEVELOPMENT_ONLY",
+  "holdout_files_used": 0,
+  "production_changed": false,
+  "coverage": {
+    "races": 124,
+    "horses": 921,
+    "matched_target_distances": 114,
+    "horses_with_two_usable_matched_rows": 449,
+    "horses_rewarded": 12,
+    "races_with_rewards": 12,
+    "selected_historical_rows": 1473,
+    "selected_rows_with_known_flow": 400,
+    "rewarded_row_occurrences": 12,
+    "rewarded_types": {
+      "LATE_GAIN_AGAINST_FLOW": 1,
+      "EARLY_RESILIENCE_AGAINST_FLOW": 11
+    },
+    "unique_rewarded_historical_horse_events": 11,
+    "target_surface_disagreements": [
+      {
+        "key": "BEL_2026-10-17_R2",
+        "parent_surface": "Synth",
+        "parsed_pp_surface": "Turf"
+      },
+      {
+        "key": "BEL_2026-10-17_R4",
+        "parent_surface": "Synth",
+        "parsed_pp_surface": "Turf"
+      },
+      {
+        "key": "BEL_2026-10-17_R7",
+        "parent_surface": "Synth",
+        "parsed_pp_surface": "Turf"
+      }
+    ]
+  },
+  "summary": [
+    {
+      "cohort": "ALL",
+      "arm": "CURRENT_CONTENDER",
+      "races": 124,
+      "win": 26,
+      "winner4": 95,
+      "top4_coverage": 329,
+      "exacta": 7,
+      "trifecta": 3,
+      "superfecta": 2,
+      "top4_pairs_correct": 435,
+      "underneath_pairs_correct": 218,
+      "slot_hits": [
+        26,
+        24,
+        21,
+        12
+      ],
+      "mean_top4_rank_error": 1.9536290322580645
+    },
+    {
+      "cohort": "ALL",
+      "arm": "CURRENT_PLUS_HISTORICAL_QUALITY",
+      "races": 124,
+      "win": 26,
+      "winner4": 95,
+      "top4_coverage": 329,
+      "exacta": 7,
+      "trifecta": 3,
+      "superfecta": 2,
+      "top4_pairs_correct": 435,
+      "underneath_pairs_correct": 218,
+      "slot_hits": [
+        26,
+        24,
+        21,
+        12
+      ],
+      "mean_top4_rank_error": 1.9536290322580645
+    },
+    {
+      "cohort": "DRF58",
+      "arm": "CURRENT_CONTENDER",
+      "races": 46,
+      "win": 11,
+      "winner4": 35,
+      "top4_coverage": 128,
+      "exacta": 4,
+      "trifecta": 2,
+      "superfecta": 1,
+      "top4_pairs_correct": 162,
+      "underneath_pairs_correct": 78,
+      "slot_hits": [
+        11,
+        10,
+        9,
+        4
+      ],
+      "mean_top4_rank_error": 1.826086956521739
+    },
+    {
+      "cohort": "DRF58",
+      "arm": "CURRENT_PLUS_HISTORICAL_QUALITY",
+      "races": 46,
+      "win": 11,
+      "winner4": 35,
+      "top4_coverage": 128,
+      "exacta": 4,
+      "trifecta": 2,
+      "superfecta": 1,
+      "top4_pairs_correct": 162,
+      "underneath_pairs_correct": 78,
+      "slot_hits": [
+        11,
+        10,
+        9,
+        4
+      ],
+      "mean_top4_rank_error": 1.826086956521739
+    },
+    {
+      "cohort": "KEE25",
+      "arm": "CURRENT_CONTENDER",
+      "races": 25,
+      "win": 7,
+      "winner4": 19,
+      "top4_coverage": 65,
+      "exacta": 0,
+      "trifecta": 0,
+      "superfecta": 0,
+      "top4_pairs_correct": 91,
+      "underneath_pairs_correct": 41,
+      "slot_hits": [
+        7,
+        4,
+        3,
+        3
+      ],
+      "mean_top4_rank_error": 2.14
+    },
+    {
+      "cohort": "KEE25",
+      "arm": "CURRENT_PLUS_HISTORICAL_QUALITY",
+      "races": 25,
+      "win": 7,
+      "winner4": 19,
+      "top4_coverage": 65,
+      "exacta": 0,
+      "trifecta": 0,
+      "superfecta": 0,
+      "top4_pairs_correct": 91,
+      "underneath_pairs_correct": 41,
+      "slot_hits": [
+        7,
+        4,
+        3,
+        3
+      ],
+      "mean_top4_rank_error": 2.14
+    },
+    {
+      "cohort": "OCT17_BEL_DRF",
+      "arm": "CURRENT_CONTENDER",
+      "races": 11,
+      "win": 3,
+      "winner4": 10,
+      "top4_coverage": 31,
+      "exacta": 1,
+      "trifecta": 0,
+      "superfecta": 0,
+      "top4_pairs_correct": 42,
+      "underneath_pairs_correct": 22,
+      "slot_hits": [
+        3,
+        3,
+        1,
+        1
+      ],
+      "mean_top4_rank_error": 1.5909090909090908
+    },
+    {
+      "cohort": "OCT17_BEL_DRF",
+      "arm": "CURRENT_PLUS_HISTORICAL_QUALITY",
+      "races": 11,
+      "win": 3,
+      "winner4": 10,
+      "top4_coverage": 31,
+      "exacta": 1,
+      "trifecta": 0,
+      "superfecta": 0,
+      "top4_pairs_correct": 42,
+      "underneath_pairs_correct": 22,
+      "slot_hits": [
+        3,
+        3,
+        1,
+        1
+      ],
+      "mean_top4_rank_error": 1.5909090909090908
+    },
+    {
+      "cohort": "SAR47",
+      "arm": "CURRENT_CONTENDER",
+      "races": 42,
+      "win": 5,
+      "winner4": 31,
+      "top4_coverage": 105,
+      "exacta": 2,
+      "trifecta": 1,
+      "superfecta": 1,
+      "top4_pairs_correct": 140,
+      "underneath_pairs_correct": 77,
+      "slot_hits": [
+        5,
+        7,
+        8,
+        4
+      ],
+      "mean_top4_rank_error": 2.0773809523809526
+    },
+    {
+      "cohort": "SAR47",
+      "arm": "CURRENT_PLUS_HISTORICAL_QUALITY",
+      "races": 42,
+      "win": 5,
+      "winner4": 31,
+      "top4_coverage": 105,
+      "exacta": 2,
+      "trifecta": 1,
+      "superfecta": 1,
+      "top4_pairs_correct": 140,
+      "underneath_pairs_correct": 77,
+      "slot_hits": [
+        5,
+        7,
+        8,
+        4
+      ],
+      "mean_top4_rank_error": 2.0773809523809526
+    }
+  ],
+  "paired_comparison": {
+    "arm": "CURRENT_PLUS_HISTORICAL_QUALITY",
+    "control": "CURRENT_CONTENDER",
+    "races": 124,
+    "cards": 22,
+    "changed_orders": 0,
+    "wins_gained": 0,
+    "wins_lost": 0,
+    "better_top4_pair_order": 0,
+    "worse_top4_pair_order": 0,
+    "descriptive_card_bootstrap_95": {
+      "pair_accuracy": [
+        0.0,
+        0.0
+      ],
+      "winner_rate": [
+        0.0,
+        0.0
+      ]
+    },
+    "replicates": 5000,
+    "seed": 20261021
+  }
+}

@@ -1,0 +1,1268 @@
+[
+  {
+    "card": "BAQ_2026-05-22",
+    "horse": "Airborne Elite",
+    "source_sha256": "e73c718a2d815e7ccb340da9de7afb24587d8eccc2c71305b0053e5fe84de247",
+    "pdf_path": "/workspace/scratch/beb548924196/comparison/drf_source_audit/sources/BAQ--05-22-2026.pdf",
+    "date": "2026-04-24",
+    "page": 2,
+    "y": 158.728,
+    "raw": "24\u00df26=2Aqu fst 1 C 22\u00a9 :45\u00a91:10\u00a91:37\u00a93\u00ceClm 12500N3L 67 6 /7 3\u00a8 4\u00aa\u00f4 3\u00aa\u00f4 3\u00a9\u00f4 3\u00a7 ZayasEJ L126 13.59 76=22 FrstTrmpt126\u00a7 GrndCommndr126\u00c7 ArbornElt126\u00aa\u00f5 4path trn,good courage",
+    "field_size": 7,
+    "shape_candidate_tokens": [
+      "C"
+    ],
+    "calls": {
+      "start": {
+        "position": 3,
+        "margin_token": "\u00a8",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "first_call": {
+        "position": 4,
+        "margin_token": "\u00aa\u00f4",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "second_call": {
+        "position": 3,
+        "margin_token": "\u00aa\u00f4",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "stretch": {
+        "position": 3,
+        "margin_token": "\u00a9\u00f4",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "finish": {
+        "position": 3,
+        "margin_token": "\u00a7",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      }
+    },
+    "status": "POSITION_CANDIDATE_REQUIRES_REVIEW",
+    "reviewed_against_original": false,
+    "positions_reviewed_against_original": true,
+    "reviewed_by": "Codex visual source review",
+    "reviewed_on": "2026-10-21",
+    "margin_review_scope": "Raw glyphs visually checked; numeric decoder separately tested; small margins not approximated."
+  },
+  {
+    "card": "BAQ_2026-05-23",
+    "horse": "Azizam",
+    "source_sha256": "614767346217703688eae3e4cf1413883f7097082fa62923120ac081b05b8da4",
+    "pdf_path": "/workspace/scratch/beb548924196/comparison/drf_source_audit/sources/BAQ--05-23-2026.pdf",
+    "date": "2026-04-19",
+    "page": 17,
+    "y": 218.019,
+    "raw": "19\u00df26=8Kee fm 5\u00f4f \u00ea \u00fd 21 :44\u00a8 :57\u00a61:04 PalisadesL287k 72 7 /11 8 9\u00ac\u00f5 8\u00a4 6\u00aa\u00f4 3\u00a9\u00f6 CastellanoJJ 118 20.21 80=15 Reb Five118\u00c9 Throckmorton120\u00a9\u00f4 Azizam118\u00c9 3-4w,rally,up shw,held",
+    "field_size": 11,
+    "shape_candidate_tokens": [
+      "\u00fd"
+    ],
+    "calls": {
+      "start": {
+        "position": 8,
+        "margin_token": null,
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "first_call": {
+        "position": 9,
+        "margin_token": "\u00ac\u00f5",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "second_call": {
+        "position": 8,
+        "margin_token": "\u00a4",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "stretch": {
+        "position": 6,
+        "margin_token": "\u00aa\u00f4",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "finish": {
+        "position": 3,
+        "margin_token": "\u00a9\u00f6",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      }
+    },
+    "status": "POSITION_CANDIDATE_REQUIRES_REVIEW",
+    "reviewed_against_original": false,
+    "positions_reviewed_against_original": true,
+    "reviewed_by": "Codex visual source review",
+    "reviewed_on": "2026-10-21",
+    "margin_review_scope": "Raw glyphs visually checked; numeric decoder separately tested; small margins not approximated."
+  },
+  {
+    "card": "BAQ_2026-06-18",
+    "horse": "Bossy Dish",
+    "source_sha256": "777d0b375e9cd7f1342ffb89cecbe268ca1ac6547458a26d3bd1c783b40f1150",
+    "pdf_path": "/workspace/scratch/beb548924196/comparison/drf_source_audit/sources/BAQ--06-18-2026.pdf",
+    "date": "2026-06-06",
+    "page": 18,
+    "y": 83.582,
+    "raw": "6\u00de26=6Mth fm 1\u00c2\u00ea S 22\u00a9 :47\u00a91:12\u00a81:45\u00d53\u00ce\u00e7Clm 30000(40-30)B 55 5 /6 4\u00a6\u00f4 2\u00c7 2\u00c7 2\u00f4 3\u00a6\u00f4 GutierrezR L119f *1.30 73=25 BellBlloBnkr117\u00a6 DoppioEsprsso118\u00f4 BossyDish119\u00a7 3w early,vied,outkick",
+    "field_size": 6,
+    "shape_candidate_tokens": [
+      "S"
+    ],
+    "calls": {
+      "start": {
+        "position": 4,
+        "margin_token": "\u00a6\u00f4",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "first_call": {
+        "position": 2,
+        "margin_token": "\u00c7",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "second_call": {
+        "position": 2,
+        "margin_token": "\u00c7",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "stretch": {
+        "position": 2,
+        "margin_token": "\u00f4",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "finish": {
+        "position": 3,
+        "margin_token": "\u00a6\u00f4",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      }
+    },
+    "status": "POSITION_CANDIDATE_REQUIRES_REVIEW",
+    "reviewed_against_original": false,
+    "positions_reviewed_against_original": true,
+    "reviewed_by": "Codex visual source review",
+    "reviewed_on": "2026-10-21",
+    "margin_review_scope": "Raw glyphs visually checked; numeric decoder separately tested; small margins not approximated."
+  },
+  {
+    "card": "BAQ_2026-06-19",
+    "horse": "Berning Beauty",
+    "source_sha256": "32d344bd0162c0df21321efde8abeee75e59389b8dadb8e2f19246416281c5ed",
+    "pdf_path": "/workspace/scratch/beb548924196/comparison/drf_source_audit/sources/BAQ--06-19-2026.pdf",
+    "date": "2026-05-16",
+    "page": 10,
+    "y": 83.582,
+    "raw": "16\u00dc26=9BAQ fst 1 23\u00a8 :45\u00a91:09\u00a91:36\u00a93\u00ce\u00d0OC 45k/N2X-N 80 3 /7 5\u00a9\u00f4 4\u00a8 4\u00a8\u00f4 4\u00a7\u00f4 5\u00a7\u00f6 LezcanoJ L126b 19.35 80=20 Three B's126\u00f3 Concorde Spirit126\u00a7\u00f5 Ez Roll126\u00c9 Swung6w,angled in/out",
+    "field_size": 7,
+    "shape_candidate_tokens": [],
+    "calls": {
+      "start": {
+        "position": 5,
+        "margin_token": "\u00a9\u00f4",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "first_call": {
+        "position": 4,
+        "margin_token": "\u00a8",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "second_call": {
+        "position": 4,
+        "margin_token": "\u00a8\u00f4",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "stretch": {
+        "position": 4,
+        "margin_token": "\u00a7\u00f4",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "finish": {
+        "position": 5,
+        "margin_token": "\u00a7\u00f6",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      }
+    },
+    "status": "POSITION_CANDIDATE_REQUIRES_REVIEW",
+    "reviewed_against_original": false,
+    "positions_reviewed_against_original": true,
+    "reviewed_by": "Codex visual source review",
+    "reviewed_on": "2026-10-21",
+    "margin_review_scope": "Raw glyphs visually checked; numeric decoder separately tested; small margins not approximated."
+  },
+  {
+    "card": "BAQ_2026-06-20",
+    "horse": "A. P. Slingshot",
+    "source_sha256": "438a3619db72bdaa70e533560a486a0ab247448e8909848efb2ed82f41a705de",
+    "pdf_path": "/workspace/scratch/beb548924196/comparison/drf_source_audit/sources/BAQ--06-20-2026.pdf",
+    "date": "2026-05-24",
+    "page": 12,
+    "y": 83.582,
+    "raw": "24\u00dc26=6BAQ sly\u00f8 1 C 23\u00a6 :46\u00a71:11\u00a91:38 3\u00ce\u00e7\u00d0Alw 40000sN1X 62 4 /7 6\u00ac 6\u00a4\u00f4 6\u00aa\u00f4 5\u00aa\u00f4 3\u00aa\u00f5 FrancoM L126b 6.64 72=20 Katie King126\u00a6 Timia126\u00a9\u00f5 A. P. Slingshot126\u00a7\u00f4 6w upper, kept on",
+    "field_size": 7,
+    "shape_candidate_tokens": [
+      "C"
+    ],
+    "calls": {
+      "start": {
+        "position": 6,
+        "margin_token": "\u00ac",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "first_call": {
+        "position": 6,
+        "margin_token": "\u00a4\u00f4",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "second_call": {
+        "position": 6,
+        "margin_token": "\u00aa\u00f4",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "stretch": {
+        "position": 5,
+        "margin_token": "\u00aa\u00f4",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "finish": {
+        "position": 3,
+        "margin_token": "\u00aa\u00f5",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      }
+    },
+    "status": "POSITION_CANDIDATE_REQUIRES_REVIEW",
+    "reviewed_against_original": false,
+    "positions_reviewed_against_original": true,
+    "reviewed_by": "Codex visual source review",
+    "reviewed_on": "2026-10-21",
+    "margin_review_scope": "Raw glyphs visually checked; numeric decoder separately tested; small margins not approximated."
+  },
+  {
+    "card": "BAQ_2026-06-21",
+    "horse": "Adrian",
+    "source_sha256": "e14e01e79fb08ed3950e0e1c74b2d750ce495aaaf6cd91e2dd8b74db6da4e026",
+    "pdf_path": "/workspace/scratch/beb548924196/comparison/drf_source_audit/sources/BAQ--06-21-2026.pdf",
+    "date": "2026-05-08",
+    "page": 11,
+    "y": 238.411,
+    "raw": "8\u00dc26=2BAQ fst 7f 22\u00a8 :45\u00a81:10 1:22\u00a93\u00ce\u00e7Alw 55000sN1X 73 3 /6 4 5\u00a7\u00f6 5\u00a8 3\u00a9 3\u00a8\u00f5 PratF L126 2.19 85=11 Grace and Grit126\u00a8 Princess Ny126\u00c9 Adrian126\u00a6\u00f6 2-3path turn,willingly",
+    "field_size": 6,
+    "shape_candidate_tokens": [],
+    "calls": {
+      "start": {
+        "position": 4,
+        "margin_token": null,
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "first_call": {
+        "position": 5,
+        "margin_token": "\u00a7\u00f6",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "second_call": {
+        "position": 5,
+        "margin_token": "\u00a8",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "stretch": {
+        "position": 3,
+        "margin_token": "\u00a9",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "finish": {
+        "position": 3,
+        "margin_token": "\u00a8\u00f5",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      }
+    },
+    "status": "POSITION_CANDIDATE_REQUIRES_REVIEW",
+    "reviewed_against_original": false,
+    "positions_reviewed_against_original": true,
+    "reviewed_by": "Codex visual source review",
+    "reviewed_on": "2026-10-21",
+    "margin_review_scope": "Raw glyphs visually checked; numeric decoder separately tested; small margins not approximated."
+  },
+  {
+    "card": "BAQ_2026-06-25",
+    "horse": "Ambition",
+    "source_sha256": "4b3a59f38d244e335bcd6586a6f8d4f882991d6d43e1a4b98142aeff20b96bb4",
+    "pdf_path": "/workspace/scratch/beb548924196/comparison/drf_source_audit/sources/BAQ--06-25-2026.pdf",
+    "date": "2026-06-13",
+    "page": 13,
+    "y": 303.748,
+    "raw": "13\u00de26=9BAQ fst 1 S 22\u00a9 :45\u00a61:09\u00a81:35 4\u00ceClm 50000 68 5 /5 2\u00f4 2\u00a6\u00f4 5\u00ac 5\u00a6\u00a8 5\u00a6\u00a4\u00f4 GonzalezS L123b 13.25 73=21 Unlimitedpotential123\u00a8\u00f6 EmiratesRoad123\u00f6 Eliminte123\u00a7\u00f5 Chased 2p, tired",
+    "field_size": 5,
+    "shape_candidate_tokens": [
+      "S"
+    ],
+    "calls": {
+      "start": {
+        "position": 2,
+        "margin_token": "\u00f4",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "first_call": {
+        "position": 2,
+        "margin_token": "\u00a6\u00f4",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "second_call": {
+        "position": 5,
+        "margin_token": "\u00ac",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "stretch": {
+        "position": 5,
+        "margin_token": "\u00a6\u00a8",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "finish": {
+        "position": 5,
+        "margin_token": "\u00a6\u00a4\u00f4",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      }
+    },
+    "status": "POSITION_CANDIDATE_REQUIRES_REVIEW",
+    "reviewed_against_original": false,
+    "positions_reviewed_against_original": true,
+    "reviewed_by": "Codex visual source review",
+    "reviewed_on": "2026-10-21",
+    "margin_review_scope": "Raw glyphs visually checked; numeric decoder separately tested; small margins not approximated."
+  },
+  {
+    "card": "BAQ_2026-06-26",
+    "horse": "Awesome Empire",
+    "source_sha256": "d55511c8fc4734b17327c612e9dc97618c5a8915727238328444c8a373b3b132",
+    "pdf_path": "/workspace/scratch/beb548924196/comparison/drf_source_audit/sources/BAQ--06-26-2026.pdf",
+    "date": "2026-05-24",
+    "page": 8,
+    "y": 83.582,
+    "raw": "24\u00dc26=9BAQ sly\u00f8 1 23\u00a6 :46\u00a81:11\u00a61:37 4\u00ceClm c-32000 73 3 /7 3\u00a6\u00f4 3\u00a6\u00f4 2\u00a7\u00f4 2\u00a8\u00f4 3\u00a9\u00f4 SantanaRJr L123b 4.65 77=20 SecurdLnding123\u00a9 Ambition123\u00f4 AwsomEmpir123\u00a7\u00f5 Bmp brk,3-5p trn,6p1/4",
+    "field_size": 7,
+    "shape_candidate_tokens": [],
+    "calls": {
+      "start": {
+        "position": 3,
+        "margin_token": "\u00a6\u00f4",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "first_call": {
+        "position": 3,
+        "margin_token": "\u00a6\u00f4",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "second_call": {
+        "position": 2,
+        "margin_token": "\u00a7\u00f4",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "stretch": {
+        "position": 2,
+        "margin_token": "\u00a8\u00f4",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "finish": {
+        "position": 3,
+        "margin_token": "\u00a9\u00f4",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      }
+    },
+    "status": "POSITION_CANDIDATE_REQUIRES_REVIEW",
+    "reviewed_against_original": false,
+    "positions_reviewed_against_original": true,
+    "reviewed_by": "Codex visual source review",
+    "reviewed_on": "2026-10-21",
+    "margin_review_scope": "Raw glyphs visually checked; numeric decoder separately tested; small margins not approximated."
+  },
+  {
+    "card": "BEL_2026-10-17",
+    "horse": "Ambition",
+    "source_sha256": "59b5a2198848c336b694d040cafce85e94a2842172651ef05ba010056d4dda4b",
+    "pdf_path": "/workspace/scratch/e211cc869cf2/oct17_sources/BEL--10-17-2026.pdf",
+    "date": "2026-10-09",
+    "page": 7,
+    "y": 83.582,
+    "raw": "9\u00e526=5Bel fst 1\u00c2 23\u00a6 :46\u00a81:11\u00a71:43 3\u00ceClm c-16000 6 /9 8\u00ab\u00f5 6\u00a9 4\u00a6\u00f4 2\u00a6 1\u00a6 ElliottC L126b 4.48 96=07 Ambition126\u00a6 Expensive Cut124\u00c9 Peek126\u00c9 3w uppr, up fin 70yds",
+    "field_size": 9,
+    "shape_candidate_tokens": [],
+    "calls": {
+      "start": {
+        "position": 8,
+        "margin_token": "\u00ab\u00f5",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "first_call": {
+        "position": 6,
+        "margin_token": "\u00a9",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "second_call": {
+        "position": 4,
+        "margin_token": "\u00a6\u00f4",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "stretch": {
+        "position": 2,
+        "margin_token": "\u00a6",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "finish": {
+        "position": 1,
+        "margin_token": "\u00a6",
+        "margin_kind": "LEAD_MARGIN",
+        "numeric_margin": null
+      }
+    },
+    "status": "POSITION_CANDIDATE_REQUIRES_REVIEW",
+    "reviewed_against_original": false,
+    "positions_reviewed_against_original": true,
+    "reviewed_by": "Codex visual source review",
+    "reviewed_on": "2026-10-21",
+    "margin_review_scope": "Raw glyphs visually checked; numeric decoder separately tested; small margins not approximated."
+  },
+  {
+    "card": "CD_2026-04-30",
+    "horse": "Air Invasion",
+    "source_sha256": "d3162a5ee9b505c732fb2b08dc8d6e93459a1470b87cb314b2d688aa08df52a2",
+    "pdf_path": "/workspace/scratch/beb548924196/comparison/drf_source_audit/sources/CD--04-30-2026.pdf",
+    "date": "2026-03-28",
+    "page": 27,
+    "y": 560.472,
+    "raw": "28\u00e026=4Tam fst 6\u00f4f 22 :44\u00a91:09\u00a91:16\u00a64\u00ceOC 16k/N1X-N 80 6 /7 7 7\u00ab\u00f4 7\u00a9 3\u00c9 1\u00a6\u00f5 MartinezGA L118f 5.40 97=10 Air Invasion118\u00a6\u00f5 King Gerald122\u00c7 Temecula118\u00a6 5p,bid1/4,kick clear",
+    "field_size": 7,
+    "shape_candidate_tokens": [],
+    "calls": {
+      "start": {
+        "position": 7,
+        "margin_token": null,
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "first_call": {
+        "position": 7,
+        "margin_token": "\u00ab\u00f4",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "second_call": {
+        "position": 7,
+        "margin_token": "\u00a9",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "stretch": {
+        "position": 3,
+        "margin_token": "\u00c9",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "finish": {
+        "position": 1,
+        "margin_token": "\u00a6\u00f5",
+        "margin_kind": "LEAD_MARGIN",
+        "numeric_margin": null
+      }
+    },
+    "status": "POSITION_CANDIDATE_REQUIRES_REVIEW",
+    "reviewed_against_original": false,
+    "positions_reviewed_against_original": true,
+    "reviewed_by": "Codex visual source review",
+    "reviewed_on": "2026-10-21",
+    "margin_review_scope": "Raw glyphs visually checked; numeric decoder separately tested; small margins not approximated."
+  },
+  {
+    "card": "KEE_2026-10-09",
+    "horse": "Chatter",
+    "source_sha256": "1ce36d439d1052663a4606d06aa299ec6948591fcebf38e95d0cebc710277c08",
+    "pdf_path": "/workspace/scratch/abf1ac6a90a2/upload/KEE--10-09-2026.pdf",
+    "date": "2026-08-23",
+    "page": 20,
+    "y": 337.398,
+    "raw": "23\u00dd26=3Sar fst 6f C 21\u00a9 :44\u00a8 :57\u00a81:11 3\u00ce\u00e7OC 55k/N1X-N 45 2 /7 4 1\u00f4 1\u00c7 3\u00a8 7\u00a6\u00a9\u00f5 CarmoucheK L126 9.30 74=12 Tennessee Belle122\u00a9\u00f5 Vekoma's Diva122\u00a6 Taqdeer126\u00c7 Brush gate st, tired",
+    "field_size": 7,
+    "shape_candidate_tokens": [
+      "C"
+    ],
+    "calls": {
+      "start": {
+        "position": 4,
+        "margin_token": null,
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "first_call": {
+        "position": 1,
+        "margin_token": "\u00f4",
+        "margin_kind": "LEAD_MARGIN",
+        "numeric_margin": null
+      },
+      "second_call": {
+        "position": 1,
+        "margin_token": "\u00c7",
+        "margin_kind": "LEAD_MARGIN",
+        "numeric_margin": null
+      },
+      "stretch": {
+        "position": 3,
+        "margin_token": "\u00a8",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "finish": {
+        "position": 7,
+        "margin_token": "\u00a6\u00a9\u00f5",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      }
+    },
+    "status": "POSITION_CANDIDATE_REQUIRES_REVIEW",
+    "reviewed_against_original": false,
+    "positions_reviewed_against_original": true,
+    "reviewed_by": "Codex visual source review",
+    "reviewed_on": "2026-10-21",
+    "margin_review_scope": "Raw glyphs visually checked; numeric decoder separately tested; small margins not approximated."
+  },
+  {
+    "card": "KEE_2026-10-10",
+    "horse": "Admiral's Order",
+    "source_sha256": "1ed95429a4e1a7428f5bc027874a7bcfb7a7a29d3238d50ff53350dc37815fdc",
+    "pdf_path": "/workspace/scratch/abf1ac6a90a2/upload/KEE--10-10-2026.pdf",
+    "date": "2026-09-12",
+    "page": 6,
+    "y": 609.702,
+    "raw": "12\u00e626=10CD fst 1 22\u00a9 :46\u00a61:10\u00a91:36\u00a7 Iroquois-G3 63 3 /7 4\u00a8 4\u00a7 7\u00a8\u00f6 7\u00ac 7\u00a6\u00a6 MachadoL 122 25.66 75=14 Salahudin122\u00f4 He Is No Lie122\u00a7\u00f6 Caribbean Life122\u00a6\u00f5 Chased inside, faded",
+    "field_size": 7,
+    "shape_candidate_tokens": [],
+    "calls": {
+      "start": {
+        "position": 4,
+        "margin_token": "\u00a8",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "first_call": {
+        "position": 4,
+        "margin_token": "\u00a7",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "second_call": {
+        "position": 7,
+        "margin_token": "\u00a8\u00f6",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "stretch": {
+        "position": 7,
+        "margin_token": "\u00ac",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "finish": {
+        "position": 7,
+        "margin_token": "\u00a6\u00a6",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      }
+    },
+    "status": "POSITION_CANDIDATE_REQUIRES_REVIEW",
+    "reviewed_against_original": false,
+    "positions_reviewed_against_original": true,
+    "reviewed_by": "Codex visual source review",
+    "reviewed_on": "2026-10-21",
+    "margin_review_scope": "Raw glyphs visually checked; numeric decoder separately tested; small margins not approximated."
+  },
+  {
+    "card": "KEE_2026-10-11",
+    "horse": "Ag Bullet",
+    "source_sha256": "fdc820c22afc81dc31f13f6729a900fd40f34869ba6bf9482d1af41b13050e4e",
+    "pdf_path": "/workspace/scratch/abf1ac6a90a2/keeneland_five_v1/prior_cards/KEE--10-11-2026.pdf",
+    "date": "2026-08-29",
+    "page": 22,
+    "y": 589.685,
+    "raw": "29\u00dd26=7KD fm 6\u00f4f \u00ea 22\u00a8 :45\u00a61:07\u00a81:16 3\u00ce\u00e7LdsTfSpt-G1 81 4 /10 2 2\u00a6 2\u00a6 3\u00a8\u00f4 8\u00ab\u00f6 GerouxF 125 *1.16 79=19 InOurTime123\u00a8\u00f4 TimetoDazzle123\u00f3 Jody'sPride123\u00a6\u00f4 Stlkd/prssd 2w,faded",
+    "field_size": 10,
+    "shape_candidate_tokens": [],
+    "calls": {
+      "start": {
+        "position": 2,
+        "margin_token": null,
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "first_call": {
+        "position": 2,
+        "margin_token": "\u00a6",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "second_call": {
+        "position": 2,
+        "margin_token": "\u00a6",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "stretch": {
+        "position": 3,
+        "margin_token": "\u00a8\u00f4",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "finish": {
+        "position": 8,
+        "margin_token": "\u00ab\u00f6",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      }
+    },
+    "status": "POSITION_CANDIDATE_REQUIRES_REVIEW",
+    "reviewed_against_original": false,
+    "positions_reviewed_against_original": true,
+    "reviewed_by": "Codex visual source review",
+    "reviewed_on": "2026-10-21",
+    "margin_review_scope": "Raw glyphs visually checked; numeric decoder separately tested; small margins not approximated."
+  },
+  {
+    "card": "KEE_2026-10-14",
+    "horse": "Admiral Hall",
+    "source_sha256": "217159278a03aab49503263b228968839bd95c529d8cecf7672252f5096d3f42",
+    "pdf_path": "/workspace/scratch/abf1ac6a90a2/upload/KEE--10-14-2026.pdf",
+    "date": "2026-08-21",
+    "page": 18,
+    "y": 262.333,
+    "raw": "21\u00dd26=6ElP fst 1 23\u00a8 :47\u00a61:11\u00a91:37\u00a73\u00ceAlw 102000N2L 76 6 /7 7\u00a8\u00f6 7\u00a9\u00f5 4\u00a6\u00f6 6\u00a8\u00f5 6\u00ab\u00f5 CorralesG L123b 19.68 80=17 VintageCowboy121\u00f3 TreItlini123\u00f6 PenltyBox123\u00c9 Adv 4w3/8,brshd 6p3/16",
+    "field_size": 7,
+    "shape_candidate_tokens": [],
+    "calls": {
+      "start": {
+        "position": 7,
+        "margin_token": "\u00a8\u00f6",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "first_call": {
+        "position": 7,
+        "margin_token": "\u00a9\u00f5",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "second_call": {
+        "position": 4,
+        "margin_token": "\u00a6\u00f6",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "stretch": {
+        "position": 6,
+        "margin_token": "\u00a8\u00f5",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "finish": {
+        "position": 6,
+        "margin_token": "\u00ab\u00f5",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      }
+    },
+    "status": "POSITION_CANDIDATE_REQUIRES_REVIEW",
+    "reviewed_against_original": false,
+    "positions_reviewed_against_original": true,
+    "reviewed_by": "Codex visual source review",
+    "reviewed_on": "2026-10-21",
+    "margin_review_scope": "Raw glyphs visually checked; numeric decoder separately tested; small margins not approximated."
+  },
+  {
+    "card": "KEE_2026-10-15",
+    "horse": "Autumn Evening",
+    "source_sha256": "bd969ba5cf811c360e4411fb3bb5b9c5a6eef55646a8003a548ac64d19fce66a",
+    "pdf_path": "/workspace/scratch/aec876d05468/upload/KEE--10-15-2026(1).pdf",
+    "date": "2026-07-23",
+    "page": 15,
+    "y": 84.224,
+    "raw": "23\u00db26=8Sar fst 7f C 22\u00a6 :44\u00a71:08\u00a91:21\u00a94\u00ce\u00e7OC 110k/C-N 60 3 /8 7 7\u00a9\u00f6 8\u00ae\u00f5 8\u00a6\u00a9 8\u00a6\u00ac\u00f6 VelazquezJR L121b 26.00 77=09 BeutyReigns123\u00f4 SenzProle123\u00a9\u00f4 MunningsExprss123\u00a9\u00f5 2path turn,no factor",
+    "field_size": 8,
+    "shape_candidate_tokens": [
+      "C"
+    ],
+    "calls": {
+      "start": {
+        "position": 7,
+        "margin_token": null,
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "first_call": {
+        "position": 7,
+        "margin_token": "\u00a9\u00f6",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "second_call": {
+        "position": 8,
+        "margin_token": "\u00ae\u00f5",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "stretch": {
+        "position": 8,
+        "margin_token": "\u00a6\u00a9",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "finish": {
+        "position": 8,
+        "margin_token": "\u00a6\u00ac\u00f6",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      }
+    },
+    "status": "POSITION_CANDIDATE_REQUIRES_REVIEW",
+    "reviewed_against_original": false,
+    "positions_reviewed_against_original": true,
+    "reviewed_by": "Codex visual source review",
+    "reviewed_on": "2026-10-21",
+    "margin_review_scope": "Raw glyphs visually checked; numeric decoder separately tested; small margins not approximated."
+  },
+  {
+    "card": "SAR_2026-06-04",
+    "horse": "Apalta",
+    "source_sha256": "54e9d1349978feed6719f637316718c651b4a2c34e1fa61d388f71e78d283cff",
+    "pdf_path": "/workspace/scratch/beb548924196/comparison/drf_source_audit/sources/SAR--06-04-2026.pdf",
+    "date": "2026-05-22",
+    "page": 21,
+    "y": 176.244,
+    "raw": "22\u00dc26=2BAQ fst 1\u00b0 50 1:14 1:38\u00a91:51\u00a83\u00ceClm c-20000B 79 3 /7 6\u00a9 6\u00a8 6\u00a8\u00f6 2\u00a6\u00f4 1\u00c9 PratF L126b *.42 79=21 Apalta126\u00c9 Shipsational126\u00ac Petrolo119\u00a6 Bmp btwn brk,checked",
+    "field_size": 7,
+    "shape_candidate_tokens": [],
+    "calls": {
+      "start": {
+        "position": 6,
+        "margin_token": "\u00a9",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "first_call": {
+        "position": 6,
+        "margin_token": "\u00a8",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "second_call": {
+        "position": 6,
+        "margin_token": "\u00a8\u00f6",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "stretch": {
+        "position": 2,
+        "margin_token": "\u00a6\u00f4",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "finish": {
+        "position": 1,
+        "margin_token": "\u00c9",
+        "margin_kind": "LEAD_MARGIN",
+        "numeric_margin": null
+      }
+    },
+    "status": "POSITION_CANDIDATE_REQUIRES_REVIEW",
+    "reviewed_against_original": false,
+    "positions_reviewed_against_original": true,
+    "reviewed_by": "Codex visual source review",
+    "reviewed_on": "2026-10-21",
+    "margin_review_scope": "Raw glyphs visually checked; numeric decoder separately tested; small margins not approximated."
+  },
+  {
+    "card": "SAR_2026-06-05",
+    "horse": "Always a Runner",
+    "source_sha256": "4f08301fa175e608415a0f991a32981fcb32c853d1a3d3d06df5e3544e298ec8",
+    "pdf_path": "/workspace/scratch/e211cc869cf2/review_extract/Saratoga_Ten_Card_Retest_Evidence/upload/SAR--06-05-2026.pdf",
+    "date": "2026-05-01",
+    "page": 27,
+    "y": 659.14,
+    "raw": "1\u00dc26=13CD fst 1\u00b0 \u00fd 46\u00a91:10\u00a81:35\u00a91:48\u00a9 \u00e7KyOaks-G1 94 7 /13 8\u00a8\u00f6 8\u00a9 6\u00a7\u00f6 3\u00a6 1\u00a6\u00f5 OrtizJL 121 5.52 92=09 AlwaysaRunner121\u00a6\u00f5 Meaning121\u00a6 CountingStrs121\u00c9 3-2w btw,5p1/4,rallied",
+    "field_size": 13,
+    "shape_candidate_tokens": [
+      "\u00fd"
+    ],
+    "calls": {
+      "start": {
+        "position": 8,
+        "margin_token": "\u00a8\u00f6",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "first_call": {
+        "position": 8,
+        "margin_token": "\u00a9",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "second_call": {
+        "position": 6,
+        "margin_token": "\u00a7\u00f6",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "stretch": {
+        "position": 3,
+        "margin_token": "\u00a6",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "finish": {
+        "position": 1,
+        "margin_token": "\u00a6\u00f5",
+        "margin_kind": "LEAD_MARGIN",
+        "numeric_margin": null
+      }
+    },
+    "status": "POSITION_CANDIDATE_REQUIRES_REVIEW",
+    "reviewed_against_original": false,
+    "positions_reviewed_against_original": true,
+    "reviewed_by": "Codex visual source review",
+    "reviewed_on": "2026-10-21",
+    "margin_review_scope": "Raw glyphs visually checked; numeric decoder separately tested; small margins not approximated."
+  },
+  {
+    "card": "SAR_2026-06-07",
+    "horse": "All of It",
+    "source_sha256": "8796264d2a62aefcc879b838385d212cf78ca888e6f97aa9a8049feb4afdc26a",
+    "pdf_path": "/workspace/scratch/beb548924196/comparison/drf_source_audit/sources/SAR--06-07-2026.pdf",
+    "date": "2026-04-16",
+    "page": 1,
+    "y": 646.128,
+    "raw": "16\u00df26=8Aqu fm 1 \u00d1 24 :49\u00a61:14 1:39\u00a6 \u00e7\u00d0Md Sp Wt 75k 76 4 /11 5\u00a8 5\u00a8\u00f6 4\u00a6\u00f6 1\u00a6\u00f4 1\u00aa\u00f5 FrancoM L122 5.64 71=30 AllofIt122\u00aa\u00f5 TickettoRide122\u00f3 TakeChrgeSmrty122\u00f4 Ins turns,2p3/16,rally",
+    "field_size": 11,
+    "shape_candidate_tokens": [],
+    "calls": {
+      "start": {
+        "position": 5,
+        "margin_token": "\u00a8",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "first_call": {
+        "position": 5,
+        "margin_token": "\u00a8\u00f6",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "second_call": {
+        "position": 4,
+        "margin_token": "\u00a6\u00f6",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "stretch": {
+        "position": 1,
+        "margin_token": "\u00a6\u00f4",
+        "margin_kind": "LEAD_MARGIN",
+        "numeric_margin": null
+      },
+      "finish": {
+        "position": 1,
+        "margin_token": "\u00aa\u00f5",
+        "margin_kind": "LEAD_MARGIN",
+        "numeric_margin": null
+      }
+    },
+    "status": "POSITION_CANDIDATE_REQUIRES_REVIEW",
+    "reviewed_against_original": false,
+    "positions_reviewed_against_original": true,
+    "reviewed_by": "Codex visual source review",
+    "reviewed_on": "2026-10-21",
+    "margin_review_scope": "Raw glyphs visually checked; numeric decoder separately tested; small margins not approximated."
+  },
+  {
+    "card": "SAR_2026-07-03",
+    "horse": "Alone Time",
+    "source_sha256": "752693a25efdb490dca5e68bc371f4e0ffafeaf7129bb42739b29747bb1f7bd4",
+    "pdf_path": "/workspace/scratch/aec876d05468/mix_evidence/browser_test/upload/SAR--07-03-2026.pdf",
+    "date": "2026-04-04",
+    "page": 18,
+    "y": 510.589,
+    "raw": "4\u00df26=8Kee fm 1 \u00ea 23 :47\u00a81:11\u00a91:35\u00a7 \u00e7Applachn-G2 51 2 /10 2\u00a6\u00f4 2\u00f4 4\u00a7 10\u00ac 10\u00a6\u00a4\u00f4 OrtizJL 118 42.71 71=14 StormsWke118\u00c9 Imgintiontheldy120\u00c7 LionLk118\u00c9 Ins,prss 2w,btw,wkn1/4",
+    "field_size": 10,
+    "shape_candidate_tokens": [],
+    "calls": {
+      "start": {
+        "position": 2,
+        "margin_token": "\u00a6\u00f4",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "first_call": {
+        "position": 2,
+        "margin_token": "\u00f4",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "second_call": {
+        "position": 4,
+        "margin_token": "\u00a7",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "stretch": {
+        "position": 10,
+        "margin_token": "\u00ac",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "finish": {
+        "position": 10,
+        "margin_token": "\u00a6\u00a4\u00f4",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      }
+    },
+    "status": "POSITION_CANDIDATE_REQUIRES_REVIEW",
+    "reviewed_against_original": false,
+    "positions_reviewed_against_original": true,
+    "reviewed_by": "Codex visual source review",
+    "reviewed_on": "2026-10-21",
+    "margin_review_scope": "Raw glyphs visually checked; numeric decoder separately tested; small margins not approximated."
+  },
+  {
+    "card": "SAR_2026-07-04",
+    "horse": "Angel Gift",
+    "source_sha256": "aaa04ab935f824c44d223c9aa1e20b4f13c4da9c295d9b45d2878a1244e389c8",
+    "pdf_path": "/workspace/scratch/e211cc869cf2/review_extract/Saratoga_Ten_Card_Retest_Evidence/upload/SAR--07-04-2026.pdf",
+    "date": "2026-06-05",
+    "page": 9,
+    "y": 525.847,
+    "raw": "5\u00de26=13Sar fst 7f 22\u00a7 :45 1:10\u00a71:23\u00a93\u00ce\u00e7\u00d0Alw 105000N1X 1 /8 2 2\u00a6 2\u00f4 3\u00a7\u00f4 5\u00ae\u00f4 OrtizIJr L121 6.18 75=06 IrishFortune121\u00a6\u00f6 GrcendGrit126\u00a7\u00f5 GrcefulRos126\u00a6\u00f4 Bmp brk,out,2-3p,wknd",
+    "field_size": 8,
+    "shape_candidate_tokens": [],
+    "calls": {
+      "start": {
+        "position": 2,
+        "margin_token": null,
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "first_call": {
+        "position": 2,
+        "margin_token": "\u00a6",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "second_call": {
+        "position": 2,
+        "margin_token": "\u00f4",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "stretch": {
+        "position": 3,
+        "margin_token": "\u00a7\u00f4",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "finish": {
+        "position": 5,
+        "margin_token": "\u00ae\u00f4",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      }
+    },
+    "status": "POSITION_CANDIDATE_REQUIRES_REVIEW",
+    "reviewed_against_original": false,
+    "positions_reviewed_against_original": true,
+    "reviewed_by": "Codex visual source review",
+    "reviewed_on": "2026-10-21",
+    "margin_review_scope": "Raw glyphs visually checked; numeric decoder separately tested; small margins not approximated."
+  },
+  {
+    "card": "SAR_2026-07-05",
+    "horse": "Always Angels",
+    "source_sha256": "d71ae094ab14569cbaace37eb407ccdb76b5d0d408f77bc837aa89979861bee0",
+    "pdf_path": "/workspace/scratch/e211cc869cf2/review_extract/Saratoga_Ten_Card_Retest_Evidence/upload/SAR--07-05-2026.pdf",
+    "date": "2026-04-26",
+    "page": 6,
+    "y": 84.224,
+    "raw": "26\u00df26=3Aqu my\u00f8 6\u00f4f 22\u00a9 :46\u00a71:11 1:17\u00a74\u00ce\u00e7Clm v-30000 69 6 /7 2 5\u00a8 5\u00a9\u00f4 4\u00a7\u00f5 5\u00aa\u00f6 RodriguezJ L123 4.59 76=15 WillNotBeSwyed123\u00a8\u00f5 GezElois123\u00c7 KhliMgic116\u00a6\u00f6 Drp back4-1/2,3-4p trn",
+    "field_size": 7,
+    "shape_candidate_tokens": [],
+    "calls": {
+      "start": {
+        "position": 2,
+        "margin_token": null,
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "first_call": {
+        "position": 5,
+        "margin_token": "\u00a8",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "second_call": {
+        "position": 5,
+        "margin_token": "\u00a9\u00f4",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "stretch": {
+        "position": 4,
+        "margin_token": "\u00a7\u00f5",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "finish": {
+        "position": 5,
+        "margin_token": "\u00aa\u00f6",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      }
+    },
+    "status": "POSITION_CANDIDATE_REQUIRES_REVIEW",
+    "reviewed_against_original": false,
+    "positions_reviewed_against_original": true,
+    "reviewed_by": "Codex visual source review",
+    "reviewed_on": "2026-10-21",
+    "margin_review_scope": "Raw glyphs visually checked; numeric decoder separately tested; small margins not approximated."
+  },
+  {
+    "card": "SAR_2026-07-09",
+    "horse": "After Taxes",
+    "source_sha256": "73e36c552941cbbd253a7554df0036da0d5d8fe6a534bfa7d0bf56f47a0f1726",
+    "pdf_path": "/workspace/scratch/e211cc869cf2/review_extract/Saratoga_Ten_Card_Retest_Evidence/upload/SAR--07-09-2026.pdf",
+    "date": "2026-06-27",
+    "page": 20,
+    "y": 498.519,
+    "raw": "27\u00de26=5BAQ fm 6f \u00ea 22\u00a8 :45\u00a6 :57 1:09 3\u00ceClm c-40000N2L 72 6 /6 5 3\u00a6\u00f4 2\u00a6\u00f4 2\u00c7 1\u00f6 DavisD L126 *.87 88=08 AfterTaxes126\u00f6 MiddleMarket126\u00a7\u00f5 SlySdieSly121\u00f6 Chased 4-2w, held safe",
+    "field_size": 6,
+    "shape_candidate_tokens": [],
+    "calls": {
+      "start": {
+        "position": 5,
+        "margin_token": null,
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "first_call": {
+        "position": 3,
+        "margin_token": "\u00a6\u00f4",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "second_call": {
+        "position": 2,
+        "margin_token": "\u00a6\u00f4",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "stretch": {
+        "position": 2,
+        "margin_token": "\u00c7",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "finish": {
+        "position": 1,
+        "margin_token": "\u00f6",
+        "margin_kind": "LEAD_MARGIN",
+        "numeric_margin": null
+      }
+    },
+    "status": "POSITION_CANDIDATE_REQUIRES_REVIEW",
+    "reviewed_against_original": false,
+    "positions_reviewed_against_original": true,
+    "reviewed_by": "Codex visual source review",
+    "reviewed_on": "2026-10-21",
+    "margin_review_scope": "Raw glyphs visually checked; numeric decoder separately tested; small margins not approximated."
+  },
+  {
+    "card": "SAR_2026-07-10",
+    "horse": "A Fine Chardonnay",
+    "source_sha256": "02c746b6a9f9363d201d1ae9c2599f5874c718a0b27fe4520d639be29202d314",
+    "pdf_path": "/workspace/scratch/e211cc869cf2/review_extract/Saratoga_Ten_Card_Retest_Evidence/upload/SAR--07-10-2026.pdf",
+    "date": "2026-06-07",
+    "page": 21,
+    "y": 506.32,
+    "raw": "7\u00de26=6CD fst 7f 22\u00a8 :45 1:08\u00a81:21 \u00e7LeslisLdyL225k 74 1 /6 3 5\u00a9 5\u00aa\u00f4 5\u00ab 5\u00a4\u00f6 HernandezBJJr 122 8.08 89=04 Explora122\u00a6\u00f5 On Time Girl122\u00aa Shilling118\u00a7\u00f4 Inside, came out 3/16",
+    "field_size": 6,
+    "shape_candidate_tokens": [],
+    "calls": {
+      "start": {
+        "position": 3,
+        "margin_token": null,
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "first_call": {
+        "position": 5,
+        "margin_token": "\u00a9",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "second_call": {
+        "position": 5,
+        "margin_token": "\u00aa\u00f4",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "stretch": {
+        "position": 5,
+        "margin_token": "\u00ab",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "finish": {
+        "position": 5,
+        "margin_token": "\u00a4\u00f6",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      }
+    },
+    "status": "POSITION_CANDIDATE_REQUIRES_REVIEW",
+    "reviewed_against_original": false,
+    "positions_reviewed_against_original": true,
+    "reviewed_by": "Codex visual source review",
+    "reviewed_on": "2026-10-21",
+    "margin_review_scope": "Raw glyphs visually checked; numeric decoder separately tested; small margins not approximated."
+  },
+  {
+    "card": "SAR_2026-07-11",
+    "horse": "Alan Turing",
+    "source_sha256": "3b86f953693896c194c2eeaf0569c8bfa372068833313ee2cf1c77801ce6987a",
+    "pdf_path": "/workspace/scratch/e211cc869cf2/review_extract/Saratoga_Ten_Card_Retest_Evidence/upload/SAR--07-11-2026.pdf",
+    "date": "2026-06-03",
+    "page": 7,
+    "y": 538.735,
+    "raw": "3\u00de26=9Sar fst 1\u00b0 47\u00a61:11 1:35\u00a81:48\u00a63\u00ce\u00d0ComentatrB200k 88 3 /8 3\u00a6\u00f4 5\u00a7 3\u00a6\u00f4 2\u00c7 1\u00f4 AlvaradoJ 124 11.81 98=01 Alan Turing124\u00f4 Dr. Kraft124\u00a7\u00f5 Russian Realm124\u00c9 Ins,rail bid3/16,dueld",
+    "field_size": 8,
+    "shape_candidate_tokens": [],
+    "calls": {
+      "start": {
+        "position": 3,
+        "margin_token": "\u00a6\u00f4",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "first_call": {
+        "position": 5,
+        "margin_token": "\u00a7",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "second_call": {
+        "position": 3,
+        "margin_token": "\u00a6\u00f4",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "stretch": {
+        "position": 2,
+        "margin_token": "\u00c7",
+        "margin_kind": "BEATEN_MARGIN",
+        "numeric_margin": null
+      },
+      "finish": {
+        "position": 1,
+        "margin_token": "\u00f4",
+        "margin_kind": "LEAD_MARGIN",
+        "numeric_margin": null
+      }
+    },
+    "status": "POSITION_CANDIDATE_REQUIRES_REVIEW",
+    "reviewed_against_original": false,
+    "positions_reviewed_against_original": true,
+    "reviewed_by": "Codex visual source review",
+    "reviewed_on": "2026-10-21",
+    "margin_review_scope": "Raw glyphs visually checked; numeric decoder separately tested; small margins not approximated."
+  },
+  {
+    "card": "SAR_2026-07-12",
+    "horse": "Alexis Zorba",
+    "source_sha256": "ad6ba7759eb8f72637b25e43e1f00830e06dbc7b60b4ae1cb65390f95181672f",
+    "pdf_path": "/workspace/scratch/e211cc869cf2/review_extract/Saratoga_Ten_Card_Retest_Evidence/upload/SAR--07-12-2026.pdf",
+    "date": "2026-06-19",
+    "page": 19,
+    "y": 288.657,
+    "raw": "19\u00de26=8Lrl fm 5\u00f4f \u00ea 22\u00a7 :45\u00a7 :56\u00a91:02\u00a83\u00ceClm 16000(16-12.5)B 75 4 /7 1 1\u00a7 1\u00a6\u00f4 1\u00a8 1\u00a6 SanchezMJ L126b 2.50 90=11 Alexis Zorba126\u00a6 Jungle Glow126\u00a6\u00f5 Beltane122\u00c7 Rate 2w,ask uppr,drvng",
+    "field_size": 7,
+    "shape_candidate_tokens": [],
+    "calls": {
+      "start": {
+        "position": 1,
+        "margin_token": null,
+        "margin_kind": "LEAD_MARGIN",
+        "numeric_margin": null
+      },
+      "first_call": {
+        "position": 1,
+        "margin_token": "\u00a7",
+        "margin_kind": "LEAD_MARGIN",
+        "numeric_margin": null
+      },
+      "second_call": {
+        "position": 1,
+        "margin_token": "\u00a6\u00f4",
+        "margin_kind": "LEAD_MARGIN",
+        "numeric_margin": null
+      },
+      "stretch": {
+        "position": 1,
+        "margin_token": "\u00a8",
+        "margin_kind": "LEAD_MARGIN",
+        "numeric_margin": null
+      },
+      "finish": {
+        "position": 1,
+        "margin_token": "\u00a6",
+        "margin_kind": "LEAD_MARGIN",
+        "numeric_margin": null
+      }
+    },
+    "status": "POSITION_CANDIDATE_REQUIRES_REVIEW",
+    "reviewed_against_original": false,
+    "positions_reviewed_against_original": true,
+    "reviewed_by": "Codex visual source review",
+    "reviewed_on": "2026-10-21",
+    "margin_review_scope": "Raw glyphs visually checked; numeric decoder separately tested; small margins not approximated."
+  }
+]
