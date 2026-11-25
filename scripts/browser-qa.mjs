@@ -77,7 +77,7 @@ for(const profile of profiles){
   for(const id of ['topContenders','finisherCandidates','contenderCandidates'])assert.equal(await page.locator('#'+id).count(),1);
   const boxes=await Promise.all(['brisResearchCandidates','brisFinisherCandidates','brisContenderCandidates','contenderCandidates','topMl'].map(id=>page.locator('#'+id).locator('..').boundingBox()));
   assert.ok(boxes.every(Boolean));assert.ok(boxes.every(b=>Math.abs(b.y-boxes[0].y)<2),'All individual model boxes share one row');assert.equal(await page.locator('#raceNotes').isVisible(),false);
-  const sharedHeaders=await page.locator('#raceDayDashboard .dashboard-table').first().locator('thead th').allTextContents();assert.deepEqual(sharedHeaders.map(s=>s.replace(/\s+/g,'')),['Horse','PrimePower','Brisnet-RR','BrisnetFinisher','BrisnetContender','DRFContenderLate+50%','DRFV4.4c–FinisherBlend','M/Lrank']);
+  const sharedHeaders=await page.locator('#raceDayDashboard .dashboard-table').first().locator('thead th').allTextContents();assert.deepEqual(sharedHeaders.map(s=>s.replace(/\s+/g,'')),['Horse','PrimePower','Brisnet-RR','RR-V2','BrisnetContender','DRFContenderLate+50%','DRFV4.4cBlend','M/Lrank']);
   assert.equal(await page.locator('#raceDayDashboard option[value=drfFinisher]').count(),0);
   for(const note of await page.locator('#raceday .model-evidence-note').all())assert.equal(await note.isVisible(),false,'Coverage and optional-gap boxes must not appear below models');
   assert.ok(boxes.every((b,i)=>i===0||boxes[i-1].x<b.x),'Panels match shared grid order across one scrollable row');
@@ -170,8 +170,8 @@ for(const profile of profiles){
     assert.match(await target.textContent(),/probability conversion has not been validated/);
    }
    const ftsHeaders=await page.locator('#raceDayDashboard .dashboard-table').first().locator('thead th').allTextContents();assert.ok(ftsHeaders.some(s=>/FTS/.test(s)));assert.ok(ftsHeaders.some(s=>/Prime Power/.test(s)));assert.ok(!ftsHeaders.some(s=>/Models/.test(s)));
-   assert.match(await page.locator('#brisFinisherCandidates').innerText(),/Ranked 2\/3/);
-   assert.match(await page.locator('#brisFinisherCandidates').innerText(),/Finisher: PASS/);
+   assert.match(await page.locator('#brisFinisherCandidates').textContent(),/ranked 2\/3 starters/i);
+   assert.match(await page.locator('#brisFinisherCandidates').textContent(),/PASS/);
    assert.equal(await page.locator('#brisFinisherCandidates tbody tr').count(),2);assert.equal(await page.locator('#horseTable tr[data-program="3"] .grid-contender-rank').innerText(),'Unranked');assert.equal(await page.locator('#horseTable tr[data-program="3"] .score').innerText(),'N/A');
    assert.match(await page.locator('#releaseStatus').innerText(),/V44C-BRISNET-BASE/);
    assert.match(await page.locator('#horseTable tbody tr[data-program="1"]').innerText(),/76/);
@@ -251,10 +251,8 @@ for(const profile of profiles){
    await page.reload({waitUntil:'domcontentloaded'});
    await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});
    const target=page.locator('#finisherCandidates');assert.equal(await target.isVisible(),false);
-   assert.equal(await target.locator(':scope > table tbody tr').count(),4);
-   const remaining=target.locator('details.remaining-ranked');assert.equal(await remaining.getAttribute('open'),null);await remaining.evaluate(el=>el.open=true);assert.equal(await remaining.locator('tbody tr').count(),1);assert.match(await remaining.textContent(),/5\. #6 QA Finisher Runner 6/);await remaining.evaluate(el=>el.open=false);
-   assert.match(await target.textContent(),/Ranked 5\/6/);assert.match(await target.textContent(),/PASS/);
-   assert.match(await target.textContent(),/QA Finisher Runner 7/);assert.doesNotMatch(await target.textContent(),/QA Finisher Runner 5/);
+   assert.equal(await target.locator('tbody tr').count(),0);
+   assert.equal(await page.locator('#brisFinisherCandidates tbody tr').count(),0,'DRF-only card must not produce RR-V2 rankings');
    const dashboard=page.locator('#raceDayDashboard');
    assert.match(await dashboard.innerText(),/5\/6 ranked · incomplete field · PASS/);
    assert.equal(await dashboard.locator('.dashboard-paper').count(),0);
@@ -453,7 +451,7 @@ for(const profile of profiles){
     }await window.qaSetActive(drf);
    });
    await page.reload({waitUntil:'domcontentloaded'});await page.locator('#releaseStatus').getByText('Rankings:',{exact:false}).waitFor({timeout:20000});await page.locator('[data-tab="raceday"]').click();
-   for(const id of ['brisTopContenders','brisFinisherCandidates','brisContenderCandidates','topContenders','finisherCandidates','contenderCandidates']){assert.match(await page.locator('#'+id).textContent(),/ranked 2\/3 starters/);assert.equal(await page.locator('#'+id+' .model-evidence-note').isVisible(),false);assert.match(await page.locator('#'+id).textContent(),/Morning-line favorite — UNRANKED/);}
+   for(const id of ['brisTopContenders','brisFinisherCandidates','brisContenderCandidates','topContenders','contenderCandidates']){assert.match(await page.locator('#'+id).textContent(),/ranked 2\/3 starters/);assert.equal(await page.locator('#'+id+' .model-evidence-note').isVisible(),false);assert.match(await page.locator('#'+id).textContent(),/Morning-line favorite — UNRANKED/);}
    const checkRRGrid=async()=>{
     const panel=page.locator('#brisResearchCandidates'),first=panel.locator('tbody tr').first(),gridFirst=page.locator('#horseTable tbody tr').first();
     assert.equal(await gridFirst.locator('.grid-contender-rank').innerText(),'1');
@@ -471,10 +469,12 @@ for(const profile of profiles){
     for(const provider of ['BRISNET','DRF']){
      const card=cards[provider],race=card.races[1],adapted=displayedProviderModels(card,race);
      for(let i=0;i<3;i++){
+      if(provider==='DRF'&&i===1)continue;
       const panel=document.getElementById(ids[provider][i]);
       const visibleRows=[...panel.querySelectorAll('tbody tr')].filter(row=>!row.closest('details')||row.closest('details').open);
-      const expected=adapted.models[i].rankings.slice(0,visibleRows.length);
-      if(visibleRows.length!==Math.min(4,adapted.models[i].rankings.length))errors.push(provider+' '+ids[provider][i]+' row count mismatch (rendered '+visibleRows.length+', recorder '+adapted.models[i].rankings.length+', decision '+adapted.models[i].decision+')');
+      const model=provider==='BRISNET'&&i===1?adapted.sharedSelections.brisnetRRV2:adapted.models[i];
+      const expected=model.rankings.slice(0,visibleRows.length);
+      if(visibleRows.length!==Math.min(4,model.rankings.length))errors.push(provider+' '+ids[provider][i]+' row count mismatch (rendered '+visibleRows.length+', recorder '+model.rankings.length+', decision '+model.decision+')');
       for(let j=0;j<expected.length;j++){
        const cell=visibleRows[j]?.querySelector('td');
        if(!cell?.textContent.includes('#'+expected[j].program+' '+expected[j].horse))errors.push(provider+' '+ids[provider][i]+' rank '+(j+1)+' horse mismatch');
