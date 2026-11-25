@@ -95,3 +95,5 @@ test('strict DRF pace evidence is bounded by owner anchors and never imputed',()
  assert.deepEqual(card.races[1].horses[0].ppEvidence,{timeformEarly:102,timeformLate:78,source:'DRF TimeformUS Pace',status:'extracted'});
  assert.equal(card.races[1].horses[1].ppEvidence,undefined);
 });
+
+test('lowercase DRF coupled program normalizes across repeated pages without merging runners',()=>{const pages=[page(1,[...copyrightedDrfHeader(1,1),...multilineRunner('1','5-1','Alpha',700)]),page(2,[...copyrightedDrfHeader(1,2),...multilineRunner('1a','8/1','Beta (L)',700)]),page(3,[...copyrightedDrfHeader(2,3),...multilineRunner('2','3-1','Gamma',700)])];const c=parseCard(pages);assert.deepEqual(c.races[1].horses.map(h=>[h.n,h.name]),[['1','Alpha'],['1A','Beta']]);assert.deepEqual(c.races[2].horses.map(h=>h.n),['2']);});
