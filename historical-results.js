@@ -24,7 +24,7 @@ export function dashboardModels(d){
  const valid=values.filter(h=>h.value!==null);
  const pp={id:'primePower',label:'Prime Power',decision:'REFERENCE',available:valid.length===field.length,reason:valid.length===field.length?null:'Prime Power missing for active starter(s)',model_id:'BRISNET-PRIME-POWER-source',unrated:values.filter(h=>h.value===null).map(h=>({n:p(h),name:h.name,reasons:['Printed Prime Power unavailable']})),rankings:valid.sort((a,b)=>b.value-a.value||a.index-b.index).map((h,i)=>({n:p(h),name:h.name,rank:i+1,score:h.value}))};
  const ml=d.morning_line?{...copy(d.morning_line),decision:'REFERENCE',model_id:'MORNING-LINE-source'}:null;
- return [pp,...['brisResearch','brisFinisher','brisContender','drfContender'].map(id=>models.find(m=>m.id===id)).filter(Boolean),...models.filter(m=>!['brisResearch','brisFinisher','brisContender','drfContender'].includes(m.id)),...(ml?[ml]:[])];
+ return [pp,...['brisResearch','brisRRV2','brisContender','drfContender'].map(id=>models.find(m=>m.id===id)).filter(Boolean),...models.filter(m=>m.id!=='brisFinisher'&&!['brisResearch','brisRRV2','brisContender','drfContender'].includes(m.id)),...(ml?[ml]:[])];
 }
 export function historicalSnapshot({dashboards,sources=[],capturedAt=new Date().toISOString()}){
  if(!Array.isArray(dashboards)||!dashboards.length||!Number.isFinite(Date.parse(capturedAt)))fail('Dated card snapshots are required.');
