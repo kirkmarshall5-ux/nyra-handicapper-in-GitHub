@@ -1,3 +1,4 @@
+import {activeRunner} from './active-field.js';
 export function numeric(v){return v!==""&&v!=null&&Number.isFinite(+v)?+v:null}
 export function evidenceProfile(h){
  const starts=numeric(h.lifeStarts),hasLast=numeric(h.last)!==null,hasBest=numeric(h.best)!==null;
@@ -65,6 +66,6 @@ export function rateRace(field,{raceBlockers=[],legacyDisplayRanking=false}={}){
  const key=legacyDisplayRanking?'v44c_display_score':'v44c_unrounded_score';const rankings=[...runners].sort((a,b)=>b[key]-a[key]||(a.name<b.name?-1:a.name>b.name?1:0));rankings.forEach((h,i)=>h.v44c_rank=i+1);return {decision:'RATEABLE',pass_reasons:[],rankings,runners};
 }
 export function websiteRace(race){
- const field=race.horses.filter(h=>h.odds!=='SCR'&&(!h.entry_status||h.entry_status==='REGULAR'));
+ const field=race.horses.filter(h=>activeRunner(h));
  return rateRace(field.map(h=>({...h,life_starts:h.life_starts??h.lifeStarts??null,beyer_figures:h.beyer_figures??h.figs??[],timeform_early:h.timeform_early??numeric(h.tfEarly),jockey_win:h.jockey_win??null,trainer_win:h.trainer_win??null,trainer_context_score:h.trainer_context_score??null})),{raceBlockers:race.parser_blockers||[]});
 }
