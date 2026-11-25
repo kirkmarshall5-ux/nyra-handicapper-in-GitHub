@@ -1,6 +1,6 @@
 // Browser-only, positioned-text Equibase chart intake. No model inputs are changed.
 import {decodeDistanceToken} from './finisher-drf-distance.js';
-import {evaluateHistoricalCard} from './historical-results.js';
+import {evaluateHistoricalCard,verifyOfficial} from './historical-results.js';
 export const CHART_PARSER_VERSION='equibase-positioned-results-v1';
 const horseKey=s=>norm(String(s).replace(/\s*\([A-Za-z]{2,3}\)\s*$/,''));
 const norm=s=>String(s??'').toLowerCase().replace(/[^a-z0-9]/g,'');
@@ -114,8 +114,7 @@ export function matchEquibaseResults(snapshot,parsed,strategyId){
   const expectedDistance=chartDistance(r.race.distance);
   if(expectedDistance===null||Math.abs(expectedDistance-o.distanceFurlongs)>0.001){pending.push({race:+number,reason:'Chart distance differs from saved rankings. Reconcile conditions in a new historical snapshot.'});continue;}
   const official={...o,track:snapshot.track,distance:r.race.distance};
-  const check=evaluateHistoricalCard({...snapshot,races:[r]},{[number]:official},strategyId);
-  if(check.pending.length)pending.push(...check.pending);else officials[number]=official;
+  try{verifyOfficial(r,official);officials[number]=official;}catch(e){pending.push({race:+number,reason:e.message});}
  }
  return {officials,pending};
 }
