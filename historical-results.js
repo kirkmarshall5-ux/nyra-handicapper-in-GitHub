@@ -55,7 +55,7 @@ export function importHistoricalSnapshot(value){
  }
  return out;
 }
-function verifyOfficial(r,official,needsPlace){
+function verifyOfficial(r,official,strategy){
  if(official?.chartIssue)fail(official.chartIssue);
  if(!official?.verified||!String(official.sourceRef||'').trim())fail('Confirm the official chart and retain its filename or source reference.');
  if(official.nonstandard)fail('Dead heat, coupled entry or nonstandard payout requires manual adjudication; excluded from automatic ROI.');
@@ -67,13 +67,13 @@ function verifyOfficial(r,official,needsPlace){
  if(absent.length||added.length)fail('Official starters differ from the snapshot. '+(absent.length?'Absent or changed in chart: '+absent.map(h=>'#'+p(h)+' '+h.name).join(', ')+'. ':'')+(added.length?'Additional or changed chart starters: '+added.map(h=>'#'+p(h)+' '+h.name).join(', ')+'. ':'')+'Reconcile scratches before saving rankings.');
  const finish=official.finish?.map(String);
  if(!Array.isArray(finish)||finish.length!==r.field.length||new Set(finish).size!==finish.length||finish.some(n=>!r.field.some(h=>p(h)===n)))fail('Enter the complete official finishing order, with every starter exactly once.');
- for(const k of ['win2','exactaPay','exactaBase'])if(typeof official[k]!=='number'||!Number.isFinite(official[k])||official[k]<=0)fail('Verified positive win/exacta payouts and exacta denomination are required.');
- if(needsPlace)for(const n of finish.slice(0,2))if(typeof official.place2?.[n]!=='number'||!Number.isFinite(official.place2[n])||official.place2[n]<=0)fail('Both official $2 place payouts are required for this strategy.');
+ for(const k of [...(strategy.win?['win2']:[]),...(strategy.exacta?['exactaPay','exactaBase']:[])])if(typeof official[k]!=='number'||!Number.isFinite(official[k])||official[k]<=0)fail('Verified positive payouts and denomination for the selected wagers are required.');
+ if(strategy.place)for(const n of finish.slice(0,2))if(typeof official.place2?.[n]!=='number'||!Number.isFinite(official.place2[n])||official.place2[n]<=0)fail('Both official $2 place payouts are required for this strategy.');
  return finish;
 }
 export function evaluateHistoricalRace(r,official,strategyId='WIN_EXACTA'){
  const strategy=STRATEGIES[strategyId];if(!strategy)fail('Unknown betting strategy.');
- const finish=verifyOfficial(r,official,strategy.place>0),[winner,second]=finish;
+ const finish=verifyOfficial(r,official,strategy),[winner,second]=finish;
  return r.models.map(m=>{
   const eligibility=paperEligibility(m,r.field,r.race),rows=m.rankings||[],a=p(rows[0]),b=p(rows[1]);
   const runnerUpRank=rows.findIndex(h=>p(h)===second)+1||null;
@@ -87,7 +87,7 @@ export function evaluateHistoricalRace(r,official,strategyId='WIN_EXACTA'){
    wagers.push({type:'exacta21',cost:strategy.exacta,hit:b===winner&&a===second,returned:b===winner&&a===second?official.exactaPay*strategy.exacta/official.exactaBase:0});
   }
   const stake=cents(wagers.reduce((s,w)=>s+w.cost,0)),returned=cents(wagers.reduce((s,w)=>s+w.returned,0));
-  return {...base,included:true,stake,returned,net:cents(returned-stake),roi:100*(returned/stake-1),exactaHit:(a===winner&&b===second)||(b===winner&&a===second),wagers};
+  return {...base,included:true,stake,returned,net:cents(returned-stake),roi:100*(returned/stake-1),exactaHit:!!strategy.exacta&&((a===winner&&b===second)||(b===winner&&a===second)),wagers};
  });
 }
 function totals(wagers){
