@@ -1,0 +1,34 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {printableRace,picksPdf} from './print-picks.js';
+import {importHistoricalSnapshot,evaluateHistoricalCard} from './historical-results.js';
+const field=[{n:'1',name:'One'},{n:'2',name:'Two'},{n:'3',name:'Three'}];
+const model=(id,order)=>({id,label:id,model_id:id+'-test',available:true,decision:'RATEABLE',rankings:order.map((n,i)=>({...field[n-1],rank:i+1,score:3-i}))});
+const dashboard=(number,surface)=>({race:{track:'Woodbine',date:'2026-11-25',number,surface,distance:'6f'},field,shortlist:field,remaining:[],unranked:[],models:[model('brisResearch',[1,2,3]),model('brisRRV2',[1,3,2]),...(surface==='Synth'?[model('brisTapeta',[2,1,3])]:[])],prime_power:{one:'120 (1)',two:'115 (2)',three:'110 (3)'}});
+const synth=dashboard(1,'Synth'),dirt=dashboard(2,'Dirt');
+test('print uses identical synthetic rankings and omits Tapeta on dirt',()=>{
+ const races=[synth,dirt].map(d=>printableRace(d,{race:d.race.number,surface:d.race.surface,distance_furlongs:6,horses:field}));
+ assert.deepEqual(races[0].columns.find(c=>c.id==='brisTapeta').picks,['2','1','3']);
+ assert.equal(races[0].rows.find(h=>h.n==='2').ranks.brisTapeta,1);
+ assert.equal(races[1].columns.some(c=>c.id==='brisTapeta'),false);
+ const pdf=new TextDecoder().decode(picksPdf({track:'Woodbine',date:'2026-11-25',generatedAt:'2026-11-25T12:00:00Z',races}));
+ assert.equal((pdf.match(/\(RR-Tapeta\)/g)||[]).length,1);
+ assert.match(pdf,/\/Count 2\b/);
+});
+test('freeze import preserves model version and settles reverse exacta independently',()=>{
+ const frozen=JSON.parse(JSON.stringify({schema:'nyra-local-research-freeze-v1',captured_at_utc:'2026-11-25T12:00:00Z',races:[{dashboard:synth},{dashboard:dirt}]}));
+ const snapshot=importHistoricalSnapshot(frozen);
+ const tapeta=snapshot.races[0].models.find(m=>m.id==='brisTapeta');
+ assert.equal(tapeta.model_id,'brisTapeta-test');
+ assert.deepEqual(tapeta.rankings.map(h=>h.n),['2','1','3']);
+ assert.equal(snapshot.races[1].models.some(m=>m.id==='brisTapeta'),false);
+ const officials=Object.fromEntries([synth,dirt].map(d=>[d.race.number,{...d.race,race:d.race.number,verified:true,sourceRef:'synthetic test fixture',field,finish:['1','2','3'],win2:6,exactaPay:20,exactaBase:2}]));
+ const result=evaluateHistoricalCard(snapshot,officials,'WIN_EXACTA');
+ const row=result.rows.find(r=>r.model==='brisTapeta');
+ assert.equal(row.included,true);
+ assert.equal(row.stake,4);
+ assert.equal(row.returned,10);
+ assert.equal(row.reverseTopTwo,true);
+ assert.equal(result.commonComparisons[2].races,1);
+ assert.equal(result.commonComparisons[2].summary.length,3);
+});
