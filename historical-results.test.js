@@ -76,3 +76,10 @@ test('historical actual-starter review handles activated AE/MTO runners without 
  assert.throws(()=>historicalStarterSelection(cards,'BRISNET',1,['9']),/unique PP/);
 });
 test('recovery cohort survives freeze and JSON roundtrip; old records stay unknown',()=>{const x=clone(d);x.models[0].recovery_status='RECOVERED';x.models[0].recovery_reasons=[{n:'1',name:'Demo Alpha',reasons:['Missing latest speed']}];const s=importHistoricalSnapshot({schema:'nyra-local-research-freeze-v1',captured_at_utc:'2026-11-16T21:36:33.250Z',races:[{dashboard:x}]});const out=evaluateHistoricalCard(importHistoricalSnapshot(JSON.parse(JSON.stringify(s))),{1:official()});const rr=out.rows.find(r=>r.model==='brisResearch');assert.deepEqual(rr.recovery_reasons,x.models[0].recovery_reasons);assert.equal(out.rrRecoverySummary.find(r=>r.status==='RECOVERED').stake,rr.stake);assert.equal(evaluateHistoricalCard(snapshot(),{1:official()}).rrRecoverySummary.find(r=>r.status==='UNKNOWN').races,1);});
+
+test('legacy freeze remains immutable and never fabricates RR-V2 rankings',()=>{
+ const old=clone(d);const retired=old.models.find(m=>m.id==='brisRRV2');retired.id='brisFinisher';retired.label='Brisnet Finisher';retired.model_id='LEGACY-FINISHER';
+ const input={schema:'nyra-local-research-freeze-v1',captured_at_utc:'2026-11-16T21:36:33.250Z',races:[{dashboard:old}]};const before=JSON.stringify(input);
+ const s=importHistoricalSnapshot(input);assert.equal(JSON.stringify(input),before);assert.equal(s.races[0].models.some(m=>m.id==='brisRRV2'||m.id==='brisFinisher'),false);
+ const rows=evaluateHistoricalRace(s.races[0],official(),'WIN_PLACE_EXACTA');assert.equal(rows.find(r=>r.model==='brisResearch').returned,12);assert.equal(rows.some(r=>r.model==='brisRRV2'),false);
+});
