@@ -1,5 +1,5 @@
 // Read-only print view of existing forecasts. No scoring changes.
-import {buildRaceDashboard,selectMorningLineProvider} from './race-day-dashboard.js?v=20261113-paper';
+import {buildRaceDashboard,selectMorningLineProvider} from './race-day-dashboard.js?v=20261125-tapeta';
 import {pairedRace,cardProvider} from './dual-pp-cards.js';
 import {decodeTodayDistance} from './finisher-drf-distance.js';
 const ids=['primePower','brisResearch','brisRRV2','brisContender','drfContender','morningLine'];
@@ -7,7 +7,8 @@ const labels=['Prime Power','Brisnet-RR','RR-V2','Brisnet Contender','DRF Conten
 const key=h=>String(h.name||'').replace(/\s*\([A-Za-z]{2,3}\)\s*$/,'').toLowerCase().replace(/[^a-z0-9]/g,'');
 export function printableRace(d,anchor,notes=''){
  const pp=d.field.map(h=>{const value=d.prime_power?.[key(h)]||'',m=value.match(/^(\d+(?:\.\d+)?)\s*\((\d+)/);return {...h,value,score:m?+m[1]:null,printedRank:m?+m[2]:null};}).filter(h=>Number.isFinite(h.score)).sort((a,b)=>b.score-a.score||a.printedRank-b.printedRank).slice(0,4).map((h,i)=>({...h,rank:i+1}));
- const columns=ids.map((id,i)=>{const m=id==='primePower'?{rankings:pp,available:!!pp.length,decision:'REFERENCE',ranked:pp.length,eligible:d.field.length}:id==='morningLine'?d.morning_line:d.models.find(m=>m.id===id);return {...m,id,label:labels[i],nameOnly:(m?.rankings||[]).some(h=>!h.n),rankings:(m?.rankings||[]).slice(0,4),picks:(m?.rankings||[]).slice(0,4).map(h=>String(h.n||h.name))};});
+ const raceIds=d.models.some(m=>m.id==='brisTapeta')?[...ids.slice(0,3),'brisTapeta',...ids.slice(3)]:ids;
+ const columns=raceIds.map((id)=>{const m=id==='primePower'?{rankings:pp,available:!!pp.length,decision:'REFERENCE',ranked:pp.length,eligible:d.field.length}:id==='morningLine'?d.morning_line:d.models.find(m=>m.id===id);return {...m,id,label:id==='brisTapeta'?'RR-Tapeta (Research)':labels[ids.indexOf(id)],nameOnly:(m?.rankings||[]).some(h=>!h.n),rankings:(m?.rankings||[]).slice(0,4),picks:(m?.rankings||[]).slice(0,4).map(h=>String(h.n||h.name))};});
  const selected=new Set(columns.flatMap(c=>c.rankings.map(key))),ordered=[...d.shortlist,...(d.remaining||[]),...(d.unranked||[])];
  const rows=ordered.filter(h=>selected.has(key(h))).map(h=>({...h,primePower:d.prime_power?.[key(h)]||null,ranks:Object.fromEntries(columns.slice(1).map(c=>[c.id,c.rankings.find(x=>key(x)===key(h))?.rank??null]))}));
  const seen=new Set(rows.map(key));for(const h of d.field)if(selected.has(key(h))&&!seen.has(key(h)))rows.push({...h,primePower:d.prime_power?.[key(h)]||null,ranks:Object.fromEntries(columns.slice(1).map(c=>[c.id,c.rankings.find(x=>key(x)===key(h))?.rank??null]))});
@@ -52,13 +53,13 @@ export function picksPdf(sheet){
   const group=groups[pageIndex],layouts=group.map(r=>raceLayout(r,sheet.races.length>10)),natural=layouts.reduce((s,l)=>s+l.height,0),scale=Math.min(1,660/Math.max(1,natural)),extra=group.length?Math.max(0,660/scale-natural)/group.length:0;
   commands.push(`q ${scale} 0 0 ${scale} ${(612-552*scale)/2} 704 cm`);let y=0;
   group.forEach((r,index)=>{
-   const l=layouts[index],xs=[0,165,229.5,294,358.5,423,487.5],cw=[165,64.5,64.5,64.5,64.5,64.5,64.5],headers=[['Horse # / Name'],['Prime','Power'],['Brisnet','RR'],['RR-V2',''],['Brisnet','Contender'],['DRF Contender','Late +50%'],['M/L','Rank']];
+   const l=layouts[index],raceIds=r.columns?.map(c=>c.id)||ids,headerMap={primePower:['Prime','Power'],brisResearch:['Brisnet','RR'],brisRRV2:['RR-V2',''],brisTapeta:['RR-Tapeta','Research'],brisContender:['Brisnet','Contender'],drfContender:['DRF Contender','Late +50%'],morningLine:['M/L','Rank']},colWidth=387/raceIds.length,xs=[0,...raceIds.map((_,i)=>165+i*colWidth)],cw=[165,...raceIds.map(()=>colWidth)],headers=[['Horse # / Name'],...raceIds.map(id=>headerMap[id]||[id])];
    text(0,y,'RACE '+r.race,10,true);text(57,y,[r.distance,r.surface,r.going].filter(Boolean).join(' - '),8);text(452,y,(r.rows||[]).length+' horses shown',7);
    const top=y-8,bottom=top-l.tableHeight;commands.push(`0.98 0.97 0.93 rg ${xs[2]} ${bottom} ${cw[2]} ${l.tableHeight} re f 0 g`);
-   headers.forEach((a,i)=>a.forEach((s,j)=>text(xs[i]+(i?Math.max(3,(cw[i]-width(s,7.2))/2):3),top-9-j*8,s,7.2,true)));
+   headers.forEach((a,i)=>a.forEach((s,j)=>{const size=i?Math.min(7.2,7.2*(cw[i]-6)/Math.max(1,width(s,7.2))):7.2;text(xs[i]+(i?Math.max(3,(cw[i]-width(s,size))/2):3),top-9-j*8,s,size,true);}));
    let ry=top-l.headerHeight;line(0,ry,552,ry);
    for(const row of l.rows){const h=row.h,hh=Math.max(l.rowHeight,row.lines.length*l.lineHeight+2);row.lines.forEach((s,j)=>text(3,ry-(l.bodySize===8?8:7)-j*l.lineHeight,s,l.bodySize));
-    const cells=[h.primePower||'-',...ids.slice(1).map(id=>h.ranks[id]??'-')];cells.forEach((v,i)=>{const size=i===1?9:8;text(xs[i+1]+Math.max(3,(cw[i+1]-width(v,size))/2),ry-8,v,size,i===1);});ry-=hh;line(0,ry,552,ry);
+    const cells=[h.primePower||'-',...raceIds.slice(1).map(id=>h.ranks[id]??'-')];cells.forEach((v,i)=>{const size=i===1?9:8;text(xs[i+1]+Math.max(3,(cw[i+1]-width(v,size))/2),ry-8,v,size,i===1);});ry-=hh;line(0,ry,552,ry);
    }
    commands.push(`0.5 0.43 0.24 RG 1 w ${xs[2]} ${bottom} ${cw[2]} ${l.tableHeight} re S 0 G`);
    let fy=bottom-10;
