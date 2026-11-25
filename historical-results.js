@@ -114,7 +114,7 @@ export function evaluateHistoricalCard(snapshot,officials,strategyId){
   if(!o){pending.push({race:r.race.number,reason:'Official result not yet entered'});continue;}
   try{rows.push(...evaluateHistoricalRace(r,o,strategyId));}catch(e){pending.push({race:r.race.number,reason:e.message});}
  }
- return {rows,pending,summary:summarizeHistorical(rows),rrRecoverySummary:summarizeRRRecovery(rows),research:summarizeHistoricalResearch(snapshot,rows,pending)};
+ return {rows,pending,summary:summarizeHistorical(rows),rrRecoverySummary:summarizeRRRecovery(rows),research:summarizeHistoricalResearch(snapshot,rows,pending),commonComparisons:[summarizeCommonRaces(rows,['brisResearch','brisRRV2']),summarizeCommonRaces(rows,['brisResearch','brisRRV2','brisContender','primePower','morningLine'])]};
 }
 
 export function summarizeRRRecovery(rows){
@@ -124,4 +124,12 @@ export function summarizeRRRecovery(rows){
 
 export function summarizeHistoricalResearch(snapshot,rows,pending){
  return snapshot.races.map(r=>{const results=rows.filter(x=>Number(x.race)===Number(r.race.number)),issue=pending.find(x=>Number(x.race)===Number(r.race.number)),fts=r.fts_research??null,starters=fts===null?null:r.field.filter(h=>Object.prototype.hasOwnProperty.call(fts,name(h))),first=results[0];return {race:r.race.number,pending:issue?.reason??null,eligibleModels:results.filter(x=>x.included).map(x=>x.label),excludedModels:results.filter(x=>!x.included).map(x=>({label:x.label,reason:x.reason,ftsUnranked:starters===null?null:x.eligibility.unrated.filter(h=>starters.some(s=>p(s)===p(h))).map(h=>p(h))})),ftsCount:starters?.length??null,fts:starters?.map(h=>({n:p(h),name:h.name,research:fts[name(h)],finish:first?(p(h)===first.actualWinner?1:p(h)===first.actualSecond?2:null):null}))??null};});
+}
+
+export function summarizeCommonRaces(rows,modelIds){
+ if(!Array.isArray(modelIds)||modelIds.length<2||new Set(modelIds).size!==modelIds.length)fail('Select distinct comparison models.');
+ const groups=new Map();for(const r of rows){if(!modelIds.includes(r.model))continue;const key=JSON.stringify([r.track,r.date,Number(r.race)]);if(!groups.has(key))groups.set(key,new Map());const g=groups.get(key);if(g.has(r.model))fail('Duplicate race/model result in common-race study.');g.set(r.model,r);}
+ const matched=[...groups.entries()].filter(([,g])=>modelIds.every(id=>g.get(id)?.included));
+ for(const [,g] of matched){if(new Set(modelIds.map(id=>g.get(id).stake)).size!==1)fail('Common-race comparison requires equal stake.');}
+ return {modelIds:[...modelIds],races:matched.length,raceKeys:matched.map(([key])=>JSON.parse(key)),summary:summarizeHistorical(matched.flatMap(([,g])=>modelIds.map(id=>g.get(id))))};
 }
