@@ -16,6 +16,7 @@ function validateField(field){
 }
 export function dashboardModels(d){
  const field=d.field||[],models=copy(d.models||[]);
+ const ids=new Set();for(const m of models){if(!m.id||ids.has(m.id)||['primePower','morningLine'].includes(m.id))fail('Invalid or duplicate model identity.');ids.add(m.id);}
  const values=field.map((h,i)=>{
   const raw=d.prime_power?.[name(h)];
   const m=typeof raw==='number'?String(raw):String(raw??'');
@@ -79,7 +80,7 @@ export function evaluateHistoricalRace(r,official,strategyId='WIN_EXACTA'){
   const eligibility=paperEligibility(m,r.field,r.race),rows=m.rankings||[],a=p(rows[0]),b=p(rows[1]);
   const winnerRank=rows.findIndex(h=>p(h)===winner)+1||null;
   const runnerUpRank=rows.findIndex(h=>p(h)===second)+1||null;
-  const base={model:m.id,label:m.label||m.id,modelVersion:m.model_id||null,recovery_status:m.recovery_status||null,recovery_reasons:m.recovery_reasons||[],race:r.race.number,winnerRank,winnerTopFour:winnerRank!==null&&winnerRank<=4,orderedTopTwo:a===winner&&b===second,reverseTopTwo:b===winner&&a===second,runnerUpRank,firstChoiceWinner:a===winner,exactSecond:runnerUpRank===2,topTwoRunnerUp:runnerUpRank!==null&&runnerUpRank<=2,topFourRunnerUp:runnerUpRank!==null&&runnerUpRank<=4,rrCompanionMiss:m.id==='brisResearch'&&a===winner&&b!==second,actualWinner:winner,actualSecond:second,chosenFirst:a,chosenSecond:b,sourceRef:official.sourceRef,resultVerification:official.verification,resultRecordedAt:official.recordedAt||null,eligibility};
+  const base={model:m.id,label:m.label||m.id,modelVersion:m.model_id||null,recovery_status:m.recovery_status||null,recovery_reasons:m.recovery_reasons||[],track:r.race.track,date:r.race.date,race:r.race.number,winnerRank,winnerTopFour:winnerRank!==null&&winnerRank<=4,orderedTopTwo:a===winner&&b===second,reverseTopTwo:b===winner&&a===second,runnerUpRank,firstChoiceWinner:a===winner,exactSecond:runnerUpRank===2,topTwoRunnerUp:runnerUpRank!==null&&runnerUpRank<=2,topFourRunnerUp:runnerUpRank!==null&&runnerUpRank<=4,rrCompanionMiss:m.id==='brisResearch'&&a===winner&&b!==second,actualWinner:winner,actualSecond:second,chosenFirst:a,chosenSecond:b,sourceRef:official.sourceRef,resultVerification:official.verification,resultRecordedAt:official.recordedAt||null,eligibility};
   if(r.cancelled||!eligibility.included)return {...base,included:false,reason:r.cancelled?'Race cancelled':eligibility.reasons.join('; '),stake:0,returned:0,wagers:[]};
   const wagers=[];
   if(strategy.win)wagers.push({type:'win',cost:strategy.win,hit:a===winner,returned:a===winner?official.win2*strategy.win/2:0});
@@ -98,6 +99,7 @@ function totals(wagers){
  return {winning:wagers.filter(w=>w.hit).length,bets:wagers.length,hitRate:wagers.length?100*wagers.filter(w=>w.hit).length/wagers.length:null,stake,returned,net:cents(returned-stake),roi:stake?100*(returned/stake-1):null};
 }
 export function summarizeHistorical(rows){
+ const seen=new Set();for(const r of rows){const key=JSON.stringify([r.track,r.date,Number(r.race),r.model]);if(seen.has(key))fail('Duplicate race/model result in ROI study.');seen.add(key);}
  const ids=[...new Set(rows.map(r=>r.model))];
  return ids.map(id=>{
   const all=rows.filter(r=>r.model===id),included=all.filter(r=>r.included),wagers=included.flatMap(r=>r.wagers);
@@ -105,6 +107,7 @@ export function summarizeHistorical(rows){
  });
 }
 export function evaluateHistoricalCard(snapshot,officials,strategyId){
+ const seen=new Set();for(const r of snapshot.races){const key=Number(r.race.number);if(seen.has(key))fail('Duplicate race in ROI study.');seen.add(key);const ids=new Set();for(const m of r.models){if(ids.has(m.id))fail('Duplicate model in ROI study.');ids.add(m.id);}}
  const rows=[],pending=[];
  for(const r of snapshot.races){
   const o=officials[String(r.race.number)];
