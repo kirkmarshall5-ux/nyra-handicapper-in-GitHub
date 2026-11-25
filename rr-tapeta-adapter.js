@@ -9,6 +9,7 @@ export function explicitSyntheticLine(line,raceDate){
  if(!prefix||line.source.provider!=='BRISNET'||line.surface!=='Synth'||!/^\d{4}-\d{2}-\d{2}$/.test(line.date||'')||!Number.isFinite(Date.parse(line.date))||line.date>=raceDate)return null;
  if(!['e1','e2','late','speed'].every(k=>Number.isFinite(line[k])&&line[k]>=0))return null;
  // Only independently unambiguous distance tokens are eligible for matching.
+ if(line.condition_evidence&&(line.condition_evidence.status!=='SOURCE_TOKEN_VERIFIED'||line.condition_evidence.marker!=='Ì'))return null;
  const token=prefix[1].replace(/Ì/g,'').trim();
  const m=token.match(/^([4-9])([½¼¾]?)(?:f)?$/);
  const miles={'1m':8,'1ˆ':8.5,'1„':9};
