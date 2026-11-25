@@ -50,7 +50,7 @@ function parseRace(rows,id,sourceRef){
   const cell=slice(r,pgm-1,wgt-1);
   if(!cell.includes('('))continue;
   const entry=cell.match(/^(\d+[A-Z]?)\s+(.+)$/);
-  if(!entry||!/^\d+$/.test(entry[1]))fail('Ambiguous or coupled starter program: '+cell);
+  if(!entry)fail('Ambiguous starter program: '+cell);
   const n=entry[1],raw=entry[2];
   const match=raw.match(/^(?:DQ-)?(.+?)\s*\([^()]*,[^()]*\)\s*$/);
   if(!match)fail('Unreadable horse/jockey identity for #'+n);
@@ -58,6 +58,7 @@ function parseRace(rows,id,sourceRef){
   oddsByProgram[n]=slice(r,odds-1,comments-1).replace('*','');
  }
  if(field.length<2||new Set(field.map(h=>h.n)).size!==field.length)fail('Incomplete or duplicated starter table');
+ if(field.some(h=>/[A-Z]$/.test(h.n))){const error=Error('Coupled starter field extracted; official wagering-interest and payout verification required');error.starterField=field.map(h=>({...h}));throw error;}
  for(const dq of all.matchAll(/Disqualification\(s\):\s*#(\d+)\s+.+?\s+from\s+(\d+)\s+to\s+(\d+)/g)){
   const at=field.findIndex(h=>h.n===dq[1]),to=+dq[3];
   if(at!==+dq[2]-1||to<1||to>field.length)fail('Ambiguous disqualification order');
@@ -102,7 +103,7 @@ export function parseEquibaseResults(pages,{sourceRef='Equibase results PDF'}={}
  for(const r of rows){const id=identity(r);if(id){if(current&&id.race===current.id.race&&id.date===current.id.date&&norm(id.track)===norm(current.id.track)){current.rows.push(r);continue;}current={id,rows:[r]};groups.push(current);}else if(current)current.rows.push(r);}
  if(!groups.length)fail('No readable Equibase race headings found. Upload the original text-based full chart PDF.');
  const races=[],pending=[],seen=new Set();
- for(const g of groups){const key=norm(g.id.track)+'|'+g.id.date+'|'+g.id.race;if(seen.has(key))fail('Duplicate race charts found; use one official chart per race');seen.add(key);try{races.push(parseRace(g.rows,g.id,sourceRef));}catch(e){pending.push({...g.id,reason:e.message});}}
+ for(const g of groups){const key=norm(g.id.track)+'|'+g.id.date+'|'+g.id.race;if(seen.has(key))fail('Duplicate race charts found; use one official chart per race');seen.add(key);try{races.push(parseRace(g.rows,g.id,sourceRef));}catch(e){pending.push({...g.id,reason:e.message,...(e.starterField?{starterField:e.starterField}: {})});}}
  return {races,pending,identities:groups.map(g=>g.id),parserVersion:CHART_PARSER_VERSION,sourceRef};
 }
 export function matchEquibaseResults(snapshot,parsed,strategyId){

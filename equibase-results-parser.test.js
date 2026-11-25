@@ -62,3 +62,5 @@ test('an explicit disqualification reorders the official field before payout rec
  }
  const parsed=parseEquibaseResults(pages);assert.deepEqual(parsed.pending,[]);assert.deepEqual(parsed.races[0].finish,['2','3','1']);
 });
+
+test('coupled chart retains individual starter identities without authorizing settlement',()=>{const parsed=parseEquibaseResults(chart({coupled:true}));assert.equal(parsed.races.length,0);assert.deepEqual(parsed.pending[0].starterField.map(h=>h.n),['1A','2','3']);assert.match(parsed.pending[0].reason,/official wagering-interest/);});
