@@ -6,7 +6,7 @@ export function reconcileNativeField(race,official){
  const selected=new Set(),programs=new Set(),names=new Set();
  for(const s of official.starters){
  const p=runnerProgram(s.program),n=runnerName(s.name);
- if(!/^\d+$/.test(p)||!n||programs.has(p)||names.has(n))throw Error('Invalid or duplicate official identity');
+ if(!/^\d+[A-Z]?$/.test(p)||!n||programs.has(p)||names.has(n))throw Error('Invalid or duplicate official identity');
  const h=matchUpdateRunner(horses,s);
  if(runnerProgram(h.n)!==p||selected.has(h))throw Error('Unverified program identity');
  if(h.entry_status&&!['REGULAR','AE','ALSO_ELIGIBLE'].includes(h.entry_status))throw Error('Unsupported starter entry status');
