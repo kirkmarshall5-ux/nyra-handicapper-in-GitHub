@@ -5,6 +5,7 @@ assert(batchPath&&refs.length,'Usage: node scripts/check-native-drf-export.mjs b
 const batch=JSON.parse(fs.readFileSync(batchPath));
 assert.equal(batch.schema,'native-drf-batch-v1');
 assert.equal(batch.model_id,'DRF-CONTENDER-LATE150-20261103');
+assert.equal(batch.status,'RECONCILED_OFFICIAL_STARTERS','Official starter reconciliation required');
 let checked=0;const errors=[];
 for(const ref of refs){
  const s=JSON.parse(fs.readFileSync(ref)).snapshot;
